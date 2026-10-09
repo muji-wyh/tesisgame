@@ -42,6 +42,8 @@ func _run() -> void:
 	_reset(view)
 	_check_layout(view)
 	_check_pictures(view)
+	_check_supply_preview(view)
+	_check_drop_projection(view)
 	_check_landing_presentation(view)
 	_check_landing_lifecycle(view)
 	_check_gesture_audio(view)
@@ -95,8 +97,27 @@ func _center(view, id: int) -> Vector2:
 	return view._tiles[id].get_global_rect().get_center()
 
 
+func _advance(view, seconds: float) -> void:
+	var remaining: float = seconds
+	while remaining > 0.000001:
+		var delta: float = minf(0.1, remaining)
+		view._process(delta)
+		remaining -= delta
+
+
+func _arrival(view) -> Dictionary:
+	for cell: Dictionary in view.game.cells:
+		if bool(cell.get("arrival", false)) and not view._settled(cell):
+			return cell
+	return {}
+
+
+func _rect(values: Array) -> Rect2:
+	return Rect2(Vector2(float(values[0]), float(values[1])), Vector2(float(values[2]), float(values[3])))
+
+
 func _check_layout(view) -> void:
-	for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(340, 460), Vector2(844, 235), Vector2(1024, 370)]:
+	for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(340, 460), Vector2(320, 260), Vector2(844, 235), Vector2(1024, 370)]:
 		view.size = dimensions
 		view._layout()
 		var board: Rect2 = view._board
@@ -104,6 +125,17 @@ func _check_layout(view) -> void:
 		check(Rect2(Vector2.ZERO, dimensions).encloses(board), "%s contains the board" % dimensions)
 		check(not board.intersects(view.finish_button.get_rect()), "%s keeps Finish outside the board" % dimensions)
 		check(not board.intersects(view._loot_icon.get_rect()), "%s keeps chest totals outside the board" % dimensions)
+		var preview: Dictionary = view.snapshot().preview
+		var preview_rect: Rect2 = _rect(preview.rect)
+		check(bool(preview.visible) and preview.slots.size() == 3
+			and view.get_global_rect().encloses(preview_rect) and not view._global_rect(board).intersects(preview_rect),
+			"%s contains all three upcoming tiles in a separate area outside the fixed board" % dimensions)
+		check(not preview_rect.intersects(view.finish_button.get_global_rect())
+			and not preview_rect.intersects(view._loot_icon.get_global_rect()),
+			"%s keeps the supply preview separate from finish and treasure controls" % dimensions)
+		for slot: Dictionary in preview.slots:
+			check(bool(slot.visible) and preview_rect.encloses(_rect(slot.rect)),
+				"%s keeps preview tile %s fully inside its supply area" % [dimensions, slot.id])
 		for cell: Dictionary in view.game.cells:
 			check(board.encloses(view._tiles[int(cell.id)].get_rect()), "%s keeps settled jelly %s inside its well" % [dimensions, cell.id])
 	view.size = Vector2(1000, 720)
@@ -123,21 +155,136 @@ func _check_pictures(view) -> void:
 			"Soft gel deforms independently of the readable learning content")
 
 
+func _check_supply_preview(view) -> void:
+	_reset(view, false, false)
+	var before: Dictionary = view.snapshot()
+	var supply: Array = before.upcoming.duplicate(true)
+	check(supply.size() == 3 and before.preview.slots.size() == 3,
+		"The view reveals exactly the next three committed supply tiles")
+	for index in range(supply.size()):
+		var slot: Dictionary = before.preview.slots[index]
+		var preview = view._preview_tiles[index]
+		check(int(slot.id) == int(supply[index].id) and bool(slot.visible),
+			"Preview slot %d shows the corresponding model supply identity" % (index + 1))
+		check(preview.word == supply[index].word and preview.kind == supply[index].kind
+			and preview._surface.texture != null and preview._picture.texture != null
+			and preview._picture.visible == (str(supply[index].kind) == "picture")
+			and preview._label.visible == (str(supply[index].kind) == "word")
+			and preview._badge.visible == bool(supply[index].chest),
+			"Preview slot %d retains the queued learning artwork, word kind and treasure marker" % (index + 1))
+		check(preview.disabled and preview.focus_mode == Control.FOCUS_NONE and preview.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+			"Upcoming tile %d remains display-only for every input route" % (index + 1))
+		check(not view._press(4, _rect(slot.rect).get_center()), "An upcoming tile cannot start a board drag")
+		view._activate(int(slot.id))
+	check(heard.is_empty() and cues.is_empty() and attempts.is_empty() and int(view.snapshot().drag.selected) == -1,
+		"Preview interaction cannot pronounce, select, answer or consume a queued tile")
+	for control: Control in view.navigation_controls():
+		check(not control.get_global_rect().intersects(_rect(before.preview.rect)),
+			"Keyboard navigation excludes the read-only supply preview")
+	view._layout()
+	view.apply_theme(Data.theme("spring"), data.chests)
+	view._refresh_hud()
+	check(view.snapshot().upcoming == supply, "Theme, HUD and layout refreshes cannot reroll the advertised supply")
+	var count: int = view.game.cells.size()
+	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed + 0.00001)
+	var next: Dictionary = view.snapshot()
+	var arrived: Dictionary = view._cell(int(supply[0].id))
+	check(view.game.cells.size() == count + 1 and int(next.generated_tiles) == int(before.generated_tiles) + 1,
+		"One supply beat adds one tile rather than a matching pair")
+	check(not arrived.is_empty() and arrived.word == supply[0].word and arrived.kind == supply[0].kind
+		and arrived.chest == supply[0].chest and not view._settled(arrived),
+		"The first advertised tile enters with its exact word, picture kind and chest marker")
+	check(int(next.preview.slots[0].id) == int(supply[1].id) and int(next.preview.slots[1].id) == int(supply[2].id)
+		and next.preview.slots.size() == 3,
+		"One arrival shifts the remaining previews forward and refills the third slot")
+	var queued: Array = next.upcoming.duplicate(true)
+	var cells: Array = next.cells.duplicate(true)
+	view.pause(true)
+	_advance(view, view.game.spawn_interval + Motion.MAX_SETTLE_SECONDS)
+	check(view.snapshot().upcoming == queued and view.snapshot().cells == cells,
+		"Pausing freezes both the airborne tile and the next-three supply")
+	view.pause(false)
+	view.hide()
+	_advance(view, view.game.spawn_interval + Motion.MAX_SETTLE_SECONDS)
+	view.show()
+	check(view.snapshot().upcoming == queued and view.snapshot().cells == cells,
+		"Hiding and returning cannot consume supply or complete an unseen fall")
+	_reset(view)
+	check(view.snapshot().upcoming == supply and view.game.cells.size() == count,
+		"A seeded replacement round restores its own committed supply without the old arrival")
+	view.game.finish_round()
+	view.result_reveal()
+	check(not bool(view.snapshot().preview.visible) and not bool(view.snapshot().landing_ghost.visible),
+		"Results hide the supply preview and all landing guidance")
+	view.stop()
+	check(not bool(view.snapshot().preview.visible) and not bool(view.snapshot().landing_ghost.visible),
+		"Stopping the mode leaves no visible supply or ghost")
+	_reset(view)
+
+
+func _check_drop_projection(view) -> void:
+	_reset(view, false, false)
+	var cell: Dictionary = _arrival(view)
+	var tile = view._tiles[int(cell.id)]
+	var target: Rect2 = view._global_rect(view._tile_rect(cell))
+	var ghost: Dictionary = view.snapshot().landing_ghost
+	check(bool(ghost.visible) and int(ghost.id) == int(cell.id) and _rect(ghost.rect).is_equal_approx(target),
+		"The ghost marks the arriving tile's exact final cell before it lands")
+	check(view._ghost.disabled and view._ghost.focus_mode == Control.FOCUS_NONE
+		and view._ghost.mouse_filter == Control.MOUSE_FILTER_IGNORE and view._ghost._surface.texture == tile._surface.texture
+		and not view._ghost._picture.visible and not view._ghost._label.visible and not view._ghost._badge.visible,
+		"The landing silhouette reuses the real gel contour without duplicating learning content or accepting input")
+	check(tile.get_parent() != view and tile.get_parent().clip_contents,
+		"A falling tile is clipped by the well instead of crossing the HUD and supply preview")
+	check(not view._press(4, target.get_center()), "The destination ghost is not a second playable tile")
+	var previous: Rect2 = tile.get_global_rect()
+	for fraction: float in [0.25, 0.50, 0.75]:
+		_advance(view, Motion.contact_at(cell) * fraction - float(cell.age))
+		var current: Rect2 = tile.get_global_rect()
+		ghost = view.snapshot().landing_ghost
+		check(current.position.y > previous.position.y and current.position.y < target.position.y
+			and is_equal_approx(current.position.x, target.position.x),
+			"The tile visibly traverses its own column before contact at %d percent" % roundi(fraction * 100))
+		check(bool(ghost.visible) and int(ghost.id) == int(cell.id) and _rect(ghost.rect).is_equal_approx(target),
+			"The destination silhouette remains fixed while the real tile descends")
+		check(tile.disabled and not view.navigation_controls().has(tile), "An airborne tile cannot be selected by touch or keyboard")
+		previous = current
+	_advance(view, Motion.contact_at(cell) - float(cell.age) + 0.001)
+	check(not bool(view.snapshot().landing_ghost.visible) and tile.get_global_rect().is_equal_approx(target),
+		"Contact replaces the projected silhouette with the real body at the same destination")
+	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
+	check(tile.get_parent() == view and not tile.disabled and view.navigation_controls().has(tile),
+		"The settled tile rejoins the board's normal drag and navigation surface")
+	_reset(view, true, false)
+	cell = _arrival(view)
+	tile = view._tiles[int(cell.id)]
+	target = view._global_rect(view._tile_rect(cell))
+	check(not bool(view.snapshot().landing_ghost.visible) and tile.get_global_rect().is_equal_approx(target) and tile.disabled,
+		"Reduced motion uses one stationary tile at the destination and retains the arrival gate")
+	_advance(view, Motion.ready_at(cell) * 0.5)
+	check(tile.get_global_rect().is_equal_approx(target) and tile._surface.scale == Vector2.ONE and tile.disabled,
+		"Reduced motion introduces neither a duplicate ghost nor a hidden moving body")
+	_reset(view)
+
+
 func _check_landing_presentation(view) -> void:
 	_reset(view, false, false)
-	var cell: Dictionary = view.game.cells[0]
+	var cell: Dictionary = _arrival(view)
+	check(not cell.is_empty(), "A new round has one visible arrival above its prepared starting board")
+	if cell.is_empty():
+		return
 	var tile = view._tiles[int(cell.id)]
 	var target: Rect2 = view._tile_rect(cell)
 	var support: Vector2 = view.get_global_transform() * (target.position + tile.size * Vector2(0.5, Motion.FOOT_Y))
 	view._process(0.2)
 	var shadow_before: float = tile._shadow.modulate.a
-	check(tile.position.y < target.position.y and tile.disabled and not view._settled(cell),
+	check(tile.get_global_rect().position.y < view._global_rect(target).position.y and tile.disabled and not view._settled(cell),
 		"A descending jelly remains above its support and cannot be selected")
 	check((tile._shadow.get_global_transform() * (tile._shadow.size * 0.5)).distance_to(support) < tile.size.y * 0.025,
 		"The contact shadow stays grounded while its body descends")
-	view._process(Motion.contact_at(cell) - float(cell.age) + 0.001)
-	check(cues.count("land") == 1 and tile.position.is_equal_approx(target.position),
-		"Neighboring contacts emit one impact as the visible bodies reach their support")
+	_advance(view, Motion.contact_at(cell) - float(cell.age) + 0.001)
+	check(cues.count("land") == 1 and tile.get_global_rect().position.is_equal_approx(view._global_rect(target).position),
+		"The arriving tile emits one impact as its visible body reaches its support")
 	view._process(Motion.COMPRESSION_SECONDS - 0.001)
 	check(tile._surface.scale.y < 0.9 and tile._surface.scale.x > 1.0
 		and (tile._surface.get_global_transform() * (tile.size * Vector2(0.5, Motion.FOOT_Y))).is_equal_approx(support),
@@ -145,7 +292,7 @@ func _check_landing_presentation(view) -> void:
 	check(tile._shadow.modulate.a > shadow_before and tile._label.scale == Vector2.ONE
 		and tile._picture.scale == Vector2.ONE and tile._visual.scale == Vector2.ONE,
 		"Contact strengthens the separate shadow while word and picture stay undistorted")
-	view._process(Motion.ready_at(cell) - float(cell.age) + 0.001)
+	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
 	check(view._settled(cell) and not tile.disabled and tile._surface.scale.is_equal_approx(Vector2.ONE),
 		"The visual body settles at the same boundary that enables input")
 	view._layout()
@@ -156,41 +303,45 @@ func _check_landing_presentation(view) -> void:
 
 func _check_landing_lifecycle(view) -> void:
 	_reset(view, false, false)
-	view._process(0.3)
+	var cell: Dictionary = _arrival(view)
+	var before_contact: float = Motion.contact_at(cell) * 0.45
+	_advance(view, before_contact)
 	view.pause(true)
 	view._process(0.4)
-	check(cues.is_empty() and is_equal_approx(float(view.game.cells[0].age), 0.3),
+	check(cues.is_empty() and is_equal_approx(float(cell.age), before_contact),
 		"Pausing before contact freezes the fall and does not emit a landing")
 	view.pause(false)
-	view._process(0.05)
-	view._process(0.05)
-	view._process(0.25)
-	check(cues.count("land") == 1, "Resume completes one grouped impact without replaying neighboring contacts")
+	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
+	check(cues.count("land") == 1, "Resume completes the interrupted fall with one impact")
 	_reset(view, false, false)
+	cell = _arrival(view)
 	view.hide()
-	view._process(0.4)
+	_advance(view, Motion.ready_at(cell) + 0.001)
 	view.show()
-	check(cues.is_empty(), "A hidden board cannot emit landing feedback")
-	view._process(0.4)
+	check(cues.is_empty() and is_zero_approx(float(cell.age)), "A hidden board cannot advance a fall or emit landing feedback")
+	_advance(view, Motion.ready_at(cell) + 0.001)
 	check(cues.count("land") == 1, "A new round owns its fresh contact without the old cooldown")
 	_reset(view, true, false)
-	var cell: Dictionary = view.game.cells[0]
+	cell = _arrival(view)
 	var tile = view._tiles[int(cell.id)]
 	check(tile.position == view._tile_rect(cell).position and tile._surface.scale == Vector2.ONE and not view._settled(cell),
 		"Reduced motion presents a static body without skipping the input gate")
-	view._process(0.4)
-	view._process(0.25)
+	_advance(view, Motion.ready_at(cell) + 0.001)
 	check(view._settled(cell) and tile._surface.scale == Vector2.ONE and cues.count("land") == 1,
 		"Reduced motion retains the shared ready time and a single quiet contact cue")
 	_reset(view)
 	view.game.step(view.game.spawn_interval - view.game.spawn_elapsed)
 	view._sync_tiles()
+	cell = _arrival(view)
+	var falling_age: float = float(cell.age)
+	var falling_position: Vector2 = view._tiles[int(cell.id)].get_global_rect().position
 	var pair: Array[int] = _pair(view)
 	view._activate(pair[0])
 	view._activate(pair[1])
 	view._process(0.4)
-	check(not view.game.fusion.is_empty() and not cues.has("land"),
-		"Other falling tiles cannot add impact sounds over an active fusion")
+	check(not view.game.fusion.is_empty() and not cues.has("land")
+		and is_equal_approx(float(cell.age), falling_age) and view._tiles[int(cell.id)].get_global_rect().position.is_equal_approx(falling_position),
+		"Fusion freezes the arriving tile instead of allowing it to fall or add a contact sound")
 	view.stop()
 	view._process(0.4)
 	check(not cues.has("land"), "Stopping the mode cannot revive a pending landing")
@@ -410,13 +561,17 @@ func _check_feedback_lifecycle(view) -> void:
 
 
 func _fill_board(view) -> void:
-	var fill_seconds: float = float(view.game.CAPACITY - view.game.cells.size()) * 0.5 * view.game.spawn_interval
-	for index in range(ceili(fill_seconds / 0.5) + 2):
+	for index in range(view.game.CAPACITY * 100):
 		if view.game.full_elapsed >= 0.0 or view.game.phase != "playing":
 			break
-		view._process(minf(0.5, float(view.game.spawn_interval) - float(view.game.spawn_elapsed)))
+		var remaining: float = float(view.game.spawn_interval) - float(view.game.spawn_elapsed)
+		if view.game.cells.size() == view.game.CAPACITY:
+			remaining = 0.0
+			for cell: Dictionary in view.game.cells:
+				remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
+		view._process(minf(0.25, maxf(0.000001, remaining)))
 	check(view.game.cells.size() == view.game.CAPACITY and is_zero_approx(float(view.game.full_elapsed)),
-		"The real spawn clock fills the board and starts its warning at zero")
+		"Single-tile supply fills the board and starts its warning only when the last tile is ready")
 
 
 func _check_danger_hidden(view, reason: String) -> void:

@@ -3,6 +3,7 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const RewardState = preload("res://scripts/pop_reward_state.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 var checks := 0
 var failures := 0
 
@@ -31,6 +32,30 @@ func pair(game, marked: bool = false) -> Array:
 			if a.word.id == b.word.id and a.kind != b.kind:
 				return [a, b]
 	return []
+
+
+func unmarked_pair(game) -> Array:
+	for a: Dictionary in game.cells:
+		if bool(a.chest):
+			continue
+		for b: Dictionary in game.cells:
+			if not bool(b.chest) and a.word.id == b.word.id and a.kind != b.kind:
+				return [a, b]
+	return []
+
+
+func fill_board(game) -> void:
+	for beat in range(game.CAPACITY + 2):
+		if game.phase != "playing" or game.full_elapsed >= 0.0:
+			break
+		var remaining: float = float(game.spawn_interval) - float(game.spawn_elapsed)
+		if game.cells.size() == game.CAPACITY:
+			remaining = 0.0
+			for cell: Dictionary in game.cells:
+				remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
+		game.step(maxf(0.000001, remaining))
+	check(game.cells.size() == game.CAPACITY and is_zero_approx(float(game.full_elapsed)),
+		"A full board waits for its final single tile to settle before warning")
 
 
 func _run() -> void:
@@ -64,12 +89,17 @@ func _run() -> void:
 	var word_id: String = str(chosen[0].word.id)
 	check(game.try_merge(chosen[0].id, chosen[1].id) == "correct", "Matching picture and word commits fusion")
 	var spawn_before: float = game.spawn_elapsed
+	var supply_before: Array = game.snapshot().upcoming.duplicate(true)
+	var cells_before: Array = game.cells.duplicate(true)
 	game.step(0.4)
-	check(game.cleared_pairs == 0 and game.spawn_elapsed == spawn_before, "Fusion neither credits early nor advances the drop clock")
+	check(game.cleared_pairs == 0 and game.spawn_elapsed == spawn_before and game.cells == cells_before
+		and game.snapshot().upcoming == supply_before,
+		"Fusion neither credits early nor advances the drop, active fall or advertised supply")
 	app._show_mode_menu()
 	var fusion_before: float = game.fusion.elapsed
 	game.step(20)
-	check(game.paused and game.fusion.elapsed == fusion_before, "The game menu freezes a committed fusion")
+	check(game.paused and game.fusion.elapsed == fusion_before and game.cells == cells_before
+		and game.snapshot().upcoming == supply_before, "The game menu freezes fusion, falling tiles and supply together")
 	app._hide_mode_menu()
 	game.step(0.66)
 	check(game.cleared_pairs == 1 and game.chest_count == 1, "Resuming completes one pair and one chest")
@@ -80,12 +110,14 @@ func _run() -> void:
 	check(not app._jelly_backdrop.visible, "The woodland does not leak behind the word notebook")
 	var before: Dictionary = game.snapshot()
 	game.step(50)
-	check(game.snapshot().spawn_elapsed == before.spawn_elapsed and game.paused, "The notebook freezes falling and danger clocks")
+	check(game.snapshot().spawn_elapsed == before.spawn_elapsed and game.paused and game.snapshot().cells == before.cells
+		and game.snapshot().upcoming == before.upcoming, "The notebook freezes falling, queued supply and danger clocks")
 	app._hide_collection()
 	app.on_page_hidden()
 	check(not app._jelly_backdrop.visible, "Backgrounding removes the gameplay scenery")
 	game.step(50)
-	check(game.paused and game.snapshot().spawn_elapsed == before.spawn_elapsed, "Backgrounding cannot catch up the board")
+	check(game.paused and game.snapshot().spawn_elapsed == before.spawn_elapsed and game.snapshot().cells == before.cells
+		and game.snapshot().upcoming == before.upcoming, "Backgrounding cannot consume preview tiles or catch up a falling body")
 	app.on_page_visible()
 	check(not game.paused, "Returning restores the same board")
 	check(app._jelly_backdrop.visible, "Returning restores the same woodland without replaying scenery")
@@ -191,8 +223,7 @@ func _warning_audio_flow(directory: String) -> void:
 	var game = app._jelly.game
 	var cues: Array[String] = []
 	app._jelly.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
-	var initial_fill_seconds: float = (float(game.CAPACITY) * 0.5 - game.INITIAL_PAIRS) * game.INITIAL_SPAWN_INTERVAL
-	game.step(initial_fill_seconds)
+	fill_board(game)
 	check(app._mode_id == "jelly" and _jelly_cue_playing(app.audio, "danger") and cues.count("danger") == 1
 		and not app.audio.voice.playing, "Choosing Jelly enables its first warning without a word tap")
 	game.step(1.0)
@@ -216,20 +247,30 @@ func _warning_audio_flow(directory: String) -> void:
 		game.step(1.0)
 		check(not game.paused and _jelly_cue_playing(app.audio, "danger") and cues.count("danger") == warning_count + 1,
 			"The next live beat restores warning audio after %s" % interruption)
-	var chosen := pair(game)
+	# This fixture exercises warning restart, not the separate pending-reward gate.
+	# Supply is shuffled, so the first match can legitimately contain a chest.
+	var chosen := unmarked_pair(game)
+	check(chosen.size() == 2, "The warning fixture has a real pair without a treasure marker")
+	if chosen.size() != 2:
+		app.audio.halt()
+		app.queue_free()
+		await settle()
+		return
 	app._jelly._activate(chosen[0].id)
 	app._jelly._activate(chosen[1].id)
 	check(not game.fusion.is_empty() and not _jelly_cue_playing(app.audio, "danger") and _jelly_cue_playing(app.audio, "merge"),
 		"A real selected pair silences the warning while preserving its rescue merge sound")
 	game.step(game.FUSION_SECONDS)
-	game.step(game.spawn_interval)
+	check(game.chest_count == 0 and not app._jelly_rewards.has_pending(),
+		"The warning-only rescue leaves no pending treasure that would correctly gate a new board")
+	fill_board(game)
 	check(_jelly_cue_playing(app.audio, "danger"), "Refilling the rescued board starts a fresh audible warning")
 	game.finish_round()
 	check(game.phase == "finished" and not _jelly_cue_playing(app.audio), "Finishing stops the active warning through GameUI")
 	app.choose_mode("memory")
 	app.choose_mode("jelly")
 	app._jelly.set_process(false)
-	app._jelly.game.step(initial_fill_seconds)
+	fill_board(app._jelly.game)
 	check(_jelly_cue_playing(app.audio, "danger"), "A replacement Jelly round owns a new warning")
 	app.choose_mode("memory")
 	check(app._mode_id == "memory" and not _jelly_cue_playing(app.audio), "Switching modes stops the previous Jelly warning")

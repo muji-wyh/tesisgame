@@ -64,10 +64,29 @@ The settled foot lies at `y=285/320` of the padded texture. Squash and recovery
 should pivot there so the underside keeps contact. The separately acquired shadow
 is not baked into the gel; its support position can remain fixed while the body
 falls, compresses or lifts. This avoids moving a ground shadow through the air.
-The shared motion clock accelerates descent over `0.16 * sqrt(max(1, travel_rows))`
-seconds, then allows 65 ms for compression, 120 ms for rebound and 95 ms to settle.
+New arrivals use a visible descent lasting `0.72 * sqrt(travel_rows)` seconds,
+beginning one cell above the clipped well. Local gravity after a clear remains
+brisk at `0.16 * sqrt(max(1, travel_rows))` seconds. Both clocks then allow 65 ms
+for compression, 120 ms for rebound and 95 ms to settle.
 Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
+
+Supply dispatches one tile at a time. Six settled tiles provide the initial
+matching layout, followed by one incoming tile. Three committed upcoming tiles
+are shown outside the well: vertically at the right on wide screens and in a
+horizontal strip above it on phones. Their picture/word kind, artwork and chest
+markers come from the actual queue. Bounded bags interleave complementary halves
+so they do not arrive together; every full board retains a possible match.
+
+The landing projection reuses the same acquired gel silhouette at the actual
+destination, without word, picture or chest content. It remains stationary while
+the incoming tile descends, then disappears at contact. The original painted
+contact shadow still accompanies the landing. No additional placeholder artwork
+is introduced. Fusion freezes descent and the supply clock; a shifted support
+retargets the destination while preserving the incoming tile's visible height.
+Reduced motion places the incoming tile at its destination without a projection
+or descent, keeping the same readiness gate. The full-board warning starts only
+after the last tile settles, leaving the complete eight seconds to make space.
 
 The adapted surfaces were inspected at full size and in an 86 px tile sample
 with 14 px dark labels and existing word pictures. Source and adapted contact
@@ -161,3 +180,14 @@ and confirms mute and interruption behavior. The Windows iPhone WebKit test
 runtime has no available WebAudio, so its audio check is skipped; its gameplay
 and layout checks pass. These checks do not establish subjective mix quality,
 repeated-play fatigue or sound on physical device speakers.
+
+Single-tile supply is verified through three consecutive real browser arrivals:
+each matches the previous preview head, descends over multiple frames and lands
+on its stationary projection. Native model, view and flow checks cover frozen
+descent during fusion, support changes and the complete full-board rescue window.
+Desktop and phone captures cover the external queue and fixed-ratio well. After
+live resize, Windows WebKit retains its previously documented
+[page-compositor limitation](../qa/2026-09-11-steady-gameplay.md): composed page
+captures can be blank while the raw canvas renders correctly. Both captures are
+retained; the raw canvas and touch/keyboard interactions pass at 390 x 844 and
+844 x 390. This does not establish physical iPhone rotation behavior.

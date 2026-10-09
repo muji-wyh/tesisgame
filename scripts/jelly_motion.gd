@@ -2,19 +2,22 @@ extends RefCounted
 ## One clock for descent, planted compression, recovery, and input readiness.
 
 const FOOT_Y: float = 285.0 / 320.0
-const MAX_SETTLE_SECONDS: float = 0.64
+const MAX_SETTLE_SECONDS: float = 2.05
 const COMPRESSION_SECONDS: float = 0.065
 const REBOUND_SECONDS: float = 0.12
 const RECOVERY_SECONDS: float = 0.095
 
 
 static func travel_rows(cell: Dictionary) -> float:
-	# New supply enters inside the well. Gravity only traverses the cleared gap.
+	# Arrivals enter from one cell above the clipped well. Local gravity only
+	# traverses the cleared gap, keeping a collapse brisk after a successful match.
+	if bool(cell.get("arrival", false)):
+		return maxf(1.0, float(cell.get("falling_rows", 1)))
 	return maxf(0.0, minf(float(cell.get("falling_rows", 0)), float(cell.get("row", 0))))
 
 
 static func contact_at(cell: Dictionary) -> float:
-	return 0.16 * sqrt(maxf(1.0, travel_rows(cell)))
+	return (0.72 if bool(cell.get("arrival", false)) else 0.16) * sqrt(maxf(1.0, travel_rows(cell)))
 
 
 static func ready_at(cell: Dictionary) -> float:

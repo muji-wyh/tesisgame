@@ -12,9 +12,11 @@ const Motion = preload("res://scripts/jelly_motion.gd")
 const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
-const INITIAL_PAIRS: int = 4
+const INITIAL_SETTLED_TILES: int = 6
+const UPCOMING_COUNT: int = 3
+const SUPPLY_BATCH_PAIRS: int = 3
 const SETTLE_SECONDS: float = Motion.MAX_SETTLE_SECONDS
-# Leave time to listen, find the picture, and drag before the next pair arrives.
+# Leave time to listen, find the picture, and drag before the next tile arrives.
 const INITIAL_SPAWN_INTERVAL: float = 7.0
 const MIN_SPAWN_INTERVAL: float = 3.5
 const SPEEDUP_PER_PAIR: float = 0.07
@@ -24,19 +26,23 @@ const FULL_SECONDS: float = 8.0
 const EPSILON: float = 0.000001
 
 var cells: Array[Dictionary] = []
+var upcoming: Array[Dictionary] = []
 var fusion: Dictionary = {}
 var phase: String = "finished"
 var paused: bool = false
 var cleared_pairs: int = 0
 var chest_count: int = 0
-var generated_pairs: int = 0
+var generated_tiles: int = 0
 var spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var error: String = ""
 
 var _words: Array[Dictionary] = []
+var _supply: Array[Dictionary] = []
 var _word_index: int = 0
+var _supply_pairs: int = 0
+var _last_supply_word: String = ""
 var _next_tile_id: int = 1
 var _attempt_count: int = 0
 var _completed_words: Dictionary = {}
@@ -48,19 +54,23 @@ var _generation: int = 0
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_generation += 1
 	cells.clear()
+	upcoming.clear()
 	fusion.clear()
 	_words.clear()
+	_supply.clear()
 	_completed_words.clear()
 	_result.clear()
 	phase = "finished"
 	paused = false
 	cleared_pairs = 0
 	chest_count = 0
-	generated_pairs = 0
+	generated_tiles = 0
 	spawn_interval = INITIAL_SPAWN_INTERVAL
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
 	_word_index = 0
+	_supply_pairs = 0
+	_last_supply_word = ""
 	_next_tile_id = 1
 	_attempt_count = 0
 	error = ""
@@ -96,8 +106,10 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		var b_priority: int = int(b.get("_growth_priority", 0))
 		return a_priority > b_priority if a_priority != b_priority else int(order[str(a.id)]) < int(order[str(b.id)]))
 	phase = "playing"
-	for index in range(INITIAL_PAIRS):
-		_spawn_pair()
+	_fill_upcoming()
+	for index in range(INITIAL_SETTLED_TILES):
+		_spawn_tile(false)
+	_spawn_tile()
 	changed.emit()
 	return true
 
@@ -114,7 +126,6 @@ func step(delta: float) -> void:
 				boundary = POP_SECONDS
 			var elapsed: float = float(fusion.elapsed)
 			var consumed: float = minf(remaining, maxf(0.0, boundary - elapsed))
-			_age_cells(consumed)
 			fusion.elapsed = elapsed + consumed
 			remaining -= consumed
 			if not bool(fusion.popped) and float(fusion.elapsed) + EPSILON >= POP_SECONDS:
@@ -125,6 +136,13 @@ func step(delta: float) -> void:
 			if not fusion.is_empty() and float(fusion.elapsed) + EPSILON >= FUSION_SECONDS:
 				_complete_fusion()
 		elif cells.size() >= CAPACITY:
+			var settling: float = _settling_remaining()
+			if settling > EPSILON:
+				var settle_delta: float = minf(remaining, settling)
+				_age_cells(settle_delta)
+				remaining -= settle_delta
+				if _settling_remaining() > EPSILON:
+					continue
 			if full_elapsed < 0.0:
 				_start_danger()
 				if generation != _generation or phase != "playing" or paused:
@@ -147,9 +165,7 @@ func step(delta: float) -> void:
 			remaining -= consumed
 			if spawn_elapsed + EPSILON >= spawn_interval:
 				spawn_elapsed = 0.0
-				_spawn_pair()
-				if cells.size() >= CAPACITY:
-					_start_danger()
+				_spawn_tile()
 	if generation == _generation:
 		changed.emit()
 
@@ -215,9 +231,9 @@ func score() -> int:
 
 func snapshot() -> Dictionary:
 	return {
-		"cells": cells.duplicate(true), "fusion": fusion.duplicate(true),
+		"cells": cells.duplicate(true), "upcoming": upcoming.duplicate(true), "fusion": fusion.duplicate(true),
 		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs, "score": score(),
-		"chest_count": chest_count, "generated_pairs": generated_pairs,
+		"chest_count": chest_count, "generated_tiles": generated_tiles,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed,
 		"full_elapsed": full_elapsed,
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
@@ -249,26 +265,72 @@ func _eligible(word: Dictionary, level: int) -> bool:
 	return minimum_age >= 3 and minimum_age <= mini(level, 12)
 
 
-func _spawn_pair() -> void:
-	if _words.is_empty() or cells.size() + 2 > CAPACITY:
+func _spawn_tile(arrival: bool = true) -> void:
+	if _words.is_empty() or cells.size() >= CAPACITY:
 		return
-	var word: Dictionary = _words[_word_index % _words.size()]
-	_word_index += 1
-	generated_pairs += 1
-	# Initial pairs participate in this cadence; the third starting pair has one
-	# chest. Paired supply and two-tile clears preserve a match on every full board.
-	var marked_index: int = _rng.randi_range(0, 1) if generated_pairs % 3 == 0 else -1
-	var first_is_word: bool = _rng.randi_range(0, 1) == 0
-	for index in range(2):
-		var column: int = _spawn_column()
-		var height: int = _column_height(column)
-		cells.append({
-			"id": _next_tile_id, "word": word.duplicate(true),
-			"kind": "word" if (index == 0) == first_is_word else "picture",
-			"column": column, "row": ROWS - height - 1,
-			"chest": index == marked_index, "age": 0.0, "falling_rows": ROWS - height
-		})
-		_next_tile_id += 1
+	var tile: Dictionary = upcoming.pop_front()
+	var column: int = _spawn_column()
+	var height: int = _column_height(column)
+	tile.merge({
+		"column": column, "row": ROWS - height - 1,
+		"age": 0.0, "falling_rows": ROWS - height if arrival else 0,
+		"arrival": arrival
+	})
+	if not arrival:
+		tile.age = Motion.ready_at(tile)
+	cells.append(tile)
+	generated_tiles += 1
+	_fill_upcoming()
+
+
+func _fill_upcoming() -> void:
+	while upcoming.size() < UPCOMING_COUNT:
+		if _supply.is_empty():
+			_build_supply_batch()
+		upcoming.append(_supply.pop_front())
+
+
+func _build_supply_batch() -> void:
+	# Each bounded bag has two interleaved waves of complementary halves. Legal
+	# clears preserve its word balance, leaving at most three unmatched halves
+	# in any supply prefix: a full board therefore always contains a real match.
+	var first_wave: Array[Dictionary] = []
+	var second_wave: Array[Dictionary] = []
+	for index in range(mini(SUPPLY_BATCH_PAIRS, _words.size())):
+		var word: Dictionary = _words[_word_index % _words.size()]
+		_word_index += 1
+		_supply_pairs += 1
+		var marked_half: int = _rng.randi_range(0, 1) if _supply_pairs % 3 == 0 else -1
+		var first_is_word: bool = _rng.randi_range(0, 1) == 0
+		for half in range(2):
+			var tile: Dictionary = {
+				"id": _next_tile_id, "word": word.duplicate(true),
+				"kind": "word" if (half == 0) == first_is_word else "picture",
+				"chest": half == marked_half
+			}
+			_next_tile_id += 1
+			if half == 0:
+				first_wave.append(tile)
+			else:
+				second_wave.append(tile)
+	_shuffle_wave(first_wave, _last_supply_word)
+	_shuffle_wave(second_wave, str(first_wave.back().word.id))
+	_supply.append_array(first_wave)
+	_supply.append_array(second_wave)
+	_last_supply_word = str(second_wave.back().word.id)
+
+
+func _shuffle_wave(wave: Array[Dictionary], previous_word: String) -> void:
+	for index in range(wave.size() - 1, 0, -1):
+		var other: int = _rng.randi_range(0, index)
+		var tile: Dictionary = wave[index]
+		wave[index] = wave[other]
+		wave[other] = tile
+	if wave.size() > 1 and str(wave[0].word.id) == previous_word:
+		var other: int = _rng.randi_range(1, wave.size() - 1)
+		var tile: Dictionary = wave[0]
+		wave[0] = wave[other]
+		wave[other] = tile
 
 
 func _spawn_column() -> int:
@@ -302,6 +364,13 @@ func _index_for_id(tile_id: int) -> int:
 func _age_cells(delta: float) -> void:
 	for cell in cells:
 		cell.age = float(cell.age) + delta
+
+
+func _settling_remaining() -> float:
+	var remaining: float = 0.0
+	for cell in cells:
+		remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
+	return remaining
 
 
 func _start_danger() -> void:
@@ -346,6 +415,15 @@ func _apply_gravity() -> void:
 		for index in range(stack.size()):
 			var row: int = ROWS - index - 1
 			if int(stack[index].row) != row:
-				stack[index].falling_rows = row - int(stack[index].row)
-				stack[index].row = row
-				stack[index].age = 0.0
+				var cell: Dictionary = stack[index]
+				var distance: int = row - int(cell.row)
+				if bool(cell.get("arrival", false)) and float(cell.age) < Motion.contact_at(cell):
+					# A paused incoming tile resumes at the same visible height even
+					# when the completed clear moves its landing destination downward.
+					cell.row = row
+					cell.falling_rows = int(cell.falling_rows) + distance
+				else:
+					cell.falling_rows = distance
+					cell.arrival = false
+					cell.row = row
+					cell.age = 0.0

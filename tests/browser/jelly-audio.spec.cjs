@@ -45,7 +45,7 @@ async function availablePair(page) {
       if (second) { found = [first, second]; break; }
     }
     return Boolean(found);
-  }, { message: 'A real, unmarked word and picture pair is available' }).toBe(true);
+  }, { timeout: 30000, message: 'Single-tile supply provides a real, unmarked word and picture pair' }).toBe(true);
   return found;
 }
 
@@ -168,7 +168,8 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     await hoverEmptySpace(page);
     expect(matching(await playbacksSince(page, beforeHover), evidence.pick),
       'Dragging across the board does not repeatedly play the pick cue').toEqual([]);
-    const beforeDrop = await playbackIndex(page), generatedBeforeDrop = (await jelly(page)).generated_pairs;
+    const dropState = await jelly(page), beforeDrop = await playbackIndex(page);
+    const fallingBeforeDrop = dropState.tiles.filter(tile => !tile.settled).length;
     await page.mouse.up();
     evidence.release = await audibleRecording(page, beforeDrop, CLIPS.release, evidence.land.fingerprint);
     // Both source files last 240 ms: compare decoded sample identity so a
@@ -178,11 +179,16 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
       const returned = (await jelly(page)).tiles.find(tile => tile.id === first.id);
       return returned ? Math.max(...returned.rect.map((value, index) => Math.abs(value - first.rect[index]))) : Infinity;
     }, { message: 'The dragged tile visibly returns before another gesture targets it' }).toBeLessThan(0.5);
-    await settledBoard(page);
-    expect((await jelly(page)).cleared_pairs).toBe(clearedBeforeDrop);
+    const afterDrop = await settledBoard(page);
+    expect(afterDrop.cleared_pairs).toBe(clearedBeforeDrop);
     const dropSounds = await playbacksSince(page, beforeDrop);
     expect(matching(dropSounds, evidence.release)).toHaveLength(1);
-    if ((await jelly(page)).generated_pairs === generatedBeforeDrop) {
+    const newArrivals = afterDrop.generated_tiles - dropState.generated_tiles;
+    const landings = matching(dropSounds, evidence.land);
+    evidence.emptyDrop = { fallingBeforeDrop, newArrivals, landings };
+    expect(landings.length, 'Only naturally falling tiles can account for landing sounds during snapback')
+      .toBeLessThanOrEqual(fallingBeforeDrop + newArrivals);
+    if (fallingBeforeDrop === 0 && newArrivals === 0) {
       expect(matching(dropSounds, evidence.land), 'Snapback is not a new falling-tile landing').toEqual([]);
     }
 

@@ -24,6 +24,7 @@ var _feedback_enabled: bool = true
 var _reduced_motion: bool = false
 var _mark: int = 0
 var _lift: Tween
+var _projection: bool = false
 
 func _init() -> void:
 	text = ""
@@ -77,7 +78,7 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	_surface.texture = surface
 	_picture.texture = picture
 	_badge.texture = chest
-	_badge.visible = bool(cell.get("chest", false)) and not combined
+	_badge.visible = bool(cell.get("chest", false)) and not combined and not _projection
 	_accent = accent
 	_refresh_feedback()
 	_label.text = str(word.text)
@@ -117,6 +118,15 @@ func _refresh_feedback(reset_motion: bool = false) -> void:
 func set_chest_texture(texture: Texture2D) -> void:
 	_badge.texture = texture
 
+func set_projection(value: bool) -> void:
+	_projection = value
+	_layout()
+	if value:
+		_badge.hide()
+		_gel.set_shader_parameter("rim_color", Color("#507968"))
+		_gel.set_shader_parameter("rim_strength", 0.8)
+		_gel.set_shader_parameter("rim_width", 1.0)
+
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	_gel.set_shader_parameter("bend", amount)
 	_gel.set_shader_parameter("beat", beat)
@@ -139,8 +149,8 @@ func _layout() -> void:
 	_surface.size = size
 	# Stay within the artwork's transparent margin, including tiny landscape tiles.
 	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
-	_picture.visible = kind == "picture" or combined
-	_label.visible = kind == "word" or combined
+	_picture.visible = not _projection and (kind == "picture" or combined)
+	_label.visible = not _projection and (kind == "word" or combined)
 	_picture.position = size * (Vector2(0.31, 0.25) if combined else Vector2(0.25, 0.29))
 	_picture.size = size * (Vector2(0.38, 0.34) if combined else Vector2(0.50, 0.46))
 	_label.position = size * Vector2(0.13, 0.60 if combined else 0.35)
@@ -152,4 +162,4 @@ func _layout() -> void:
 	_label.add_theme_font_size_override("font_size", font_size)
 	_badge.position = size * Vector2(0.59, 0.56)
 	_badge.size = size * 0.42
-	set_support()
+	set_support(0.0, 0.0, not _projection)

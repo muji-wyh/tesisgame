@@ -35,6 +35,10 @@ var _manifest: Dictionary = {}
 var _surfaces: Array[Texture2D] = []
 var _pictures: Dictionary = {}
 var _tiles: Dictionary = {}
+var _falling_layer: Control
+var _ghost: Tile
+var _preview_tiles: Array[Tile] = []
+var _preview_rect := Rect2()
 var _board := Rect2()
 var _pitch: float = 0.0
 var _gap: float = 0.0
@@ -58,7 +62,7 @@ var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_count: Label
 var _pace: Label
-var _next_pair: ProgressBar
+var _next_tile: ProgressBar
 var _notice: Label
 var _result: Control
 var _result_title: Label
@@ -77,6 +81,19 @@ func _init() -> void:
 	name = "JellyMatch"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_ALL
+	_falling_layer = Control.new()
+	_falling_layer.name = "FallingJellyClip"
+	_falling_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_falling_layer.clip_contents = true
+	_falling_layer.z_index = 2
+	add_child(_falling_layer)
+	_ghost = Tile.new()
+	_ghost.name = "LandingProjection"
+	_ghost.disabled = true
+	_ghost.focus_mode = Control.FOCUS_NONE
+	_ghost.modulate = Color(0.65, 0.82, 0.75, 0.28)
+	add_child(_ghost)
+	_ghost.hide()
 	_merged = Tile.new()
 	_merged.name = "FusedJelly"
 	_merged.focus_mode = Control.FOCUS_NONE
@@ -86,12 +103,19 @@ func _init() -> void:
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
-	_pace = _label(self, "Next pair", 12)
+	_pace = _label(self, "Next", 12)
 	_pace.add_theme_color_override("font_color", Color("#315142"))
-	_next_pair = ProgressBar.new()
-	_next_pair.show_percentage = false
-	_next_pair.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_next_pair)
+	_next_tile = ProgressBar.new()
+	_next_tile.show_percentage = false
+	_next_tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_next_tile)
+	for index in range(3):
+		var preview := Tile.new()
+		preview.name = "UpcomingJelly%d" % (index + 1)
+		preview.disabled = true
+		preview.focus_mode = Control.FOCUS_NONE
+		add_child(preview)
+		_preview_tiles.append(preview)
 	_notice = _label(self, "Match a picture to its word.", 14)
 	_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -178,16 +202,19 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_manifest = chests
 	_prepare_chest()
 	var accent: Color = _theme.get("accent", Style.GOOD)
-	_next_pair.add_theme_stylebox_override("background", Style.box(Color(accent, 0.13), Color.TRANSPARENT, 4, 0))
-	_next_pair.add_theme_stylebox_override("fill", Style.box(accent, Color.TRANSPARENT, 4, 0))
+	_next_tile.add_theme_stylebox_override("background", Style.box(Color(accent, 0.13), Color.TRANSPARENT, 4, 0))
+	_next_tile.add_theme_stylebox_override("fill", Style.box(accent, Color.TRANSPARENT, 4, 0))
 	for state: String in ["background", "fill"]:
-		_next_pair.get_theme_stylebox(state).set_content_margin_all(0)
+		_next_tile.get_theme_stylebox(state).set_content_margin_all(0)
 	Style.action_button(chests_button, accent, true)
 	Style.action_button(replay_button, accent)
 	Style.action_button(finish_button, accent)
 	for id in _tiles:
 		_configure_tile(_tiles[id], _cell(int(id)))
 	_merged.tile_id = -1
+	_ghost.tile_id = -1
+	for preview: Tile in _preview_tiles:
+		preview.tile_id = -1
 	queue_redraw()
 
 func _prepare_chest() -> void:
@@ -216,6 +243,8 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 		chest.texture = _chest_texture
 	for tile in _tiles.values():
 		tile.set_chest_texture(texture)
+	for preview: Tile in _preview_tiles:
+		preview.set_chest_texture(texture)
 
 func _cache_chest_image(id: String, cache: Dictionary) -> void:
 	# Source chests reserve an opening envelope. Trim the rendered closed pose once
@@ -278,6 +307,9 @@ func stop() -> void:
 	_result_visible = false
 	_result.hide()
 	_merged.hide()
+	_ghost.hide()
+	for preview: Tile in _preview_tiles:
+		preview.hide()
 	for tile in _tiles.values():
 		tile.hide()
 		tile.queue_free()
@@ -552,6 +584,7 @@ func _tile_rect(cell: Dictionary) -> Rect2:
 		Vector2.ONE * (_pitch - _gap))
 
 func _sync_positions() -> void:
+	_ghost.hide()
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
 		if not _tiles.has(id):
@@ -562,19 +595,44 @@ func _sync_positions() -> void:
 		tile.z_index = 40 if id == _source and _dragging else 1
 		var pose: Dictionary = Motion.sample(cell)
 		var dragging: bool = id == _source and _dragging
-		if id != _source or not _dragging:
-			tile.position = rect.position
+		var airborne: bool = bool(cell.get("arrival", false)) and float(cell.age) < Motion.contact_at(cell) and not reduced_motion
+		var parent: Control = _falling_layer if airborne else self
+		if tile.get_parent() != parent:
+			tile.reparent(parent, false)
+		var position_in_view: Vector2 = tile.position if dragging else rect.position
+		if not dragging:
 			if _snapbacks.has(id):
 				var p: float = clampf(float(_snapbacks[id].elapsed) / 0.24, 0.0, 1.0)
-				tile.position = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
+				position_in_view = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
 			elif not reduced_motion:
-				tile.position.y -= float(pose.lift_rows) * _pitch
+				position_in_view.y -= float(pose.lift_rows) * _pitch
+			tile.position = position_in_view - (_falling_layer.position if airborne else Vector2.ZERO)
 		var stretch: Vector2 = Vector2.ONE if reduced_motion else Vector2(0.985, 1.06) if dragging else Vector2(pose.stretch)
 		tile.deform(0.0 if reduced_motion or dragging else float(pose.bend), float(pose.beat), stretch)
-		var lift: float = 6.0 / Style.ui_scale(self) if dragging else maxf(0.0, rect.position.y - tile.position.y)
+		var lift: float = 6.0 / Style.ui_scale(self) if dragging else maxf(0.0, rect.position.y - position_in_view.y)
 		tile.set_support(lift, 0.0 if reduced_motion or dragging else float(pose.compression))
 		tile.modulate.a = 1.0 if reduced_motion else float(pose.opacity)
 		tile.visible = not _result_visible
+		if airborne and not _result_visible:
+			if _ghost.tile_id != id:
+				_configure_tile(_ghost, cell)
+				_ghost.set_projection(true)
+			_ghost.position = rect.position
+			_ghost.size = rect.size
+			_ghost.set_projection(true)
+			_ghost.show()
+
+func _sync_preview() -> void:
+	for index in range(_preview_tiles.size()):
+		var preview: Tile = _preview_tiles[index]
+		preview.visible = _configured and not _result_visible and index < game.upcoming.size()
+		if not preview.visible:
+			continue
+		var item: Dictionary = game.upcoming[index]
+		if preview.tile_id != int(item.id):
+			_configure_tile(preview, item)
+			preview.set("accessibility_name", "Next %d: %s %s" % [index + 1, str(item.kind), str(item.word.text)])
+		preview.set_support(0.0, 0.0, false)
 
 func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
@@ -742,8 +800,8 @@ func _refresh_hud() -> void:
 	_loot_count.text = str(game.chest_count)
 	_loot_count.set("accessibility_name", "%d chests collected" % game.chest_count)
 	var state: Dictionary = game.snapshot()
-	_next_pair.value = float(state.get("spawn_elapsed", 0.0)) / maxf(0.1, float(game.spawn_interval)) * 100.0
-	_pace.text = "Next pair"
+	_next_tile.value = float(state.get("spawn_elapsed", 0.0)) / maxf(0.1, float(game.spawn_interval)) * 100.0
+	_pace.text = "Next"
 	var full: bool = float(game.full_elapsed) >= 0.0
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
 	if _compact_hud and full:
@@ -751,9 +809,10 @@ func _refresh_hud() -> void:
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
 	_pace.visible = _configured and not _result_visible
-	_next_pair.visible = _configured and not _result_visible
+	_next_tile.visible = _configured and not _result_visible
 	_loot_icon.visible = _configured
 	_loot_count.visible = _configured
+	_sync_preview()
 
 func _refresh_controls() -> void:
 	for cell: Dictionary in game.cells:
@@ -800,15 +859,17 @@ func _layout() -> void:
 	var wide: bool = short_board or size.x > size.y * 1.18
 	_compact_hud = wide and size.x * scale_factor <= 400.0
 	var side_space: float = minf(164.0 / scale_factor, size.x * 0.20) if wide else 0.0
-	var available_height: float = size.y - edge * 2.0 if wide else size.y - 110.0 / scale_factor
+	var available_height: float = size.y - edge * 2.0 if wide else size.y - 150.0 / scale_factor
 	var available_width: float = size.x - edge * 2.0 - side_space * 2.0
 	var board_height: float = maxf(60.0, minf(minf(available_height, available_width * 1.5), 684.0 / scale_factor))
-	_board = Rect2(Vector2((size.x - board_height * 2.0 / 3.0) * 0.5, edge if wide else 52.0 / scale_factor), Vector2(board_height * 2.0 / 3.0, board_height))
+	_board = Rect2(Vector2((size.x - board_height * 2.0 / 3.0) * 0.5, edge if wide else 88.0 / scale_factor), Vector2(board_height * 2.0 / 3.0, board_height))
+	_falling_layer.position = _board.position
+	_falling_layer.size = _board.size
 	_pitch = board_height / 6.0
 	_gap = maxf(2.0 / scale_factor, _pitch * 0.035)
 	var hud_width: float = minf(160.0 / scale_factor, maxf(0.0, _board.position.x - edge * 2.0)) if wide else minf(110.0 / scale_factor, _board.size.x * 0.40)
-	var hud_x: float = maxf(edge, _board.position.x - hud_width - edge) if wide else _board.position.x
-	var hud_y: float = _board.position.y + 14.0 / scale_factor if wide else 0.0
+	var hud_x: float = maxf(edge, _board.position.x - hud_width - edge) if wide else edge
+	var hud_y: float = _board.position.y + 14.0 / scale_factor if wide else 20.0 / scale_factor
 	_loot_icon.position = Vector2(hud_x, hud_y)
 	_loot_icon.size = Vector2(44, 44) / scale_factor
 	_loot_count.position = Vector2(hud_x + 46.0 / scale_factor, hud_y)
@@ -822,14 +883,25 @@ func _layout() -> void:
 		_loot_count.size = Vector2(hud_width, 26.0 / scale_factor)
 		_loot_count.add_theme_font_size_override("font_size", ceili(20 / scale_factor))
 		_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var pace_x: float = hud_x if wide else _board.end.x - 125.0 / scale_factor
-	var pace_y: float = hud_y + (76.0 if _compact_hud else 66.0) / scale_factor if wide else 4.0 / scale_factor
-	_pace.position = Vector2(pace_x, pace_y)
-	_pace.size = Vector2(hud_width if wide else 125.0 / scale_factor, 23.0 / scale_factor)
+	var preview_width: float = minf(112.0 / scale_factor, size.x - _board.end.x - edge * 2.0) if wide else minf(208.0 / scale_factor, size.x - 92.0 / scale_factor - edge * 2.0)
+	var preview_x: float = _board.end.x + edge if wide else size.x - edge - preview_width
+	var preview_y: float = _board.position.y if wide else 0.0
+	var padding: float = 8.0 / scale_factor
+	var preview_size: float = minf(minf(72.0 / scale_factor, preview_width - padding * 2.0), maxf(20.0 / scale_factor, (board_height - 94.0 / scale_factor) / 3.0)) if wide else minf(56.0 / scale_factor, (preview_width - padding * 2.0) / 3.0)
+	if wide:
+		preview_size = minf(preview_size, _pitch * 0.88)
+	var preview_height: float = preview_size * 3.0 + 44.0 / scale_factor if wide else 78.0 / scale_factor
+	_preview_rect = Rect2(Vector2(preview_x, preview_y), Vector2(preview_width, preview_height))
+	_pace.position = _preview_rect.position + Vector2(padding, 2.0 / scale_factor)
+	_pace.size = Vector2(preview_width - padding * 2.0, 20.0 / scale_factor)
 	_pace.add_theme_font_size_override("font_size", ceili(12 / scale_factor))
-	_next_pair.position = Vector2(pace_x, pace_y + 27.0 / scale_factor)
-	_next_pair.size = Vector2(_pace.size.x, 5.0 / scale_factor)
-	_notice.position = Vector2(_board.end.x + edge * 2.0, _board.position.y + 20.0 / scale_factor) if wide else Vector2(_board.position.x, _board.end.y + 7.0 / scale_factor)
+	for index in range(_preview_tiles.size()):
+		var preview: Tile = _preview_tiles[index]
+		preview.size = Vector2.ONE * preview_size
+		preview.position = _preview_rect.position + (Vector2((preview_width - preview_size) * 0.5, 22.0 / scale_factor + index * (preview_size + 4.0 / scale_factor)) if wide else Vector2(padding + index * preview_size, 17.0 / scale_factor))
+	_next_tile.position = Vector2(preview_x + padding, _preview_rect.end.y - 8.0 / scale_factor)
+	_next_tile.size = Vector2(preview_width - padding * 2.0, 4.0 / scale_factor)
+	_notice.position = Vector2(_board.end.x + edge * 2.0, _preview_rect.end.y + 10.0 / scale_factor) if wide else Vector2(_board.position.x, _board.end.y + 7.0 / scale_factor)
 	_notice.size = Vector2(maxf(0.0, size.x - _notice.position.x - edge), minf(size.y - _notice.position.y, 96.0 / scale_factor)) if wide else Vector2(maxf(0.0, _board.size.x - 92.0 / scale_factor), 44.0 / scale_factor)
 	_notice.add_theme_font_size_override("font_size", ceili(14 / scale_factor))
 	Style.action_button(finish_button, _theme.get("accent", Style.GOOD))
@@ -839,7 +911,7 @@ func _layout() -> void:
 		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 			finish_button.get_theme_stylebox(state).content_margin_left = 6.0 / scale_factor
 			finish_button.get_theme_stylebox(state).content_margin_right = 6.0 / scale_factor
-	finish_button.position = Vector2(hud_x, maxf(pace_y + 56.0 / scale_factor, _board.end.y - 48.0 / scale_factor)) if wide else Vector2(_board.end.x - 84.0 / scale_factor, _board.end.y + 7.0 / scale_factor)
+	finish_button.position = Vector2(hud_x, _board.end.y - 48.0 / scale_factor) if wide else Vector2(_board.end.x - 84.0 / scale_factor, _board.end.y + 7.0 / scale_factor)
 	finish_button.size = Vector2(hud_width if wide else 84.0 / scale_factor, 44.0 / scale_factor)
 	_result.position = Vector2.ZERO
 	_result.size = size
@@ -924,6 +996,7 @@ func _draw() -> void:
 	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
 	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
 	draw_style_box(well, _board.grow(2.0))
+	draw_style_box(Style.box(Color("#fffdf5", 0.78), Color("#78a995", 0.30), 12, 1), _preview_rect)
 	for column in range(1, JellyMatchModel.COLUMNS):
 		var x: float = _board.position.x + float(column) * _pitch
 		draw_line(Vector2(x, _board.position.y + 8.0), Vector2(x, _board.end.y - 8.0), Color(accent, 0.07), 1.0 / Style.ui_scale(self))
@@ -958,6 +1031,10 @@ func snapshot() -> Dictionary:
 		item["focused"] = _tiles[int(cell.id)].has_focus()
 		result.tiles.append(item)
 	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": _selected}
+	result["preview"] = {"visible": _pace.is_visible_in_tree(), "rect": _rect(_global_rect(_preview_rect)), "slots": []}
+	for preview: Tile in _preview_tiles:
+		result.preview.slots.append({"id": preview.tile_id, "rect": _rect(preview.get_global_rect()), "visible": preview.is_visible_in_tree()})
+	result["landing_ghost"] = {"visible": _ghost.is_visible_in_tree(), "id": _ghost.tile_id, "rect": _rect(_ghost.get_global_rect())}
 	result["fusion_rect"] = _rect(_merged.get_global_rect()) if _merged.visible else []
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
