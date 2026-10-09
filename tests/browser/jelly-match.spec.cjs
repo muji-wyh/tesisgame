@@ -494,7 +494,7 @@ test.describe('manual jelly supply', () => {
   }
 });
 
-test('preview wobble builds with the dispatch clock and freezes during menus and fusion', async ({ page }, info) => {
+test('preview pressure builds with the dispatch clock and freezes during menus and fusion', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const poses = state => state.preview.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion }));
@@ -506,16 +506,36 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
   expectPreviewLayout(early, await metrics(page));
   await expect.poll(async () => {
     const state = await jelly(page);
+    return state.upcoming[0].id === early.upcoming[0].id && state.spawn_elapsed / state.spawn_interval >= 0.45;
+  }, { timeout: 7000, intervals: [50], message: 'Observe pressure building in the same upcoming batch' }).toBe(true);
+  const middle = await jelly(page);
+  await expect.poll(async () => {
+    const state = await jelly(page);
     return state.upcoming[0].id === early.upcoming[0].id && state.spawn_elapsed / state.spawn_interval >= 0.7;
   }, { timeout: 7000, intervals: [50], message: 'The same upcoming batch approaches its actual dispatch time' }).toBe(true);
   const late = await jelly(page);
   expectPreviewLayout(late, await metrics(page));
   for (let index = 0; index < 4; index++) {
-    const before = early.preview.slots[index].motion, after = late.preview.slots[index].motion;
-    expect(after.intensity, 'Every preview becomes more animated as dispatch approaches').toBeGreaterThan(before.intensity);
-    expect({ offset: after.offset, stretch: after.stretch, bend: after.bend }, 'The visible gel pose actually changes')
-      .not.toEqual({ offset: before.offset, stretch: before.stretch, bend: before.bend });
+    const before = early.preview.slots[index].motion;
+    const between = middle.preview.slots[index].motion;
+    const after = late.preview.slots[index].motion;
+    expect(between.intensity, 'Every preview builds pressure as its dispatch approaches').toBeGreaterThan(before.intensity);
+    expect(after.intensity, 'Pressure keeps building through the final part of the supply cycle').toBeGreaterThan(between.intensity);
+    expect(between.beat, 'The pulse phase follows the actual supply clock').toBeGreaterThan(before.beat);
+    expect(after.beat).toBeGreaterThan(between.beat);
+    for (const state of [early, middle, late]) {
+      const slot = state.preview.slots[index];
+      expect(slot.rect, 'The queued tile keeps a fixed origin and hit rectangle').toEqual(early.preview.slots[index].rect);
+      expect(Object.keys(slot.motion).sort()).toEqual(['beat', 'intensity', 'pressure', 'sway']);
+      expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.021);
+      expect(slot.motion.pressure).toBeLessThanOrEqual(0.066);
+      expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.0121);
+    }
+    expect({ pressure: after.pressure, sway: after.sway }, 'The gel skin changes strain without moving its contents')
+      .not.toEqual({ pressure: before.pressure, sway: before.sway });
   }
+  expect(new Set(late.preview.slots.map(slot => JSON.stringify([slot.motion.pressure, slot.motion.sway]))).size,
+    'The four skins have staggered pressure impulses').toBeGreaterThan(1);
 
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
@@ -527,8 +547,12 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
   expect(stillPaused.spawn_elapsed, 'The menu freezes the actual supply clock').toBe(paused.spawn_elapsed);
   expect(poses(stillPaused), 'Preview jellies retain their exact pose while paused').toEqual(poses(paused));
   await libraryControl(page, 'LibraryClose');
-  await expect.poll(async () => (await jelly(page)).spawn_elapsed,
-    { timeout: 3000, intervals: [50], message: 'Closing the menu resumes the interrupted dispatch clock' }).toBeGreaterThan(paused.spawn_elapsed);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    // Resuming near release can commit the batch and reset its clock before
+    // the next published frame. Both outcomes prove the same clock resumed.
+    return !state.paused && (state.spawn_elapsed > paused.spawn_elapsed || state.generated_tiles > paused.generated_tiles);
+  }, { timeout: 3000, intervals: [50], message: 'Closing the menu advances the supply clock or dispatches its pending batch' }).toBe(true);
   const resumed = await jelly(page);
   expect(poses(resumed), 'Preview motion resumes with the dispatch clock').not.toEqual(poses(paused));
 
@@ -544,11 +568,14 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
     expect(frame.previewEnabled, 'Fusion disables manual dispatch until every animation finishes').toBe(false);
     expect(frame.previewControl.disabled).toBe(true);
   }
-  await info.attach('jelly-preview-motion.json', { body: Buffer.from(JSON.stringify({
+  const motionPath = info.outputPath('jelly-preview-motion.json');
+  fs.writeFileSync(motionPath, JSON.stringify({
     early: { elapsed: early.spawn_elapsed, slots: poses(early) },
+    middle: { elapsed: middle.spawn_elapsed, slots: poses(middle) },
     late: { elapsed: late.spawn_elapsed, slots: poses(late) },
     paused: { elapsed: paused.spawn_elapsed, slots: poses(paused) }, fusion
-  }, null, 2)), contentType: 'application/json' });
+  }, null, 2));
+  await info.attach('jelly-preview-motion', { path: motionPath, contentType: 'application/json' });
   await page.screenshot({ path: info.outputPath('jelly-preview-after-fusion.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });

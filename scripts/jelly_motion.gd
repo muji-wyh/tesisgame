@@ -30,21 +30,33 @@ static func ready_at(cell: Dictionary) -> float:
 
 static func preview(elapsed: float, interval: float, index: int, reduced: bool = false) -> Dictionary:
 	if reduced:
-		return {"offset": Vector2.ZERO, "stretch": Vector2.ONE, "bend": 0.0, "beat": 0.0, "intensity": 0.0}
+		return {"pressure": 0.0, "sway": 0.0, "beat": 0.0, "intensity": 0.0}
 	var duration: float = maxf(0.1, interval)
 	var progress: float = clampf(elapsed / duration, 0.0, 1.0)
-	var buildup: float = pow(progress, 2.4)
-	# Integrating the rising frequency keeps phase continuous as the real supply
-	# clock approaches release. No independent tween can outlive a paused round.
-	var beat: float = TAU * duration * (progress + 0.875 * pow(progress, 4.0)) + float(index) * 1.31
-	var amplitude: float = lerpf(0.006, 0.052, buildup)
-	var height: float = 1.0 + sin(beat + 0.8) * lerpf(0.012, 0.078, buildup)
-	return {
-		"offset": Vector2(sin(beat) * amplitude, -absf(sin(beat * 0.82)) * amplitude * 0.4),
-		"stretch": Vector2(1.0 / sqrt(height), height),
-		"bend": lerpf(0.002, 0.014, buildup), "beat": beat,
-		"intensity": lerpf(0.12, 1.0, buildup)
-	}
+	var time: float = progress * duration
+	# The supply clock schedules increasingly close pressure impulses. Each skin
+	# keeps its own short physical recovery instead of speeding up a rigid shake.
+	var acceleration: float = 2.15 / duration
+	var phase: float = 0.65 * time + 0.5 * acceleration * time * time
+	var stagger: float = 0.18 + float(index) * 0.095
+	var latest: int = floori(phase - stagger)
+	var pressure: float = 0.0
+	var sway: float = 0.0
+	for pulse in range(maxi(0, latest - 2), latest + 1):
+		var onset: float = (sqrt(0.65 * 0.65 + 2.0 * acceleration * (float(pulse) + stagger)) - 0.65) / acceleration
+		var age: float = maxf(0.0, time - onset)
+		var strength: float = lerpf(0.009, 0.06, pow(onset / duration, 2.4))
+		if age < 0.07:
+			pressure += strength * smoothstep(0.0, 0.07, age)
+		else:
+			var release: float = age - 0.07
+			# Zero velocity at release, then one small overshoot and a dying tail.
+			pressure += strength * exp(-10.5 * release) * (cos(23.0 * release) + 10.5 / 23.0 * sin(23.0 * release))
+			var lag: float = maxf(0.0, release - 0.025)
+			var direction: float = -1.0 if (pulse + index) % 2 == 0 else 1.0
+			sway += direction * strength * 0.30 * exp(-8.0 * lag) * sin(20.0 * lag)
+	return {"pressure": pressure, "sway": sway, "beat": phase * TAU,
+		"intensity": lerpf(0.12, 1.0, pow(progress, 2.4))}
 
 
 static func sample(cell: Dictionary) -> Dictionary:

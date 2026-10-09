@@ -137,6 +137,11 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
 	_surface.scale = _base_stretch
 
+func set_preview_pressure(pressure: float, sway: float) -> void:
+	_gel.set_shader_parameter("preview_pressure", pressure)
+	_gel.set_shader_parameter("preview_sway", sway)
+	set_support(0.0, clampf(pressure / 0.06, 0.0, 1.0))
+
 func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
 	if kind_value == "none" and _contact_kind == "none":
 		return

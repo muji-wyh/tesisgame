@@ -117,14 +117,17 @@ batch then uses the existing soft landing feedback at contact. Manual supply
 introduces no new artwork or audio assets, and preserves the current mute,
 pronunciation priority and interruption behavior.
 
-Upcoming bodies wobble on the actual supply clock, with frequency rising from
-1 to 4.5 Hz and lateral travel from 0.6% to 5.2% of tile width. A curved buildup
-reserves the strongest motion for the end of the interval; slot phase offsets
-keep the four acquired gel illustrations from moving as one rigid object.
-Only their surfaces squash, preserving the learning labels and pictures. Pause
-and fusion freeze this same pose. New supply resets the buildup; a full board
+Upcoming bodies stay planted while the acquired skin briefly compresses, spreads
+at its lower lobe and settles through a damped rebound. Pressure impulses follow
+the actual supply clock, rising from 0.65 to 2.8 Hz; strain builds toward 6% near
+release. Each squeeze takes 70 ms, followed by one small overshoot and a dying
+tail. A delayed crown sway and slight slot offsets keep the four bodies from
+moving in rigid unison. The painted foot stays fixed above the source contact
+shadow; labels, pictures, chest markers and input rectangles remain stationary.
+Pause and fusion freeze the same pose. New supply starts at rest; a full board
 and reduced motion display neutral previews. No new visual or audio asset is
-introduced for anticipation.
+introduced for anticipation; the existing CC0 gel skins and contact shadow are
+reused.
 
 Each landing projection reuses the same acquired gel silhouette at its actual
 destination, without word, picture or chest content. It remains stationary while

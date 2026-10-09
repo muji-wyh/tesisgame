@@ -3,6 +3,8 @@ render_mode unshaded;
 
 uniform float bend = 0.0;
 uniform float beat = 0.0;
+uniform float preview_pressure = 0.0;
+uniform float preview_sway = 0.0;
 uniform vec4 rim_color : source_color = vec4(0.21, 0.49, 0.44, 1.0);
 uniform float rim_strength = 0.0;
 uniform float rim_width = 1.0;
@@ -20,6 +22,13 @@ void fragment() {
 	vec2 sample_uv = UV;
 	sample_uv.x += sin(UV.y * 3.14159265) * sin(beat + UV.y * 3.14159265) * bend;
 	sample_uv.y += sin(UV.x * 3.14159265) * cos(beat + UV.x * 3.14159265) * bend * 0.55;
+	// Anticipation deforms the acquired skin above its painted contact point.
+	// The lower lobe spreads under pressure; the crown follows a little later.
+	float height = clamp((0.890625 - UV.y) / 0.784375, 0.0, 1.0);
+	float bulge = sin(height * 3.14159265) * preview_pressure * 0.48;
+	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge);
+	sample_uv.x -= preview_sway * height * height;
+	sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);
 	vec2 local = UV - vec2(0.5);
 	float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
 	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);

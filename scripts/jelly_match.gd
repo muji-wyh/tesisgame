@@ -111,6 +111,7 @@ func _init() -> void:
 	for index in range(JellyMatchModel.UPCOMING_COUNT):
 		var preview := Tile.new()
 		preview.name = "UpcomingJelly%d" % (index + 1)
+		preview.z_index = 1
 		preview.disabled = true
 		preview.focus_mode = Control.FOCUS_NONE
 		add_child(preview)
@@ -706,9 +707,9 @@ func _sync_preview() -> void:
 			_configure_tile(preview, item)
 			preview.set("accessibility_name", "Upcoming %d: %s %s" % [index + 1, str(item.kind), str(item.word.text)])
 		var pose: Dictionary = _preview_pose(index)
-		preview.position = _preview_origins[index] + Vector2(pose.offset) * preview.size
-		preview.deform(float(pose.bend), float(pose.beat), Vector2(pose.stretch))
-		preview.set_support(0.0, 0.0, false)
+		preview.position = _preview_origins[index]
+		preview.deform(0.0, 0.0)
+		preview.set_preview_pressure(float(pose.pressure), float(pose.sway))
 
 func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index,
@@ -1300,8 +1301,7 @@ func snapshot() -> Dictionary:
 		var preview: Tile = _preview_tiles[index]
 		var pose: Dictionary = _preview_pose(index)
 		result.preview.slots.append({"id": preview.tile_id, "rect": _rect(preview.get_global_rect()), "visible": preview.is_visible_in_tree(),
-			"motion": {"offset": [pose.offset.x, pose.offset.y], "stretch": [pose.stretch.x, pose.stretch.y],
-				"bend": pose.bend, "beat": pose.beat, "intensity": pose.intensity}})
+			"motion": {"pressure": pose.pressure, "sway": pose.sway, "beat": pose.beat, "intensity": pose.intensity}})
 	result["landing_ghosts"] = []
 	for ghost: Tile in _ghosts.values():
 		result.landing_ghosts.append({"visible": ghost.is_visible_in_tree(), "id": ghost.tile_id, "rect": _rect(ghost.get_global_rect())})

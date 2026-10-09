@@ -205,13 +205,12 @@ func _check_layout(view) -> void:
 		for slot: Dictionary in preview.slots:
 			check(bool(slot.visible) and preview_rect.encloses(_rect(slot.rect)),
 				"%s keeps preview tile %s fully inside its supply area" % [dimensions, slot.id])
-		for progress: float in [0.8, 0.9, 0.99]:
-			for index in range(view._preview_tiles.size()):
-				var tile = view._preview_tiles[index]
-				var pose: Dictionary = Motion.preview(progress * view.game.spawn_interval, view.game.spawn_interval, index)
-				var moving_rect := Rect2(view._preview_origins[index] + Vector2(pose.offset) * tile.size, tile.size)
-				check(preview_rect.encloses(view._global_rect(moving_rect)),
-					"%s contains preview %d at %d percent of its urgent wobble" % [dimensions, index + 1, roundi(progress * 100)])
+		for index in range(view._preview_tiles.size()):
+			var tile = view._preview_tiles[index]
+			var anchored_rect := Rect2(view._preview_origins[index], tile.size)
+			check(tile.position.is_equal_approx(view._preview_origins[index])
+				and preview_rect.encloses(view._global_rect(anchored_rect)),
+				"%s keeps preview %d planted inside its supply region" % [dimensions, index + 1])
 		for cell: Dictionary in view.game.cells:
 			check(board.encloses(view._tiles[int(cell.id)].get_rect()), "%s keeps settled jelly %s inside its well" % [dimensions, cell.id])
 	view.size = Vector2(1000, 720)
@@ -468,10 +467,10 @@ func _preview_window(interval: float, start: float, finish: float) -> Dictionary
 	var energy: float = 0.0
 	var samples: int = 0
 	for index in range(4):
-		for sample_index in range(41):
-			var progress: float = lerpf(start, finish, float(sample_index) / 40.0)
+		for sample_index in range(81):
+			var progress: float = lerpf(start, finish, float(sample_index) / 80.0)
 			var pose: Dictionary = Motion.preview(progress * interval, interval, index)
-			energy += Vector2(pose.offset).length_squared()
+			energy += float(pose.pressure) * float(pose.pressure) + float(pose.sway) * float(pose.sway)
 			samples += 1
 	var first: Dictionary = Motion.preview(start * interval, interval, 0)
 	var last: Dictionary = Motion.preview(finish * interval, interval, 0)
@@ -480,18 +479,40 @@ func _preview_window(interval: float, start: float, finish: float) -> Dictionary
 
 func _check_preview_pose(view, reason: String) -> void:
 	var slots: Array = view.snapshot().preview.slots
+	var still: bool = view.reduced_motion or view.game.phase != "playing" or view.game.cells.size() >= view.game.CAPACITY
 	for index in range(view._preview_tiles.size()):
 		var tile = view._preview_tiles[index]
-		var pose: Dictionary = Motion.preview(view.game.spawn_elapsed, view.game.spawn_interval, index, view.reduced_motion)
-		check(tile.position.is_equal_approx(view._preview_origins[index] + Vector2(pose.offset) * tile.size)
-			and tile._surface.scale.is_equal_approx(Vector2(pose.stretch))
-			and is_equal_approx(float(tile._gel.get_shader_parameter("bend")), float(pose.bend)),
-			"%s derives preview %d from the live model clock" % [reason, index + 1])
-		check(tile._visual.scale == Vector2.ONE and tile._picture.scale == Vector2.ONE and tile._label.scale == Vector2.ONE,
-			"%s keeps preview %d learning content readable while its gel wobbles" % [reason, index + 1])
-		check(slots[index].has("motion") and is_equal_approx(float(slots[index].motion.intensity), float(pose.intensity))
+		var pose: Dictionary = Motion.preview(view.game.spawn_elapsed, view.game.spawn_interval, index, still)
+		check(tile.position.is_equal_approx(view._preview_origins[index]) and tile._surface.scale == Vector2.ONE
+			and is_zero_approx(float(tile._gel.get_shader_parameter("bend")))
+			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_pressure")), float(pose.pressure))
+			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_sway")), float(pose.sway)),
+			"%s applies preview %d's model-clock strain to its skin without moving or scaling its root" % [reason, index + 1])
+		check(tile._visual.scale == Vector2.ONE and tile._picture.scale == Vector2.ONE and tile._label.scale == Vector2.ONE
+			and is_zero_approx(tile._visual.rotation) and is_zero_approx(tile._picture.rotation) and is_zero_approx(tile._label.rotation),
+			"%s keeps preview %d learning content free of pressure deformation" % [reason, index + 1])
+		check(tile._shadow.visible and tile._shadow.modulate.a > 0.0
+			and is_equal_approx(tile._shadow.position.x + tile._shadow.size.x * 0.5, tile.size.x * 0.5)
+			and is_equal_approx(tile._shadow.position.y + tile._shadow.size.y * 0.6, tile.size.y * Motion.FOOT_Y),
+			"%s keeps preview %d's contact shadow anchored to its painted foot" % [reason, index + 1])
+		var shadow_layer: int = tile.z_index + tile._shadow.z_index
+		check(tile.z_as_relative and tile._shadow.z_as_relative and tile._visual.z_as_relative
+			and tile.get_parent() == view.drop_button.get_parent()
+			and (shadow_layer > view.drop_button.z_index
+				or (shadow_layer == view.drop_button.z_index and tile.get_index() > view.drop_button.get_index()))
+			and tile._shadow.z_index < tile._visual.z_index,
+			"%s paints preview %d's support shadow above the supply panel and below its gel skin" % [reason, index + 1])
+		check(slots[index].has("motion") and slots[index].motion == pose
 			and _rect(slots[index].rect).is_equal_approx(tile.get_global_rect()),
-			"%s publishes preview %d's real motion intensity and moving rectangle" % [reason, index + 1])
+			"%s publishes preview %d's actual pressure and fixed hit rectangle" % [reason, index + 1])
+
+
+func _preview_content_transforms(view) -> Array:
+	var transforms: Array = []
+	for tile in view._preview_tiles:
+		transforms.append([tile.get_transform(), tile._surface.get_transform(), tile._visual.get_transform(),
+			tile._picture.get_transform(), tile._label.get_transform(), tile._badge.get_transform()])
+	return transforms
 
 
 func _check_preview_motion(view) -> void:
@@ -499,29 +520,55 @@ func _check_preview_motion(view) -> void:
 		var early: Dictionary = _preview_window(interval, 0.05, 0.20)
 		var middle: Dictionary = _preview_window(interval, 0.40, 0.55)
 		var late: Dictionary = _preview_window(interval, 0.84, 0.99)
-		check(float(middle.amplitude) > float(early.amplitude) * 1.5
-			and float(late.amplitude) > float(middle.amplitude) * 1.5,
-			"The %.2f-second supply beat grows from gentle motion to a stronger pre-drop wobble" % interval)
-		check(float(middle.speed) > float(early.speed) * 1.2 and float(late.speed) > float(middle.speed) * 1.8,
-			"The %.2f-second supply beat accelerates wobble frequency as dispatch approaches" % interval)
+		check(float(early.amplitude) > 0.0 and float(middle.amplitude) > float(early.amplitude)
+			and float(late.amplitude) > float(middle.amplitude),
+			"The %.2f-second supply cycle builds material pressure from early through middle to late release" % interval)
+		check(float(middle.speed) > float(early.speed) and float(late.speed) > float(middle.speed),
+			"The %.2f-second supply cycle brings pressure pulses closer together as dispatch approaches" % interval)
 		var previous_intensity: float = 0.0
+		var different_slots: bool = false
 		for step in range(101):
 			var elapsed: float = interval * float(step) / 100.0
 			var pose: Dictionary = Motion.preview(elapsed, interval, 0)
 			check(float(pose.intensity) >= previous_intensity and float(pose.intensity) <= 1.0
-				and absf(Vector2(pose.offset).x) <= 0.0521 and absf(Vector2(pose.offset).y) <= 0.0209
-				and Vector2(pose.stretch).y >= 0.9219 and Vector2(pose.stretch).y <= 1.0781,
-				"Preview urgency grows inside a small readable motion envelope at %d percent" % step)
+				and float(pose.pressure) >= -0.021 and float(pose.pressure) <= 0.066 and absf(float(pose.sway)) <= 0.0121
+				and not pose.has("offset") and not pose.has("stretch") and not pose.has("bend"),
+				"Preview urgency grows inside a small strain envelope without affine motion at %d percent" % step)
 			previous_intensity = float(pose.intensity)
 			var still: Dictionary = Motion.preview(elapsed, interval, step % 4, true)
-			check(still.offset == Vector2.ZERO and still.stretch == Vector2.ONE
-				and is_zero_approx(float(still.bend)) and is_zero_approx(float(still.intensity)),
+			check(is_zero_approx(float(still.pressure)) and is_zero_approx(float(still.sway))
+				and is_zero_approx(float(still.beat)) and is_zero_approx(float(still.intensity)),
 				"Reduced motion has a neutral preview pose throughout the supply beat")
+			for index in range(1, 4):
+				var other: Dictionary = Motion.preview(elapsed, interval, index)
+				different_slots = different_slots or not is_equal_approx(float(other.pressure), float(pose.pressure))
+		check(different_slots, "The four queued skins have staggered pressure impulses instead of moving as a rigid group")
+		for index in range(4):
+			var reset: Dictionary = Motion.preview(0.0, interval, index)
+			check(is_zero_approx(float(reset.pressure)) and is_zero_approx(float(reset.sway)),
+				"A newly queued skin starts exactly at rest rather than inheriting the previous beat")
+			var previous: Dictionary = reset
+			var maximum_rate: Vector2 = Vector2.ZERO
+			var minimum_pressure: float = 0.0
+			var maximum_pressure: float = 0.0
+			for sample_index in range(1, 2001):
+				var current: Dictionary = Motion.preview(interval * float(sample_index) / 2000.0, interval, index)
+				var rate := Vector2(absf(float(current.pressure) - float(previous.pressure)), absf(float(current.sway) - float(previous.sway))) / (interval / 2000.0)
+				maximum_rate = maximum_rate.max(rate)
+				minimum_pressure = minf(minimum_pressure, float(current.pressure))
+				maximum_pressure = maxf(maximum_pressure, float(current.pressure))
+				previous = current
+			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 1.0,
+				"Preview %d compresses and elastically recovers through continuous bounded pressure without a phase-boundary snap" % (index + 1))
 	_reset(view, false, false)
 	var first: Array = view.snapshot().preview.slots.duplicate(true)
+	var content: Array = _preview_content_transforms(view)
 	_check_preview_pose(view, "A fresh batch")
-	_advance(view, view.game.spawn_interval * 0.9)
-	_check_preview_pose(view, "The late supply beat")
+	for progress: float in [0.25, 0.5, 0.75, 0.9]:
+		_advance(view, view.game.spawn_interval * progress - view.game.spawn_elapsed)
+		_check_preview_pose(view, "The %.0f percent supply beat" % (progress * 100))
+		check(_preview_content_transforms(view) == content,
+			"Pressure changes the gel material while every queued root, word, picture, and chest marker stays anchored")
 	var late_slots: Array = view.snapshot().preview.slots.duplicate(true)
 	check(late_slots != first and int(late_slots[0].id) == int(first[0].id),
 		"Approaching release animates the existing queued tiles without replacing them")
@@ -532,12 +579,12 @@ func _check_preview_motion(view) -> void:
 	view.hide()
 	_advance(view, 0.5)
 	view.show()
-	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot keep wobbling or advance its preview clock")
+	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot continue pressure pulses or advance its preview clock")
 	var pair: Array[int] = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	_advance(view, 0.4)
 	check(not view.game.fusion.is_empty() and view.snapshot().preview.slots == late_slots,
-		"Fusion freezes the pending batch's urgent wobble with its supply clock")
+		"Fusion freezes the pending batch's pressure strain with its supply clock")
 	_advance(view, view.game.FUSION_SECONDS - 0.4 + 0.00001)
 	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed + 0.00001)
 	_check_preview_pose(view, "The following dispatched batch")
@@ -562,8 +609,13 @@ func _check_preview_motion(view) -> void:
 	check(view.snapshot().preview.slots == static_slots, "Reduced motion advances supply time without moving its preview")
 	view.set_reduced_motion(false)
 	_check_preview_pose(view, "Restoring motion")
+	_fill_board(view)
+	_check_preview_pose(view, "A full board")
+	var full_slots: Array = view.snapshot().preview.slots.duplicate(true)
+	_advance(view, 0.2)
+	check(view.snapshot().preview.slots == full_slots, "Full-board danger cannot keep pulsing a batch that cannot fall")
 	view.stop()
-	check(not bool(view.snapshot().preview.visible), "Stopping removes the wobbling supply presentation")
+	check(not bool(view.snapshot().preview.visible), "Stopping removes the pressure-pulse supply presentation")
 	for tile in view._preview_tiles:
 		check(not tile.visible, "No preview tile continues rendering after stop")
 	_reset(view)
