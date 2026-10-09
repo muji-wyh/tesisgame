@@ -44,6 +44,25 @@ test('a successful receipt verifies exact source and output bytes without relyin
   assert.deepEqual(verifyBuildReceipt(root), JSON.parse(fs.readFileSync(receipt, 'utf8')));
 });
 
+test('localhost preview edits do not stale production builds while runtime and deployed files remain protected', t => {
+  const { root, write, record } = fixture(t);
+  write('web/preview/pip-growth/index.html', 'local preview');
+  write('web/preview/pip-growth/art/pip.svg', 'review artwork');
+  write('web/preview.js', 'production script with a similar name');
+  const receipt = record();
+  assert.equal(receipt.sources.some(file => file.path.startsWith('web/preview/')), false);
+  assert.ok(receipt.sources.some(file => file.path === 'web/preview.js'));
+  write('web/preview/pip-growth/index.html', 'revised local preview');
+  write('web/preview/pip-growth/review-output/desktop.png', 'new local review capture');
+  fs.unlinkSync(path.join(root, 'web/preview/pip-growth/art/pip.svg'));
+  assert.deepEqual(verifyBuildReceipt(root), receipt);
+  write('web/preview.js', 'changed production script');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*web\/preview\.js/);
+  record();
+  write('build/web/preview/pip-growth/index.html', 'accidentally copied preview');
+  assert.throws(() => verifyBuildReceipt(root), /export changed.*preview\/pip-growth\/index\.html/);
+});
+
 test('edits to private assets, new scripts and deleted runtime inputs reject an older export', t => {
   const { root, write, record } = fixture(t);
   record();

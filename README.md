@@ -14,7 +14,7 @@ handles loading, accessibility, audio recovery, and speech recognition.
 - **Voice Pop:** speak visible words during a 50-second round. Scores of 100, 200, and 300 each earn a chest. Results retain scores, chest progress and word review.
 - **Growth:** everyone starts at Lv3. Each word needs six consecutive correct answers in any applicable mode. A wrong answer resets the involved words. Master the entire current cohort to unlock the next level, up to Lv12+. Earned levels never decrease.
 - **Vocabulary notebook:** the progress bar opens all words in a selected age cohort, including saved mastery and pronunciation. Later levels can be previewed but cannot be selected to skip progression. The 1,550-word curriculum is an editorial English-as-a-second-language sequence, not a developmental assessment.
-- **Pip:** ten stage appearances and cumulative action repertoires accompany growth. [Review all stages, moves and voices](https://gentle-forest-02ff42900.3.azurestaticapps.net/preview/pip-growth/).
+- **Pip:** ten stage appearances and cumulative action repertoires accompany growth. Run `npm run preview:pip` to review the assets at [localhost](http://127.0.0.1:41774/). The asset preview is not published with the game.
 - **Eight worlds and treasure:** theme choices, three-second round celebrations and existing chest rewards remain available. Usernames, identity avatars, leaderboards and Pip's room have been retired.
 
 Voice Pop uses `SpeechRecognition` or `webkitSpeechRecognition` by default.

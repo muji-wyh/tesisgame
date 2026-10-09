@@ -1,5 +1,16 @@
 # Grow with Pip release verification
 
+The original release evidence below describes commit `f008dc4`. A subsequent
+October 9 correction makes the Pip asset preview localhost-only: start it with
+`npm run preview:pip` at `http://127.0.0.1:41774/`. The preview entry and files
+are removed from the published game; the original production preview link and
+preview packaging checks below are historical evidence, not current behavior.
+The correction passed 45 packaging/receipt tests and the 43-check native growth
+flow. The localhost page was checked for all ten stages, cumulative actions and
+voice choices, playback and cancellation when switching stages.
+The rebuilt artifact verifies 7,107 production inputs and 17 output files, with
+no preview directory. The focused desktop startup/notebook browser case passed.
+
 ## Scope
 
 The game now uses a device-local Lv3–Lv12+ learning path. Correct completed

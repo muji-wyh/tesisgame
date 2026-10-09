@@ -206,21 +206,3 @@ test('two open game tabs preserve each other\'s completed word practice', async 
     await other.close();
   }
 });
-
-test('the notebook opens the complete Pip growth preview without changing progress', async ({ page }) => {
-  const errors = await openGame(page);
-  const before = await growth(page);
-  await pressNamed(page, 'GrowthProgressButton');
-  const opened = page.context().waitForEvent('page');
-  await pressNamed(page, 'PreviewPipGrowth');
-  const preview = await opened;
-  try {
-    await expect(preview).toHaveURL(/\/preview\/pip-growth\/#lv3$/);
-    await expect(preview).toHaveTitle("Pip's growth journey · Grow with Pip");
-    await expect(preview.locator('#level-picker button')).toHaveCount(10);
-    expect(await growth(page)).toEqual(before);
-    expect(errors).toEqual([]);
-  } finally {
-    await preview.close();
-  }
-});

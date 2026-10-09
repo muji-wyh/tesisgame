@@ -21,6 +21,11 @@ npm start
 
 `npm start` imports the resources, exports Godot to Web, and serves the result at `http://127.0.0.1:41773`.
 
+For the ten-stage Pip asset review, run `npm run preview:pip` and open
+`http://127.0.0.1:41774/`. This separate server binds to localhost only and does
+not require a game build. Asset previews are development tools; Pip's preview
+is excluded from the production export, its build receipt inputs and game UI.
+
 To build without starting a server:
 
 ```powershell

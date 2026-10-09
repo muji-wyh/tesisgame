@@ -20,7 +20,7 @@ The persistent level button and progress bar show mastered words in the current
 cohort. The button or **More** opens the learning notebook. It includes all words
 in each cohort, their 0-6 streaks or Mastered labels, pronunciation and short
 meanings. Future cohorts are clearly previews: browsing them cannot change the
-game's earned level. **Meet Pip** opens the interactive ten-stage review page.
+game's earned level.
 
 The notebook also offers eight worlds. On short screens a header icon cycles
 worlds; on larger screens an illustrated horizontal strip offers direct choices.

@@ -37,4 +37,4 @@ Existing reward, medal and Voice Pop chest saves are preserved. Legacy age choic
 
 ## Pip review
 
-The preview at `/preview/pip-growth/` presents ten compositions using Pip's existing layered production artwork and expressions. Every successive stage adds one motion and one click-to-hear Ava line. Gameplay keeps feedback, pronunciation, pause, mute, reduced motion and chest timing. Extra Pip speech is explicitly requested rather than played as guidance. Source, license, composition and voice settings are documented in `docs/assets/pip-growth.md`.
+The developer-only asset preview at `http://127.0.0.1:41774/` presents ten compositions using Pip's existing layered production artwork and expressions. Start it with `npm run preview:pip`; it is not included in the published game or linked from gameplay. Every successive stage adds one motion and one click-to-hear Ava line. Gameplay keeps feedback, pronunciation, pause, mute, reduced motion and chest timing. Extra Pip speech is explicitly requested rather than played as guidance. Source, license, composition and voice settings are documented in `docs/assets/pip-growth.md`.

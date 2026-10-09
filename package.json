@@ -27,6 +27,7 @@
     "prestart": "npm run build:web",
     "start": "npm run serve:web",
     "serve:web": "http-server build/web -a 127.0.0.1 -p 41773 --brotli -c-1",
+    "preview:pip": "http-server web/preview/pip-growth -a 127.0.0.1 -p 41774 -c-1",
     "pretest:browser": "npm run build:web",
     "test:browser": "playwright test",
     "test:all": "npm test && npm run test:browser",

@@ -8,9 +8,10 @@ diagnosis or an attempt to make Pip physically older.
 These are **new stage compositions for review**, assembled from already
 integrated production illustration. They are not newly acquired stock character
 designs, generated concept-art placeholders, or a one-to-one assignment of the
-eight world outfits to ages. The interactive review is available at
-`/preview/pip-growth/` after web packaging. During development it can be served
-directly from `web/preview/pip-growth/`.
+eight world outfits to ages. The interactive review is a localhost-only asset
+tool, served directly from `web/preview/pip-growth/`. Run `npm run preview:pip`
+and open `http://127.0.0.1:41774/`. It is excluded from the production export
+and has no in-game entry.
 
 ## Visual progression
 

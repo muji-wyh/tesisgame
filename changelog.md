@@ -15,7 +15,8 @@ removed. Use the [documentation index](docs/README.md) for current guidance.
   330 phrases with approved Ava recordings, researched curriculum notes,
   sourced pictures and contextual vocabulary.
 - Added ten earned Pip appearances with cumulative gestures and a standalone
-  interactive action/voice review page at `/preview/pip-growth/`.
+  localhost-only action/voice asset review, started with `npm run preview:pip`.
+  The preview has no gameplay entry and is excluded from production exports.
 - Retired Pip's room, identity avatars, usernames and leaderboards, including
   exclusive runtime code and assets. Existing chest and reward saves remain.
 

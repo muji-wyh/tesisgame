@@ -235,7 +235,6 @@ var growth := GrowthState.new()
 var _growth_button: Button
 var _growth_bar: ProgressBar
 var _growth_summary: Label
-var _growth_preview: Button
 var _compact_world: Button
 var _growth_save_failed: bool = false
 var _catalog_age: int = 3
@@ -831,21 +830,10 @@ func _build_collection_shell() -> void:
 	_collection_back.tooltip_text = "Back to game"
 	UiClick.bind_button(_collection_back)
 	_collection_back.pressed.connect(_back_from_collection)
-	_growth_preview = Button.new()
-	_growth_preview.name = "PreviewPipGrowth"
-	_growth_preview.text = "Meet Pip"
-	_growth_preview.tooltip_text = "Preview all ten Pip stages, moves and voices"
-	UiClick.bind_button(_growth_preview)
-	_growth_preview.pressed.connect(func() -> void:
-		if OS.has_feature("web"):
-			JavaScriptBridge.eval("window.open('/preview/pip-growth/', '_blank', 'noopener')")
-		else:
-			OS.shell_open("https://gentle-forest-02ff42900.3.azurestaticapps.net/preview/pip-growth/"))
 	_compact_world = Button.new()
 	_compact_world.name = "NextWorld"
 	_compact_world.pressed.connect(_cycle_theme.bind(1))
 	_collection_header.add_child(_compact_world)
-	_collection_header.add_child(_growth_preview)
 	_collection_header.add_child(_collection_back)
 	_growth_summary = Style.label("", 15)
 	_growth_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -2072,9 +2060,6 @@ func _layout_collection() -> void:
 	_collection_column.add_theme_constant_override("separation", ceili(8 / scale))
 	_collection_header.add_theme_constant_override("separation", ceili(8 / scale))
 	_collection_title.add_theme_font_size_override("font_size", ceili(21 / scale))
-	Style.action_button(_growth_preview, Style.GOOD)
-	_growth_preview.custom_minimum_size = Vector2(80, 42) / scale
-	_growth_preview.add_theme_font_size_override("font_size", ceili(13 / scale))
 	_growth_summary.add_theme_font_size_override("font_size", ceili(13 / scale))
 	_age_notice.add_theme_font_size_override("font_size", ceili(12 / scale))
 	_age_scroll.custom_minimum_size.y = ceilf(44 / scale)

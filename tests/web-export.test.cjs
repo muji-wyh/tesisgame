@@ -464,7 +464,7 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   }
 });
 
-test('Pip growth preview packaging preserves real assets and excludes source caches and stale review helpers', t => {
+test('Pip growth preview stays local and is removed from an older Web export without touching neighboring files', t => {
   const fixture = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'pip-growth-export-'));
   t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
   const source = path.join(fixture, 'web/preview/pip-growth');
@@ -482,10 +482,14 @@ test('Pip growth preview packaging preserves real assets and excludes source cac
   }
   const catalog = JSON.parse(fs.readFileSync(path.join(original, 'stages.json'), 'utf8'));
   assert.equal(catalog.stages.length, 10);
-  const shipped = ['index.html', 'preview.js', 'preview.css', 'stages.json',
+  const previewFiles = ['index.html', 'preview.js', 'preview.css', 'stages.json',
     'Nunito-600.ttf', 'Nunito-800.ttf', 'FONT-LICENSE.txt', 'audio/manifest.json',
     ...catalog.stages.flatMap(stage => [...Object.values(stage.previewArt), stage.newVoice.previewPath])].sort();
-  for (const name of shipped) write(source, name, fs.readFileSync(path.join(original, name)));
+  for (const name of previewFiles) {
+    const bytes = fs.readFileSync(path.join(original, name));
+    write(source, name, bytes);
+    write(output, name, bytes);
+  }
   const helpers = ['.gitignore', 'generate.cjs', 'verify.cjs', 'review.cjs'];
   for (const name of helpers) {
     write(source, name, fs.readFileSync(path.join(original, name)));
@@ -493,24 +497,62 @@ test('Pip growth preview packaging preserves real assets and excludes source cac
   }
   write(source, '.voice-cache/recording.mp3', 'private voice generation cache');
   write(source, 'review-output/desktop.png', 'local review capture');
-  write(directory, 'index.html', '<script src="index.js"></script><script>const config = {};</script>');
-  for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
-    write(directory, `index.${suffix}`, suffix === 'js' ? startupFixture : suffix);
+  write(output, '.voice-cache/recording.mp3', 'old private cache');
+  write(output, 'review-output/desktop.png', 'old local capture');
+  write(directory, 'preview/keep/index.html', 'unrelated preview');
+  write(directory, 'notes.txt', 'unrelated output');
+  const writeExport = () => {
+    write(directory, 'index.html', '<script src="index.js"></script><script>const config = {};</script>');
+    for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
+      write(directory, `index.${suffix}`, suffix === 'js' ? startupFixture : suffix);
+    }
+  };
+
+  const { packageWebExport } = require(path.join(fixture, 'tools/package-web.cjs'));
+  for (let pass = 0; pass < 2; pass++) {
+    writeExport();
+    packageWebExport(directory);
+    assert.equal(fs.existsSync(output), false, 'Neither stale nor freshly copied Pip preview files may ship');
+    assert.equal(fs.readFileSync(path.join(directory, 'preview/keep/index.html'), 'utf8'), 'unrelated preview');
+    assert.equal(fs.readFileSync(path.join(directory, 'notes.txt'), 'utf8'), 'unrelated output');
   }
 
-  require(path.join(fixture, 'tools/package-web.cjs')).packageWebExport(directory);
+  for (const name of [...previewFiles, ...helpers]) {
+    assert.deepEqual(fs.readFileSync(path.join(source, name)), fs.readFileSync(path.join(original, name)),
+      `Keep the localhost preview source intact: ${name}`);
+  }
+  assert.equal(fs.readFileSync(path.join(source, '.voice-cache/recording.mp3'), 'utf8'), 'private voice generation cache');
+  assert.equal(fs.readFileSync(path.join(source, 'review-output/desktop.png'), 'utf8'), 'local review capture');
+});
 
-  const actual = fs.readdirSync(output, { recursive: true })
-    .filter(name => fs.statSync(path.join(output, name)).isFile())
-    .map(name => name.split(path.sep).join('/')).sort();
-  assert.deepEqual(actual, shipped, 'Only preview pages, artwork, voices and their source notices should ship');
-  for (const name of shipped) {
-    assert.deepEqual(fs.readFileSync(path.join(output, name)), fs.readFileSync(path.join(original, name)),
-      `Keep the real preview asset unchanged: ${name}`);
-  }
-  for (const name of [...helpers, '.voice-cache', 'review-output']) {
-    assert.equal(fs.existsSync(path.join(output, name)), false, `Do not publish ${name}`);
-  }
+test('Pip growth preview cleanup does not follow linked folders outside the export', t => {
+  const { packageWebExport } = require('../tools/package-web.cjs');
+  const fixture = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'pip-growth-export-links-'));
+  t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
+  const directory = path.join(fixture, 'export');
+  const external = path.join(fixture, 'local-only');
+  fs.mkdirSync(directory);
+  fs.mkdirSync(path.join(external, 'pip-growth'), { recursive: true });
+  const sentinel = path.join(external, 'pip-growth/index.html');
+  fs.writeFileSync(sentinel, 'preserve local preview');
+  const writeExport = () => {
+    fs.writeFileSync(path.join(directory, 'index.html'), '<script src="index.js"></script><script>const config = {};</script>');
+    for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
+      fs.writeFileSync(path.join(directory, `index.${suffix}`), suffix === 'js' ? startupFixture : suffix);
+    }
+  };
+  const preview = path.join(directory, 'preview');
+  fs.symlinkSync(external, preview, process.platform === 'win32' ? 'junction' : 'dir');
+  writeExport();
+  assert.throws(() => packageWebExport(directory), /Refusing to clean a linked preview directory/);
+  assert.equal(fs.readFileSync(sentinel, 'utf8'), 'preserve local preview');
+  fs.unlinkSync(preview);
+  fs.mkdirSync(preview);
+  fs.symlinkSync(path.join(external, 'pip-growth'), path.join(preview, 'pip-growth'), process.platform === 'win32' ? 'junction' : 'dir');
+  writeExport();
+  packageWebExport(directory);
+  assert.equal(fs.existsSync(preview), false, 'Remove only the stale output link and its empty parent');
+  assert.equal(fs.readFileSync(sentinel, 'utf8'), 'preserve local preview');
 });
 
 test('rebuilding a legacy export removes standalone audio and retired speech assets while preserving unrelated output', t => {

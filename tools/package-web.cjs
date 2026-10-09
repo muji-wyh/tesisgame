@@ -179,6 +179,23 @@ function removeRetiredVoiceAssets(directory) {
   if (fs.readdirSync(assets).length === 0) fs.rmdirSync(assets);
 }
 
+function removeLocalPipPreview(directory) {
+  const exportRoot = fs.realpathSync(directory);
+  const previewRoot = path.join(exportRoot, 'preview');
+  const parent = fs.lstatSync(previewRoot, { throwIfNoEntry: false });
+  if (!parent || !parent.isDirectory() && !parent.isSymbolicLink()) return;
+  if (parent.isSymbolicLink()) throw new Error('Refusing to clean a linked preview directory outside the Web export.');
+  const target = path.resolve(previewRoot, 'pip-growth');
+  const relative = path.relative(exportRoot, target);
+  if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+    throw new Error('The retired Pip preview must remain inside the Web export.');
+  }
+  const stale = fs.lstatSync(target, { throwIfNoEntry: false });
+  if (stale?.isSymbolicLink()) fs.unlinkSync(target);
+  else if (stale) fs.rmSync(target, { recursive: true, force: true });
+  if (fs.readdirSync(previewRoot).length === 0) fs.rmdirSync(previewRoot);
+}
+
 function packageWebExport(directory) {
   const page = path.join(directory, 'index.html');
   const html = fs.readFileSync(page, 'utf8');
@@ -237,17 +254,7 @@ function packageWebExport(directory) {
     }
   }
   removeRetiredVoiceAssets(directory);
-  const previewSource = path.resolve(__dirname, '../web/preview/pip-growth');
-  if (fs.existsSync(previewSource)) {
-    const previewOutput = path.join(directory, 'preview/pip-growth');
-    for (const file of ['.gitignore', 'generate.cjs', 'verify.cjs', 'review.cjs']) {
-      fs.rmSync(path.join(previewOutput, file), { force: true });
-    }
-    fs.cpSync(previewSource, previewOutput, {
-      recursive: true,
-      filter: source => !/(?:^|[\\/])(?:\.voice-cache|review-output|\.gitignore|(?:generate|verify|review)\.cjs)(?:[\\/]|$)/.test(source)
-    });
-  }
+  removeLocalPipPreview(directory);
   return downloadBytes;
 }
 

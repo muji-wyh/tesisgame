@@ -14,9 +14,11 @@ const INPUTS = [
 const receiptPath = root => path.join(root, 'build', 'web-build.json');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
-function inventory(root, entries) {
+function inventory(root, entries, excluded = []) {
   const files = [];
   function visit(relative) {
+    const normalized = relative.replaceAll('\\', '/');
+    if (excluded.some(prefix => normalized === prefix || normalized.startsWith(`${prefix}/`))) return;
     const filename = path.join(root, relative);
     if (!fs.existsSync(filename)) return;
     const stat = fs.lstatSync(filename);
@@ -33,7 +35,7 @@ function inventory(root, entries) {
 }
 
 function snapshotInputs(root) {
-  return inventory(root, INPUTS);
+  return inventory(root, INPUTS, ['web/preview']);
 }
 
 function changedFiles(expected, actual) {
