@@ -2,6 +2,7 @@ extends SceneTree
 
 const Model = preload("res://scripts/jelly_match_model.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const INITIAL_COUNT: int = Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT
 
 var checks: int = 0
 var failures: int = 0
@@ -22,6 +23,7 @@ func _run() -> void:
 	_test_configuration()
 	_test_supply_and_gravity()
 	_test_queue_contract()
+	_test_partial_and_stacked_drops()
 	_test_supply_fairness()
 	_test_landing_timeline()
 	_test_fusion_timeline()
@@ -54,11 +56,18 @@ func _vocabulary(count: int = 16) -> Array:
 
 
 func _initial_fill_seconds() -> float:
-	return (Model.CAPACITY - Model.INITIAL_SETTLED_TILES - 1) * Model.INITIAL_SPAWN_INTERVAL
+	return ceilf(float(Model.CAPACITY - INITIAL_COUNT) / Model.DROP_COUNT) * Model.INITIAL_SPAWN_INTERVAL
 
 
 func _danger_start_seconds() -> float:
 	return _initial_fill_seconds() + Motion.ready_at({"row": 0, "falling_rows": 1, "arrival": true})
+
+
+func _settle_remaining(model) -> float:
+	var remaining: float = 0.0
+	for cell in model.cells:
+		remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
+	return remaining
 
 
 func _observe(model) -> Dictionary:
@@ -112,7 +121,7 @@ func _assert_board(model, label: String) -> void:
 	check(model.cells.size() <= Model.CAPACITY, label + ": board capacity holds")
 	check(model.generated_tiles == model.cells.size() + model.cleared_pairs * 2,
 		label + ": every dispatched tile remains on the board or belongs to a completed clear")
-	check(model.upcoming.size() == Model.UPCOMING_COUNT, label + ": exactly three committed previews remain")
+	check(model.upcoming.size() == Model.UPCOMING_COUNT, label + ": exactly four committed previews remain")
 	for tile in model.upcoming:
 		check(not ids.has(tile.id), label + ": queued tiles are distinct from every visible tile")
 		ids[tile.id] = true
@@ -133,22 +142,24 @@ func _test_configuration() -> void:
 	words.insert(0, null)
 	words.append(words[4].duplicate(true))
 	check(model.configure(words, 3, 19), "A pictured eligible curriculum starts Jelly Match")
-	check(model.phase == "playing" and model.cells.size() == 7, "The initial board has six settled tiles and one incoming tile")
-	check(model.generated_tiles == 7 and model.spawn_interval == 7.0, "Each new tile leaves seven seconds to read and match")
+	check(model.phase == "playing" and model.cells.size() == INITIAL_COUNT,
+		"The initial board has six settled tiles and four simultaneous arrivals")
+	check(model.generated_tiles == INITIAL_COUNT and model.spawn_interval == 7.0,
+		"Each four-tile drop leaves seven seconds to read and match")
 	var initial_ids: Array[String] = []
 	var initial_chests: int = 0
 	for cell in model.cells:
 		if not initial_ids.has(str(cell.word.id)):
 			initial_ids.append(str(cell.word.id))
 		check(cell.word.min_age <= 3 and not str(cell.word.image).is_empty(), "Only pictured age-appropriate words enter the board")
-		if cell == model.cells.back():
+		if bool(cell.arrival):
 			check(cell.age == 0.0 and cell.arrival and int(cell.falling_rows) == int(cell.row) + 1,
-				"The first new tile visibly descends from above the well")
+				"Each initial arrival descends from above its own column")
 		else:
 			check(model.is_settled(cell) and not cell.arrival and cell.falling_rows == 0,
 				"The six starting tiles are ready without simultaneous falling")
 		initial_chests += 1 if cell.chest and not cell.arrival else 0
-	check(initial_ids.size() == 4 and model.cells.slice(0, 6).all(func(cell: Dictionary) -> bool:
+	check(initial_ids.size() == 6 and model.cells.slice(0, 6).all(func(cell: Dictionary) -> bool:
 		return str(cell.word.id) in ["word-0", "word-1", "word-2", "word-3"]),
 		"The opening complete bag practises current unmastered words first")
 	check(initial_chests == 1, "The third initial pair contains exactly one chest")
@@ -160,7 +171,7 @@ func _test_configuration() -> void:
 	copied.cells[0].word.id = "changed"
 	copied.cells.clear()
 	copied.upcoming[0].word.id = "changed-queue"
-	check(model.cells.size() == 7 and model.cells[0].word.id == first_word
+	check(model.cells.size() == INITIAL_COUNT and model.cells[0].word.id == first_word
 		and model.upcoming[0].word.id != "changed-queue", "Snapshots cannot mutate model cells, queued tiles, or words")
 	var tile: Dictionary = model.tile_by_id(int(model.cells[0].id))
 	tile.word.id = "changed"
@@ -168,7 +179,7 @@ func _test_configuration() -> void:
 	check(not second.configure([context_only, _word("future", 4)], 3, 1)
 		and second.cells.is_empty() and second.phase == "finished", "An empty eligible catalog fails without a partial board")
 	check(not second.configure(_vocabulary(), 2, 1), "Levels below the starting age do not leak age-three words")
-	check(second.configure([_word("only")], 3, 2) and second.cells.size() == 7,
+	check(second.configure([_word("only")], 3, 2) and second.cells.size() == INITIAL_COUNT,
 		"A small pictured catalog can repeat complementary halves without becoming unsolvable")
 	var different_orders: Dictionary = {}
 	for seed_value in range(8):
@@ -196,21 +207,22 @@ func _test_supply_and_gravity() -> void:
 		var model = Model.new()
 		model.configure(_vocabulary(), 3, seed_value)
 		model.step(6.999)
-		check(model.cells.size() == 7, "The next tile does not arrive before seven seconds")
+		check(model.cells.size() == INITIAL_COUNT, "The next drop does not arrive before seven seconds")
 		model.step(0.001)
-		check(model.cells.size() == 8 and model.generated_tiles == 8, "The seven-second boundary supplies exactly one tile")
-		for tile_index in range(8, Model.CAPACITY):
+		check(model.cells.size() == 14 and model.generated_tiles == 14,
+			"The seven-second boundary supplies exactly four tiles")
+		for drop_index in range(3):
 			model.step(model.spawn_interval)
-			_assert_board(model, "Seed %d, dispatched tile %d" % [seed_value, tile_index + 1])
+			_assert_board(model, "Seed %d, drop %d" % [seed_value, drop_index + 2])
 		check(model.cells.size() == 24 and model.full_elapsed == -1.0,
-			"The final incoming tile does not begin danger before landing")
+			"The final incoming batch does not begin danger before every tile lands")
 		var chest_tiles: int = 0
 		for cell in model.cells:
 			chest_tiles += 1 if cell.chest else 0
 		check(chest_tiles == 4, "Every third generated pair supplies exactly one chest tile")
 		model.step(Model.SETTLE_SECONDS)
 		check(model.full_elapsed >= 0.0 and model.full_elapsed < Model.SETTLE_SECONDS,
-			"Danger starts after the last tile recovers from landing")
+			"Danger starts after every tile in the last drop recovers from landing")
 		var pair: Array[int] = _pair(model)
 		var previous_rows: Dictionary = {}
 		for cell in model.cells:
@@ -230,29 +242,37 @@ func _test_queue_contract() -> void:
 	model.configure(_vocabulary(8), 3, 27)
 	var previous_word: String = str(model.cells.back().word.id)
 	for index in range(36):
-		if model.cells.size() >= 14:
-			model.step(Model.SETTLE_SECONDS)
+		model.step(_settle_remaining(model))
+		while model.cells.size() >= 14:
 			var pair: Array[int] = _pair(model)
 			model.try_merge(pair[0], pair[1])
 			var queue_during_fusion: Array = model.upcoming.duplicate(true)
 			model.step(Model.FUSION_SECONDS)
-			check(model.upcoming == queue_during_fusion, "A completed match never rewrites the three advertised tiles")
+			check(model.upcoming == queue_during_fusion, "A completed match never rewrites the four advertised tiles")
+			model.step(_settle_remaining(model))
 		var advertised: Array = model.upcoming.duplicate(true)
 		var entered: int = model.generated_tiles
+		var before_count: int = model.cells.size()
 		model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
 		check(model.generated_tiles == entered and model.upcoming == advertised,
-			"A preview waits unchanged until its exact dispatch boundary")
+			"All four previews wait unchanged until their exact dispatch boundary")
 		model.step(0.001)
-		var arrival: Dictionary = model.cells.back()
-		check(model.generated_tiles == entered + 1 and int(arrival.id) == int(advertised[0].id)
-			and arrival.word == advertised[0].word and arrival.kind == advertised[0].kind
-			and arrival.chest == advertised[0].chest,
-			"Each advertised identity, word, tile kind, and chest marker enters unchanged")
-		check(model.upcoming.size() == 3 and model.upcoming[0] == advertised[1]
-			and model.upcoming[1] == advertised[2], "The next three shift once and preserve both remaining previews")
-		check(str(arrival.word.id) != previous_word,
-			"Distinct-word supply never dispatches immediate matching partners consecutively")
-		previous_word = str(arrival.word.id)
+		check(model.generated_tiles == entered + Model.DROP_COUNT and model.cells.size() == before_count + Model.DROP_COUNT,
+			"Every unobstructed drop dispatches four tiles at the same boundary")
+		for offset in range(Model.DROP_COUNT):
+			var arrival: Dictionary = model.cells[before_count + offset]
+			var advertised_tile: Dictionary = advertised[offset]
+			check(int(arrival.id) == int(advertised_tile.id) and arrival.word == advertised_tile.word
+				and arrival.kind == advertised_tile.kind and arrival.chest == advertised_tile.chest,
+				"The four advertised identities, words, kinds, and chest markers enter in committed order")
+			check(str(arrival.word.id) != previous_word,
+				"Distinct-word supply never places immediate matching partners consecutively")
+			check(arrival.age == 0.0, "All four arrivals share the same drop clock")
+			previous_word = str(arrival.word.id)
+		check(model.upcoming.size() == Model.UPCOMING_COUNT
+			and model.upcoming.all(func(tile: Dictionary) -> bool:
+				return advertised.all(func(previous: Dictionary) -> bool: return tile.id != previous.id)),
+			"A complete drop exposes a fresh four-tile preview without repeating consumed entries")
 		model.set_paused(true)
 		var paused: Dictionary = model.snapshot()
 		model.step(50.0)
@@ -262,8 +282,8 @@ func _test_queue_contract() -> void:
 	var split_steps = Model.new()
 	one_step.configure(_vocabulary(), 3, 42)
 	split_steps.configure(_vocabulary(), 3, 42)
-	one_step.step(35.0)
-	for index in range(140):
+	one_step.step(21.0)
+	for index in range(84):
 		split_steps.step(0.25)
 	var single_snapshot: Dictionary = one_step.snapshot()
 	var split_snapshot: Dictionary = split_steps.snapshot()
@@ -271,7 +291,74 @@ func _test_queue_contract() -> void:
 		for cell in snapshot.cells:
 			cell.age = snappedf(float(cell.age), 0.000001)
 	check(single_snapshot == split_snapshot,
-		"Equivalent elapsed time reproduces the same queue, board, ages, and counters without a hidden pair burst")
+		"Equivalent elapsed time reproduces the same four-tile drops, queue, board, ages, and counters")
+
+
+func _test_partial_and_stacked_drops() -> void:
+	for heights in [[6, 6, 6, 5], [6, 6, 6, 4], [6, 6, 6, 3], [6, 6, 6, 2], [6, 6, 5, 3], [5, 5, 5, 5], [6, 6, 6, 6]]:
+		var model = Model.new()
+		model.configure(_vocabulary(), 3, 61)
+		model.step(_initial_fill_seconds())
+		var count: int = 0
+		var eligible: Array[int] = []
+		for column in range(Model.COLUMNS):
+			if int(heights[column]) < Model.ROWS:
+				eligible.append(column)
+			for row_index in range(int(heights[column])):
+				var cell: Dictionary = model.cells[count]
+				cell.column = column
+				cell.row = Model.ROWS - row_index - 1
+				cell.age = Model.SETTLE_SECONDS
+				cell.falling_rows = 0
+				cell.arrival = false
+				count += 1
+		model.cells.resize(count)
+		model.generated_tiles = count
+		model.full_elapsed = -1.0
+		model.spawn_elapsed = 0.0
+		var advertised: Array = model.upcoming.duplicate(true)
+		var expected: int = mini(Model.DROP_COUNT, Model.CAPACITY - count)
+		model.step(0.01 if expected == 0 else model.spawn_interval)
+		check(model.cells.size() == count + expected and model.generated_tiles == count + expected,
+			"A drop fills only its available slots without overflow or losing a queued tile")
+		var used: Array[int] = []
+		var arrivals: Array[Dictionary] = []
+		for offset in range(expected):
+			var cell: Dictionary = model.cells[count + offset]
+			arrivals.append(cell)
+			check(cell.id == advertised[offset].id and cell.word == advertised[offset].word
+				and cell.kind == advertised[offset].kind and cell.chest == advertised[offset].chest,
+				"A constrained drop consumes its exact advertised prefix")
+			if offset < eligible.size():
+				check(not used.has(int(cell.column)), "Every available column receives one tile before any column receives another")
+			used.append(int(cell.column))
+			var ordinal: int = used.count(int(cell.column)) - 1
+			check(int(cell.falling_rows) == int(cell.row) + 1 + ordinal
+				and Motion.travel_rows(cell) <= Model.ROWS and Motion.ready_at(cell) <= Model.SETTLE_SECONDS,
+				"Same-column arrivals enter at separate heights within the bounded landing duration")
+		for offset in range(Model.UPCOMING_COUNT - expected):
+			check(model.upcoming[offset] == advertised[expected + offset],
+				"A partial drop preserves every unconsumed advertised tile at the front")
+		for a_index in range(arrivals.size()):
+			for b_index in range(a_index + 1, arrivals.size()):
+				var a: Dictionary = arrivals[a_index].duplicate(true)
+				var b: Dictionary = arrivals[b_index].duplicate(true)
+				if a.column != b.column:
+					continue
+				for age_fraction in [0.0, 0.3, 0.7, 1.0]:
+					a.age = Motion.contact_at(a) * age_fraction
+					b.age = Motion.contact_at(b) * age_fraction
+					var a_y: float = float(a.row) - float(Motion.sample(a).lift_rows)
+					var b_y: float = float(b.row) - float(Motion.sample(b).lift_rows)
+					check(absf(a_y - b_y) >= 1.0 - Model.EPSILON,
+						"Bodies in the same-column batch stay separated throughout descent")
+		if expected > 0:
+			check(model.full_elapsed < 0.0, "Even a partial final batch cannot begin danger while airborne")
+			var settle_time: float = _settle_remaining(model)
+			model.step(settle_time - 0.001)
+			check(model.full_elapsed < 0.0, "A full board waits for the slowest arrival's final recovery")
+			model.step(0.001)
+			check(is_zero_approx(model.full_elapsed), "The last landing starts a complete countdown at zero")
 
 
 func _test_supply_fairness() -> void:
@@ -313,13 +400,15 @@ func _test_landing_timeline() -> void:
 	model.step(3.0 * model.spawn_interval)
 	var arriving: Dictionary = model.cells.back()
 	var pair: Array[int] = []
+	var ready_time: float = Motion.ready_at(arriving)
 	for cell in model.cells:
 		if cell.word.id == arriving.word.id and cell.kind != arriving.kind:
 			pair = [int(arriving.id), int(cell.id)]
+			ready_time = maxf(ready_time, Motion.ready_at(cell) - float(cell.age))
 	check(pair.size() == 2, "Interleaved supply eventually brings the incoming counterpart of a waiting tile")
 	if pair.is_empty():
 		return
-	model.step(Motion.ready_at(arriving) - 0.001)
+	model.step(ready_time - 0.001)
 	check(model.try_merge(pair[0], pair[1]) == "ignored", "A recovering jelly cannot match just before its ready boundary")
 	model.step(0.001)
 	check(model.try_merge(pair[0], pair[1]) == "correct", "The exact shared ready boundary enables a matching pair")
@@ -339,18 +428,18 @@ func _test_fusion_timeline() -> void:
 	check(events.fusions.size() == 1 and events.cues == ["merge"], "Fusion emits its payload and merge cue once")
 	check(events.fusions[0].a.id == pair[0] and events.fusions[0].b.id == pair[1],
 		"Fusion payload preserves both source tiles for presentation")
-	check(model.cells.size() == 7 and events.attempts.is_empty(), "Starting fusion keeps tiles and delays learning credit")
+	check(model.cells.size() == INITIAL_COUNT and events.attempts.is_empty(), "Starting fusion keeps tiles and delays learning credit")
 	check(model.try_merge(pair[1], pair[0]) == "ignored", "Repeated input during fusion cannot double-credit")
 	model.step(0.69)
 	check(events.cues == ["merge"], "The pop cue waits for the fusion pop point")
 	model.step(0.01)
 	check(events.cues == ["merge", "pop"], "The pop cue occurs at 0.7 seconds")
 	model.step(0.349)
-	check(model.cells.size() == 7 and events.attempts.is_empty(), "A nearly finished fusion does not credit early")
+	check(model.cells.size() == INITIAL_COUNT and events.attempts.is_empty(), "A nearly finished fusion does not credit early")
 	check(is_equal_approx(float(model.tile_by_id(incoming_id).age), saved_age),
 		"An incoming tile freezes in the air throughout fusion")
 	model.step(0.001)
-	check(model.cells.size() == 5 and model.fusion.is_empty() and model.cleared_pairs == 1,
+	check(model.cells.size() == INITIAL_COUNT - 2 and model.fusion.is_empty() and model.cleared_pairs == 1,
 		"The 1.05 second fusion clears exactly two tiles")
 	check(is_equal_approx(model.spawn_elapsed, saved_spawn), "Spawning remains frozen throughout fusion")
 	check(events.attempts.size() == 1 and events.attempts[0].correct
@@ -409,7 +498,7 @@ func _test_wrong_and_ignored_attempts() -> void:
 	check(model.try_merge(a, b) == "wrong", "Different words are a wrong merge")
 	check(events.attempts.size() == 1 and not events.attempts[0].correct
 		and events.attempts[0].words == expected_words, "Wrong merges reset both unique involved words")
-	check(model.cells.size() == 7 and model.fusion.is_empty() and model.cleared_pairs == 0,
+	check(model.cells.size() == INITIAL_COUNT and model.fusion.is_empty() and model.cleared_pairs == 0,
 		"Wrong merges leave the board playable without rewards")
 	check(model.try_merge(a, a) == "ignored" and model.try_merge(a, 100000) == "ignored"
 		and events.attempts.size() == 1, "Self and unknown tile IDs do not create learning events")
@@ -436,7 +525,7 @@ func _test_full_board_timeout() -> void:
 	model.configure(_vocabulary(), 3, 9)
 	model.step(_danger_start_seconds())
 	check(model.cells.size() == 24 and model.snapshot().full_remaining == 8.0,
-		"Seventeen single spawns and the final landing expose the full eight-second countdown")
+		"Four drops and the final batch's landing expose the full eight-second countdown")
 	check(events.cues == ["danger"], "A newly full board emits one warning at elapsed zero")
 	for second in range(7):
 		model.step(0.999)
@@ -494,13 +583,11 @@ func _test_danger_rescue_and_pause() -> void:
 		and events.cues.count("danger") == warnings,
 		"Completing the rescue cancels the old countdown")
 	model.step(model.spawn_interval)
-	check(model.cells.size() == 23 and model.full_elapsed == -1.0,
-		"The first single replacement leaves one slot free without restarting danger")
-	model.step(model.spawn_interval)
-	var last_tile: Dictionary = model.cells.back()
-	model.step(Motion.ready_at(last_tile))
+	check(model.cells.size() == 24 and model.full_elapsed == -1.0,
+		"A partial replacement batch fills the two free slots but waits for landing before danger")
+	model.step(_settle_remaining(model))
 	check(model.cells.size() == 24 and is_zero_approx(model.full_elapsed) and events.cues.count("danger") == warnings + 1,
-		"The second replacement's landing starts a fresh, complete danger window")
+		"The replacement batch's final landing starts a fresh, complete danger window")
 	model.set_paused(true)
 	paused_state = model.snapshot()
 	paused_cues = events.cues.duplicate()
@@ -572,12 +659,14 @@ func _test_long_round() -> void:
 		if model.cleared_pairs in [20, 50]:
 			var expected_interval: float = 5.6 if model.cleared_pairs == 20 else 3.5
 			check(is_equal_approx(model.spawn_interval, expected_interval),
-				"%d completed pairs leave %.1f seconds between new tiles" % [model.cleared_pairs, expected_interval])
+				"%d completed pairs leave %.1f seconds between four-tile drops" % [model.cleared_pairs, expected_interval])
 			var generated: int = model.generated_tiles
+			var expected_drop: int = mini(Model.DROP_COUNT, Model.CAPACITY - model.cells.size())
 			model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
-			check(model.generated_tiles == generated, "An accelerated tile still waits for its complete interval")
+			check(model.generated_tiles == generated, "An accelerated drop still waits for its complete interval")
 			model.step(0.001)
-			check(model.generated_tiles == generated + 1, "An accelerated boundary supplies one tile without a burst")
+			check(model.generated_tiles == generated + expected_drop,
+				"An accelerated boundary dispatches one batch, limited only by available space")
 		elif model.cleared_pairs == 49:
 			check(model.spawn_interval > 3.5, "The fastest pace is not reached before fifty completed pairs")
 		_assert_board(model, "Long-round clear %d" % index)
@@ -638,7 +727,7 @@ func _test_signal_reentry() -> void:
 			reset_model.configure(_vocabulary(), 3, 12)
 	reset_model.word_attempted.connect(reset_on_wrong)
 	reset_model.try_merge(int(reset_model.cells[0].id), int(reset_model.cells[2].id))
-	check(reset_events.cues.is_empty() and reset_model.generated_tiles == 7,
+	check(reset_events.cues.is_empty() and reset_model.generated_tiles == INITIAL_COUNT,
 		"A synchronous round reset prevents stale wrong feedback reaching the next round")
 	reset_model.word_attempted.disconnect(reset_on_wrong)
 
@@ -672,7 +761,7 @@ func _test_danger_signal_reentry() -> void:
 				check(model.phase == "finished" and events.finished.size() == 1 and model.chest_count == 0,
 					"Finishing inside a warning closes the round once without an unearned reward")
 			"reset":
-				check(model.phase == "playing" and model.generated_tiles == 7 and model.full_elapsed == -1.0,
+				check(model.phase == "playing" and model.generated_tiles == INITIAL_COUNT and model.full_elapsed == -1.0,
 					"Resetting inside a warning leaves the new round's supply and countdown untouched")
 			"fusion":
 				check(not model.fusion.is_empty() and is_zero_approx(model.full_elapsed) and events.attempts.is_empty(),

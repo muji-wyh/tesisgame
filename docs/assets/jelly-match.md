@@ -71,16 +71,28 @@ for compression, 120 ms for rebound and 95 ms to settle.
 Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
 
-Supply dispatches one tile at a time. Six settled tiles provide the initial
-matching layout, followed by one incoming tile. Three committed upcoming tiles
-are shown outside the well: vertically at the right on wide screens and in a
-horizontal strip above it on phones. Their picture/word kind, artwork and chest
-markers come from the actual queue. Bounded bags interleave complementary halves
-so they do not arrive together; every full board retains a possible match.
+Supply dispatches four tiles together. Six settled tiles provide the initial
+matching layout, followed by the first four arrivals. Four committed upcoming
+tiles appear outside the well: a compact two-by-two group on wide screens and
+a horizontal strip above it on phones. There is no visible heading or countdown
+bar. Their picture/word kind, artwork and chest markers come from the actual
+queue. A batch first uses each available column once, then stacks additional
+arrivals above one another if fewer columns have space. A nearly full board
+accepts only the remaining capacity and preserves the unused preview entries.
+The bounded supply bags preserve a possible match on every full board.
 
-The landing projection reuses the same acquired gel silhouette at the actual
+Upcoming bodies wobble on the actual supply clock, with frequency rising from
+1 to 4.5 Hz and lateral travel from 0.6% to 5.2% of tile width. A curved buildup
+reserves the strongest motion for the end of the interval; slot phase offsets
+keep the four acquired gel illustrations from moving as one rigid object.
+Only their surfaces squash, preserving the learning labels and pictures. Pause
+and fusion freeze this same pose. New supply resets the buildup; a full board
+and reduced motion display neutral previews. No new visual or audio asset is
+introduced for anticipation.
+
+Each landing projection reuses the same acquired gel silhouette at its actual
 destination, without word, picture or chest content. It remains stationary while
-the incoming tile descends, then disappears at contact. The original painted
+its incoming tile descends, then disappears at contact. The original painted
 contact shadow still accompanies the landing. No additional placeholder artwork
 is introduced. Fusion freezes descent and the supply clock; a shifted support
 retargets the destination while preserving the incoming tile's visible height.
@@ -181,10 +193,11 @@ runtime has no available WebAudio, so its audio check is skipped; its gameplay
 and layout checks pass. These checks do not establish subjective mix quality,
 repeated-play fatigue or sound on physical device speakers.
 
-Single-tile supply is verified through three consecutive real browser arrivals:
-each matches the previous preview head, descends over multiple frames and lands
-on its stationary projection. Native model, view and flow checks cover frozen
-descent during fusion, support changes and the complete full-board rescue window.
+Batch supply checks compare each dispatched group with its committed previews,
+including a partially filled final group. Each tile descends over multiple frames
+and lands on its own stationary projection. Native model, view and flow checks
+cover frozen anticipation and descent during fusion, support changes and the
+complete full-board rescue window.
 Desktop and phone captures cover the external queue and fixed-ratio well. After
 live resize, Windows WebKit retains its previously documented
 [page-compositor limitation](../qa/2026-09-11-steady-gameplay.md): composed page

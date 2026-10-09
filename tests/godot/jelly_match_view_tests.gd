@@ -43,6 +43,7 @@ func _run() -> void:
 	_check_layout(view)
 	_check_pictures(view)
 	_check_supply_preview(view)
+	_check_preview_motion(view)
 	_check_drop_projection(view)
 	_check_landing_presentation(view)
 	_check_landing_lifecycle(view)
@@ -106,10 +107,35 @@ func _advance(view, seconds: float) -> void:
 
 
 func _arrival(view) -> Dictionary:
+	var incoming: Array[Dictionary] = _arrivals(view)
+	return incoming[0] if not incoming.is_empty() else {}
+
+
+func _arrivals(view) -> Array[Dictionary]:
+	var incoming: Array[Dictionary] = []
 	for cell: Dictionary in view.game.cells:
 		if bool(cell.get("arrival", false)) and not view._settled(cell):
-			return cell
+			incoming.append(cell)
+	incoming.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return Motion.contact_at(a) < Motion.contact_at(b))
+	return incoming
+
+
+func _ghost(view, id: int) -> Dictionary:
+	for projection: Dictionary in view.snapshot().landing_ghosts:
+		if int(projection.id) == id:
+			return projection
 	return {}
+
+
+func _landing_groups(incoming: Array[Dictionary]) -> int:
+	var count: int = 0
+	var previous: float = -1.0
+	for cell: Dictionary in incoming:
+		var contact: float = Motion.contact_at(cell)
+		if previous < 0.0 or contact - previous > 0.12:
+			count += 1
+			previous = contact
+	return count
 
 
 func _rect(values: Array) -> Rect2:
@@ -127,15 +153,22 @@ func _check_layout(view) -> void:
 		check(not board.intersects(view._loot_icon.get_rect()), "%s keeps chest totals outside the board" % dimensions)
 		var preview: Dictionary = view.snapshot().preview
 		var preview_rect: Rect2 = _rect(preview.rect)
-		check(bool(preview.visible) and preview.slots.size() == 3
+		check(bool(preview.visible) and preview.slots.size() == 4
 			and view.get_global_rect().encloses(preview_rect) and not view._global_rect(board).intersects(preview_rect),
-			"%s contains all three upcoming tiles in a separate area outside the fixed board" % dimensions)
+			"%s contains all four upcoming tiles in a separate area outside the fixed board" % dimensions)
 		check(not preview_rect.intersects(view.finish_button.get_global_rect())
 			and not preview_rect.intersects(view._loot_icon.get_global_rect()),
 			"%s keeps the supply preview separate from finish and treasure controls" % dimensions)
 		for slot: Dictionary in preview.slots:
 			check(bool(slot.visible) and preview_rect.encloses(_rect(slot.rect)),
 				"%s keeps preview tile %s fully inside its supply area" % [dimensions, slot.id])
+		for progress: float in [0.8, 0.9, 0.99]:
+			for index in range(view._preview_tiles.size()):
+				var tile = view._preview_tiles[index]
+				var pose: Dictionary = Motion.preview(progress * view.game.spawn_interval, view.game.spawn_interval, index)
+				var moving_rect := Rect2(view._preview_origins[index] + Vector2(pose.offset) * tile.size, tile.size)
+				check(preview_rect.encloses(view._global_rect(moving_rect)),
+					"%s contains preview %d at %d percent of its urgent wobble" % [dimensions, index + 1, roundi(progress * 100)])
 		for cell: Dictionary in view.game.cells:
 			check(board.encloses(view._tiles[int(cell.id)].get_rect()), "%s keeps settled jelly %s inside its well" % [dimensions, cell.id])
 	view.size = Vector2(1000, 720)
@@ -159,8 +192,12 @@ func _check_supply_preview(view) -> void:
 	_reset(view, false, false)
 	var before: Dictionary = view.snapshot()
 	var supply: Array = before.upcoming.duplicate(true)
-	check(supply.size() == 3 and before.preview.slots.size() == 3,
-		"The view reveals exactly the next three committed supply tiles")
+	check(supply.size() == 4 and before.preview.slots.size() == 4,
+		"The view reveals all four committed tiles in the next batch")
+	check(view.find_children("*", "ProgressBar", true, false).is_empty(),
+		"The supply area has no competing progress bar")
+	for label: Label in view.find_children("*", "Label", true, false):
+		check(str(label.text) != "Next", "The four preview tiles communicate supply without a Next label")
 	for index in range(supply.size()):
 		var slot: Dictionary = before.preview.slots[index]
 		var preview = view._preview_tiles[index]
@@ -188,21 +225,27 @@ func _check_supply_preview(view) -> void:
 	var count: int = view.game.cells.size()
 	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed + 0.00001)
 	var next: Dictionary = view.snapshot()
-	var arrived: Dictionary = view._cell(int(supply[0].id))
-	check(view.game.cells.size() == count + 1 and int(next.generated_tiles) == int(before.generated_tiles) + 1,
-		"One supply beat adds one tile rather than a matching pair")
-	check(not arrived.is_empty() and arrived.word == supply[0].word and arrived.kind == supply[0].kind
-		and arrived.chest == supply[0].chest and not view._settled(arrived),
-		"The first advertised tile enters with its exact word, picture kind and chest marker")
-	check(int(next.preview.slots[0].id) == int(supply[1].id) and int(next.preview.slots[1].id) == int(supply[2].id)
-		and next.preview.slots.size() == 3,
-		"One arrival shifts the remaining previews forward and refills the third slot")
+	check(view.game.cells.size() == count + 4 and int(next.generated_tiles) == int(before.generated_tiles) + 4,
+		"One supply beat dispatches the complete advertised batch of four")
+	var columns: Array[int] = []
+	for index in range(supply.size()):
+		var arrived: Dictionary = view._cell(int(supply[index].id))
+		check(not arrived.is_empty() and arrived.word == supply[index].word and arrived.kind == supply[index].kind
+			and arrived.chest == supply[index].chest and not view._settled(arrived),
+			"Advertised tile %d arrives with its exact identity, learning content and chest marker" % (index + 1))
+		if not arrived.is_empty():
+			columns.append(int(arrived.column))
+		check(int(next.preview.slots[index].id) == int(next.upcoming[index].id)
+			and not supply.any(func(item: Dictionary) -> bool: return int(item.id) == int(next.preview.slots[index].id)),
+			"Preview slot %d advances to a newly committed tile after its batch leaves" % (index + 1))
+	check(columns.size() == 4 and columns.has(0) and columns.has(1) and columns.has(2) and columns.has(3),
+		"A batch uses all four available columns instead of stacking its arrivals")
 	var queued: Array = next.upcoming.duplicate(true)
 	var cells: Array = next.cells.duplicate(true)
 	view.pause(true)
 	_advance(view, view.game.spawn_interval + Motion.MAX_SETTLE_SECONDS)
 	check(view.snapshot().upcoming == queued and view.snapshot().cells == cells,
-		"Pausing freezes both the airborne tile and the next-three supply")
+		"Pausing freezes all airborne tiles and the next-four supply")
 	view.pause(false)
 	view.hide()
 	_advance(view, view.game.spawn_interval + Motion.MAX_SETTLE_SECONDS)
@@ -214,63 +257,196 @@ func _check_supply_preview(view) -> void:
 		"A seeded replacement round restores its own committed supply without the old arrival")
 	view.game.finish_round()
 	view.result_reveal()
-	check(not bool(view.snapshot().preview.visible) and not bool(view.snapshot().landing_ghost.visible),
+	check(not bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty(),
 		"Results hide the supply preview and all landing guidance")
 	view.stop()
-	check(not bool(view.snapshot().preview.visible) and not bool(view.snapshot().landing_ghost.visible),
+	check(not bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty(),
 		"Stopping the mode leaves no visible supply or ghost")
+	_reset(view)
+
+
+func _preview_window(interval: float, start: float, finish: float) -> Dictionary:
+	var energy: float = 0.0
+	var samples: int = 0
+	for index in range(4):
+		for sample_index in range(41):
+			var progress: float = lerpf(start, finish, float(sample_index) / 40.0)
+			var pose: Dictionary = Motion.preview(progress * interval, interval, index)
+			energy += Vector2(pose.offset).length_squared()
+			samples += 1
+	var first: Dictionary = Motion.preview(start * interval, interval, 0)
+	var last: Dictionary = Motion.preview(finish * interval, interval, 0)
+	return {"amplitude": sqrt(energy / samples), "speed": (float(last.beat) - float(first.beat)) / ((finish - start) * interval)}
+
+
+func _check_preview_pose(view, reason: String) -> void:
+	var slots: Array = view.snapshot().preview.slots
+	for index in range(view._preview_tiles.size()):
+		var tile = view._preview_tiles[index]
+		var pose: Dictionary = Motion.preview(view.game.spawn_elapsed, view.game.spawn_interval, index, view.reduced_motion)
+		check(tile.position.is_equal_approx(view._preview_origins[index] + Vector2(pose.offset) * tile.size)
+			and tile._surface.scale.is_equal_approx(Vector2(pose.stretch))
+			and is_equal_approx(float(tile._gel.get_shader_parameter("bend")), float(pose.bend)),
+			"%s derives preview %d from the live model clock" % [reason, index + 1])
+		check(tile._visual.scale == Vector2.ONE and tile._picture.scale == Vector2.ONE and tile._label.scale == Vector2.ONE,
+			"%s keeps preview %d learning content readable while its gel wobbles" % [reason, index + 1])
+		check(slots[index].has("motion") and is_equal_approx(float(slots[index].motion.intensity), float(pose.intensity))
+			and _rect(slots[index].rect).is_equal_approx(tile.get_global_rect()),
+			"%s publishes preview %d's real motion intensity and moving rectangle" % [reason, index + 1])
+
+
+func _check_preview_motion(view) -> void:
+	for interval: float in [view.game.INITIAL_SPAWN_INTERVAL, view.game.MIN_SPAWN_INTERVAL]:
+		var early: Dictionary = _preview_window(interval, 0.05, 0.20)
+		var middle: Dictionary = _preview_window(interval, 0.40, 0.55)
+		var late: Dictionary = _preview_window(interval, 0.84, 0.99)
+		check(float(middle.amplitude) > float(early.amplitude) * 1.5
+			and float(late.amplitude) > float(middle.amplitude) * 1.5,
+			"The %.2f-second supply beat grows from gentle motion to a stronger pre-drop wobble" % interval)
+		check(float(middle.speed) > float(early.speed) * 1.2 and float(late.speed) > float(middle.speed) * 1.8,
+			"The %.2f-second supply beat accelerates wobble frequency as dispatch approaches" % interval)
+		var previous_intensity: float = 0.0
+		for step in range(101):
+			var elapsed: float = interval * float(step) / 100.0
+			var pose: Dictionary = Motion.preview(elapsed, interval, 0)
+			check(float(pose.intensity) >= previous_intensity and float(pose.intensity) <= 1.0
+				and absf(Vector2(pose.offset).x) <= 0.0521 and absf(Vector2(pose.offset).y) <= 0.0209
+				and Vector2(pose.stretch).y >= 0.9219 and Vector2(pose.stretch).y <= 1.0781,
+				"Preview urgency grows inside a small readable motion envelope at %d percent" % step)
+			previous_intensity = float(pose.intensity)
+			var still: Dictionary = Motion.preview(elapsed, interval, step % 4, true)
+			check(still.offset == Vector2.ZERO and still.stretch == Vector2.ONE
+				and is_zero_approx(float(still.bend)) and is_zero_approx(float(still.intensity)),
+				"Reduced motion has a neutral preview pose throughout the supply beat")
+	_reset(view, false, false)
+	var first: Array = view.snapshot().preview.slots.duplicate(true)
+	_check_preview_pose(view, "A fresh batch")
+	_advance(view, view.game.spawn_interval * 0.9)
+	_check_preview_pose(view, "The late supply beat")
+	var late_slots: Array = view.snapshot().preview.slots.duplicate(true)
+	check(late_slots != first and int(late_slots[0].id) == int(first[0].id),
+		"Approaching release animates the existing queued tiles without replacing them")
+	view.pause(true)
+	_advance(view, 0.5)
+	check(view.snapshot().preview.slots == late_slots, "Menu pause freezes all four preview poses and identities")
+	view.pause(false)
+	view.hide()
+	_advance(view, 0.5)
+	view.show()
+	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot keep wobbling or advance its preview clock")
+	var pair: Array[int] = _pair(view)
+	view._activate(pair[0])
+	view._activate(pair[1])
+	_advance(view, 0.4)
+	check(not view.game.fusion.is_empty() and view.snapshot().preview.slots == late_slots,
+		"Fusion freezes the pending batch's urgent wobble with its supply clock")
+	_advance(view, view.game.FUSION_SECONDS - 0.4 + 0.00001)
+	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed + 0.00001)
+	_check_preview_pose(view, "The following dispatched batch")
+	var dispatched: Array = view.snapshot().preview.slots
+	check(int(dispatched[0].id) != int(first[0].id) and float(dispatched[0].motion.intensity) < 0.121,
+		"Dispatch resets the replacement preview to gentle motion instead of inheriting urgency")
+	_reset(view, false, false)
+	var reset_slots: Array = view.snapshot().preview.slots
+	check(reset_slots.size() == first.size(), "A replacement round restores the complete preview batch")
+	for index in range(mini(reset_slots.size(), first.size())):
+		var reset_rect: Rect2 = _rect(reset_slots[index].rect)
+		var first_rect: Rect2 = _rect(first[index].rect)
+		check(reset_slots[index].id == first[index].id and reset_slots[index].visible == first[index].visible
+			and reset_slots[index].motion == first[index].motion
+			and reset_rect.position.distance_to(first_rect.position) < 0.001 and reset_rect.size.is_equal_approx(first_rect.size),
+			"A replacement round resets preview %d position, deformation and supply identity" % (index + 1))
+	_advance(view, view.game.spawn_interval * 0.9)
+	view.set_reduced_motion(true)
+	_check_preview_pose(view, "Enabling reduced motion")
+	var static_slots: Array = view.snapshot().preview.slots.duplicate(true)
+	_advance(view, 0.2)
+	check(view.snapshot().preview.slots == static_slots, "Reduced motion advances supply time without moving its preview")
+	view.set_reduced_motion(false)
+	_check_preview_pose(view, "Restoring motion")
+	view.stop()
+	check(not bool(view.snapshot().preview.visible), "Stopping removes the wobbling supply presentation")
+	for tile in view._preview_tiles:
+		check(not tile.visible, "No preview tile continues rendering after stop")
 	_reset(view)
 
 
 func _check_drop_projection(view) -> void:
 	_reset(view, false, false)
-	var cell: Dictionary = _arrival(view)
-	var tile = view._tiles[int(cell.id)]
-	var target: Rect2 = view._global_rect(view._tile_rect(cell))
-	var ghost: Dictionary = view.snapshot().landing_ghost
-	check(bool(ghost.visible) and int(ghost.id) == int(cell.id) and _rect(ghost.rect).is_equal_approx(target),
-		"The ghost marks the arriving tile's exact final cell before it lands")
-	check(view._ghost.disabled and view._ghost.focus_mode == Control.FOCUS_NONE
-		and view._ghost.mouse_filter == Control.MOUSE_FILTER_IGNORE and view._ghost._surface.texture == tile._surface.texture
-		and not view._ghost._picture.visible and not view._ghost._label.visible and not view._ghost._badge.visible,
-		"The landing silhouette reuses the real gel contour without duplicating learning content or accepting input")
-	check(tile.get_parent() != view and tile.get_parent().clip_contents,
-		"A falling tile is clipped by the well instead of crossing the HUD and supply preview")
-	check(not view._press(4, target.get_center()), "The destination ghost is not a second playable tile")
-	var previous: Rect2 = tile.get_global_rect()
+	var incoming: Array[Dictionary] = _arrivals(view)
+	check(incoming.size() == 4 and view.snapshot().landing_ghosts.size() == 4 and view._ghosts.size() == 4,
+		"Four simultaneous arrivals each receive their own destination projection")
+	if incoming.size() != 4:
+		return
+	var previous: Dictionary = {}
+	for cell: Dictionary in incoming:
+		var tile = view._tiles[int(cell.id)]
+		var target: Rect2 = view._global_rect(view._tile_rect(cell))
+		var ghost: Dictionary = _ghost(view, int(cell.id))
+		check(not ghost.is_empty() and bool(ghost.visible) and _rect(ghost.rect).is_equal_approx(target),
+			"Arrival %s has a fixed projection in its exact destination cell" % cell.id)
+		var projection = view._ghosts[int(cell.id)]
+		check(projection.disabled and projection.focus_mode == Control.FOCUS_NONE
+			and projection.mouse_filter == Control.MOUSE_FILTER_IGNORE and projection._surface.texture == tile._surface.texture
+			and not projection._picture.visible and not projection._label.visible and not projection._badge.visible,
+			"Each landing silhouette reuses its gel contour without duplicating content or accepting input")
+		check(tile.get_parent() != view and tile.get_parent().clip_contents,
+			"Every airborne tile is clipped by the well instead of crossing its supply preview")
+		check(not view._press(4, target.get_center()), "A projected destination is not a second playable tile")
+		previous[int(cell.id)] = tile.get_global_rect()
 	for fraction: float in [0.25, 0.50, 0.75]:
-		_advance(view, Motion.contact_at(cell) * fraction - float(cell.age))
-		var current: Rect2 = tile.get_global_rect()
-		ghost = view.snapshot().landing_ghost
-		check(current.position.y > previous.position.y and current.position.y < target.position.y
-			and is_equal_approx(current.position.x, target.position.x),
-			"The tile visibly traverses its own column before contact at %d percent" % roundi(fraction * 100))
-		check(bool(ghost.visible) and int(ghost.id) == int(cell.id) and _rect(ghost.rect).is_equal_approx(target),
-			"The destination silhouette remains fixed while the real tile descends")
-		check(tile.disabled and not view.navigation_controls().has(tile), "An airborne tile cannot be selected by touch or keyboard")
-		previous = current
-	_advance(view, Motion.contact_at(cell) - float(cell.age) + 0.001)
-	check(not bool(view.snapshot().landing_ghost.visible) and tile.get_global_rect().is_equal_approx(target),
-		"Contact replaces the projected silhouette with the real body at the same destination")
-	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
-	check(tile.get_parent() == view and not tile.disabled and view.navigation_controls().has(tile),
-		"The settled tile rejoins the board's normal drag and navigation surface")
+		_advance(view, Motion.contact_at(incoming[0]) * fraction - float(incoming[0].age))
+		for cell: Dictionary in incoming:
+			var tile = view._tiles[int(cell.id)]
+			var target: Rect2 = view._global_rect(view._tile_rect(cell))
+			var current: Rect2 = tile.get_global_rect()
+			var ghost: Dictionary = _ghost(view, int(cell.id))
+			check(current.position.y > Rect2(previous[int(cell.id)]).position.y and current.position.y < target.position.y
+				and is_equal_approx(current.position.x, target.position.x),
+				"Arrival %s visibly descends in its own column at %d percent of first contact" % [cell.id, roundi(fraction * 100)])
+			check(not ghost.is_empty() and bool(ghost.visible) and _rect(ghost.rect).is_equal_approx(target),
+				"Every destination remains fixed while its own body descends")
+			check(tile.disabled and not view.navigation_controls().has(tile), "An airborne tile cannot be selected by touch or keyboard")
+			previous[int(cell.id)] = current
+	_advance(view, Motion.contact_at(incoming[0]) - float(incoming[0].age) + 0.001)
+	var expected_ghosts: int = 0
+	for cell: Dictionary in incoming:
+		var contacted: bool = float(cell.age) >= Motion.contact_at(cell)
+		check(_ghost(view, int(cell.id)).is_empty() == contacted,
+			"Only the arriving body's own contact retires its projection")
+		if contacted:
+			check(view._tiles[int(cell.id)].get_global_rect().is_equal_approx(view._global_rect(view._tile_rect(cell))),
+				"Contact replaces its silhouette with the real body at the same destination")
+		else:
+			expected_ghosts += 1
+	check(expected_ghosts > 0 and expected_ghosts < 4 and view.snapshot().landing_ghosts.size() == expected_ghosts,
+		"Columns with different stack heights retire their landing ghosts independently")
+	var last: Dictionary = incoming[-1]
+	_advance(view, Motion.ready_at(last) - float(last.age) + 0.001)
+	check(view.snapshot().landing_ghosts.is_empty() and view._ghosts.is_empty(), "The complete batch leaves no landing projections behind")
+	for cell: Dictionary in incoming:
+		var tile = view._tiles[int(cell.id)]
+		check(tile.get_parent() == view and not tile.disabled and view.navigation_controls().has(tile),
+			"Every settled arrival rejoins the normal drag and navigation surface")
 	_reset(view, true, false)
-	cell = _arrival(view)
-	tile = view._tiles[int(cell.id)]
-	target = view._global_rect(view._tile_rect(cell))
-	check(not bool(view.snapshot().landing_ghost.visible) and tile.get_global_rect().is_equal_approx(target) and tile.disabled,
-		"Reduced motion uses one stationary tile at the destination and retains the arrival gate")
-	_advance(view, Motion.ready_at(cell) * 0.5)
-	check(tile.get_global_rect().is_equal_approx(target) and tile._surface.scale == Vector2.ONE and tile.disabled,
-		"Reduced motion introduces neither a duplicate ghost nor a hidden moving body")
+	incoming = _arrivals(view)
+	check(view.snapshot().landing_ghosts.is_empty() and view._ghosts.is_empty(), "Reduced motion creates no duplicate landing silhouettes")
+	for cell: Dictionary in incoming:
+		var tile = view._tiles[int(cell.id)]
+		check(tile.get_global_rect().is_equal_approx(view._global_rect(view._tile_rect(cell))) and tile.disabled,
+			"Reduced motion keeps every arrival stationary at its destination behind the input gate")
+	_advance(view, Motion.ready_at(incoming[0]) * 0.5)
+	for cell: Dictionary in incoming:
+		var tile = view._tiles[int(cell.id)]
+		check(tile.get_global_rect().is_equal_approx(view._global_rect(view._tile_rect(cell))) and tile._surface.scale == Vector2.ONE and tile.disabled,
+			"Reduced motion introduces neither a ghost nor a hidden moving body during the batch's fall time")
 	_reset(view)
 
 
 func _check_landing_presentation(view) -> void:
 	_reset(view, false, false)
 	var cell: Dictionary = _arrival(view)
-	check(not cell.is_empty(), "A new round has one visible arrival above its prepared starting board")
+	check(not cell.is_empty(), "A new round has a visible batch above its prepared starting board")
 	if cell.is_empty():
 		return
 	var tile = view._tiles[int(cell.id)]
@@ -295,53 +471,67 @@ func _check_landing_presentation(view) -> void:
 	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
 	check(view._settled(cell) and not tile.disabled and tile._surface.scale.is_equal_approx(Vector2.ONE),
 		"The visual body settles at the same boundary that enables input")
+	var landed_before: int = cues.count("land")
 	view._layout()
 	view._sync_positions()
 	view.apply_theme(Data.theme("spring"), data.chests)
-	check(cues.count("land") == 1, "Layout, position and theme refreshes never replay an impact")
+	check(cues.count("land") == landed_before, "Layout, position and theme refreshes never replay an impact")
 
 
 func _check_landing_lifecycle(view) -> void:
 	_reset(view, false, false)
-	var cell: Dictionary = _arrival(view)
+	var incoming: Array[Dictionary] = _arrivals(view)
+	var cell: Dictionary = incoming[0]
 	var before_contact: float = Motion.contact_at(cell) * 0.45
 	_advance(view, before_contact)
+	var paused_cells: Array = view.game.cells.duplicate(true)
 	view.pause(true)
 	view._process(0.4)
-	check(cues.is_empty() and is_equal_approx(float(cell.age), before_contact),
-		"Pausing before contact freezes the fall and does not emit a landing")
+	check(cues.is_empty() and view.game.cells == paused_cells,
+		"Pausing before contact freezes the whole batch and does not emit a landing")
 	view.pause(false)
-	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
-	check(cues.count("land") == 1, "Resume completes the interrupted fall with one impact")
+	_advance(view, Motion.ready_at(incoming[-1]) - float(incoming[-1].age) + 0.001)
+	check(cues.count("land") == _landing_groups(incoming),
+		"Resume completes the batch with one impact per simultaneous contact group")
+	var landed_before: int = cues.count("land")
+	_advance(view, 0.2)
+	check(cues.count("land") == landed_before, "Recovered batch contacts do not repeat after settling")
 	_reset(view, false, false)
-	cell = _arrival(view)
+	incoming = _arrivals(view)
+	paused_cells = view.game.cells.duplicate(true)
 	view.hide()
-	_advance(view, Motion.ready_at(cell) + 0.001)
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
 	view.show()
-	check(cues.is_empty() and is_zero_approx(float(cell.age)), "A hidden board cannot advance a fall or emit landing feedback")
-	_advance(view, Motion.ready_at(cell) + 0.001)
-	check(cues.count("land") == 1, "A new round owns its fresh contact without the old cooldown")
+	check(cues.is_empty() and view.game.cells == paused_cells, "A hidden board cannot advance any fall or emit landing feedback")
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
+	check(cues.count("land") == _landing_groups(incoming), "A replacement round owns fresh grouped contacts without the old cooldown")
 	_reset(view, true, false)
-	cell = _arrival(view)
+	incoming = _arrivals(view)
+	cell = incoming[0]
 	var tile = view._tiles[int(cell.id)]
 	check(tile.position == view._tile_rect(cell).position and tile._surface.scale == Vector2.ONE and not view._settled(cell),
 		"Reduced motion presents a static body without skipping the input gate")
-	_advance(view, Motion.ready_at(cell) + 0.001)
-	check(view._settled(cell) and tile._surface.scale == Vector2.ONE and cues.count("land") == 1,
-		"Reduced motion retains the shared ready time and a single quiet contact cue")
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
+	check(view._settled(cell) and tile._surface.scale == Vector2.ONE and cues.count("land") == _landing_groups(incoming),
+		"Reduced motion retains each ready boundary and quiet grouped contact cues")
 	_reset(view)
 	view.game.step(view.game.spawn_interval - view.game.spawn_elapsed)
 	view._sync_tiles()
-	cell = _arrival(view)
-	var falling_age: float = float(cell.age)
-	var falling_position: Vector2 = view._tiles[int(cell.id)].get_global_rect().position
+	incoming = _arrivals(view)
+	var falling: Dictionary = {}
+	for arrival: Dictionary in incoming:
+		falling[int(arrival.id)] = {"age": float(arrival.age), "position": view._tiles[int(arrival.id)].get_global_rect().position}
 	var pair: Array[int] = _pair(view)
 	view._activate(pair[0])
 	view._activate(pair[1])
 	view._process(0.4)
-	check(not view.game.fusion.is_empty() and not cues.has("land")
-		and is_equal_approx(float(cell.age), falling_age) and view._tiles[int(cell.id)].get_global_rect().position.is_equal_approx(falling_position),
-		"Fusion freezes the arriving tile instead of allowing it to fall or add a contact sound")
+	check(incoming.size() == 4 and not view.game.fusion.is_empty() and not cues.has("land"),
+		"Fusion suspends all four arrivals without adding a landing sound")
+	for arrival: Dictionary in incoming:
+		var held: Dictionary = falling[int(arrival.id)]
+		check(is_equal_approx(float(arrival.age), float(held.age))
+			and view._tiles[int(arrival.id)].get_global_rect().position.is_equal_approx(Vector2(held.position)),
+			"Fusion freezes arrival %s at its current height" % arrival.id)
 	view.stop()
 	view._process(0.4)
 	check(not cues.has("land"), "Stopping the mode cannot revive a pending landing")
@@ -571,7 +761,7 @@ func _fill_board(view) -> void:
 				remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
 		view._process(minf(0.25, maxf(0.000001, remaining)))
 	check(view.game.cells.size() == view.game.CAPACITY and is_zero_approx(float(view.game.full_elapsed)),
-		"Single-tile supply fills the board and starts its warning only when the last tile is ready")
+		"Batch supply fills the board and starts its warning only when every final arrival is ready")
 
 
 func _check_danger_hidden(view, reason: String) -> void:
@@ -852,7 +1042,7 @@ func _check_reduced_motion_and_cache(view) -> void:
 		"Static theme chest previews stop rendering once their source pose is cached")
 	view.stop()
 	check(view._tiles.is_empty() and not view._merged.visible and not view.finish_button.visible
-		and not view._loot_icon.visible and not view._pace.visible,
+		and not view._loot_icon.visible and not bool(view.snapshot().preview.visible) and view._ghosts.is_empty(),
 		"Stopping a view releases all gameplay presentation without finishing a round")
 
 

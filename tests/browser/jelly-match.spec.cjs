@@ -36,7 +36,7 @@ async function startJelly(page, options = {}) {
   await libraryControl(page, 'Mode_jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles?.length >= 6 &&
+    return state.visible && state.phase === 'playing' && state.tiles?.length >= 10 &&
       state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Jelly board starts with settled word and picture tiles' }).toBe(true);
   return errors;
@@ -59,7 +59,7 @@ async function availablePair(page, options = {}) {
   await expect.poll(async () => {
     found = pair(await jelly(page), options);
     return Boolean(found);
-  }, { timeout: 30000, message: 'Single-tile supply provides a settled, visible word and its matching picture' }).toBe(true);
+  }, { timeout: 30000, message: 'Batched supply provides a settled, visible word and its matching picture' }).toBe(true);
   return found;
 }
 
@@ -156,10 +156,10 @@ function separate(a, b) {
 }
 
 function expectPreviewLayout(state, bounds) {
-  expect(state.preview.visible, 'The next three tiles are visible outside the well').toBe(true);
-  expect(state.upcoming).toHaveLength(3);
-  expect(state.preview.slots).toHaveLength(3);
-  expectInCanvas(state.preview.rect, bounds, 'The full next-three preview fits the screen');
+  expect(state.preview.visible, 'The upcoming four tiles are visible outside the well').toBe(true);
+  expect(state.upcoming).toHaveLength(4);
+  expect(state.preview.slots).toHaveLength(4);
+  expectInCanvas(state.preview.rect, bounds, 'The complete four-tile preview fits the screen');
   expect(separate(state.preview.rect, state.board_rect), 'The preview never occupies a playable board cell').toBe(true);
   expect(separate(state.preview.rect, state.finish.rect), 'The preview does not overlap Finish').toBe(true);
   for (let index = 0; index < state.preview.slots.length; index++) {
@@ -203,8 +203,11 @@ async function observeSupply(page) {
       const tile = item => ({ id: item.id, word: item.word.id, kind: item.kind, chest: item.chest,
         rect: item.rect, visible: item.visible, settled: item.settled });
       window.jellySupplyTimeline.push({ at: performance.now(), generated: state.generated_tiles,
+        spawnElapsed: state.spawn_elapsed, spawnInterval: state.spawn_interval, paused: state.paused,
+        fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
+        preview: state.preview?.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion })),
         tiles: state.tiles.map(tile), upcoming: (state.upcoming || []).map(tile),
-        ghost: state.landing_ghost, board: state.board_rect });
+        ghosts: state.landing_ghosts, board: state.board_rect });
     };
     new MutationObserver(record).observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
     record();
@@ -221,7 +224,7 @@ async function focusTile(page, tileId) {
   throw new Error(`Keyboard navigation could not focus Jelly tile ${tileId}.`);
 }
 
-test('next three tiles predict separate visible drops and their stable landing ghosts', async ({ page }, info) => {
+test('four previews predict simultaneous batches and the final partial batch with stable landing ghosts', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await openModeMenu(page);
@@ -229,11 +232,12 @@ test('next three tiles predict separate visible drops and their stable landing g
   await libraryControl(page, 'Mode_jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.preview?.visible && state.upcoming?.length === 3 && state.landing_ghost?.visible;
-  }, { timeout: 12000, intervals: [50], message: 'An ordinary single arrival visibly announces its destination' }).toBe(true);
+    return state.visible && state.preview?.visible && state.upcoming?.length === 4 &&
+      state.landing_ghosts?.some(ghost => ghost.visible);
+  }, { timeout: 12000, intervals: [50], message: 'An ordinary batch visibly announces its landing destinations' }).toBe(true);
   const starting = await jelly(page);
   expectPreviewLayout(starting, await metrics(page));
-  await page.screenshot({ path: info.outputPath('jelly-next-three-and-falling-tile.png'), scale: 'css' });
+  await page.screenshot({ path: info.outputPath('jelly-four-previews-and-falling-batch.png'), scale: 'css' });
 
   // These are real pointer gestures on the display-only queue. Its contents
   // may naturally advance, but they cannot become a selected gameplay tile.
@@ -258,31 +262,35 @@ test('next three tiles predict separate visible drops and their stable landing g
 
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.generated_tiles >= starting.generated_tiles + 3 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 32000, intervals: [100], message: 'Three real seven-second dispatches descend and settle' }).toBe(true);
+    return state.generated_tiles === 24 && state.tiles.every(tile => tile.settled);
+  }, { timeout: 40000, intervals: [100], message: 'Real four-tile dispatches fill the last two spaces with a partial batch' }).toBe(true);
   const timeline = await page.evaluate(() => window.jellySupplyTimeline);
-  await info.attach('jelly-single-tile-supply.json', { body: Buffer.from(JSON.stringify(timeline, null, 2)), contentType: 'application/json' });
-  const records = timeline.filter(entry => entry.upcoming.length === 3);
+  await info.attach('jelly-batch-supply.json', { body: Buffer.from(JSON.stringify(timeline, null, 2)), contentType: 'application/json' });
+  const records = timeline.filter(entry => entry.upcoming.length === 4);
   const arrivals = [];
   const identity = tile => ({ id: tile.id, word: tile.word, kind: tile.kind, chest: tile.chest });
   for (let index = 1; index < records.length; index++) {
     const previous = records[index - 1], current = records[index];
     expect(current.tiles.filter(tile => !tile.settled).length,
-      'Only one newly supplied tile is airborne or settling at a time').toBeLessThanOrEqual(1);
+      'No more than the four incoming tiles are airborne or settling').toBeLessThanOrEqual(4);
+    expect(current.ghosts.filter(ghost => ghost.visible).length).toBeLessThanOrEqual(4);
     const added = current.tiles.filter(tile => !previous.tiles.some(older => older.id === tile.id));
     if (!added.length) continue;
-    expect(added, 'Each dispatch adds one tile instead of a simultaneous pair').toHaveLength(1);
-    expect(current.generated - previous.generated).toBe(1);
-    expect(identity(added[0]), 'The next arrival is exactly the previous preview head').toEqual(identity(previous.upcoming[0]));
-    expect(current.upcoming.slice(0, 2).map(identity), 'The remaining previews advance in order')
-      .toEqual(previous.upcoming.slice(1).map(identity));
-    arrivals.push({ id: added[0].id, at: current.at });
+    const count = Math.min(4, 24 - previous.tiles.length);
+    expect(added, 'A single dispatch inserts its entire available batch together').toHaveLength(count);
+    expect(current.generated - previous.generated).toBe(count);
+    expect(added.map(identity), 'Every arriving tile matches the preview in the same order')
+      .toEqual(previous.upcoming.slice(0, count).map(identity));
+    expect(current.upcoming.slice(0, 4 - count).map(identity), 'Undispatched previews stay at the front after a partial batch')
+      .toEqual(previous.upcoming.slice(count).map(identity));
+    arrivals.push({ ids: added.map(tile => tile.id), at: current.at });
   }
   expect(arrivals.length).toBeGreaterThanOrEqual(3);
-  for (const arrival of arrivals.slice(0, 3)) {
-    const flight = records.filter(entry => entry.at >= arrival.at && entry.ghost?.visible && entry.ghost.id === arrival.id);
+  expect(arrivals.at(-1).ids, 'The board has room for exactly two tiles in its final batch').toHaveLength(2);
+  for (const batch of arrivals.slice(0, 2)) for (const id of batch.ids) {
+    const flight = records.filter(entry => entry.at >= batch.at && entry.ghosts.some(ghost => ghost.visible && ghost.id === id));
     const visibleFlight = flight.filter(entry => {
-      const tile = entry.tiles.find(item => item.id === arrival.id);
+      const tile = entry.tiles.find(item => item.id === id);
       const visibleHeight = Math.min(tile.rect[1] + tile.rect[3], entry.board[1] + entry.board[3]) -
         Math.max(tile.rect[1], entry.board[1]);
       return tile.visible && visibleHeight >= tile.rect[3] * 0.35;
@@ -290,21 +298,77 @@ test('next three tiles predict separate visible drops and their stable landing g
     expect(visibleFlight.length, 'The clipped well shows the fall across several published frames').toBeGreaterThanOrEqual(4);
     const first = visibleFlight[0], last = visibleFlight.at(-1);
     expect(last.at - first.at, 'The descent has perceptible duration at normal game speed').toBeGreaterThanOrEqual(300);
-    const firstTile = first.tiles.find(tile => tile.id === arrival.id), lastTile = last.tiles.find(tile => tile.id === arrival.id);
+    const firstTile = first.tiles.find(tile => tile.id === id), lastTile = last.tiles.find(tile => tile.id === id);
+    const destination = first.ghosts.find(ghost => ghost.id === id).rect;
     expect(lastTile.rect[1] - firstTile.rect[1], 'The tile visibly travels down toward the ghost').toBeGreaterThan(firstTile.rect[3] / 2);
     for (const frame of flight) {
-      expect(frame.ghost.rect.every((value, index) => Math.abs(value - first.ghost.rect[index]) < 0.5),
+      expect(frame.ghosts.find(ghost => ghost.id === id).rect.every((value, index) => Math.abs(value - destination[index]) < 0.5),
         'The landing destination stays stable throughout this descent').toBe(true);
     }
-    const landed = records.find(entry => entry.at > last.at && entry.tiles.some(tile => tile.id === arrival.id && tile.settled));
+    const landed = records.find(entry => entry.at > last.at && entry.tiles.some(tile => tile.id === id && tile.settled));
     expect(landed, 'The falling tile reaches its advertised cell').toBeTruthy();
-    const tile = landed.tiles.find(item => item.id === arrival.id);
-    expect(tile.rect.every((value, index) => Math.abs(value - first.ghost.rect[index]) < 1),
+    const tile = landed.tiles.find(item => item.id === id);
+    expect(tile.rect.every((value, index) => Math.abs(value - destination[index]) < 1),
       'The ghost marks the actual resting rectangle').toBe(true);
-    expect(landed.ghost?.visible && landed.ghost.id === arrival.id, 'This ghost disappears after contact').toBe(false);
+    expect(landed.ghosts.some(ghost => ghost.visible && ghost.id === id), 'This ghost disappears after contact').toBe(false);
   }
   expectPreviewLayout(await jelly(page), await metrics(page));
-  await page.screenshot({ path: info.outputPath('jelly-next-three-settled.png'), scale: 'css' });
+  await page.screenshot({ path: info.outputPath('jelly-four-previews-final-partial-batch.png'), scale: 'css' });
+  expect(errors).toEqual([]);
+});
+
+test('preview wobble builds with the dispatch clock and freezes during menus and fusion', async ({ page }, info) => {
+  test.setTimeout(90000);
+  const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+  const poses = state => state.preview.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion }));
+  await expect.poll(async () => {
+    const state = await jelly(page), progress = state.spawn_elapsed / state.spawn_interval;
+    return progress >= 0.12 && progress <= 0.4;
+  }, { timeout: 10000, intervals: [50], message: 'Observe the early part of a real dispatch cycle' }).toBe(true);
+  const early = await jelly(page);
+  expectPreviewLayout(early, await metrics(page));
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.upcoming[0].id === early.upcoming[0].id && state.spawn_elapsed / state.spawn_interval >= 0.7;
+  }, { timeout: 7000, intervals: [50], message: 'The same upcoming batch approaches its actual dispatch time' }).toBe(true);
+  const late = await jelly(page);
+  expectPreviewLayout(late, await metrics(page));
+  for (let index = 0; index < 4; index++) {
+    const before = early.preview.slots[index].motion, after = late.preview.slots[index].motion;
+    expect(after.intensity, 'Every preview becomes more animated as dispatch approaches').toBeGreaterThan(before.intensity);
+    expect({ offset: after.offset, stretch: after.stretch, bend: after.bend }, 'The visible gel pose actually changes')
+      .not.toEqual({ offset: before.offset, stretch: before.stretch, bend: before.bend });
+  }
+
+  await openModeMenu(page);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const paused = await jelly(page);
+  await page.waitForTimeout(450);
+  const stillPaused = await jelly(page);
+  expect(stillPaused.spawn_elapsed, 'The menu freezes the actual supply clock').toBe(paused.spawn_elapsed);
+  expect(poses(stillPaused), 'Preview jellies retain their exact pose while paused').toEqual(poses(paused));
+  await libraryControl(page, 'LibraryClose');
+  await expect.poll(async () => (await jelly(page)).spawn_elapsed,
+    { timeout: 3000, intervals: [50], message: 'Closing the menu resumes the interrupted dispatch clock' }).toBeGreaterThan(paused.spawn_elapsed);
+  const resumed = await jelly(page);
+  expect(poses(resumed), 'Preview motion resumes with the dispatch clock').not.toEqual(poses(paused));
+
+  await observeSupply(page);
+  const tiles = await availablePair(page, { chest: false }), before = (await jelly(page)).cleared_pairs;
+  await dragPair(page, tiles);
+  await expectClear(page, before + 1, tiles);
+  const fusion = (await page.evaluate(() => window.jellySupplyTimeline)).filter(frame => frame.fusion);
+  expect(fusion.length, 'Observe several ordinary frames of the committed fusion').toBeGreaterThanOrEqual(3);
+  for (const frame of fusion) {
+    expect(frame.spawnElapsed, 'A committed fusion freezes the dispatch clock').toBe(fusion[0].spawnElapsed);
+    expect(frame.preview, 'Preview poses stay still throughout the matching animation').toEqual(fusion[0].preview);
+  }
+  await info.attach('jelly-preview-motion.json', { body: Buffer.from(JSON.stringify({
+    early: { elapsed: early.spawn_elapsed, slots: poses(early) },
+    late: { elapsed: late.spawn_elapsed, slots: poses(late) },
+    paused: { elapsed: paused.spawn_elapsed, slots: poses(paused) }, fusion
+  }, null, 2)), contentType: 'application/json' });
+  await page.screenshot({ path: info.outputPath('jelly-preview-after-fusion.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
 
@@ -390,39 +454,50 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
 });
 
 test('a naturally full board pauses, can be rescued, and eventually ends without inventing loot', async ({ page }, info) => {
-  test.setTimeout(240000);
+  test.setTimeout(150000);
   test.skip(info.project.name !== 'desktop-chromium', 'Natural supply and the eight-second countdown run once on desktop.');
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
-  expect((await jelly(page)).spawn_interval, 'The round starts with seven seconds between individual tiles').toBe(7);
+  expect((await jelly(page)).spawn_interval, 'The round starts with seven seconds between four-tile batches').toBe(7);
   await observeTimeline(page);
+  let full;
   await expect.poll(async () => {
-    const state = await jelly(page);
-    return state.cells.length === 24 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 150000, intervals: [100, 250, 500], message: 'Unmodified single-tile supply naturally fills all 24 cells' }).toBe(true);
-  const arrivals = await page.evaluate(() => window.jellyObservedTimeline.filter((entry, index, entries) =>
-    index > 0 && entry.generated > entries[index - 1].generated));
-  const intervals = arrivals.slice(1).map((entry, index) => (entry.at - arrivals[index].at) / 1000);
-  await info.attach('jelly-spawn-cadence', { body: JSON.stringify({ arrivals, intervals }, null, 2), contentType: 'application/json' });
-  expect(arrivals.length, 'Natural single arrivals establish the real seven-second cadence').toBeGreaterThanOrEqual(16);
-  for (let index = 1; index < arrivals.length; index++) {
-    expect(arrivals[index].generated - arrivals[index - 1].generated, 'Every dispatch adds exactly one tile').toBe(1);
-  }
-  for (const interval of intervals) expect(interval, 'Idle tile arrivals leave reading and matching time').toBeGreaterThanOrEqual(6.5);
-  expect((await jelly(page)).notice).toContain('Board full');
+    full = await jelly(page);
+    return full.cells.length === 24 && full.tiles.every(tile => tile.settled);
+  }, { timeout: 50000, intervals: [100], message: 'Unmodified batch supply naturally fills all 24 cells' }).toBe(true);
+  // Freeze the real countdown before inspecting cadence or preparing the rescue.
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const paused = await jelly(page);
+  expect(full.notice).toContain('Board full');
+  expect(paused.phase).toBe('playing');
   expect(paused.danger).toEqual({ active: false, strength: 0 });
+  const arrivals = await page.evaluate(() => window.jellyObservedTimeline.filter((entry, index, entries) =>
+    index > 0 && entry.generated > entries[index - 1].generated));
+  const intervals = arrivals.slice(1).map((entry, index) => (entry.at - arrivals[index].at) / 1000);
+  const rescue = pair(paused, { chest: false });
+  expect(rescue, 'The full paused board contains an unmarked rescue pair').toBeTruthy();
+  const streak = (await growth(page)).streaks[rescue[0].word.id] || 0;
+  const bounds = await metrics(page), close = bounds.library.controls.find(item => item.name === 'LibraryClose');
+  expect(close?.disabled).toBe(false);
+  const from = center(rescue[0].rect, bounds), to = center(rescue[1].rect, bounds);
   await page.waitForTimeout(1200);
   const stillPaused = await jelly(page);
   expect(stillPaused.full_elapsed, 'The menu freezes the real danger clock').toBe(paused.full_elapsed);
   expect(stillPaused.generated_tiles).toBe(paused.generated_tiles);
-  await libraryControl(page, 'LibraryClose');
-  await expect.poll(async () => (await jelly(page)).visible && !(await jelly(page)).paused).toBe(true);
-
-  const rescue = await availablePair(page, { chest: false });
-  const streak = (await growth(page)).streaks[rescue[0].word.id] || 0;
-  await dragPair(page, rescue);
+  await tap(page, close.rect[0] + close.rect[2] / 2, close.rect[1] + close.rect[3] / 2, bounds);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && !state.paused;
+  }, { intervals: [25] }).toBe(true);
+  // The normal drag test already observes intermediate poses. Here, commit the
+  // prepared real gesture promptly instead of holding it through assertion polls.
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(to.x, to.y, { steps: 2 });
+  } finally {
+    await page.mouse.up();
+  }
   const rescued = await expectClear(page, 1, rescue);
   expect(rescued.cells).toHaveLength(22);
   expect(rescued.full_elapsed, 'A completed rescue cancels the entire previous countdown').toBe(-1);
@@ -431,7 +506,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
   await page.screenshot({ path: info.outputPath('jelly-full-board-rescue.png'), scale: 'css' });
   await expect.poll(async () => (await jelly(page)).cells.length,
-    { timeout: 20000, message: 'Two separate natural arrivals fill the newly opened space' }).toBe(24);
+    { timeout: 12000, message: 'A partial batch fills the two newly opened spaces' }).toBe(24);
   expect((await jelly(page)).phase).toBe('playing');
   // Capture feedback during the final countdown so screenshots cannot consume rescue time.
   await expect.poll(async () => (await jelly(page)).danger.strength,
@@ -456,6 +531,13 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   await page.waitForTimeout(400);
   expect((await jelly(page)).round_id).toBe(ended.round_id);
   expect((await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
+  await info.attach('jelly-spawn-cadence', { body: JSON.stringify({ arrivals, intervals }, null, 2), contentType: 'application/json' });
+  expect(arrivals.length, 'Natural batch arrivals establish the real seven-second cadence').toBeGreaterThanOrEqual(3);
+  for (let index = 1; index < arrivals.length; index++) {
+    expect(arrivals[index].generated - arrivals[index - 1].generated,
+      'Dispatches add four tiles until only two board cells remain').toBe(index === arrivals.length - 1 ? 2 : 4);
+  }
+  for (const interval of intervals) expect(interval, 'Idle batch arrivals leave reading and matching time').toBeGreaterThanOrEqual(6.5);
   expect(errors).toEqual([]);
 });
 

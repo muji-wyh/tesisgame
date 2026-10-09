@@ -55,7 +55,7 @@ func fill_board(game) -> void:
 				remaining = maxf(remaining, Motion.ready_at(cell) - float(cell.age))
 		game.step(maxf(0.000001, remaining))
 	check(game.cells.size() == game.CAPACITY and is_zero_approx(float(game.full_elapsed)),
-		"A full board waits for its final single tile to settle before warning")
+		"A full board waits for every arrival in its final batch to settle before warning")
 
 
 func _run() -> void:
@@ -78,6 +78,9 @@ func _run() -> void:
 		and app._jelly_backdrop.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"The woodland covers the Jelly screen behind controls without capturing touch input")
 	var game = app._jelly.game
+	check(game.cells.size() == game.INITIAL_SETTLED_TILES + 4 and game.upcoming.size() == 4
+		and app._jelly.snapshot().preview.slots.size() == 4,
+		"The real game starts with four arriving tiles and a complete four-tile supply preview")
 	game.step(game.SETTLE_SECONDS)
 	var chosen := pair(game, true)
 	check(chosen.size() == 2, "The initial board contains a reachable marked pair")
@@ -87,6 +90,16 @@ func _run() -> void:
 		quit(1)
 		return
 	var word_id: String = str(chosen[0].word.id)
+	var advertised: Array = game.snapshot().upcoming.duplicate(true)
+	var tile_count: int = game.cells.size()
+	game.step(game.spawn_interval - game.spawn_elapsed)
+	check(game.cells.size() == tile_count + 4
+		and game.cells.filter(func(cell: Dictionary) -> bool: return bool(cell.arrival) and is_zero_approx(float(cell.age))).size() == 4,
+		"A real supply beat introduces four concurrent arrivals before the pause and fusion checks")
+	for tile: Dictionary in advertised:
+		check(game.cells.any(func(cell: Dictionary) -> bool: return (int(cell.id) == int(tile.id)
+			and cell.word == tile.word and cell.kind == tile.kind and cell.chest == tile.chest)),
+			"Every advertised identity enters the real game unchanged")
 	check(game.try_merge(chosen[0].id, chosen[1].id) == "correct", "Matching picture and word commits fusion")
 	var spawn_before: float = game.spawn_elapsed
 	var supply_before: Array = game.snapshot().upcoming.duplicate(true)

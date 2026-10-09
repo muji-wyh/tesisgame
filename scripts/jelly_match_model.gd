@@ -13,10 +13,11 @@ const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
 const INITIAL_SETTLED_TILES: int = 6
-const UPCOMING_COUNT: int = 3
+const DROP_COUNT: int = 4
+const UPCOMING_COUNT: int = DROP_COUNT
 const SUPPLY_BATCH_PAIRS: int = 3
 const SETTLE_SECONDS: float = Motion.MAX_SETTLE_SECONDS
-# Leave time to listen, find the picture, and drag before the next tile arrives.
+# Leave time to listen, find the picture, and drag before the next drop arrives.
 const INITIAL_SPAWN_INTERVAL: float = 7.0
 const MIN_SPAWN_INTERVAL: float = 3.5
 const SPEEDUP_PER_PAIR: float = 0.07
@@ -109,7 +110,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_fill_upcoming()
 	for index in range(INITIAL_SETTLED_TILES):
 		_spawn_tile(false)
-	_spawn_tile()
+	_spawn_drop()
 	changed.emit()
 	return true
 
@@ -165,7 +166,7 @@ func step(delta: float) -> void:
 			remaining -= consumed
 			if spawn_elapsed + EPSILON >= spawn_interval:
 				spawn_elapsed = 0.0
-				_spawn_tile()
+				_spawn_drop()
 	if generation == _generation:
 		changed.emit()
 
@@ -265,15 +266,28 @@ func _eligible(word: Dictionary, level: int) -> bool:
 	return minimum_age >= 3 and minimum_age <= mini(level, 12)
 
 
-func _spawn_tile(arrival: bool = true) -> void:
+func _spawn_drop() -> void:
+	var used_columns: Array[int] = []
+	var column_counts: Dictionary = {}
+	for index in range(mini(DROP_COUNT, CAPACITY - cells.size())):
+		var column: int = _spawn_column(used_columns)
+		var ordinal: int = int(column_counts.get(column, 0))
+		_spawn_tile(true, column, ordinal)
+		column_counts[column] = ordinal + 1
+		if not used_columns.has(column):
+			used_columns.append(column)
+
+
+func _spawn_tile(arrival: bool = true, column: int = -1, entry_offset: int = 0) -> void:
 	if _words.is_empty() or cells.size() >= CAPACITY:
 		return
 	var tile: Dictionary = upcoming.pop_front()
-	var column: int = _spawn_column()
+	if column < 0:
+		column = _spawn_column()
 	var height: int = _column_height(column)
 	tile.merge({
 		"column": column, "row": ROWS - height - 1,
-		"age": 0.0, "falling_rows": ROWS - height if arrival else 0,
+		"age": 0.0, "falling_rows": ROWS - height + entry_offset if arrival else 0,
 		"arrival": arrival
 	})
 	if not arrival:
@@ -333,16 +347,20 @@ func _shuffle_wave(wave: Array[Dictionary], previous_word: String) -> void:
 		wave[other] = tile
 
 
-func _spawn_column() -> int:
+func _spawn_column(excluded: Array[int] = []) -> int:
 	var shortest: int = ROWS
 	var candidates: Array[int] = []
 	for column in range(COLUMNS):
+		if excluded.has(column):
+			continue
 		var height: int = _column_height(column)
 		if height < shortest:
 			shortest = height
 			candidates.clear()
 		if height == shortest and height < ROWS:
 			candidates.append(column)
+	if candidates.is_empty() and not excluded.is_empty():
+		return _spawn_column()
 	return candidates[_rng.randi_range(0, candidates.size() - 1)]
 
 

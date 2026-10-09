@@ -36,8 +36,9 @@ var _surfaces: Array[Texture2D] = []
 var _pictures: Dictionary = {}
 var _tiles: Dictionary = {}
 var _falling_layer: Control
-var _ghost: Tile
+var _ghosts: Dictionary = {}
 var _preview_tiles: Array[Tile] = []
+var _preview_origins: Array[Vector2] = []
 var _preview_rect := Rect2()
 var _board := Rect2()
 var _pitch: float = 0.0
@@ -61,8 +62,6 @@ var _focus_after_fusion: bool = false
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_count: Label
-var _pace: Label
-var _next_tile: ProgressBar
 var _notice: Label
 var _result: Control
 var _result_title: Label
@@ -87,13 +86,6 @@ func _init() -> void:
 	_falling_layer.clip_contents = true
 	_falling_layer.z_index = 2
 	add_child(_falling_layer)
-	_ghost = Tile.new()
-	_ghost.name = "LandingProjection"
-	_ghost.disabled = true
-	_ghost.focus_mode = Control.FOCUS_NONE
-	_ghost.modulate = Color(0.65, 0.82, 0.75, 0.28)
-	add_child(_ghost)
-	_ghost.hide()
 	_merged = Tile.new()
 	_merged.name = "FusedJelly"
 	_merged.focus_mode = Control.FOCUS_NONE
@@ -103,19 +95,14 @@ func _init() -> void:
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
-	_pace = _label(self, "Next", 12)
-	_pace.add_theme_color_override("font_color", Color("#315142"))
-	_next_tile = ProgressBar.new()
-	_next_tile.show_percentage = false
-	_next_tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_next_tile)
-	for index in range(3):
+	for index in range(JellyMatchModel.UPCOMING_COUNT):
 		var preview := Tile.new()
 		preview.name = "UpcomingJelly%d" % (index + 1)
 		preview.disabled = true
 		preview.focus_mode = Control.FOCUS_NONE
 		add_child(preview)
 		_preview_tiles.append(preview)
+		_preview_origins.append(Vector2.ZERO)
 	_notice = _label(self, "Match a picture to its word.", 14)
 	_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -202,17 +189,14 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_manifest = chests
 	_prepare_chest()
 	var accent: Color = _theme.get("accent", Style.GOOD)
-	_next_tile.add_theme_stylebox_override("background", Style.box(Color(accent, 0.13), Color.TRANSPARENT, 4, 0))
-	_next_tile.add_theme_stylebox_override("fill", Style.box(accent, Color.TRANSPARENT, 4, 0))
-	for state: String in ["background", "fill"]:
-		_next_tile.get_theme_stylebox(state).set_content_margin_all(0)
 	Style.action_button(chests_button, accent, true)
 	Style.action_button(replay_button, accent)
 	Style.action_button(finish_button, accent)
 	for id in _tiles:
 		_configure_tile(_tiles[id], _cell(int(id)))
 	_merged.tile_id = -1
-	_ghost.tile_id = -1
+	for ghost: Tile in _ghosts.values():
+		ghost.tile_id = -1
 	for preview: Tile in _preview_tiles:
 		preview.tile_id = -1
 	queue_redraw()
@@ -274,6 +258,7 @@ func set_reduced_motion(value: bool) -> void:
 	_snapbacks.clear()
 	_loot_flights.clear()
 	_sync_tiles()
+	_sync_preview()
 	_refresh_fusion()
 	_animate_result()
 	queue_redraw()
@@ -307,7 +292,10 @@ func stop() -> void:
 	_result_visible = false
 	_result.hide()
 	_merged.hide()
-	_ghost.hide()
+	for ghost: Tile in _ghosts.values():
+		ghost.hide()
+		ghost.queue_free()
+	_ghosts.clear()
 	for preview: Tile in _preview_tiles:
 		preview.hide()
 	for tile in _tiles.values():
@@ -584,7 +572,7 @@ func _tile_rect(cell: Dictionary) -> Rect2:
 		Vector2.ONE * (_pitch - _gap))
 
 func _sync_positions() -> void:
-	_ghost.hide()
+	var airborne_ids: Dictionary = {}
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
 		if not _tiles.has(id):
@@ -614,13 +602,27 @@ func _sync_positions() -> void:
 		tile.modulate.a = 1.0 if reduced_motion else float(pose.opacity)
 		tile.visible = not _result_visible
 		if airborne and not _result_visible:
-			if _ghost.tile_id != id:
-				_configure_tile(_ghost, cell)
-				_ghost.set_projection(true)
-			_ghost.position = rect.position
-			_ghost.size = rect.size
-			_ghost.set_projection(true)
-			_ghost.show()
+			airborne_ids[id] = true
+			if not _ghosts.has(id):
+				var projection := Tile.new()
+				projection.name = "LandingProjection_%d" % id
+				projection.disabled = true
+				projection.focus_mode = Control.FOCUS_NONE
+				projection.modulate = Color(0.65, 0.82, 0.75, 0.28)
+				add_child(projection)
+				_ghosts[id] = projection
+			var ghost: Tile = _ghosts[id]
+			if ghost.tile_id != id:
+				_configure_tile(ghost, cell)
+				ghost.set_projection(true)
+			ghost.position = rect.position
+			ghost.size = rect.size
+			ghost.show()
+	for id in _ghosts.keys():
+		if not airborne_ids.has(id):
+			_ghosts[id].hide()
+			_ghosts[id].queue_free()
+			_ghosts.erase(id)
 
 func _sync_preview() -> void:
 	for index in range(_preview_tiles.size()):
@@ -631,8 +633,15 @@ func _sync_preview() -> void:
 		var item: Dictionary = game.upcoming[index]
 		if preview.tile_id != int(item.id):
 			_configure_tile(preview, item)
-			preview.set("accessibility_name", "Next %d: %s %s" % [index + 1, str(item.kind), str(item.word.text)])
+			preview.set("accessibility_name", "Upcoming %d: %s %s" % [index + 1, str(item.kind), str(item.word.text)])
+		var pose: Dictionary = _preview_pose(index)
+		preview.position = _preview_origins[index] + Vector2(pose.offset) * preview.size
+		preview.deform(float(pose.bend), float(pose.beat), Vector2(pose.stretch))
 		preview.set_support(0.0, 0.0, false)
+
+func _preview_pose(index: int) -> Dictionary:
+	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index,
+		reduced_motion or game.phase != "playing" or game.cells.size() >= JellyMatchModel.CAPACITY)
 
 func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
@@ -800,16 +809,12 @@ func _refresh_hud() -> void:
 	_loot_count.text = str(game.chest_count)
 	_loot_count.set("accessibility_name", "%d chests collected" % game.chest_count)
 	var state: Dictionary = game.snapshot()
-	_next_tile.value = float(state.get("spawn_elapsed", 0.0)) / maxf(0.1, float(game.spawn_interval)) * 100.0
-	_pace.text = "Next"
 	var full: bool = float(game.full_elapsed) >= 0.0
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
 	if _compact_hud and full:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
-	_pace.visible = _configured and not _result_visible
-	_next_tile.visible = _configured and not _result_visible
 	_loot_icon.visible = _configured
 	_loot_count.visible = _configured
 	_sync_preview()
@@ -883,24 +888,22 @@ func _layout() -> void:
 		_loot_count.size = Vector2(hud_width, 26.0 / scale_factor)
 		_loot_count.add_theme_font_size_override("font_size", ceili(20 / scale_factor))
 		_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var preview_width: float = minf(112.0 / scale_factor, size.x - _board.end.x - edge * 2.0) if wide else minf(208.0 / scale_factor, size.x - 92.0 / scale_factor - edge * 2.0)
+	var preview_width: float = minf(144.0 / scale_factor, size.x - _board.end.x - edge * 2.0) if wide else minf(248.0 / scale_factor, size.x - 92.0 / scale_factor - edge * 2.0)
 	var preview_x: float = _board.end.x + edge if wide else size.x - edge - preview_width
 	var preview_y: float = _board.position.y if wide else 0.0
 	var padding: float = 8.0 / scale_factor
-	var preview_size: float = minf(minf(72.0 / scale_factor, preview_width - padding * 2.0), maxf(20.0 / scale_factor, (board_height - 94.0 / scale_factor) / 3.0)) if wide else minf(56.0 / scale_factor, (preview_width - padding * 2.0) / 3.0)
+	var preview_columns: int = 2 if wide else JellyMatchModel.UPCOMING_COUNT
+	var preview_gap: float = 4.0 / scale_factor
+	var preview_size: float = minf(60.0 / scale_factor, (preview_width - padding * 2.0 - preview_gap * (preview_columns - 1)) / preview_columns)
 	if wide:
 		preview_size = minf(preview_size, _pitch * 0.88)
-	var preview_height: float = preview_size * 3.0 + 44.0 / scale_factor if wide else 78.0 / scale_factor
+	var preview_height: float = preview_size * 2.0 + preview_gap + padding * 2.0 if wide else preview_size + padding * 2.0
 	_preview_rect = Rect2(Vector2(preview_x, preview_y), Vector2(preview_width, preview_height))
-	_pace.position = _preview_rect.position + Vector2(padding, 2.0 / scale_factor)
-	_pace.size = Vector2(preview_width - padding * 2.0, 20.0 / scale_factor)
-	_pace.add_theme_font_size_override("font_size", ceili(12 / scale_factor))
+	var inset: float = (preview_width - preview_columns * preview_size - (preview_columns - 1) * preview_gap) * 0.5
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		preview.size = Vector2.ONE * preview_size
-		preview.position = _preview_rect.position + (Vector2((preview_width - preview_size) * 0.5, 22.0 / scale_factor + index * (preview_size + 4.0 / scale_factor)) if wide else Vector2(padding + index * preview_size, 17.0 / scale_factor))
-	_next_tile.position = Vector2(preview_x + padding, _preview_rect.end.y - 8.0 / scale_factor)
-	_next_tile.size = Vector2(preview_width - padding * 2.0, 4.0 / scale_factor)
+		_preview_origins[index] = _preview_rect.position + Vector2(inset + (index % preview_columns) * (preview_size + preview_gap), padding + floorf(float(index) / preview_columns) * (preview_size + preview_gap))
 	_notice.position = Vector2(_board.end.x + edge * 2.0, _preview_rect.end.y + 10.0 / scale_factor) if wide else Vector2(_board.position.x, _board.end.y + 7.0 / scale_factor)
 	_notice.size = Vector2(maxf(0.0, size.x - _notice.position.x - edge), minf(size.y - _notice.position.y, 96.0 / scale_factor)) if wide else Vector2(maxf(0.0, _board.size.x - 92.0 / scale_factor), 44.0 / scale_factor)
 	_notice.add_theme_font_size_override("font_size", ceili(14 / scale_factor))
@@ -1031,10 +1034,16 @@ func snapshot() -> Dictionary:
 		item["focused"] = _tiles[int(cell.id)].has_focus()
 		result.tiles.append(item)
 	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": _selected}
-	result["preview"] = {"visible": _pace.is_visible_in_tree(), "rect": _rect(_global_rect(_preview_rect)), "slots": []}
-	for preview: Tile in _preview_tiles:
-		result.preview.slots.append({"id": preview.tile_id, "rect": _rect(preview.get_global_rect()), "visible": preview.is_visible_in_tree()})
-	result["landing_ghost"] = {"visible": _ghost.is_visible_in_tree(), "id": _ghost.tile_id, "rect": _rect(_ghost.get_global_rect())}
+	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible, "rect": _rect(_global_rect(_preview_rect)), "slots": []}
+	for index in range(_preview_tiles.size()):
+		var preview: Tile = _preview_tiles[index]
+		var pose: Dictionary = _preview_pose(index)
+		result.preview.slots.append({"id": preview.tile_id, "rect": _rect(preview.get_global_rect()), "visible": preview.is_visible_in_tree(),
+			"motion": {"offset": [pose.offset.x, pose.offset.y], "stretch": [pose.stretch.x, pose.stretch.y],
+				"bend": pose.bend, "beat": pose.beat, "intensity": pose.intensity}})
+	result["landing_ghosts"] = []
+	for ghost: Tile in _ghosts.values():
+		result.landing_ghosts.append({"visible": ghost.is_visible_in_tree(), "id": ghost.tile_id, "rect": _rect(ghost.get_global_rect())})
 	result["fusion_rect"] = _rect(_merged.get_global_rect()) if _merged.visible else []
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,

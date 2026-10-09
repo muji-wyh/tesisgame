@@ -24,6 +24,25 @@ static func ready_at(cell: Dictionary) -> float:
 	return contact_at(cell) + COMPRESSION_SECONDS + REBOUND_SECONDS + RECOVERY_SECONDS
 
 
+static func preview(elapsed: float, interval: float, index: int, reduced: bool = false) -> Dictionary:
+	if reduced:
+		return {"offset": Vector2.ZERO, "stretch": Vector2.ONE, "bend": 0.0, "beat": 0.0, "intensity": 0.0}
+	var duration: float = maxf(0.1, interval)
+	var progress: float = clampf(elapsed / duration, 0.0, 1.0)
+	var buildup: float = pow(progress, 2.4)
+	# Integrating the rising frequency keeps phase continuous as the real supply
+	# clock approaches release. No independent tween can outlive a paused round.
+	var beat: float = TAU * duration * (progress + 0.875 * pow(progress, 4.0)) + float(index) * 1.31
+	var amplitude: float = lerpf(0.006, 0.052, buildup)
+	var height: float = 1.0 + sin(beat + 0.8) * lerpf(0.012, 0.078, buildup)
+	return {
+		"offset": Vector2(sin(beat) * amplitude, -absf(sin(beat * 0.82)) * amplitude * 0.4),
+		"stretch": Vector2(1.0 / sqrt(height), height),
+		"bend": lerpf(0.002, 0.014, buildup), "beat": beat,
+		"intensity": lerpf(0.12, 1.0, buildup)
+	}
+
+
 static func sample(cell: Dictionary) -> Dictionary:
 	var age: float = maxf(0.0, float(cell.get("age", 0.0)))
 	var contact: float = contact_at(cell)

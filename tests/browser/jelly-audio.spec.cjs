@@ -38,6 +38,8 @@ async function availablePair(page) {
   let found;
   await expect.poll(async () => {
     const state = await jelly(page);
+    found = undefined;
+    if (!state.visible || state.paused || state.phase !== 'playing' || Object.keys(state.fusion || {}).length) return false;
     for (const first of state.tiles || []) {
       if (!first.visible || !first.settled || first.chest) continue;
       const second = state.tiles.find(tile => tile.visible && tile.settled && !tile.chest &&
@@ -45,8 +47,21 @@ async function availablePair(page) {
       if (second) { found = [first, second]; break; }
     }
     return Boolean(found);
-  }, { timeout: 30000, message: 'Single-tile supply provides a real, unmarked word and picture pair' }).toBe(true);
+  }, { timeout: 30000, message: 'Batched supply provides a real, unmarked word and picture pair' }).toBe(true);
   return found;
+}
+
+async function freshRound(page) {
+  // Each audio/lifecycle case uses a new round through the real library. Batch
+  // arrivals keep their production pacing instead of expiring one shared board.
+  await openModeMenu(page);
+  await libraryControl(page, 'Mode_match');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
+  await openModeMenu(page);
+  await libraryControl(page, 'Mode_jelly');
+  const state = await settledBoard(page);
+  expect(state.cleared_pairs, 'A fresh real round starts without credit from earlier audio checks').toBe(0);
+  return { generated_tiles: state.generated_tiles, cleared_pairs: state.cleared_pairs };
 }
 
 function center(rect, bounds) {
@@ -55,7 +70,11 @@ function center(rect, bounds) {
 }
 
 async function beginDrag(page, tile) {
-  const current = (await jelly(page)).tiles.find(item => item.id === tile.id);
+  const state = await jelly(page);
+  expect(state.phase, 'The gesture starts in an active real round').toBe('playing');
+  expect(state.paused).toBe(false);
+  const current = state.tiles.find(item => item.id === tile.id);
+  expect(current?.visible && current.settled, 'The gesture targets a visible settled tile').toBe(true);
   const point = center(current.rect, await metrics(page));
   await page.mouse.move(point.x, point.y);
   await page.mouse.down();
@@ -142,8 +161,8 @@ async function interruptFusion(page, tiles) {
 }
 
 test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and respect mute and lifecycle', async ({ page, context, browserName }, info) => {
-  test.setTimeout(150000);
-  const requests = watchAudioRequests(page), evidence = {};
+  test.setTimeout(240000);
+  const requests = watchAudioRequests(page), evidence = { rounds: {} };
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   const available = await page.evaluate(() => window.audioObservation.available);
@@ -192,13 +211,15 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
       expect(matching(dropSounds, evidence.land), 'Snapback is not a new falling-tile landing').toEqual([]);
     }
 
+    evidence.rounds.merge = await freshRound(page);
     const tiles = await availablePair(page), beforeMerge = await playbackIndex(page);
+    const clearedBeforeMerge = (await jelly(page)).cleared_pairs;
     await beginDrag(page, tiles[0]);
     await hoverTile(page, tiles[1]);
     await page.mouse.up();
     evidence.merge = await audibleRecording(page, beforeMerge, CLIPS.merge);
     evidence.clear = await audibleRecording(page, beforeMerge, CLIPS.clear);
-    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(clearedBeforeDrop + 1);
+    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(clearedBeforeMerge + 1);
     expect(evidence.clear.at).toBeGreaterThan(evidence.merge.at);
     expect(new Set(['pick', 'release', 'land', 'merge', 'clear'].map(cue => evidence[cue].fingerprint)).size).toBe(5);
     const mergeSounds = await playbacksSince(page, beforeMerge);
@@ -206,7 +227,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(matching(mergeSounds, evidence.clear)).toHaveLength(1);
     expect(matching(mergeSounds, evidence.release), 'A successful drop does not also play empty-drop audio').toEqual([]);
 
-    await settledBoard(page);
+    evidence.rounds.cancel = await freshRound(page);
     const cancelTile = (await availablePair(page))[0];
     await beginDrag(page, cancelTile);
     await hoverEmptySpace(page);
@@ -218,6 +239,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(matching(await playbacksSince(page, beforeCancel), evidence.release),
       'Canceling a drag does not play an intentional empty-drop cue').toEqual([]);
 
+    evidence.rounds.muted = await freshRound(page);
     await muteInMenu(page, true);
     const mutedFrom = await playbackIndex(page), mutedPair = await availablePair(page);
     const mutedScore = (await jelly(page)).cleared_pairs;
@@ -228,7 +250,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(await playbacksSince(page, mutedFrom), 'Mute silences pick, speech, merge, clear, and landing').toEqual([]);
 
     await muteInMenu(page, false);
-    await settledBoard(page);
+    evidence.rounds.pauseResume = await freshRound(page);
     const interruptedFrom = await playbackIndex(page), interruptedTiles = await availablePair(page);
     const paused = await interruptFusion(page, interruptedTiles);
     evidence.interruptedMerge = await audibleRecording(page, interruptedFrom, CLIPS.merge);
@@ -251,7 +273,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(matching(resumed, evidence.clear)).toHaveLength(1);
     expect(matching(resumed, evidence.merge), 'Resuming a committed fusion does not restart its merge sound').toEqual([]);
 
-    await settledBoard(page);
+    evidence.rounds.leave = await freshRound(page);
     const leaveFrom = await playbackIndex(page), lastTiles = await availablePair(page);
     await interruptFusion(page, lastTiles);
     await audibleRecording(page, leaveFrom, CLIPS.merge);
