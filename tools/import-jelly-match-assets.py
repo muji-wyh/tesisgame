@@ -37,7 +37,7 @@ MATERIAL_AUDIO_SOURCES = [
      "page": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
      "download": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
      "archive_sha256": ARCHIVES["water-splash-slime-sfx.zip"], "license": "CC0-1.0",
-     "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted and integrated",
+     "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted into merge, elastic clear, and soft landing cues",
      "description": "Creator's slime recordings; the pack is partly recorded from real slime",
      "animations": "Not applicable; one-shot audio recordings"},
     {"creator": "Aeva", "title": "BOING!", "page": "https://opengameart.org/content/boing",
@@ -207,6 +207,14 @@ def prepare_material_sounds(source_dir):
                playback_rate="1.55 + 0.22 * exp(-6t) * sin(2pi * 9t) + 0.32 * exp(-14t)",
                gain_envelope="0.40 * exp(-6.5t)")],
         "Floating-point decode and filtering before per-layer peak normalization; soft slime transient over an acquired spring's damped pitch recoil. Mix, edge fades, final peak normalization, mono PCM16. Starts at the existing 0.700-second release and ends before removal at 1.050 seconds."))
+    landing_filter = "highpass=f=85,lowpass=f=1100,acompressor=threshold=0.07:ratio=4:attack=2:release=45:makeup=1"
+    landing_skin = decode_material(slime / "slime_16.ogg", landing_filter)
+    landing = [value * math.exp(-7.0 * index / SAMPLE_RATE)
+               for index, value in enumerate(pitched_layer(landing_skin, 0.220, 0.86, 0.004))]
+    records.append(save_material_cue("land", landing, -16.0, 0.016, 0.085,
+        [layer(slime / "slime_16.ogg", filter=landing_filter, source_offset_seconds=0.004,
+               playback_rate=0.86, gain_envelope="exp(-7t)")],
+        "Recorded slime contact with a rounded attack, damped high frequencies and short soft tail; no spring or hard impact layer. Floating-point filtering, pitch resampling, damping, edge fades, -16 dBFS peak normalization and mono PCM16. Runtime gain 0.35; existing landing-group timing and speech ducking are preserved."))
     notice = "Jelly material audio sources (CC0 1.0)\n\n" + "\n\n".join(
         f"{source['title']} by {source['creator']}\n{source['page']}\n{source['description']}" for source in MATERIAL_AUDIO_SOURCES)
     notice += "\n\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nAdaptations: tools/import-jelly-match-assets.py; provenance: docs/assets/jelly-match.json\n"
@@ -315,9 +323,6 @@ def main():
                            "provenance": "docs/assets/ui-click-audio.json"},
                   "release": {"path": "assets/imported-audio/chest-reference/step.wav",
                               "provenance": "docs/assets/chest-reference-audio.json"},
-                  "landing": {"path": "assets/imported-audio/chest-reference/step-detail.wav",
-                              "provenance": "docs/assets/chest-reference-audio.json",
-                              "use": "Soft contact once per landing group, at low gain with the existing speech ducking and interruption lifecycle; no duplicate WAV"},
                   "chest_art": "Use the current theme's real closed chest through the existing chest renderer; archived rejected skins are not replacements."},
     }
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

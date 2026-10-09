@@ -5,7 +5,7 @@ const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecord
 const CLIPS = {
   pick: 'assets/imported-audio/ui-click/select.wav',
   release: 'assets/imported-audio/chest-reference/step.wav',
-  land: 'assets/imported-audio/chest-reference/step-detail.wav',
+  land: 'assets/audio/jelly-match/land.wav',
   merge: 'assets/audio/jelly-match/merge.wav',
   clear: 'assets/audio/jelly-match/clear.wav'
 };
@@ -126,7 +126,7 @@ async function audibleRecording(page, from, path, excludedFingerprint = '') {
           sound.contextState === 'running' && sound.fingerprint && sound.fingerprint !== excludedFingerprint),
       { from, timing, excludedFingerprint });
       return Boolean(playback);
-    }, { message: `${path} plays its own samples, distinct from the equal-duration landing clip` }).toBe(true);
+    }, { message: `${path} plays its own samples, distinct from the landing clip` }).toBe(true);
   }
   expect(playback.fingerprint, `${path} was decoded into observed PCM`).toBeTruthy();
   expect(playback.peak, `${path} contains nonzero samples`).toBeGreaterThan(0.01);
@@ -191,8 +191,8 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     const fallingBeforeDrop = dropState.tiles.filter(tile => !tile.settled).length;
     await page.mouse.up();
     evidence.release = await audibleRecording(page, beforeDrop, CLIPS.release, evidence.land.fingerprint);
-    // Both source files last 240 ms: compare decoded sample identity so a
-    // landing sound cannot accidentally satisfy the empty-drop assertion.
+    // Compare decoded sample identity so a nearby natural landing cannot
+    // accidentally satisfy the empty-drop assertion.
     expect(evidence.release.fingerprint).not.toBe(evidence.land.fingerprint);
     await expect.poll(async () => {
       const returned = (await jelly(page)).tiles.find(tile => tile.id === first.id);

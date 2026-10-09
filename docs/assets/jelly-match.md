@@ -14,12 +14,12 @@ The playfield now sits in a sourced [woodland environment](jelly-environment.md)
 | Finish flag icon | Paweł Kuna, [Tabler Icons v3.35.0](https://github.com/tabler/tabler-icons/blob/v3.35.0/icons/outline/flag-check.svg) | MIT. Downloaded, visually inspected and integrated as `assets/images/ui/finish-flag.svg`. [Attribution and adaptation](../../assets/images/ui/ATTRIBUTION.md) and original license retained. | Static vector artwork; button states use the existing native input lifecycle and click cue. |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
 | Contact shadow | Same acquired Jelly Squash pack, `png/separate/Shadow.png` | Same CC0 1.0 license. Inspected and copied byte-for-byte to `assets/images/jelly-match/contact-shadow.png`; source and output hashes are identical. | Static 334 × 150 RGBA texture, maximum alpha 26/255. Runtime placement, tint and opacity establish contact independently of the moving gel. The pack's `WithShadow` bodies include faces and are not used. |
-| Gel contact and fusion recordings | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0. Original archive acquired; `slime_09.ogg` and `slime_16.ogg` selected for the merge and clear derivatives. The creator's source page records the license and describes some slime recordings as made from real slime; it does not identify which individual files use that technique. | One-shot recordings; no loops. The delivered cues layer, shape and time the acquired recordings. |
+| Gel contact and fusion recordings | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0. Original archive acquired; `slime_09.ogg` and `slime_16.ogg` selected for the landing, merge and clear derivatives. The creator's source page records the license and describes some slime recordings as made from real slime; it does not identify which individual files use that technique. | One-shot recordings; no loops. The delivered cues layer, shape and time the acquired recordings. |
 | Elastic release layer | Aeva, [BOING!](https://opengameart.org/content/boing) | CC0 1.0. Original `boing.flac` acquired from the creator's OpenGameArt upload and selected for the clear derivative. The source page records the license. | One authored spring sound made with an Arturia MicroFreak. This is a synthesized source recording, not rubber foley. The delivered layer is pitched and shaped to fit the release. |
 | Countdown warning cue | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; `Audio/question_001.ogg` decoded, adapted and integrated as `danger.wav`. The original pack license is retained. | One-shot recording; no loop. |
 | Word artwork and pronunciation | Existing Grow with Pip vocabulary | Reused unchanged, with existing [vocabulary](growth-vocabulary.md), [Mulberry](mulberry-vocabulary.md) and [Ava](ava-voice.md) provenance. | Existing pronunciation playback; artwork is static. |
 | Earned chest cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/reward.wav` without a duplicate. Its existing user-supplied source and embedded-game restrictions remain in force; it is not relabeled CC0. | Existing one-shot reward cue. |
-| Landing contact cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/step-detail.wav` without a duplicate; the same user-supplied source and embedded-game restrictions apply. | Existing short one-shot, triggered once per landing group at low gain with speech ducking and the established interruption lifecycle. No new recording is acquired. |
+| Landing contact cue | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx), `slime_16.ogg` | CC0 1.0. The already acquired recording is filtered, slowed and damped into `assets/audio/jelly-match/land.wav`; source and derivative hashes and processing are recorded in the manifest. | A 220 ms one-shot with a rounded attack and fading gel contact, triggered once per landing group at low gain with speech ducking and the established interruption lifecycle. |
 | Select and empty-drop cues | Existing [interface click](ui-click-audio.md) and [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/ui-click/select.wav` and `assets/imported-audio/chest-reference/step.wav` without duplicate files, under their existing embedded-game source restrictions. | One-shot selection and intentional empty-drop feedback. Movement, hover, menu interruption and pointer cancellation do not replay them. |
 | Chest artwork | Existing current theme chest manifest and renderer | Reused under the recorded [chest asset rights](chest-feel.md). Royal and Energy have closed PNG artwork; the five newer modeled skins require the actual current renderer or a cached still of that renderer. | Use a closed pose for gameplay badges. Archived renders of replaced chest designs must not substitute for the current theme. |
 
@@ -187,6 +187,7 @@ the summary uses `Round results` rather than a level-completion message.
 
 | Event | Runtime path | Original source | Duration | Peak |
 | --- | --- | --- | ---: | ---: |
+| Falling gel makes contact | `assets/audio/jelly-match/land.wav` | rubberduck `slime_16.ogg` | 220 ms | −16.0 dBFS |
 | Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | rubberduck `slime_09.ogg`, with a quieter `slime_16.ogg` contact layer | 620 ms | −9.0 dBFS |
 | Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | rubberduck `slime_16.ogg` with Aeva `boing.flac` | 340 ms | −7.5 dBFS |
 | Each full-board countdown beat | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
@@ -200,6 +201,16 @@ Kenney drop and pluck cues. The attention source remains a question cue rather
 than an error buzzer. Wetness, elasticity and comfort are intended qualities;
 they require listening in the game mix, and cannot be established from file
 names, source descriptions or waveform inspection.
+
+The landing derivative uses a single `slime_16.ogg` layer with an 85 Hz high-pass
+and 1,100 Hz low-pass filter. Compression uses threshold 0.07, ratio 4, a 2 ms
+attack and a 45 ms release. Playback starts 4 ms into the filtered recording at
+0.86 speed, with exponential damping `exp(-7t)`, a 16 ms onset fade and an 85 ms
+tail fade. Its final peak is −16 dBFS before the separate runtime gain of 0.35.
+The resulting PCM RMS is −32.520 dBFS, with onset above −40 dBFS at 12.79 ms.
+The softer attack and reduced high-frequency energy replace the former shared
+chest step cue. That original recording remains unchanged for chest interaction
+and Pip's celebration.
 
 Conversion uses FFmpeg floating-point decode, stereo-to-mono mix and 44.1 kHz
 PCM16 output. The new material cues use edited envelopes, layered recordings and
@@ -223,13 +234,13 @@ audio and removes the border flash; pause, exit and expiry stop the warning too.
 Tap pronunciation remains the primary learning sound. While a word plays,
 duck Jelly Match effects by 6 dB and use a small bounded voice pool. The original
 12 dB duck made the short merge/clear transients too attenuated under frequent
-pronunciation. Current gains are 0.64 for pick, 0.38 for release and land, 1.0 for
-merge, 0.90 for clear, 0.52 for danger and 0.36 for reward. Pick, release and land
-only use idle channels; they cannot cut off a warning, answer or reward.
-The quiet landing cue uses the existing `step-detail.wav` source once per contact
-group, following the same pronunciation priority; overlapping tiles must not
-multiply the transient. Its audible weight and comfort require runtime listening,
-and are not established by the reuse record or waveform measurements.
+pronunciation. Current gains are 0.64 for pick, 0.38 for release, 0.35 for land,
+1.0 for merge, 0.90 for clear, 0.52 for danger and 0.36 for reward. Pick, release
+and land only use idle channels; they cannot cut off a warning, answer or reward.
+The landing cue uses the dedicated `land.wav` derivative once per contact group,
+following the same pronunciation priority; overlapping tiles must not multiply
+the transient. Its audible weight and comfort require runtime listening, and
+are not established by the processing recipe or waveform measurements.
 Mute, pause, backgrounding and leaving the mode must stop pending and playing
 Jelly cues. Reuse the existing chest reward gain and lifecycle for earned chests.
 
@@ -251,7 +262,7 @@ python tools/import-jelly-match-assets.py --check
 
 The importer verifies the original archive and recording hashes, extracts only
 into its source directory, and reproduces four adapted gel PNGs, the unchanged
-source shadow PNG, three WAVs and the manifest. Full imports reproduce the new
+source shadow PNG, four WAVs and the manifest. Full imports reproduce the new
 material cues. `--images-only` retains existing audio files and their complete
 provenance, including the rubberduck and Aeva sources, while regenerating artwork.
 The check mode only reads files and verifies hashes, texture format, PCM format,
@@ -265,9 +276,10 @@ audio input is unsupported, so no subjective audition or listening approval is
 claimed. The earlier `kenney-audition.wav` in the ignored source directory is a
 review of the former cues, not evidence for the new mixture.
 
-The replacement files passed source/hash, PCM, edge and headroom checks. An
-image-only import preserved the complete current manifest. The 74 native audio
-checks and desktop Chromium WebAudio regression passed with the rebuilt game:
+At the merge and clear integration, those replacement files passed source/hash,
+PCM, edge and headroom checks. An image-only import preserved their complete
+manifest. The 74 native audio checks and desktop Chromium WebAudio regression
+passed with the rebuilt game:
 observed decoded buffers were 0.620 and 0.340 seconds with distinct fingerprints.
 Real drag, pronunciation, consecutive taps, mute, menu pause/resume and exit
 retained their expected playback behavior. The isolated final cue timeline is
@@ -276,6 +288,14 @@ the runtime gains and model timing, and is not a gameplay recording.
 The Windows iPhone WebKit test runtime has no available WebAudio; gameplay and
 layout coverage remain separate. Technical checks do not establish subjective
 mix quality, repeated-play fatigue or sound on physical speakers.
+
+The soft landing update passed the source/hash and PCM checks, all 74 native
+audio checks and all 40 focused Web export/audio tests. The rebuilt game also
+passed the desktop Chromium WebAudio regression: the dedicated landing samples
+played from the offline bundle, remained distinct from empty-drop feedback, and
+respected mute, menu pause/resume and exit. Direct listening remains unavailable
+in this review environment; these results establish playback and lifecycle,
+not subjective listening approval.
 
 Batch supply checks compare each dispatched group with its committed previews,
 including a partially filled final group. Each tile descends over multiple frames

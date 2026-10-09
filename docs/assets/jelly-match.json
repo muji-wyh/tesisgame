@@ -28,7 +28,7 @@
       "download": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
       "archive_sha256": "7cd39abb49d4362a37ba18dc0e454c7dc1d08029d4e5b683149046bc237b2eba",
       "license": "CC0-1.0",
-      "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted and integrated",
+      "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted into merge, elastic clear, and soft landing cues",
       "description": "Creator's slime recordings; the pack is partly recorded from real slime",
       "animations": "Not applicable; one-shot audio recordings"
     },
@@ -268,6 +268,33 @@
       "loop": false
     },
     {
+      "id": "land",
+      "path": "assets/audio/jelly-match/land.wav",
+      "sha256": "42e2700d8b363ca3944d4a8af625afa4ba3cd07eec5ea5d05af3652d250e8b72",
+      "source": "slime_16.ogg",
+      "layers": [
+        {
+          "source": "slime_16.ogg",
+          "source_sha256": "9f50f3732420288170866ad29afb46bccfc1eae5f7474937f02d4ed6ada69725",
+          "filter": "highpass=f=85,lowpass=f=1100,acompressor=threshold=0.07:ratio=4:attack=2:release=45:makeup=1",
+          "source_offset_seconds": 0.004,
+          "playback_rate": 0.86,
+          "gain_envelope": "exp(-7t)"
+        }
+      ],
+      "processing": "Recorded slime contact with a rounded attack, damped high frequencies and short soft tail; no spring or hard impact layer. Floating-point filtering, pitch resampling, damping, edge fades, -16 dBFS peak normalization and mono PCM16. Runtime gain 0.35; existing landing-group timing and speech ducking are preserved.",
+      "seconds": 0.22,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -16.001,
+      "rms_dbfs": -32.52,
+      "onset_minus_40_dbfs_seconds": 0.012789,
+      "attack_frames": 706,
+      "release_frames": 3749,
+      "loop": false
+    },
+    {
       "id": "danger",
       "path": "assets/audio/jelly-match/danger.wav",
       "sha256": "18bae3a1b89c6d73a35cb0443bc798ffde7638dbb217212eecebff19fec2d9c2",
@@ -299,11 +326,6 @@
     "release": {
       "path": "assets/imported-audio/chest-reference/step.wav",
       "provenance": "docs/assets/chest-reference-audio.json"
-    },
-    "landing": {
-      "path": "assets/imported-audio/chest-reference/step-detail.wav",
-      "provenance": "docs/assets/chest-reference-audio.json",
-      "use": "Soft contact once per landing group, at low gain with the existing speech ducking and interruption lifecycle; no duplicate WAV"
     },
     "chest_art": "Use the current theme's real closed chest through the existing chest renderer; archived rejected skins are not replacements."
   }
