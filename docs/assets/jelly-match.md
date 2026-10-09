@@ -54,6 +54,11 @@ the finished game's responsive layout.
 
 ## Cue contract and mix
 
+Each fully cleared pair earns one point. The round summary displays the score
+and exact chest count from entry, including zero-loot rounds. Rounds with treasure
+keep Pip's existing reward presentation before revealing the opening action;
+the summary uses `Round results` rather than a level-completion message.
+
 | Event | Runtime path | Original source | Duration | Measured peak |
 | --- | --- | --- | ---: | ---: |
 | Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | `Audio/drop_002.ogg` | 188 ms | −10.05 dBFS |

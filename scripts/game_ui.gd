@@ -1246,7 +1246,12 @@ func _jelly_finished(result: Dictionary) -> void:
 		_begin_round_celebration(count)
 	else:
 		_jelly.result_reveal()
+		_announce_status(_jelly_result_summary())
 	_refresh()
+
+
+func _jelly_result_summary() -> String:
+	return "Round results. Score: %d. Chests: %d." % [int(_round_result.get("score", 0)), int(_round_result.get("chest_count", 0))]
 
 
 func _save_jelly_round_reward() -> bool:
@@ -1503,11 +1508,13 @@ func _begin_round_celebration(chest_count: int) -> void:
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
-	_round_celebration.begin(_round_id, model.theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"])
+	var score: int = int(_round_result.get("score", 0)) if _mode_id == "jelly" else -1
+	_round_celebration.begin(_round_id, model.theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
-		_announce_status("You did it! Pip is celebrating. You earned %d treasure chest%s." % [chest_count, "" if chest_count == 1 else "s"])
+		_announce_status(_jelly_result_summary() if _mode_id == "jelly" else \
+			"You did it! Pip is celebrating. You earned %d treasure chest%s." % [chest_count, "" if chest_count == 1 else "s"])
 	_sync_round_celebration()
 	_publish_round_celebration()
 
@@ -1565,7 +1572,7 @@ func _on_round_celebration_finished(round_id: String) -> void:
 		if _mode_id == "jelly":
 			_jelly.result_reveal()
 		_refresh()
-		_announce_status("Round complete. View your results or open your earned chests.")
+		_announce_status(_jelly_result_summary() if _mode_id == "jelly" else "Round complete. View your results or open your earned chests.")
 	else:
 		_announce_status("You earned a treasure chest! Choose Open chest.")
 	var target: Control = _default_focus()

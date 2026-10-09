@@ -539,11 +539,15 @@ func _check_result_gate(view) -> void:
 	view.result_reveal()
 	check(view._result.visible and view.chests_button.visible and view.replay_button.visible,
 		"The root explicitly reveals the complete result after celebration")
+	check(view.snapshot().score == 1 and view.snapshot().result.title == "Round results"
+		and view.snapshot().result.caption == "Score: 1 · Chests: 1", "The settled result reports completed pairs and exact loot")
 	for dimensions: Vector2 in [Vector2(390, 640), Vector2(844, 235), Vector2(320, 260)]:
 		view.size = dimensions
 		view._layout()
 		check(Rect2(Vector2.ZERO, dimensions).encloses(view.chests_button.get_rect()), "Result actions fit %s" % dimensions)
 		check(not view.chests_button.get_rect().intersects(view.replay_button.get_rect()), "Result actions never overlap at %s" % dimensions)
+		for label: Label in [view._result_title, view._result_caption]:
+			check(Rect2(Vector2.ZERO, dimensions).encloses(label.get_rect()), "Result facts fit %s" % dimensions)
 		for image: TextureRect in view._result_chests:
 			if image.visible:
 				check(not image.get_rect().intersects(view.chests_button.get_rect()), "Result treasure and actions stay separate at %s" % dimensions)
@@ -555,6 +559,8 @@ func _check_result_gate(view) -> void:
 	view.finish_button.pressed.emit()
 	view.result_reveal()
 	check(not view.chests_button.visible and view.replay_button.visible, "A zero-chest round offers replay without a false opening action")
+	check(view.snapshot().score == 0 and view.snapshot().result.caption == "Score: 0 · Chests: 0",
+		"An empty round explicitly reports zero score and zero loot")
 	view.size = Vector2(1000, 720)
 
 

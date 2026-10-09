@@ -36,6 +36,7 @@ var _cue_log: Array[String] = []
 var _performance_emitted: bool = false
 var _open_emitted: bool = false
 var _chest_count: int = 1
+var _score: int = -1
 var _theme_id: String = "spring"
 var _palette: Dictionary = {}
 var _pip_rect := Rect2()
@@ -92,18 +93,21 @@ func _label(text: String, node_name: String) -> Label:
 
 
 func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
-		chest_count: int, reduce: bool, automatic: bool = false) -> void:
+		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1) -> void:
 	if round_id.is_empty() or (_active and round_id == _round_id):
 		return
 	stop()
 	_round_id = round_id
 	_chest_count = maxi(1, chest_count)
+	_score = score
 	_reduced_motion = reduce
 	_automatic = automatic
 	_active = true
 	_paused = false
 	_origin_frame = Engine.get_process_frames()
-	_caption.text = "You earned a treasure chest!" if _chest_count == 1 else "You earned %d treasure chests!" % _chest_count
+	_heading.text = "Round results" if _score >= 0 else "You did it!"
+	_caption.text = "Score: %d · Chests: %d" % [_score, _chest_count] if _score >= 0 else \
+		"You earned a treasure chest!" if _chest_count == 1 else "You earned %d treasure chests!" % _chest_count
 	_count.text = "" if _chest_count == 1 else "x%d" % _chest_count
 	action_button.text = "Open chest" if _chest_count == 1 else "Open chests"
 	pip.set_reduced_motion(reduce)
@@ -291,8 +295,8 @@ func _sample() -> void:
 	_glow.modulate = Color(_palette.get("spark", Color("#f8d574")), glow_amount)
 	_glow.pivot_offset = _glow.size * 0.5
 	_glow.scale = Vector2.ONE * (1.0 if _reduced_motion else 0.94 + pop * 0.09)
-	_heading.modulate.a = 1.0 if _reduced_motion else smoothstep(0.0, 0.25, _elapsed)
-	_caption.modulate.a = 1.0 if _reduced_motion else smoothstep(1.8, 2.18, _elapsed)
+	_heading.modulate.a = 1.0 if _reduced_motion or _score >= 0 else smoothstep(0.0, 0.25, _elapsed)
+	_caption.modulate.a = 1.0 if _reduced_motion or _score >= 0 else smoothstep(1.8, 2.18, _elapsed)
 	_count.modulate.a = reveal * settle
 	_refresh_action()
 
@@ -357,6 +361,7 @@ func snapshot() -> Dictionary:
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
 		"chest_count": _chest_count, "cue_log": _cue_log.duplicate(),
+		"title": _heading.text, "caption": _caption.text, "score": _score,
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),
 			"disabled": action_button.disabled, "text": action_button.text},

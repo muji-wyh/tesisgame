@@ -202,10 +202,15 @@ func tile_by_id(tile_id: int) -> Dictionary:
 	return {} if index < 0 else cells[index].duplicate(true)
 
 
+func score() -> int:
+	# Only completed fusions count; an interrupted merge has earned no point.
+	return cleared_pairs
+
+
 func snapshot() -> Dictionary:
 	return {
 		"cells": cells.duplicate(true), "fusion": fusion.duplicate(true),
-		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs,
+		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs, "score": score(),
 		"chest_count": chest_count, "generated_pairs": generated_pairs,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed,
 		"full_elapsed": full_elapsed,
@@ -221,7 +226,7 @@ func finish_round() -> Dictionary:
 	# or chest. Previously completed clears are already reflected in the result.
 	phase = "finished"
 	fusion.clear()
-	_result = {"cleared_pairs": cleared_pairs, "chest_count": chest_count, "words": []}
+	_result = {"cleared_pairs": cleared_pairs, "score": score(), "chest_count": chest_count, "words": []}
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
 	var result: Dictionary = _result.duplicate(true)

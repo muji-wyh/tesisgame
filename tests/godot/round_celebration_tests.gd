@@ -41,6 +41,7 @@ func _run() -> void:
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
 	_check_reward_counts(view, data.chests)
+	_check_score_summary(view, data.chests)
 	_check_lifecycle(view, data.chests)
 	_check_theme_updates(view, data.chests)
 	_check_reduced_and_stalls(view, data.chests)
@@ -189,6 +190,32 @@ func _check_reward_counts(view, manifest: Dictionary) -> void:
 			and view._caption.text == caption and view._count.text == badge and not view.action_button.visible,
 			"Automatic completion retains the exact %d-chest reward without an extra action" % count)
 		view.stop()
+
+
+func _check_score_summary(view, manifest: Dictionary) -> void:
+	view.show()
+	view.begin("scored", "spring", manifest, 4, false, true, 27)
+	view.set_process(false)
+	var summary: Dictionary = view.snapshot()
+	check(summary.title == "Round results" and summary.caption == "Score: 27 · Chests: 4" and summary.score == 27
+		and is_zero_approx(summary.elapsed) and is_equal_approx(view._heading.modulate.a, 1.0)
+		and is_equal_approx(view._caption.modulate.a, 1.0),
+		"A scored result shows its title and exact totals from the first animation frame")
+	var finished_before: int = _finished.size()
+	view.set_narration_playing(true)
+	_step(view, 3.01)
+	check(not view.is_ready() and _finished.size() == finished_before and view.controls().is_empty(),
+		"Immediate result copy does not bypass the performance or narration gates")
+	view.set_narration_playing(false)
+	check(view.is_ready() and _finished.size() == finished_before + 1 and _finished.back() == "scored"
+		and view.snapshot().caption == summary.caption and not view.action_button.visible,
+		"A scored automatic finale completes once while preserving its result summary")
+	_begin(view, manifest, "after-scored")
+	check(view.snapshot().score == -1 and view.snapshot().title == "You did it!"
+		and view.snapshot().caption == "You earned a treasure chest!"
+		and is_zero_approx(view._heading.modulate.a) and is_zero_approx(view._caption.modulate.a),
+		"The next ordinary celebration restores its default copy and reveal timing")
+	view.stop()
 
 
 func _check_lifecycle(view, manifest: Dictionary) -> void:

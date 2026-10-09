@@ -352,7 +352,7 @@ func _test_finish_and_reset() -> void:
 	model.try_merge(pair[0], pair[1])
 	model.step(0.8)
 	var result: Dictionary = model.finish_round()
-	check(result.chest_count == 1 and result.cleared_pairs == 1 and result.words.size() == 1,
+	check(result.chest_count == 1 and result.cleared_pairs == 1 and result.score == 1 and model.snapshot().score == 1 and result.words.size() == 1,
 		"Explicit exit preserves completed rewards and unique successful words")
 	check(model.fusion.is_empty() and events.attempts.size() == 1 and events.finished.size() == 1,
 		"Exit cancels an unfinished fusion without success credit")

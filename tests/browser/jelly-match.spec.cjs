@@ -183,11 +183,18 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   await pressControl(page, (await jelly(page)).finish);
   await expect.poll(async () => (await celebrationState(page)).active,
     { message: 'Earned loot receives the shared Pip celebration' }).toBe(true);
+  const summary = await celebrationState(page);
+  expect(summary.title).toBe('Round results');
+  expect(summary.score).toBe(2);
+  expect(summary.caption).toBe('Score: 2 · Chests: 1');
   expect((await jelly(page)).result.visible, 'Results cannot be used during the celebration').toBe(false);
   await expect.poll(async () => (await jelly(page)).result.visible,
     { timeout: 15000, message: 'The performance naturally reveals the Jelly result' }).toBe(true);
   const result = await jelly(page);
   expect(result.phase).toBe('finished');
+  expect(result.score).toBe(2);
+  expect(result.result.title).toBe('Round results');
+  expect(result.result.caption).toBe('Score: 2 · Chests: 1');
   expect(result.chest_count).toBe(1);
   expect(result.result.open.text).toBe('Open chest');
   expectInCanvas(result.result.open.rect, await metrics(page), 'The earned-chest action fits the screen');
@@ -278,6 +285,9 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(ended.phase).toBe('finished');
   expect(ended.danger).toEqual({ active: false, strength: 0 });
   expect(ended.cleared_pairs).toBe(1);
+  expect(ended.score).toBe(1);
+  expect(ended.result.title).toBe('Round results');
+  expect(ended.result.caption).toBe('Score: 1 · Chests: 0');
   expect(ended.chest_count).toBe(0);
   expect(ended.result.open.visible).toBe(false);
   expect(ended.result.replay.visible).toBe(true);

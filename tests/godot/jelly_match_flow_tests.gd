@@ -85,6 +85,11 @@ func _run() -> void:
 	check(not game.paused, "Returning restores the same board")
 	game.finish_round()
 	check(app._round_celebration.is_active() and not app._jelly.visible, "A positive result enters the shared Pip celebration")
+	var summary: Dictionary = app._round_celebration.snapshot()
+	check(app._round_result.score == 1 and summary.score == 1 and summary.title == "Round results"
+		and summary.caption == "Score: 1 · Chests: 1" and is_equal_approx(app._round_celebration._heading.modulate.a, 1.0)
+		and is_equal_approx(app._round_celebration._caption.modulate.a, 1.0),
+		"The real result immediately reports the completed pair's score and earned chest")
 	check(app._jelly_rewards.has_pending() and FileAccess.file_exists(app.jelly_reward_save_path), "Earned treasure is durable before its result action")
 	app._show_jelly_rewards()
 	check(not app._jelly_rewards_shown, "Treasure cannot open through the celebration gate")
@@ -93,6 +98,9 @@ func _run() -> void:
 	check(app._round_id == receipt and app._jelly_rewards.snapshot().chest_count == 1, "Finishing twice preserves one reward batch")
 	Fixture.finish_celebration(app)
 	check(app._jelly.visible and not app._round_celebration.is_active(), "The full result appears after celebration")
+	check(app._jelly.snapshot().score == 1 and app._jelly.snapshot().result.title == "Round results"
+		and app._jelly.snapshot().result.caption == summary.caption,
+		"The persistent result retains the same score and chest summary after the animation")
 	check(not app.new_round(52, false, "", "jelly") and app._jelly_rewards_shown, "Replay resumes pending treasure before starting a new board")
 	await settle()
 	var room = app._jelly_rewards
@@ -112,6 +120,9 @@ func _run() -> void:
 	game = app._jelly.game
 	game.finish_round()
 	check(not app._round_celebration.is_active() and app._jelly.visible, "Zero loot shows a result without a false reward celebration")
+	check(app._round_result.score == 0 and app._jelly.snapshot().result.title == "Round results"
+		and app._jelly.snapshot().result.caption == "Score: 0 · Chests: 0",
+		"A new zero-loot round reports its own zero totals without stale score or victory copy")
 	check(app.new_round(54, false, "", "jelly"), "A zero-loot result can replay")
 	app._jelly.set_process(false)
 	game = app._jelly.game
@@ -255,12 +266,14 @@ func _uncapped_reward_checks(directory: String) -> void:
 	game.step(game.CAPACITY * game.spawn_interval + game.FULL_SECONDS + 1.0)
 	app._round_celebration.set_process(false)
 	var celebration: Dictionary = app._round_celebration.snapshot()
-	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.chest_count == 4,
+	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.score == cleared
+		and app._round_result.chest_count == 4,
 		"A natural full-board timeout finishes with all four previously earned chests")
 	check(celebration.active and celebration.automatic and celebration.chest_count == 4
-		and app._round_celebration._caption.text == "You earned 4 treasure chests!"
+		and celebration.score == cleared and celebration.title == "Round results"
+		and celebration.caption == "Score: %d · Chests: 4" % cleared
 		and app._round_celebration._count.text == "x4",
-		"The real Jelly finale announces the full reward instead of truncating it to three")
+		"The real Jelly finale reports the earned score and full reward instead of truncating it to three")
 	var saved := RewardState.new(app.jelly_reward_save_path)
 	saved.storage_kind = "jelly"
 	saved.max_chests = 0
@@ -269,8 +282,10 @@ func _uncapped_reward_checks(directory: String) -> void:
 		"All four earned chests are durable before the celebration completes")
 	Fixture.finish_celebration(app)
 	check(not app._round_celebration.is_active() and app._jelly.snapshot().result.visible
-		and app._round_result.chest_count == 4,
-		"The completed celebration restores the exact four-chest result")
+		and app._round_result.chest_count == 4 and app._jelly.snapshot().score == cleared
+		and app._jelly.snapshot().result.title == "Round results"
+		and app._jelly.snapshot().result.caption == celebration.caption,
+		"The completed celebration restores the same score and exact four-chest result")
 	app._jelly.chests_button.pressed.emit()
 	var room = app._jelly_rewards
 	room.set_process(false)

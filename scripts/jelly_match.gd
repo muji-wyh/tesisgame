@@ -98,7 +98,7 @@ func _init() -> void:
 	_result.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_result)
 	_result.hide()
-	_result_title = _label(_result, "Your treasures", 30)
+	_result_title = _label(_result, "Round results", 30)
 	_result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_result_caption = _label(_result, "", 17)
 	_result_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -683,8 +683,8 @@ func result_reveal() -> void:
 	_result_transition = false
 	_result_elapsed = 0.0
 	_result.show()
-	_result_title.text = "Your treasures" if int(game.chest_count) > 0 else "Let's try again"
-	_result_caption.text = "%d %s collected" % [game.chest_count, "chest" if int(game.chest_count) == 1 else "chests"] if int(game.chest_count) > 0 else "Make matching pairs to discover treasure."
+	_result_title.text = "Round results"
+	_result_caption.text = "Score: %d · Chests: %d" % [game.score(), game.chest_count]
 	chests_button.text = "Open chest" if int(game.chest_count) == 1 else "Open chests"
 	_layout()
 	_sync_tiles()
@@ -927,7 +927,8 @@ func snapshot() -> Dictionary:
 	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": _selected}
 	result["fusion_rect"] = _rect(_merged.get_global_rect()) if _merged.visible else []
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
-	result["result"] = {"visible": _result_visible, "open": _control(chests_button), "replay": _control(replay_button)}
+	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
+		"open": _control(chests_button), "replay": _control(replay_button)}
 	result["finish"] = _control(finish_button)
 	result["notice"] = _notice.text
 	result["danger"] = danger_feedback()
