@@ -1061,7 +1061,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "") -> bool:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_jelly_treasure: bool = true) -> bool:
 	if not growth.ready:
 		_growth_save_failed = true
 		_refresh()
@@ -1069,7 +1069,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_jelly_round():
 		return false
-	if _mode_id == "jelly" and next_mode in ["", "jelly"] and _jelly_rewards.has_pending():
+	if resume_jelly_treasure and _mode_id == "jelly" and next_mode in ["", "jelly"] and _jelly_rewards.has_pending():
 		_hide_mode_menu(false, false)
 		_stop_round_celebration()
 		_show_jelly_rewards()
@@ -1159,7 +1159,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_rebuilding = false
 			_show_error(_jelly.game.error)
 			return false
-		if _jelly_rewards.has_pending():
+		if resume_jelly_treasure and _jelly_rewards.has_pending():
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
 			_jelly_rewards_shown = true
 	_rebuilding = false
@@ -1269,8 +1269,7 @@ func _save_jelly_round_reward() -> bool:
 	var count: int = int(_round_result.get("chest_count", 0))
 	if count <= 0 or _jelly_reward_saved:
 		return true
-	# A conflicting saved batch may temporarily occupy the reward room. Its
-	# completion must not discard this finished round or change its earned theme.
+	# Unopened treasure carries across replays without changing its earned theme.
 	_jelly_reward_saved = _jelly_rewards.configure(_round_id, count, _jelly_reward_theme, data.chests, reduced_motion)
 	return _jelly_reward_saved
 
@@ -1293,9 +1292,9 @@ func _settle_jelly_round() -> bool:
 
 
 func _replay_jelly() -> void:
-	if not _jelly_interaction_allowed():
+	if not _jelly_interaction_allowed() or _jelly.game.phase != "finished":
 		return
-	if new_round(-1, false, "", "jelly"):
+	if new_round(-1, false, "", "jelly", "", false):
 		audio.interact(model.theme_id)
 		_default_focus().grab_focus()
 
@@ -1840,6 +1839,7 @@ func _refresh() -> void:
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
 	_jelly_rewards.visible = playing and _mode_id == "jelly" and not collection_page.visible and _jelly_rewards_shown
+	_jelly.set_pending_chests(_jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
 	_sync_jelly()
 	_message.hide()
 	_outcome.visible = not playing and not celebrating

@@ -158,10 +158,19 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 	var count: int = maxi(0, chest_count) if max_chests == 0 else clampi(chest_count, 0, max_chests)
 	_draft_themes = _choose_themes(id, count, preferred_theme, allow_repeated_themes)
 	_save_failed = not rewards.create_batch(id, _draft_themes)
+	if not _save_failed:
+		_sync_saved_batch()
 	_unsaved_index = -1
 	_build_cards()
 	resume()
 	return not _save_failed
+
+
+func _sync_saved_batch() -> void:
+	_configured_id = rewards.round_id
+	_draft_themes.clear()
+	for entry in rewards.entries:
+		_draft_themes.append(str(entry.theme))
 
 
 func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
@@ -174,11 +183,8 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 	_save_failed = not rewards.load_state()
 	if not _save_failed and rewards.entries.is_empty():
 		return false
-	_configured_id = rewards.round_id
+	_sync_saved_batch()
 	_page_index = 0
-	_draft_themes.clear()
-	for entry in rewards.entries:
-		_draft_themes.append(str(entry.theme))
 	for index in range(rewards.entries.size()):
 		if not bool(rewards.entries[index].opened):
 			_page_index = floori(float(index) / maxi(1, page_size))
@@ -484,6 +490,14 @@ func _cue(theme_id: String, cue: String, step: int, index: int) -> void:
 
 func retry_save() -> void:
 	if _unsaved_index >= 0:
+		if storage_kind == "jelly" and rewards.load_state() and rewards.round_id != _configured_id:
+			# Another tab appended loot and changed indexes. Reload rather than
+			# applying this old chest's callback to a different saved chest.
+			pause()
+			_unsaved_index = -1
+			_save_failed = false
+			configure_saved(_manifest, reduced_motion)
+			return
 		var index: int = _unsaved_index
 		if _commit(index) and _cards[index].art.mode == "opened":
 			_announce(index)
@@ -491,7 +505,7 @@ func retry_save() -> void:
 		_save_failed = not rewards.load_state()
 		if not _save_failed and not rewards.entries.is_empty():
 			configure_saved(_manifest, reduced_motion)
-	elif rewards.has_pending() and rewards.round_id != _configured_id:
+	elif storage_kind != "jelly" and rewards.has_pending() and rewards.round_id != _configured_id:
 		# Another tab may have earned a batch while this round was in play.
 		# Keep that durable batch intact and let the player resume it.
 		_save_failed = false
@@ -499,6 +513,7 @@ func retry_save() -> void:
 	else:
 		_save_failed = not rewards.create_batch(_configured_id, _draft_themes)
 		if not _save_failed:
+			_sync_saved_batch()
 			_build_cards()
 	_refresh()
 
@@ -599,7 +614,7 @@ func _refresh() -> void:
 		var card: Dictionary = _cards[index]
 		card.button.disabled = _paused or _save_failed or card.opened or (_active >= 0 and _active != index)
 	_retry.visible = _save_failed
-	_retry.text = "Resume saved treasure" if rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
+	_retry.text = "Resume saved treasure" if storage_kind != "jelly" and rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
 	_retry.disabled = _opening
 	_notice.text = rewards.error if _save_failed else ""
 	_notice.visible = _save_failed

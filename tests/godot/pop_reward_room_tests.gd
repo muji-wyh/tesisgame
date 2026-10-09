@@ -66,6 +66,7 @@ func _run() -> void:
 	await _deferred_layout_checks()
 	await _jelly_pagination_checks()
 	await _jelly_save_retry_checks()
+	await _jelly_accumulation_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -108,7 +109,29 @@ func _jelly_state_checks() -> void:
 	storage.writable = true
 	check(reloaded.mark_opened("long-jelly", 255) and reloaded.entries[255].opened,
 		"Retry saves the exact previously failed Jelly chest")
-	check(not reloaded.create_batch("replace-pending", ["spring"]), "Pending Jelly treasure cannot be overwritten")
+	var pending_save: String = storage.jelly_text
+	var pending_entries: Array[Dictionary] = reloaded.entries.duplicate(true)
+	var pending_receipts: Array[String] = reloaded._receipts.duplicate()
+	storage.writable = false
+	check(not reloaded.create_batch("replace-pending", ["spring"])
+		and storage.jelly_text == pending_save and reloaded.round_id == "long-jelly"
+		and reloaded.entries == pending_entries and reloaded._receipts == pending_receipts,
+		"A failed Jelly append preserves the durable batch, opened flags and receipts atomically")
+	storage.writable = true
+	check(reloaded.create_batch("replace-pending", ["spring"]) and reloaded.entries.size() == 256
+		and reloaded.entries[0].theme == "ocean" and reloaded.entries[254].theme == "ocean"
+		and reloaded.entries[255].theme == "spring"
+		and reloaded.entries.all(func(entry: Dictionary) -> bool: return not entry.opened),
+		"A new Jelly round carries all unopened treasure forward and omits already opened chests")
+	writes = storage.jelly_writes
+	check(reloaded.create_batch("long-jelly", ["space"])
+		and reloaded.create_batch("replace-pending", ["winter"])
+		and reloaded.round_id == "replace-pending" and reloaded.entries.size() == 256
+		and reloaded.entries[255].theme == "spring" and storage.jelly_writes == writes,
+		"Old and current Jelly batch callbacks are idempotent without adding or rerolling treasure")
+	check(not reloaded.mark_opened("long-jelly", 0) and storage.jelly_writes == writes
+		and not reloaded.entries[0].opened,
+		"A stale pre-append chest callback cannot consume the current batch's remapped index")
 	check(storage.text == pop_text and pop.load_state() and pop.entries.size() == 1
 		and pop.entries[0].theme == "summer", "Jelly operations do not disturb an unopened Pop reward")
 	var defaults := State.new()
@@ -128,7 +151,11 @@ func _jelly_state_checks() -> void:
 		"A completed uncapped batch writes once per chest and has no pending remainder")
 	check(complete.create_batch("next-jelly", ["spring"]) and complete.mark_opened("next-jelly", 0),
 		"Completed Jelly treasure permits a subsequent earned batch")
-	check(not complete.create_batch("complete-jelly", ["space"]), "Completed Jelly receipts prevent an older round replay")
+	var completed_writes: int = small_storage.jelly_writes
+	check(complete.create_batch("complete-jelly", ["space"]) and complete.round_id == "next-jelly"
+		and complete.entries.size() == 1 and complete.entries[0].theme == "spring"
+		and complete.entries[0].opened and small_storage.jelly_writes == completed_writes,
+		"Completed Jelly receipts acknowledge an old round without recreating its opened treasure")
 
 
 func _make_jelly_room(storage: Storage):
@@ -234,6 +261,73 @@ func _jelly_save_retry_checks() -> void:
 	check(storage.jelly_writes == 2 and room.snapshot().opened_count == 1,
 		"Repeated save retry cannot duplicate a Jelly chest")
 	room.queue_free()
+	await process_frame
+
+
+func _jelly_accumulation_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("kept-round", 3, "ocean", _manifest, true),
+		"Prepare pending treasure before a direct replay earns another round")
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	check(room.snapshot().opened_count == 1, "One earlier chest is already opened before replay")
+	var durable_before: String = storage.jelly_text
+	storage.writable = false
+	check(not room.configure("new-round", 2, "space", _manifest, true)
+		and room.snapshot().save_failed and room.snapshot().chest_count == 2
+		and room._draft_themes == ["space", "space"] and storage.jelly_text == durable_before,
+		"A failed replay reward append retains its exact new draft without disturbing older treasure")
+	storage.writable = true
+	var external = _jelly_state(storage)
+	check(external.create_batch("foreign-round", ["spring"]) and external.entries.size() == 3,
+		"Another room can append treasure while the local reward draft waits for a retry")
+	room.retry_save()
+	check(not room.snapshot().save_failed and room._configured_id == "new-round"
+		and room.snapshot().chest_count == 5 and room.snapshot().opened_count == 0
+		and room._draft_themes == ["ocean", "ocean", "spring", "space", "space"],
+		"Retry combines foreign and local rewards with each remaining chest's original theme")
+	check(external.load_state() and external.round_id == "new-round" and external.entries.size() == 5
+		and external._receipts.has("kept-round") and external._receipts.has("foreign-round"),
+		"The combined reward and both earlier awarded round identities are durable")
+	var writes: int = storage.jelly_writes
+	room.retry_save()
+	check(room.configure("kept-round", 3, "winter", _manifest, true)
+		and room._configured_id == "new-round" and room.snapshot().chest_count == 5
+		and room._draft_themes == ["ocean", "ocean", "spring", "space", "space"]
+		and storage.jelly_writes == writes,
+		"Repeated retry and a superseded round callback adopt the saved batch without duplicate rewards")
+	var other_room = _make_jelly_room(storage)
+	check(other_room.configure_saved(_manifest, true), "A second room restores the same pending treasure")
+	_hold(other_room, 0, Feel.HOLD_SECONDS)
+	check(other_room.configure("later-round", 1, "candy", _manifest, true)
+		and other_room.snapshot().chest_count == 5,
+		"A second room opens one chest and appends a reward, changing the saved index mapping")
+	writes = storage.jelly_writes
+	room.set_reduced_motion(false)
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	room._cards[0].art._advance_animation(Feel.RELEASE_TIME + 0.01)
+	check(room.snapshot().save_failed and room._unsaved_index == 0
+		and storage.jelly_writes == writes and external.load_state()
+		and external.entries.all(func(entry: Dictionary) -> bool: return not entry.opened),
+		"A stale room cannot mark a remapped chest opened when another round has been appended")
+	check(room._opening and room._cards[0].art.opening_committed()
+		and room._cards[0].art.mode != "opened",
+		"Stale-room recovery is exercised after release while the normal opening animation is still active")
+	room.retry_save()
+	check(not room.snapshot().save_failed and room._unsaved_index == -1
+		and room._configured_id == "later-round" and room.snapshot().chest_count == 5
+		and room.snapshot().opened_count == 0 and room._cards[0].art.mode == "closed"
+		and not room._opening and room._active == -1
+		and room._draft_themes == ["ocean", "spring", "space", "space", "candy"]
+		and storage.jelly_writes == writes,
+		"Retry refreshes a stale room without consuming a new chest or reusing the old index")
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
+	check(room.snapshot().opened_count == 1 and storage.jelly_writes == writes + 1
+		and external.load_state() and external.entries[0].opened and not external.entries[1].opened,
+		"A fresh hold after stale-room recovery opens exactly the newly displayed chest")
+	room.queue_free()
+	other_room.queue_free()
 	await process_frame
 
 

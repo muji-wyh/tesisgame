@@ -523,6 +523,81 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   expect(errors).toEqual([]);
 });
 
+test('Play again starts immediately and preserves unopened treasure for a later result', async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+  const marked = await availablePair(page, { chest: true });
+  if (info.project.use.browserName === 'chromium') await touchDragPair(page, marked);
+  else await dragPair(page, marked);
+  const earned = await expectClear(page, 1, marked);
+  expect(earned.chest_count).toBe(1);
+
+  await pressControl(page, earned.finish);
+  await expect.poll(async () => (await celebrationState(page)).active,
+    { message: 'The earned chest completes its ordinary celebration before replay' }).toBe(true);
+  await expect.poll(async () => (await jelly(page)).result.visible, { timeout: 15000 }).toBe(true);
+  const firstResult = await jelly(page);
+  expect(firstResult.result.caption).toBe('Score: 1 · Chests: 1');
+  const savedTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
+  expect(savedTreasure).toContain(firstResult.round_id);
+
+  await pressControl(page, firstResult.result.replay);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.round_id !== firstResult.round_id && state.visible && state.phase === 'playing' &&
+      state.tiles.length >= 10 && !state.result.visible;
+  }, { timeout: 10000, message: 'Play again immediately creates a playable fresh board' }).toBe(true);
+  const replay = await jelly(page);
+  expect((await treasure(page)).visible, 'Unopened rewards do not interrupt replay').toBe(false);
+  expect((await metrics(page)).library.visible, 'Replay does not send the player to mode selection').toBe(false);
+  expect(replay.score).toBe(0);
+  expect(replay.chest_count).toBe(0);
+  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS),
+    'Starting the next board leaves the earned treasure durable').toBe(savedTreasure);
+
+  // A second activation at the old result action cannot launch another round.
+  await pressRect(page, firstResult.result.replay.rect);
+  await page.waitForTimeout(400);
+  expect((await jelly(page)).round_id).toBe(replay.round_id);
+  expect((await jelly(page)).phase).toBe('playing');
+  await page.screenshot({ path: info.outputPath('jelly-direct-replay.png'), scale: 'css' });
+
+  await pressControl(page, (await jelly(page)).finish);
+  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  const secondResult = await jelly(page);
+  expect(secondResult.round_id).toBe(replay.round_id);
+  expect(secondResult.score).toBe(0);
+  expect(secondResult.chest_count).toBe(0);
+  expect(secondResult.result.caption).toBe('Score: 0 · Chests: 0');
+  expect(secondResult.result.open.visible, 'A zero-loot result still offers the saved unopened chest').toBe(true);
+  expect(secondResult.result.open.text).toBe('Open chest');
+  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(savedTreasure);
+
+  await page.screenshot({ path: info.outputPath('jelly-retained-chest-result.png'), scale: 'css' });
+  await pressControl(page, secondResult.result.open);
+  await expect.poll(async () => {
+    const room = await treasure(page);
+    return { visible: room.visible, chests: room.chest_count, opened: room.opened_count, failed: room.save_failed };
+  }, { timeout: 45000 }).toEqual({ visible: true, chests: 1, opened: 0, failed: false });
+  const room = await treasure(page), chest = room.chests[0].rect, viewport = room.scroll_rect;
+  const left = Math.max(chest.x, viewport.x), right = Math.min(chest.x + chest.width, viewport.x + viewport.width);
+  const top = Math.max(chest.y, viewport.y), bottom = Math.min(chest.y + chest.height, viewport.y + viewport.height);
+  expect(right - left).toBeGreaterThan(20);
+  expect(bottom - top).toBeGreaterThan(20);
+  const position = center([left, top, right - left, bottom - top], await metrics(page));
+  await page.mouse.move(position.x, position.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await treasure(page)).opened_count,
+      { timeout: 15000, message: 'The earlier round chest remains fully openable after replay' }).toBe(1);
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => (await treasure(page)).pending, { timeout: 12000 }).toBe(false);
+  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toContain(firstResult.round_id);
+  expect(errors).toEqual([]);
+});
+
 test('a naturally full board pauses, can be rescued, and eventually ends without inventing loot', async ({ page }, info) => {
   test.setTimeout(150000);
   test.skip(info.project.name !== 'desktop-chromium', 'Natural supply and the eight-second countdown run once on desktop.');

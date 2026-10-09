@@ -96,21 +96,35 @@ func create_batch(id: String, themes: Array[String]) -> bool:
 		return true
 	if id.is_empty() or id.length() > 200 or themes.is_empty() or (max_chests > 0 and themes.size() > max_chests):
 		return _fail("This round has no treasure to open.")
-	if has_pending():
+	if has_pending() and storage_kind != "jelly":
 		return _fail("Open your saved treasure before starting another reward batch.")
 	if _receipts.has(id):
+		if storage_kind == "jelly":
+			return true
 		return _fail("The treasure from that round has already been opened.")
 	var next_entries: Array[Dictionary] = []
+	var receipts: Array[String] = _receipts.duplicate()
+	if storage_kind == "jelly":
+		# Keep unopened loot across replays. Retired batch IDs remain receipts so
+		# a delayed callback cannot append the same round's treasure twice.
+		for entry in entries:
+			if not entry.opened:
+				next_entries.append(entry.duplicate())
+		if not round_id.is_empty() and not receipts.has(round_id):
+			receipts.append(round_id)
+			if receipts.size() > MAX_RECEIPTS:
+				receipts.pop_front()
 	var seen: Array[String] = []
 	for theme_id in themes:
 		if not Data.THEMES.has(theme_id) or (not allow_repeated_themes and seen.has(theme_id)):
 			return _fail("Choose different treasure styles for this round.")
 		seen.append(theme_id)
 		next_entries.append({"theme": theme_id, "opened": false})
-	if not _persist(id, next_entries, _receipts):
+	if not _persist(id, next_entries, receipts):
 		return false
 	round_id = id
 	entries = next_entries
+	_receipts = receipts
 	return true
 
 

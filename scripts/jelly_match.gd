@@ -75,6 +75,7 @@ var _result_caption: Label
 var _result_chests: Array[TextureRect] = []
 var _result_visible: bool = false
 var _result_transition: bool = false
+var _pending_chests: int = 0
 var _result_elapsed: float = 0.0
 var _last_published: String = ""
 var _publish_elapsed: float = 0.0
@@ -866,7 +867,7 @@ func result_reveal() -> void:
 	_result.show()
 	_result_title.text = "Round results"
 	_result_caption.text = "Score: %d · Chests: %d" % [game.score(), game.chest_count]
-	chests_button.text = "Open chest" if int(game.chest_count) == 1 else "Open chests"
+	chests_button.text = "Open chest" if maxi(game.chest_count, _pending_chests) == 1 else "Open chests"
 	_layout()
 	_sync_tiles()
 	_refresh_controls()
@@ -878,7 +879,7 @@ func _focus_result() -> void:
 		default_focus().grab_focus()
 
 func _open_chests() -> void:
-	if not _allowed() or not _result_visible or _result_transition or int(game.chest_count) <= 0:
+	if not _allowed() or not _result_visible or _result_transition or maxi(game.chest_count, _pending_chests) <= 0:
 		return
 	_result_transition = true
 	_refresh_controls()
@@ -907,11 +908,20 @@ func _refresh_hud() -> void:
 	_loot_count.visible = _configured
 	_sync_preview()
 
+func set_pending_chests(count: int) -> void:
+	if _pending_chests == count:
+		return
+	_pending_chests = count
+	chests_button.text = "Open chest" if maxi(game.chest_count, _pending_chests) == 1 else "Open chests"
+	_refresh_controls()
+	_layout()
+	_publish()
+
 func _refresh_controls() -> void:
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
 			_tiles[int(cell.id)].disabled = not _can_play() or not _settled(cell)
-	chests_button.visible = _result_visible and int(game.chest_count) > 0
+	chests_button.visible = _result_visible and maxi(game.chest_count, _pending_chests) > 0
 	replay_button.visible = _result_visible
 	chests_button.disabled = not _allowed() or _result_transition
 	replay_button.disabled = not _allowed() or _result_transition
@@ -923,7 +933,7 @@ func navigation_controls() -> Array[Control]:
 	if not _allowed():
 		return controls
 	if _result_visible:
-		if int(game.chest_count) > 0:
+		if maxi(game.chest_count, _pending_chests) > 0:
 			controls.append(chests_button)
 		controls.append(replay_button)
 	elif _can_play():
@@ -1054,10 +1064,11 @@ func _layout_result(s: float, edge: float) -> void:
 		image.visible = _result_visible and index < count
 		image.size = Vector2.ONE * hero / s
 		image.position = Vector2(hero_x + hero * index, hero_y) / s
-	var action_w: float = (result_w - 10.0) * 0.5 if count > 0 else result_w
+	var has_treasure: bool = maxi(game.chest_count, _pending_chests) > 0
+	var action_w: float = (result_w - 10.0) * 0.5 if has_treasure else result_w
 	chests_button.position = Vector2(result_x, action_y) / s
 	chests_button.size = Vector2(action_w, 48.0) / s
-	replay_button.position = Vector2(result_x + action_w + 10.0 if count > 0 else result_x, action_y) / s
+	replay_button.position = Vector2(result_x + action_w + 10.0 if has_treasure else result_x, action_y) / s
 	replay_button.size = Vector2(action_w, 48.0) / s
 
 func _animate_result() -> void:
