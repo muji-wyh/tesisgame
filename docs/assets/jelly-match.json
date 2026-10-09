@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "acquired_on": "2026-10-09",
   "license": "CC0-1.0",
   "image_source": {
@@ -18,8 +18,32 @@
     "page": "https://kenney.nl/assets/interface-sounds",
     "download": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip",
     "archive_sha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
-    "status": "Downloaded, decoded and integrated; subjective listening approval remains separate"
+    "status": "Downloaded, decoded and integrated for the countdown warning; former drop/pluck feedback replaced by material recordings"
   },
+  "material_audio_sources": [
+    {
+      "creator": "rubberduck",
+      "title": "40 CC0 water / splash / slime SFX",
+      "page": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+      "download": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
+      "archive_sha256": "7cd39abb49d4362a37ba18dc0e454c7dc1d08029d4e5b683149046bc237b2eba",
+      "license": "CC0-1.0",
+      "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted and integrated",
+      "description": "Creator's slime recordings; the pack is partly recorded from real slime",
+      "animations": "Not applicable; one-shot audio recordings"
+    },
+    {
+      "creator": "Aeva",
+      "title": "BOING!",
+      "page": "https://opengameart.org/content/boing",
+      "download": "https://opengameart.org/sites/default/files/boing.flac",
+      "sha256": "9c6af38ca79332ad3fa66ad1229179d2a91655c1157d3620e21ef676f54d9fdd",
+      "license": "CC0-1.0",
+      "status": "Original FLAC acquired; a short pitched and damped excerpt integrated under the clear's slime transient",
+      "description": "Authored spring sound made with an Arturia MicroFreak; not rubber foley",
+      "animations": "Not applicable; one-shot audio recording"
+    }
+  ],
   "image_processing": {
     "tool": "Pillow",
     "version": "12.2.0",
@@ -176,43 +200,71 @@
     {
       "id": "merge",
       "path": "assets/audio/jelly-match/merge.wav",
-      "sha256": "169c0a2222edec396a0acdd13fd65dd8e63d1b30698c8b88183d0cd792a156ee",
-      "source": "Audio/drop_002.ogg",
-      "source_sha256": "4ac4d1cef7e936965cbf795852ca2020300b9e2ba7daa59f2bf4f1f7bf416218",
-      "seconds": 0.188186,
+      "sha256": "0229dcd86f9be83c1cda909e1d1df2fdcc72dbbc089d0315ae69f12691fe11d9",
+      "source": "slime_09.ogg + slime_16.ogg",
+      "layers": [
+        {
+          "source": "slime_09.ogg",
+          "source_sha256": "a3e04bf955878cc5316e9c480739504ee6fb2f7a3a94aba8ca4efa1c4b74fb3c",
+          "filter": "highpass=f=85,lowpass=f=4300,acompressor=threshold=0.05:ratio=6:attack=0.1:release=35:makeup=1",
+          "source_offset_seconds": 0.024,
+          "playback_rate": 0.94,
+          "gain_envelope": "0.52 + 0.48 * smoothstep(0, 0.32, seconds)"
+        },
+        {
+          "source": "slime_16.ogg",
+          "source_sha256": "9f50f3732420288170866ad29afb46bccfc1eae5f7474937f02d4ed6ada69725",
+          "filter": "highpass=f=95,lowpass=f=3600,acompressor=threshold=0.05:ratio=6:attack=0.1:release=35:makeup=1",
+          "source_offset_seconds": 0.004,
+          "playback_rate": 1.1,
+          "gain": 0.14
+        }
+      ],
+      "processing": "Floating-point decode and filtering before per-layer peak normalization; wet pressure pulses swell through union, with a quiet immediate skin contact. Mix, edge fades, final peak normalization, mono PCM16.",
+      "seconds": 0.62,
       "sample_rate": 44100,
       "channels": 1,
       "pcm_bits": 16,
-      "source_decoded_peak_dbfs": 1.953,
-      "linear_gain": 0.317952609,
-      "peak_dbfs": -10.053,
-      "rms_dbfs": -27.295,
-      "onset_minus_40_dbfs_seconds": 0.000113,
-      "attack_frames": 44,
-      "release_frames": 441,
-      "pitch_shift": 0,
-      "time_stretch": 1,
+      "peak_dbfs": -9.0,
+      "rms_dbfs": -22.824,
+      "onset_minus_40_dbfs_seconds": 0.005351,
+      "attack_frames": 265,
+      "release_frames": 2646,
       "loop": false
     },
     {
       "id": "clear",
       "path": "assets/audio/jelly-match/clear.wav",
-      "sha256": "ec1fc45d555c2b3dc68cda9ea3f16ec70f8143b480a5f89420397b6a6841428e",
-      "source": "Audio/pluck_002.ogg",
-      "source_sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
-      "seconds": 0.161655,
+      "sha256": "d53876591d14e97ff0db6a769525af180eb8a700c7727ccdc1349141421acc5f",
+      "source": "slime_16.ogg + boing.flac",
+      "layers": [
+        {
+          "source": "slime_16.ogg",
+          "source_sha256": "9f50f3732420288170866ad29afb46bccfc1eae5f7474937f02d4ed6ada69725",
+          "filter": "highpass=f=95,lowpass=f=3600,acompressor=threshold=0.05:ratio=6:attack=0.1:release=35:makeup=1",
+          "source_offset_seconds": 0.004,
+          "playback_rate": 1.15,
+          "gain": 0.76
+        },
+        {
+          "source": "boing.flac",
+          "source_sha256": "9c6af38ca79332ad3fa66ad1229179d2a91655c1157d3620e21ef676f54d9fdd",
+          "filter": "highpass=f=90,lowpass=f=2400",
+          "source_offset_seconds": 0,
+          "playback_rate": "1.55 + 0.22 * exp(-6t) * sin(2pi * 9t) + 0.32 * exp(-14t)",
+          "gain_envelope": "0.40 * exp(-6.5t)"
+        }
+      ],
+      "processing": "Floating-point decode and filtering before per-layer peak normalization; soft slime transient over an acquired spring's damped pitch recoil. Mix, edge fades, final peak normalization, mono PCM16. Starts at the existing 0.700-second release and ends before removal at 1.050 seconds.",
+      "seconds": 0.34,
       "sample_rate": 44100,
       "channels": 1,
       "pcm_bits": 16,
-      "source_decoded_peak_dbfs": 2.547,
-      "linear_gain": 0.373826064,
-      "peak_dbfs": -6.0,
-      "rms_dbfs": -27.793,
-      "onset_minus_40_dbfs_seconds": 6.8e-05,
-      "attack_frames": 44,
-      "release_frames": 441,
-      "pitch_shift": 0,
-      "time_stretch": 1,
+      "peak_dbfs": -7.5,
+      "rms_dbfs": -23.186,
+      "onset_minus_40_dbfs_seconds": 0.000703,
+      "attack_frames": 110,
+      "release_frames": 2426,
       "loop": false
     },
     {

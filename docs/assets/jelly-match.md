@@ -13,7 +13,9 @@ The playfield now sits in a sourced [woodland environment](jelly-environment.md)
 | --- | --- | --- | --- |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
 | Contact shadow | Same acquired Jelly Squash pack, `png/separate/Shadow.png` | Same CC0 1.0 license. Inspected and copied byte-for-byte to `assets/images/jelly-match/contact-shadow.png`; source and output hashes are identical. | Static 334 × 150 RGBA texture, maximum alpha 26/255. Runtime placement, tint and opacity establish contact independently of the moving gel. The pack's `WithShadow` bodies include faces and are not used. |
-| Merge, clear and countdown warning cues | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; three selected OGG recordings decoded, adapted and integrated as WAVs. The original pack license is retained. | One-shot recordings; no loops. |
+| Gel contact and fusion recordings | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0. Original archive acquired; `slime_09.ogg` and `slime_16.ogg` selected for the merge and clear derivatives. The creator's source page records the license and describes some slime recordings as made from real slime; it does not identify which individual files use that technique. | One-shot recordings; no loops. The delivered cues layer, shape and time the acquired recordings. |
+| Elastic release layer | Aeva, [BOING!](https://opengameart.org/content/boing) | CC0 1.0. Original `boing.flac` acquired from the creator's OpenGameArt upload and selected for the clear derivative. The source page records the license. | One authored spring sound made with an Arturia MicroFreak. This is a synthesized source recording, not rubber foley. The delivered layer is pitched and shaped to fit the release. |
+| Countdown warning cue | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; `Audio/question_001.ogg` decoded, adapted and integrated as `danger.wav`. The original pack license is retained. | One-shot recording; no loop. |
 | Word artwork and pronunciation | Existing Grow with Pip vocabulary | Reused unchanged, with existing [vocabulary](growth-vocabulary.md), [Mulberry](mulberry-vocabulary.md) and [Ava](ava-voice.md) provenance. | Existing pronunciation playback; artwork is static. |
 | Earned chest cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/reward.wav` without a duplicate. Its existing user-supplied source and embedded-game restrictions remain in force; it is not relabeled CC0. | Existing one-shot reward cue. |
 | Landing contact cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/step-detail.wav` without a duplicate; the same user-supplied source and embedded-game restrictions apply. | Existing short one-shot, triggered once per landing group at low gain with speech ducking and the established interruption lifecycle. No new recording is acquired. |
@@ -154,9 +156,10 @@ The 1.05-second committed timeline remains unchanged: two contact lobes unite by
 starts that release. Five small pieces reuse the acquired gel illustration; a
 brief supporting bloom reuses `assets/chests/particles/portal_glow.png`, from
 Bobardo's already acquired Modern 2D Animated Chests Pack_FREE Demo 1.0.2 under
-the recorded [Unity Asset Store EULA](../voice-pop-treasure.md). No new sound,
-particle artwork or source license is introduced. Reward credit stays at 1.05
-seconds and still follows the model, independent of the visual fragments.
+the recorded [Unity Asset Store EULA](../voice-pop-treasure.md). Particle artwork
+and its license remain unchanged. The material sounds below use newly acquired
+CC0 recordings. Reward credit stays at 1.05 seconds and still follows the model,
+independent of the visual fragments or audio duration.
 
 Every effect uses the paused gameplay clock, with no shader `TIME` or independent
 particle timer. Retarget, canceled input, menu, hidden page and a new round clear
@@ -181,27 +184,35 @@ and exact chest count from entry, including zero-loot rounds. Rounds with treasu
 keep Pip's existing reward presentation before revealing the opening action;
 the summary uses `Round results` rather than a level-completion message.
 
-| Event | Runtime path | Original source | Duration | Measured peak |
+| Event | Runtime path | Original source | Duration | Peak |
 | --- | --- | --- | ---: | ---: |
-| Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | `Audio/drop_002.ogg` | 188 ms | −10.05 dBFS |
-| Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | `Audio/pluck_002.ogg` | 162 ms | −6.00 dBFS |
+| Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | rubberduck `slime_09.ogg`, with a quieter `slime_16.ogg` contact layer | 620 ms | −9.0 dBFS |
+| Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | rubberduck `slime_16.ogg` with Aeva `boing.flac` | 340 ms | −7.5 dBFS |
 | Each full-board countdown beat | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
 
-The names describe intended event use. The drop and pluck sources were selected
-for contrasting contact and release envelopes; the attention source is a question
-cue rather than an error buzzer. Actual wetness, elasticity and comfort need
-listening approval in the game mix; file names and waveform checks alone do not
-establish these qualities.
+These are measurements of the final PCM files. The merge and clear RMS levels
+are −22.824 and −23.186 dBFS; onset above −40 dBFS is 5.35 and 0.70 ms respectively.
+The merge combines a short contact with a longer pressure envelope to support
+the visible union. The clear combines a gel-skin release with a compressed,
+pitched spring layer to support the upward rebound. These replace the former
+Kenney drop and pluck cues. The attention source remains a question cue rather
+than an error buzzer. Wetness, elasticity and comfort are intended qualities;
+they require listening in the game mix, and cannot be established from file
+names, source descriptions or waveform inspection.
 
 Conversion uses FFmpeg floating-point decode, stereo-to-mono mix and 44.1 kHz
-PCM16 output. Original duration and pitch are retained. Peak headroom is applied
-before a 44-frame attack fade and 441-frame tail fade. This also avoids clipping
-from the original Vorbis decode's intersample overshoot. Every delivered file
-starts and ends at zero and has no full-scale samples; audible onset is within
-7 ms of the cue start. The manifest distinguishes pre-fade gain from final
-measured peaks.
+PCM16 output. The new material cues use edited envelopes, layered recordings and
+pitch/time adaptation; their original duration and pitch are not retained.
+The importer and manifest record the source files and exact processing recipe.
+Gain must be applied before PCM conversion: some source Vorbis recordings exceed
+0 dBFS when decoded to floating point. Attack and tail fades keep the delivered
+file edges at zero, with headroom for the existing game mix. The countdown cue
+retains its previous conversion and measured output.
 
 Drive each cue from the same committed event as its visible contact or release.
+The merge starts at fusion time 0; the clear starts at the existing 0.70-second
+pop node. Both end within the unchanged 1.05-second fusion timeline. Audio does
+not move the success-credit boundary or change matching, difficulty or rewards.
 Do not play merge or clear for every animation frame or every affected card.
 The full-board clock triggers one danger recording at each remaining second,
 including entry. The border uses that same clock: bright for 180 ms, fading to
@@ -223,10 +234,13 @@ Jelly cues. Reuse the existing chest reward gain and lifecycle for earned chests
 
 ## Reproduction and validation
 
-The two verified archives are downloaded from the exact URLs in the manifest
-to `build/jelly-match-sources/jelly.zip` and
-`build/jelly-match-sources/kenney-interface-sounds.zip`. With Python, Pillow 12.2.0
-and FFmpeg available:
+The acquired sources are retained under `build/jelly-match-sources/`:
+
+- `jelly.zip` and `kenney-interface-sounds.zip`, from the original URLs in the manifest.
+- `water-splash-slime-sfx.zip`, from [rubberduck's original archive](https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip), SHA-256 `7cd39abb49d4362a37ba18dc0e454c7dc1d08029d4e5b683149046bc237b2eba`.
+- `boing.flac`, from [Aeva's original recording](https://opengameart.org/sites/default/files/boing.flac), SHA-256 `9c6af38ca79332ad3fa66ad1229179d2a91655c1157d3620e21ef676f54d9fdd`.
+
+With Python, Pillow 12.2.0 and FFmpeg available:
 
 ```powershell
 python tools/import-jelly-match-assets.py
@@ -234,24 +248,33 @@ python tools/import-jelly-match-assets.py --images-only
 python tools/import-jelly-match-assets.py --check
 ```
 
-The importer rejects different source archive hashes, extracts only into its
-source directory, and reproduces four adapted gel PNGs, the unchanged source
-shadow PNG, three WAVs and the manifest. `--images-only` retains existing audio
-files and their provenance records while regenerating artwork. The check mode
-only reads files and verifies hashes, texture format, PCM format, zero edges and
-headroom; it also verifies the shadow matches its original source hash. Normal
-game builds use the acquired files and need no asset service or network synthesis.
+The importer verifies the original archive and recording hashes, extracts only
+into its source directory, and reproduces four adapted gel PNGs, the unchanged
+source shadow PNG, three WAVs and the manifest. Full imports reproduce the new
+material cues. `--images-only` retains existing audio files and their complete
+provenance, including the rubberduck and Aeva sources, while regenerating artwork.
+The check mode only reads files and verifies hashes, texture format, PCM format,
+zero edges and headroom; it also verifies the shadow matches its original source
+hash. Normal game builds use the acquired files and need no asset service or
+network synthesis.
 
-FFprobe/FFmpeg decoding and sample checks passed. This task's tool channel could
-not present audio to the reviewing model, so no subjective listening approval is
-claimed. A labeled candidate timeline and `kenney-audition.wav` are retained in
-the ignored source directory for human review. Native gesture/lifecycle checks
-and Chromium WebAudio checks on desktop and simulated Android pass: observed
-PCM distinguishes pick, release, land, merge and clear, preserves pronunciation,
-and confirms mute and interruption behavior. The Windows iPhone WebKit test
-runtime has no available WebAudio, so its audio check is skipped; its gameplay
-and layout checks pass. These checks do not establish subjective mix quality,
-repeated-play fatigue or sound on physical device speakers.
+The original rubberduck recordings were decoded and measured for duration,
+envelope, spectral energy and headroom. This review tool channel reports that
+audio input is unsupported, so no subjective audition or listening approval is
+claimed. The earlier `kenney-audition.wav` in the ignored source directory is a
+review of the former cues, not evidence for the new mixture.
+
+The replacement files passed source/hash, PCM, edge and headroom checks. An
+image-only import preserved the complete current manifest. The 74 native audio
+checks and desktop Chromium WebAudio regression passed with the rebuilt game:
+observed decoded buffers were 0.620 and 0.340 seconds with distinct fingerprints.
+Real drag, pronunciation, consecutive taps, mute, menu pause/resume and exit
+retained their expected playback behavior. The isolated final cue timeline is
+available at `build/jelly-audio-refinement/jelly-material-timeline.wav`; it uses
+the runtime gains and model timing, and is not a gameplay recording.
+The Windows iPhone WebKit test runtime has no available WebAudio; gameplay and
+layout coverage remain separate. Technical checks do not establish subjective
+mix quality, repeated-play fatigue or sound on physical speakers.
 
 Batch supply checks compare each dispatched group with its committed previews,
 including a partially filled final group. Each tile descends over multiple frames

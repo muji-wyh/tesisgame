@@ -1,0 +1,12 @@
+Jelly material audio sources (CC0 1.0)
+
+40 CC0 water / splash / slime SFX by rubberduck
+https://opengameart.org/content/40-cc0-water-splash-slime-sfx
+Creator's slime recordings; the pack is partly recorded from real slime
+
+BOING! by Aeva
+https://opengameart.org/content/boing
+Authored spring sound made with an Arturia MicroFreak; not rubber foley
+
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Adaptations: tools/import-jelly-match-assets.py; provenance: docs/assets/jelly-match.json

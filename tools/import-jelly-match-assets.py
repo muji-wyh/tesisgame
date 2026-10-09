@@ -1,4 +1,4 @@
-"""Prepare the selected CC0 Jelly Squash artwork and Kenney interface cues."""
+"""Prepare the selected CC0 Jelly Squash artwork and material sound recordings."""
 
 import argparse
 import array
@@ -20,17 +20,33 @@ MANIFEST = ROOT / "docs/assets/jelly-match.json"
 ARCHIVES = {
     "jelly.zip": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
     "kenney-interface-sounds.zip": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+    "water-splash-slime-sfx.zip": "7cd39abb49d4362a37ba18dc0e454c7dc1d08029d4e5b683149046bc237b2eba",
 }
+BOING_SHA256 = "9c6af38ca79332ad3fa66ad1229179d2a91655c1157d3620e21ef676f54d9fdd"
 PALETTES = {"coral": 0.0, "mint": 0.34, "sky": 0.50, "lilac": 0.72}
 WHITE_CENTER = 0.40
 WHITE_CONTOUR = 0.24
 SATURATION_SCALE = 0.88
 MINT_SATURATION_SCALE = 0.78
 SOUNDS = {
-    "merge": ("drop_002.ogg", -8.0),
-    "clear": ("pluck_002.ogg", -6.0),
     "danger": ("question_001.ogg", -12.0),
 }
+SAMPLE_RATE = 44100
+MATERIAL_AUDIO_SOURCES = [
+    {"creator": "rubberduck", "title": "40 CC0 water / splash / slime SFX",
+     "page": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+     "download": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
+     "archive_sha256": ARCHIVES["water-splash-slime-sfx.zip"], "license": "CC0-1.0",
+     "status": "Original archive acquired; slime_09.ogg and slime_16.ogg adapted and integrated",
+     "description": "Creator's slime recordings; the pack is partly recorded from real slime",
+     "animations": "Not applicable; one-shot audio recordings"},
+    {"creator": "Aeva", "title": "BOING!", "page": "https://opengameart.org/content/boing",
+     "download": "https://opengameart.org/sites/default/files/boing.flac",
+     "sha256": BOING_SHA256, "license": "CC0-1.0",
+     "status": "Original FLAC acquired; a short pitched and damped excerpt integrated under the clear's slime transient",
+     "description": "Authored spring sound made with an Arturia MicroFreak; not rubber foley",
+     "animations": "Not applicable; one-shot audio recording"},
+]
 
 
 def sha256(path):
@@ -111,10 +127,97 @@ def prepare_images(source):
     return records
 
 
+def decode_material(source, filters):
+    decoded = subprocess.check_output(["ffmpeg", "-v", "error", "-i", str(source),
+                                       "-af", filters, "-f", "f32le", "-ac", "1", "-ar", str(SAMPLE_RATE), "-"])
+    values = array.array("f")
+    values.frombytes(decoded)
+    peak = max(map(abs, values))
+    if peak <= 0 or not all(math.isfinite(value) for value in values):
+        raise ValueError(f"Invalid material recording: {source}")
+    return [value / peak for value in values]
+
+
+def pitched_layer(values, seconds, speed, offset=0.0):
+    # Resample an acquired recording, preserving its material harmonics. The
+    # clear's damped pitch motion follows elastic recoil, not a generated tone.
+    output = []
+    position = offset * SAMPLE_RATE
+    for index in range(round(seconds * SAMPLE_RATE)):
+        start = int(position)
+        fraction = position - start
+        value = values[start] * (1.0 - fraction) + values[start + 1] * fraction if start + 1 < len(values) else 0.0
+        output.append(value)
+        position += speed(index / SAMPLE_RATE) if callable(speed) else speed
+    return output
+
+
+def save_material_cue(name, values, peak_dbfs, attack, release, layers, processing):
+    frames = len(values)
+    faded = [value * min(1.0, index / (attack * SAMPLE_RATE),
+                        (frames - 1 - index) / (release * SAMPLE_RATE)) for index, value in enumerate(values)]
+    gain = 10 ** (peak_dbfs / 20.0) / max(map(abs, faded))
+    pcm = array.array("h", (round(value * gain * 32767) for value in faded))
+    destination = ROOT / "assets/audio/jelly-match" / f"{name}.wav"
+    with wave.open(str(destination), "wb") as recording:
+        recording.setparams((1, 2, SAMPLE_RATE, frames, "NONE", "not compressed"))
+        recording.writeframes(pcm.tobytes())
+    peak = max(map(abs, pcm)) / 32768
+    rms = math.sqrt(sum((value / 32768) ** 2 for value in pcm) / frames)
+    onset = next(index for index, value in enumerate(pcm) if abs(value) / 32768 > 0.01)
+    return {"id": name, "path": relative(destination), "sha256": sha256(destination),
+            "source": " + ".join(layer["source"] for layer in layers), "layers": layers,
+            "processing": processing, "seconds": round(frames / SAMPLE_RATE, 6),
+            "sample_rate": SAMPLE_RATE, "channels": 1, "pcm_bits": 16,
+            "peak_dbfs": round(20 * math.log10(peak), 3), "rms_dbfs": round(20 * math.log10(rms), 3),
+            "onset_minus_40_dbfs_seconds": round(onset / SAMPLE_RATE, 6),
+            "attack_frames": round(attack * SAMPLE_RATE), "release_frames": round(release * SAMPLE_RATE),
+            "loop": False}
+
+
+def prepare_material_sounds(source_dir):
+    slime = source_dir / "rubberduck-slime"
+    boing = source_dir / "boing.flac"
+    if sha256(boing) != BOING_SHA256:
+        raise ValueError("Unexpected BOING! source recording")
+    wet_filter = "highpass=f=85,lowpass=f=4300,acompressor=threshold=0.05:ratio=6:attack=0.1:release=35:makeup=1"
+    skin_filter = "highpass=f=95,lowpass=f=3600,acompressor=threshold=0.05:ratio=6:attack=0.1:release=35:makeup=1"
+    spring_filter = "highpass=f=90,lowpass=f=2400"
+    wet = decode_material(slime / "slime_09.ogg", wet_filter)
+    skin = decode_material(slime / "slime_16.ogg", skin_filter)
+    spring = decode_material(boing, spring_filter)
+    layer = lambda source, **processing: {"source": source.name, "source_sha256": sha256(source), **processing}
+    merge_wet = pitched_layer(wet, 0.620, 0.94, 0.024)
+    merge_skin = pitched_layer(skin, 0.620, 1.10, 0.004)
+    merge = [value * (0.52 + 0.48 * smoothstep(0.0, 0.32, index / SAMPLE_RATE)) + merge_skin[index] * 0.14
+             for index, value in enumerate(merge_wet)]
+    records = [save_material_cue("merge", merge, -9.0, 0.006, 0.060,
+        [layer(slime / "slime_09.ogg", filter=wet_filter, source_offset_seconds=0.024, playback_rate=0.94,
+               gain_envelope="0.52 + 0.48 * smoothstep(0, 0.32, seconds)"),
+         layer(slime / "slime_16.ogg", filter=skin_filter, source_offset_seconds=0.004, playback_rate=1.10, gain=0.14)],
+        "Floating-point decode and filtering before per-layer peak normalization; wet pressure pulses swell through union, with a quiet immediate skin contact. Mix, edge fades, final peak normalization, mono PCM16.")]
+    clear_skin = pitched_layer(skin, 0.340, 1.15, 0.004)
+    clear_spring = pitched_layer(spring, 0.340,
+        lambda t: 1.55 + 0.22 * math.exp(-6.0 * t) * math.sin(2.0 * math.pi * 9.0 * t) + 0.32 * math.exp(-14.0 * t))
+    clear = [value * 0.76 + clear_spring[index] * 0.40 * math.exp(-6.5 * index / SAMPLE_RATE)
+             for index, value in enumerate(clear_skin)]
+    records.append(save_material_cue("clear", clear, -7.5, 0.0025, 0.055,
+        [layer(slime / "slime_16.ogg", filter=skin_filter, source_offset_seconds=0.004, playback_rate=1.15, gain=0.76),
+         layer(boing, filter=spring_filter, source_offset_seconds=0,
+               playback_rate="1.55 + 0.22 * exp(-6t) * sin(2pi * 9t) + 0.32 * exp(-14t)",
+               gain_envelope="0.40 * exp(-6.5t)")],
+        "Floating-point decode and filtering before per-layer peak normalization; soft slime transient over an acquired spring's damped pitch recoil. Mix, edge fades, final peak normalization, mono PCM16. Starts at the existing 0.700-second release and ends before removal at 1.050 seconds."))
+    notice = "Jelly material audio sources (CC0 1.0)\n\n" + "\n\n".join(
+        f"{source['title']} by {source['creator']}\n{source['page']}\n{source['description']}" for source in MATERIAL_AUDIO_SOURCES)
+    notice += "\n\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nAdaptations: tools/import-jelly-match-assets.py; provenance: docs/assets/jelly-match.json\n"
+    (ROOT / "assets/audio/jelly-match/LICENSE-Material-Audio.txt").write_text(notice, encoding="utf-8")
+    return records
+
+
 def prepare_sounds(source_dir):
     output = ROOT / "assets/audio/jelly-match"
     output.mkdir(parents=True, exist_ok=True)
-    records = []
+    records = prepare_material_sounds(source_dir.parent)
     for name, (source_name, target_peak_dbfs) in SOUNDS.items():
         source = source_dir / "Audio" / source_name
         decoded = subprocess.check_output(["ffmpeg", "-v", "error", "-i", str(source),
@@ -185,20 +288,23 @@ def main():
     extract_verified(source_dir, "jelly.zip", source_dir / "jelly")
     if not options.images_only:
         extract_verified(source_dir, "kenney-interface-sounds.zip", source_dir / "kenney-interface-sounds")
+        extract_verified(source_dir, "water-splash-slime-sfx.zip", source_dir / "rubberduck-slime")
     existing = json.loads(MANIFEST.read_text(encoding="utf-8")) if options.images_only else {}
     manifest = {
-        "version": 2, "acquired_on": "2026-10-09", "license": "CC0-1.0",
+        "version": 3, "acquired_on": "2026-10-09", "license": "CC0-1.0",
         "image_source": {"creator": "Zuhria Alfitra (pzUH), GameArt2D", "title": "Jelly Squash Free Sprites",
                          "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
                          "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
                          "license_page": "https://www.gameart2d.com/license.html", "archive_sha256": ARCHIVES["jelly.zip"],
                          "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
                          "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."},
-        "audio_source": {"creator": "Kenney", "title": "Interface Sounds 1.0",
+        "audio_source": existing["audio_source"] if options.images_only else {"creator": "Kenney", "title": "Interface Sounds 1.0",
                          "page": "https://kenney.nl/assets/interface-sounds",
                          "download": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip",
                          "archive_sha256": ARCHIVES["kenney-interface-sounds.zip"],
-                         "status": "Downloaded, decoded and integrated; subjective listening approval remains separate"},
+                         "status": "Downloaded, decoded and integrated for the countdown warning; former drop/pluck feedback replaced by material recordings"},
+        **({"material_audio_sources": existing["material_audio_sources"]} if "material_audio_sources" in existing
+           else {} if options.images_only else {"material_audio_sources": MATERIAL_AUDIO_SOURCES}),
         "image_processing": {"tool": "Pillow", "version": pillow_version,
                              "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 40 percent center to 24 percent contour white mix. Original silhouette, painted detail and alpha preserved. Separate contact shadow copied unchanged."},
         "images": prepare_images(source_dir / "jelly/png/separate/Jellies/Blank/Jelly (3).png"),
