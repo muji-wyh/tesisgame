@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "acquired_on": "2026-10-09",
+  "source": {
+    "title": "Free Nature Platformer Tileset",
+    "creator": "Zuhria Alfitra (pzUH), GameArt2D",
+    "page": "https://www.gameart2d.com/free-platformer-game-tileset.html",
+    "creator_page": "https://www.gameart2d.com/about.html",
+    "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/freetileset.zip",
+    "archive_sha256": "a4dabc46ca5c16adb8c6fb550c6cd53affc83fb489f6a151feec34f9ff03a448",
+    "license": "CC0 1.0",
+    "license_page": "https://www.gameart2d.com/license.html",
+    "license_file": "assets/images/jelly-match/LICENSE-CC0.txt",
+    "status": "Original source downloaded and images visually inspected; four unchanged PNGs integrated",
+    "animations": "Static PNG and vector source artwork; no baked animation clips. Any runtime motion is authored by the game."
+  },
+  "images": [
+    {
+      "id": "woodland",
+      "path": "assets/images/jelly-match/environment/woodland.png",
+      "source": "png/BG/BG.png",
+      "source_sha256": "0d582107ca28aaa3abdf30e5783f16e53c01254aed1428acb47601cd0b2ba922",
+      "sha256": "0d582107ca28aaa3abdf30e5783f16e53c01254aed1428acb47601cd0b2ba922",
+      "bytes": 122466,
+      "size": [
+        1000,
+        750
+      ],
+      "mode": "RGBA",
+      "processing": "Unmodified original PNG copied byte-for-byte from the verified archive"
+    },
+    {
+      "id": "tree",
+      "path": "assets/images/jelly-match/environment/tree.png",
+      "source": "png/Object/Tree_2.png",
+      "source_sha256": "93299d587e777852ad6ef7519b7095df0430558790ef34dd6dea896ff37eafe8",
+      "sha256": "93299d587e777852ad6ef7519b7095df0430558790ef34dd6dea896ff37eafe8",
+      "bytes": 21899,
+      "size": [
+        282,
+        301
+      ],
+      "mode": "RGBA",
+      "processing": "Unmodified original PNG copied byte-for-byte from the verified archive"
+    },
+    {
+      "id": "bush",
+      "path": "assets/images/jelly-match/environment/bush.png",
+      "source": "png/Object/Bush (1).png",
+      "source_sha256": "61a9ade8fd6a15b86e841c32bd27c4a3926f02f2a6e72ef01eab85984a5aca20",
+      "sha256": "61a9ade8fd6a15b86e841c32bd27c4a3926f02f2a6e72ef01eab85984a5aca20",
+      "bytes": 2398,
+      "size": [
+        133,
+        65
+      ],
+      "mode": "RGBA",
+      "processing": "Unmodified original PNG copied byte-for-byte from the verified archive"
+    },
+    {
+      "id": "mushroom",
+      "path": "assets/images/jelly-match/environment/mushroom.png",
+      "source": "png/Object/Mushroom_1.png",
+      "source_sha256": "756eb050b49e07c83ec9df1365172eae5c898596475a61fd0f846ab6a46c262f",
+      "sha256": "756eb050b49e07c83ec9df1365172eae5c898596475a61fd0f846ab6a46c262f",
+      "bytes": 1894,
+      "size": [
+        49,
+        41
+      ],
+      "mode": "RGBA",
+      "processing": "Unmodified original PNG copied byte-for-byte from the verified archive"
+    }
+  ],
+  "review": {
+    "source_contact_sheet": "build/jelly-environment-sources/environment-source-review.png",
+    "status": "Source artwork inspected. Runtime layout, readability and motion are verified separately.",
+    "alternative": "Kenney Background Elements Remastered was downloaded and inspected but no files from it are integrated."
+  }
+}

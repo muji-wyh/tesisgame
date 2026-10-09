@@ -240,6 +240,14 @@
   "reuse": {
     "chest_reward": "assets/imported-audio/chest-reference/reward.wav",
     "provenance": "docs/assets/chest-reference-audio.json",
+    "pick": {
+      "path": "assets/imported-audio/ui-click/select.wav",
+      "provenance": "docs/assets/ui-click-audio.json"
+    },
+    "release": {
+      "path": "assets/imported-audio/chest-reference/step.wav",
+      "provenance": "docs/assets/chest-reference-audio.json"
+    },
     "landing": {
       "path": "assets/imported-audio/chest-reference/step-detail.wav",
       "provenance": "docs/assets/chest-reference-audio.json",

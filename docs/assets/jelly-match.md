@@ -5,6 +5,7 @@ pictures and labels. A shared silhouette, consistent upper-left highlights and
 muted color variants give the board a soft material without competing with the
 learning content. The appearance comes from a production illustration; animation
 deforms that illustration rather than replacing it with flat geometry.
+The playfield now sits in a sourced [woodland environment](jelly-environment.md).
 
 ## Sources and acquired material
 
@@ -16,6 +17,7 @@ deforms that illustration rather than replacing it with flat geometry.
 | Word artwork and pronunciation | Existing Grow with Pip vocabulary | Reused unchanged, with existing [vocabulary](growth-vocabulary.md), [Mulberry](mulberry-vocabulary.md) and [Ava](ava-voice.md) provenance. | Existing pronunciation playback; artwork is static. |
 | Earned chest cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/reward.wav` without a duplicate. Its existing user-supplied source and embedded-game restrictions remain in force; it is not relabeled CC0. | Existing one-shot reward cue. |
 | Landing contact cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/step-detail.wav` without a duplicate; the same user-supplied source and embedded-game restrictions apply. | Existing short one-shot, triggered once per landing group at low gain with speech ducking and the established interruption lifecycle. No new recording is acquired. |
+| Select and empty-drop cues | Existing [interface click](ui-click-audio.md) and [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/ui-click/select.wav` and `assets/imported-audio/chest-reference/step.wav` without duplicate files, under their existing embedded-game source restrictions. | One-shot selection and intentional empty-drop feedback. Movement, hover, menu interruption and pointer cancellation do not replay them. |
 | Chest artwork | Existing current theme chest manifest and renderer | Reused under the recorded [chest asset rights](chest-feel.md). Royal and Energy have closed PNG artwork; the five newer modeled skins require the actual current renderer or a cached still of that renderer. | Use a closed pose for gameplay badges. Archived renders of replaced chest designs must not substitute for the current theme. |
 
 The creator identifies himself on [GameArt2D's about page](https://www.gameart2d.com/about.html).
@@ -116,7 +118,11 @@ its normal outline by 550 ms, then resting until the next second. Reduced motion
 uses a steady warning outline. A matching contact immediately stops warning
 audio and removes the border flash; pause, exit and expiry stop the warning too.
 Tap pronunciation remains the primary learning sound. While a word plays,
-duck Jelly Match effects by about 12 dB and use a small bounded voice pool.
+duck Jelly Match effects by 6 dB and use a small bounded voice pool. The original
+12 dB duck made the short merge/clear transients too attenuated under frequent
+pronunciation. Current gains are 0.64 for pick, 0.38 for release and land, 1.0 for
+merge, 0.90 for clear, 0.52 for danger and 0.36 for reward. Pick, release and land
+only use idle channels; they cannot cut off a warning, answer or reward.
 The quiet landing cue uses the existing `step-detail.wav` source once per contact
 group, following the same pronunciation priority; overlapping tiles must not
 multiply the transient. Its audible weight and comfort require runtime listening,
@@ -148,5 +154,10 @@ game builds use the acquired files and need no asset service or network synthesi
 FFprobe/FFmpeg decoding and sample checks passed. This task's tool channel could
 not present audio to the reviewing model, so no subjective listening approval is
 claimed. A labeled candidate timeline and `kenney-audition.wav` are retained in
-the ignored source directory for human review. Native/browser timing, overlapping
-pronunciation, repeated-play fatigue and device speakers need runtime review.
+the ignored source directory for human review. Native gesture/lifecycle checks
+and Chromium WebAudio checks on desktop and simulated Android pass: observed
+PCM distinguishes pick, release, land, merge and clear, preserves pronunciation,
+and confirms mute and interruption behavior. The Windows iPhone WebKit test
+runtime has no available WebAudio, so its audio check is skipped; its gameplay
+and layout checks pass. These checks do not establish subjective mix quality,
+repeated-play fatigue or sound on physical device speakers.

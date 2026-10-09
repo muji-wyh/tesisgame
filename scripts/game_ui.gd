@@ -19,6 +19,7 @@ const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
+const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
@@ -178,6 +179,7 @@ var reduced_motion: bool = false
 var _page_hidden: bool = false
 var _resume_music_after_background: bool = false
 var _background: ColorRect
+var _jelly_backdrop: Control
 var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
@@ -322,6 +324,11 @@ func _build_controls() -> void:
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_background)
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_jelly_backdrop = JellyBackdrop.new()
+	_jelly_backdrop.name = "JellyWoodland"
+	add_child(_jelly_backdrop)
+	_jelly_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_jelly_backdrop.hide()
 	var margins := MarginContainer.new()
 	_content_margins = margins
 	margins.minimum_size_changed.connect(_fit_content.call_deferred)
@@ -1204,6 +1211,7 @@ func _sync_jelly() -> void:
 		return
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed)
+	_jelly_backdrop.visible = _mode_id == "jelly" and _jelly.visible and not _page_hidden and not collection_page.visible
 	if not allowed:
 		audio.stop_jelly_sounds()
 	if _jelly_rewards_shown and _mode_id == "jelly" and not _page_hidden and not collection_page.visible and not _mode_menu_open():

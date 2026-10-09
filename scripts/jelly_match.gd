@@ -87,7 +87,7 @@ func _init() -> void:
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
 	_pace = _label(self, "Next pair", 12)
-	_pace.add_theme_color_override("font_color", Style.MUTED)
+	_pace.add_theme_color_override("font_color", Color("#315142"))
 	_next_pair = ProgressBar.new()
 	_next_pair.show_percentage = false
 	_next_pair.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -389,6 +389,9 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	word_requested.emit(_cell(id).word.duplicate(true))
 	if generation != _generation or not _can_play():
 		return false
+	audio_requested.emit("pick")
+	if generation != _generation or not _can_play():
+		return false
 	_refresh_marks()
 	_publish()
 	return true
@@ -414,6 +417,7 @@ func _release(global_point: Vector2) -> void:
 	if not _can_play() or _source < 0:
 		cancel_input()
 		return
+	var generation: int = _generation
 	var source: int = _source
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	var target: int = _tile_at(point, source) if _dragging else -1
@@ -430,8 +434,11 @@ func _release(global_point: Vector2) -> void:
 			_merge(source, target, from)
 		else:
 			_snap_back(source, from)
+			audio_requested.emit("release")
 	else:
 		_activate(source, false)
+	if generation != _generation or not _allowed():
+		return
 	_refresh_marks()
 	_publish()
 
@@ -441,6 +448,9 @@ func _activate(id: int, speak: bool = true) -> void:
 	if speak:
 		var generation: int = _generation
 		word_requested.emit(_cell(id).word.duplicate(true))
+		if generation != _generation or not _can_play():
+			return
+		audio_requested.emit("pick")
 		if generation != _generation or not _can_play():
 			return
 	if _selected == id:
@@ -738,7 +748,7 @@ func _refresh_hud() -> void:
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
 	if _compact_hud and full:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
-	_notice.add_theme_color_override("font_color", Color("#ae5f2c") if full else Style.MUTED)
+	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
 	_pace.visible = _configured and not _result_visible
 	_next_pair.visible = _configured and not _result_visible
@@ -909,7 +919,14 @@ func _draw() -> void:
 	if not _configured or _result_visible:
 		return
 	var accent: Color = _theme.get("accent", Style.GOOD)
-	draw_style_box(Style.box(Color(accent, 0.055), Color(accent, 0.22), 18, 1), _board.grow(2.0))
+	var well := Style.box(Color("#fbfff9", 0.90), Color("#78a995", 0.64), 18, 2)
+	well.shadow_color = Color("#2a6954", 0.13)
+	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
+	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
+	draw_style_box(well, _board.grow(2.0))
+	for column in range(1, JellyMatchModel.COLUMNS):
+		var x: float = _board.position.x + float(column) * _pitch
+		draw_line(Vector2(x, _board.position.y + 8.0), Vector2(x, _board.end.y - 8.0), Color(accent, 0.07), 1.0 / Style.ui_scale(self))
 	var warning: Dictionary = danger_feedback()
 	if float(warning.strength) > 0.0:
 		var edge := Color(Color("#c65c35"), float(warning.strength))

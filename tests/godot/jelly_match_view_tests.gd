@@ -44,6 +44,7 @@ func _run() -> void:
 	_check_pictures(view)
 	_check_landing_presentation(view)
 	_check_landing_lifecycle(view)
+	_check_gesture_audio(view)
 	await _check_pointer_ownership(view)
 	_check_pointer_feedback(view)
 	_check_drag_replaces_selection(view)
@@ -193,6 +194,34 @@ func _check_landing_lifecycle(view) -> void:
 	view.stop()
 	view._process(0.4)
 	check(not cues.has("land"), "Stopping the mode cannot revive a pending landing")
+
+
+func _check_gesture_audio(view) -> void:
+	_reset(view)
+	var id: int = int(view.game.cells[0].id)
+	var start: Vector2 = _center(view, id)
+	view._press(4, start)
+	view._release(start)
+	check(cues == ["pick"] and heard.size() == 1, "A tap reads its word and acknowledges selection exactly once")
+	view.cancel_input()
+	view._activate(id)
+	check(cues.count("pick") == 2 and heard.size() == 2, "Keyboard selection shares the pointer's tactile feedback")
+	view.cancel_input()
+	var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
+	view._press(4, start)
+	for index in range(10):
+		view._move(start.lerp(empty, float(index + 1) / 10.0))
+	check(cues.count("pick") == 3 and not cues.has("release"), "Dragging cannot stack sounds for each motion event")
+	view._release(empty)
+	check(cues.count("release") == 1 and attempts.is_empty(), "An empty drop has a short return cue without counting as an answer")
+	view._process(0.3)
+	view._layout()
+	check(cues.count("release") == 1, "Snapback and layout cannot replay the drop sound")
+	view._press(4, _center(view, id))
+	view._move(empty)
+	view.pause(true)
+	check(cues.count("release") == 1, "Menu interruption cancels a drag silently instead of pretending the player dropped it")
+	_reset(view)
 
 
 func _check_pointer_ownership(view) -> void:

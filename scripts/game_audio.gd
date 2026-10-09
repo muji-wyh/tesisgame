@@ -19,14 +19,20 @@ const PAIR_FEEDBACK_GAIN := 0.48
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
 const JELLY_PATHS := {
+	"pick": UI_CLICK_PATH,
+	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/imported-audio/chest-reference/step-detail.wav",
 	"merge": "res://assets/audio/jelly-match/merge.wav",
 	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
 }
-const JELLY_GAINS := {"land": 0.20, "merge": 0.7, "pop": 0.64, "danger": 0.52, "reward": 0.36}
-const JELLY_SPEECH_DB: float = -12.0
+const JELLY_GAINS := {
+	"pick": 0.64, "release": 0.38, "land": 0.38,
+	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
+}
+const JELLY_SECONDARY_CUES := ["pick", "release", "land"]
+const JELLY_SPEECH_DB: float = -6.0
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
 	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -232,8 +238,8 @@ func play_jelly_cue(cue_name: String) -> void:
 			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
 			_jelly_players.append(channel)
 	var player: AudioStreamPlayer = _jelly_players[_jelly_next_player]
-	if cue_name == "land":
-		# Material contact is secondary to answers, rewards and warning cues.
+	if cue_name in JELLY_SECONDARY_CUES:
+		# Short input and material cues must not steal answers, rewards or warnings.
 		var idle: Array[AudioStreamPlayer] = []
 		for candidate: AudioStreamPlayer in _jelly_players:
 			if not candidate.playing and not _jelly_cues.has(candidate):

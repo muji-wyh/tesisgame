@@ -49,6 +49,9 @@ func _run() -> void:
 	app._jelly.set_process(false)
 	await settle()
 	check(app._jelly.visible and not app._phrase.visible and not app._pop.visible, "Jelly owns the play surface")
+	check(app._jelly_backdrop.is_visible_in_tree() and app._jelly_backdrop.size == app.size
+		and app._jelly_backdrop.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"The woodland covers the Jelly screen behind controls without capturing touch input")
 	var game = app._jelly.game
 	game.step(game.SETTLE_SECONDS)
 	var chosen := pair(game, true)
@@ -74,17 +77,21 @@ func _run() -> void:
 	app._jelly.word_attempted.emit("jelly-1", [word_id] as Array[String], true)
 	check(int(app.growth.snapshot().streaks.get(word_id, 0)) == 1, "A repeated event receipt cannot double credit growth")
 	app._show_collection()
+	check(not app._jelly_backdrop.visible, "The woodland does not leak behind the word notebook")
 	var before: Dictionary = game.snapshot()
 	game.step(50)
 	check(game.snapshot().spawn_elapsed == before.spawn_elapsed and game.paused, "The notebook freezes falling and danger clocks")
 	app._hide_collection()
 	app.on_page_hidden()
+	check(not app._jelly_backdrop.visible, "Backgrounding removes the gameplay scenery")
 	game.step(50)
 	check(game.paused and game.snapshot().spawn_elapsed == before.spawn_elapsed, "Backgrounding cannot catch up the board")
 	app.on_page_visible()
 	check(not game.paused, "Returning restores the same board")
+	check(app._jelly_backdrop.visible, "Returning restores the same woodland without replaying scenery")
 	game.finish_round()
 	check(app._round_celebration.is_active() and not app._jelly.visible, "A positive result enters the shared Pip celebration")
+	check(not app._jelly_backdrop.visible, "The shared reward presentation owns its own background")
 	var summary: Dictionary = app._round_celebration.snapshot()
 	check(app._round_result.score == 1 and summary.score == 1 and summary.title == "Round results"
 		and summary.caption == "Score: 1 · Chests: 1" and is_equal_approx(app._round_celebration._heading.modulate.a, 1.0)
@@ -98,10 +105,12 @@ func _run() -> void:
 	check(app._round_id == receipt and app._jelly_rewards.snapshot().chest_count == 1, "Finishing twice preserves one reward batch")
 	Fixture.finish_celebration(app)
 	check(app._jelly.visible and not app._round_celebration.is_active(), "The full result appears after celebration")
+	check(app._jelly_backdrop.visible, "Jelly's settlement returns to its woodland setting")
 	check(app._jelly.snapshot().score == 1 and app._jelly.snapshot().result.title == "Round results"
 		and app._jelly.snapshot().result.caption == summary.caption,
 		"The persistent result retains the same score and chest summary after the animation")
 	check(not app.new_round(52, false, "", "jelly") and app._jelly_rewards_shown, "Replay resumes pending treasure before starting a new board")
+	check(not app._jelly_backdrop.visible, "The chest room does not inherit gameplay scenery")
 	await settle()
 	var room = app._jelly_rewards
 	room.set_process(false)
@@ -131,6 +140,7 @@ func _run() -> void:
 	game.try_merge(chosen[0].id, chosen[1].id)
 	game.step(1.05)
 	app.choose_mode("memory")
+	check(not app._jelly_backdrop.visible, "Switching games removes the Jelly-only scenery")
 	check(app._mode_id == "memory" and app._jelly_rewards.has_pending(), "Switching modes settles earned Jelly loot without replaying celebration")
 	var saved_growth: Dictionary = app.growth.snapshot().streaks.duplicate()
 	app._jelly.word_attempted.emit("stale", [word_id] as Array[String], true)
