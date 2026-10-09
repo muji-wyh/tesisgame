@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const { openGame, enterGame, metrics, tap, rendered, chooseMode, discoverMatchCards,
-  boardPoint, memoryPoint, peekPoint } = require('./game-ui.cjs');
+  boardPoint, memoryPoint, peekPoint, pipHeaderRect } = require('./game-ui.cjs');
 
 const KEY = 'growWithPip.growth.v1';
 const cohort = words.filter(word => word.min_age === 3);
@@ -56,16 +56,54 @@ async function matchTap(page, card) {
   await tap(page, point.x, point.y);
 }
 
-test('new device starts directly at Lv3 with a complete notebook and separated progress bar', async ({ page }, info) => {
+async function expectHeaderBadge(page) {
+  const state = await growth(page);
+  await expect.poll(async () => {
+    const bar = (await view(page)).controls?.find(control => control.name === 'GrowthProgressBar');
+    return bar ? bar.value / bar.max_value : -1;
+  }, { message: 'The visible growth bar follows current mastered-word progress' }).toBeCloseTo(state.progress, 6);
+  const layout = await view(page), bounds = await metrics(page);
+  const badge = layout.controls.find(control => control.name === 'GrowthProgressButton');
+  const bar = layout.controls.find(control => control.name === 'GrowthProgressBar');
+  expect(badge.visible).toBe(true);
+  expect(badge.disabled).toBe(false);
+  expect(badge.description).toContain(state.label);
+  expect(badge.description).toContain(`${state.mastered} of ${state.total} words mastered`);
+  expect(bar.visible).toBe(true);
+  const [x, y, width, height] = badge.rect;
+  const [barX, barY, barWidth, barHeight] = bar.rect;
+  expect(x).toBeGreaterThanOrEqual(0);
+  expect(y).toBeGreaterThanOrEqual(0);
+  expect(x + width).toBeLessThanOrEqual(bounds.width + 0.5);
+  expect(y + height).toBeLessThanOrEqual(bounds.height + 0.5);
+  expect(width * bounds.scale, 'Growth has a compact header footprint').toBeLessThanOrEqual(180);
+  expect(width * bounds.scale).toBeGreaterThanOrEqual(43.5);
+  expect(height * bounds.scale).toBeGreaterThanOrEqual(43.5);
+  expect(height * bounds.scale).toBeLessThanOrEqual(56.5);
+  expect(barWidth).toBeGreaterThan(0);
+  expect(barHeight).toBeGreaterThan(0);
+  expect(barX).toBeGreaterThanOrEqual(x - 0.5);
+  expect(barY).toBeGreaterThanOrEqual(y - 0.5);
+  expect(barX + barWidth, 'The progress track stays inside its entry button').toBeLessThanOrEqual(x + width + 0.5);
+  expect(barY + barHeight).toBeLessThanOrEqual(y + height + 0.5);
+  const pip = pipHeaderRect(bounds);
+  expect(Math.abs(y + height / 2 - pip.y - pip.height / 2) * bounds.scale,
+    'Pip and the growth badge share the same header row').toBeLessThanOrEqual(2);
+  expect(pip.x + pip.width).toBeLessThan(x);
+  return { state, layout, badge, bar, bounds };
+}
+
+test('new device starts directly at Lv3 with a compact header badge and complete notebook', async ({ page }, info) => {
   const errors = await openGame(page);
   await expect(page).toHaveTitle(/Grow with Pip/);
   await expect.poll(async () => (await growth(page)).level).toBe(3);
   expect((await growth(page)).total).toBe(80);
   expect(await page.evaluate(() => ['leaderboardState', 'playroomState'].some(name => name in window.wordBuddiesHost))).toBe(false);
   await expect.poll(async () => Boolean((await view(page)).board)).toBe(true);
-  const layout = await view(page);
-  const progress = layout.controls.find(control => control.name === 'GrowthProgressButton');
-  expect(progress.rect[1] + progress.rect[3]).toBeLessThanOrEqual(layout.board.rect[1] - 2);
+  const { layout, badge, bounds } = await expectHeaderBadge(page);
+  expect(badge.rect[1] + badge.rect[3]).toBeLessThanOrEqual(layout.board.rect[1] - 2);
+  expect((layout.board.rect[1] - badge.rect[1] - badge.rect[3]) * bounds.scale,
+    'The board begins below the single header without a separate growth row').toBeLessThanOrEqual(18);
   await page.screenshot({ path: info.outputPath('growth-board.png'), scale: 'css' });
   await pressNamed(page, 'GrowthProgressButton');
   await expect.poll(async () => (await view(page)).catalog?.word_count).toBe(80);
@@ -77,6 +115,42 @@ test('new device starts directly at Lv3 with a complete notebook and separated p
   await page.screenshot({ path: info.outputPath('growth-notebook.png'), scale: 'css' });
   await pressNamed(page, 'GrowthBack');
   await expect.poll(async () => (await view(page)).visible).toBe(false);
+  expect(errors).toEqual([]);
+});
+
+test('partial growth remains accessible in every mode on desktop, narrow, and short screens', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop-chromium', 'The responsive matrix runs once; device projects retain the real growth-flow coverage.');
+  test.setTimeout(240000);
+  const mastered = cohort.slice(0, 20);
+  await seed(page, 3, Object.fromEntries(mastered.map(word => [word.id, 6])));
+  const errors = await openGame(page);
+  const cases = [
+    { mode: 'match', width: 1366, height: 768 },
+    { mode: 'memory', width: 390, height: 844 },
+    { mode: 'phrase', width: 320, height: 640 },
+    { mode: 'pop', width: 844, height: 390 },
+    { mode: 'jelly', width: 1366, height: 768 },
+    { mode: 'jelly', width: 390, height: 844 },
+    { mode: 'jelly', width: 844, height: 390 },
+    { mode: 'match', width: 320, height: 568 }
+  ];
+  for (const item of cases) {
+    await page.setViewportSize({ width: item.width, height: item.height });
+    await rendered(page);
+    await chooseMode(page, item.mode);
+    await expect.poll(async () => (await metrics(page)).library.current).toBe(item.mode);
+    const badge = await expectHeaderBadge(page);
+    expect(badge.state.level).toBe(3);
+    expect(badge.state.mastered).toBe(mastered.length);
+    expect(badge.state.progress).toBeCloseTo(mastered.length / cohort.length, 6);
+    await page.screenshot({ path: info.outputPath(`growth-header-${item.mode}-${item.width}x${item.height}.png`), scale: 'css' });
+    await pressNamed(page, 'GrowthProgressButton');
+    await expect.poll(async () => (await view(page)).catalog?.age_band).toBe('3');
+    expect((await view(page)).catalog.word_count).toBe(cohort.length);
+    await pressNamed(page, 'GrowthBack');
+    await expect.poll(async () => (await view(page)).visible).toBe(false);
+    expect((await metrics(page)).library.current).toBe(item.mode);
+  }
   expect(errors).toEqual([]);
 });
 
@@ -161,11 +235,19 @@ test('sixth real success promotes Pip and the new level survives a reload', asyn
   const streaks = Object.fromEntries(cohort.map(word => [word.id, word.id === 'apple' ? 5 : 6]));
   await seed(page, 3, streaks);
   const errors = await openGame(page);
+  const before = await expectHeaderBadge(page);
+  expect(before.state.mastered).toBe(cohort.length - 1);
+  expect(before.bar.value / before.bar.max_value).toBeCloseTo((cohort.length - 1) / cohort.length, 6);
   const cards = await discoverMatchCards(page);
   expect(cards.filter(card => card.word === 'apple')).toHaveLength(2);
   for (const card of cards.filter(card => card.word === 'apple')) await matchTap(page, card);
   await expect.poll(async () => (await growth(page)).level).toBe(4);
   expect((await growth(page)).streaks.apple).toBe(6);
+  const promoted = await expectHeaderBadge(page);
+  expect(promoted.state.level).toBe(4);
+  expect(promoted.state.total).toBe(words.filter(word => word.min_age === 4).length);
+  expect(promoted.state.mastered).toBe(0);
+  expect(promoted.bar.value).toBe(0);
   await pressNamed(page, 'GrowthProgressButton');
   await expect.poll(async () => (await view(page)).catalog?.age_band).toBe('4');
   await page.screenshot({ path: info.outputPath('level-four.png'), scale: 'css' });

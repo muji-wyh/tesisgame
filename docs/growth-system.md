@@ -8,6 +8,21 @@ Every device starts at Lv3. A successful activity adds one to each unique involv
 
 The six-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across four modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or choose a higher gameplay level.
 
+The gameplay header contains one growth button in place of the former More
+icon and full-width progress row. On wide screens it shows the current level,
+the next level, a short mastery bar and the exact mastered-word count. Narrow
+and short screens retain a 44-pixel-tall level badge with the same progress
+bar. The entire badge opens the current level's notebook; its accessible name
+also includes the count and next-level requirement. Pip remains a separate
+game-mode control.
+
+The bar measures mastered words, not partial practice streaks. It updates from
+saved growth state, resets to the new cohort on promotion, and has no invented
+starter fill. An unreadable save displays unavailable progress rather than a
+fresh level. This presentation reuses the existing Nunito fonts, Pip artwork,
+notebook and interface click sound; it adds no character or sound assets and
+does not change mastery, saving or reward rules.
+
 | Mode | Correct evidence | Reset boundary | Neutral actions |
 | --- | --- | --- | --- |
 | Match | Completed matching pair, once per word | Both words in a mismatched word-picture pair | First selection, cancelling, hint, replay |

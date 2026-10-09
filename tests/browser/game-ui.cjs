@@ -60,9 +60,14 @@ async function chooseTheme(page, index) {
 }
 
 function contentBounds(bounds) {
-  const scale = uiScale(bounds), padding = Math.ceil(12 / scale), gap = Math.ceil(8 / scale), header = Math.ceil(56 / scale);
-  const x = Math.max(padding, Math.round((bounds.width - 1040 / scale) / 2)), width = bounds.width - x * 2;
-  const top = padding + header + gap + Math.ceil(44 / scale) + gap;
+  const scale = uiScale(bounds), shortJelly = bounds.library?.current === 'jelly' && bounds.height * scale <= 440;
+  const padding = Math.ceil((shortJelly ? 4 : 12) / scale);
+  const gap = Math.ceil((shortJelly || bounds.width * scale < 360 ? 4 : 8) / scale);
+  const header = Math.ceil((shortJelly ? 44 : 56) / scale), board = bounds.growth?.board;
+  const inset = Math.max(Math.ceil(12 / scale), Math.round((bounds.width - 1040 / scale) / 2));
+  const x = board?.visible ? board.rect[0] : inset;
+  const width = board?.visible ? board.rect[2] : bounds.width - inset * 2;
+  const top = board?.visible ? board.rect[1] : padding + header + gap;
   return { x, width, top, padding, gap, header };
 }
 
@@ -171,23 +176,31 @@ async function worldControl(page, index) {
 }
 
 function headerIconRect(bounds, key = 'rewards') {
-  const { x, width, padding, header, gap } = contentBounds(bounds);
+  const badge = growthRect(bounds, 'GrowthProgressButton');
+  if (key === 'rewards') return badge;
+  const { gap } = contentBounds(bounds);
   const index = { rewards: 0, hint: 1, voice: 2, eye: 1 }[key];
   if (index === undefined) throw new Error(`Unknown header icon: ${key}`);
   const side = Math.ceil(44 / uiScale(bounds));
-  return { x: x + width - side - index * (side + gap), y: padding + (header - side) / 2, width: side, height: side };
+  return { x: badge.x - index * (side + gap), y: badge.y + (badge.height - side) / 2, width: side, height: side };
 }
 
 function headerPoint(bounds, key = 'rewards') {
   const content = contentBounds(bounds), scale = uiScale(bounds);
-  if (['pip', 'retry'].includes(key)) return { x: content.x + (key === 'pip' ? 26 : 48) / scale, y: content.padding + content.header / 2 };
+  if (key === 'pip') {
+    const pip = pipHeaderRect(bounds);
+    return { x: pip.x + pip.width / 2, y: pip.y + pip.height / 2 };
+  }
+  if (key === 'retry') return { x: content.x + 48 / scale, y: content.padding + content.header / 2 };
   const rect = headerIconRect(bounds, key);
   return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }
 
 function pipHeaderRect(bounds) {
   const content = contentBounds(bounds), scale = uiScale(bounds);
-  return { x: content.x, y: content.padding + 2 / scale, width: 52 / scale, height: 52 / scale };
+  const shortJelly = bounds.library?.current === 'jelly' && bounds.height * scale <= 440;
+  const side = (shortJelly ? 44 : 52) / scale;
+  return { x: content.x, y: content.padding + (shortJelly ? 0 : 2 / scale), width: side, height: side };
 }
 
 async function openRewards(page) {

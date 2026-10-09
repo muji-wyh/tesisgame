@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Growth = preload("res://scripts/growth_state.gd")
+const Badge = preload("res://scripts/growth_badge.gd")
 var checks := 0
 var failures := 0
 
@@ -35,6 +36,7 @@ func settle() -> void:
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
+	await _badge_states()
 	var directory := "user://growth_flow_%d_%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
@@ -51,13 +53,7 @@ func _run() -> void:
 		return
 	app.audio.set_muted(true)
 	check(app._growth_button.is_visible_in_tree(), "Learning progress has a persistent entry")
-	for viewport_size in [Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 768)]:
-		root.size = viewport_size
-		await settle()
-		var progress_rect: Rect2 = app._growth_button.get_global_rect()
-		var board_rect: Rect2 = app._match_playfield.get_global_rect()
-		check(progress_rect.end.y <= board_rect.position.y - 2.0,
-			"Growth text stays above the playable board at %s" % viewport_size)
+	await _responsive_badge(app)
 	check(app.find_child("LeaderboardOverlay", true, false) == null and app.find_child("PipsRoom", true, false) == null, "Identity and room views are absent")
 	await _match(app)
 	await _memory(app)
@@ -90,6 +86,98 @@ func _run() -> void:
 	print("Growth flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
+func _badge_states() -> void:
+	var badge = Badge.new()
+	root.add_child(badge)
+	var states: Array[Dictionary] = [
+		{"ready": true, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "practice_progress": 0.75},
+		{"ready": true, "level": 3, "label": "Lv3", "mastered": 17, "total": 80, "progress": 17.0 / 80.0, "practice_progress": 0.95},
+		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 30, "total": 120, "progress": 0.25},
+		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 120, "total": 120, "progress": 1.0, "completed": true},
+		{"ready": false, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "save_ok": false}
+	]
+	for state: Dictionary in states:
+		badge.configure(state)
+		check(is_equal_approx(badge.bar.value, float(state.progress) * 100.0),
+			"The badge fills only for mastered words, never partial practice evidence")
+		if bool(state.ready):
+			check(badge.level_label.text == state.label
+				and badge.count_label.text == "%d / %d mastered" % [state.mastered, state.total],
+				"Growth facts retain the exact earned level and mastered cohort count")
+		else:
+			check(badge.level_label.text == "Lv…" and badge.count_label.text == "Progress unavailable",
+				"Unreadable storage is shown as unavailable instead of a false starting level")
+		for footprint: Vector2 in [Vector2(168, 52), Vector2(68, 44), Vector2(52, 44)]:
+			var compact: bool = footprint.x < 168
+			badge.fit(1.0, compact, footprint.x == 52)
+			await settle()
+			check(badge.size.is_equal_approx(footprint), "The growth entry honors its %s toolbar footprint" % footprint)
+			check(badge.get_global_rect().encloses(badge.bar.get_global_rect())
+				and badge.bar.is_visible_in_tree() and not badge.bar.show_percentage,
+				"Every badge size keeps its actual mastery bar inside the clickable entry")
+			for label: Label in [badge.level_label, badge.count_label, badge.target_label]:
+				if label.is_visible_in_tree():
+					check(badge.get_global_rect().grow(0.5).encloses(label.get_global_rect()),
+						"Visible badge text stays inside the %s entry" % footprint)
+			check(badge.count_label.visible == not compact and badge.target_label.visible == not compact,
+				"Compact badges keep level and progress while secondary copy moves to the accessible description")
+			if not compact and bool(state.ready):
+				check(badge.target_label.text == ("Words  ›" if int(state.level) == 12 else "Lv4  ›"),
+					"The terminal level offers word review without inventing Lv13")
+			check(is_equal_approx(badge.bar.value, float(state.progress) * 100.0),
+				"Responsive fitting cannot change saved mastery progress")
+	badge.configure(states[1])
+	badge.focus_mode = Control.FOCUS_NONE
+	badge.fit(1.0, true)
+	check(badge.focus_mode == Control.FOCUS_NONE,
+		"Fitting the badge cannot re-enable toolbar focus behind an open menu")
+	badge.free()
+
+
+func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
+	var badge = app._growth_button
+	var rect: Rect2 = badge.get_global_rect()
+	check(badge.is_visible_in_tree() and Rect2(Vector2.ZERO, Vector2(viewport_size)).encloses(rect),
+		"%s keeps the growth entry within %s" % [context, viewport_size])
+	check(rect.encloses(app._growth_bar.get_global_rect()) and app._growth_bar.is_visible_in_tree(),
+		"%s keeps the real progress bar visible inside its toolbar entry" % context)
+	for child in app._toolbar.get_children():
+		if child is Control and child != badge and child.is_visible_in_tree():
+			check(not rect.intersects(child.get_global_rect()), "%s keeps growth separate from neighboring toolbar actions" % context)
+	check(not rect.intersects(app._mode_heading_button.get_global_rect()),
+		"%s keeps growth separate from the game selector" % context)
+
+
+func _responsive_badge(app) -> void:
+	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
+		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
+		"The notebook entry and mastery bar share one toolbar button without a separate full-width row")
+	check(app._growth_button.level_label.text == "Lv3" and app._growth_button.count_label.text == "0 / 80 mastered"
+		and app._growth_bar.value == 0.0,
+		"A new device presents the actual zero of eighty mastered words")
+	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
+		check(app.new_round(720, false, "", mode), "%s starts for growth HUD layout coverage" % mode)
+		for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 768)]:
+			root.size = viewport_size
+			await settle()
+			_badge_geometry(app, viewport_size, mode)
+			var playfield: Control = {"match": app._match_playfield, "memory": app._memory,
+				"phrase": app._phrase, "pop": app._pop, "jelly": app._jelly}[mode]
+			check(app._growth_button.get_global_rect().end.y <= playfield.get_global_rect().position.y,
+				"%s keeps the growth entry above its playable region at %s" % [mode, viewport_size])
+		root.size = Vector2i(320, 568)
+		await settle()
+		app._growth_button.pressed.emit()
+		await settle()
+		check(app.collection_page.visible and app._age_catalog.word_count() == 80,
+			"The compact growth entry opens the current word notebook from %s" % mode)
+		app._hide_collection()
+		await settle()
+	root.size = Vector2i(1366, 768)
+	check(app.new_round(721, false, "", "match"), "Responsive checks restore a fresh Match round for learning assertions")
+	await settle()
+
+
 func _load_failure(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	Fixture.install(app, directory, "load-recovery.cfg")
@@ -100,6 +188,8 @@ func _load_failure(directory: String) -> void:
 	await settle()
 	app.audio.set_muted(true)
 	check(not app.growth.ready and app.model.cards.is_empty(), "An unreadable growth save blocks scored play")
+	check(app._growth_button.level_label.text == "Lv…" and app._growth_bar.value == 0.0,
+		"The persistent entry shows unavailable progress while the saved level cannot be loaded")
 	check(app._storage_retry_button.is_visible_in_tree() and app._message.visible,
 		"The initial load failure explains how to recover")
 	check(not app.new_round(101, false, "", "pop"), "Mode switching cannot bypass the growth load gate")
@@ -152,6 +242,11 @@ func _memory(app) -> void:
 	view.continue_feedback()
 	var next_word: Dictionary = view.memory.cards.filter(func(card: Dictionary) -> bool: return card.word.id != word.id)[0].word
 	var next_before: int = app.growth.streak(next_word.id)
+	for index in range(next_before, 5):
+		app.growth.record_attempt("seed-memory-mastery-%d" % index, [next_word.id], true)
+	app._refresh_growth()
+	next_before = app.growth.streak(next_word.id)
+	var progress_before: float = app._growth_bar.value
 	var storage := BlockedStorage.new()
 	storage.text = FileAccess.get_file_as_string(app.growth._path)
 	app.growth._host = storage
@@ -162,10 +257,22 @@ func _memory(app) -> void:
 	check(app.growth.streak(next_word.id) == next_before and app.growth.snapshot().pending_count == 1,
 		"A failed write holds the Memory answer without publishing false mastery")
 	check(app._storage_retry_button.is_visible_in_tree(), "Memory immediately exposes the shared Retry saving action")
+	check(app._growth_bar.value == progress_before,
+		"A failed sixth-answer save does not advertise mastery before it is committed")
+	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(844, 390)]:
+		root.size = viewport_size
+		await settle()
+		_badge_geometry(app, viewport_size, "Pending save")
+		check(Rect2(Vector2.ZERO, Vector2(viewport_size)).encloses(app._storage_retry_button.get_global_rect()),
+			"Retry saving remains reachable alongside growth progress at %s" % viewport_size)
+	root.size = Vector2i(1366, 768)
+	await settle()
 	app.growth._host = null
 	app._storage_retry_button.pressed.emit()
 	check(app.growth.streak(next_word.id) == mini(6, next_before + 1) and app.growth.snapshot().pending_count == 0,
 		"Retry saves the queued Memory answer exactly once")
+	check(is_equal_approx(app._growth_bar.value, progress_before + 100.0 / 80.0),
+		"The successful retry advances the badge by exactly one mastered word")
 	view.continue_feedback()
 
 func _phrase(app) -> void:

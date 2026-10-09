@@ -23,6 +23,7 @@ const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
+const GrowthBadge = preload("res://scripts/growth_badge.gd")
 const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
@@ -170,7 +171,7 @@ var _journey_save_failed: bool = false
 var _voice_listening: bool = false
 var _voice_attention_active: bool = false
 var _speech_queue: Array[String] = []
-var collection_button: Icons
+var collection_button: Button
 var collection_page: Panel
 var collected_rewards: Dictionary = {}
 var _result_retry_button: Button
@@ -243,7 +244,7 @@ var _speech_debug_tree_paused: bool = false
 var _speech_debug_audio_process_mode: ProcessMode = Node.PROCESS_MODE_INHERIT
 var _pop_result_callback: JavaScriptObject
 var growth := GrowthState.new()
-var _growth_button: Button
+var _growth_button: GrowthBadge
 var _growth_bar: ProgressBar
 var _growth_summary: Label
 var _compact_world: Button
@@ -386,31 +387,12 @@ func _build_controls() -> void:
 	_set_accessibility_name(hint_button, "Hint: three per round")
 	hint_button.pressed.connect(_request_hint)
 	_toolbar.add_child(hint_button)
-	collection_button = Icons.new()
-	collection_button.name = "Rewards"
-	collection_button.symbol = Icons.Symbol.MORE
-	collection_button.tooltip_text = "Your words, Pip growth and worlds"
-	_set_accessibility_name(collection_button, collection_button.tooltip_text)
-	UiClick.bind_button(collection_button)
-	collection_button.pressed.connect(_show_collection)
-	_toolbar.add_child(collection_button)
-	var growth_row := HBoxContainer.new()
-	growth_row.name = "GrowthProgress"
-	column.add_child(growth_row)
-	_growth_button = Button.new()
-	_growth_button.name = "GrowthProgressButton"
-	_growth_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_growth_button.pressed.connect(_show_collection)
+	_growth_button = GrowthBadge.new()
 	UiClick.bind_button(_growth_button)
-	growth_row.add_child(_growth_button)
-	_growth_bar = ProgressBar.new()
-	_growth_bar.name = "GrowthProgressBar"
-	_growth_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_growth_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_growth_bar.custom_minimum_size = Vector2(0, 8)
-	_growth_bar.show_percentage = false
-	_growth_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	growth_row.add_child(_growth_bar)
+	_growth_button.pressed.connect(_show_collection)
+	_toolbar.add_child(_growth_button)
+	collection_button = _growth_button
+	_growth_bar = _growth_button.bar
 	_build_mode_menu()
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
@@ -1800,8 +1782,7 @@ func _refresh() -> void:
 		if _mode_id == "jelly" and _jelly.game.phase == "finished" and not _jelly_reward_theme.is_empty():
 			jelly_palette = Data.theme(_jelly_reward_theme)
 		_jelly.apply_theme(jelly_palette, data.chests)
-		for button in [collection_button, hint_button]:
-			Style.square_icon_button(button, palette.accent)
+		Style.square_icon_button(hint_button, palette.accent)
 		Style.square_icon_button(_collection_back, palette.accent)
 		Style.button(_storage_retry_button, palette.accent)
 		_style_result_actions(palette.accent)
@@ -2176,7 +2157,7 @@ func _fit_mode_buttons() -> void:
 	var css_scale: float = Style.ui_scale(self)
 	var short_jelly: bool = _mode_id == "jelly" and size.y * css_scale <= 440
 	_header_spacer.show()
-	var gap: int = ceili((4 if short_jelly else 8) / css_scale)
+	var gap: int = ceili((4 if short_jelly or size.x * css_scale < 360 else 8) / css_scale)
 	_main_column.add_theme_constant_override("separation", gap)
 	_header.add_theme_constant_override("separation", gap)
 	_header.custom_minimum_size.y = ceilf((44 if short_jelly else 56) / css_scale)
@@ -2205,7 +2186,7 @@ func _fit_mode_buttons() -> void:
 	_mode_panel.configure(_mode_id, audio.muted if audio != null else false, reduced_motion)
 	_layout_mode_menu()
 	_layout_mode_menu.call_deferred()
-	for button in [collection_button, hint_button, _memory.study_button]:
+	for button in [hint_button, _memory.study_button]:
 		Style.square_icon_button(button, accent)
 	_style_voice_button()
 	var compact_retry: bool = size.x * css_scale < 360
@@ -2223,9 +2204,21 @@ func _fit_mode_buttons() -> void:
 func _layout_game_heading() -> void:
 	if _mode_heading_button == null:
 		return
-	# Restyling can expand the button before its temporary minimum size is cleared.
-	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_mode_heading_button.visible = _header_spacer.size.x * Style.ui_scale(self) >= 64 and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
+	var scale: float = Style.ui_scale(self)
+	var available: float = _header_spacer.size.x
+	var center: float = _header.global_position.x + _header.size.x * 0.5 - _header_spacer.global_position.x
+	var centered_width: float = maxf(0.0, 2.0 * minf(center, available - center))
+	var title_width: float = _mode_heading.get_minimum_size().x
+	var width: float = minf(available, 360 / scale)
+	if centered_width >= title_width:
+		width = minf(width, centered_width)
+	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	_mode_heading_button.size = Vector2(width, _header_spacer.size.y)
+	_mode_heading_button.position = Vector2(clampf(center - width * 0.5, 0.0, maxf(0.0, available - width)), 0)
+	_mode_heading_button.visible = available >= maxf(64 / scale, title_width) and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
+	_mode_subheading.visible = size.x * scale >= 680 and not (_mode_id == "jelly" and size.y * scale <= 440) \
+		and width >= _mode_subheading.get_minimum_size().x
+	_mode_heading.offset_bottom = -14 / scale if _mode_subheading.visible else 0
 
 
 func _layout_mode_menu() -> void:
@@ -3872,15 +3865,7 @@ func _refresh_growth() -> void:
 	for mascot in [duck, _phrase.pip, _round_celebration.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_level(growth.level)
-	_growth_button.text = "%s  ·  %d / %d words" % [state.label, state.mastered, state.total]
-	_growth_button.tooltip_text = "See your words and learning progress"
-	_growth_bar.tooltip_text = _growth_button.text
-	_growth_bar.set("accessibility_name", _growth_button.text)
-	_growth_bar.value = float(state.progress) * 100
-	if not _growth_button.visible and _mode_id == "phrase":
-		_mode_heading.text = "%s · Phrase  ›" % state.label
-	elif not _growth_button.visible and _mode_id == "jelly":
-		_mode_heading.text = "%s · Jelly Match  ›" % state.label
+	_growth_button.configure(state)
 	_growth_summary.text = "%s  ·  %d of %d words mastered%s" % [state.label, state.mastered, state.total, "  ·  All stages unlocked!" if state.completed else "  ·  Grow one word at a time."]
 	var serialized: String = JSON.stringify(state)
 	if _host != null and serialized != _growth_published:
@@ -3890,24 +3875,9 @@ func _refresh_growth() -> void:
 
 func _style_growth_progress() -> void:
 	var scale: float = Style.ui_scale(self)
-	# The existing More button keeps a full-size notebook entry on very short screens.
-	var short_phrase: bool = _mode_id == "phrase" and size.y * scale < 370
-	var short_jelly: bool = _mode_id == "jelly" and size.y * scale <= 440
-	_growth_button.visible = not short_phrase and not short_jelly
-	_growth_button.get_parent().visible = not short_jelly
-	if short_phrase:
-		_mode_heading.text = "%s · Phrase  ›" % growth.snapshot().label
-	elif short_jelly:
-		_mode_heading.text = "%s · Jelly Match  ›" % growth.snapshot().label
-	Style.quiet_button(_growth_button, Style.GOOD)
-	_growth_button.add_theme_font_size_override("font_size", ceili(12 / scale))
-	_growth_button.custom_minimum_size = Vector2(0, ceilf(44 / scale))
-	# Clear the transient height assigned by the shared button style before sorting.
-	_growth_button.reset_size()
-	_growth_button.get_parent().queue_sort()
-	_growth_bar.custom_minimum_size.y = ceilf(6 / scale)
-	_growth_bar.add_theme_stylebox_override("background", Style.box(Style.EDGE, Color.TRANSPARENT, 4, 0))
-	_growth_bar.add_theme_stylebox_override("fill", Style.box(Style.GOOD, Color.TRANSPARENT, 4, 0))
+	var width: float = size.x * scale
+	var short_screen: bool = size.y * scale <= 440
+	_growth_button.fit(scale, width < 680 or short_screen, width < 360)
 
 
 func _publish_growth_view() -> void:
@@ -3933,8 +3903,13 @@ func _publish_growth_view() -> void:
 
 func _growth_control(control: Control) -> Dictionary:
 	var rect := control.get_global_rect()
-	return {"name": str(control.name), "visible": control.is_visible_in_tree(),
+	var result := {"name": str(control.name), "visible": control.is_visible_in_tree(),
 		"focused": control.has_focus(),
 		"disabled": control.disabled if control is BaseButton else false,
 		"text": control.text if control is Button else "",
+		"description": control.tooltip_text,
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
+	if control is Range:
+		result["value"] = control.value
+		result["max_value"] = control.max_value
+	return result
