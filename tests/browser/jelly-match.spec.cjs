@@ -128,6 +128,7 @@ async function observeTimeline(page) {
       const state = JSON.parse(status.dataset.jelly || '{}');
       window.jellyObservedTimeline.push({ at: performance.now(), phase: state.phase,
         cleared: state.cleared_pairs, chests: state.chest_count,
+        generated: state.generated_pairs, spawnInterval: state.spawn_interval,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
         fullElapsed: state.full_elapsed, resultVisible: state.result?.visible });
     };
@@ -241,12 +242,20 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
 
 test('a naturally full board pauses, can be rescued, and eventually ends without inventing loot', async ({ page }, info) => {
   test.setTimeout(150000);
-  test.skip(info.project.name !== 'desktop-chromium', 'The real 28-second supply and eight-second countdown run once on desktop.');
+  test.skip(info.project.name !== 'desktop-chromium', 'Natural supply and the eight-second countdown run once on desktop.');
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+  expect((await jelly(page)).spawn_interval, 'The round starts with seven seconds between pairs').toBe(7);
+  await observeTimeline(page);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.cells.length === 24 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 50000, intervals: [100, 250, 500], message: 'Unmodified paired supply naturally fills all 24 cells' }).toBe(true);
+  }, { timeout: 85000, intervals: [100, 250, 500], message: 'Unmodified paired supply naturally fills all 24 cells' }).toBe(true);
+  const arrivals = await page.evaluate(() => window.jellyObservedTimeline.filter((entry, index, entries) =>
+    index > 0 && entry.generated > entries[index - 1].generated));
+  const intervals = arrivals.slice(1).map((entry, index) => (entry.at - arrivals[index].at) / 1000);
+  await info.attach('jelly-spawn-cadence', { body: JSON.stringify({ arrivals, intervals }, null, 2), contentType: 'application/json' });
+  expect(arrivals.length, 'Several natural arrivals establish the real seven-second cadence').toBeGreaterThanOrEqual(7);
+  for (const interval of intervals) expect(interval, 'Idle pair arrivals leave reading and matching time').toBeGreaterThanOrEqual(6.5);
   expect((await jelly(page)).notice).toContain('Board full');
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
@@ -270,7 +279,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
   await page.screenshot({ path: info.outputPath('jelly-full-board-rescue.png'), scale: 'css' });
   await expect.poll(async () => (await jelly(page)).cells.length,
-    { timeout: 10000, message: 'Natural supply fills the newly opened space' }).toBe(24);
+    { timeout: 15000, message: 'Natural supply fills the newly opened space' }).toBe(24);
   expect((await jelly(page)).phase).toBe('playing');
   // Capture feedback during the final countdown so screenshots cannot consume rescue time.
   await expect.poll(async () => (await jelly(page)).danger.strength,

@@ -13,9 +13,10 @@ const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
 const INITIAL_PAIRS: int = 4
 const SETTLE_SECONDS: float = 0.45
-const INITIAL_SPAWN_INTERVAL: float = 3.5
-const MIN_SPAWN_INTERVAL: float = 1.1
-const SPEEDUP_PER_PAIR: float = 0.12
+# Leave time to listen, find the picture, and drag before the next pair arrives.
+const INITIAL_SPAWN_INTERVAL: float = 7.0
+const MIN_SPAWN_INTERVAL: float = 3.5
+const SPEEDUP_PER_PAIR: float = 0.07
 const FUSION_SECONDS: float = 1.05
 const POP_SECONDS: float = 0.7
 const FULL_SECONDS: float = 8.0

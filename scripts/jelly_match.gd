@@ -717,7 +717,7 @@ func _refresh_hud() -> void:
 	_loot_count.set("accessibility_name", "%d chests collected" % game.chest_count)
 	var state: Dictionary = game.snapshot()
 	_next_pair.value = float(state.get("spawn_elapsed", 0.0)) / maxf(0.1, float(game.spawn_interval)) * 100.0
-	_pace.text = "Next pair" if _compact_hud else "New pair" if float(game.spawn_interval) >= 2.8 else "A little quicker" if float(game.spawn_interval) >= 1.8 else "Keep matching"
+	_pace.text = "Next pair"
 	var full: bool = float(game.full_elapsed) >= 0.0
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
 	if _compact_hud and full:

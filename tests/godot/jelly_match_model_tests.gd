@@ -48,6 +48,10 @@ func _vocabulary(count: int = 16) -> Array:
 	return words
 
 
+func _initial_fill_seconds() -> float:
+	return (float(Model.CAPACITY) * 0.5 - Model.INITIAL_PAIRS) * Model.INITIAL_SPAWN_INTERVAL
+
+
 func _observe(model) -> Dictionary:
 	var events: Dictionary = {"attempts": [], "cues": [], "fusions": [], "chests": [], "finished": []}
 	model.word_attempted.connect(func(attempt_id: String, word_ids: Array[String], correct: bool) -> void:
@@ -115,7 +119,7 @@ func _test_configuration() -> void:
 	words.append(words[4].duplicate(true))
 	check(model.configure(words, 3, 19), "A pictured eligible curriculum starts Jelly Match")
 	check(model.phase == "playing" and model.cells.size() == 8, "The initial board has eight tiles")
-	check(model.generated_pairs == 4 and model.spawn_interval == 3.5, "Four pairs start at a 3.5 second spawn interval")
+	check(model.generated_pairs == 4 and model.spawn_interval == 7.0, "Four pairs start with seven seconds to read and match")
 	var initial_ids: Array[String] = []
 	var initial_chests: int = 0
 	for cell in model.cells:
@@ -152,7 +156,7 @@ func _test_configuration() -> void:
 			order.append(str(cell.word.id))
 		different_orders[JSON.stringify(order)] = true
 	check(different_orders.size() > 1, "Equal-priority words vary across seeded rounds")
-	model.step(28.0)
+	model.step(_initial_fill_seconds())
 	for index in range(model.cells.size()):
 		var expected_priority: int = 2 if index < 8 else (1 if index < 16 else 0)
 		check(int(model.cells[index].word._growth_priority) == expected_priority,
@@ -164,10 +168,10 @@ func _test_supply_and_gravity() -> void:
 	for seed_value in range(12):
 		var model = Model.new()
 		model.configure(_vocabulary(), 3, seed_value)
-		model.step(3.49)
-		check(model.cells.size() == 8, "A pair does not spawn before its interval")
-		model.step(0.01)
-		check(model.cells.size() == 10 and model.generated_pairs == 5, "Each interval supplies exactly two tiles")
+		model.step(6.999)
+		check(model.cells.size() == 8, "The first pair does not arrive before seven seconds")
+		model.step(0.001)
+		check(model.cells.size() == 10 and model.generated_pairs == 5, "The seven-second boundary supplies exactly two tiles")
 		for pair_index in range(5, 12):
 			model.step(model.spawn_interval)
 			_assert_board(model, "Seed %d, generated pair %d" % [seed_value, pair_index + 1])
@@ -221,7 +225,7 @@ func _test_fusion_timeline() -> void:
 		"Chest credit and its cue happen once after a marked pair clears")
 	check(model.try_merge(pair[0], pair[1]) == "ignored" and events.attempts.size() == 1,
 		"Removed tile IDs cannot replay learning or rewards")
-	check(model.spawn_interval < 3.5 and model.spawn_interval >= 1.1, "Successful clears accelerate supply within its bounds")
+	check(is_equal_approx(model.spawn_interval, 6.93), "The first clear makes only a small change to the seven-second pace")
 	_assert_board(model, "Completed fusion")
 
 
@@ -261,7 +265,7 @@ func _test_full_board_timeout() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 9)
-	model.step(28.0)
+	model.step(_initial_fill_seconds())
 	check(model.cells.size() == 24 and model.snapshot().full_remaining == 8.0,
 		"Eight paired spawns fill the board and expose an eight-second countdown")
 	check(events.cues == ["danger"], "A newly full board emits one warning at elapsed zero")
@@ -297,7 +301,7 @@ func _test_danger_rescue_and_pause() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 14)
-	model.step(35.9)
+	model.step(_initial_fill_seconds() + Model.FULL_SECONDS - 0.1)
 	check(model.phase == "playing" and model.full_elapsed > 7.8, "The last countdown fraction remains playable")
 	var pair: Array[int] = _pair(model)
 	var danger: float = model.full_elapsed
@@ -389,10 +393,21 @@ func _test_long_round() -> void:
 			break
 		check(model.try_merge(pair[0], pair[1]) == "correct", "Long-round matching remains responsive")
 		model.step(Model.FUSION_SECONDS)
-		check(model.spawn_interval >= 1.1 and model.spawn_interval <= 3.5,
+		check(model.spawn_interval >= 3.5 and model.spawn_interval <= 7.0,
 			"Spawn acceleration always remains within its specified limits")
+		if model.cleared_pairs in [20, 50]:
+			var expected_interval: float = 5.6 if model.cleared_pairs == 20 else 3.5
+			check(is_equal_approx(model.spawn_interval, expected_interval),
+				"%d completed pairs leave %.1f seconds between new pairs" % [model.cleared_pairs, expected_interval])
+			var generated: int = model.generated_pairs
+			model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
+			check(model.generated_pairs == generated, "An accelerated pair still waits for its complete interval")
+			model.step(0.001)
+			check(model.generated_pairs == generated + 1, "An accelerated boundary supplies one pair without a burst")
+		elif model.cleared_pairs == 49:
+			check(model.spawn_interval > 3.5, "The fastest pace is not reached before fifty completed pairs")
 		_assert_board(model, "Long-round clear %d" % index)
-	check(model.cleared_pairs == 75 and model.spawn_interval == 1.1, "Acceleration reaches and holds the minimum interval")
+	check(model.cleared_pairs == 75 and model.spawn_interval == 3.5, "Long play holds the minimum three-and-a-half-second interval")
 	check(model.chest_count > 3, "Jelly rewards have no unrelated three-chest cap")
 	var awarded: int = 0
 	for count in events.chests:
@@ -412,7 +427,7 @@ func _test_catalog_levels() -> void:
 	for level in range(3, 13):
 		var model = Model.new()
 		check(model.configure(vocabulary, level, level), "Every growth level has enough pictured words for Jelly Match")
-		model.step(28.45)
+		model.step(_initial_fill_seconds() + Model.SETTLE_SECONDS)
 		for cell in model.cells:
 			check(int(cell.word.get("min_age", 3)) <= level and not str(cell.word.image).is_empty(),
 				"The real curriculum respects pictured eligibility at level %d" % level)
@@ -473,7 +488,7 @@ func _test_danger_signal_reentry() -> void:
 					var chosen: Array[int] = _pair(model)
 					model.try_merge(chosen[0], chosen[1])
 		model.cue_requested.connect(interrupt)
-		model.step(28.5)
+		model.step(_initial_fill_seconds() + 0.5)
 		var expected: Array = ["danger", "merge"] if action == "fusion" else ["danger"]
 		check(events.cues == expected, "A synchronous %s at the warning cannot leak another old countdown cue" % action)
 		match action:

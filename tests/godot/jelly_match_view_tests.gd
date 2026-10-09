@@ -304,7 +304,8 @@ func _check_feedback_lifecycle(view) -> void:
 
 
 func _fill_board(view) -> void:
-	for index in range(80):
+	var fill_seconds: float = float(view.game.CAPACITY - view.game.cells.size()) * 0.5 * view.game.spawn_interval
+	for index in range(ceili(fill_seconds / 0.5) + 2):
 		if view.game.full_elapsed >= 0.0 or view.game.phase != "playing":
 			break
 		view._process(minf(0.5, float(view.game.spawn_interval) - float(view.game.spawn_elapsed)))

@@ -181,7 +181,8 @@ func _warning_audio_flow(directory: String) -> void:
 	var game = app._jelly.game
 	var cues: Array[String] = []
 	app._jelly.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
-	game.step(28.0)
+	var initial_fill_seconds: float = (float(game.CAPACITY) * 0.5 - game.INITIAL_PAIRS) * game.INITIAL_SPAWN_INTERVAL
+	game.step(initial_fill_seconds)
 	check(app._mode_id == "jelly" and _jelly_cue_playing(app.audio, "danger") and cues.count("danger") == 1
 		and not app.audio.voice.playing, "Choosing Jelly enables its first warning without a word tap")
 	game.step(1.0)
@@ -218,7 +219,7 @@ func _warning_audio_flow(directory: String) -> void:
 	app.choose_mode("memory")
 	app.choose_mode("jelly")
 	app._jelly.set_process(false)
-	app._jelly.game.step(28.0)
+	app._jelly.game.step(initial_fill_seconds)
 	check(_jelly_cue_playing(app.audio, "danger"), "A replacement Jelly round owns a new warning")
 	app.choose_mode("memory")
 	check(app._mode_id == "memory" and not _jelly_cue_playing(app.audio), "Switching modes stops the previous Jelly warning")
