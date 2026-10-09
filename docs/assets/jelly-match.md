@@ -64,10 +64,19 @@ The settled foot lies at `y=285/320` of the padded texture. Squash and recovery
 should pivot there so the underside keeps contact. The separately acquired shadow
 is not baked into the gel; its support position can remain fixed while the body
 falls, compresses or lifts. This avoids moving a ground shadow through the air.
-New arrivals use a visible descent lasting `0.72 * sqrt(travel_rows)` seconds,
-beginning one cell above the clipped well. Local gravity after a clear remains
-brisk at `0.16 * sqrt(max(1, travel_rows))` seconds. Both clocks then allow 65 ms
-for compression, 120 ms for rebound and 95 ms to settle.
+New arrivals accelerate from rest at 12.5 board rows per second squared,
+beginning one cell above the clipped well. Contact takes
+`0.40 * sqrt(travel_rows)` seconds: 0.40 seconds for one row and 0.98 seconds
+for the full six-row distance, about 44% shorter than the previous descent.
+The quadratic path keeps acceleration constant, including when a cleared
+support extends the fall. Local gravity after a clear remains brisk at
+`0.16 * sqrt(max(1, travel_rows))` seconds. Both clocks then allow 55 ms
+for planted compression, 105 ms for a restrained rebound and 110 ms to settle.
+Longer falls stretch the gel slightly more in the air and compress it more
+firmly on contact (up to 24% of its height). The foot stays planted throughout
+the single rebound, with no repeated bouncing. The landing cue and projection
+retirement share the actual contact boundary. The four-tile supply interval
+and eight-second rescue countdown are unchanged.
 Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
 

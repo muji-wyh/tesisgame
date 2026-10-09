@@ -201,7 +201,8 @@ async function observeSupply(page) {
       const state = JSON.parse(status.dataset.jelly || '{}');
       if (!state.visible || state.phase !== 'playing' || !state.tiles?.length) return;
       const tile = item => ({ id: item.id, word: item.word.id, kind: item.kind, chest: item.chest,
-        rect: item.rect, visible: item.visible, settled: item.settled });
+        rect: item.rect, visible: item.visible, settled: item.settled,
+        age: item.age, fallingRows: item.falling_rows });
       window.jellySupplyTimeline.push({ at: performance.now(), generated: state.generated_tiles,
         spawnElapsed: state.spawn_elapsed, spawnInterval: state.spawn_interval, paused: state.paused,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
@@ -295,10 +296,29 @@ test('four previews predict simultaneous batches and the final partial batch wit
         Math.max(tile.rect[1], entry.board[1]);
       return tile.visible && visibleHeight >= tile.rect[3] * 0.35;
     });
-    expect(visibleFlight.length, 'The clipped well shows the fall across several published frames').toBeGreaterThanOrEqual(4);
+    // Status publication is nominally 100 ms, but WebKit can coalesce it to
+    // roughly 180 ms. A 330 ms visible fall may therefore publish only twice.
+    // Inspect its full airborne history as well, including entry into the well.
+    const airborneTiles = flight.map(frame => frame.tiles.find(tile => tile.id === id));
+    expect(airborneTiles.length, 'The descent has several published airborne poses').toBeGreaterThanOrEqual(3);
+    expect(new Set(airborneTiles.map(tile => Math.round(tile.rect[1] * 2))).size,
+      'The full airborne history contains distinct moving positions').toBeGreaterThanOrEqual(3);
+    expect(flight.at(-1).at - flight[0].at,
+      'The full airborne history spans at least two normal publication intervals').toBeGreaterThanOrEqual(180);
+    expect(airborneTiles.at(-1).age - airborneTiles[0].age,
+      'Published motion covers a meaningful part of the actual fall clock').toBeGreaterThanOrEqual(0.18);
+    expect(airborneTiles[0].rect[1], 'The incoming tile enters from above the clipped well').toBeLessThan(flight[0].board[1]);
+    expect(visibleFlight.length, 'The clipped well shows more than one position before landing').toBeGreaterThanOrEqual(2);
+    const positions = visibleFlight.map(frame => frame.tiles.find(tile => tile.id === id).rect[1]);
+    expect(new Set(positions.map(y => Math.round(y * 2))).size,
+      'Separate visible frames show actual motion, not repeated stationary poses').toBeGreaterThanOrEqual(2);
+    for (let index = 1; index < positions.length; index++) {
+      expect(positions[index] - positions[index - 1], 'The incoming tile continues downward before contact').toBeGreaterThanOrEqual(-0.5);
+    }
     const first = visibleFlight[0], last = visibleFlight.at(-1);
-    expect(last.at - first.at, 'The descent has perceptible duration at normal game speed').toBeGreaterThanOrEqual(300);
+    expect(last.at - first.at, 'The visible poses span at least one normal publication interval').toBeGreaterThanOrEqual(80);
     const firstTile = first.tiles.find(tile => tile.id === id), lastTile = last.tiles.find(tile => tile.id === id);
+    expect(lastTile.age - firstTile.age, 'The visible poses also advance the actual fall clock').toBeGreaterThanOrEqual(0.08);
     const destination = first.ghosts.find(ghost => ghost.id === id).rect;
     expect(lastTile.rect[1] - firstTile.rect[1], 'The tile visibly travels down toward the ghost').toBeGreaterThan(firstTile.rect[3] / 2);
     for (const frame of flight) {

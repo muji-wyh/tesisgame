@@ -46,6 +46,7 @@ func _run() -> void:
 	_check_preview_motion(view)
 	_check_drop_projection(view)
 	_check_landing_presentation(view)
+	_check_landing_audio_groups(view)
 	_check_landing_lifecycle(view)
 	_check_gesture_audio(view)
 	await _check_pointer_ownership(view)
@@ -98,10 +99,10 @@ func _center(view, id: int) -> Vector2:
 	return view._tiles[id].get_global_rect().get_center()
 
 
-func _advance(view, seconds: float) -> void:
+func _advance(view, seconds: float, frame_step: float = 0.1) -> void:
 	var remaining: float = seconds
 	while remaining > 0.000001:
-		var delta: float = minf(0.1, remaining)
+		var delta: float = minf(frame_step, remaining)
 		view._process(delta)
 		remaining -= delta
 
@@ -468,7 +469,15 @@ func _check_landing_presentation(view) -> void:
 	check(tile._shadow.modulate.a > shadow_before and tile._label.scale == Vector2.ONE
 		and tile._picture.scale == Vector2.ONE and tile._visual.scale == Vector2.ONE,
 		"Contact strengthens the separate shadow while word and picture stay undistorted")
-	_advance(view, Motion.ready_at(cell) - float(cell.age) + 0.001)
+	var remaining: float = Motion.ready_at(cell) - float(cell.age)
+	for index in range(12):
+		_advance(view, remaining / 12.0, 1.0 / 240.0)
+		check((tile._surface.get_global_transform() * (tile.size * Vector2(0.5, Motion.FOOT_Y))).is_equal_approx(support)
+			and tile.get_global_rect().position.is_equal_approx(view._global_rect(target).position),
+			"The visible foot and tile destination remain planted across rebound and recovery")
+		check(tile._surface.scale.y <= 1.04 and tile._label.scale == Vector2.ONE and tile._picture.scale == Vector2.ONE,
+			"A firm impact recovers without a large bounce or deforming its learning content")
+	view._process(0.001)
 	check(view._settled(cell) and not tile.disabled and tile._surface.scale.is_equal_approx(Vector2.ONE),
 		"The visual body settles at the same boundary that enables input")
 	var landed_before: int = cues.count("land")
@@ -476,6 +485,37 @@ func _check_landing_presentation(view) -> void:
 	view._sync_positions()
 	view.apply_theme(Data.theme("spring"), data.chests)
 	check(cues.count("land") == landed_before, "Layout, position and theme refreshes never replay an impact")
+
+
+func _check_landing_audio_groups(view) -> void:
+	for skipped_drops in [0, 2]:
+		_reset(view, false, false)
+		if skipped_drops > 0:
+			view.game.step(float(skipped_drops) * view.game.spawn_interval)
+			view._sync_tiles()
+		var incoming: Array[Dictionary] = _arrivals(view)
+		check(incoming.size() == 4, "The landing-audio fixture observes one complete airborne batch")
+		if incoming.is_empty():
+			continue
+		var first_contact: float = Motion.contact_at(incoming[0])
+		var last_contact: float = Motion.contact_at(incoming[-1])
+		check(last_contact > first_contact,
+			"Uneven columns produce distinct contact times within the same dispatched batch")
+		# Sample more finely than the 120 ms grouping window. The faster descent
+		# can put separate contacts only a few milliseconds beyond that threshold.
+		_advance(view, Motion.ready_at(incoming[-1]) + 0.001, 1.0 / 240.0)
+		check(cues.count("land") == _landing_groups(incoming),
+			"Faster contacts emit one cue for each natural impact group without one cue per tile")
+		if skipped_drops == 0:
+			check(cues.count("land") == 1 and last_contact - first_contact < 0.12,
+				"The first batch's closely spaced impacts combine into one grounded landing cue")
+		else:
+			check(cues.count("land") == 2 and last_contact - first_contact > 0.12,
+				"Contacts beyond the grouping window retain both distinct landing cues")
+		var landed: int = cues.count("land")
+		_advance(view, 0.3, 1.0 / 240.0)
+		check(cues.count("land") == landed, "Recovery never replays a contact cue")
+	_reset(view)
 
 
 func _check_landing_lifecycle(view) -> void:
@@ -490,7 +530,7 @@ func _check_landing_lifecycle(view) -> void:
 	check(cues.is_empty() and view.game.cells == paused_cells,
 		"Pausing before contact freezes the whole batch and does not emit a landing")
 	view.pause(false)
-	_advance(view, Motion.ready_at(incoming[-1]) - float(incoming[-1].age) + 0.001)
+	_advance(view, Motion.ready_at(incoming[-1]) - float(incoming[-1].age) + 0.001, 1.0 / 240.0)
 	check(cues.count("land") == _landing_groups(incoming),
 		"Resume completes the batch with one impact per simultaneous contact group")
 	var landed_before: int = cues.count("land")
@@ -500,10 +540,10 @@ func _check_landing_lifecycle(view) -> void:
 	incoming = _arrivals(view)
 	paused_cells = view.game.cells.duplicate(true)
 	view.hide()
-	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001, 1.0 / 240.0)
 	view.show()
 	check(cues.is_empty() and view.game.cells == paused_cells, "A hidden board cannot advance any fall or emit landing feedback")
-	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001, 1.0 / 240.0)
 	check(cues.count("land") == _landing_groups(incoming), "A replacement round owns fresh grouped contacts without the old cooldown")
 	_reset(view, true, false)
 	incoming = _arrivals(view)
@@ -511,7 +551,7 @@ func _check_landing_lifecycle(view) -> void:
 	var tile = view._tiles[int(cell.id)]
 	check(tile.position == view._tile_rect(cell).position and tile._surface.scale == Vector2.ONE and not view._settled(cell),
 		"Reduced motion presents a static body without skipping the input gate")
-	_advance(view, Motion.ready_at(incoming[-1]) + 0.001)
+	_advance(view, Motion.ready_at(incoming[-1]) + 0.001, 1.0 / 240.0)
 	check(view._settled(cell) and tile._surface.scale == Vector2.ONE and cues.count("land") == _landing_groups(incoming),
 		"Reduced motion retains each ready boundary and quiet grouped contact cues")
 	_reset(view)

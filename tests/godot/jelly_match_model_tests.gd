@@ -25,6 +25,7 @@ func _run() -> void:
 	_test_queue_contract()
 	_test_partial_and_stacked_drops()
 	_test_supply_fairness()
+	_test_fall_physics()
 	_test_landing_timeline()
 	_test_fusion_timeline()
 	_test_fusion_freezes_arrival()
@@ -379,6 +380,69 @@ func _test_supply_fairness() -> void:
 				check(model.phase == "playing", "Full-board rescue remains possible after any tested sequence of legal clears")
 
 
+func _test_fall_physics() -> void:
+	var shallow: Dictionary = {"row": 1, "falling_rows": 2, "age": 0.0, "arrival": true}
+	var deep: Dictionary = {"row": 5, "falling_rows": 6, "age": 0.0, "arrival": true}
+	check(Motion.contact_at(deep) < 1.0 and Motion.contact_at(deep) > 0.75,
+		"A six-row arrival reaches the floor in under a second while retaining a visible descent")
+	var previous_y: float = float(deep.row) - float(Motion.sample(deep).lift_rows)
+	var previous_displacement: float = 0.0
+	var displacement_gain: float = -1.0
+	for elapsed: float in [0.1, 0.2, 0.3, 0.4]:
+		shallow.age = elapsed
+		deep.age = elapsed
+		var deep_y: float = float(deep.row) - float(Motion.sample(deep).lift_rows)
+		var shallow_y: float = float(shallow.row) - float(Motion.sample(shallow).lift_rows)
+		check(is_equal_approx(deep_y, shallow_y),
+			"Arrivals fall through the same height at equal elapsed time regardless of their destination")
+		var displacement: float = deep_y - previous_y
+		check(displacement > previous_displacement,
+			"Each equal time slice covers more distance as gravity accelerates the arrival")
+		if previous_displacement > 0.0:
+			var gain: float = displacement - previous_displacement
+			if displacement_gain >= 0.0:
+				check(is_equal_approx(gain, displacement_gain),
+					"The increase in speed remains constant before contact instead of easing toward the floor")
+			displacement_gain = gain
+		previous_displacement = displacement
+		previous_y = deep_y
+	var small_collapse: Dictionary = {"row": 5, "falling_rows": 1, "age": 0.0, "arrival": false}
+	var large_collapse: Dictionary = {"row": 5, "falling_rows": 4, "age": 0.0, "arrival": false}
+	for elapsed: float in [0.04, 0.08, 0.12]:
+		small_collapse.age = elapsed
+		large_collapse.age = elapsed
+		check(is_equal_approx(Motion.travel_rows(small_collapse) - float(Motion.sample(small_collapse).lift_rows),
+			Motion.travel_rows(large_collapse) - float(Motion.sample(large_collapse).lift_rows)),
+			"Local collapses share their own consistent acceleration across different cleared gaps")
+	shallow.age = Motion.contact_at(shallow) + Motion.COMPRESSION_SECONDS
+	deep.age = Motion.contact_at(deep) + Motion.COMPRESSION_SECONDS
+	var shallow_pose: Dictionary = Motion.sample(shallow)
+	var deep_pose: Dictionary = Motion.sample(deep)
+	check(float(deep_pose.stretch.y) < float(shallow_pose.stretch.y) - 0.02
+		and float(deep_pose.stretch.x) > float(shallow_pose.stretch.x),
+		"A longer fall produces a visibly firmer and wider planted compression")
+	for boundary: float in [Motion.contact_at(deep), Motion.contact_at(deep) + Motion.COMPRESSION_SECONDS,
+		Motion.contact_at(deep) + Motion.COMPRESSION_SECONDS + Motion.REBOUND_SECONDS, Motion.ready_at(deep)]:
+		deep.age = boundary - 0.000001
+		var before: Dictionary = Motion.sample(deep)
+		deep.age = boundary + 0.000001
+		var after: Dictionary = Motion.sample(deep)
+		check(Vector2(before.stretch).distance_to(Vector2(after.stretch)) < 0.001
+			and absf(float(before.lift_rows) - float(after.lift_rows)) < 0.001,
+			"Descent, compression, rebound, and recovery join without a position or scale discontinuity")
+	var contact: float = Motion.contact_at(deep)
+	var settle_duration: float = Motion.ready_at(deep) - contact
+	for index in range(41):
+		deep.age = contact + settle_duration * float(index) / 40.0
+		var pose: Dictionary = Motion.sample(deep)
+		check(is_zero_approx(float(pose.lift_rows)), "The landing remains planted throughout compression and recovery")
+		if float(deep.age) >= contact + Motion.COMPRESSION_SECONDS:
+			check(float(pose.stretch.y) <= 1.04, "The recovery stays restrained instead of bouncing into another jump")
+	deep.age = Motion.ready_at(deep)
+	check(Motion.sample(deep).stretch.is_equal_approx(Vector2.ONE) and Motion.ready_at(deep) <= Model.SETTLE_SECONDS,
+		"The strongest impact returns to its exact neutral scale within the shared input bound")
+
+
 func _test_landing_timeline() -> void:
 	var short_drop: Dictionary = {"row": 4, "falling_rows": 1, "age": 0.0, "arrival": false}
 	var long_drop: Dictionary = {"row": 5, "falling_rows": 6, "age": 0.0, "arrival": true}
@@ -524,7 +588,7 @@ func _test_full_board_timeout() -> void:
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 9)
 	model.step(_danger_start_seconds())
-	check(model.cells.size() == 24 and model.snapshot().full_remaining == 8.0,
+	check(model.cells.size() == 24 and is_equal_approx(float(model.snapshot().full_remaining), 8.0),
 		"Four drops and the final batch's landing expose the full eight-second countdown")
 	check(events.cues == ["danger"], "A newly full board emits one warning at elapsed zero")
 	for second in range(7):
