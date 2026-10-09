@@ -141,6 +141,8 @@ func _init() -> void:
 	finish_button = Button.new()
 	finish_button.name = "JellyFinish"
 	finish_button.text = "Finish"
+	finish_button.expand_icon = true
+	finish_button.tooltip_text = "Finish this round and see your score"
 	UiClick.bind_button(finish_button)
 	finish_button.pressed.connect(_finish_round)
 	add_child(finish_button)
@@ -208,7 +210,7 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	var accent: Color = _theme.get("accent", Style.GOOD)
 	Style.action_button(chests_button, accent, true)
 	Style.action_button(replay_button, accent)
-	Style.action_button(finish_button, accent)
+	_style_finish_button()
 	for id in _tiles:
 		_configure_tile(_tiles[id], _cell(int(id)))
 	_merged.tile_id = -1
@@ -950,6 +952,38 @@ func default_focus() -> Control:
 	var controls: Array[Control] = navigation_controls()
 	return controls[0] if not controls.is_empty() else self
 
+func _style_finish_button() -> void:
+	var s: float = Style.ui_scale(self)
+	var ink := Color("#514731")
+	Style.action_button(finish_button, ink)
+	finish_button.icon = null if _compact_hud else preload("res://assets/images/ui/finish-flag.svg")
+	finish_button.custom_minimum_size = Vector2(0, 44.0 / s)
+	finish_button.add_theme_font_size_override("font_size", ceili((12.0 if _compact_hud else 14.0) / s))
+	finish_button.add_theme_constant_override("icon_max_width", ceili((16.0 if _compact_hud else 20.0) / s))
+	finish_button.add_theme_constant_override("h_separation", ceili((4.0 if _compact_hud else 6.0) / s))
+	var fills := {"normal": Color("#fff5dc"), "hover": Color("#fff9e9"),
+		"pressed": Color("#efdfbb"), "disabled": Color("#e7e9dc")}
+	for state: String in fills:
+		var pressed: bool = state == "pressed"
+		var inactive: bool = state == "disabled"
+		var surface := Style.box(fills[state], Color("#c5b489") if not inactive else Color("#ced4c7"), ceili(22.0 / s), maxi(1, roundi(1.0 / s)))
+		surface.border_width_bottom = maxi(1, roundi((1.0 if pressed or inactive else 3.0) / s))
+		surface.shadow_color = Color("#294834", 0.0 if pressed or inactive else 0.12)
+		surface.shadow_size = ceili(3.0 / s)
+		surface.shadow_offset = Vector2(0, 2.0 / s)
+		surface.content_margin_left = (6.0 if _compact_hud else 12.0) / s
+		surface.content_margin_right = surface.content_margin_left
+		surface.content_margin_top = (10.0 if pressed else 7.0) / s
+		surface.content_margin_bottom = (4.0 if pressed else 7.0) / s
+		finish_button.add_theme_stylebox_override(state, surface)
+	var focus := Style.box(Color.TRANSPARENT, Style.GOOD, ceili(25.0 / s), maxi(2, roundi(2.0 / s)))
+	focus.set_expand_margin_all(3.0 / s)
+	finish_button.add_theme_stylebox_override("focus", focus)
+	for state: String in ["normal", "hover", "focus", "pressed", "hover_pressed", "disabled"]:
+		var color: Color = Color("#8a927e") if state == "disabled" else ink
+		finish_button.add_theme_color_override("font_color" if state == "normal" else "font_%s_color" % state, color)
+		finish_button.add_theme_color_override("icon_%s_color" % state, color)
+
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
 		return
@@ -1003,17 +1037,12 @@ func _layout() -> void:
 		preview.size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2(inset + (index % preview_columns) * (preview_size + preview_gap), padding + floorf(float(index) / preview_columns) * (preview_size + preview_gap))
 	_notice.position = Vector2(_board.end.x + edge * 2.0, _preview_rect.end.y + 10.0 / scale_factor) if wide else Vector2(_board.position.x, _board.end.y + 7.0 / scale_factor)
-	_notice.size = Vector2(maxf(0.0, size.x - _notice.position.x - edge), minf(size.y - _notice.position.y, 96.0 / scale_factor)) if wide else Vector2(maxf(0.0, _board.size.x - 92.0 / scale_factor), 44.0 / scale_factor)
+	_notice.size = Vector2(maxf(0.0, size.x - _notice.position.x - edge), minf(size.y - _notice.position.y, 96.0 / scale_factor)) if wide else Vector2(maxf(0.0, _board.size.x - 120.0 / scale_factor), 44.0 / scale_factor)
 	_notice.add_theme_font_size_override("font_size", ceili(14 / scale_factor))
-	Style.action_button(finish_button, _theme.get("accent", Style.GOOD))
-	finish_button.custom_minimum_size = Vector2(0, 44.0 / scale_factor)
-	if _compact_hud:
-		finish_button.add_theme_font_size_override("font_size", ceili(12 / scale_factor))
-		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
-			finish_button.get_theme_stylebox(state).content_margin_left = 6.0 / scale_factor
-			finish_button.get_theme_stylebox(state).content_margin_right = 6.0 / scale_factor
-	finish_button.position = Vector2(hud_x, _board.end.y - 48.0 / scale_factor) if wide else Vector2(_board.end.x - 84.0 / scale_factor, _board.end.y + 7.0 / scale_factor)
-	finish_button.size = Vector2(hud_width if wide else 84.0 / scale_factor, 44.0 / scale_factor)
+	_style_finish_button()
+	var finish_width: float = minf(hud_width, 112.0 / scale_factor) if wide else 112.0 / scale_factor
+	finish_button.position = Vector2(hud_x + hud_width - finish_width, _board.end.y - 48.0 / scale_factor) if wide else Vector2(_board.end.x - finish_width, _board.end.y + 7.0 / scale_factor)
+	finish_button.size = Vector2(finish_width, 44.0 / scale_factor)
 	_result.position = Vector2.ZERO
 	_result.size = size
 	_layout_result(scale_factor, edge)
