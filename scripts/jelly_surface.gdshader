@@ -7,6 +7,9 @@ uniform vec4 rim_color : source_color = vec4(0.21, 0.49, 0.44, 1.0);
 uniform float rim_strength = 0.0;
 uniform float rim_width = 1.0;
 uniform float rim_uv = 0.025;
+uniform vec2 contact_direction = vec2(0.0);
+uniform float contact_strength = 0.0;
+uniform bool contact_match = false;
 varying vec4 gel_modulate;
 
 void vertex() {
@@ -17,7 +20,12 @@ void fragment() {
 	vec2 sample_uv = UV;
 	sample_uv.x += sin(UV.y * 3.14159265) * sin(beat + UV.y * 3.14159265) * bend;
 	sample_uv.y += sin(UV.x * 3.14159265) * cos(beat + UV.x * 3.14159265) * bend * 0.55;
+	vec2 local = UV - vec2(0.5);
+	float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
+	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
 	vec4 gel = texture(TEXTURE, clamp(sample_uv, vec2(0.0), vec2(1.0)));
+	float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
+	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);
 	if (rim_strength > 0.0) {
 		// Both edges follow the acquired artwork and deform with its gel surface.
 		float outer = 0.0;

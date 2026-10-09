@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "source_manifest": "docs/assets/jelly-match.json",
+  "source": {
+    "creator": "Zuhria Alfitra (pzUH), GameArt2D",
+    "title": "Jelly Squash Free Sprites",
+    "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
+    "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
+    "license_page": "https://www.gameart2d.com/license.html",
+    "archive_sha256": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
+    "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
+    "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."
+  },
+  "license": "CC0-1.0",
+  "status": "Derived from the integrated acquired artwork; material maps for runtime shader sampling",
+  "animation": "No baked animation. Runtime distance-field blending deforms the acquired painted surfaces.",
+  "processing": {
+    "tool": "tools/prepare-jelly-material.py",
+    "pillow_version": "12.2.0",
+    "dimensions": [
+      320,
+      320
+    ],
+    "source_alpha_threshold": 128,
+    "distance": "Exact two-pass squared Euclidean lower envelope, followed by square root; distances between pixel centers",
+    "sign": "Negative inside the original alpha >= 128 silhouette; positive outside",
+    "alpha": "round(255 * clamp(0.5 + signed_distance_pixels / 128, 0, 1)); round uses nearest integer with ties to even",
+    "distance_range_pixels": 128.0,
+    "rgb": "Original RGB retained inside the silhouette; exterior RGB copied from the nearest interior pixel",
+    "tie_break": "Equal-distance nearest pixels prefer smaller y, then smaller x",
+    "runtime_decode": "signed_distance_pixels = (sample.a - 0.5) * 128; alpha is data and must not be used as display opacity",
+    "source_preservation": "The original gel PNGs are read-only inputs and are not modified",
+    "godot_import": "Lossless; no mipmaps, alpha border repair or premultiplication. Alpha is distance data, including zero inside the painted body."
+  },
+  "images": [
+    {
+      "path": "assets/images/jelly-match/gel-coral-material.png",
+      "sha256": "39396f31d38bbe8dbdf199f2c09d7263a9614edaec180521d0e36b3eb02094c0",
+      "source": "assets/images/jelly-match/gel-coral.png",
+      "source_sha256": "faf99e7056b6283c5bb415f367e071ffce6f41e016a1a93a7818c6fdd37d46a9",
+      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGBA",
+      "alpha_is_opacity": false,
+      "import": "assets/images/jelly-match/gel-coral-material.png.import"
+    },
+    {
+      "path": "assets/images/jelly-match/gel-mint-material.png",
+      "sha256": "8c47fc12d15bb48a663e00cf49413e3854c75f7b286aa9d9ec742469d16fdb9d",
+      "source": "assets/images/jelly-match/gel-mint.png",
+      "source_sha256": "f14382fff28b91ee53b547d62b85d5aa0d1df0dfd8a71be8bcbf40b30dd78827",
+      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGBA",
+      "alpha_is_opacity": false,
+      "import": "assets/images/jelly-match/gel-mint-material.png.import"
+    },
+    {
+      "path": "assets/images/jelly-match/gel-sky-material.png",
+      "sha256": "888b8146c618de33a1e9e735d25840fe9d7cd8cb8354b7402df5d1987ed8e286",
+      "source": "assets/images/jelly-match/gel-sky.png",
+      "source_sha256": "e6540fc21927449c74f8791e9ce6167695632ffb0cabe27888c6ffc2221beb17",
+      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGBA",
+      "alpha_is_opacity": false,
+      "import": "assets/images/jelly-match/gel-sky-material.png.import"
+    },
+    {
+      "path": "assets/images/jelly-match/gel-lilac-material.png",
+      "sha256": "b92216eaca17981a63ca6361f7d61826bfc82c85d21a4f252f32e5d311ef3f78",
+      "source": "assets/images/jelly-match/gel-lilac.png",
+      "source_sha256": "d2c8211a58ad86190a9485061db18883b0fedda72014fae7a316d875beca1b2d",
+      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGBA",
+      "alpha_is_opacity": false,
+      "import": "assets/images/jelly-match/gel-lilac-material.png.import"
+    }
+  ]
+}

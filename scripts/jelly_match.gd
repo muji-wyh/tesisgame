@@ -13,6 +13,7 @@ signal changed(state: Dictionary)
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
 const Tile = preload("res://scripts/jelly_tile.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const FusionArt = preload("res://scripts/jelly_fusion.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const Chest = preload("res://scripts/chest_view.gd")
@@ -55,9 +56,16 @@ var _drag_offset := Vector2.ZERO
 var _dragging: bool = false
 var _snapbacks: Dictionary = {}
 var _merged: Tile
+var _fusion_art: Control
+var _contact_elapsed: float = 0.0
+var _rejection: Dictionary = {}
+var _contact_label: Label
+var _contact_label_kind: String = ""
 var _fusion_origin := Vector2.ZERO
 var _fusion_start := Vector2.ZERO
 var _fusion_direction := Vector2.RIGHT
+var _fusion_contact_strength: float = 0.0
+var _fusion_held_direction := Vector2.ZERO
 var _focus_after_fusion: bool = false
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
@@ -86,12 +94,23 @@ func _init() -> void:
 	_falling_layer.clip_contents = true
 	_falling_layer.z_index = 2
 	add_child(_falling_layer)
+	_fusion_art = FusionArt.new()
+	_fusion_art.name = "GelUnion"
+	_fusion_art.z_index = 25
+	add_child(_fusion_art)
 	_merged = Tile.new()
 	_merged.name = "FusedJelly"
 	_merged.focus_mode = Control.FOCUS_NONE
 	_merged.z_index = 30
+	_merged._shadow.z_index = -10
 	add_child(_merged)
 	_merged.hide()
+	_contact_label = _label(self, "", 14)
+	_contact_label.name = "JellyContactFeedback"
+	_contact_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_contact_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_contact_label.z_index = 50
+	_contact_label.hide()
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
@@ -260,6 +279,7 @@ func set_reduced_motion(value: bool) -> void:
 	_sync_tiles()
 	_sync_preview()
 	_refresh_fusion()
+	_refresh_contact()
 	_animate_result()
 	queue_redraw()
 	_publish()
@@ -292,6 +312,7 @@ func stop() -> void:
 	_result_visible = false
 	_result.hide()
 	_merged.hide()
+	_fusion_art.hide()
 	for ghost: Tile in _ghosts.values():
 		ghost.hide()
 		ghost.queue_free()
@@ -313,10 +334,13 @@ func cancel_input() -> void:
 	_target = -1
 	_selected = -1
 	_dragging = false
+	_contact_elapsed = 0.0
+	_rejection.clear()
 	_gesture_serial += 1
 	_refresh_marks()
 	_sync_positions()
 	_refresh_fusion()
+	_refresh_contact()
 	queue_redraw()
 	_publish()
 
@@ -398,6 +422,8 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_gesture_serial += 1
 	_source = id
 	_target = -1
+	_contact_elapsed = 0.0
+	_rejection.clear()
 	_press_point = point
 	_drag_point = point
 	_drag_offset = point - _tiles[id].position
@@ -429,8 +455,12 @@ func _move(global_point: Vector2) -> void:
 	_selected = -1
 	_tiles[_source].position = point - _drag_offset
 	_tiles[_source].z_index = 40
-	_target = _tile_at(point, _source)
+	var target: int = _tile_at(point, _source)
+	if target != _target:
+		_contact_elapsed = 0.0
+	_target = target
 	_refresh_marks()
+	_sync_positions()
 	_publish()
 
 func _release(global_point: Vector2) -> void:
@@ -443,6 +473,8 @@ func _release(global_point: Vector2) -> void:
 	var target: int = _tile_at(point, source) if _dragging else -1
 	var from: Vector2 = _tiles[source].position if _tiles.has(source) else Vector2.ZERO
 	var dragged: bool = _dragging
+	var held: Dictionary = _contact_state()
+	_fusion_held_direction = Vector2(held.direction) if held.kind == "match" else Vector2.ZERO
 	_pointer = NO_POINTER
 	_source = -1
 	_target = -1
@@ -451,6 +483,7 @@ func _release(global_point: Vector2) -> void:
 	if dragged:
 		_selected = -1
 		if target >= 0:
+			_fusion_contact_strength = lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed))
 			_merge(source, target, from)
 		else:
 			_snap_back(source, from)
@@ -478,6 +511,8 @@ func _activate(id: int, speak: bool = true) -> void:
 	elif _selected >= 0:
 		var previous: int = _selected
 		_selected = -1
+		_fusion_contact_strength = 0.0
+		_fusion_held_direction = Vector2.ZERO
 		_merge(previous, id, _tiles[previous].position)
 	else:
 		_selected = id
@@ -493,10 +528,15 @@ func _merge(first: int, second: int, from: Vector2) -> void:
 		if game.fusion.is_empty():
 			return
 		_fusion_start = from + _tile_rect(game.fusion.a).size * 0.5
-		_fusion_direction = (_tile_rect(game.fusion.b).get_center() - _tile_rect(game.fusion.a).get_center()).normalized()
+		_fusion_direction = _fusion_held_direction if not _fusion_held_direction.is_zero_approx() else (_tile_rect(game.fusion.b).get_center() - _tile_rect(game.fusion.a).get_center()).normalized()
+		_fusion_art.configure(SURFACES, first, second, _surfaces[posmod(second, _surfaces.size())])
 		_focus_after_fusion = _tiles.values().has(get_viewport().gui_get_focus_owner())
 		_snapbacks.clear()
+		_rejection.clear()
 	else:
+		if result == "wrong":
+			var direction: Vector2 = (_tile_rect(_cell(second)).get_center() - _tile_rect(_cell(first)).get_center()).normalized()
+			_rejection = {"a": first, "b": second, "elapsed": 0.0, "direction": direction}
 		_snap_back(first, from)
 	_sync_tiles()
 	_refresh_fusion()
@@ -578,6 +618,7 @@ func _sync_positions() -> void:
 		if not _tiles.has(id):
 			continue
 		var tile: Tile = _tiles[id]
+		tile._surface.visible = true
 		var rect: Rect2 = _tile_rect(cell)
 		tile.size = rect.size
 		tile.z_index = 40 if id == _source and _dragging else 1
@@ -623,6 +664,7 @@ func _sync_positions() -> void:
 			_ghosts[id].hide()
 			_ghosts[id].queue_free()
 			_ghosts.erase(id)
+	_refresh_contact()
 
 func _sync_preview() -> void:
 	for index in range(_preview_tiles.size()):
@@ -647,6 +689,52 @@ func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
 	for id in _tiles:
 		_tiles[id].set_marked(int(id) == _target, int(id) == _selected or int(id) == _source, feedback_enabled, reduced_motion)
+	_refresh_contact()
+
+func _contact_state() -> Dictionary:
+	var state := {"kind": "none", "source": -1, "target": -1, "strength": 0.0, "direction": Vector2.ZERO}
+	if not _can_play():
+		return state
+	if not _rejection.is_empty():
+		state.merge({"kind": "mismatch", "source": int(_rejection.a), "target": int(_rejection.b),
+			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": _rejection.direction}, true)
+		return state
+	if not _dragging or _source < 0 or _target < 0:
+		return state
+	var a: Dictionary = _cell(_source)
+	var b: Dictionary = _cell(_target)
+	if a.is_empty() or b.is_empty():
+		return state
+	var matching: bool = a.word.id == b.word.id and a.kind != b.kind
+	var direction: Vector2 = (_tile_rect(b).get_center() - (_tiles[_source].position + _tiles[_source].size * 0.5)).normalized()
+	if direction.length_squared() < 0.1:
+		direction = (_tile_rect(b).get_center() - _tile_rect(a).get_center()).normalized()
+	state.merge({"kind": "match" if matching else "mismatch", "source": _source, "target": _target,
+		"strength": lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
+	return state
+
+func _refresh_contact() -> void:
+	var state: Dictionary = _contact_state()
+	for id in _tiles:
+		var involved: bool = int(id) == int(state.source) or int(id) == int(state.target)
+		var direction: Vector2 = Vector2(state.direction) * (1.0 if int(id) == int(state.source) else -1.0)
+		_tiles[id].set_contact(str(state.kind) if involved else "none", direction, float(state.strength) if involved else 0.0, reduced_motion)
+	_contact_label.visible = state.kind != "none"
+	if not _contact_label.visible:
+		return
+	var good: bool = state.kind == "match"
+	var s: float = Style.ui_scale(self)
+	_contact_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
+	if _contact_label_kind != str(state.kind):
+		_contact_label_kind = str(state.kind)
+		_contact_label.text = "Match!" if good else "Try another"
+		_contact_label.add_theme_color_override("font_color", Color("#17604a") if good else Color("#923e43"))
+		_contact_label.add_theme_stylebox_override("normal", Style.box(Color("#edfff3") if good else Color("#fff0ea"), Color("#76bb97") if good else Color("#d99288"), 9, 1))
+	_contact_label.size = Vector2(72.0 if good else 104.0, 25.0) / s
+	var destination: Vector2 = _tile_rect(_cell(int(state.target))).get_center()
+	_contact_label.position = destination - Vector2(_contact_label.size.x * 0.5, _pitch * 0.57 + _contact_label.size.y)
+	_contact_label.position.x = clampf(_contact_label.position.x, _board.position.x, _board.end.x - _contact_label.size.x)
+	_contact_label.position.y = maxf(_board.position.y, _contact_label.position.y)
 
 func _process(delta: float) -> void:
 	for id in _chest_cache:
@@ -666,6 +754,12 @@ func _process(delta: float) -> void:
 	for cell: Dictionary in game.cells:
 		previous_ages[int(cell.id)] = float(cell.age)
 	_landing_cooldown = maxf(0.0, _landing_cooldown - delta)
+	if _dragging and _target >= 0:
+		_contact_elapsed += delta
+	if not _rejection.is_empty():
+		_rejection.elapsed += delta
+		if float(_rejection.elapsed) >= 0.34:
+			_rejection.clear()
 	if game.phase == "playing":
 		game.step(delta)
 	if generation != _generation or not _allowed():
@@ -699,6 +793,7 @@ func _process(delta: float) -> void:
 func _refresh_fusion() -> void:
 	if game.fusion.is_empty() or _result_visible:
 		_merged.hide()
+		_fusion_art.hide()
 		return
 	var fusion: Dictionary = game.fusion
 	var p: float = clampf(float(fusion.elapsed) / float(fusion.duration), 0.0, 1.0)
@@ -708,42 +803,61 @@ func _refresh_fusion() -> void:
 	_fusion_origin = destination
 	if _merged.tile_id != int(b.id):
 		_configure_tile(_merged, b, true)
+	var unit: float = _pitch - _gap
 	var size_factor: float = 1.28
-	var opacity: float = 1.0
 	var stretch := Vector2.ONE
 	var contact: float = smoothstep(0.0, 0.30, p)
 	var union: float = smoothstep(0.24, 0.38, p)
 	var close_drop: bool = _fusion_start.distance_to(destination) < _pitch * 0.4
 	var contact_lobe: float = sin(clampf(p / 0.27, 0.0, 1.0) * PI) if close_drop else 0.0
+	var held_separation: float = _fusion_contact_strength * unit * 0.25 * (1.0 - smoothstep(0.0, 0.27, p)) if close_drop else 0.0
+	var first_center: Vector2 = _fusion_start.lerp(destination, contact)
+	var second_center: Vector2 = destination
+	if close_drop:
+		first_center -= _fusion_direction * (contact_lobe * _pitch * 0.17 + held_separation)
+		second_center += _fusion_direction * (contact_lobe * _pitch * 0.12 + held_separation)
 	for cell: Dictionary in [a, b]:
 		if not _tiles.has(int(cell.id)):
 			continue
 		var droplet: Tile = _tiles[int(cell.id)]
 		droplet.set_support(0.0, 0.0, false)
 		droplet.visible = not reduced_motion and p < 0.38
+		droplet._surface.hide()
 		droplet.modulate.a = 1.0 - union
-		droplet.z_index = 22 if int(cell.id) == int(a.id) else 21
-		var center: Vector2 = _fusion_start.lerp(destination, contact) if int(cell.id) == int(a.id) else destination
-		if close_drop:
-			center += _fusion_direction * contact_lobe * _pitch * (-0.26 if int(cell.id) == int(a.id) else 0.14)
+		droplet.z_index = 28 if int(cell.id) == int(a.id) else 27
+		var center: Vector2 = first_center if int(cell.id) == int(a.id) else second_center
 		droplet.position = center - droplet.size * 0.5
-		var pull: float = sin(contact * PI) * 0.17
-		droplet.deform(0.012 * sin(contact * PI), p * TAU, Vector2(1.0 + pull, 1.0 - pull * 0.7))
+		droplet.deform(0.0, 0.0)
+	var compression: float = smoothstep(0.54, 2.0 / 3.0, p)
+	var release: float = clampf((p - 2.0 / 3.0) * 3.0, 0.0, 1.0)
+	var body_opacity: float = 1.0
+	var content_opacity: float = 1.0
+	var rise: float = 0.0
 	if not reduced_motion:
-		size_factor = lerpf(1.12, 1.28, union)
-		opacity = union
-		if p > 0.67:
-			var vanish: float = smoothstep(0.67, 1.0, p)
-			size_factor *= 1.0 - vanish * 0.8
-			opacity = 1.0 - vanish
-		var jelly: float = sin(p * PI * 6.0) * (1.0 - p) * 0.13
-		stretch = Vector2(1.0 + jelly, 1.0 - jelly)
-	_merged.size = Vector2.ONE * (_pitch - _gap) * size_factor
-	_merged.position = destination - _merged.size * 0.5
-	_merged.modulate.a = opacity
-	_merged.deform(0.0 if reduced_motion else 0.018 * sin(p * PI), p * TAU * 2.0, stretch)
+		size_factor = lerpf(1.0, 1.28, union)
+		content_opacity = union
+		var settle: float = sin(clampf((p - 0.30) / 0.24, 0.0, 1.0) * TAU) * (1.0 - smoothstep(0.30, 0.54, p)) * 0.10
+		stretch = Vector2(1.0 + settle + compression * 0.20, 1.0 - settle - compression * 0.22)
+		if release > 0.0:
+			var snap: float = smoothstep(0.0, 0.24, release)
+			var retract: float = smoothstep(0.20, 0.88, release)
+			stretch = Vector2(lerpf(1.20, 0.74, snap), lerpf(0.78, 1.42, snap)) * lerpf(1.0, 0.05, retract)
+			rise = unit * (0.18 * snap + 0.15 * retract)
+			body_opacity = 1.0 - smoothstep(0.66, 0.92, release)
+			content_opacity *= 1.0 - smoothstep(0.04, 0.44, release)
+		var extent: Vector2 = Vector2.ONE * unit * size_factor * stretch
+		# The same two painted lobes become one surface; no sprite crossfade at the seam.
+		_fusion_art.pose(first_center - Vector2(0, rise), second_center - Vector2(0, rise), destination,
+			extent, unit, p, union, compression * (1.0 - release), release, body_opacity)
+	else:
+		_fusion_art.hide()
+	_merged._surface.visible = reduced_motion
+	_merged.size = Vector2.ONE * unit * size_factor
+	_merged.position = destination - _merged.size * 0.5 - Vector2(0, rise * 0.65)
+	_merged.modulate.a = content_opacity
+	_merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
 	_merged.set_support(0.0, maxf(0.0, 1.0 - stretch.y))
-	_merged.show()
+	_merged._shadow.modulate.a *= body_opacity
 	_merged.visible = reduced_motion or union > 0.0
 
 func _cue(cue: String) -> void:
@@ -1034,6 +1148,9 @@ func snapshot() -> Dictionary:
 		item["focused"] = _tiles[int(cell.id)].has_focus()
 		result.tiles.append(item)
 	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": _selected}
+	var contact: Dictionary = _contact_state()
+	result["contact"] = {"kind": contact.kind, "source": contact.source, "target": contact.target, "strength": contact.strength}
+	result["fusion_effect"] = {"visible": _fusion_art.is_visible_in_tree(), "stage": _fusion_art.stage if _fusion_art.is_visible_in_tree() else "none"}
 	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible, "rect": _rect(_global_rect(_preview_rect)), "slots": []}
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]

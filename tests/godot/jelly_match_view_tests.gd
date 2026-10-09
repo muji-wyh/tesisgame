@@ -52,6 +52,10 @@ func _run() -> void:
 	await _check_pointer_ownership(view)
 	_check_pointer_feedback(view)
 	_check_drag_replaces_selection(view)
+	_check_contact_validity(view)
+	_check_same_kind_contact(view)
+	_check_contact_lifecycle(view)
+	_check_rejection_lifecycle(view)
 	_check_keyboard_feedback(view)
 	_check_feedback_lifecycle(view)
 	_check_danger_clock(view)
@@ -59,7 +63,9 @@ func _run() -> void:
 	_check_danger_reduced_motion_and_end(view)
 	_check_wrong_drop(view)
 	_check_fusion(view)
+	_check_fusion_interruption(view)
 	_check_close_drop_contact(view)
+	_check_off_center_drop_continuity(view)
 	_check_pauses_and_new_round(view)
 	await _check_deferred_release(view)
 	_check_result_gate(view)
@@ -643,9 +649,26 @@ func _check_wrong_drop(view) -> void:
 	check(attempts.size() == 1 and not bool(attempts[0].correct), "A wrong drop emits one incorrect learning attempt")
 	check(view.game.cells == before and view.game.fusion.is_empty(), "Wrong drops preserve board positions and tiles")
 	check(view._snapbacks.has(first), "Wrong drops visibly return the held jelly to its slot")
-	view._process(0.25)
+	check(not view._rejection.is_empty() and int(view._rejection.a) == first and int(view._rejection.b) == other,
+		"An incorrect commit records both participants for one reciprocal rejection")
+	check(cues.count("wrong") == 1 and not cues.has("merge") and not cues.has("pop"),
+		"An incorrect commit uses one rejection sound without successful fusion feedback")
+	view._process(0.08)
+	var source_offset: Vector2 = view._tiles[first]._surface.position
+	var target_offset: Vector2 = view._tiles[other]._surface.position
+	check(view._tiles[first]._contact_kind == "mismatch" and view._tiles[other]._contact_kind == "mismatch"
+		and not source_offset.is_zero_approx() and not target_offset.is_zero_approx()
+		and source_offset.dot(target_offset) < 0.0, "Both incorrect partners recoil away from their shared contact")
+	view._process(0.17)
 	check(view._snapbacks.is_empty() and view._tiles[first].position == view._tile_rect(view._cell(first)).position,
 		"Snapback settles into the original slot")
+	view._process(0.10)
+	check(view._rejection.is_empty() and view._tiles[first]._contact_kind == "none" and view._tiles[other]._contact_kind == "none",
+		"The complete rejection releases both participants without leaving a false match cue")
+	check(view._tiles[first]._surface.position.is_zero_approx() and view._tiles[other]._surface.position.is_zero_approx(),
+		"Both surfaces return to their authored positions when rejection ends")
+	check(attempts.size() == 1 and cues.count("wrong") == 1 and view.game.score() == 0 and view.game.chest_count == 0,
+		"Rejection playback cannot repeat the learning reset or earn a reward")
 
 
 func _lift_stopped(tile) -> bool:
@@ -703,14 +726,177 @@ func _check_drag_replaces_selection(view) -> void:
 	var target = view._tiles[pair[1]]
 	check(source.selected and target.highlighted and not target.selected,
 		"The held jelly and prospective partner have distinct selection and contact states")
-	check(source._gel.get_shader_parameter("rim_color") != target._gel.get_shader_parameter("rim_color")
+	check(source._contact_kind == "match" and target._contact_kind == "match"
 		and target._surface.scale != Vector2.ONE,
-		"The contact partner uses its own warm contour and soft surface response")
+		"Both valid partners share matching feedback while the target responds to contact")
 	view.cancel_input()
 	_check_feedback_cleared(source, "Cancelling the dragged source")
 	_check_feedback_cleared(target, "Cancelling the prospective partner")
 	check(source._surface.scale == Vector2.ONE and target._surface.scale == Vector2.ONE,
 		"Cancellation clears contact squash without waiting for the next frame")
+
+
+func _check_contact_validity(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	var wrong: int = -1
+	for cell: Dictionary in view.game.cells:
+		if cell.word.id != view._cell(pair[0]).word.id and cell.kind != view._cell(pair[0]).kind:
+			wrong = int(cell.id)
+			break
+	check(wrong >= 0, "The contact test has a real opposite-kind distractor")
+	if wrong < 0:
+		return
+	view._press(2, _center(view, pair[0]))
+	view._move(_center(view, pair[1]))
+	view._process(0.08)
+	var contact: Dictionary = view._contact_state()
+	check(contact.kind == "match" and int(contact.source) == pair[0] and int(contact.target) == pair[1],
+		"Dragging a picture onto its word identifies the actual two matching participants")
+	check(view._tiles[pair[0]]._contact_kind == "match" and view._tiles[pair[1]]._contact_kind == "match",
+		"Matching contact reaches both gel surfaces instead of decorating only the target")
+	var source_offset: Vector2 = view._tiles[pair[0]]._surface.position
+	var target_offset: Vector2 = view._tiles[pair[1]]._surface.position
+	check(not source_offset.is_zero_approx() and not target_offset.is_zero_approx()
+		and source_offset.dot(target_offset) < 0.0, "Correct contact visibly pulls the two gel surfaces toward each other")
+	check(str(view.snapshot().contact.kind) == "match", "The published contact state agrees with the rendered match feedback")
+	var settled_clock: float = view._contact_elapsed
+	for index in range(8):
+		view._move(_center(view, pair[1]))
+	check(is_equal_approx(view._contact_elapsed, settled_clock), "Repeated motion events do not restart or advance contact animation")
+	check(attempts.is_empty() and view.game.fusion.is_empty() and view.game.score() == 0 and view.game.chest_count == 0
+		and cues == ["pick"], "Matching hover neither submits an answer nor stacks sounds or rewards")
+	view._move(_center(view, wrong))
+	check(is_zero_approx(view._contact_elapsed), "Changing partners starts a fresh contact response")
+	view._process(0.08)
+	contact = view._contact_state()
+	check(contact.kind == "mismatch" and int(contact.target) == wrong,
+		"A different word is rejected visually even when the two tile kinds are complementary")
+	check(view._tiles[pair[0]]._contact_kind == "mismatch" and view._tiles[wrong]._contact_kind == "mismatch"
+		and view._tiles[pair[1]]._contact_kind == "none", "Retargeting updates both new participants and releases the previous partner")
+	check(attempts.is_empty() and view.game.fusion.is_empty() and cues == ["pick"],
+		"An incorrect preview does not reset learning or play the committed rejection sound")
+	var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
+	view._move(empty)
+	check(view._contact_state().kind == "none" and view._tiles[pair[0]]._contact_kind == "none"
+		and view._tiles[wrong]._contact_kind == "none", "Leaving all partners immediately removes reciprocal contact feedback")
+	view.cancel_input()
+
+
+func _check_same_kind_contact(view) -> void:
+	check(view.configure(words.slice(0, 1), 3, Data.theme("spring"), data.chests, false, 42),
+		"A real single-word supply can exercise repeated copies without mutating board state")
+	view.set_process(false)
+	view.game.step(view.game.SETTLE_SECONDS)
+	view._sync_tiles()
+	view._layout()
+	heard.clear()
+	attempts.clear()
+	cues.clear()
+	var pair: Array[int] = []
+	for first: Dictionary in view.game.cells:
+		for second: Dictionary in view.game.cells:
+			if first.id != second.id and first.word.id == second.word.id and first.kind == second.kind:
+				pair = [int(first.id), int(second.id)]
+				break
+		if not pair.is_empty():
+			break
+	check(pair.size() == 2, "The ordinary supply contains repeated copies of the same tile kind")
+	if pair.size() != 2:
+		_reset(view)
+		return
+	view._press(2, _center(view, pair[0]))
+	view._move(_center(view, pair[1]))
+	view._process(0.08)
+	check(view._contact_state().kind == "mismatch" and view._tiles[pair[0]]._contact_kind == "mismatch"
+		and view._tiles[pair[1]]._contact_kind == "mismatch", "Same-word copies still need opposite kinds to receive matching feedback")
+	check(attempts.is_empty() and view.game.fusion.is_empty(), "A same-kind hover remains presentation only")
+	view._release(_center(view, pair[1]))
+	check(attempts.size() == 1 and not attempts[0].correct and view.game.fusion.is_empty(),
+		"Committing same-kind copies agrees with the preview and resets the word only once")
+	_reset(view)
+
+
+func _check_contact_lifecycle(view) -> void:
+	for interruption: String in ["cancel", "pause", "hide", "stop", "new_round"]:
+		_reset(view)
+		var pair: Array[int] = _pair(view)
+		view._press(2, _center(view, pair[0]))
+		view._move(_center(view, pair[1]))
+		view._process(0.08)
+		match interruption:
+			"cancel":
+				view.cancel_input()
+			"pause":
+				view.pause(true)
+			"hide":
+				view.hide()
+			"stop":
+				view.stop()
+			"new_round":
+				_reset(view)
+		check(view._contact_state().kind == "none" and is_zero_approx(view._contact_elapsed) and view._rejection.is_empty(),
+			"%s clears contact and rejection ownership immediately" % interruption)
+		for tile in view._tiles.values():
+			check(tile._contact_kind == "none" and tile._surface.position.is_zero_approx(),
+				"%s leaves no stale matching material or contact offset on a surviving tile" % interruption)
+		check(attempts.is_empty() and not view._fusion_art.visible, "%s cannot convert cancelled contact into a fusion or attempt" % interruption)
+		view.show()
+		view.pause(false)
+	_reset(view)
+	var pair: Array[int] = _pair(view)
+	view._press(2, _center(view, pair[0]))
+	view._move(_center(view, pair[1]))
+	view._process(0.08)
+	view.set_reduced_motion(true)
+	check(view._contact_state().kind == "match" and view._tiles[pair[0]]._contact_kind == "match"
+		and view._tiles[pair[1]]._contact_kind == "match", "Reduced motion retains understandable static match feedback")
+	for id: int in pair:
+		check(view._tiles[id]._surface.scale == Vector2.ONE and view._tiles[id]._visual.position.is_zero_approx()
+			and view._tiles[id]._surface.position.is_zero_approx(),
+			"Enabling reduced motion removes active contact movement on both partners")
+	view.cancel_input()
+	check(view._contact_state().kind == "none" and view._tiles[pair[0]]._contact_kind == "none"
+		and view._tiles[pair[1]]._contact_kind == "none", "Cancelling reduced-motion contact removes both static markers")
+	_reset(view)
+
+
+func _check_rejection_lifecycle(view) -> void:
+	for interruption: String in ["cancel", "pause", "hide", "stop", "new_round"]:
+		_reset(view)
+		var first: int = int(view.game.cells[0].id)
+		var other: int = -1
+		for cell: Dictionary in view.game.cells:
+			if cell.word.id != view._cell(first).word.id:
+				other = int(cell.id)
+				break
+		view._press(2, _center(view, first))
+		view._move(_center(view, other))
+		view._release(_center(view, other))
+		view._process(0.08)
+		check(not view._rejection.is_empty(), "%s begins with an active committed rejection" % interruption)
+		match interruption:
+			"cancel":
+				view.cancel_input()
+			"pause":
+				view.pause(true)
+			"hide":
+				view.hide()
+			"stop":
+				view.stop()
+			"new_round":
+				_reset(view)
+		check(view._rejection.is_empty() and not view._fusion_art.visible,
+			"%s immediately removes the interrupted rejection effect" % interruption)
+		for tile in view._tiles.values():
+			check(tile._contact_kind == "none" and tile._surface.position.is_zero_approx(),
+				"%s releases both rejection participants without a stale offset" % interruption)
+		view.show()
+		view.pause(false)
+		view._process(0.4)
+		check(view._rejection.is_empty() and cues.count("wrong") <= 1 and not cues.has("merge") and not cues.has("pop"),
+			"%s cannot revive a cancelled rejection or emit a stale success cue" % interruption)
+	_reset(view)
 
 
 func _check_keyboard_feedback(view) -> void:
@@ -951,10 +1137,14 @@ func _check_fusion(view) -> void:
 	view._process(0.10)
 	check(view._tiles[pair[0]].visible and view._tiles[pair[1]].visible and not view._merged.visible,
 		"Fusion begins with two separate droplets moving into contact")
+	check(view._fusion_art.visible and not view._tiles[pair[0]]._surface.visible and not view._tiles[pair[1]]._surface.visible,
+		"The shared gel material draws contact continuously without layering two opaque tile bodies")
 	check(_center(view, pair[0]) != source_center, "The held droplet moves toward its matching partner")
 	view._process(0.32)
 	check(view._merged.visible and view._merged._picture.visible and view._merged._label.visible,
 		"The merged jelly holds its picture and word together before popping")
+	check(view._fusion_art.visible and not view._merged._surface.visible,
+		"The combined word and picture remain separate from the continuous deforming gel material")
 	check(not view._tiles[pair[0]].visible and not view._tiles[pair[1]].visible,
 		"The merged jelly replaces both source droplets once they unite")
 	view._process(0.29)
@@ -964,9 +1154,47 @@ func _check_fusion(view) -> void:
 		"One completed fusion grants exactly one word credit and its marked chest")
 	check(not view._tiles.has(pair[0]) and not view._tiles.has(pair[1]) and not view._merged.visible,
 		"Cleared droplets disappear and the model supplies gravity")
+	check(not view._fusion_art.visible, "The completed clear also releases the shared material effect")
 	check(view._loot_flights.size() == 1, "A completed treasure fusion flies toward the visible chest total")
 	view._release(source_center)
 	check(attempts.size() == 1, "A stale release cannot repeat a completed merge")
+
+
+func _check_fusion_interruption(view) -> void:
+	_reset(view)
+	var pair: Array[int] = _pair(view, true)
+	view._activate(pair[0])
+	view._activate(pair[1])
+	view._process(0.42)
+	var elapsed: float = view.game.fusion.elapsed
+	var pose: Rect2 = view._merged.get_rect()
+	view.pause(true)
+	view._process(0.3)
+	check(is_equal_approx(view.game.fusion.elapsed, elapsed) and view._merged.get_rect().is_equal_approx(pose)
+		and attempts.is_empty(), "A menu freezes the in-progress gel union and its unearned reward")
+	view.set_reduced_motion(true)
+	check(not view._fusion_art.visible and view._merged.visible and view._merged._surface.visible,
+		"Enabling reduced motion during fusion switches to the static authored combined jelly")
+	view.pause(false)
+	var static_pose: Rect2 = view._merged.get_rect()
+	view._process(0.3)
+	check(view._merged.get_rect().is_equal_approx(static_pose) and view._merged._surface.scale == Vector2.ONE
+		and not view._fusion_art.visible and attempts.is_empty(), "Reduced motion keeps the combined tile still while honoring the original completion boundary")
+	view._process(0.33)
+	check(attempts.size() == 1 and attempts[0].correct and view.game.chest_count == 1
+		and not view._fusion_art.visible and not view._merged.visible, "Resuming a reduced-motion fusion awards its word and chest once at the original end")
+	_reset(view)
+	pair = _pair(view)
+	view._activate(pair[0])
+	view._activate(pair[1])
+	view._process(0.2)
+	view.stop()
+	view._process(0.4)
+	check(not view._fusion_art.visible and not view._merged.visible and attempts.is_empty(),
+		"Stopping during contact removes the unified material without completing a stale answer")
+	_reset(view)
+	check(not view._fusion_art.visible and view.game.fusion.is_empty() and attempts.is_empty(),
+		"A new round cannot inherit an interrupted fusion effect or success credit")
 
 
 func _check_pauses_and_new_round(view) -> void:
@@ -1107,6 +1335,7 @@ func _check_close_drop_contact(view) -> void:
 		source_tile._lift.custom_step(0.12)
 	view._move(target)
 	view._sync_positions()
+	var held_center: Vector2 = source_tile.get_rect().get_center() + source_tile._surface.position
 	view._release(target)
 	_check_feedback_cleared(source_tile, "Starting pointer fusion on its first frame")
 	_check_feedback_cleared(target_tile, "Starting pointer fusion on its contact partner")
@@ -1115,8 +1344,9 @@ func _check_close_drop_contact(view) -> void:
 	check(not view._focus_after_fusion and not view._tiles.values().has(root.gui_get_focus_owner()),
 		"Pointer fusion does not request keyboard focus restoration")
 	view._process(0.01)
-	check(not view.game.fusion.is_empty() and _center(view, pair[0]).distance_to(target) < view._pitch * 0.05,
-		"A center-to-center drop begins at its actual dropped position")
+	check(not view.game.fusion.is_empty() and view._fusion_start.is_equal_approx(target)
+		and _center(view, pair[0]).distance_to(held_center) < view._pitch * 0.05,
+		"A close drop retains its pointer anchor and continues the visible held lobe without snapping")
 	view._process(0.10)
 	check(_center(view, pair[0]).distance_to(_center(view, pair[1])) > view._pitch * 0.25,
 		"Close drops express two elastic contact lobes before uniting")
@@ -1126,6 +1356,44 @@ func _check_close_drop_contact(view) -> void:
 		view._process(delta)
 	check(view.game.fusion.is_empty() and not view._tiles.values().has(root.gui_get_focus_owner()),
 		"Completing a pointer fusion leaves the remaining board without a phantom focus contour")
+
+
+func _check_off_center_drop_continuity(view) -> void:
+	for turn: float in [0.0, 0.60, -0.60]:
+		_reset(view)
+		var pair: Array[int] = _pair(view)
+		var source = view._tiles[pair[0]]
+		var target = view._tiles[pair[1]]
+		var source_home: Vector2 = _center(view, pair[0])
+		var target_home: Vector2 = _center(view, pair[1])
+		var grid_direction: Vector2 = (target_home - source_home).normalized()
+		var drop: Vector2 = target_home + grid_direction.rotated(turn) * view._pitch * 0.18
+		var cells: Array = view.game.cells.duplicate(true)
+		view._press(2, source_home)
+		view._move(drop)
+		view._process(0.12)
+		var contact: Dictionary = view._contact_state()
+		var held_direction: Vector2 = contact.direction
+		check(contact.kind == "match" and held_direction.dot(grid_direction) < -0.7,
+			"An off-center drop approaches from the opposite side of the original grid direction")
+		var source_surface: Vector2 = source._surface.get_global_rect().get_center()
+		var target_surface: Vector2 = target._surface.get_global_rect().get_center()
+		var source_control: Vector2 = source.get_global_rect().get_center()
+		var target_control: Vector2 = target.get_global_rect().get_center()
+		check(source_control.is_equal_approx(drop) and target_control.is_equal_approx(target_home),
+			"Contact deformation preserves the pointer anchor and target hit rectangle before release")
+		view._release(drop)
+		check(not view.game.fusion.is_empty() and view._fusion_direction.is_equal_approx(held_direction),
+			"Fusion inherits the actual approach direction rather than the source's former grid direction")
+		check(source.get_global_rect().get_center().distance_to(source_surface) < view._pitch * 0.05
+			and target.get_global_rect().get_center().distance_to(target_surface) < view._pitch * 0.05,
+			"Both visible gel lobes continue across pointer release without switching sides or snapping")
+		check(view._fusion_start.is_equal_approx(drop) and attempts.is_empty() and view.game.score() == 0,
+			"Off-center continuity retains the real pointer origin and does not credit the answer early")
+		for index in range(cells.size()):
+			check(view.game.cells[index].column == cells[index].column and view.game.cells[index].row == cells[index].row,
+				"Fusion contact offsets leave every board cell's logical position unchanged")
+	_reset(view)
 
 
 func _check_signal_reentry(view) -> void:

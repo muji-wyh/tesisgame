@@ -79,6 +79,7 @@ async function dragPair(page, tiles) {
       const state = await jelly(page);
       return { active: state.drag.active, target: state.drag.target };
     }).toEqual({ active: true, target: tiles[1].id });
+    expect((await jelly(page)).contact).toMatchObject({ kind: 'match', source: tiles[0].id, target: tiles[1].id });
   } finally {
     await page.mouse.up();
   }
@@ -131,6 +132,7 @@ async function observeTimeline(page) {
         cleared: state.cleared_pairs, chests: state.chest_count,
         generated: state.generated_tiles, spawnInterval: state.spawn_interval,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
+        effect: state.fusion_effect,
         fullElapsed: state.full_elapsed, resultVisible: state.result?.visible });
     };
     const observer = new MutationObserver(record);
@@ -404,6 +406,10 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   await expect.poll(async () => (await growth(page)).streaks[first[0].word.id]).toBe(firstBefore + 1);
   const timeline = await page.evaluate(() => window.jellyObservedTimeline);
   expect(timeline.some(state => state.fusion && state.cleared === 0), 'Fusion visibly precedes success credit').toBe(true);
+  expect(timeline.some(state => state.effect?.visible && ['hold', 'compress'].includes(state.effect.stage)),
+    'The browser renders the continuous union with its readable combined face').toBe(true);
+  expect(timeline.some(state => state.effect?.visible && state.effect.stage === 'release'),
+    'Elastic release remains visible before the pair receives credit').toBe(true);
 
   const marked = await availablePair(page, { chest: true });
   const markedBefore = (await growth(page)).streaks[marked[0].word.id] || 0;

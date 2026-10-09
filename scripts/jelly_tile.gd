@@ -25,6 +25,9 @@ var _reduced_motion: bool = false
 var _mark: int = 0
 var _lift: Tween
 var _projection: bool = false
+var _contact_kind: String = "none"
+var _base_stretch := Vector2.ONE
+var _content_offset := Vector2.ZERO
 
 func _init() -> void:
 	text = ""
@@ -131,7 +134,44 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	_gel.set_shader_parameter("bend", amount)
 	_gel.set_shader_parameter("beat", beat)
 	_surface.pivot_offset = size * Vector2(0.5, Motion.FOOT_Y)
-	_surface.scale = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
+	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
+	_surface.scale = _base_stretch
+
+func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
+	if kind_value == "none" and _contact_kind == "none":
+		return
+	_contact_kind = kind_value
+	# Both learning faces stay above the overlapping skins during contact.
+	_picture.z_index = 45 if kind_value != "none" else 0
+	_label.z_index = 45 if kind_value != "none" else 0
+	_picture.position -= _content_offset
+	_label.position -= _content_offset
+	_content_offset = Vector2.ZERO
+	_surface.position = Vector2.ZERO
+	_surface.scale = _base_stretch
+	_gel.set_shader_parameter("contact_direction", direction)
+	_gel.set_shader_parameter("contact_strength", 0.0 if reduced else strength)
+	_gel.set_shader_parameter("contact_match", kind_value == "match")
+	if kind_value == "none":
+		_refresh_feedback()
+		return
+	_gel.set_shader_parameter("rim_color", Color("#24856a") if kind_value == "match" else Color("#b54649"))
+	_gel.set_shader_parameter("rim_strength", 1.0)
+	_gel.set_shader_parameter("rim_width", 1.0)
+	if reduced:
+		_surface.scale = Vector2.ONE
+		if _lift != null:
+			_lift.kill()
+		_visual.position = Vector2.ZERO
+		return
+	var pull: float = -strength * (0.25 if kind_value == "match" else 0.16)
+	_surface.position = direction * size * pull
+	_content_offset = _surface.position
+	_picture.position += _content_offset
+	_label.position += _content_offset
+	# Pressure changes the gel skin, never the word, picture or hit rectangle.
+	var along := Vector2(absf(direction.x), absf(direction.y))
+	_surface.scale = _base_stretch * (Vector2.ONE + (along * 2.0 - Vector2.ONE) * strength * (0.08 if kind_value == "match" else -0.10))
 
 
 func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bool = true) -> void:
@@ -146,6 +186,7 @@ func _layout() -> void:
 	if _visual == null:
 		return
 	_visual.size = size
+	_content_offset = Vector2.ZERO
 	_surface.size = size
 	# Stay within the artwork's transparent margin, including tiny landscape tiles.
 	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))

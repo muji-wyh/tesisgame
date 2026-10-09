@@ -125,6 +125,51 @@ sound quality or performance on a physical phone.
 
 ## Cue contract and mix
 
+### Contact, union and elastic release
+
+Contact now gives reciprocal skin pressure and separates the two learning faces
+slightly so an overlapping dragged body does not hide its partner. A mint contour
+and `Match!` label identify an opposite-kind pair with the same word ID; a coral
+contour, `Try another` label and opposed recoil identify an incompatible pair.
+These previews do not submit learning attempts. Only a committed wrong drop
+resets learning, and only a completed fusion grants success and treasure.
+
+The continuous fusion skin samples four derivative material maps documented in
+[the material manifest](jelly-material.json). RGB preserves the acquired painted
+surface, including its existing highlights; alpha stores signed distance to that
+exact source silhouette. Smooth distance-field union gives the contact neck a
+continuous contour. Moving meniscus light, lower-edge attenuation and a restrained
+highlight add thickness without warping the separate picture or word. These are
+runtime material effects, not additional sourced animation clips.
+
+The 1.05-second committed timeline remains unchanged: two contact lobes unite by
+0.40 seconds, briefly hold the combined picture and word, compress from 0.57 to
+0.70 seconds, then spring upward and retract. The existing pop cue at 0.70 seconds
+starts that release. Five small pieces reuse the acquired gel illustration; a
+brief supporting bloom reuses `assets/chests/particles/portal_glow.png`, from
+Bobardo's already acquired Modern 2D Animated Chests Pack_FREE Demo 1.0.2 under
+the recorded [Unity Asset Store EULA](../voice-pop-treasure.md). No new sound,
+particle artwork or source license is introduced. Reward credit stays at 1.05
+seconds and still follows the model, independent of the visual fragments.
+
+Every effect uses the paused gameplay clock, with no shader `TIME` or independent
+particle timer. Retarget, canceled input, menu, hidden page and a new round clear
+contact/rejection feedback. Reduced motion keeps static correctness cues and the
+combined acquired artwork, omitting pressure, union motion, fragments and bloom.
+Reproduce and verify the material maps with `tools/prepare-jelly-material.py`
+and its `--check` option. Their lossless imports disable alpha-border repair and
+premultiplication because alpha is distance data, not display transparency.
+
+The same seeded interaction was rendered before and after at 390 x 844, with
+additional checks at 1366 x 768 and 844 x 390. Frame inspection covers mutual
+contact, rejection, the connected surface, readable union and release fragments;
+a normal-speed silent comparison remains in the ignored local review output.
+Native regressions cover different approach directions, preview purity, wrong
+attempts, pause/cancel/new-round cleanup and reduced motion. Chromium and iPhone
+WebKit runs cover real input, completed fusion, learning credit, chest opening,
+portrait and short landscape. These are local renders and simulated browser
+devices, not physical phone or subjective audio approval.
+
 Each fully cleared pair earns one point. The round summary displays the score
 and exact chest count from entry, including zero-loot rounds. Rounds with treasure
 keep Pip's existing reward presentation before revealing the opening action;
