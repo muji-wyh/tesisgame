@@ -338,8 +338,8 @@ func _check_scaled_restored_geometry(manifest: Dictionary) -> void:
 	room.set_process(false)
 	await settle()
 	var maximum: float = room._scroll._maximum()
-	check(maximum > 0 and room._scroll.scroll_vertical == 0,
-		"The restored desktop list starts at zero with enough content to scroll")
+	check(maximum >= 0 and room._scroll.scroll_vertical == 0,
+		"The restored desktop layout starts at zero whether the batch fits or needs scrolling")
 	check(not published.is_empty(), "Restoring the list publishes its initial geometry")
 	if not published.is_empty():
 		var initial: Dictionary = published.back()
@@ -353,16 +353,17 @@ func _check_scaled_restored_geometry(manifest: Dictionary) -> void:
 		wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
 		wheel.factor = 100.0
 		wheel.pressed = true
-		published.clear()
+		if maximum > 0.0:
+			published.clear()
 		root.push_input(wheel, true)
 		await settle()
 		var last: Button = room._cards[2].button
 		var viewport: Rect2 = room._scroll.get_global_rect()
 		check(room._scroll.scroll_vertical == roundi(maximum) and not room._scroll.is_coasting(),
-			"A desktop wheel gesture reaches the list endpoint and stops")
+			"A desktop wheel gesture reaches the available endpoint without moving a fitted batch")
 		check(viewport.grow(1.0).encloses(last.get_global_rect()),
 			"The final restored chest fits the actual viewport at the wheel endpoint")
-		check(not published.is_empty(), "The wheel endpoint publishes updated chest geometry")
+		check(not published.is_empty(), "The endpoint has current chest geometry even when scrolling is unnecessary")
 		if not published.is_empty():
 			var endpoint: Dictionary = published.back()
 			var recorded: Dictionary = endpoint.chests[2].rect

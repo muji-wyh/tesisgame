@@ -5,6 +5,7 @@ const State = preload("res://scripts/pop_reward_state.gd")
 const Room = preload("res://scripts/pop_reward_room.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const PIXEL_TOLERANCE: float = 0.1
 
 class Storage extends RefCounted:
 	var text: Variant = null
@@ -58,6 +59,7 @@ func _run() -> void:
 	_state_checks()
 	_jelly_state_checks()
 	await _room_checks()
+	await _single_chest_layout_checks()
 	await _retained_rewards_checks()
 	await _failure_checks()
 	await _responsive_resize_checks()
@@ -149,6 +151,8 @@ func _jelly_pagination_checks() -> void:
 	var state: Dictionary = room.snapshot()
 	check(state.chest_count == 8 and state.opened_count == 0 and state.visible_chest_count == 3
 		and state.page == 0 and state.page_count == 3, "Pagination retains complete reward totals while constructing only three live chests")
+	check(state.heading == "Your treasure" and state.progress_text == "0 / 8 opened",
+		"Treasure progress describes the whole reward batch instead of the current page")
 	check(room._cards.all(func(card: Dictionary) -> bool: return card.theme == "ocean")
 		and room._cards[0].entry_index == 0 and room._cards[2].entry_index == 2,
 		"The first Jelly page has consistent theme and stable global reward indexes")
@@ -162,6 +166,8 @@ func _jelly_pagination_checks() -> void:
 	_hold(room, 0, Feel.HOLD_SECONDS)
 	check(room.snapshot().opened_count == 1 and room.rewards.entries[6].opened
 		and not room.rewards.entries[0].opened, "A paged chest writes its global index rather than its local card index")
+	check(room.snapshot().progress_text == "1 / 8 opened",
+		"Opening a later-page chest updates the shared progress label")
 	check(room.set_page(0) and room.snapshot().opened_count == 1 and room._cards.size() == 3,
 		"Returning to an earlier page keeps whole-batch opened totals")
 	for index in range(3):
@@ -291,6 +297,30 @@ func _hold(room, index: int, seconds: float) -> void:
 	room.advance_hold(seconds)
 
 
+func _card_geometry(room, card: Dictionary) -> String:
+	var scale: float = Style.ui_scale(room)
+	return " (room_px=%s, art_px=%s, card=%s, hint=%s, caption=%s, content=%s, viewport=%s, scale=%s)" % [
+		room.size * scale, card.art.size * scale, card.panel.get_rect(), card.hint.get_global_rect(),
+		card.caption.get_global_rect(), room._content.size, room._scroll.get_global_rect(), scale]
+
+
+func _check_treasure_labels(room, context: String) -> void:
+	var scale: float = Style.ui_scale(room)
+	for label in [room._heading, room._progress]:
+		var line_height: float = label.get_line_height()
+		var detail: String = " (text='%s', size=%s, line_height=%s, visible_lines=%s, scale=%s)" % [
+			label.text, label.size, line_height, label.get_visible_line_count(), scale]
+		check(label.is_visible_in_tree() and not label.text.is_empty() and not label.clip_text,
+			"Treasure heading and progress remain visible without text clipping after " + context + detail)
+		check(label.autowrap_mode == TextServer.AUTOWRAP_OFF and label.get_line_count() == 1
+			and label.get_visible_line_count() == 1
+			and label.size.y * scale + PIXEL_TOLERANCE >= line_height * scale,
+			"Treasure label boxes fit their actual scaled font line after " + context + detail)
+		if room._scroll.scroll_vertical == 0:
+			check(room._scroll.get_global_rect().grow(PIXEL_TOLERANCE / scale).encloses(label.get_global_rect()),
+				"Treasure labels begin inside the visible scroll area after " + context + detail)
+
+
 func _room_checks() -> void:
 	var storage := Storage.new()
 	var room = _make_room(storage)
@@ -309,29 +339,40 @@ func _room_checks() -> void:
 		for index in range(3):
 			var card: Dictionary = room._cards[index]
 			var button: Control = room._cards[index].button
-			check(button.size.x * Style.ui_scale(room) >= 44 and button.size.y * Style.ui_scale(room) >= 44,
+			check(button.size.x * Style.ui_scale(room) >= 44 - PIXEL_TOLERANCE
+				and button.size.y * Style.ui_scale(room) >= 44 - PIXEL_TOLERANCE,
 				"Every desktop and portrait chest has a full touch target")
-			check(Rect2(Vector2.ZERO, room._content.size).encloses(card.panel.get_rect()),
+			check(Rect2(Vector2.ZERO, room._content.size).grow(PIXEL_TOLERANCE / Style.ui_scale(room)).encloses(card.panel.get_rect()),
 				"All earned chests belong to the same scrollable treasure stage: room=%s, viewport=%s, content=%s, card=%s, scale=%s" % [
 					room.size, room._scroll.size, room._content.size, card.panel.get_rect(), Style.ui_scale(room)])
-			check(card.art.size.x * Style.ui_scale(room) >= 220
-				and card.art.size.y * Style.ui_scale(room) >= 260,
-				"Desktop and portrait rewards keep the chest artwork large instead of shrinking the full batch")
+			check(card.art.size.x * Style.ui_scale(room) >= 180 - PIXEL_TOLERANCE
+				and card.art.size.x * Style.ui_scale(room) <= 361
+				and card.art.size.y * Style.ui_scale(room) >= 220 - PIXEL_TOLERANCE
+				and card.art.size.y * Style.ui_scale(room) <= 301,
+				"A reward batch keeps each chest readable without turning it into a full-page card" + _card_geometry(room, card))
 			check(button.tooltip_text.is_empty() and not button.accessibility_name.is_empty(),
-				"Artwork-only chests retain accessible instructions without visual tooltips")
-			check(not card.has("heading") and not card.has("caption"),
-				"Treasure cards reserve their space for artwork without title or hold labels")
-		check(room.snapshot().scroll_max > 0,
-			"A large three-chest batch can scroll instead of compressing every reward into the viewport")
+				"Chest instructions remain accessible without requiring a hover tooltip")
+			check(card.has("caption") and card.has("hint") and card.caption.text == "Hold to open"
+				and card.caption.is_visible_in_tree() and card.hint.is_visible_in_tree(),
+				"Every unopened chest visibly explains the hold interaction")
+			check(card.hint.get_global_rect().grow(1.0).encloses(card.caption.get_global_rect())
+				and not card.art.get_global_rect().intersects(card.hint.get_global_rect()),
+				"The hold instruction fits its compact badge below the chest artwork" + _card_geometry(room, card))
+		if width * Style.ui_scale(room) < 620.0:
+			check(room.snapshot().scroll_max > 0,
+				"A phone can scroll the reward batch without compressing its chest artwork")
+		check(room._back.size.x * Style.ui_scale(room) <= 113
+			and room._back.size.y * Style.ui_scale(room) >= 44 - PIXEL_TOLERANCE,
+			"Back remains a compact, touch-sized secondary action (size_px=%s)" % [room._back.size * Style.ui_scale(room)])
 	room.size = Vector2(820, 250)
 	room._layout()
 	for frame in range(4):
 		await process_frame
 	for card in room._cards:
-		check(card.art.size.x * Style.ui_scale(room) >= 220
-			and card.art.size.y * Style.ui_scale(room) >= 190,
-			"A short landscape room preserves large chest art and allows vertical scrolling")
-		check(card.button.size.y * Style.ui_scale(room) >= 44,
+		check(card.art.size.x * Style.ui_scale(room) >= 180 - PIXEL_TOLERANCE
+			and card.art.size.y * Style.ui_scale(room) >= 128 - PIXEL_TOLERANCE,
+			"A short landscape room keeps recognisable chest artwork with room for its action" + _card_geometry(room, card))
+		check(card.button.size.y * Style.ui_scale(room) >= 44 - PIXEL_TOLERANCE,
 			"Landscape rewards preserve the minimum touch target")
 	room.size = Vector2(640, 230) / Style.ui_scale(room)
 	room._layout()
@@ -339,7 +380,7 @@ func _room_checks() -> void:
 		await process_frame
 	for index in range(room._cards.size()):
 		var card: Dictionary = room._cards[index]
-		check(card.button.size.y * Style.ui_scale(room) >= 44,
+		check(card.button.size.y * Style.ui_scale(room) >= 44 - PIXEL_TOLERANCE,
 			"Narrow landscape rewards preserve the minimum touch target")
 		for other_index in range(index + 1, room._cards.size()):
 			check(not card.button.get_global_rect().intersects(room._cards[other_index].button.get_global_rect()),
@@ -347,12 +388,17 @@ func _room_checks() -> void:
 	room.size = Vector2(390, 640)
 	room._layout()
 	_hold(room, 0, 0.4)
+	check(room._cards[0].caption.text != "Hold to open"
+		and room._cards[0].button.accessibility_name.contains("Keep holding"),
+		"A held chest updates its visible hint and accessible instructions together")
 	room.begin_hold(room._cards[1].button)
 	check(room.snapshot().active == 0 and room._cards[1].art.hold_progress == 0.0,
 		"A second finger cannot begin another chest while one is held")
 	room.end_hold()
 	check(room.snapshot().active == -1 and room._cards[0].art.mode == "closed" and storage.writes == 1,
 		"Releasing a short hold leaves its chance unspent")
+	check(room._cards[0].caption.text == "Hold to open",
+		"Canceling a short hold restores the visible instruction")
 	_hold(room, 0, Feel.HOLD_SECONDS)
 	room._cards[0].art._advance_animation(Feel.ANTICIPATION_TIME)
 	room.end_hold()
@@ -370,6 +416,9 @@ func _room_checks() -> void:
 	room._finished(0)
 	check(reward_audio.size() == 1 and storage.writes == 2,
 		"Letting go after release completes one surprise without duplicating the save")
+	check(room._cards[0].caption.text.to_lower().contains("opened")
+		and room._cards[0].button.accessibility_name.contains("Opened"),
+		"A completed chest visibly reports its opened state without inviting another hold")
 	check(room._cards[0].art.hold_effect_snapshot().surprise.play_count == 1,
 		"The room uses the shared chest surprise effect")
 	check(room.configure("room-one", 3, "space", _manifest, false) and room.snapshot().opened_count == 1,
@@ -403,6 +452,51 @@ func _room_checks() -> void:
 		check(card.art.mode == "opened" and card.art.hold_effect_snapshot().surprise.play_count == 0,
 			"Restoring durable state never replays the chest animation or surprise")
 	restored.queue_free()
+	await process_frame
+
+
+func _single_chest_layout_checks() -> void:
+	var previous_size: Vector2i = root.size
+	var room = _make_room(Storage.new())
+	check(room.configure("single-chest-layout", 1, "spring", _manifest, false),
+		"Prepare one chest for the compact treasure presentation")
+	for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(320, 568), Vector2i(844, 390)]:
+		root.size = dimensions
+		await process_frame
+		var scale: float = Style.ui_scale(room)
+		room.size = Vector2(dimensions.x, dimensions.y - 92) / scale
+		room._layout()
+		for frame in range(5):
+			await process_frame
+		_check_treasure_labels(room, "single chest at %s" % dimensions)
+		var card: Dictionary = room._cards[0]
+		var viewport: Rect2 = room._scroll.get_global_rect()
+		var maximum_width: float = 600 if dimensions.y < 430 and dimensions.x >= 620 else 480
+		check(card.panel.size.x * scale <= maximum_width + PIXEL_TOLERANCE and card.art.size.y * scale <= 361,
+			"One chest has a bounded display size at %s" % dimensions + _card_geometry(room, card))
+		check(absf(card.panel.get_global_rect().get_center().x - viewport.get_center().x) <= 1.0,
+			"One chest stays horizontally centered at %s" % dimensions)
+		check(room.get_global_rect().grow(1.0).encloses(room._back.get_global_rect())
+			and room._back.size.x * scale <= 113,
+			"The compact Back action remains in reach at %s" % dimensions)
+		check(card.hint.size.y * scale >= 44 - PIXEL_TOLERANCE
+			and card.hint.get_global_rect().grow(1.0).encloses(card.caption.get_global_rect()),
+			"The hold badge remains legible and touch-sized at %s" % dimensions + _card_geometry(room, card))
+		card.button.grab_focus()
+		await process_frame
+		check(card.button.has_focus() and card.button.get_theme_stylebox("focus") is StyleBoxEmpty,
+			"A focused chest keeps keyboard access without outlining its whole stage at %s" % dimensions)
+		var focus_surface: StyleBoxFlat = card.hint.get_theme_stylebox("panel")
+		check(focus_surface.border_color.a > 0.0 and focus_surface.border_width_top > 0,
+			"Keyboard focus remains visibly indicated on the compact hold badge at %s (focused=%s, disabled=%s, border=%s, color=%s)" % [
+				dimensions, card.button.has_focus(), card.button.disabled, focus_surface.border_width_top, focus_surface.border_color])
+		if dimensions.y >= 568:
+			check(viewport.grow(1.0).encloses(card.button.get_global_rect())
+				and room.snapshot().scroll_max == 0,
+				"A single chest and its instruction are immediately visible without scrolling at %s" % dimensions + _card_geometry(room, card))
+	room.queue_free()
+	await process_frame
+	root.size = previous_size
 	await process_frame
 
 
@@ -477,6 +571,7 @@ func _failure_checks() -> void:
 		"Initial storage failure remains visible to the integrating screen")
 	check(room.snapshot().save_failed and room.snapshot().chest_count == 2 and room._retry.visible,
 		"The initial failed save preserves its selected chest draft and offers retry")
+	await _check_save_error_layout(room)
 	room.begin_hold(room._cards[0].button)
 	check(not room.snapshot().holding, "An unpersisted batch cannot consume a chance")
 	storage.writable = true
@@ -500,6 +595,31 @@ func _failure_checks() -> void:
 	check(storage.writes == 2, "Repeated retry cannot write a second receipt for one opening")
 	room.queue_free()
 	await process_frame
+	var conflict = _make_room(Storage.new())
+	check(conflict.configure("waiting-treasure", 1, "spring", _manifest, false)
+		and not conflict.configure("new-treasure", 1, "summer", _manifest, false)
+		and conflict._retry.text == "Resume saved treasure",
+		"A conflicting saved batch exposes the longer recovery action")
+	await _check_save_error_layout(conflict)
+	conflict.queue_free()
+	await process_frame
+
+
+func _check_save_error_layout(room) -> void:
+	for width in [320, 390]:
+		room.size = Vector2(width, 568) / Style.ui_scale(room)
+		room._layout()
+		for frame in range(4):
+			await process_frame
+		for control in [room._back, room._retry, room._notice]:
+			check(room.get_global_rect().grow(1.0).encloses(control.get_global_rect()),
+				"Save recovery controls fit a %dpx room with action '%s'" % [width, room._retry.text])
+		check(not room._back.get_global_rect().intersects(room._retry.get_global_rect())
+			and not room._notice.get_global_rect().intersects(room._back.get_global_rect())
+			and not room._notice.get_global_rect().intersects(room._retry.get_global_rect()),
+			"The save error and recovery actions remain separate at %dpx" % width)
+		check(room._retry.size.x >= room._retry.get_combined_minimum_size().x,
+			"The full recovery action label remains readable at %dpx" % width)
 
 
 func _responsive_resize_checks() -> void:
@@ -550,9 +670,8 @@ func _responsive_resize_checks() -> void:
 			check(card_global.position.x >= viewport_global.position.x - 1.0
 				and card_global.end.x <= viewport_global.end.x + 1.0,
 				"Every chest keeps its full width within the viewport after " + context)
-			if dimensions.x <= 390:
-				check(card.art.size.x >= room._scroll.size.x - 10.0 / Style.ui_scale(room),
-					"Phone treasure artwork uses the available stage width after " + context)
+			check(card.art.size.x * Style.ui_scale(room) <= 361,
+				"Reward artwork stays at a considered size after " + context)
 		_check_settled_layout(room, published, context)
 	column.queue_free()
 	await process_frame
@@ -601,6 +720,7 @@ func _check_settled_layout(room, published: Array[Dictionary], context: String) 
 	check(not published.is_empty(), "The room publishes its final layout after " + context)
 	if published.is_empty():
 		return
+	_check_treasure_labels(room, context)
 	var current: Dictionary = published.back()
 	check(Rect2(Vector2.ZERO, room.size).encloses(room._scroll.get_rect())
 		and not room._scroll.get_rect().intersects(room._back.get_rect()),
@@ -614,12 +734,13 @@ func _check_settled_layout(room, published: Array[Dictionary], context: String) 
 		var recorded: Dictionary = current.chests[index].rect
 		check(actual.is_equal_approx(Rect2(recorded.x, recorded.y, recorded.width, recorded.height)),
 			"Published chest geometry matches its final container position after " + context)
-		check(Rect2(Vector2.ZERO, card.panel.size).encloses(card.art.get_rect()),
-			"Large chest artwork remains inside its own card after " + context)
-		var minimum_art_height: float = 190 if room.size.y * Style.ui_scale(room) < 430 else 260
-		check(card.art.size.x * Style.ui_scale(room) >= 220
-			and card.art.size.y * Style.ui_scale(room) >= minimum_art_height,
-			"Settled treasure art keeps its readable physical size after " + context)
+		check(Rect2(Vector2.ZERO, card.panel.size).grow(PIXEL_TOLERANCE / Style.ui_scale(room)).encloses(card.art.get_rect())
+			and card.panel.get_global_rect().grow(1.0).encloses(card.hint.get_global_rect()),
+			"Chest artwork and its instruction remain inside their own card after " + context + _card_geometry(room, card))
+		var minimum_art_height: float = 128 if room.size.y * Style.ui_scale(room) < 430 else 220
+		check(card.art.size.x * Style.ui_scale(room) >= 180 - PIXEL_TOLERANCE
+			and card.art.size.y * Style.ui_scale(room) >= minimum_art_height - PIXEL_TOLERANCE,
+			"Settled treasure art keeps its readable physical size after " + context + _card_geometry(room, card))
 		for other_index in range(index + 1, room._cards.size()):
 			check(not actual.intersects(room._cards[other_index].button.get_global_rect()),
 				"Settled chest controls never overlap after " + context)

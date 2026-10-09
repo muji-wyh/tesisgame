@@ -8,6 +8,22 @@ Releasing earlier cancels the performance, stops its sounds and resets progress
 while preserving the unopened chest. Reward selection and the save format are
 unchanged.
 
+## Earned treasure room
+
+Jelly Match and Voice Pop share a centered treasure presentation on the game's
+paper surface. The existing chest artwork and contact shadows remain the focus;
+the old floral backdrop and large card borders are removed from this room.
+The already integrated `particles/portal_glow.png` from the Modern 2D Animated
+Chests demo supplies a subtle, static golden light behind each chest. Its source
+mapping remains in `assets/chests/SOURCE.txt`; no new art or audio is acquired.
+
+A compact instruction reads "Hold to open", "Keep holding...", or "You can let
+go!" at the actual input boundaries, then "Opened!". Keyboard/controller focus
+outlines that instruction instead of the whole artwork. The batch counter shows
+saved openings, and the Back action stays compact. A single chest is centered;
+larger batches use up to three columns, vertical scrolling, and existing paging.
+The shared opening timeline, audio, cancellation, and durable receipts are unchanged.
+
 ## Motion and timing
 
 `scripts/chest_feel.gd` defines per-world pressure, opening curves, staggering,

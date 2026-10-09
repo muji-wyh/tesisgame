@@ -1144,6 +1144,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			return false
 	if _mode_id == "pop":
 		_configure_pop(seed_value)
+		if _pop_rewards.has_pending():
+			_pop_rewards.configure_saved(data.chests, reduced_motion)
+			_pop_rewards_shown = true
 	if _mode_id == "jelly":
 		if not _jelly.configure(_learning_words(), growth.level, Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false

@@ -113,5 +113,64 @@ func _run() -> void:
 	app.queue_free()
 	await process_frame
 	await process_frame
+	await _pending_treasure_reload_checks()
 	print("Pop reward flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _pending_treasure_reload_checks() -> void:
+	var directory: String = "user://pop-pending-reload-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	DirAccess.make_dir_recursive_absolute(directory)
+	var saved_entries: Array = []
+	var saved_text: String = ""
+	for reload_index in range(2):
+		var app = load("res://scenes/main.tscn").instantiate()
+		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+		Fixture.install(app, directory)
+		root.add_child(app)
+		app.audio.muted = true
+		await process_frame
+		await process_frame
+		app.choose_mode("pop")
+		await process_frame
+		await process_frame
+		if reload_index == 0:
+			var room = app._pop_rewards
+			check(room.configure("pending-reload-batch", 3, "spring", app.data.chests, true),
+				"Create an isolated saved three-chest batch for restoration")
+			app._show_pop_rewards()
+			room.set_reduced_motion(true)
+			room.set_process(false)
+			room.begin_hold(room._cards[0].button)
+			room.advance_hold(Feel.HOLD_SECONDS)
+			check(room.snapshot().opened_count == 1 and room.snapshot().pending,
+				"A real hold saves one opened chest and leaves two pending before navigation")
+			saved_entries = room.rewards.entries.duplicate(true)
+			saved_text = FileAccess.get_file_as_string(app.pop_reward_save_path)
+			app.choose_mode("match")
+			check(app._mode_id == "match" and not app._pop_rewards.visible,
+				"Switching to Match leaves the partial Pop reward batch available")
+			app.choose_mode("pop")
+			await process_frame
+			await process_frame
+		_check_restored_pending_room(app, saved_entries, saved_text,
+			"switching back to Pop" if reload_index == 0 else "recreating GameUI from the same saved files")
+		app.audio.halt()
+		app.queue_free()
+		await process_frame
+		await process_frame
+
+
+func _check_restored_pending_room(app, saved_entries: Array, saved_text: String, context: String) -> void:
+	var room = app._pop_rewards
+	var state: Dictionary = room.snapshot()
+	check(app._pop_rewards_shown and room.is_visible_in_tree() and not app._pop.visible and not state.paused,
+		"Pending treasure appears before a new Pop round after " + context)
+	check(state.round_id == "pending-reload-batch" and state.chest_count == 3 and state.opened_count == 1
+		and state.pending and room.rewards.entries == saved_entries,
+		"The exact chest styles and one-opened/two-pending state survive " + context)
+	check(app._pop.game.phase == "ready" and not app._pop_speech_active
+		and not app._pop._listening and not app._pop._enabled,
+		"Restoring pending treasure does not enter the microphone flow after " + context)
+	check(FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
+		"Restoring pending treasure neither rerolls nor rewrites its durable batch after " + context)

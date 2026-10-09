@@ -3,6 +3,7 @@ const { enterGame, chooseMode, rendered, metrics, tap, contentBounds, uiScale } 
 const { roomState, scrollChestIntoView } = require('./pop-treasure-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.popRewards';
+const PIXEL_TOLERANCE = 0.1;
 
 async function installRecognition(page) {
   await page.addInitScript(() => {
@@ -59,6 +60,23 @@ async function popState(page) {
     resultsRewards: JSON.parse(element.dataset.resultsRewards || '{}'),
     hud: JSON.parse(element.dataset.hud || '{}'), controls: JSON.parse(element.dataset.controls || '[]')
   }));
+}
+
+async function visibleResultState(page) {
+  // The round finishes before its shared Pip celebration reveals the results.
+  // Wait for the visible reward ladder and actions rather than elapsed time.
+  let current;
+  await expect.poll(async () => {
+    current = await popState(page);
+    const actions = current.controls.filter(control =>
+      /^(OpenChests|Replay)$/.test(control.name) && !control.disabled && control.width > 1 && control.height > 1);
+    return { phase: current.phase, visible: current.resultsRewards.visible === true,
+      actions: actions.map(control => control.name).sort() };
+  }, { timeout: 45000, intervals: [50, 100, 200],
+    message: 'The completed Pip celebration reveals the earned result ladder and its actions' })
+    .toEqual({ phase: 'finished', visible: true, actions: ['OpenChests', 'Replay'] });
+  await rendered(page);
+  return popState(page);
 }
 
 function expectEarnedResultLadder(current, bounds) {
@@ -178,6 +196,8 @@ async function expectChestRoom(page, opened, expectedTypes) {
     contentType: 'application/json'
   });
   expect(current.chests).toHaveLength(3);
+  expect(current.heading).toBe('Your treasure');
+  expect(current.progress_text, 'The room reports opened rewards across the entire saved batch').toBe(`${opened} / 3 opened`);
   const types = current.chests.map(chest => chest.type);
   expect(new Set(types).size, 'All three displayed chests have different actual styles').toBe(3);
   expect(types.every(type => typeof type === 'string' && type.length > 0)).toBe(true);
@@ -191,14 +211,18 @@ async function expectChestRoom(page, opened, expectedTypes) {
   expect(viewport.x + viewport.width).toBeLessThanOrEqual(field.x + field.width + 1);
   expect(viewport.y).toBeGreaterThanOrEqual(field.top - 1);
   expect(viewport.y + viewport.height).toBeLessThanOrEqual(bounds.height - field.padding + 1);
-  expect(current.scroll_max, 'Three large chests use a scrollable list').toBeGreaterThan(0);
+  expect(current.scroll_max).toBeGreaterThanOrEqual(0);
   expect(current.scroll_offset).toBeGreaterThanOrEqual(0);
   expect(current.scroll_offset).toBeLessThanOrEqual(current.scroll_max + 1);
   for (const chest of current.chests) {
     const rect = chest.rect;
     expect([rect.x, rect.y, rect.width, rect.height].every(Number.isFinite)).toBe(true);
     expect(rect.width).toBeGreaterThan(0);
-    expect(rect.height * uiScale(bounds), 'Chest artwork keeps a generous size instead of shrinking to fit the batch').toBeGreaterThanOrEqual(319);
+    expect(rect.height * uiScale(bounds), 'Every chest keeps a usable hold target').toBeGreaterThanOrEqual(44 - PIXEL_TOLERANCE);
+    expect(chest.art_rect.width * uiScale(bounds), 'Chest art stays bounded within the reward layout').toBeLessThanOrEqual(361);
+    expect(chest.art_rect.height * uiScale(bounds), 'The artwork remains readable even in short landscape').toBeGreaterThanOrEqual(128 - PIXEL_TOLERANCE);
+    expect(chest.art_rect.height * uiScale(bounds), 'A batch no longer uses oversized chest panels').toBeLessThanOrEqual(301);
+    expect(chest.caption, 'The visible instruction follows the durable opened state').toBe(chest.opened ? 'Opened!' : 'Hold to open');
     expect(rect.x).toBeGreaterThanOrEqual(viewport.x - 1);
     expect(rect.x + rect.width).toBeLessThanOrEqual(viewport.x + viewport.width + 1);
     expect(rect.y + current.scroll_offset).toBeGreaterThanOrEqual(viewport.y - 1);
@@ -212,12 +236,18 @@ async function expectChestRoom(page, opened, expectedTypes) {
       a.y + a.height <= b.y + 1 || b.y + b.height <= a.y + 1,
     'Chest controls never overlap inside the shared list').toBe(true);
   }
-  if (bounds.width * bounds.scale < 600) {
+  const roomWidth = field.width * uiScale(bounds);
+  if (roomWidth < 620) {
+    expect(current.scroll_max, 'Phone rewards remain scrollable without shrinking every chest').toBeGreaterThan(0);
     expect(current.chests.every(chest => Math.abs(chest.rect.x - current.chests[0].rect.x) <= 1),
-      'Phone treasure uses one large chest per row').toBe(true);
-  } else if (bounds.width * bounds.scale >= 1100) {
-    expect(Math.abs(current.chests[0].rect.y - current.chests[1].rect.y), 'Desktop treasure has two large columns').toBeLessThanOrEqual(1);
+      'Phone treasure uses one chest per row').toBe(true);
+  } else {
+    expect(Math.abs(current.chests[0].rect.y - current.chests[1].rect.y), 'Wide treasure layouts place rewards alongside one another').toBeLessThanOrEqual(1);
     expect(current.chests[1].rect.x).toBeGreaterThan(current.chests[0].rect.x);
+    if (roomWidth >= 960) {
+      expect(Math.abs(current.chests[0].rect.y - current.chests[2].rect.y), 'A desktop row can present the complete three-chest batch').toBeLessThanOrEqual(1);
+      expect(current.chests[2].rect.x).toBeGreaterThan(current.chests[1].rect.x);
+    }
   }
   return current;
 }
@@ -236,6 +266,7 @@ async function pressChest(page, index) {
     const value = await roomState(page);
     return { active: value.active, holding: value.holding };
   }, { intervals: [20, 50, 100] }).toEqual({ active: index, holding: true });
+  expect((await roomState(page)).chests[index].caption).toBe('Keep holding...');
   return pressedAt;
 }
 
@@ -296,8 +327,7 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   for (const milestone of milestones) expect(milestone.score).toBeGreaterThanOrEqual(milestone.count * 100);
   await info.attach('earned-chest-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 65000 });
-  await rendered(page);
-  const finishedRound = await popState(page);
+  const finishedRound = await visibleResultState(page);
   expect(finishedRound.chestCount).toBe(3);
   expectEarnedResultLadder(finishedRound, await metrics(page));
   await info.attach('earned-chest-result-ladder.json', { body: JSON.stringify(finishedRound.resultsRewards, null, 2), contentType: 'application/json' });
@@ -307,7 +337,7 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   const types = room.chests.map(chest => chest.type), round = room.round_id;
   const unopened = await storedRewards(page);
   expect(unopened).toBeTruthy();
-  await page.screenshot({ path: info.outputPath('large-treasure-list.png') });
+  await page.screenshot({ path: info.outputPath('treasure-room.png') });
 
   await pressChest(page, 0);
   await page.waitForTimeout(150);
@@ -334,8 +364,7 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   expect(partiallyOpened).not.toBe(unopened);
   await page.locator('#canvas').press('Escape');
   await expect.poll(async () => (await roomState(page)).visible).toBe(false);
-  await rendered(page);
-  const returnedResult = await popState(page);
+  const returnedResult = await visibleResultState(page);
   expect(returnedResult.score, 'Returning from a partially opened batch preserves the scored round').toBe(finishedRound.score);
   expectEarnedResultLadder(returnedResult, await metrics(page));
   await tapPopAction(page, 'OpenChests');
