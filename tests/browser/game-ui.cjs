@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
 const THEME_NAMES = THEME_IDS.map(id => id[0].toUpperCase() + id.slice(1));
-const MODES = ['match', 'memory', 'pop', 'phrase'];
+const MODES = ['match', 'memory', 'pop', 'phrase', 'jelly'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -26,7 +26,7 @@ function uiScale(bounds) {
 
 function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
-  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop or phrase.`);
+  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop, phrase or jelly.`);
   const control = bounds.library?.controls?.find(item => item.name === `Mode_${name}`);
   if (!control) throw new Error(`Open the game library before locating ${name}.`);
   const [x, y, width, height] = control.rect;

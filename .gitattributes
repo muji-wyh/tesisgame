@@ -1,3 +1,5 @@
 assets/chests/manifest.json text eol=lf
 assets/chests/SOURCE.txt text eol=lf
 docs/qa/2026-10-03-performance-baseline-sparkle.patch text eol=lf -whitespace
+# Preserve the upstream license's original line endings and whitespace.
+assets/audio/jelly-match/LICENSE-Kenney.txt -text -whitespace

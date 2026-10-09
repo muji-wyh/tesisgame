@@ -264,6 +264,27 @@ func _check_pop_error_gate(app) -> void:
 	check(_pop_ready_snapshot(app) == before
 		and [pop.game.score, pop.game.hits, pop._enabled, pop._reconnecting] == progress,
 		"Dismissing the menu preserves a paused hard error and its Retry action without retrying speech")
+	var round_id: String = app._round_id
+	app._show_collection()
+	await settle()
+	check(app.collection_page.visible and _pop_ready_snapshot(app) == before,
+		"Opening growth preserves the existing hard-error explanation and Retry action")
+	app._hide_collection()
+	await settle()
+	check(_pop_ready_snapshot(app) == before and app._round_id == round_id
+		and [pop.game.score, pop.game.hits, pop._enabled, pop._reconnecting] == progress,
+		"Closing growth preserves the hard-error round without restarting speech")
+	pop.set_listening(true, true, "Listening.")
+	app._pop_speech_active = true
+	app._show_collection()
+	await settle()
+	check(pop.game.phase == "paused" and not pop._listening and not pop._pending
+		and not pop._reconnecting and not app._pop_speech_active and app._round_id == round_id,
+		"Opening growth still pauses an active Pop round and stops microphone ownership")
+	app._hide_collection()
+	await settle()
+	check(pop.game.phase == "paused" and not pop._listening and not app._pop_speech_active,
+		"Closing growth waits for an explicit microphone retry after interrupting active play")
 
 
 func _check_lifecycle(app) -> void:
@@ -359,11 +380,16 @@ func _check_direct_pop_entry(app) -> void:
 			"The mode menu blocks microphone input at " + str(dimensions))
 		app._hide_mode_menu()
 		app._show_collection()
+		await settle()
 		check(app.collection_page.visible and not app._pop.interaction_allowed.call(),
 			"The growth catalog covers the microphone gate")
-		app._hide_collection()
 		check(_pop_ready_snapshot(app) == ready and app._round_id == round_id,
-			"Closing growth preserves the prepared round without opening a microphone")
+			"Opening growth preserves the prepared gate and its original Start listening action")
+		app._hide_collection()
+		await settle()
+		check(_pop_ready_snapshot(app) == ready and app._round_id == round_id,
+			"Closing growth preserves the prepared round without opening a microphone: before=%s, after=%s" % [
+				str(ready), str(_pop_ready_snapshot(app))])
 		app.choose_mode("match")
 		check(app._mode_id == "match" and not app._mode_menu_open(),
 			"The player can leave a ready microphone gate using the mode menu")

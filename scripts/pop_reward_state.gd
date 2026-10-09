@@ -3,7 +3,11 @@ extends RefCounted
 const Data = preload("res://scripts/game_data.gd")
 const VERSION: int = 1
 const MAX_RECEIPTS: int = 4096
+const DEFAULT_PATH: String = "user://pop-rewards-v1.cfg"
 
+var storage_kind: String = "pop"
+var max_chests: int = 3
+var allow_repeated_themes: bool = false
 var ready: bool = false
 var error: String = ""
 var round_id: String = ""
@@ -24,10 +28,12 @@ func _init(path: String = "user://pop-rewards-v1.cfg", host: Object = null) -> v
 func load_state() -> bool:
 	ready = false
 	error = ""
+	if storage_kind not in ["pop", "jelly"] or max_chests < 0:
+		return _fail("This treasure storage configuration is unavailable.")
 	var config := ConfigFile.new()
 	var missing: bool = false
 	if _host != null:
-		var text: Variant = _host.popRewardState()
+		var text: Variant = _host.jellyRewardState() if storage_kind == "jelly" else _host.popRewardState()
 		if text == null:
 			missing = true
 		elif not text is String or config.parse(text) != OK:
@@ -35,11 +41,12 @@ func load_state() -> bool:
 	elif OS.has_feature("web"):
 		return _fail("Treasure storage is unavailable. Please retry.")
 	else:
-		if not FileAccess.file_exists(_path) and FileAccess.file_exists(_path + ".previous"):
-			if DirAccess.rename_absolute(_path + ".previous", _path) != OK:
+		var path: String = _storage_path()
+		if not FileAccess.file_exists(path) and FileAccess.file_exists(path + ".previous"):
+			if DirAccess.rename_absolute(path + ".previous", path) != OK:
 				return _fail("Could not restore your treasure. Please retry.")
-		var result: Error = config.load(_path)
-		missing = result == ERR_FILE_NOT_FOUND and not FileAccess.file_exists(_path)
+		var result: Error = config.load(path)
+		missing = result == ERR_FILE_NOT_FOUND and not FileAccess.file_exists(path)
 		if result != OK and not missing:
 			return _fail("Could not read your treasure. Please retry.")
 	var next_id: String = ""
@@ -52,13 +59,14 @@ func load_state() -> bool:
 		var saved_entries: Variant = config.get_value("treasure", "entries", null)
 		var saved_receipts: Variant = config.get_value("treasure", "receipts", null)
 		if not saved_id is String or saved_id.is_empty() or saved_id.length() > 200 \
-			or not saved_entries is Array or saved_entries.is_empty() or saved_entries.size() > 3 \
+			or not saved_entries is Array or saved_entries.is_empty() \
+			or (max_chests > 0 and saved_entries.size() > max_chests) \
 			or not saved_receipts is Array or saved_receipts.size() > MAX_RECEIPTS:
 			return _fail("Your treasure save could not be understood.")
 		var themes: Array[String] = []
 		for entry in saved_entries:
 			if not entry is Dictionary or not entry.get("theme") is String or not Data.THEMES.has(entry.theme) \
-				or themes.has(entry.theme) or not entry.get("opened") is bool:
+				or (not allow_repeated_themes and themes.has(entry.theme)) or not entry.get("opened") is bool:
 				return _fail("Your treasure save contains an invalid chest.")
 			themes.append(entry.theme)
 			next_entries.append({"theme": entry.theme, "opened": entry.opened})
@@ -86,7 +94,7 @@ func create_batch(id: String, themes: Array[String]) -> bool:
 		return false
 	if id == round_id:
 		return true
-	if id.is_empty() or id.length() > 200 or themes.is_empty() or themes.size() > 3:
+	if id.is_empty() or id.length() > 200 or themes.is_empty() or (max_chests > 0 and themes.size() > max_chests):
 		return _fail("This round has no treasure to open.")
 	if has_pending():
 		return _fail("Open your saved treasure before starting another reward batch.")
@@ -95,7 +103,7 @@ func create_batch(id: String, themes: Array[String]) -> bool:
 	var next_entries: Array[Dictionary] = []
 	var seen: Array[String] = []
 	for theme_id in themes:
-		if not Data.THEMES.has(theme_id) or seen.has(theme_id):
+		if not Data.THEMES.has(theme_id) or (not allow_repeated_themes and seen.has(theme_id)):
 			return _fail("Choose different treasure styles for this round.")
 		seen.append(theme_id)
 		next_entries.append({"theme": theme_id, "opened": false})
@@ -139,26 +147,32 @@ func _persist(id: String, next: Array[Dictionary], receipts: Array[String]) -> b
 	config.set_value("treasure", "entries", next)
 	config.set_value("treasure", "receipts", receipts)
 	if _host != null:
-		var result: Variant = _host.savePopRewardState(config.encode_to_text())
+		var result: Variant = _host.saveJellyRewardState(config.encode_to_text()) if storage_kind == "jelly" \
+			else _host.savePopRewardState(config.encode_to_text())
 		if result is bool and result:
 			return true
 		return _fail("Could not save your treasure. Please retry.")
 	if OS.has_feature("web"):
 		return _fail("Treasure storage is unavailable. Please retry.")
-	if config.save(_path + ".pending") != OK:
+	var path: String = _storage_path()
+	if config.save(path + ".pending") != OK:
 		return _fail("Could not save your treasure. Please retry.")
-	if FileAccess.file_exists(_path + ".previous") and DirAccess.remove_absolute(_path + ".previous") != OK:
+	if FileAccess.file_exists(path + ".previous") and DirAccess.remove_absolute(path + ".previous") != OK:
 		return _fail("Could not preserve your treasure. Please retry.")
-	var had_previous: bool = FileAccess.file_exists(_path)
-	if had_previous and DirAccess.rename_absolute(_path, _path + ".previous") != OK:
+	var had_previous: bool = FileAccess.file_exists(path)
+	if had_previous and DirAccess.rename_absolute(path, path + ".previous") != OK:
 		return _fail("Could not preserve your treasure. Please retry.")
-	if DirAccess.rename_absolute(_path + ".pending", _path) != OK:
+	if DirAccess.rename_absolute(path + ".pending", path) != OK:
 		if had_previous:
-			DirAccess.rename_absolute(_path + ".previous", _path)
+			DirAccess.rename_absolute(path + ".previous", path)
 		return _fail("Could not save your treasure. Please retry.")
 	if had_previous:
-		DirAccess.remove_absolute(_path + ".previous")
+		DirAccess.remove_absolute(path + ".previous")
 	return true
+
+
+func _storage_path() -> String:
+	return "user://jelly-rewards-v1.cfg" if storage_kind == "jelly" and _path == DEFAULT_PATH else _path
 
 
 func _fail(message: String) -> bool:

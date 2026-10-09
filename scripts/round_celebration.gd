@@ -97,7 +97,7 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 		return
 	stop()
 	_round_id = round_id
-	_chest_count = clampi(chest_count, 1, 3)
+	_chest_count = maxi(1, chest_count)
 	_reduced_motion = reduce
 	_automatic = automatic
 	_active = true

@@ -18,6 +18,15 @@ const PAIR_FEEDBACK_PATHS := {
 const PAIR_FEEDBACK_GAIN := 0.48
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
+const JELLY_PATHS := {
+	"merge": "res://assets/audio/jelly-match/merge.wav",
+	"pop": "res://assets/audio/jelly-match/clear.wav",
+	"danger": "res://assets/audio/jelly-match/danger.wav",
+	"tick": "res://assets/audio/jelly-match/tick.wav",
+	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
+}
+const JELLY_GAINS := {"merge": 0.7, "pop": 0.64, "danger": 0.52, "tick": 0.52, "reward": 0.36}
+const JELLY_SPEECH_DB: float = -12.0
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
 	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -92,6 +101,9 @@ var _round_celebration_seen: Dictionary = {}
 var _round_celebration_players: Array[AudioStreamPlayer] = []
 var _round_celebration_gains: Dictionary = {}
 var _round_celebration_next_player: int = 0
+var _jelly_players: Array[AudioStreamPlayer] = []
+var _jelly_gains: Dictionary = {}
+var _jelly_next_player: int = 0
 
 
 func _ready() -> void:
@@ -208,6 +220,33 @@ func stop_ui_click() -> void:
 		ui_click.stream = null
 
 
+func play_jelly_cue(cue_name: String) -> void:
+	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
+		return
+	if _jelly_players.is_empty():
+		for index in range(3):
+			_jelly_players.append(_player(1.0))
+	var player: AudioStreamPlayer = _jelly_players[_jelly_next_player]
+	_jelly_next_player = (_jelly_next_player + 1) % _jelly_players.size()
+	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
+	_update_jelly_gain()
+	_play(player, JELLY_PATHS[cue_name])
+	set_process(true)
+
+
+func _update_jelly_gain() -> void:
+	var duck_db: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
+	for player: AudioStreamPlayer in _jelly_players:
+		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
+
+
+func stop_jelly_sounds() -> void:
+	for player: AudioStreamPlayer in _jelly_players:
+		_stop(player)
+		player.stream = null
+	_jelly_next_player = 0
+
+
 func begin_round_celebration(round_id: String) -> void:
 	if round_id.is_empty() or muted or not active or not available:
 		stop_round_celebration()
@@ -259,7 +298,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(false)
+	set_process(not _jelly_players.is_empty())
 	_update_music_gain()
 
 
@@ -271,11 +310,17 @@ func _update_round_celebration_gain() -> void:
 
 
 func _process(_delta: float) -> void:
-	if _round_celebration_id.is_empty():
-		set_process(false)
-		return
 	if muted or not active or not available:
 		stop_round_celebration()
+		stop_jelly_sounds()
+		set_process(false)
+		return
+	var jelly_playing: bool = false
+	for player: AudioStreamPlayer in _jelly_players:
+		jelly_playing = jelly_playing or player.playing
+	_update_jelly_gain()
+	if _round_celebration_id.is_empty() and not jelly_playing:
+		set_process(false)
 		return
 	# Actual playback, including a natural word ending, controls the cue mix.
 	_update_round_celebration_gain()
@@ -752,6 +797,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 	if not keep_pair_feedback:
 		stop_pair_feedback()
 	stop_pop_sounds()
+	stop_jelly_sounds()
 	stop_pip_reaction()
 	stop_round_celebration()
 	stop_chest_performance()

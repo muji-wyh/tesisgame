@@ -5,6 +5,7 @@ const State = preload("res://scripts/growth_state.gd")
 
 static func install(app, directory: String, filename: String = "growth.cfg") -> void:
 	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
+	app.jelly_reward_save_path = directory + "/jelly-rewards.cfg"
 	app.growth = State.new(directory + "/" + filename)
 
 

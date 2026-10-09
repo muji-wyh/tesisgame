@@ -8,9 +8,11 @@ const Style = preload("res://scripts/ui_style.gd")
 
 class Storage extends RefCounted:
 	var text: Variant = null
+	var jelly_text: Variant = null
 	var readable: bool = true
 	var writable: bool = true
 	var writes: int = 0
+	var jelly_writes: int = 0
 
 	func popRewardState() -> Variant:
 		return text if readable else false
@@ -20,6 +22,16 @@ class Storage extends RefCounted:
 			return false
 		text = value
 		writes += 1
+		return true
+
+	func jellyRewardState() -> Variant:
+		return jelly_text if readable else false
+
+	func saveJellyRewardState(value: String) -> bool:
+		if not writable:
+			return false
+		jelly_text = value
+		jelly_writes += 1
 		return true
 
 var checks: int = 0
@@ -44,13 +56,179 @@ func _run() -> void:
 	check(data.load_all(), "Load the shared chest artwork for the reward room")
 	_manifest = data.chests
 	_state_checks()
+	_jelly_state_checks()
 	await _room_checks()
 	await _retained_rewards_checks()
 	await _failure_checks()
 	await _responsive_resize_checks()
 	await _deferred_layout_checks()
+	await _jelly_pagination_checks()
+	await _jelly_save_retry_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _jelly_state(storage: Storage):
+	var state := State.new("user://unused-jelly-test.cfg", storage)
+	state.storage_kind = "jelly"
+	state.max_chests = 0
+	state.allow_repeated_themes = true
+	return state
+
+
+func _jelly_state_checks() -> void:
+	var storage := Storage.new()
+	var pop := State.new("user://unused-pop-test.cfg", storage)
+	check(not pop.create_batch("over-pop-cap", ["spring", "summer", "autumn", "winter"]),
+		"Voice Pop still rejects rewards above its default three-chest cap")
+	check(pop.create_batch("pop-isolated", ["summer"]), "Prepare independent Pop treasure")
+	var pop_text: String = storage.text
+	var jelly = _jelly_state(storage)
+	var themes: Array[String] = Room._choose_themes("long-jelly", 257, "ocean", true)
+	check(themes.size() == 257 and themes.all(func(theme: String) -> bool: return theme == "ocean"),
+		"Every Jelly chest uses the preferred theme without limiting the earned count")
+	check(jelly.create_batch("long-jelly", themes) and jelly.entries.size() == 257,
+		"An uncapped Jelly batch durably preserves more than three and more than 255 chests")
+	check(storage.writes == 1 and storage.jelly_writes == 1 and storage.text == pop_text,
+		"Jelly reads and writes use a separate host storage namespace")
+	var reloaded = _jelly_state(storage)
+	check(reloaded.load_state() and reloaded.entries.size() == 257
+		and reloaded.entries.all(func(entry: Dictionary) -> bool: return entry.theme == "ocean"),
+		"Reload preserves every repeated-theme chest without truncation")
+	check(reloaded.mark_opened("long-jelly", 256) and reloaded.entries[256].opened
+		and not reloaded.entries[0].opened, "High reward indexes consume their exact saved chest")
+	var writes: int = storage.jelly_writes
+	check(reloaded.mark_opened("long-jelly", 256) and reloaded.last_open_was_duplicate
+		and storage.jelly_writes == writes, "Repeated callbacks on a high index cannot duplicate its reward")
+	storage.writable = false
+	check(not reloaded.mark_opened("long-jelly", 255) and not reloaded.entries[255].opened,
+		"An uncapped reward's failed save remains unopened and retryable")
+	storage.writable = true
+	check(reloaded.mark_opened("long-jelly", 255) and reloaded.entries[255].opened,
+		"Retry saves the exact previously failed Jelly chest")
+	check(not reloaded.create_batch("replace-pending", ["spring"]), "Pending Jelly treasure cannot be overwritten")
+	check(storage.text == pop_text and pop.load_state() and pop.entries.size() == 1
+		and pop.entries[0].theme == "summer", "Jelly operations do not disturb an unopened Pop reward")
+	var defaults := State.new()
+	check(defaults._storage_path() == "user://pop-rewards-v1.cfg", "Default native treasure keeps its existing Pop path")
+	defaults.storage_kind = "jelly"
+	check(defaults._storage_path() == "user://jelly-rewards-v1.cfg", "Jelly automatically selects a separate native save path")
+	var custom := State.new("user://custom-jelly.cfg")
+	custom.storage_kind = "jelly"
+	check(custom._storage_path() == "user://custom-jelly.cfg", "Explicit native test or user save paths are preserved")
+	var small_storage := Storage.new()
+	var complete = _jelly_state(small_storage)
+	check(complete.create_batch("complete-jelly", Room._choose_themes("complete-jelly", 8, "space", true)),
+		"Create an eight-chest receipt fixture")
+	for index in range(8):
+		check(complete.mark_opened("complete-jelly", index), "Every uncapped reward can complete independently")
+	check(not complete.has_pending() and small_storage.jelly_writes == 9,
+		"A completed uncapped batch writes once per chest and has no pending remainder")
+	check(complete.create_batch("next-jelly", ["spring"]) and complete.mark_opened("next-jelly", 0),
+		"Completed Jelly treasure permits a subsequent earned batch")
+	check(not complete.create_batch("complete-jelly", ["space"]), "Completed Jelly receipts prevent an older round replay")
+
+
+func _make_jelly_room(storage: Storage):
+	var room := Room.new()
+	room.storage_kind = "jelly"
+	room.max_chests = 0
+	room.allow_repeated_themes = true
+	room.page_size = 3
+	root.add_child(room)
+	room.size = Vector2(880, 640)
+	room.connect_storage(storage)
+	room.set_process(false)
+	return room
+
+
+func _jelly_pagination_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("jelly-pages", 8, "ocean", _manifest, true), "Configure all eight earned Jelly chests")
+	var state: Dictionary = room.snapshot()
+	check(state.chest_count == 8 and state.opened_count == 0 and state.visible_chest_count == 3
+		and state.page == 0 and state.page_count == 3, "Pagination retains complete reward totals while constructing only three live chests")
+	check(room._cards.all(func(card: Dictionary) -> bool: return card.theme == "ocean")
+		and room._cards[0].entry_index == 0 and room._cards[2].entry_index == 2,
+		"The first Jelly page has consistent theme and stable global reward indexes")
+	check(room.navigation_controls().has(room._next_page) and not room.navigation_controls().has(room._previous_page),
+		"Available reward pages participate in controller and keyboard navigation")
+	room.begin_hold(room._cards[0].button)
+	check(not room.set_page(1) and room.snapshot().page == 0, "Paging cannot interrupt a held chest")
+	room.end_hold()
+	check(room.set_page(2) and room._cards.size() == 2 and room._cards[0].entry_index == 6,
+		"The final page constructs only the two remaining chests")
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	check(room.snapshot().opened_count == 1 and room.rewards.entries[6].opened
+		and not room.rewards.entries[0].opened, "A paged chest writes its global index rather than its local card index")
+	check(room.set_page(0) and room.snapshot().opened_count == 1 and room._cards.size() == 3,
+		"Returning to an earlier page keeps whole-batch opened totals")
+	for index in range(3):
+		_hold(room, index, Feel.HOLD_SECONDS)
+	check(room.snapshot().opened_count == 4 and room.snapshot().pending,
+		"Finishing one page leaves all other earned rewards pending")
+	check(room.set_page(1), "The next unopened page remains reachable")
+	for width in [320, 390, 880]:
+		room.size = Vector2(width, 640)
+		room._layout()
+		for frame in range(4):
+			await process_frame
+		for control in [room._previous_page, room._next_page, room._page_label, room._back]:
+			check(room.get_global_rect().grow(1.0).encloses(control.get_global_rect()),
+				"Reward page controls fit the room at width %d" % width)
+		check(not room._previous_page.get_global_rect().intersects(room._page_label.get_global_rect())
+			and not room._next_page.get_global_rect().intersects(room._page_label.get_global_rect()),
+			"Reward page controls do not overlap at width %d: previous=%s, label=%s, next=%s" % [
+				width, room._previous_page.get_global_rect(), room._page_label.get_global_rect(), room._next_page.get_global_rect()])
+	room.pause()
+	check(not room.set_page(2), "A paused or covered treasure room cannot change pages")
+	room.resume()
+	room.queue_free()
+	await process_frame
+	var restored = _make_jelly_room(storage)
+	check(restored.configure_saved(_manifest, true) and restored.snapshot().chest_count == 8
+		and restored.snapshot().opened_count == 4 and restored.snapshot().page == 1,
+		"Reload returns directly to the first page with unopened treasure")
+	for index in range(3):
+		_hold(restored, index, Feel.HOLD_SECONDS)
+	check(restored.set_page(2) and restored._cards[0].opened, "The last page retains an earlier opened chest")
+	_hold(restored, 1, Feel.HOLD_SECONDS)
+	check(restored.snapshot().opened_count == 8 and not restored.has_pending()
+		and storage.jelly_writes == 9 and storage.writes == 0,
+		"All eight paged rewards open once without touching Pop storage")
+	restored.queue_free()
+	await process_frame
+
+
+func _jelly_save_retry_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	storage.writable = false
+	check(not room.configure("jelly-retry", 11, "space", _manifest, true)
+		and room.snapshot().chest_count == 11 and room.snapshot().save_failed,
+		"A failed batch save retains every earned Jelly chest in its retry draft")
+	check(not room.set_page(1), "Unsaved treasure cannot page into an unavailable reward")
+	storage.writable = true
+	room.retry_save()
+	check(not room.snapshot().save_failed and room.snapshot().chest_count == 11
+		and room.rewards.entries.size() == 11, "Retry durably writes the complete uncapped reward draft")
+	check(room.set_page(3) and room._cards.size() == 2, "A retried long batch retains its last page")
+	storage.writable = false
+	_hold(room, 1, Feel.HOLD_SECONDS)
+	check(room.snapshot().save_failed and not room.rewards.entries[10].opened,
+		"An opened final-page chest keeps its failed receipt pending")
+	check(not room.set_page(0), "A failed chest receipt keeps its exact card available for retry")
+	storage.writable = true
+	room.retry_save()
+	check(not room.snapshot().save_failed and room.rewards.entries[10].opened
+		and room.snapshot().opened_count == 1 and storage.jelly_writes == 2,
+		"Retry writes the final-page receipt once at its global index")
+	room.retry_save()
+	check(storage.jelly_writes == 2 and room.snapshot().opened_count == 1,
+		"Repeated save retry cannot duplicate a Jelly chest")
+	room.queue_free()
+	await process_frame
 
 
 func _state_checks() -> void:

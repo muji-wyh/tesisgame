@@ -144,7 +144,7 @@ test('accessible help describes the current controls rather than the removed mot
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /Choose Match, Memory, Voice Pop, or Phrase Builder\./);
+  assert.match(help, /Choose Match, Memory, Voice Pop, Phrase Builder, or Jelly Match\./);
   assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
   assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
     'Retired adventure progress stays on the device and is neither read nor erased');
@@ -210,6 +210,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'phrases.json'), JSON.stringify(phrases));
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
+  for (const cue of ['merge', 'clear', 'danger', 'tick']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
   const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
@@ -220,7 +221,9 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 399);
+  assert.equal(required.length, 403);
+  assert.equal(required.filter(asset => asset.source.includes('/jelly-match/')).length, 4,
+    'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');

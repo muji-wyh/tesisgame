@@ -340,7 +340,7 @@
       <canvas id="canvas" tabindex="0" inert aria-label="Grow with Pip word game" aria-describedby="help selection-status">
         This game needs a browser with WebGL 2 support.
       </canvas>
-      <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, or Phrase Builder.
+      <p id="help" class="sr-only">Choose Match, Memory, Voice Pop, Phrase Builder, or Jelly Match.
         Match: find five matching word and picture pairs.
         Keep trying until every pair is matched. Each Match round allows three hints, shared by touch, keyboard, and controller.
         Use touch, Tab and Enter, or an Xbox controller. Use the D-pad or left stick to move,
@@ -371,9 +371,11 @@
         Your learning journey starts at Lv3. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
         In any game, correctly completing an activity involving a word adds one to that word's streak. A wrong answer resets its streak. Six consecutive correct answers mark the word as mastered. Replaying audio, peeking, and moving cards do not count as answers.
         Voice Pop credits each accepted spoken target once. Unrecognized speech, silence, and unattended words do not count as wrong answers.
+        In Jelly Match, pictures and words fall into four columns. Tap a jelly to hear it, or drag it onto its matching picture or word. With a keyboard or controller, select one jelly and then its partner. A correct pair merges and clears; falling pauses while it clears. Each cleared pair credits its word once. A wrong pairing resets the involved words; releasing outside a tile is not an answer.
+        Jelly Match speeds up as pairs are cleared. A full board starts an eight-second countdown. Clearing a pair cancels the countdown. Marked jellies earn treasure chests. Finish ends the current round; after Pip celebrates, open the earned chests. Unopened treasure is saved on this device and must be opened before another Jelly round.
         Master every word at your current level to unlock the next. An earned level never goes down, even if a mastered word later needs more practice. Lv12+ is the final level.
         Open your learning progress to browse the words at each age, see mastered words and practice streaks, and hear their pronunciation. Future levels are available to review; gameplay uses your unlocked vocabulary.
-        Review all ten Pip stages on the <a href="./preview/pip-growth/">Pip growth preview</a> page. Your progress stays on this device without a player name or profile. An unsaved progress message lets you retry a failed save.
+        Your progress stays on this device without a player name or profile. An unsaved progress message lets you retry a failed save.
         Eight worlds offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Your chosen world is remembered.
         Winning Match, Memory, or Phrase Builder earns a chest. Hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
         Open the game library with Pip or the mode title to adjust sound and motion. Motion follows your device's reduced-motion setting until you choose a preference.</p>
@@ -385,6 +387,7 @@
       <div id="learning-progress" class="sr-only" role="progressbar" aria-label="Level vocabulary mastery"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
       <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
+      <p id="jelly-reward-status" class="sr-only" aria-label="Jelly Match treasures" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
         data-phase="idle" data-remaining="50" data-base-duration="50" data-hits="0" data-score="0" data-combo="0" data-best-combo="0" data-bonus-time="0" data-targets="[]" data-controls="[]" data-hud="{}" data-results-hits="{}"></p>
@@ -2979,7 +2982,34 @@
           try { value = JSON.parse(text); } catch { return; }
           if (!value || typeof value !== 'object' || Array.isArray(value) || !Array.isArray(value.options)) return;
           document.getElementById('game-status').dataset.phrase = JSON.stringify(value);
-          canvas.style.touchAction = value.visible ? 'pinch-zoom' : 'manipulation';
+          const jelly = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
+          canvas.style.touchAction = value.visible || jelly.visible ? 'pinch-zoom' : 'manipulation';
+        },
+        jellyStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+          const status = document.getElementById('game-status');
+          status.dataset.jelly = JSON.stringify(value);
+          const phrase = JSON.parse(status.dataset.phrase || '{}');
+          canvas.style.touchAction = value.visible || phrase.visible ? 'pinch-zoom' : 'manipulation';
+        },
+        jellyRewardState() {
+          try { return localStorage.getItem('growWithPip.jellyRewards.v1'); }
+          catch { return false; }
+        },
+        saveJellyRewardState(text) {
+          if (typeof text !== 'string' || !text.length || text.length > 2 * 1024 * 1024) return false;
+          try {
+            localStorage.setItem('growWithPip.jellyRewards.v1', text);
+            return localStorage.getItem('growWithPip.jellyRewards.v1') === text;
+          } catch { return false; }
+        },
+        jellyRewardStatus(text) {
+          let value;
+          try { value = JSON.parse(text); } catch { return; }
+          if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+          document.getElementById('jelly-reward-status').dataset.snapshot = JSON.stringify(value);
         },
         growthView(text) {
           let value;

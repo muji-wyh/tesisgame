@@ -40,6 +40,7 @@ func _run() -> void:
 	view.cue_requested.connect(func(id: String, cue: String) -> void: _cues.append(id + ":" + cue))
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
+	_check_reward_counts(view, data.chests)
 	_check_lifecycle(view, data.chests)
 	_check_theme_updates(view, data.chests)
 	_check_reduced_and_stalls(view, data.chests)
@@ -173,6 +174,21 @@ func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 		and not view.chest.hold_effect_snapshot().surprise.active,
 		"Celebration and acceptance never open the preview or manufacture a gift")
 	view.stop()
+
+
+func _check_reward_counts(view, manifest: Dictionary) -> void:
+	for count: int in [1, 2, 3, 4, 12]:
+		var identity: String = "reward-count-%d" % count
+		_begin(view, manifest, identity, false, true, count)
+		var caption: String = "You earned a treasure chest!" if count == 1 else "You earned %d treasure chests!" % count
+		var badge: String = "" if count == 1 else "x%d" % count
+		check(view.snapshot().chest_count == count and view._caption.text == caption and view._count.text == badge,
+			"The shared performance preserves all %d earned chests in its snapshot, caption, and badge" % count)
+		_step(view, 3.01)
+		check(view.is_ready() and _finished.back() == identity and view.snapshot().chest_count == count
+			and view._caption.text == caption and view._count.text == badge and not view.action_button.visible,
+			"Automatic completion retains the exact %d-chest reward without an extra action" % count)
+		view.stop()
 
 
 func _check_lifecycle(view, manifest: Dictionary) -> void:

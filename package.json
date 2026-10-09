@@ -21,6 +21,7 @@
     "test": "node tools/run-tests.cjs all",
     "test:voice-pop": "node tools/run-tests.cjs voice-pop",
     "test:growth": "node tools/run-tests.cjs growth",
+    "test:jelly": "node tools/run-tests.cjs jelly",
     "test:layout-release": "node tools/run-tests.cjs layout-release",
     "build:web": "node tools/build-web.cjs",
     "deploy": "powershell -NoProfile -ExecutionPolicy Bypass -File tools\\deploy-web.ps1",

@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "acquired_on": "2026-10-09",
+  "license": "CC0-1.0",
+  "image_source": {
+    "creator": "Zuhria Alfitra (pzUH), GameArt2D",
+    "title": "Jelly Squash Free Sprites",
+    "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
+    "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
+    "license_page": "https://www.gameart2d.com/license.html",
+    "archive_sha256": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
+    "status": "Downloaded and inspected; four adapted PNG surfaces integrated",
+    "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."
+  },
+  "audio_source": {
+    "creator": "Kenney",
+    "title": "Interface Sounds 1.0",
+    "page": "https://kenney.nl/assets/interface-sounds",
+    "download": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip",
+    "archive_sha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+    "status": "Downloaded, decoded and integrated; subjective listening approval remains separate"
+  },
+  "image_processing": {
+    "tool": "Pillow",
+    "version": "12.2.0",
+    "description": "Hue adaptation and 46 percent white mix of acquired blank Jelly 3; source shading/alpha preserved; transparent square padding only."
+  },
+  "images": [
+    {
+      "path": "assets/images/jelly-match/gel-coral.png",
+      "sha256": "c824eb814df410de592922b8c0a328502ab665eb12de896a18da41daa5f4d765",
+      "source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "art_bounds": [
+        11,
+        34,
+        297,
+        251
+      ],
+      "hue_shift_turns": 0.0,
+      "white_mix": 0.46
+    },
+    {
+      "path": "assets/images/jelly-match/gel-mint.png",
+      "sha256": "5859980b6fa672737010b11bde1bf829460f8dbafcb4383c6feac3d3b4e73f0e",
+      "source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "art_bounds": [
+        11,
+        34,
+        297,
+        251
+      ],
+      "hue_shift_turns": 0.34,
+      "white_mix": 0.46
+    },
+    {
+      "path": "assets/images/jelly-match/gel-sky.png",
+      "sha256": "163c373129c5b8765e12f9a23bfa73e9c84697bc3db68b5ddd90586ce24cbec1",
+      "source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "art_bounds": [
+        11,
+        34,
+        297,
+        251
+      ],
+      "hue_shift_turns": 0.5,
+      "white_mix": 0.46
+    },
+    {
+      "path": "assets/images/jelly-match/gel-lilac.png",
+      "sha256": "e9a50d27468d95e09d7d2ad4edf956ee5296172f5c65f78fa3a14de64513ad19",
+      "source": "png/separate/Jellies/Blank/Jelly (3).png",
+      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "size": [
+        320,
+        320
+      ],
+      "art_bounds": [
+        11,
+        34,
+        297,
+        251
+      ],
+      "hue_shift_turns": 0.72,
+      "white_mix": 0.46
+    }
+  ],
+  "audio": [
+    {
+      "id": "merge",
+      "path": "assets/audio/jelly-match/merge.wav",
+      "sha256": "169c0a2222edec396a0acdd13fd65dd8e63d1b30698c8b88183d0cd792a156ee",
+      "source": "Audio/drop_002.ogg",
+      "source_sha256": "4ac4d1cef7e936965cbf795852ca2020300b9e2ba7daa59f2bf4f1f7bf416218",
+      "seconds": 0.188186,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "source_decoded_peak_dbfs": 1.953,
+      "linear_gain": 0.317952609,
+      "peak_dbfs": -10.053,
+      "rms_dbfs": -27.295,
+      "onset_minus_40_dbfs_seconds": 0.000113,
+      "attack_frames": 44,
+      "release_frames": 441,
+      "pitch_shift": 0,
+      "time_stretch": 1,
+      "loop": false
+    },
+    {
+      "id": "clear",
+      "path": "assets/audio/jelly-match/clear.wav",
+      "sha256": "ec1fc45d555c2b3dc68cda9ea3f16ec70f8143b480a5f89420397b6a6841428e",
+      "source": "Audio/pluck_002.ogg",
+      "source_sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+      "seconds": 0.161655,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "source_decoded_peak_dbfs": 2.547,
+      "linear_gain": 0.373826064,
+      "peak_dbfs": -6.0,
+      "rms_dbfs": -27.793,
+      "onset_minus_40_dbfs_seconds": 6.8e-05,
+      "attack_frames": 44,
+      "release_frames": 441,
+      "pitch_shift": 0,
+      "time_stretch": 1,
+      "loop": false
+    },
+    {
+      "id": "danger",
+      "path": "assets/audio/jelly-match/danger.wav",
+      "sha256": "18bae3a1b89c6d73a35cb0443bc798ffde7638dbb217212eecebff19fec2d9c2",
+      "source": "Audio/question_001.ogg",
+      "source_sha256": "abb8f9e4eb2071491b0b15f84ee302386b1847609310c1b000ae174639a6cc5a",
+      "seconds": 0.49068,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "source_decoded_peak_dbfs": -0.902,
+      "linear_gain": 0.278682197,
+      "peak_dbfs": -12.0,
+      "rms_dbfs": -22.864,
+      "onset_minus_40_dbfs_seconds": 0.006871,
+      "attack_frames": 44,
+      "release_frames": 441,
+      "pitch_shift": 0,
+      "time_stretch": 1,
+      "loop": false
+    },
+    {
+      "id": "tick",
+      "path": "assets/audio/jelly-match/tick.wav",
+      "sha256": "0fce645feaa9294d717b0f5d0342b62b83d237758474620c8b7a5266200adc97",
+      "source": "Audio/tick_001.ogg",
+      "source_sha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+      "seconds": 0.044989,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "source_decoded_peak_dbfs": -0.805,
+      "linear_gain": 0.195095821,
+      "peak_dbfs": -16.668,
+      "rms_dbfs": -38.779,
+      "onset_minus_40_dbfs_seconds": 6.8e-05,
+      "attack_frames": 44,
+      "release_frames": 441,
+      "pitch_shift": 0,
+      "time_stretch": 1,
+      "loop": false
+    }
+  ],
+  "reuse": {
+    "chest_reward": "assets/imported-audio/chest-reference/reward.wav",
+    "provenance": "docs/assets/chest-reference-audio.json",
+    "chest_art": "Use the current theme's real closed chest through the existing chest renderer; archived rejected skins are not replacements."
+  }
+}

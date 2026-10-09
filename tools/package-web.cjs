@@ -150,6 +150,7 @@ function collectRequiredAudio(root) {
   }
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
+    ...['merge', 'clear', 'danger', 'tick'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
     ...phrasePaths,

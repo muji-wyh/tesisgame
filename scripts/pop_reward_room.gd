@@ -16,6 +16,10 @@ const TreasureScroll = preload("res://scripts/treasure_scroll.gd")
 
 var rewards := State.new()
 var save_path: String = "user://pop-rewards-v1.cfg"
+var storage_kind: String = "pop"
+var max_chests: int = 3
+var allow_repeated_themes: bool = false
+var page_size: int = 3
 var reduced_motion: bool = false
 var interaction_allowed: Callable
 var _cards: Array[Dictionary] = []
@@ -40,6 +44,10 @@ var _content: Control
 var _notice: Label
 var _back: Button
 var _retry: Button
+var _previous_page: Button
+var _next_page: Button
+var _page_label: Label
+var _page_index: int = 0
 
 
 func _ready() -> void:
@@ -79,6 +87,21 @@ func _ready() -> void:
 	add_child(_retry)
 	Style.action_button(_retry, Style.GOOD, true)
 	_retry.pressed.connect(retry_save)
+	_previous_page = Button.new()
+	_previous_page.name = "TreasurePreviousPage"
+	_previous_page.text = "Previous"
+	UiClick.bind_button(_previous_page)
+	Style.action_button(_previous_page, Style.GOOD, true)
+	add_child(_previous_page)
+	_previous_page.pressed.connect(func() -> void: set_page(_page_index - 1))
+	_next_page = Button.new()
+	_next_page.name = "TreasureNextPage"
+	_next_page.text = "Next"
+	UiClick.bind_button(_next_page)
+	Style.action_button(_next_page, Style.GOOD, true)
+	add_child(_next_page)
+	_next_page.pressed.connect(func() -> void: set_page(_page_index + 1))
+	_page_label = _label("", 16)
 	item_rect_changed.connect(_queue_layout)
 	get_viewport().size_changed.connect(_queue_layout)
 	visibility_changed.connect(_visibility_changed)
@@ -98,6 +121,9 @@ func connect_storage(host: Object) -> bool:
 	if not _configured_id.is_empty():
 		return rewards.ready
 	rewards = State.new(save_path, host)
+	rewards.storage_kind = storage_kind
+	rewards.max_chests = max_chests
+	rewards.allow_repeated_themes = allow_repeated_themes
 	_save_failed = not rewards.load_state()
 	_refresh()
 	return not _save_failed
@@ -121,7 +147,9 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 		return not _save_failed
 	pause()
 	_configured_id = id
-	_draft_themes = _choose_themes(id, clampi(chest_count, 0, 3), preferred_theme)
+	_page_index = 0
+	var count: int = maxi(0, chest_count) if max_chests == 0 else clampi(chest_count, 0, max_chests)
+	_draft_themes = _choose_themes(id, count, preferred_theme, allow_repeated_themes)
 	_save_failed = not rewards.create_batch(id, _draft_themes)
 	_unsaved_index = -1
 	_build_cards()
@@ -140,18 +168,29 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 	if not _save_failed and rewards.entries.is_empty():
 		return false
 	_configured_id = rewards.round_id
+	_page_index = 0
 	_draft_themes.clear()
 	for entry in rewards.entries:
 		_draft_themes.append(str(entry.theme))
+	for index in range(rewards.entries.size()):
+		if not bool(rewards.entries[index].opened):
+			_page_index = floori(float(index) / maxi(1, page_size))
+			break
 	_build_cards()
 	resume()
 	return not _save_failed
 
 
-static func _choose_themes(id: String, count: int, preferred: String) -> Array[String]:
+static func _choose_themes(id: String, count: int, preferred: String, repeat_preferred: bool = false) -> Array[String]:
 	var available: Array[String] = []
 	for key in Data.THEMES:
 		available.append(str(key))
+	if repeat_preferred:
+		var repeated: Array[String] = []
+		var selected: String = preferred if available.has(preferred) else available[0]
+		for index in range(maxi(0, count)):
+			repeated.append(selected)
+		return repeated
 	var rng := RandomNumberGenerator.new()
 	rng.seed = id.hash()
 	for index in range(available.size() - 1, 0, -1):
@@ -181,14 +220,12 @@ func _build_cards() -> void:
 	for card in _cards:
 		card.panel.free()
 	_cards.clear()
-	var entries: Array[Dictionary] = []
-	if rewards.round_id == _configured_id:
-		entries.assign(rewards.entries)
-	if entries.is_empty():
-		for theme_id in _draft_themes:
-			entries.append({"theme": theme_id, "opened": false})
-	for index in range(entries.size()):
-		var entry: Dictionary = entries[index]
+	var entries: Array[Dictionary] = _batch_entries()
+	_page_index = clampi(_page_index, 0, _page_count() - 1)
+	var start: int = _page_index * maxi(1, page_size)
+	for entry_index in range(start, mini(entries.size(), start + maxi(1, page_size))):
+		var index: int = _cards.size()
+		var entry: Dictionary = entries[entry_index]
 		var palette: Dictionary = Data.theme(str(entry.theme))
 		var panel := Panel.new()
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -199,13 +236,13 @@ func _build_cards() -> void:
 		art.configure_skin(palette, _manifest)
 		art.reduced_motion = reduced_motion
 		var button := Button.new()
-		button.name = "PopTreasureChest%d" % index
+		button.name = "%sTreasureChest%d" % ["Jelly" if storage_kind == "jelly" else "Pop", entry_index]
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		for style_name in ["normal", "hover", "pressed", "disabled"]:
 			button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, palette.accent, 24, 3))
 		panel.add_child(button)
-		_cards.append({"panel": panel, "art": art,
+		_cards.append({"panel": panel, "art": art, "entry_index": entry_index,
 			"button": button, "theme": str(entry.theme), "opened": bool(entry.opened), "announced": bool(entry.opened)})
 		button.focus_entered.connect(_ensure_chest_visible.bind(button))
 		button.button_down.connect(begin_hold.bind(button))
@@ -228,6 +265,39 @@ func _build_cards() -> void:
 	_refresh()
 
 
+func _batch_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	if rewards.round_id == _configured_id:
+		entries.assign(rewards.entries)
+	if entries.is_empty():
+		for theme_id in _draft_themes:
+			entries.append({"theme": theme_id, "opened": false})
+	return entries
+
+
+func _page_count() -> int:
+	return maxi(1, ceili(float(_batch_entries().size()) / maxi(1, page_size)))
+
+
+func set_page(index: int) -> bool:
+	if not is_visible_in_tree() or _paused or _holding or _opening or _save_failed or _unsaved_index >= 0:
+		return false
+	if interaction_allowed.is_valid() and not interaction_allowed.call():
+		return false
+	var target: int = clampi(index, 0, _page_count() - 1)
+	if target == _page_index:
+		return false
+	var move_focus: bool = _previous_page.has_focus() or _next_page.has_focus()
+	cancel_input()
+	_page_index = target
+	_build_cards()
+	if move_focus:
+		var controls: Array[Control] = navigation_controls()
+		if not controls.is_empty():
+			controls[0].grab_focus()
+	return true
+
+
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
 	for card in _cards:
@@ -235,6 +305,9 @@ func navigation_controls() -> Array[Control]:
 			controls.append(card.button)
 	if _retry.visible:
 		controls.append(_retry)
+	for button in [_previous_page, _next_page]:
+		if is_instance_valid(button) and button.visible and not button.disabled:
+			controls.append(button)
 	controls.append(_back)
 	return controls
 
@@ -338,7 +411,7 @@ func _released(index: int) -> void:
 func _commit(index: int) -> bool:
 	if _cards[index].opened:
 		return true
-	if rewards.mark_opened(_configured_id, index):
+	if rewards.mark_opened(_configured_id, int(_cards[index].entry_index)):
 		_cards[index].opened = true
 		if rewards.last_open_was_duplicate:
 			_cards[index].announced = true
@@ -489,6 +562,13 @@ func _refresh() -> void:
 	_retry.disabled = _opening
 	_notice.text = rewards.error if _save_failed else ""
 	_notice.visible = _save_failed
+	var pages: int = _page_count()
+	_previous_page.visible = pages > 1
+	_next_page.visible = pages > 1
+	_page_label.visible = pages > 1
+	_previous_page.disabled = _paused or _holding or _opening or _save_failed or _page_index == 0
+	_next_page.disabled = _paused or _holding or _opening or _save_failed or _page_index + 1 >= pages
+	_page_label.text = "%d / %d" % [_page_index + 1, pages]
 	_refresh_captions()
 	_layout()
 	changed.emit(snapshot())
@@ -529,7 +609,8 @@ func _layout() -> void:
 	var gap: float = 18 / s
 	var margin: float = 12 / s
 	_backdrop.size = size
-	var footer: float = (110 if _save_failed else 62) / s
+	var pager_height: float = 52 / s if _page_count() > 1 else 0.0
+	var footer: float = (110 if _save_failed else 62) / s + pager_height
 	_scroll.position = Vector2(margin, 8 / s)
 	_scroll.size = Vector2(maxf(1, w - margin * 2), maxf(64 / s, h - footer - 8 / s))
 	var count: int = maxi(1, _cards.size())
@@ -559,8 +640,20 @@ func _layout() -> void:
 	_retry.position = Vector2(w * 0.5 + gap * 0.5, button_y)
 	_retry.size = Vector2((w - margin * 2 - gap) / 2, 46 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(14 / s))
-	_notice.position = Vector2(margin, button_y - 48 / s)
+	_notice.position = Vector2(margin, button_y - pager_height - 48 / s)
 	_notice.size = Vector2(w - margin * 2, 44 / s)
+	var page_gap: float = 8 / s
+	var page_button_width: float = minf(130 / s, maxf(44 / s, (w - margin * 2 - 80 / s - page_gap * 2) * 0.5))
+	page_button_width = maxf(page_button_width, maxf(_previous_page.get_combined_minimum_size().x,
+		_next_page.get_combined_minimum_size().x))
+	_previous_page.position = Vector2(margin, button_y - pager_height)
+	_previous_page.size = Vector2(page_button_width, 44 / s)
+	_next_page.position = Vector2(w - margin - page_button_width, button_y - pager_height)
+	_next_page.size = Vector2(page_button_width, 44 / s)
+	_page_label.position = Vector2(margin + page_button_width + page_gap, button_y - pager_height)
+	_page_label.size = Vector2(maxf(1.0, w - margin * 2 - page_button_width * 2 - page_gap * 2), 44 / s)
+	_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_page_label.add_theme_font_size_override("font_size", ceili(16 / s))
 	_update_navigation(columns)
 
 
@@ -597,11 +690,13 @@ func _update_navigation(columns: int) -> void:
 func snapshot() -> Dictionary:
 	var entries: Array[Dictionary] = []
 	var opened: int = 0
+	var batch: Array[Dictionary] = _batch_entries()
+	for entry in batch:
+		opened += int(entry.opened)
 	for card in _cards:
-		opened += int(card.opened)
 		var rect: Rect2 = card.button.get_global_rect()
 		var art_rect: Rect2 = card.art.get_global_rect()
-		entries.append({"theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
+		entries.append({"index": card.entry_index, "theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
 			"disabled": card.button.disabled, "control": str(card.button.name),
@@ -609,7 +704,8 @@ func snapshot() -> Dictionary:
 				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
-	return {"round_id": _configured_id, "chest_count": _cards.size(), "opened_count": opened,
+	return {"round_id": _configured_id, "chest_count": batch.size(), "opened_count": opened,
+		"page": _page_index, "page_count": _page_count(), "page_size": maxi(1, page_size), "visible_chest_count": _cards.size(),
 		"scroll_rect": {"x": viewport_rect.position.x, "y": viewport_rect.position.y,
 			"width": viewport_rect.size.x, "height": viewport_rect.size.y},
 		"scroll_offset": _scroll.scroll_vertical if is_instance_valid(_scroll) else 0,

@@ -20,7 +20,7 @@ test('the illustrated library fits, preserves play, and switches every game', as
     await page.setViewportSize(size);
     await openModeMenu(page);
     expect((await metrics(page)).library.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
-      'The library exposes all four supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop', 'Mode_phrase']);
+      'The library exposes all five supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop', 'Mode_phrase', 'Mode_jelly']);
     await expect.poll(async () => {
       const bounds = await metrics(page);
       return bounds.library.controls.every(({ rect: [x, y, w, h] }) => x >= 0 && y >= 0 && x + w <= bounds.width + 1 && y + h <= bounds.height + 1 && h * bounds.scale >= 43);
@@ -37,7 +37,7 @@ test('the illustrated library fits, preserves play, and switches every game', as
     await activate(page, 'LibraryClose');
     await expect(page.locator('#game-status')).toContainText('Game mode menu closed');
   }
-  for (const mode of ['memory', 'pop', 'phrase', 'match']) {
+  for (const mode of ['memory', 'pop', 'phrase', 'jelly', 'match']) {
     await chooseMode(page, mode);
     await openModeMenu(page);
     expect((await metrics(page)).library.current).toBe(mode);
@@ -54,17 +54,17 @@ test('sound and explicit motion choices persist while system motion remains the 
   const errors = await openGame(page);
   await openModeMenu(page);
   await activate(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, preferred_theme: 'spring' });
   await activate(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: false });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: false, preferred_theme: 'spring' });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
   await page.reload();
   await enterGame(page);
   await openModeMenu(page);
   await activate(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: true });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: true, preferred_theme: 'spring' });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'true');
   await activate(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, reduced_motion: true });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, reduced_motion: true, preferred_theme: 'spring' });
   expect(errors).toEqual([]);
 });
