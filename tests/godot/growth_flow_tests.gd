@@ -92,20 +92,37 @@ func _badge_states() -> void:
 	var states: Array[Dictionary] = [
 		{"ready": true, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "practice_progress": 0.75},
 		{"ready": true, "level": 3, "label": "Lv3", "mastered": 17, "total": 80, "progress": 17.0 / 80.0, "practice_progress": 0.95},
+		{"ready": true, "level": 11, "label": "Lv11", "mastered": 89, "total": 120, "progress": 89.0 / 120.0},
+		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 0, "total": 120, "progress": 0.0},
 		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 30, "total": 120, "progress": 0.25},
 		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 120, "total": 120, "progress": 1.0, "completed": true},
 		{"ready": false, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "save_ok": false}
 	]
 	for state: Dictionary in states:
 		badge.configure(state)
-		check(is_equal_approx(badge.bar.value, float(state.progress) * 100.0),
+		check(absf(badge.bar.value - float(state.progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
 			"The badge fills only for mastered words, never partial practice evidence")
 		if bool(state.ready):
 			check(badge.level_label.text == state.label
-				and badge.count_label.text == "%d / %d mastered" % [state.mastered, state.total],
+				and badge.count_label.text == "%d / %d" % [state.mastered, state.total],
 				"Growth facts retain the exact earned level and mastered cohort count")
+			check(badge.tooltip_text.contains("%d of %d words mastered" % [state.mastered, state.total])
+				and badge.tooltip_text.contains("View your words")
+				and str(badge.get("accessibility_name")) == badge.tooltip_text,
+				"The compact visual count retains its mastery meaning and notebook action in the accessible description")
+			if int(state.level) < 12:
+				var next_level: String = "Lv12+" if int(state.level) == 11 else "Lv%d" % (int(state.level) + 1)
+				check(badge.tooltip_text.contains("reach " + next_level),
+					"The earned level retains the correct next-stage target without crowding the badge")
+			else:
+				check(not badge.tooltip_text.contains("Lv13") and not badge.tooltip_text.contains("reach "),
+					"The final stage offers word review without inventing a further level")
+				if bool(state.get("completed", false)):
+					check(badge.tooltip_text.contains("All stages unlocked"),
+						"The completed final stage keeps its completion meaning accessible")
 		else:
-			check(badge.level_label.text == "Lv…" and badge.count_label.text == "Progress unavailable",
+			check(badge.level_label.text == "Lv…" and badge.count_label.text == "Unavailable"
+				and badge.tooltip_text.contains("unavailable") and badge.bar.value == 0.0,
 				"Unreadable storage is shown as unavailable instead of a false starting level")
 		for footprint: Vector2 in [Vector2(168, 52), Vector2(68, 44), Vector2(52, 44)]:
 			var compact: bool = footprint.x < 168
@@ -119,12 +136,27 @@ func _badge_states() -> void:
 				if label.is_visible_in_tree():
 					check(badge.get_global_rect().grow(0.5).encloses(label.get_global_rect()),
 						"Visible badge text stays inside the %s entry" % footprint)
+					var font: Font = label.get_theme_font("font")
+					var font_size: int = label.get_theme_font_size("font_size")
+					check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x + 0.5,
+						"The full %s label fits without clipping in the %s entry" % [label.text, footprint])
 			check(badge.count_label.visible == not compact and badge.target_label.visible == not compact,
 				"Compact badges keep level and progress while secondary copy moves to the accessible description")
-			if not compact and bool(state.ready):
-				check(badge.target_label.text == ("Words  ›" if int(state.level) == 12 else "Lv4  ›"),
-					"The terminal level offers word review without inventing Lv13")
-			check(is_equal_approx(badge.bar.value, float(state.progress) * 100.0),
+			check(badge.bar.size.y >= (7.5 if compact else 19.5),
+				"The mastery track remains visibly substantial instead of resembling a divider")
+			if not compact:
+				check(badge.target_label.text == "›",
+					"The wide badge uses a quiet notebook chevron while its description carries the next-level target")
+				var track: Rect2 = badge.bar.get_global_rect()
+				var count: Rect2 = badge.count_label.get_global_rect()
+				check(track.grow(0.5).encloses(count) and track.get_center().distance_to(count.get_center()) < 0.5
+					and badge.count_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER
+					and badge.count_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER,
+					"The wide badge centers its readable count within the recessed mastery track")
+				check(badge.count_label.z_index > badge.bar.z_index
+					or (badge.count_label.z_index == badge.bar.z_index and badge.count_label.get_index() > badge.bar.get_index()),
+					"The mastery count paints above the track and remains readable across its fill")
+			check(absf(badge.bar.value - float(state.progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
 				"Responsive fitting cannot change saved mastery progress")
 	badge.configure(states[1])
 	badge.focus_mode = Control.FOCUS_NONE
@@ -152,7 +184,7 @@ func _responsive_badge(app) -> void:
 	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
 		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
 		"The notebook entry and mastery bar share one toolbar button without a separate full-width row")
-	check(app._growth_button.level_label.text == "Lv3" and app._growth_button.count_label.text == "0 / 80 mastered"
+	check(app._growth_button.level_label.text == "Lv3" and app._growth_button.count_label.text == "0 / 80"
 		and app._growth_bar.value == 0.0,
 		"A new device presents the actual zero of eighty mastered words")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:

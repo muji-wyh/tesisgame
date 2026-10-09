@@ -9,12 +9,15 @@ Every device starts at Lv3. A successful activity adds one to each unique involv
 The six-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across four modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or choose a higher gameplay level.
 
 The gameplay header contains one growth button in place of the former More
-icon and full-width progress row. On wide screens it shows the current level,
-the next level, a short mastery bar and the exact mastered-word count. Narrow
-and short screens retain a 44-pixel-tall level badge with the same progress
-bar. The entire badge opens the current level's notebook; its accessible name
-also includes the count and next-level requirement. Pip remains a separate
-game-mode control.
+icon and full-width progress row. On wide screens a warm gold level token sits
+beside a recessed green mastery track, with the exact mastered-word count
+centered inside the track and a notebook chevron at its end. The 20-pixel track
+replaces the former thin divider and three-row card. Narrow and short screens
+retain a 44-pixel-tall token with an 8-pixel track below the level. The whole
+control opens the current level's notebook; its accessible name and tooltip
+include the count and next-level requirement. Pip remains a separate game-mode
+control. The token and track are native interface surfaces using the existing
+Nunito typography, with hover, pressed depth and keyboard focus states.
 
 The bar measures mastered words, not partial practice streaks. It updates from
 saved growth state, resets to the new cohort on promotion, and has no invented
