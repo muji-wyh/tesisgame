@@ -1081,16 +1081,12 @@ func danger_feedback() -> Dictionary:
 func _draw() -> void:
 	if not _configured or _result_visible:
 		return
-	var accent: Color = _theme.get("accent", Style.GOOD)
 	var well := Style.box(Color("#fbfff9", 0.90), Color("#78a995", 0.64), 18, 2)
 	well.shadow_color = Color("#2a6954", 0.13)
 	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
 	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
 	draw_style_box(well, _board.grow(2.0))
 	draw_style_box(Style.box(Color("#fffdf5", 0.78), Color("#78a995", 0.30), 12, 1), _preview_rect)
-	for column in range(1, JellyMatchModel.COLUMNS):
-		var x: float = _board.position.x + float(column) * _pitch
-		draw_line(Vector2(x, _board.position.y + 8.0), Vector2(x, _board.end.y - 8.0), Color(accent, 0.07), 1.0 / Style.ui_scale(self))
 	var warning: Dictionary = danger_feedback()
 	if float(warning.strength) > 0.0:
 		var edge := Color(Color("#c65c35"), float(warning.strength))
