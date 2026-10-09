@@ -28,6 +28,10 @@ func _run() -> void:
 	_test_fall_physics()
 	_test_landing_timeline()
 	_test_fusion_timeline()
+	_test_overlapping_fusions()
+	_test_concurrent_fusion_lifecycle()
+	_test_held_source_after_gravity()
+	_test_concurrent_fusion_reentry()
 	_test_fusion_freezes_arrival()
 	_test_wrong_and_ignored_attempts()
 	_test_full_board_timeout()
@@ -72,11 +76,13 @@ func _settle_remaining(model) -> float:
 
 
 func _observe(model) -> Dictionary:
-	var events: Dictionary = {"attempts": [], "cues": [], "fusions": [], "chests": [], "finished": []}
+	var events: Dictionary = {"attempts": [], "cues": [], "fusions": [], "completed": [], "chests": [], "finished": []}
 	model.word_attempted.connect(func(attempt_id: String, word_ids: Array[String], correct: bool) -> void:
 		events.attempts.append({"id": attempt_id, "words": word_ids.duplicate(), "correct": correct}))
 	model.cue_requested.connect(func(cue: String) -> void: events.cues.append(cue))
 	model.fusion_started.connect(func(payload: Dictionary) -> void: events.fusions.append(payload.duplicate(true)))
+	model.fusion_completed.connect(func(payload: Dictionary, awarded: int) -> void:
+		events.completed.append({"fusion": payload.duplicate(true), "awarded": awarded}))
 	model.chest_awarded.connect(func(count: int) -> void: events.chests.append(count))
 	model.finished.connect(func(result: Dictionary) -> void: events.finished.append(result.duplicate(true)))
 	return events
@@ -86,6 +92,8 @@ func _pair(model, require_settled: bool = true, chest_only: bool = false) -> Arr
 	for a in model.cells:
 		for b in model.cells:
 			if int(a.id) == int(b.id) or a.word.id != b.word.id or a.kind == b.kind:
+				continue
+			if model.is_fusing(int(a.id)) or model.is_fusing(int(b.id)):
 				continue
 			if require_settled and (not model.is_settled(a) or not model.is_settled(b)):
 				continue
@@ -514,6 +522,231 @@ func _test_fusion_timeline() -> void:
 		"Removed tile IDs cannot replay learning or rewards")
 	check(is_equal_approx(model.spawn_interval, 6.93), "The first clear makes only a small change to the seven-second pace")
 	_assert_board(model, "Completed fusion")
+
+
+func _test_overlapping_fusions() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(), 3, 31)
+	model.step(_danger_start_seconds() + 3.0)
+	var first: Array[int] = _pair(model, true, true)
+	var original: Dictionary = model.snapshot()
+	check(model.try_merge(first[0], first[1]) == "correct", "A first marked pair starts during danger")
+	model.step(0.4)
+	var second: Array[int] = _pair(model, true, true)
+	check(second.size() == 2 and model.try_merge(second[0], second[1]) == "correct",
+		"An independent settled pair starts while the first pair is still merging")
+	check(model.fusions.size() == 2 and model.fusion.a_id == first[0]
+		and is_equal_approx(float(model.fusions[0].elapsed), 0.4)
+		and is_zero_approx(float(model.fusions[1].elapsed)),
+		"Concurrent fusions retain independent clocks and the oldest compatibility snapshot")
+	check(model.is_fusing(first[0]) and model.is_fusing(first[1])
+		and model.is_fusing(second[0]) and model.is_fusing(second[1]) and not model.is_fusing(-1),
+		"Both participants of every active fusion are reserved")
+	var snapshot: Dictionary = model.snapshot()
+	snapshot.fusions[1].word.id = "tampered"
+	snapshot.fusions[0].elapsed = 100.0
+	snapshot.fusions.clear()
+	check(model.fusions.size() == 2 and model.fusions[1].word.id != "tampered"
+		and is_equal_approx(float(model.fusion.elapsed), 0.4),
+		"Concurrent fusion snapshots cannot mutate model timelines or vocabulary")
+	var third: Array[int] = _pair(model)
+	check(model.try_merge(first[1], first[0]) == "ignored"
+		and model.try_merge(second[0], third[0]) == "ignored"
+		and model.try_merge(third[0], second[1]) == "ignored"
+		and events.attempts.is_empty() and events.fusions.size() == 2,
+		"Reserved source and target tiles cannot earn duplicate or incorrect attempts")
+	var wrong: Array[int] = []
+	for cell in model.cells:
+		if not model.is_fusing(int(cell.id)) and cell.word.id != model.tile_by_id(third[0]).word.id:
+			wrong = [third[0], int(cell.id)]
+			break
+	check(wrong.size() == 2 and model.try_merge(wrong[0], wrong[1]) == "wrong",
+		"A wrong drag between unreserved tiles is still judged during another fusion")
+	check(events.attempts.size() == 1 and not events.attempts[0].correct and model.fusions.size() == 2,
+		"An independent mistake leaves both running fusions intact")
+	model.step(0.3)
+	check(events.cues.count("pop") == 1 and model.fusions[0].popped and not model.fusions[1].popped,
+		"Each overlapping pair emits pop only at its own 0.7 second point")
+	model.step(0.35)
+	check(model.cleared_pairs == 1 and model.cells.size() == Model.CAPACITY - 2
+		and model.fusions.size() == 1 and model.fusion.a_id == second[0]
+		and is_equal_approx(float(model.fusion.elapsed), 0.65),
+		"The first pair clears at 1.05 seconds while the newer pair keeps its original clock")
+	check(model.chest_count == 1 and events.chests == [1] and events.completed.size() == 1
+		and events.completed[0].fusion.a_id == first[0] and events.completed[0].fusion.b_id == first[1]
+		and events.completed[0].awarded == 1,
+		"A completed pair publishes exactly its own source tiles and earned chest")
+	for cell in model.cells:
+		var previous: Dictionary = {}
+		for candidate in original.cells:
+			if candidate.id == cell.id:
+				previous = candidate
+		check(cell == previous, "Earlier clears do not move or age any tile while another fusion is active")
+	check(model.upcoming == original.upcoming and model.generated_tiles == original.generated_tiles
+		and is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed)) and model.full_elapsed == -1.0,
+		"Overlapping clears keep supply paused and the first completed rescue cancels danger")
+	model.step(0.05)
+	check(events.cues.count("pop") == 2 and model.fusion.popped,
+		"The second elastic pop follows its own clock instead of the previous clear")
+	model.step(0.35)
+	check(model.fusions.is_empty() and model.fusion.is_empty() and model.cleared_pairs == 2
+		and model.chest_count == 2 and events.completed.size() == 2 and events.chests == [1, 1],
+		"Both overlapping pairs complete independently with one success and one chest each")
+	check(events.attempts.size() == 3 and events.attempts[1].correct and events.attempts[2].correct
+		and events.attempts[1].id != events.attempts[2].id
+		and events.completed[1].fusion.a_id == second[0]
+		and is_equal_approx(float(events.completed[1].fusion.elapsed), Model.FUSION_SECONDS),
+		"Completion receipts identify the exact pair and cannot duplicate learning credit")
+	check(model.upcoming == original.upcoming and model.generated_tiles == original.generated_tiles
+		and is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed)),
+		"Falling and supply remain frozen through the final disappearance boundary")
+	_assert_board(model, "Concurrent fusion final gravity")
+	model.step(0.05)
+	check(is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed) + 0.05),
+		"The supply clock resumes only after all active fusions finish")
+
+
+func _test_concurrent_fusion_lifecycle() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(), 3, 42)
+	var first: Array[int] = _pair(model, true, true)
+	model.try_merge(first[0], first[1])
+	model.step(0.8)
+	var second: Array[int] = _pair(model)
+	check(model.try_merge(second[0], second[1]) == "correct" and model.fusions.size() == 2,
+		"Another drag can begin a fusion during the first pair's disappearance")
+	var incoming: Dictionary = model.cells.back().duplicate(true)
+	model.set_paused(true)
+	var paused: Dictionary = model.snapshot()
+	var cues: Array = events.cues.duplicate()
+	model.step(10.0)
+	check(model.snapshot() == paused and events.cues == cues,
+		"Menu pause freezes all concurrent timelines, airborne tiles, and sounds")
+	var third: Array[int] = _pair(model)
+	check(model.try_merge(third[0], third[1]) == "ignored", "A paused round rejects an otherwise independent pair")
+	model.set_paused(false)
+	model.step(0.25)
+	check(model.cleared_pairs == 1 and model.fusions.size() == 1
+		and is_equal_approx(float(model.fusion.elapsed), 0.25)
+		and model.tile_by_id(int(incoming.id)) == incoming,
+		"Resume preserves overlap timing and freezes an incoming tile until the last pair finishes")
+	var result: Dictionary = model.finish_round()
+	check(result.cleared_pairs == 1 and result.chest_count == 1 and model.fusions.is_empty()
+		and events.attempts.size() == 1 and events.completed.size() == 1,
+		"Finishing retains an earlier completed pair but cancels every pending fusion")
+	model.step(20.0)
+	check(model.finish_round() == result and events.finished.size() == 1 and events.chests == [1],
+		"Finishing or stepping an interrupted overlap cannot repeat rewards")
+	model.configure(_vocabulary(), 3, 42)
+	first = _pair(model)
+	model.try_merge(first[0], first[1])
+	second = _pair(model)
+	model.try_merge(second[0], second[1])
+	model.step(0.5)
+	model.configure(_vocabulary(), 3, 42)
+	check(model.fusions.is_empty() and model.cleared_pairs == 0 and model.chest_count == 0
+		and model.generated_tiles == INITIAL_COUNT and model.spawn_elapsed == 0.0,
+		"A new round drops every overlapping timeline and reservation without carrying score")
+	var attempts: int = events.attempts.size()
+	model.step(2.0)
+	check(events.attempts.size() == attempts and events.completed.size() == 1,
+		"Reset timelines cannot complete later in a new round")
+
+
+func _test_held_source_after_gravity() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(), 3, 42)
+	var pair: Array[int] = _pair(model)
+	var source_index: int = model._index_for_id(pair[0])
+	var target_index: int = model._index_for_id(pair[1])
+	model.cells[source_index].age = 0.0
+	model.cells[source_index].falling_rows = 1
+	check(model.try_merge(pair[0], pair[1]) == "ignored" and model.fusions.is_empty(),
+		"A newly falling source cannot be picked up through ordinary merge input")
+	model.cells[target_index].age = 0.0
+	model.cells[target_index].falling_rows = 1
+	check(model.try_merge(pair[0], pair[1], true) == "ignored" and events.fusions.is_empty(),
+		"An existing held source cannot bypass the target's landing gate")
+	model.cells[target_index].age = Model.SETTLE_SECONDS
+	check(model.try_merge(pair[0], pair[1], true) == "correct" and model.fusions.size() == 1,
+		"A drag already held before gravity can release onto a settled matching target")
+	check(model.try_merge(pair[0], pair[1], true) == "ignored" and events.fusions.size() == 1,
+		"An existing held source cannot bypass a fusion reservation")
+	model.step(Model.FUSION_SECONDS)
+	check(events.attempts.size() == 1 and events.attempts[0].correct and model.cleared_pairs == 1,
+		"A held source accepted after gravity earns exactly one normal learning receipt")
+
+
+func _test_concurrent_fusion_reentry() -> void:
+	for action: String in ["pause", "finish", "reset"]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(), 3, 42)
+		var first: Array[int] = _pair(model)
+		model.try_merge(first[0], first[1])
+		var second: Array[int] = _pair(model)
+		model.try_merge(second[0], second[1])
+		var interrupt: Callable = func(cue: String) -> void:
+			if cue != "pop":
+				return
+			match action:
+				"pause":
+					model.set_paused(true)
+				"finish":
+					model.finish_round()
+				"reset":
+					model.configure(_vocabulary(), 3, 42)
+		model.cue_requested.connect(interrupt)
+		model.step(2.0)
+		check(events.cues.count("pop") == 1 and events.attempts.is_empty() and events.completed.is_empty(),
+			"A synchronous %s at one pop prevents stale sibling events or rewards" % action)
+		model.cue_requested.disconnect(interrupt)
+		if action == "pause":
+			check(model.fusions.size() == 2 and model.fusions[0].popped and not model.fusions[1].popped,
+				"Pause during a shared pop boundary retains the unannounced sibling event")
+			model.set_paused(false)
+			model.step(0.35)
+			check(model.cleared_pairs == 2 and events.cues.count("pop") == 2 and events.completed.size() == 2,
+				"Resume publishes each interrupted simultaneous event exactly once")
+		else:
+			check(model.fusions.is_empty(), "Finish or reset removes every concurrent reservation")
+	for action: String in ["finish", "reset"]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(), 3, 42)
+		var first: Array[int] = _pair(model, true, true)
+		model.try_merge(first[0], first[1])
+		var second: Array[int] = _pair(model)
+		model.try_merge(second[0], second[1])
+		var interrupt: Callable = func(_payload: Dictionary, _awarded: int) -> void:
+			if action == "finish":
+				model.finish_round()
+			else:
+				model.configure(_vocabulary(), 3, 42)
+		model.fusion_completed.connect(interrupt)
+		model.step(2.0)
+		check(events.attempts.size() == 1 and events.completed.size() == 1
+			and events.chests.is_empty() and events.cues.count("chest") == 0 and model.fusions.is_empty(),
+			"A synchronous %s from a completion cannot leak the old chest cue or sibling completion" % action)
+		check(model.chest_count == (1 if action == "finish" else 0),
+			"A completion callback retains earned rewards only in the finished round")
+	var chained = Model.new()
+	var chained_events: Dictionary = _observe(chained)
+	chained.configure(_vocabulary(), 3, 42)
+	var pair: Array[int] = _pair(chained)
+	chained.try_merge(pair[0], pair[1])
+	var add_at_pop: Callable = func(cue: String) -> void:
+		if cue == "pop" and chained_events.fusions.size() == 1:
+			var next: Array[int] = _pair(chained)
+			chained.try_merge(next[0], next[1])
+	chained.cue_requested.connect(add_at_pop)
+	chained.step(1.75)
+	check(chained.cleared_pairs == 2 and chained.fusions.is_empty()
+		and chained_events.cues.count("merge") == 2 and chained_events.cues.count("pop") == 2,
+		"A pair accepted during an event callback gets its full independent timeline within a long frame")
 
 
 func _test_fusion_freezes_arrival() -> void:

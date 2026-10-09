@@ -55,6 +55,20 @@ function pair(state, { chest = null } = {}) {
   return null;
 }
 
+function independentPairs(state) {
+  const pairs = [], used = new Set();
+  for (const first of state.tiles || []) {
+    if (used.has(first.id) || !first.visible || !first.settled) continue;
+    const second = state.tiles.find(tile => !used.has(tile.id) && tile.id !== first.id &&
+      tile.visible && tile.settled && tile.word.id === first.word.id && tile.kind !== first.kind);
+    if (!second) continue;
+    pairs.push([first, second]);
+    used.add(first.id);
+    used.add(second.id);
+  }
+  return pairs;
+}
+
 async function availablePair(page, options = {}) {
   let found;
   await expect.poll(async () => {
@@ -435,6 +449,135 @@ test('consecutive taps never judge matching or mismatching tiles; a drag still c
   await expectClear(page, before.cleared_pairs + 1, tiles);
   await expect.poll(async () => (await growth(page)).streaks[tiles[0].word.id]).toBe(previousStreak + 1);
   expect(errors).toEqual([]);
+});
+
+test.describe('concurrent jelly gestures', () => {
+  // Preserve mobile CSS geometry while isolating the short overlap window
+  // from high-DPR software-renderer fill cost. High-DPR cadence still needs
+  // real-device verification; the production animation clock is unchanged.
+  test.use({ deviceScaleFactor: 1 });
+
+  for (const pointer of ['mouse', 'touch']) {
+    test(`other jellies remain draggable through merge and pop with ${pointer}`, async ({ page }, info) => {
+      test.skip(pointer === 'touch' && info.project.use.browserName !== 'chromium',
+        'Native multi-event touch injection uses the Chromium protocol; mouse coverage also runs in WebKit.');
+      test.setTimeout(90000);
+      const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+      // Compile the production gel material through an ordinary completed clear
+      // before measuring overlapping gestures on software-rendered Chromium.
+      const warmup = await availablePair(page);
+      await dragPair(page, warmup);
+      await expectClear(page, 1, warmup);
+      let pairs;
+      await expect.poll(async () => {
+        pairs = independentPairs(await jelly(page));
+        return pairs.length;
+      }, { message: 'Two independent settled pairs are available for overlapping real gestures' }).toBeGreaterThanOrEqual(2);
+      const [first, second] = pairs;
+      const before = await jelly(page), bounds = await metrics(page), learning = await growth(page);
+      const expectedChests = [...first, ...second].filter(tile => tile.chest).length;
+      const expectedLearning = new Map();
+      for (const tiles of [first, second]) {
+        const id = tiles[0].word.id;
+        expectedLearning.set(id, (expectedLearning.get(id) ?? (learning.streaks[id] || 0)) + 1);
+      }
+      await page.evaluate(() => {
+        const status = document.getElementById('game-status');
+        window.jellyConcurrentTimeline = [];
+        const record = () => {
+          const state = JSON.parse(status.dataset.jelly || '{}');
+          window.jellyConcurrentTimeline.push({ at: performance.now(), cleared: state.cleared_pairs,
+            generated: state.generated_tiles, spawnElapsed: state.spawn_elapsed, drag: state.drag,
+            contact: state.contact,
+            finishDisabled: state.finish?.disabled, chests: state.chest_count,
+            fusions: (state.fusions || []).map(item => ({ id: item.attempt_id, elapsed: item.elapsed })),
+            effects: state.fusion_effects || [] });
+        };
+        new MutationObserver(record).observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+        record();
+      });
+      const session = pointer === 'touch' ? await page.context().newCDPSession(page) : null;
+      const firstFrom = center(first[0].rect, bounds), firstTo = center(first[1].rect, bounds);
+      const from = center(second[0].rect, bounds), to = center(second[1].rect, bounds);
+      const touchPoint = point => [{ x: point.x, y: point.y, id: 0, radiusX: 6, radiusY: 6, force: 1 }];
+      let down = false;
+      try {
+        // These consecutive native input events deliberately avoid round trips
+        // to the published status between the two real gestures.
+        await page.mouse.move(firstFrom.x, firstFrom.y);
+        await page.mouse.down();
+        await page.mouse.move(firstTo.x, firstTo.y);
+        await page.mouse.up();
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: touchPoint(from) });
+        else {
+          await page.mouse.move(from.x, from.y);
+          await page.mouse.down();
+        }
+        down = true;
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: touchPoint(to) });
+        else await page.mouse.move(to.x, to.y, { steps: 2 });
+        await page.waitForFunction(source => {
+          const state = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
+          return state.drag.active && state.drag.source === source && state.fusions?.length === 1 &&
+            state.fusions[0].elapsed >= 0.70 && state.fusion_effects?.[0]?.stage === 'release';
+        }, second[0].id, { polling: 20, timeout: 3000 });
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        else await page.mouse.up();
+        down = false;
+        await page.screenshot({ path: info.outputPath(`jelly-concurrent-${pointer}-fusion.png`), scale: 'css' });
+        await expect.poll(async () => (await jelly(page)).cleared_pairs,
+          { intervals: [50], message: 'The two accepted drops complete at their separate timeline boundaries' }).toBe(before.cleared_pairs + 2);
+        const completed = await jelly(page);
+        expect(completed.fusions).toEqual([]);
+        expect(completed.fusion_effects).toEqual([]);
+        expect(completed.finish.disabled).toBe(false);
+        expect(completed.chest_count).toBe(before.chest_count + expectedChests);
+        for (const tile of [...first, ...second]) expect(completed.tiles.some(item => item.id === tile.id)).toBe(false);
+        for (const [id, count] of expectedLearning) {
+          await expect.poll(async () => (await growth(page)).streaks[id]).toBe(count);
+        }
+        const timeline = await page.evaluate(() => window.jellyConcurrentTimeline);
+        const active = timeline.filter(frame => frame.fusions.length);
+        expect(active.length).toBeGreaterThanOrEqual(4);
+        const held = active.filter(frame => frame.drag.active && frame.drag.source === second[0].id &&
+          frame.drag.target === second[1].id && frame.contact.kind === 'match');
+        expect(held.some(frame => frame.fusions.length === 1 && frame.fusions[0].elapsed < 0.7),
+          'The second jelly is draggable while the first pair is merging').toBe(true);
+        expect(held.some(frame => frame.effects.some(effect => effect.stage === 'release')),
+          'The held second jelly stays interactive during the first elastic pop').toBe(true);
+        expect(active.some(frame => frame.fusions.length === 2 && frame.effects.length === 2 &&
+          frame.cleared === before.cleared_pairs),
+        'The second drop starts its own effect before the first pair receives credit').toBe(true);
+        expect(active.some(frame => frame.cleared === before.cleared_pairs + 1 && frame.fusions.length === 1),
+          'Completing the older pair preserves the younger independent animation').toBe(true);
+        for (const frame of active) {
+          expect(frame.generated, 'New supply stays paused until every accepted pair disappears').toBe(active[0].generated);
+          expect(frame.spawnElapsed, 'Concurrent gestures cannot restart the falling clock').toBe(active[0].spawnElapsed);
+          expect(frame.finishDisabled, 'Finish cannot discard a pending independent award').toBe(true);
+        }
+        await page.waitForTimeout(300);
+        expect((await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 2);
+        expect((await jelly(page)).chest_count).toBe(before.chest_count + expectedChests);
+        for (const [id, count] of expectedLearning) expect((await growth(page)).streaks[id]).toBe(count);
+      } finally {
+        if (down) {
+          if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+          else await page.mouse.up();
+        }
+        const timeline = await page.evaluate(() => window.jellyConcurrentTimeline || []);
+        const timelinePath = info.outputPath(`jelly-concurrent-${pointer}-timeline.json`);
+        fs.writeFileSync(timelinePath, JSON.stringify({
+          scenario: { pointer, first: first.map(tile => ({ id: tile.id, word: tile.word.id, rect: tile.rect })),
+            second: second.map(tile => ({ id: tile.id, word: tile.word.id, rect: tile.rect })),
+            viewport: page.viewportSize(), bounds, deviceScaleFactor: 1 }, timeline
+        }, null, 2));
+        await info.attach(`jelly-concurrent-${pointer}-timeline`,
+          { path: timelinePath, contentType: 'application/json' });
+        if (session) await session.detach();
+      }
+      expect(errors).toEqual([]);
+    });
+  }
 });
 
 test('real drag and touch pairs earn learning once, then reveal and open their exact treasure', async ({ page }, info) => {

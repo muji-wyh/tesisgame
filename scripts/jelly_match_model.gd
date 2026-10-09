@@ -4,6 +4,7 @@ extends RefCounted
 signal changed
 signal word_attempted(attempt_id: String, word_ids: Array[String], correct: bool)
 signal fusion_started(payload: Dictionary)
+signal fusion_completed(payload: Dictionary, awarded: int)
 signal cue_requested(cue: String)
 signal chest_awarded(count: int)
 signal finished(result: Dictionary)
@@ -28,7 +29,10 @@ const EPSILON: float = 0.000001
 
 var cells: Array[Dictionary] = []
 var upcoming: Array[Dictionary] = []
-var fusion: Dictionary = {}
+var fusions: Array[Dictionary] = []
+var fusion: Dictionary:
+	get:
+		return {} if fusions.is_empty() else fusions[0]
 var phase: String = "finished"
 var paused: bool = false
 var cleared_pairs: int = 0
@@ -56,7 +60,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_generation += 1
 	cells.clear()
 	upcoming.clear()
-	fusion.clear()
+	fusions.clear()
 	_words.clear()
 	_supply.clear()
 	_completed_words.clear()
@@ -121,21 +125,30 @@ func step(delta: float) -> void:
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and phase == "playing" and not paused and generation == _generation:
-		if not fusion.is_empty():
-			var boundary: float = FUSION_SECONDS
-			if not bool(fusion.popped):
-				boundary = POP_SECONDS
-			var elapsed: float = float(fusion.elapsed)
-			var consumed: float = minf(remaining, maxf(0.0, boundary - elapsed))
-			fusion.elapsed = elapsed + consumed
+		if not fusions.is_empty():
+			# Advance every active merge to the next shared event boundary. Supply,
+			# airborne tiles, and danger stay paused until the final merge releases.
+			var consumed: float = remaining
+			for active in fusions:
+				var boundary: float = FUSION_SECONDS if bool(active.popped) else POP_SECONDS
+				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
+			for active in fusions:
+				active.elapsed = float(active.elapsed) + consumed
 			remaining -= consumed
-			if not bool(fusion.popped) and float(fusion.elapsed) + EPSILON >= POP_SECONDS:
-				fusion.popped = true
-				cue_requested.emit("pop")
+			# A callback may add, stop, or replace merges. Iterate the current batch
+			# only, and recheck each receipt before publishing another event.
+			for active in fusions.duplicate():
 				if generation != _generation or phase != "playing" or paused:
 					break
-			if not fusion.is_empty() and float(fusion.elapsed) + EPSILON >= FUSION_SECONDS:
-				_complete_fusion()
+				if _fusion_index(str(active.attempt_id)) < 0:
+					continue
+				if not bool(active.popped) and float(active.elapsed) + EPSILON >= POP_SECONDS:
+					active.popped = true
+					cue_requested.emit("pop")
+					if generation != _generation or phase != "playing" or paused:
+						break
+				if float(active.elapsed) + EPSILON >= FUSION_SECONDS:
+					_complete_fusion(str(active.attempt_id))
 		elif cells.size() >= CAPACITY:
 			var settling: float = _settling_remaining()
 			if settling > EPSILON:
@@ -148,7 +161,7 @@ func step(delta: float) -> void:
 				_start_danger()
 				if generation != _generation or phase != "playing" or paused:
 					break
-				if not fusion.is_empty():
+				if not fusions.is_empty():
 					continue
 			var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 			var consumed: float = minf(remaining, maxf(0.0, next_second - full_elapsed))
@@ -171,8 +184,8 @@ func step(delta: float) -> void:
 		changed.emit()
 
 
-func try_merge(a_id: int, b_id: int) -> String:
-	if paused or phase != "playing" or not fusion.is_empty() or a_id == b_id:
+func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
+	if paused or phase != "playing" or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
 	var a_index: int = _index_for_id(a_id)
 	var b_index: int = _index_for_id(b_id)
@@ -180,7 +193,9 @@ func try_merge(a_id: int, b_id: int) -> String:
 		return "ignored"
 	var a: Dictionary = cells[a_index]
 	var b: Dictionary = cells[b_index]
-	if not is_settled(a) or not is_settled(b):
+	# A drag that began on a settled tile may outlive another pair's clear.
+	# Gravity can retarget that held source without invalidating the gesture.
+	if (not held_source and not is_settled(a)) or not is_settled(b):
 		return "ignored"
 	_attempt_count += 1
 	var attempt_id: String = "jelly-%d" % _attempt_count
@@ -194,18 +209,20 @@ func try_merge(a_id: int, b_id: int) -> String:
 			cue_requested.emit("wrong")
 			changed.emit()
 		return "wrong"
-	fusion = {
+	var active: Dictionary = {
 		"a_id": a_id, "b_id": b_id,
 		"a": a.duplicate(true), "b": b.duplicate(true),
 		"word": a.word.duplicate(true), "attempt_id": attempt_id,
 		"elapsed": 0.0, "duration": FUSION_SECONDS,
 		"pop_at": POP_SECONDS, "popped": false
 	}
+	fusions.append(active)
 	var generation: int = _generation
-	fusion_started.emit(fusion.duplicate(true))
-	if generation == _generation and phase == "playing" and not fusion.is_empty():
+	fusion_started.emit(active.duplicate(true))
+	if generation == _generation and phase == "playing" and not paused and _fusion_index(attempt_id) >= 0:
 		cue_requested.emit("merge")
-		changed.emit()
+		if generation == _generation and phase == "playing":
+			changed.emit()
 	return "correct"
 
 
@@ -214,6 +231,13 @@ func set_paused(value: bool) -> void:
 		return
 	paused = value
 	changed.emit()
+
+
+func is_fusing(tile_id: int) -> bool:
+	for active in fusions:
+		if tile_id == int(active.a_id) or tile_id == int(active.b_id):
+			return true
+	return false
 
 
 func is_settled(cell: Dictionary) -> bool:
@@ -232,7 +256,8 @@ func score() -> int:
 
 func snapshot() -> Dictionary:
 	return {
-		"cells": cells.duplicate(true), "upcoming": upcoming.duplicate(true), "fusion": fusion.duplicate(true),
+		"cells": cells.duplicate(true), "upcoming": upcoming.duplicate(true),
+		"fusion": fusion.duplicate(true), "fusions": fusions.duplicate(true),
 		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs, "score": score(),
 		"chest_count": chest_count, "generated_tiles": generated_tiles,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed,
@@ -248,7 +273,7 @@ func finish_round() -> Dictionary:
 	# An interrupted fusion has not cleared its tiles yet, so it earns no attempt
 	# or chest. Previously completed clears are already reflected in the result.
 	phase = "finished"
-	fusion.clear()
+	fusions.clear()
 	_result = {"cleared_pairs": cleared_pairs, "score": score(), "chest_count": chest_count, "words": []}
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
@@ -398,15 +423,27 @@ func _start_danger() -> void:
 	cue_requested.emit("danger")
 
 
-func _complete_fusion() -> void:
-	var completed: Dictionary = fusion.duplicate(true)
-	fusion.clear()
+func _fusion_index(attempt_id: String) -> int:
+	for index in range(fusions.size()):
+		if str(fusions[index].attempt_id) == attempt_id:
+			return index
+	return -1
+
+
+func _complete_fusion(attempt_id: String) -> void:
+	var fusion_index: int = _fusion_index(attempt_id)
+	if fusion_index < 0:
+		return
+	var completed: Dictionary = fusions[fusion_index].duplicate(true)
+	fusions.remove_at(fusion_index)
 	var awarded: int = 0
 	for index in range(cells.size() - 1, -1, -1):
 		if int(cells[index].id) in [int(completed.a_id), int(completed.b_id)]:
 			awarded += 1 if bool(cells[index].chest) else 0
 			cells.remove_at(index)
-	_apply_gravity()
+	# Keep other reserved pairs and held tiles in place while their effects run.
+	if fusions.is_empty():
+		_apply_gravity()
 	full_elapsed = -1.0
 	cleared_pairs += 1
 	chest_count += awarded
@@ -415,7 +452,10 @@ func _complete_fusion() -> void:
 	var generation: int = _generation
 	var word_ids: Array[String] = [str(completed.word.id)]
 	word_attempted.emit(str(completed.attempt_id), word_ids, true)
-	if generation != _generation:
+	if generation != _generation or phase != "playing":
+		return
+	fusion_completed.emit(completed, awarded)
+	if generation != _generation or phase != "playing":
 		return
 	if awarded > 0:
 		chest_awarded.emit(awarded)

@@ -54,17 +54,11 @@ var _drag_point := Vector2.ZERO
 var _drag_offset := Vector2.ZERO
 var _dragging: bool = false
 var _snapbacks: Dictionary = {}
-var _merged: Tile
-var _fusion_art: Control
+var _fusion_visuals: Dictionary = {}
 var _contact_elapsed: float = 0.0
 var _rejection: Dictionary = {}
 var _contact_label: Label
 var _contact_label_kind: String = ""
-var _fusion_origin := Vector2.ZERO
-var _fusion_start := Vector2.ZERO
-var _fusion_direction := Vector2.RIGHT
-var _fusion_contact_strength: float = 0.0
-var _fusion_held_direction := Vector2.ZERO
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_count: Label
@@ -93,17 +87,6 @@ func _init() -> void:
 	_falling_layer.clip_contents = true
 	_falling_layer.z_index = 2
 	add_child(_falling_layer)
-	_fusion_art = FusionArt.new()
-	_fusion_art.name = "GelUnion"
-	_fusion_art.z_index = 25
-	add_child(_fusion_art)
-	_merged = Tile.new()
-	_merged.name = "FusedJelly"
-	_merged.focus_mode = Control.FOCUS_NONE
-	_merged.z_index = 30
-	_merged._shadow.z_index = -10
-	add_child(_merged)
-	_merged.hide()
 	_contact_label = _label(self, "", 14)
 	_contact_label.name = "JellyContactFeedback"
 	_contact_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -149,7 +132,7 @@ func _init() -> void:
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
 	game.cue_requested.connect(_cue)
-	game.chest_awarded.connect(_chest_awarded)
+	game.fusion_completed.connect(_fusion_completed)
 	game.finished.connect(_finished)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
@@ -213,7 +196,8 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_style_finish_button()
 	for id in _tiles:
 		_configure_tile(_tiles[id], _cell(int(id)))
-	_merged.tile_id = -1
+	for visual: Dictionary in _fusion_visuals.values():
+		visual.merged.tile_id = -1
 	for ghost: Tile in _ghosts.values():
 		ghost.tile_id = -1
 	for preview: Tile in _preview_tiles:
@@ -311,8 +295,7 @@ func stop() -> void:
 	settle()
 	_result_visible = false
 	_result.hide()
-	_merged.hide()
-	_fusion_art.hide()
+	_clear_fusion_visuals()
 	for ghost: Tile in _ghosts.values():
 		ghost.hide()
 		ghost.queue_free()
@@ -360,14 +343,14 @@ func _visibility_changed() -> void:
 	_publish()
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _merged != null:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _contact_label != null:
 		cancel_input()
 
 func _allowed() -> bool:
 	return _configured and not _paused and is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 func _can_play() -> bool:
-	return _allowed() and game.phase == "playing" and game.fusion.is_empty() and not _result_visible
+	return _allowed() and game.phase == "playing" and not _result_visible
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
@@ -458,6 +441,7 @@ func _move(global_point: Vector2) -> void:
 	_target = target
 	_refresh_marks()
 	_sync_positions()
+	_refresh_fusion()
 	_publish()
 
 func _release(global_point: Vector2) -> void:
@@ -471,7 +455,6 @@ func _release(global_point: Vector2) -> void:
 	var from: Vector2 = _tiles[source].position if _tiles.has(source) else Vector2.ZERO
 	var dragged: bool = _dragging
 	var held: Dictionary = _contact_state()
-	_fusion_held_direction = Vector2(held.direction) if held.kind == "match" else Vector2.ZERO
 	_pointer = NO_POINTER
 	_source = -1
 	_target = -1
@@ -479,8 +462,7 @@ func _release(global_point: Vector2) -> void:
 	_gesture_serial += 1
 	if dragged:
 		if target >= 0:
-			_fusion_contact_strength = lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed))
-			_merge(source, target, from)
+			_merge(source, target, from, held, true)
 		else:
 			_snap_back(source, from)
 			audio_requested.emit("release")
@@ -500,18 +482,24 @@ func _activate(id: int) -> void:
 		return
 	audio_requested.emit("pick")
 
-func _merge(first: int, second: int, from: Vector2) -> void:
+func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_source: bool = false) -> void:
 	var generation: int = _generation
-	var result: String = game.try_merge(first, second)
+	# A source grabbed while settled stays in the hand if an earlier clear moves
+	# its resting row. The destination must still be an available, settled tile.
+	var result: String = game.try_merge(first, second, held_source)
 	if generation != _generation or not _configured or game.phase != "playing":
 		return
 	if result == "correct":
-		if game.fusion.is_empty():
-			return
-		_fusion_start = from + _tile_rect(game.fusion.a).size * 0.5
-		_fusion_direction = _fusion_held_direction if not _fusion_held_direction.is_zero_approx() else (_tile_rect(game.fusion.b).get_center() - _tile_rect(game.fusion.a).get_center()).normalized()
-		_fusion_art.configure(SURFACES, first, second, _surfaces[posmod(second, _surfaces.size())])
-		_snapbacks.clear()
+		for fusion: Dictionary in game.fusions:
+			if int(fusion.a_id) == first and int(fusion.b_id) == second:
+				var visual: Dictionary = _ensure_fusion_visual(fusion)
+				visual.start = from + _tile_rect(fusion.a).size * 0.5
+				if held.get("kind", "none") == "match" and not Vector2(held.direction).is_zero_approx():
+					visual.direction = Vector2(held.direction)
+				visual.contact_strength = lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed))
+				break
+		_snapbacks.erase(first)
+		_snapbacks.erase(second)
 		_rejection.clear()
 	else:
 		if result == "wrong":
@@ -537,7 +525,7 @@ func _cell(id: int) -> Dictionary:
 	return {}
 
 func _settled(cell: Dictionary) -> bool:
-	return game.is_settled(cell)
+	return game.is_settled(cell) and not game.is_fusing(int(cell.id))
 
 func _tile_at(point: Vector2, except_id: int = -1) -> int:
 	if not _board.has_point(point):
@@ -641,6 +629,13 @@ func _sync_positions() -> void:
 			_ghosts[id].hide()
 			_ghosts[id].queue_free()
 			_ghosts.erase(id)
+	if _dragging:
+		# A completed pair can move a destination without another pointer event.
+		var target: int = _tile_at(_drag_point, _source)
+		if target != _target:
+			_target = target
+			_contact_elapsed = 0.0
+			_refresh_marks()
 	_refresh_contact()
 
 func _sync_preview() -> void:
@@ -665,7 +660,7 @@ func _preview_pose(index: int) -> Dictionary:
 func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
 	for id in _tiles:
-		_tiles[id].set_marked(int(id) == _target, int(id) == _source, feedback_enabled, reduced_motion)
+		_tiles[id].set_marked(int(id) == _target, int(id) == _source, feedback_enabled and not game.is_fusing(int(id)), reduced_motion)
 	_refresh_contact()
 
 func _contact_state() -> Dictionary:
@@ -680,7 +675,7 @@ func _contact_state() -> Dictionary:
 		return state
 	var a: Dictionary = _cell(_source)
 	var b: Dictionary = _cell(_target)
-	if a.is_empty() or b.is_empty():
+	if a.is_empty() or b.is_empty() or game.is_fusing(_source) or not _settled(b):
 		return state
 	var matching: bool = a.word.id == b.word.id and a.kind != b.kind
 	var direction: Vector2 = (_tile_rect(b).get_center() - (_tiles[_source].position + _tiles[_source].size * 0.5)).normalized()
@@ -767,32 +762,73 @@ func _process(delta: float) -> void:
 				audio_requested.emit("land")
 				break
 
+func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
+	var id: String = str(fusion.attempt_id)
+	if not _fusion_visuals.has(id):
+		var art := FusionArt.new()
+		art.name = "GelUnion_" + id
+		art.z_index = 25
+		add_child(art)
+		art.configure(SURFACES, int(fusion.a_id), int(fusion.b_id), _surfaces[posmod(int(fusion.b_id), _surfaces.size())])
+		var merged := Tile.new()
+		merged.name = "FusedJelly_" + id
+		merged.focus_mode = Control.FOCUS_NONE
+		merged.disabled = true
+		merged.z_index = 30
+		merged._shadow.z_index = -10
+		add_child(merged)
+		merged.hide()
+		_fusion_visuals[id] = {"art": art, "merged": merged,
+			"start": _tile_rect(fusion.a).get_center(),
+			"direction": (_tile_rect(fusion.b).get_center() - _tile_rect(fusion.a).get_center()).normalized(),
+			"contact_strength": 0.0}
+	return _fusion_visuals[id]
+
+func _remove_fusion_visual(id: String) -> void:
+	var visual: Dictionary = _fusion_visuals[id]
+	for node: Control in [visual.art, visual.merged]:
+		node.hide()
+		node.queue_free()
+	_fusion_visuals.erase(id)
+
+func _clear_fusion_visuals() -> void:
+	for id: String in _fusion_visuals.keys():
+		_remove_fusion_visual(id)
+
 func _refresh_fusion() -> void:
-	if game.fusion.is_empty() or _result_visible:
-		_merged.hide()
-		_fusion_art.hide()
+	if not _configured or _result_visible or game.phase != "playing":
+		_clear_fusion_visuals()
 		return
-	var fusion: Dictionary = game.fusion
+	var live: Dictionary = {}
+	for fusion: Dictionary in game.fusions:
+		live[str(fusion.attempt_id)] = true
+		_pose_fusion(fusion, _ensure_fusion_visual(fusion))
+	for id: String in _fusion_visuals.keys():
+		if not live.has(id):
+			_remove_fusion_visual(id)
+
+func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
+	var merged: Tile = visual.merged
+	var art: Control = visual.art
 	var p: float = clampf(float(fusion.elapsed) / float(fusion.duration), 0.0, 1.0)
 	var a: Dictionary = fusion.a
 	var b: Dictionary = fusion.b
 	var destination: Vector2 = _tile_rect(b).get_center()
-	_fusion_origin = destination
-	if _merged.tile_id != int(b.id):
-		_configure_tile(_merged, b, true)
+	if merged.tile_id != int(b.id):
+		_configure_tile(merged, b, true)
 	var unit: float = _pitch - _gap
 	var size_factor: float = 1.28
 	var stretch := Vector2.ONE
 	var contact: float = smoothstep(0.0, 0.30, p)
 	var union: float = smoothstep(0.24, 0.38, p)
-	var close_drop: bool = _fusion_start.distance_to(destination) < _pitch * 0.4
+	var close_drop: bool = Vector2(visual.start).distance_to(destination) < _pitch * 0.4
 	var contact_lobe: float = sin(clampf(p / 0.27, 0.0, 1.0) * PI) if close_drop else 0.0
-	var held_separation: float = _fusion_contact_strength * unit * 0.25 * (1.0 - smoothstep(0.0, 0.27, p)) if close_drop else 0.0
-	var first_center: Vector2 = _fusion_start.lerp(destination, contact)
+	var held_separation: float = float(visual.contact_strength) * unit * 0.25 * (1.0 - smoothstep(0.0, 0.27, p)) if close_drop else 0.0
+	var first_center: Vector2 = Vector2(visual.start).lerp(destination, contact)
 	var second_center: Vector2 = destination
 	if close_drop:
-		first_center -= _fusion_direction * (contact_lobe * _pitch * 0.17 + held_separation)
-		second_center += _fusion_direction * (contact_lobe * _pitch * 0.12 + held_separation)
+		first_center -= Vector2(visual.direction) * (contact_lobe * _pitch * 0.17 + held_separation)
+		second_center += Vector2(visual.direction) * (contact_lobe * _pitch * 0.12 + held_separation)
 	for cell: Dictionary in [a, b]:
 		if not _tiles.has(int(cell.id)):
 			continue
@@ -824,37 +860,39 @@ func _refresh_fusion() -> void:
 			content_opacity *= 1.0 - smoothstep(0.04, 0.44, release)
 		var extent: Vector2 = Vector2.ONE * unit * size_factor * stretch
 		# The same two painted lobes become one surface; no sprite crossfade at the seam.
-		_fusion_art.pose(first_center - Vector2(0, rise), second_center - Vector2(0, rise), destination,
+		art.pose(first_center - Vector2(0, rise), second_center - Vector2(0, rise), destination,
 			extent, unit, p, union, compression * (1.0 - release), release, body_opacity)
 	else:
-		_fusion_art.hide()
-	_merged._surface.visible = reduced_motion
-	_merged.size = Vector2.ONE * unit * size_factor
-	_merged.position = destination - _merged.size * 0.5 - Vector2(0, rise * 0.65)
-	_merged.modulate.a = content_opacity
-	_merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
-	_merged.set_support(0.0, maxf(0.0, 1.0 - stretch.y))
-	_merged._shadow.modulate.a *= body_opacity
-	_merged.visible = reduced_motion or union > 0.0
+		art.hide()
+	merged._surface.visible = reduced_motion
+	merged.size = Vector2.ONE * unit * size_factor
+	merged.position = destination - merged.size * 0.5 - Vector2(0, rise * 0.65)
+	merged.modulate.a = content_opacity
+	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
+	merged.set_support(0.0, maxf(0.0, 1.0 - stretch.y))
+	merged._shadow.modulate.a *= body_opacity
+	merged.visible = reduced_motion or union > 0.0
 
 func _cue(cue: String) -> void:
 	if _allowed():
 		audio_requested.emit(cue)
 
-func _chest_awarded(_count: int) -> void:
-	if not reduced_motion:
-		_loot_flights.append({"from": _fusion_origin, "elapsed": 0.0})
+func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
+	if not _configured:
+		return
+	if awarded > 0 and not reduced_motion:
+		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0})
 	_refresh_hud()
 
 func _finished(result: Dictionary) -> void:
 	cancel_input()
-	_merged.hide()
+	_clear_fusion_visuals()
 	_refresh_controls()
 	round_finished.emit(result.duplicate(true))
 	_publish()
 
 func _finish_round() -> void:
-	if not _can_play() or _pointer != NO_POINTER:
+	if not _can_play() or not game.fusions.is_empty() or _pointer != NO_POINTER:
 		return
 	cancel_input()
 	game.finish_round()
@@ -928,7 +966,7 @@ func _refresh_controls() -> void:
 	chests_button.disabled = not _allowed() or _result_transition
 	replay_button.disabled = not _allowed() or _result_transition
 	finish_button.visible = _configured and game.phase == "playing" and not _result_visible
-	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
+	finish_button.disabled = not _can_play() or not game.fusions.is_empty() or _pointer != NO_POINTER
 
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
@@ -1109,7 +1147,7 @@ func _animate_result() -> void:
 		image.modulate.a = 1.0 if reduced_motion else smoothstep(0.0, 0.2, p)
 
 func danger_feedback() -> Dictionary:
-	var active: bool = _can_play() and float(game.full_elapsed) >= 0.0
+	var active: bool = _can_play() and game.fusions.is_empty() and float(game.full_elapsed) >= 0.0
 	var strength: float = 0.0
 	if active:
 		# The model emits a warning at this same second boundary. Keep a quiet
@@ -1160,7 +1198,15 @@ func snapshot() -> Dictionary:
 	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": -1}
 	var contact: Dictionary = _contact_state()
 	result["contact"] = {"kind": contact.kind, "source": contact.source, "target": contact.target, "strength": contact.strength}
-	result["fusion_effect"] = {"visible": _fusion_art.is_visible_in_tree(), "stage": _fusion_art.stage if _fusion_art.is_visible_in_tree() else "none"}
+	result["fusion_effects"] = []
+	for id: String in _fusion_visuals:
+		var visual: Dictionary = _fusion_visuals[id]
+		var visible_art: bool = visual.art.is_visible_in_tree()
+		result.fusion_effects.append({"attempt_id": id, "visible": visible_art,
+			"stage": visual.art.stage if visible_art else "none",
+			"rect": _rect(visual.merged.get_global_rect()) if visual.merged.visible else []})
+	var first_effect: Dictionary = result.fusion_effects[0] if not result.fusion_effects.is_empty() else {}
+	result["fusion_effect"] = {"visible": first_effect.get("visible", false), "stage": first_effect.get("stage", "none")}
 	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible, "rect": _rect(_global_rect(_preview_rect)), "slots": []}
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
@@ -1171,7 +1217,7 @@ func snapshot() -> Dictionary:
 	result["landing_ghosts"] = []
 	for ghost: Tile in _ghosts.values():
 		result.landing_ghosts.append({"visible": ghost.is_visible_in_tree(), "id": ghost.tile_id, "rect": _rect(ghost.get_global_rect())})
-	result["fusion_rect"] = _rect(_merged.get_global_rect()) if _merged.visible else []
+	result["fusion_rect"] = first_effect.get("rect", [])
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
 		"open": _control(chests_button), "replay": _control(replay_button)}

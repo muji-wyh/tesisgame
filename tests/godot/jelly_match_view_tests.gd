@@ -66,6 +66,9 @@ func _run() -> void:
 	_check_danger_reduced_motion_and_end(view)
 	_check_wrong_drop(view)
 	_check_fusion(view)
+	_check_concurrent_fusions(view)
+	_check_drag_across_fusion_completion(view)
+	_check_concurrent_fusion_lifecycle(view)
 	_check_fusion_interruption(view)
 	_check_close_drop_contact(view)
 	_check_off_center_drop_continuity(view)
@@ -106,6 +109,25 @@ func _pair(view, chest_only: bool = false) -> Array[int]:
 
 func _center(view, id: int) -> Vector2:
 	return view._tiles[id].get_global_rect().get_center()
+
+
+func _effect(view) -> Dictionary:
+	return view._fusion_visuals.values()[0] if not view._fusion_visuals.is_empty() else {}
+
+
+func _available_pairs(view) -> Array[Array]:
+	var pairs: Array[Array] = []
+	var used: Array[int] = []
+	for a: Dictionary in view.game.cells:
+		if int(a.id) in used or not view._settled(a):
+			continue
+		for b: Dictionary in view.game.cells:
+			if a.id != b.id and int(b.id) not in used and view._settled(b) and a.word.id == b.word.id and a.kind != b.kind:
+				pairs.append([int(a.id), int(b.id)])
+				used.append(int(a.id))
+				used.append(int(b.id))
+				break
+	return pairs
 
 
 func _drag_pair(view, source: int, target: int) -> void:
@@ -643,7 +665,7 @@ func _check_consecutive_taps(view) -> void:
 		check(heard.size() == ids.size() and cues.count("pick") == ids.size(),
 			"Consecutive matching, mismatching and repeated taps pronounce exactly their own words")
 		check(view.game.snapshot() == before and attempts.is_empty() and view._rejection.is_empty()
-			and view._loot_flights.is_empty() and not view._fusion_art.visible,
+			and view._loot_flights.is_empty() and view._fusion_visuals.is_empty(),
 			"Tap sequences cannot judge answers, reset learning streaks, fuse tiles, change score or earn chests")
 		check(not cues.has("merge") and not cues.has("wrong") and not cues.has("pop"),
 			"Tapping two words never emits answer or fusion feedback")
@@ -900,7 +922,7 @@ func _check_contact_lifecycle(view) -> void:
 		for tile in view._tiles.values():
 			check(tile._contact_kind == "none" and tile._surface.position.is_zero_approx(),
 				"%s leaves no stale matching material or contact offset on a surviving tile" % interruption)
-		check(attempts.is_empty() and not view._fusion_art.visible, "%s cannot convert cancelled contact into a fusion or attempt" % interruption)
+		check(attempts.is_empty() and view._fusion_visuals.is_empty(), "%s cannot convert cancelled contact into a fusion or attempt" % interruption)
 		view.show()
 		view.pause(false)
 	_reset(view)
@@ -946,7 +968,7 @@ func _check_rejection_lifecycle(view) -> void:
 				view.stop()
 			"new_round":
 				_reset(view)
-		check(view._rejection.is_empty() and not view._fusion_art.visible,
+		check(view._rejection.is_empty() and view._fusion_visuals.is_empty(),
 			"%s immediately removes the interrupted rejection effect" % interruption)
 		for tile in view._tiles.values():
 			check(tile._contact_kind == "none" and tile._surface.position.is_zero_approx(),
@@ -983,7 +1005,7 @@ func _check_keyboard_feedback(view) -> void:
 		"Moving keyboard focus gives the next word only a navigation cue")
 	second.pressed.emit()
 	check(heard.size() == 2 and cues == ["pick", "pick"] and attempts.is_empty()
-		and view.game.snapshot() == before and view._rejection.is_empty() and not view._fusion_art.visible,
+		and view.game.snapshot() == before and view._rejection.is_empty() and view._fusion_visuals.is_empty(),
 		"Confirming matching partners only pronounces both words and cannot change learning, score or treasure")
 	for index in range(4):
 		second.pressed.emit()
@@ -1190,17 +1212,17 @@ func _check_fusion(view) -> void:
 	_drag_pair(view, pair[0], pair[1])
 	check(heard.size() == 1 and not view.game.fusion.is_empty(), "Dragging reads the held word and starts fusion only when released on its matching partner")
 	check(attempts.is_empty() and view.game.chest_count == 0, "A matching contact does not credit a clear or treasure before fusion completes")
-	check(view.finish_button.disabled and not view._can_play(), "Fusion blocks repeated contacts and early finish")
+	check(view.finish_button.disabled and view._can_play(), "Fusion keeps other jellies interactive while preventing early finish")
 	view._process(0.10)
-	check(view._tiles[pair[0]].visible and view._tiles[pair[1]].visible and not view._merged.visible,
+	check(view._tiles[pair[0]].visible and view._tiles[pair[1]].visible and not _effect(view).merged.visible,
 		"Fusion begins with two separate droplets moving into contact")
-	check(view._fusion_art.visible and not view._tiles[pair[0]]._surface.visible and not view._tiles[pair[1]]._surface.visible,
+	check(_effect(view).art.visible and not view._tiles[pair[0]]._surface.visible and not view._tiles[pair[1]]._surface.visible,
 		"The shared gel material draws contact continuously without layering two opaque tile bodies")
 	check(_center(view, pair[0]) != source_center, "The held droplet moves toward its matching partner")
 	view._process(0.32)
-	check(view._merged.visible and view._merged._picture.visible and view._merged._label.visible,
+	check(_effect(view).merged.visible and _effect(view).merged._picture.visible and _effect(view).merged._label.visible,
 		"The merged jelly holds its picture and word together before popping")
-	check(view._fusion_art.visible and not view._merged._surface.visible,
+	check(_effect(view).art.visible and not _effect(view).merged._surface.visible,
 		"The combined word and picture remain separate from the continuous deforming gel material")
 	check(not view._tiles[pair[0]].visible and not view._tiles[pair[1]].visible,
 		"The merged jelly replaces both source droplets once they unite")
@@ -1209,12 +1231,153 @@ func _check_fusion(view) -> void:
 	view._process(0.34)
 	check(attempts.size() == 1 and bool(attempts[0].correct) and view.game.chest_count == 1,
 		"One completed fusion grants exactly one word credit and its marked chest")
-	check(not view._tiles.has(pair[0]) and not view._tiles.has(pair[1]) and not view._merged.visible,
+	check(not view._tiles.has(pair[0]) and not view._tiles.has(pair[1]) and view._fusion_visuals.is_empty(),
 		"Cleared droplets disappear and the model supplies gravity")
-	check(not view._fusion_art.visible, "The completed clear also releases the shared material effect")
+	check(view._fusion_visuals.is_empty(), "The completed clear also releases the shared material effect")
 	check(view._loot_flights.size() == 1, "A completed treasure fusion flies toward the visible chest total")
 	view._release(source_center)
 	check(attempts.size() == 1, "A stale release cannot repeat a completed merge")
+
+
+func _check_concurrent_fusions(view) -> void:
+	for delay: float in [0.18, 0.76]:
+		_reset(view)
+		var pairs: Array[Array] = _available_pairs(view)
+		check(pairs.size() >= 2, "The production board supplies two independent settled pairs")
+		if pairs.size() < 2:
+			continue
+		var first: Array = pairs[0]
+		var second: Array = pairs[1]
+		var chests: int = 0
+		for id: int in first + second:
+			chests += 1 if bool(view._cell(id).chest) else 0
+		var first_home: Vector2 = view._global_rect(view._tile_rect(view._cell(first[0]))).get_center()
+		var second_target_home: Vector2 = _center(view, second[1])
+		_drag_pair(view, first[0], first[1])
+		var elapsed: float = view.game.spawn_elapsed
+		var generated: int = view.game.generated_tiles
+		_advance(view, delay)
+		check(view._can_play() and view.finish_button.disabled, "Other jellies remain playable during merge and elastic release")
+		check(not view._press(-1, first_home), "A participating jelly cannot begin a second gesture")
+		view._activate(first[0])
+		check(heard.size() == 1 and view.game.fusions.size() == 1, "Reserved jellies cannot replay pronunciation or create a duplicate fusion")
+		for id: int in second:
+			view._press(-1, _center(view, id))
+			view._release(_center(view, id))
+		check(heard.size() == 3 and attempts.is_empty() and view.game.fusions.size() == 1,
+			"Consecutive taps on other matching jellies remain pronunciation only during an active fusion")
+		view.finish_button.pressed.emit()
+		check(view.game.phase == "playing" and finishes.is_empty(), "A synthetic Finish press cannot interrupt an unearned clear")
+		check(view._press(4, _center(view, second[0])), "Touch can pick up an unrelated jelly while another pair animates")
+		view._move(second_target_home)
+		check(view.snapshot().drag.active and view.snapshot().drag.target == second[1]
+			and view.snapshot().contact.kind == "match", "The second drag gets ordinary matching contact feedback")
+		check(view._fusion_visuals.size() == 1 and _effect(view).art.visible,
+			"Moving a new jelly preserves the first pair's continuous material effect")
+		view._release(second_target_home)
+		check(view.game.fusions.size() == 2 and view._fusion_visuals.size() == 2,
+			"A second valid drop starts its own fusion immediately instead of being ignored or queued")
+		check(view.snapshot().fusion_effects.size() == 2 and attempts.is_empty(),
+			"Both accepted effects are observable before either receives learning credit")
+		check(cues.count("merge") == 2 and is_equal_approx(view.game.spawn_elapsed, elapsed)
+			and view.game.generated_tiles == generated, "Two independent merge sounds do not restart the paused supply")
+		var first_id: String = str(view.game.fusions[0].attempt_id)
+		var second_id: String = str(view.game.fusions[1].attempt_id)
+		_advance(view, view.game.FUSION_SECONDS - delay)
+		check(view.game.cleared_pairs == 1 and attempts.size() == 1 and attempts[0].id == first_id,
+			"The older fusion earns its word exactly at its own completion boundary")
+		check(view.game.fusions.size() == 1 and str(view.game.fusions[0].attempt_id) == second_id
+			and view._fusion_visuals.size() == 1 and view._fusion_visuals.has(second_id),
+			"Completing the older pair removes only its own material and face")
+		check(view.finish_button.disabled and view._can_play()
+			and is_equal_approx(view.game.spawn_elapsed, elapsed) and view.game.generated_tiles == generated,
+			"Supply and Finish remain paused until the final independent fusion completes")
+		check(view._global_rect(view._tile_rect(view._cell(second[1]))).get_center().is_equal_approx(second_target_home),
+			"Earlier removal cannot shift the still-animating pair's destination")
+		_advance(view, delay)
+		check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.disabled,
+			"The final disappearance releases all effects and enables Finish")
+		check(attempts.size() == 2 and attempts[1].id == second_id and first_id != second_id
+			and bool(attempts[0].correct) and bool(attempts[1].correct) and view.game.chest_count == chests,
+			"Independent pairs receive distinct, exactly-once word and marked-chest credits")
+		check(cues.count("pop") == 2 and view.game.cleared_pairs == 2, "Both timelines pop once and score once")
+		view._release(second_target_home)
+		_advance(view, 0.2)
+		check(attempts.size() == 2 and view.game.chest_count == chests and view.game.spawn_elapsed > elapsed,
+			"A repeated release cannot duplicate awards and ordinary supply resumes after all fusions")
+
+
+func _check_drag_across_fusion_completion(view) -> void:
+	_reset(view)
+	var pairs: Array[Array] = _available_pairs(view)
+	var first: Array = pairs[0]
+	var second: Array = pairs[1]
+	var arranged: Array[Dictionary] = []
+	var positions: Array[Vector2i] = [Vector2i(0, 5), Vector2i(1, 5), Vector2i(0, 4), Vector2i(2, 5)]
+	var ids: Array = first + second
+	for index in range(ids.size()):
+		var cell: Dictionary = view._cell(ids[index]).duplicate(true)
+		cell.column = positions[index].x
+		cell.row = positions[index].y
+		arranged.append(cell)
+	view.game.cells.assign(arranged)
+	view._sync_tiles()
+	_drag_pair(view, first[0], first[1])
+	_advance(view, 0.77)
+	var source_home: Vector2 = _center(view, second[0])
+	var held: Vector2 = source_home + Vector2(view._pitch * 0.32, -view._pitch * 0.27)
+	check(view._press(-1, source_home), "Mouse can begin another drag during elastic disappearance")
+	view._move(held)
+	var position: Vector2 = view._tiles[second[0]].position
+	_advance(view, 0.28)
+	check(view.game.cleared_pairs == 1 and view.game.fusions.is_empty() and view.snapshot().drag.active
+		and view.snapshot().drag.source == second[0] and view.snapshot().drag.pointer == -1,
+		"Completing the last animated pair preserves an unrelated held pointer and source")
+	check(view._tiles[second[0]].position.is_equal_approx(position),
+		"Applying gravity below a held jelly cannot snap it away from the pointer")
+	check(int(view._cell(second[0]).row) == 5 and not view.game.is_settled(view._cell(second[0]))
+		and view.game.is_settled(view._cell(second[1])),
+		"The first clear moves the held jelly's logical home while its partner remains a settled target")
+	view._move(_center(view, second[1]))
+	view._release(_center(view, second[1]))
+	check(view.game.fusions.size() == 1 and attempts.size() == 1,
+		"An uninterrupted drag can commit immediately despite gravity moving its logical home")
+	_advance(view, view.game.FUSION_SECONDS)
+	check(attempts.size() == 2 and view.game.cleared_pairs == 2, "Continuing the held drag awards the second word once")
+
+
+func _check_concurrent_fusion_lifecycle(view) -> void:
+	_reset(view)
+	var pairs: Array[Array] = _available_pairs(view)
+	check(pairs.size() >= 3, "The lifecycle scenario has a third free pair to hold")
+	if pairs.size() < 3:
+		return
+	_drag_pair(view, pairs[0][0], pairs[0][1])
+	_advance(view, 0.12)
+	_drag_pair(view, pairs[1][0], pairs[1][1])
+	view._press(7, _center(view, pairs[2][0]))
+	view._move(_center(view, pairs[2][1]))
+	var saved: Array = view.game.fusions.duplicate(true)
+	view.pause(true)
+	_advance(view, 0.4)
+	check(view.game.fusions == saved and view._fusion_visuals.size() == 2 and attempts.is_empty(),
+		"A menu freezes every active fusion without discarding or prematurely crediting it")
+	check(not view.snapshot().drag.active and view.snapshot().drag.pointer == Jelly.NO_POINTER
+		and view.snapshot().contact.kind == "none", "Pausing cancels only the uncommitted third gesture")
+	view.pause(false)
+	view._release(_center(view, pairs[2][1]))
+	check(view.game.fusions.size() == 2, "A stale touch release after resume cannot commit the canceled drag")
+	view.set_reduced_motion(true)
+	for effect: Dictionary in view._fusion_visuals.values():
+		check(not effect.art.visible and effect.merged.visible and effect.merged._surface.visible,
+			"Reduced motion switches every simultaneous fusion to its static authored combined jelly")
+	view.stop()
+	check(view._fusion_visuals.is_empty() and not view.snapshot().drag.active and attempts.is_empty(),
+		"Leaving the mode immediately removes all simultaneous effects and unearned interaction")
+	_reset(view)
+	_advance(view, view.game.FUSION_SECONDS)
+	check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and attempts.is_empty()
+		and view.game.chest_count == 0, "New rounds cannot inherit prior concurrent effects, callbacks, or rewards")
 
 
 func _check_fusion_interruption(view) -> void:
@@ -1223,32 +1386,32 @@ func _check_fusion_interruption(view) -> void:
 	_drag_pair(view, pair[0], pair[1])
 	view._process(0.42)
 	var elapsed: float = view.game.fusion.elapsed
-	var pose: Rect2 = view._merged.get_rect()
+	var pose: Rect2 = _effect(view).merged.get_rect()
 	view.pause(true)
 	view._process(0.3)
-	check(is_equal_approx(view.game.fusion.elapsed, elapsed) and view._merged.get_rect().is_equal_approx(pose)
+	check(is_equal_approx(view.game.fusion.elapsed, elapsed) and _effect(view).merged.get_rect().is_equal_approx(pose)
 		and attempts.is_empty(), "A menu freezes the in-progress gel union and its unearned reward")
 	view.set_reduced_motion(true)
-	check(not view._fusion_art.visible and view._merged.visible and view._merged._surface.visible,
+	check(not _effect(view).art.visible and _effect(view).merged.visible and _effect(view).merged._surface.visible,
 		"Enabling reduced motion during fusion switches to the static authored combined jelly")
 	view.pause(false)
-	var static_pose: Rect2 = view._merged.get_rect()
+	var static_pose: Rect2 = _effect(view).merged.get_rect()
 	view._process(0.3)
-	check(view._merged.get_rect().is_equal_approx(static_pose) and view._merged._surface.scale == Vector2.ONE
-		and not view._fusion_art.visible and attempts.is_empty(), "Reduced motion keeps the combined tile still while honoring the original completion boundary")
+	check(_effect(view).merged.get_rect().is_equal_approx(static_pose) and _effect(view).merged._surface.scale == Vector2.ONE
+		and not _effect(view).art.visible and attempts.is_empty(), "Reduced motion keeps the combined tile still while honoring the original completion boundary")
 	view._process(0.33)
 	check(attempts.size() == 1 and attempts[0].correct and view.game.chest_count == 1
-		and not view._fusion_art.visible and not view._merged.visible, "Resuming a reduced-motion fusion awards its word and chest once at the original end")
+		and view._fusion_visuals.is_empty(), "Resuming a reduced-motion fusion awards its word and chest once at the original end")
 	_reset(view)
 	pair = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	view._process(0.2)
 	view.stop()
 	view._process(0.4)
-	check(not view._fusion_art.visible and not view._merged.visible and attempts.is_empty(),
+	check(view._fusion_visuals.is_empty() and attempts.is_empty(),
 		"Stopping during contact removes the unified material without completing a stale answer")
 	_reset(view)
-	check(not view._fusion_art.visible and view.game.fusion.is_empty() and attempts.is_empty(),
+	check(view._fusion_visuals.is_empty() and view.game.fusion.is_empty() and attempts.is_empty(),
 		"A new round cannot inherit an interrupted fusion effect or success credit")
 
 
@@ -1345,10 +1508,10 @@ func _check_reduced_motion_and_cache(view) -> void:
 	var pair: Array[int] = _pair(view, true)
 	_drag_pair(view, pair[0], pair[1])
 	view._process(0.2)
-	var static_rect: Rect2 = view._merged.get_rect()
+	var static_rect: Rect2 = _effect(view).merged.get_rect()
 	view._process(0.3)
-	check(view._merged.get_rect().is_equal_approx(static_rect) and view._merged._surface.scale == Vector2.ONE,
-		"Reduced motion shows a stationary combined picture and word: %s -> %s, scale %s" % [static_rect, view._merged.get_rect(), view._merged._surface.scale])
+	check(_effect(view).merged.get_rect().is_equal_approx(static_rect) and _effect(view).merged._surface.scale == Vector2.ONE,
+		"Reduced motion shows a stationary combined picture and word: %s -> %s, scale %s" % [static_rect, _effect(view).merged.get_rect(), _effect(view).merged._surface.scale])
 	for delta: float in [0.3, 0.25]:
 		view._process(delta)
 	check(view._loot_flights.is_empty() and view.game.chest_count == 1,
@@ -1362,7 +1525,7 @@ func _check_reduced_motion_and_cache(view) -> void:
 	check(cache.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED and not cache.art.is_processing(),
 		"Static theme chest previews stop rendering once their source pose is cached")
 	view.stop()
-	check(view._tiles.is_empty() and not view._merged.visible and not view.finish_button.visible
+	check(view._tiles.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.visible
 		and not view._loot_icon.visible and not bool(view.snapshot().preview.visible) and view._ghosts.is_empty(),
 		"Stopping a view releases all gameplay presentation without finishing a round")
 
@@ -1397,7 +1560,7 @@ func _check_close_drop_contact(view) -> void:
 	check(not view._tiles.values().has(root.gui_get_focus_owner()),
 		"Pointer fusion does not request keyboard focus restoration")
 	view._process(0.01)
-	check(not view.game.fusion.is_empty() and view._fusion_start.is_equal_approx(target)
+	check(not view.game.fusion.is_empty() and _effect(view).start.is_equal_approx(target)
 		and _center(view, pair[0]).distance_to(held_center) < view._pitch * 0.05,
 		"A close drop retains its pointer anchor and continues the visible held lobe without snapping")
 	view._process(0.10)
@@ -1436,12 +1599,12 @@ func _check_off_center_drop_continuity(view) -> void:
 		check(source_control.is_equal_approx(drop) and target_control.is_equal_approx(target_home),
 			"Contact deformation preserves the pointer anchor and target hit rectangle before release")
 		view._release(drop)
-		check(not view.game.fusion.is_empty() and view._fusion_direction.is_equal_approx(held_direction),
+		check(not view.game.fusion.is_empty() and _effect(view).direction.is_equal_approx(held_direction),
 			"Fusion inherits the actual approach direction rather than the source's former grid direction")
 		check(source.get_global_rect().get_center().distance_to(source_surface) < view._pitch * 0.05
 			and target.get_global_rect().get_center().distance_to(target_surface) < view._pitch * 0.05,
 			"Both visible gel lobes continue across pointer release without switching sides or snapping")
-		check(view._fusion_start.is_equal_approx(drop) and attempts.is_empty() and view.game.score() == 0,
+		check(_effect(view).start.is_equal_approx(drop) and attempts.is_empty() and view.game.score() == 0,
 			"Off-center continuity retains the real pointer origin and does not credit the answer early")
 		for index in range(cells.size()):
 			check(view.game.cells[index].column == cells[index].column and view.game.cells[index].row == cells[index].row,
