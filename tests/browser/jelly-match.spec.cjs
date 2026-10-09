@@ -7,6 +7,7 @@ const POP_REWARDS = 'wordBuddies.popRewards';
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const treasure = page => page.locator('#jelly-reward-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
+const growthSave = page => page.evaluate(() => localStorage.getItem('growWithPip.growth.v1'));
 
 async function pressRect(page, rect) {
   expect(rect).toHaveLength(4);
@@ -85,14 +86,6 @@ async function dragPair(page, tiles) {
   }
 }
 
-async function tapPair(page, tiles) {
-  await pressRect(page, tiles[0].rect);
-  await expect.poll(async () => (await jelly(page)).drag.selected).toBe(tiles[0].id);
-  // Read the second tile again in case a responsive layout settled after the tap.
-  const target = (await jelly(page)).tiles.find(tile => tile.id === tiles[1].id);
-  await pressRect(page, target.rect);
-}
-
 async function touchDragPair(page, tiles) {
   const bounds = await metrics(page), from = center(tiles[0].rect, bounds), to = center(tiles[1].rect, bounds);
   const session = await page.context().newCDPSession(page);
@@ -107,10 +100,27 @@ async function touchDragPair(page, tiles) {
       await page.waitForTimeout(25);
     }
     await expect.poll(async () => (await jelly(page)).drag.target).toBe(tiles[1].id);
+    expect((await jelly(page)).contact).toMatchObject({ kind: 'match', source: tiles[0].id, target: tiles[1].id });
     await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   } finally {
     await session.detach();
   }
+}
+
+async function expectNoJudgment(page, before, savedGrowth, tiles) {
+  // Wait through the presentation publication cadence and the full fusion
+  // duration so a delayed pointer release cannot hide an unintended answer.
+  await page.waitForTimeout(1200);
+  const after = await jelly(page);
+  expect(after.drag).toMatchObject({ active: false, source: -1, target: -1, selected: -1 });
+  expect(after.contact.kind).toBe('none');
+  expect(after.fusion).toEqual({});
+  expect(after.error).toBe(before.error);
+  expect(after.cleared_pairs).toBe(before.cleared_pairs);
+  expect(after.score).toBe(before.score);
+  expect(after.chest_count).toBe(before.chest_count);
+  for (const tile of tiles) expect(after.tiles.some(item => item.id === tile.id)).toBe(true);
+  expect(await growthSave(page), 'Listening must not persist either a correct or incorrect learning attempt').toBe(savedGrowth);
 }
 
 async function expectClear(page, count, tiles) {
@@ -394,6 +404,39 @@ test('preview wobble builds with the dispatch clock and freezes during menus and
   expect(errors).toEqual([]);
 });
 
+test('consecutive taps never judge matching or mismatching tiles; a drag still clears', async ({ page }, info) => {
+  test.setTimeout(90000);
+  const errors = await startJelly(page);
+  const tiles = await availablePair(page, { chest: false });
+  const before = await jelly(page), savedGrowth = await growthSave(page);
+  const other = before.tiles.find(tile => tile.visible && tile.settled &&
+    tile.word.id !== tiles[0].word.id && tile.kind !== tiles[0].kind);
+  expect(other, 'A different word provides a real mismatching partner').toBeTruthy();
+  const tapped = [...tiles, other];
+  for (const pointer of ['touch', 'mouse']) {
+    for (const candidate of [tiles, [tiles[0], other]]) {
+      for (const original of candidate) {
+        const current = (await jelly(page)).tiles.find(tile => tile.id === original.id);
+        if (pointer === 'touch') await pressRect(page, current.rect);
+        else {
+          const point = center(current.rect, await metrics(page));
+          await page.mouse.click(point.x, point.y);
+          await rendered(page);
+        }
+        await page.waitForTimeout(140);
+        expect((await jelly(page)).drag.selected, `${pointer} release leaves no sticky selection`).toBe(-1);
+      }
+      await expectNoJudgment(page, before, savedGrowth, tapped);
+    }
+  }
+  const previousStreak = (await growth(page)).streaks[tiles[0].word.id] || 0;
+  if (info.project.use.browserName === 'chromium') await touchDragPair(page, tiles);
+  else await dragPair(page, tiles);
+  await expectClear(page, before.cleared_pairs + 1, tiles);
+  await expect.poll(async () => (await growth(page)).streaks[tiles[0].word.id]).toBe(previousStreak + 1);
+  expect(errors).toEqual([]);
+});
+
 test('real drag and touch pairs earn learning once, then reveal and open their exact treasure', async ({ page }, info) => {
   test.setTimeout(150000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
@@ -413,7 +456,8 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
 
   const marked = await availablePair(page, { chest: true });
   const markedBefore = (await growth(page)).streaks[marked[0].word.id] || 0;
-  await tapPair(page, marked);
+  if (info.project.use.browserName === 'chromium') await touchDragPair(page, marked);
+  else await dragPair(page, marked);
   const completed = await expectClear(page, 2, marked);
   expect(completed.chest_count).toBe(1);
   expect(completed.loot.count).toBe(1);
@@ -567,7 +611,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(errors).toEqual([]);
 });
 
-test('portrait and short landscape preserve touch targets and keyboard matching', async ({ page }, info) => {
+test('portrait and short landscape preserve drag targets and keyboard pronunciation without matching', async ({ page }, info) => {
   test.setTimeout(150000);
   const errors = await startJelly(page);
   let clears = 0;
@@ -593,19 +637,19 @@ test('portrait and short landscape preserve touch targets and keyboard matching'
     }
     const touchPair = await availablePair(page);
     if (info.project.use.browserName === 'chromium') await touchDragPair(page, touchPair);
-    else await tapPair(page, touchPair);
+    else await dragPair(page, touchPair);
     await expectClear(page, ++clears, touchPair);
     await captureResponsive(page, info, `jelly-${dimensions.width}x${dimensions.height}`);
   }
 
   const keyboardPair = await availablePair(page);
-  const previousStreak = (await growth(page)).streaks[keyboardPair[0].word.id] || 0;
+  const beforeKeyboard = await jelly(page), savedGrowth = await growthSave(page);
   await focusTile(page, keyboardPair[0].id);
   await page.keyboard.press('Enter');
-  await expect.poll(async () => (await jelly(page)).drag.selected).toBe(keyboardPair[0].id);
+  await page.waitForTimeout(140);
+  expect((await jelly(page)).drag.selected).toBe(-1);
   await focusTile(page, keyboardPair[1].id);
-  await page.keyboard.press('Enter');
-  await expectClear(page, ++clears, keyboardPair);
-  await expect.poll(async () => (await growth(page)).streaks[keyboardPair[0].word.id]).toBe(previousStreak + 1);
+  await page.keyboard.press('Space');
+  await expectNoJudgment(page, beforeKeyboard, savedGrowth, keyboardPair);
   expect(errors).toEqual([]);
 });

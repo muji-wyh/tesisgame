@@ -227,6 +227,28 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(matching(mergeSounds, evidence.clear)).toHaveLength(1);
     expect(matching(mergeSounds, evidence.release), 'A successful drop does not also play empty-drop audio').toEqual([]);
 
+    evidence.rounds.tap = await freshRound(page);
+    const tapTiles = await availablePair(page), beforeTaps = await playbackIndex(page);
+    const savedGrowth = await page.evaluate(() => localStorage.getItem('growWithPip.growth.v1'));
+    evidence.tapPronunciations = [];
+    for (const tile of tapTiles) {
+      const beforeTap = await playbackIndex(page);
+      const current = (await jelly(page)).tiles.find(item => item.id === tile.id);
+      const [x, y, width, height] = current.rect;
+      await tap(page, x + width / 2, y + height / 2);
+      evidence.tapPronunciations.push(await audibleRecording(page, beforeTap, tile.word.audio));
+    }
+    await page.waitForTimeout(1200);
+    const afterTaps = await jelly(page), tapSounds = await playbacksSince(page, beforeTaps);
+    expect(afterTaps.drag).toMatchObject({ active: false, source: -1, target: -1, selected: -1 });
+    expect(afterTaps.fusion).toEqual({});
+    expect(afterTaps.cleared_pairs).toBe(0);
+    for (const cue of ['merge', 'clear', 'release']) {
+      expect(matching(tapSounds, evidence[cue]), `Consecutive taps pronounce words without the ${cue} cue`).toEqual([]);
+    }
+    expect(await page.evaluate(() => localStorage.getItem('growWithPip.growth.v1')),
+      'Pronouncing both halves of a pair does not record a learning attempt').toBe(savedGrowth);
+
     evidence.rounds.cancel = await freshRound(page);
     const cancelTile = (await availablePair(page))[0];
     await beginDrag(page, cancelTile);

@@ -49,7 +49,6 @@ var _pointer: int = NO_POINTER
 var _gesture_serial: int = 0
 var _source: int = -1
 var _target: int = -1
-var _selected: int = -1
 var _press_point := Vector2.ZERO
 var _drag_point := Vector2.ZERO
 var _drag_offset := Vector2.ZERO
@@ -66,7 +65,6 @@ var _fusion_start := Vector2.ZERO
 var _fusion_direction := Vector2.RIGHT
 var _fusion_contact_strength: float = 0.0
 var _fusion_held_direction := Vector2.ZERO
-var _focus_after_fusion: bool = false
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_count: Label
@@ -192,7 +190,6 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 	_result_elapsed = 0.0
 	_publish_elapsed = 0.0
 	_landing_cooldown = 0.0
-	_focus_after_fusion = false
 	_paused = false
 	apply_theme(theme, chests)
 	_configured = game.configure(words, level, seed_value)
@@ -323,7 +320,6 @@ func stop() -> void:
 		tile.hide()
 		tile.queue_free()
 	_tiles.clear()
-	_focus_after_fusion = false
 	_refresh_controls()
 	_refresh_hud()
 	_publish()
@@ -332,7 +328,6 @@ func cancel_input() -> void:
 	_pointer = NO_POINTER
 	_source = -1
 	_target = -1
-	_selected = -1
 	_dragging = false
 	_contact_elapsed = 0.0
 	_rejection.clear()
@@ -372,7 +367,7 @@ func _can_play() -> bool:
 	return _allowed() and game.phase == "playing" and game.fusion.is_empty() and not _result_visible
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") and (_pointer != NO_POINTER or _selected >= 0):
+	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
@@ -452,7 +447,6 @@ func _move(global_point: Vector2) -> void:
 		_dragging = true
 	if not _dragging:
 		return
-	_selected = -1
 	_tiles[_source].position = point - _drag_offset
 	_tiles[_source].z_index = 40
 	var target: int = _tile_at(point, _source)
@@ -481,43 +475,27 @@ func _release(global_point: Vector2) -> void:
 	_dragging = false
 	_gesture_serial += 1
 	if dragged:
-		_selected = -1
 		if target >= 0:
 			_fusion_contact_strength = lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed))
 			_merge(source, target, from)
 		else:
 			_snap_back(source, from)
 			audio_requested.emit("release")
-	else:
-		_activate(source, false)
 	if generation != _generation or not _allowed():
 		return
 	_refresh_marks()
 	_publish()
 
-func _activate(id: int, speak: bool = true) -> void:
-	if not _can_play() or not _settled(_cell(id)):
+func _activate(id: int) -> void:
+	# Keyboard/controller activation is pronunciation only. Pointer presses
+	# already read the word; only a completed drag can submit a pair.
+	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)):
 		return
-	if speak:
-		var generation: int = _generation
-		word_requested.emit(_cell(id).word.duplicate(true))
-		if generation != _generation or not _can_play():
-			return
-		audio_requested.emit("pick")
-		if generation != _generation or not _can_play():
-			return
-	if _selected == id:
-		_selected = -1
-	elif _selected >= 0:
-		var previous: int = _selected
-		_selected = -1
-		_fusion_contact_strength = 0.0
-		_fusion_held_direction = Vector2.ZERO
-		_merge(previous, id, _tiles[previous].position)
-	else:
-		_selected = id
-	_refresh_marks()
-	_publish()
+	var generation: int = _generation
+	word_requested.emit(_cell(id).word.duplicate(true))
+	if generation != _generation or not _can_play():
+		return
+	audio_requested.emit("pick")
 
 func _merge(first: int, second: int, from: Vector2) -> void:
 	var generation: int = _generation
@@ -530,7 +508,6 @@ func _merge(first: int, second: int, from: Vector2) -> void:
 		_fusion_start = from + _tile_rect(game.fusion.a).size * 0.5
 		_fusion_direction = _fusion_held_direction if not _fusion_held_direction.is_zero_approx() else (_tile_rect(game.fusion.b).get_center() - _tile_rect(game.fusion.a).get_center()).normalized()
 		_fusion_art.configure(SURFACES, first, second, _surfaces[posmod(second, _surfaces.size())])
-		_focus_after_fusion = _tiles.values().has(get_viewport().gui_get_focus_owner())
 		_snapbacks.clear()
 		_rejection.clear()
 	else:
@@ -603,9 +580,6 @@ func _sync_tiles() -> void:
 	_refresh_marks()
 	_sync_positions()
 	_refresh_controls()
-	if _focus_after_fusion and game.fusion.is_empty() and _can_play():
-		_focus_after_fusion = false
-		default_focus().grab_focus()
 
 func _tile_rect(cell: Dictionary) -> Rect2:
 	return Rect2(_board.position + Vector2(int(cell.column), int(cell.row)) * _pitch + Vector2.ONE * _gap * 0.5,
@@ -688,7 +662,7 @@ func _preview_pose(index: int) -> Dictionary:
 func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
 	for id in _tiles:
-		_tiles[id].set_marked(int(id) == _target, int(id) == _selected or int(id) == _source, feedback_enabled, reduced_motion)
+		_tiles[id].set_marked(int(id) == _target, int(id) == _source, feedback_enabled, reduced_motion)
 	_refresh_contact()
 
 func _contact_state() -> Dictionary:
@@ -1147,7 +1121,7 @@ func snapshot() -> Dictionary:
 		item["visible"] = _tiles[int(cell.id)].is_visible_in_tree()
 		item["focused"] = _tiles[int(cell.id)].has_focus()
 		result.tiles.append(item)
-	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": _selected}
+	result["drag"] = {"active": _dragging, "pointer": _pointer, "source": _source, "target": _target, "selected": -1}
 	var contact: Dictionary = _contact_state()
 	result["contact"] = {"kind": contact.kind, "source": contact.source, "target": contact.target, "strength": contact.strength}
 	result["fusion_effect"] = {"visible": _fusion_art.is_visible_in_tree(), "stage": _fusion_art.stage if _fusion_art.is_visible_in_tree() else "none"}

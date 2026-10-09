@@ -127,6 +127,12 @@ sound quality or performance on a physical phone.
 
 ### Contact, union and elastic release
 
+Only releasing a dragged jelly on another settled jelly submits a match attempt.
+Taps and keyboard/controller activations pronounce the word without retaining a
+selection or judging a pair. Repeated taps never grant learning credit or clear
+an existing streak, including taps on incompatible words. The movement threshold
+keeps small finger motion from turning an ordinary tap into a match attempt.
+
 Contact now gives reciprocal skin pressure and separates the two learning faces
 slightly so an overlapping dragged body does not hide its partner. A mint contour
 and `Match!` label identify an opposite-kind pair with the same word ID; a coral

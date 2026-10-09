@@ -205,6 +205,7 @@ func _run() -> void:
 	app.audio.halt()
 	app.queue_free()
 	await settle()
+	await _tap_growth_checks(directory)
 	await _warning_audio_flow(directory)
 	await _uncapped_reward_checks(directory)
 	await _reward_conflict_checks(directory)
@@ -213,6 +214,61 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Jelly Match flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _tap_growth_checks(directory: String) -> void:
+	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory, "tap-growth.cfg")
+	app.jelly_reward_save_path = directory + "/tap-jelly-rewards.cfg"
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/tap-medals.cfg", directory + "/tap-legacy.cfg")
+	app._presentation.path = directory + "/tap-presentation.cfg"
+	root.add_child(app)
+	await settle()
+	app.audio.set_muted(true)
+	check(app.new_round(51, false, "", "jelly"), "Tap regression starts a real Jelly round")
+	var view = app._jelly
+	view.set_process(false)
+	await settle()
+	view.game.step(view.game.SETTLE_SECONDS)
+	view._sync_tiles()
+	var chosen := pair(view.game)
+	var other: Dictionary = {}
+	for cell: Dictionary in view.game.cells:
+		if cell.word.id != chosen[0].word.id:
+			other = cell
+			break
+	var practiced: Array = [chosen[0].word.id, other.word.id]
+	app.growth.record_attempt("tap-fixture-prior-learning", practiced, true)
+	check(app.growth.streak(str(practiced[0])) == 1 and app.growth.streak(str(practiced[1])) == 1,
+		"Both tapped words have saved progress that an incorrect judgment would erase")
+	var saved: String = FileAccess.get_file_as_string(directory + "/tap-growth.cfg")
+	var learned: Dictionary = app.growth.snapshot().streaks.duplicate()
+	for pointer: int in [-1, 3]:
+		for cell: Dictionary in [chosen[0], chosen[1], chosen[0], other, chosen[1]]:
+			var point: Vector2 = view._tiles[int(cell.id)].get_global_rect().get_center()
+			check(view._press(pointer, point), "A settled jelly accepts a pronunciation tap")
+			view._release(point)
+			check(view.game.fusion.is_empty() and view.game.cleared_pairs == 0 and view.game.chest_count == 0,
+				"Matching and mismatching taps cannot start fusion or earn a reward")
+	for cell: Dictionary in [chosen[0], chosen[1], other]:
+		view._tiles[int(cell.id)].pressed.emit()
+	check(app.growth.snapshot().streaks == learned
+		and FileAccess.get_file_as_string(directory + "/tap-growth.cfg") == saved,
+		"Mouse, touch and keyboard activation neither increment nor reset saved learning or attempt receipts")
+	check(not app._jelly_rewards.has_pending(), "Pronunciation taps never create pending treasure")
+	var target: Vector2 = view._tiles[int(chosen[1].id)].get_global_rect().get_center()
+	view._press(-1, view._tiles[int(chosen[0].id)].get_global_rect().get_center())
+	view._move(target)
+	view._release(target)
+	check(not view.game.fusion.is_empty(), "Dragging the same tapped pair still starts its normal fusion")
+	for step: float in [0.4, 0.4, 0.25]:
+		view._process(step)
+	check(view.game.cleared_pairs == 1 and app.growth.streak(str(practiced[0])) == 2
+		and app.growth.streak(str(practiced[1])) == 1,
+		"Only the completed drag adds one learning success while leaving the other word intact")
+	app.audio.halt()
+	app.queue_free()
+	await settle()
 
 
 func _jelly_cue_playing(audio, cue: String = "") -> bool:
@@ -233,6 +289,7 @@ func _warning_audio_flow(directory: String) -> void:
 	app.audio.set_muted(false)
 	app.choose_mode("jelly")
 	app._jelly.set_process(false)
+	await settle()
 	var game = app._jelly.game
 	var cues: Array[String] = []
 	app._jelly.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
@@ -269,10 +326,13 @@ func _warning_audio_flow(directory: String) -> void:
 		app.queue_free()
 		await settle()
 		return
-	app._jelly._activate(chosen[0].id)
-	app._jelly._activate(chosen[1].id)
+	app._jelly._sync_tiles()
+	var target: Vector2 = app._jelly._tiles[int(chosen[1].id)].get_global_rect().get_center()
+	app._jelly._press(-1, app._jelly._tiles[int(chosen[0].id)].get_global_rect().get_center())
+	app._jelly._move(target)
+	app._jelly._release(target)
 	check(not game.fusion.is_empty() and not _jelly_cue_playing(app.audio, "danger") and _jelly_cue_playing(app.audio, "merge"),
-		"A real selected pair silences the warning while preserving its rescue merge sound")
+		"A real dragged pair silences the warning while preserving its rescue merge sound")
 	game.step(game.FUSION_SECONDS)
 	check(game.chest_count == 0 and not app._jelly_rewards.has_pending(),
 		"The warning-only rescue leaves no pending treasure that would correctly gate a new board")

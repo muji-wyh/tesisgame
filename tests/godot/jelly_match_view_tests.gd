@@ -3,6 +3,7 @@ extends SceneTree
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const Style = preload("res://scripts/ui_style.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -49,9 +50,11 @@ func _run() -> void:
 	_check_landing_audio_groups(view)
 	_check_landing_lifecycle(view)
 	_check_gesture_audio(view)
+	_check_consecutive_taps(view)
+	_check_drag_threshold(view)
 	await _check_pointer_ownership(view)
 	_check_pointer_feedback(view)
-	_check_drag_replaces_selection(view)
+	_check_drag_after_tap(view)
 	_check_contact_validity(view)
 	_check_same_kind_contact(view)
 	_check_contact_lifecycle(view)
@@ -103,6 +106,13 @@ func _pair(view, chest_only: bool = false) -> Array[int]:
 
 func _center(view, id: int) -> Vector2:
 	return view._tiles[id].get_global_rect().get_center()
+
+
+func _drag_pair(view, source: int, target: int) -> void:
+	var destination: Vector2 = _center(view, target)
+	view._press(-1, _center(view, source))
+	view._move(destination)
+	view._release(destination)
 
 
 func _advance(view, seconds: float, frame_step: float = 0.1) -> void:
@@ -342,8 +352,7 @@ func _check_preview_motion(view) -> void:
 	view.show()
 	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot keep wobbling or advance its preview clock")
 	var pair: Array[int] = _pair(view)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	_advance(view, 0.4)
 	check(not view.game.fusion.is_empty() and view.snapshot().preview.slots == late_slots,
 		"Fusion freezes the pending batch's urgent wobble with its supply clock")
@@ -568,8 +577,7 @@ func _check_landing_lifecycle(view) -> void:
 	for arrival: Dictionary in incoming:
 		falling[int(arrival.id)] = {"age": float(arrival.age), "position": view._tiles[int(arrival.id)].get_global_rect().position}
 	var pair: Array[int] = _pair(view)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	view._process(0.4)
 	check(incoming.size() == 4 and not view.game.fusion.is_empty() and not cues.has("land"),
 		"Fusion suspends all four arrivals without adding a landing sound")
@@ -589,10 +597,10 @@ func _check_gesture_audio(view) -> void:
 	var start: Vector2 = _center(view, id)
 	view._press(4, start)
 	view._release(start)
-	check(cues == ["pick"] and heard.size() == 1, "A tap reads its word and acknowledges selection exactly once")
+	check(cues == ["pick"] and heard.size() == 1, "A tap reads its word and acknowledges the touch exactly once")
 	view.cancel_input()
 	view._activate(id)
-	check(cues.count("pick") == 2 and heard.size() == 2, "Keyboard selection shares the pointer's tactile feedback")
+	check(cues.count("pick") == 2 and heard.size() == 2, "Keyboard pronunciation shares the pointer's tactile feedback")
 	view.cancel_input()
 	var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
 	view._press(4, start)
@@ -608,6 +616,55 @@ func _check_gesture_audio(view) -> void:
 	view._move(empty)
 	view.pause(true)
 	check(cues.count("release") == 1, "Menu interruption cancels a drag silently instead of pretending the player dropped it")
+	_reset(view)
+
+
+func _check_consecutive_taps(view) -> void:
+	for pointer: int in [-1, 4]:
+		_reset(view)
+		var pair: Array[int] = _pair(view, true)
+		var wrong: int = -1
+		for cell: Dictionary in view.game.cells:
+			if cell.word.id != view._cell(pair[0]).word.id:
+				wrong = int(cell.id)
+				break
+		check(wrong >= 0, "The tap regression has both a chest-bearing match and a genuine distractor")
+		if wrong < 0:
+			continue
+		var before: Dictionary = view.game.snapshot()
+		var ids: Array[int] = [pair[0], pair[1], pair[0], wrong, wrong, pair[1], pair[0], pair[0]]
+		for id: int in ids:
+			var point: Vector2 = _center(view, id)
+			check(view._press(pointer, point), "Each separate mouse or touch tap owns its word until release")
+			view._release(point)
+			check(int(view.snapshot().drag.selected) == -1 and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER
+				and view._contact_state().kind == "none" and view.game.fusion.is_empty(),
+				"Each completed tap releases its word without carrying a matching target into the next tap")
+		check(heard.size() == ids.size() and cues.count("pick") == ids.size(),
+			"Consecutive matching, mismatching and repeated taps pronounce exactly their own words")
+		check(view.game.snapshot() == before and attempts.is_empty() and view._rejection.is_empty()
+			and view._loot_flights.is_empty() and not view._fusion_art.visible,
+			"Tap sequences cannot judge answers, reset learning streaks, fuse tiles, change score or earn chests")
+		check(not cues.has("merge") and not cues.has("wrong") and not cues.has("pop"),
+			"Tapping two words never emits answer or fusion feedback")
+	_reset(view)
+
+
+func _check_drag_threshold(view) -> void:
+	for pointer: int in [-1, 4]:
+		for travel: float in [0.0, 6.0]:
+			_reset(view)
+			var pair: Array[int] = _pair(view, true)
+			var start: Vector2 = _center(view, pair[0])
+			var destination: Vector2 = _center(view, pair[1])
+			var before: Dictionary = view.game.snapshot()
+			view._press(pointer, start)
+			view._move(start + Vector2(travel / Style.ui_scale(view), 0.0))
+			check(not bool(view.snapshot().drag.active), "Sub-threshold pointer movement remains a pronunciation gesture")
+			view._release(destination)
+			check(view.game.snapshot() == before and attempts.is_empty() and cues == ["pick"]
+				and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER and int(view.snapshot().drag.selected) == -1,
+				"Even a release over another tile cannot match without crossing the drag threshold")
 	_reset(view)
 
 
@@ -630,7 +687,8 @@ func _check_pointer_ownership(view) -> void:
 	view._input(emulated)
 	check(int(view.snapshot().drag.pointer) == 4 and heard.size() == 1, "Touch-emulated mouse events cannot duplicate pronunciation or contact")
 	view._release(_center(view, pair[0]))
-	check(int(view.snapshot().drag.selected) == pair[0] and attempts.is_empty(), "A tap selects without inventing an attempt")
+	check(int(view.snapshot().drag.selected) == -1 and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER
+		and attempts.is_empty(), "A tap releases ownership without leaving a match selection or learning attempt")
 	view.cancel_input()
 
 
@@ -688,19 +746,21 @@ func _check_pointer_feedback(view) -> void:
 	var tile = view._tiles[pair[0]]
 	view._tiles[pair[1]].grab_focus()
 	view._press(2, _center(view, pair[0]))
-	view._release(_center(view, pair[0]))
 	check(tile.selected and not view._tiles.values().has(root.gui_get_focus_owner()),
-		"Pointer selection clears an earlier tile focus instead of creating a second selection cue")
+		"Holding a jelly clears an earlier tile focus and presents one active touch cue")
 	check(float(tile._gel.get_shader_parameter("rim_strength")) > 0.0 and tile._lift != null,
-		"A pointer tap uses the gel contour and starts the selection lift")
+		"A held pointer uses the gel contour and starts the tactile lift")
 	if tile._lift != null and tile._lift.is_valid():
 		tile._lift.custom_step(0.12)
-	check(tile._visual.position.y < 0.0, "A selected jelly visibly rises before a retap")
+	check(tile._visual.position.y < 0.0, "The held jelly visibly rises before pointer release")
+	view._release(_center(view, pair[0]))
+	_check_feedback_cleared(tile, "Releasing a pronunciation tap")
+	check(int(view.snapshot().drag.selected) == -1 and not tile.has_focus(),
+		"A completed tap leaves neither a pending match selection nor pointer-created keyboard focus")
 	view._press(2, _center(view, pair[0]))
 	view._release(_center(view, pair[0]))
-	_check_feedback_cleared(tile, "Retapping the selected jelly")
-	check(int(view.snapshot().drag.selected) == -1 and not tile.has_focus(),
-		"Retapping leaves neither logical selection nor pointer-created keyboard focus")
+	_check_feedback_cleared(tile, "Tapping the same jelly again")
+	check(heard.size() == 2 and attempts.is_empty(), "Repeated taps replay pronunciation without selecting or answering")
 	view.finish_button.grab_focus()
 	view._press(2, _center(view, pair[0]))
 	check(view.finish_button.has_focus(), "Tile pointer input leaves the separately focused Finish control alone")
@@ -708,7 +768,7 @@ func _check_pointer_feedback(view) -> void:
 	view.finish_button.release_focus()
 
 
-func _check_drag_replaces_selection(view) -> void:
+func _check_drag_after_tap(view) -> void:
 	_reset(view)
 	var pair: Array[int] = _pair(view)
 	var previous: int = -1
@@ -901,9 +961,10 @@ func _check_rejection_lifecycle(view) -> void:
 
 func _check_keyboard_feedback(view) -> void:
 	_reset(view)
-	var pair: Array[int] = _pair(view)
+	var pair: Array[int] = _pair(view, true)
 	var first = view._tiles[pair[0]]
 	var second = view._tiles[pair[1]]
+	var before: Dictionary = view.game.snapshot()
 	first.grab_focus()
 	var focus_strength: float = float(first._gel.get_shader_parameter("rim_strength"))
 	var focus_width: float = float(first._gel.get_shader_parameter("rim_width"))
@@ -911,49 +972,48 @@ func _check_keyboard_feedback(view) -> void:
 		and first._visual.position.is_zero_approx() and _lift_stopped(first),
 		"Keyboard focus is visible without selecting or lifting a jelly")
 	first.pressed.emit()
-	check(first.selected and float(first._gel.get_shader_parameter("rim_strength")) > focus_strength
-		and float(first._gel.get_shader_parameter("rim_width")) > focus_width,
-		"Keyboard confirmation strengthens the contour separately from focus")
-	if first._lift != null and first._lift.is_valid():
-		first._lift.custom_step(0.12)
+	check(not first.selected and is_equal_approx(float(first._gel.get_shader_parameter("rim_strength")), focus_strength)
+		and is_equal_approx(float(first._gel.get_shader_parameter("rim_width")), focus_width)
+		and first._visual.position.is_zero_approx() and _lift_stopped(first),
+		"Keyboard or controller confirmation reads the focused word without creating a match selection")
 	second.grab_focus()
-	check(first.selected and not first.has_focus() and second.has_focus() and not second.selected
+	_check_feedback_cleared(first, "Navigating away from a pronounced word")
+	check(second.has_focus() and not second.selected
 		and is_equal_approx(float(second._gel.get_shader_parameter("rim_strength")), focus_strength),
-		"Moving keyboard focus preserves the chosen jelly and gives its partner only a focus cue")
+		"Moving keyboard focus gives the next word only a navigation cue")
 	second.pressed.emit()
-	check(not view.game.fusion.is_empty() and view._focus_after_fusion,
-		"Keyboard matching remembers to restore navigation after fusion")
-	_check_feedback_cleared(first, "Starting keyboard fusion on its first frame")
-	_check_feedback_cleared(second, "Starting keyboard fusion on its focused partner")
-	for delta: float in [0.4, 0.4, 0.25]:
-		view._process(delta)
-	var focused = root.gui_get_focus_owner()
-	check(view._tiles.values().has(focused) and not view._focus_after_fusion,
-		"Completed keyboard fusion restores focus to a remaining playable jelly")
-	if view._tiles.values().has(focused):
-		check(not focused.selected and float(focused._gel.get_shader_parameter("rim_strength")) > 0.0
-			and focused._visual.position.is_zero_approx() and _lift_stopped(focused),
-			"Restored navigation has a focus contour without a stale selection or lift")
+	check(heard.size() == 2 and cues == ["pick", "pick"] and attempts.is_empty()
+		and view.game.snapshot() == before and view._rejection.is_empty() and not view._fusion_art.visible,
+		"Confirming matching partners only pronounces both words and cannot change learning, score or treasure")
+	for index in range(4):
+		second.pressed.emit()
+	check(heard.size() == 6 and cues.count("pick") == 6 and attempts.is_empty()
+		and view.game.snapshot() == before and int(view.snapshot().drag.selected) == -1,
+		"Repeated keyboard or controller confirmation never builds a pending pair or learning streak")
+	check(second.has_focus() and not second.selected and second._visual.position.is_zero_approx() and _lift_stopped(second),
+		"Pronunciation retains ordinary keyboard focus without a sticky lift or selection")
 
 
 func _check_feedback_lifecycle(view) -> void:
 	_reset(view)
 	var pair: Array[int] = _pair(view)
 	var tile = view._tiles[pair[0]]
-	tile.grab_focus()
-	tile.pressed.emit()
+	view._press(2, _center(view, pair[0]))
 	if tile._lift != null and tile._lift.is_valid():
 		tile._lift.custom_step(0.12)
 	view.set_reduced_motion(true)
-	check(tile.selected and int(view.snapshot().drag.selected) == pair[0]
-		and float(tile._gel.get_shader_parameter("rim_strength")) > 0.0,
-		"Enabling reduced motion preserves the player's chosen jelly and static contour")
+	check(tile.selected and int(view.snapshot().drag.selected) == -1
+		and int(view.snapshot().drag.source) == pair[0] and float(tile._gel.get_shader_parameter("rim_strength")) > 0.0,
+		"Enabling reduced motion retains only the currently held jelly and its static contour")
 	check(tile._visual.position.is_zero_approx() and _lift_stopped(tile),
 		"Enabling reduced motion immediately ends an in-flight lift")
 	view.cancel_input()
+	_check_feedback_cleared(tile, "Cancelling a held jelly under reduced motion")
+	tile.grab_focus()
+	tile.pressed.emit()
 	check(not tile.selected and tile.has_focus() and float(tile._gel.get_shader_parameter("rim_strength")) > 0.0
-		and tile._visual.position.is_zero_approx(),
-		"Cancelling keyboard selection preserves only its independent focus cue")
+		and tile._visual.position.is_zero_approx() and attempts.is_empty(),
+		"Reduced-motion keyboard pronunciation retains only its independent focus cue")
 	view.pause(true)
 	_check_feedback_cleared(tile, "Pausing keyboard navigation")
 	view.pause(false)
@@ -1047,8 +1107,7 @@ func _check_danger_clock(view) -> void:
 		if cell.word.id != view._cell(first).word.id:
 			other = int(cell.id)
 			break
-	view._activate(first)
-	view._activate(other)
+	_drag_pair(view, first, other)
 	check(attempts.size() == 1 and not bool(attempts[0].correct), "The warning test makes a real incorrect match")
 	check(is_equal_approx(float(view.game.full_elapsed), elapsed) and view.danger_feedback() == before
 		and cues.count("danger") == 3,
@@ -1077,8 +1136,7 @@ func _check_danger_lifecycle(view) -> void:
 	check(view.danger_feedback() == before and is_equal_approx(float(view.game.full_elapsed), elapsed),
 		"Returning to the mode preserves the countdown phase that was hidden")
 	var pair: Array[int] = _pair(view)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	check(not view.game.fusion.is_empty(), "A correct match starts a real rescue fusion on the full board")
 	_check_danger_hidden(view, "Starting a rescue fusion")
 	view._process(0.4)
@@ -1129,9 +1187,8 @@ func _check_fusion(view) -> void:
 	_reset(view)
 	var pair: Array[int] = _pair(view, true)
 	var source_center: Vector2 = _center(view, pair[0])
-	view._activate(pair[0])
-	view._activate(pair[1])
-	check(heard.size() == 2 and not view.game.fusion.is_empty(), "Tap or controller selection reads both tiles and starts the same fusion")
+	_drag_pair(view, pair[0], pair[1])
+	check(heard.size() == 1 and not view.game.fusion.is_empty(), "Dragging reads the held word and starts fusion only when released on its matching partner")
 	check(attempts.is_empty() and view.game.chest_count == 0, "A matching contact does not credit a clear or treasure before fusion completes")
 	check(view.finish_button.disabled and not view._can_play(), "Fusion blocks repeated contacts and early finish")
 	view._process(0.10)
@@ -1163,8 +1220,7 @@ func _check_fusion(view) -> void:
 func _check_fusion_interruption(view) -> void:
 	_reset(view)
 	var pair: Array[int] = _pair(view, true)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	view._process(0.42)
 	var elapsed: float = view.game.fusion.elapsed
 	var pose: Rect2 = view._merged.get_rect()
@@ -1185,8 +1241,7 @@ func _check_fusion_interruption(view) -> void:
 		and not view._fusion_art.visible and not view._merged.visible, "Resuming a reduced-motion fusion awards its word and chest once at the original end")
 	_reset(view)
 	pair = _pair(view)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	view._process(0.2)
 	view.stop()
 	view._process(0.4)
@@ -1248,8 +1303,7 @@ func _check_result_gate(view) -> void:
 	view.chests_requested.connect(func() -> void: opened.append(1))
 	view.replay_requested.connect(func() -> void: replayed.append(1))
 	var pair: Array[int] = _pair(view, true)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	for delta: float in [0.4, 0.4, 0.25]:
 		view._process(delta)
 	view.finish_button.pressed.emit()
@@ -1289,8 +1343,7 @@ func _check_result_gate(view) -> void:
 func _check_reduced_motion_and_cache(view) -> void:
 	_reset(view, true)
 	var pair: Array[int] = _pair(view, true)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	view._process(0.2)
 	var static_rect: Rect2 = view._merged.get_rect()
 	view._process(0.3)
@@ -1341,7 +1394,7 @@ func _check_close_drop_contact(view) -> void:
 	_check_feedback_cleared(target_tile, "Starting pointer fusion on its contact partner")
 	check(source_tile._surface.scale == Vector2.ONE and target_tile._surface.scale == Vector2.ONE,
 		"Pointer fusion starts without stale held stretch or target squash")
-	check(not view._focus_after_fusion and not view._tiles.values().has(root.gui_get_focus_owner()),
+	check(not view._tiles.values().has(root.gui_get_focus_owner()),
 		"Pointer fusion does not request keyboard focus restoration")
 	view._process(0.01)
 	check(not view.game.fusion.is_empty() and view._fusion_start.is_equal_approx(target)
@@ -1403,8 +1456,7 @@ func _check_signal_reentry(view) -> void:
 			view.game.finish_round()
 	view.audio_requested.connect(interrupt)
 	var pair: Array[int] = _pair(view)
-	view._activate(pair[0])
-	view._activate(pair[1])
+	_drag_pair(view, pair[0], pair[1])
 	check(view.game.phase == "finished" and view.game.fusion.is_empty() and attempts.is_empty(),
 		"A synchronous finish callback may cancel a just-started fusion without stale payload access or credit")
 	view.audio_requested.disconnect(interrupt)
@@ -1413,5 +1465,5 @@ func _check_signal_reentry(view) -> void:
 	view.word_requested.connect(leave_on_word)
 	view._activate(_pair(view)[0])
 	check(not view._configured and int(view.snapshot().drag.selected) == -1,
-		"Leaving from a synchronous pronunciation callback cannot restore a stale selection")
+		"Leaving from a synchronous pronunciation callback cannot restore stale input ownership")
 	view.word_requested.disconnect(leave_on_word)
