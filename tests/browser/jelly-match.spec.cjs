@@ -235,7 +235,7 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
 test('a naturally full board pauses, can be rescued, and eventually ends without inventing loot', async ({ page }, info) => {
   test.setTimeout(150000);
   test.skip(info.project.name !== 'desktop-chromium', 'The real 28-second supply and eight-second countdown run once on desktop.');
-  const errors = await startJelly(page);
+  const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.cells.length === 24 && state.tiles.every(tile => tile.settled);
@@ -244,6 +244,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const paused = await jelly(page);
+  expect(paused.danger).toEqual({ active: false, strength: 0 });
   await page.waitForTimeout(1200);
   const stillPaused = await jelly(page);
   expect(stillPaused.full_elapsed, 'The menu freezes the real danger clock').toBe(paused.full_elapsed);
@@ -257,16 +258,25 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   const rescued = await expectClear(page, 1, rescue);
   expect(rescued.cells).toHaveLength(22);
   expect(rescued.full_elapsed, 'A completed rescue cancels the entire previous countdown').toBe(-1);
+  expect(rescued.danger).toEqual({ active: false, strength: 0 });
   expect(rescued.chest_count).toBe(0);
   await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
   await page.screenshot({ path: info.outputPath('jelly-full-board-rescue.png'), scale: 'css' });
   await expect.poll(async () => (await jelly(page)).cells.length,
     { timeout: 10000, message: 'Natural supply fills the newly opened space' }).toBe(24);
   expect((await jelly(page)).phase).toBe('playing');
+  // Capture feedback during the final countdown so screenshots cannot consume rescue time.
+  await expect.poll(async () => (await jelly(page)).danger.strength,
+    { intervals: [50], message: 'The full-board frame visibly flashes on each countdown beat' }).toBeGreaterThan(0.9);
+  await page.screenshot({ path: info.outputPath('jelly-danger-bright.png'), scale: 'css' });
+  await expect.poll(async () => (await jelly(page)).danger.strength,
+    { intervals: [50], message: 'The warning returns to the quiet board frame between beats' }).toBe(0);
+  await page.screenshot({ path: info.outputPath('jelly-danger-dim.png'), scale: 'css' });
   await expect.poll(async () => (await jelly(page)).result.visible,
     { timeout: 18000, intervals: [100, 250, 500], message: 'The fresh full-board countdown expires through ordinary gameplay time' }).toBe(true);
   const ended = await jelly(page);
   expect(ended.phase).toBe('finished');
+  expect(ended.danger).toEqual({ active: false, strength: 0 });
   expect(ended.cleared_pairs).toBe(1);
   expect(ended.chest_count).toBe(0);
   expect(ended.result.open.visible).toBe(false);

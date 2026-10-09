@@ -127,6 +127,8 @@ func step(delta: float) -> void:
 				_start_danger()
 				if generation != _generation or phase != "playing" or paused:
 					break
+				if not fusion.is_empty():
+					continue
 			var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 			var consumed: float = minf(remaining, maxf(0.0, next_second - full_elapsed))
 			_age_cells(consumed)
@@ -135,7 +137,7 @@ func step(delta: float) -> void:
 			if full_elapsed + EPSILON >= FULL_SECONDS:
 				finish_round()
 			elif full_elapsed + EPSILON >= next_second:
-				cue_requested.emit("tick")
+				cue_requested.emit("danger")
 		else:
 			var consumed: float = minf(remaining, maxf(0.0, spawn_interval - spawn_elapsed))
 			_age_cells(consumed)
@@ -295,10 +297,7 @@ func _start_danger() -> void:
 	if full_elapsed >= 0.0:
 		return
 	full_elapsed = 0.0
-	var generation: int = _generation
 	cue_requested.emit("danger")
-	if generation == _generation and phase == "playing" and full_elapsed >= 0.0:
-		cue_requested.emit("tick")
 
 
 func _complete_fusion() -> void:

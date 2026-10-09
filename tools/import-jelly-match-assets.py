@@ -26,7 +26,6 @@ SOUNDS = {
     "merge": ("drop_002.ogg", -8.0),
     "clear": ("pluck_002.ogg", -6.0),
     "danger": ("question_001.ogg", -12.0),
-    "tick": ("tick_001.ogg", -15.0),
 }
 
 
@@ -135,7 +134,7 @@ def verify():
             values.frombytes(recording.readframes(recording.getnframes()))
             if not values or values[0] != 0 or values[-1] != 0 or max(map(abs, values)) >= 32767:
                 raise ValueError(f"Clipped or discontinuous cue: {record['path']}")
-    print("Jelly Match assets verified: four sourced gel surfaces and four non-clipping recorded cues.")
+    print(f"Jelly Match assets verified: {len(manifest['images'])} sourced gel surfaces and {len(manifest['audio'])} non-clipping recorded cues.")
 
 
 def main():

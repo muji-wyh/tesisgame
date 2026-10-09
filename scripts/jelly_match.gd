@@ -66,7 +66,6 @@ var _result_chests: Array[TextureRect] = []
 var _result_visible: bool = false
 var _result_transition: bool = false
 var _result_elapsed: float = 0.0
-var _time: float = 0.0
 var _last_published: String = ""
 var _publish_elapsed: float = 0.0
 var _chest_cache: Dictionary = {}
@@ -159,7 +158,6 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 	_result_visible = false
 	_result_transition = false
 	_result_elapsed = 0.0
-	_time = 0.0
 	_publish_elapsed = 0.0
 	_focus_after_fusion = false
 	_paused = false
@@ -296,6 +294,7 @@ func cancel_input() -> void:
 	_refresh_marks()
 	_sync_positions()
 	_refresh_fusion()
+	queue_redraw()
 	_publish()
 
 func release_pointer(pointer: int) -> void:
@@ -469,6 +468,7 @@ func _merge(first: int, second: int, from: Vector2) -> void:
 	_sync_tiles()
 	_refresh_fusion()
 	_refresh_hud()
+	queue_redraw()
 
 func _snap_back(id: int, from: Vector2) -> void:
 	if not _tiles.has(id):
@@ -582,7 +582,6 @@ func _process(delta: float) -> void:
 		if _pointer != NO_POINTER:
 			cancel_input()
 		return
-	_time += delta
 	var generation: int = _generation
 	if game.phase == "playing":
 		game.step(delta)
@@ -880,14 +879,26 @@ func _animate_result() -> void:
 		image.scale = Vector2.ONE if reduced_motion else Vector2.ONE * (1.0 + sin(p * PI * 2.0) * (1.0 - p) * 0.14)
 		image.modulate.a = 1.0 if reduced_motion else smoothstep(0.0, 0.2, p)
 
+func danger_feedback() -> Dictionary:
+	var active: bool = _can_play() and float(game.full_elapsed) >= 0.0
+	var strength: float = 0.0
+	if active:
+		# The model emits a warning at this same second boundary. Keep a quiet
+		# interval between bright frames, without flashing the learning content.
+		var beat: float = fposmod(float(game.full_elapsed), 1.0)
+		strength = 1.0 if reduced_motion else 1.0 - smoothstep(0.18, 0.55, beat)
+	return {"active": active, "strength": strength}
+
 func _draw() -> void:
 	if not _configured or _result_visible:
 		return
 	var accent: Color = _theme.get("accent", Style.GOOD)
-	var full: bool = float(game.full_elapsed) >= 0.0
-	var pulse: float = 1.0 if reduced_motion else 0.5 + sin(_time * TAU * 1.1) * 0.5
-	var edge: Color = Color("#d88942").lerp(Color("#bf713a"), pulse) if full else Color(accent, 0.22)
-	draw_style_box(Style.box(Color(accent, 0.055), edge, 18, 3 if full else 1), _board.grow(2.0))
+	draw_style_box(Style.box(Color(accent, 0.055), Color(accent, 0.22), 18, 1), _board.grow(2.0))
+	var warning: Dictionary = danger_feedback()
+	if float(warning.strength) > 0.0:
+		var edge := Color(Color("#c65c35"), float(warning.strength))
+		var width: int = maxi(2, ceili(4.0 / Style.ui_scale(self)))
+		draw_style_box(Style.box(Color.TRANSPARENT, edge, 18, width), _board.grow(2.0))
 	if _chest_texture != null:
 		for flight: Dictionary in _loot_flights:
 			var p: float = clampf(float(flight.elapsed) / 0.65, 0.0, 1.0)
@@ -919,6 +930,7 @@ func snapshot() -> Dictionary:
 	result["result"] = {"visible": _result_visible, "open": _control(chests_button), "replay": _control(replay_button)}
 	result["finish"] = _control(finish_button)
 	result["notice"] = _notice.text
+	result["danger"] = danger_feedback()
 	return result
 
 func _global_rect(rect: Rect2) -> Rect2:

@@ -46,6 +46,9 @@ func _run() -> void:
 	_check_drag_replaces_selection(view)
 	_check_keyboard_feedback(view)
 	_check_feedback_lifecycle(view)
+	_check_danger_clock(view)
+	_check_danger_lifecycle(view)
+	_check_danger_reduced_motion_and_end(view)
 	_check_wrong_drop(view)
 	_check_fusion(view)
 	_check_close_drop_contact(view)
@@ -298,6 +301,148 @@ func _check_feedback_lifecycle(view) -> void:
 	view.hide()
 	_check_feedback_cleared(tile, "Hiding the mode")
 	view.show()
+
+
+func _fill_board(view) -> void:
+	for index in range(80):
+		if view.game.full_elapsed >= 0.0 or view.game.phase != "playing":
+			break
+		view._process(minf(0.5, float(view.game.spawn_interval) - float(view.game.spawn_elapsed)))
+	check(view.game.cells.size() == view.game.CAPACITY and is_zero_approx(float(view.game.full_elapsed)),
+		"The real spawn clock fills the board and starts its warning at zero")
+
+
+func _check_danger_hidden(view, reason: String) -> void:
+	var danger: Dictionary = view.danger_feedback()
+	check(not bool(danger.active) and is_zero_approx(float(danger.strength)),
+		"%s immediately suppresses the countdown warning" % reason)
+	check(view.snapshot().danger == danger, "%s publishes the same warning state" % reason)
+
+
+func _check_danger_clock(view) -> void:
+	_reset(view)
+	_check_danger_hidden(view, "A board with available space")
+	var warning_frames: Array[Dictionary] = []
+	var capture_warning: Callable = func(cue: String) -> void:
+		if cue == "danger":
+			warning_frames.append(view.danger_feedback().duplicate(true))
+	view.audio_requested.connect(capture_warning)
+	_fill_board(view)
+	check(cues.count("danger") == 1 and not cues.has("tick"),
+		"Filling the board starts one warning sound without a second overlapping cue")
+	var start: Dictionary = view.danger_feedback()
+	check(bool(start.active) and is_equal_approx(float(start.strength), 1.0),
+		"The warning starts at full brightness with its first sound")
+	view._refresh_hud()
+	view._layout()
+	check(view.danger_feedback() == start, "Refreshing layout and HUD cannot restart the model-clock warning phase")
+	view._process(0.125)
+	check(is_equal_approx(float(view.danger_feedback().strength), 1.0),
+		"The warning remains bright long enough to read each pulse")
+	view._process(0.125)
+	var early_fade: float = float(view.danger_feedback().strength)
+	view._process(0.125)
+	var late_fade: float = float(view.danger_feedback().strength)
+	check(early_fade > late_fade and late_fade > 0.0 and early_fade < 1.0,
+		"The warning fades smoothly after its bright interval")
+	view._process(0.25)
+	var dim: Dictionary = view.danger_feedback()
+	check(bool(dim.active) and is_zero_approx(float(dim.strength)) and view.snapshot().danger == dim,
+		"The dim interval stays logically active while its visible strength reaches zero")
+	view._process(0.25)
+	check(is_zero_approx(float(view.danger_feedback().strength)), "The warning stays dim until the next clock boundary")
+	for delta: float in [0.125, 0.5, 0.5]:
+		view._process(delta)
+	check(warning_frames.size() == 3 and cues.count("danger") == 3 and not cues.has("tick"),
+		"The zero-, one-, and two-second boundaries each produce one warning sound")
+	for frame: Dictionary in warning_frames:
+		check(bool(frame.active) and is_equal_approx(float(frame.strength), 1.0),
+			"The visual warning is already bright inside the corresponding audio callback")
+	view._process(0.25)
+	var before: Dictionary = view.danger_feedback()
+	var elapsed: float = float(view.game.full_elapsed)
+	var first: int = int(view.game.cells[0].id)
+	var other: int = -1
+	for cell: Dictionary in view.game.cells:
+		if cell.word.id != view._cell(first).word.id:
+			other = int(cell.id)
+			break
+	view._activate(first)
+	view._activate(other)
+	check(attempts.size() == 1 and not bool(attempts[0].correct), "The warning test makes a real incorrect match")
+	check(is_equal_approx(float(view.game.full_elapsed), elapsed) and view.danger_feedback() == before
+		and cues.count("danger") == 3,
+		"An incorrect match does not restart, brighten, or repeat the countdown warning")
+	view.audio_requested.disconnect(capture_warning)
+
+
+func _check_danger_lifecycle(view) -> void:
+	_reset(view)
+	_fill_board(view)
+	view._process(0.25)
+	var elapsed: float = float(view.game.full_elapsed)
+	var before: Dictionary = view.danger_feedback()
+	var warnings: int = cues.count("danger")
+	view.pause(true)
+	_check_danger_hidden(view, "Pausing a full board")
+	view._process(0.4)
+	check(is_equal_approx(float(view.game.full_elapsed), elapsed) and cues.count("danger") == warnings,
+		"A paused warning advances neither the countdown nor its sound")
+	view.pause(false)
+	check(view.danger_feedback() == before, "Resuming restores the saved warning phase without starting a new pulse")
+	view.hide()
+	_check_danger_hidden(view, "Hiding a full board")
+	view._process(0.4)
+	view.show()
+	check(view.danger_feedback() == before and is_equal_approx(float(view.game.full_elapsed), elapsed),
+		"Returning to the mode preserves the countdown phase that was hidden")
+	var pair: Array[int] = _pair(view)
+	view._activate(pair[0])
+	view._activate(pair[1])
+	check(not view.game.fusion.is_empty(), "A correct match starts a real rescue fusion on the full board")
+	_check_danger_hidden(view, "Starting a rescue fusion")
+	view._process(0.4)
+	check(is_equal_approx(float(view.game.full_elapsed), elapsed) and cues.count("danger") == warnings,
+		"Rescue fusion suspends the old countdown without continuing its warning sounds")
+	for delta: float in [0.4, 0.25]:
+		view._process(delta)
+	check(view.game.cells.size() == view.game.CAPACITY - 2 and view.game.full_elapsed < 0.0,
+		"Completing the rescue makes space and clears the model's danger clock")
+	_check_danger_hidden(view, "Completing a rescue fusion")
+	_fill_board(view)
+	check(cues.count("danger") == warnings + 1 and not cues.has("tick")
+		and is_equal_approx(float(view.danger_feedback().strength), 1.0),
+		"Filling the rescued space begins a fresh warning and one new first sound")
+
+
+func _check_danger_reduced_motion_and_end(view) -> void:
+	_reset(view, true)
+	_check_danger_hidden(view, "Reduced motion before the board fills")
+	_fill_board(view)
+	for delta: float in [0.125, 0.25, 0.25]:
+		view._process(delta)
+		check(bool(view.danger_feedback().active) and is_equal_approx(float(view.danger_feedback().strength), 1.0),
+			"Reduced motion keeps the countdown warning steadily visible")
+	var elapsed: float = float(view.game.full_elapsed)
+	view.set_reduced_motion(false)
+	check(is_zero_approx(float(view.danger_feedback().strength)) and is_equal_approx(float(view.game.full_elapsed), elapsed),
+		"Disabling reduced motion resumes the existing dim phase without resetting time")
+	view.set_reduced_motion(true)
+	check(is_equal_approx(float(view.danger_feedback().strength), 1.0) and cues.count("danger") == 1,
+		"Enabling reduced motion immediately restores a steady warning without replaying its sound")
+	for index in range(20):
+		if view.game.phase == "finished":
+			break
+		view._process(0.5)
+	check(view.game.phase == "finished" and finishes.size() == 1 and cues.count("danger") == 8 and not cues.has("tick"),
+		"The eight-second deadline finishes once after exactly eight warning sounds")
+	_check_danger_hidden(view, "Reaching the deadline")
+	view.result_reveal()
+	_check_danger_hidden(view, "Revealing the completed result")
+	view.stop()
+	_check_danger_hidden(view, "Stopping the mode")
+	_reset(view)
+	_check_danger_hidden(view, "Starting a fresh round")
 
 
 func _check_fusion(view) -> void:

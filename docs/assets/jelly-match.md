@@ -11,7 +11,7 @@ deforms that illustration rather than replacing it with flat geometry.
 | Material | Creator and original source | License and status | Available animation |
 | --- | --- | --- | --- |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
-| Merge, clear, attention and countdown cues | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; the four selected OGG recordings decoded, adapted and integrated as WAVs. The original pack license is retained. | One-shot recordings; no loops. |
+| Merge, clear and countdown warning cues | Kenney, [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | CC0 1.0. Original archive downloaded; three selected OGG recordings decoded, adapted and integrated as WAVs. The original pack license is retained. | One-shot recordings; no loops. |
 | Word artwork and pronunciation | Existing Grow with Pip vocabulary | Reused unchanged, with existing [vocabulary](growth-vocabulary.md), [Mulberry](mulberry-vocabulary.md) and [Ava](ava-voice.md) provenance. | Existing pronunciation playback; artwork is static. |
 | Earned chest cue | Existing [chest reference audio](chest-reference-audio.md) | Reuse `assets/imported-audio/chest-reference/reward.wav` without a duplicate. Its existing user-supplied source and embedded-game restrictions remain in force; it is not relabeled CC0. | Existing one-shot reward cue. |
 | Chest artwork | Existing current theme chest manifest and renderer | Reused under the recorded [chest asset rights](chest-feel.md). Royal and Energy have closed PNG artwork; the five newer modeled skins require the actual current renderer or a cached still of that renderer. | Use a closed pose for gameplay badges. Archived renders of replaced chest designs must not substitute for the current theme. |
@@ -58,8 +58,7 @@ the finished game's responsive layout.
 | --- | --- | --- | ---: | ---: |
 | Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | `Audio/drop_002.ogg` | 188 ms | −10.05 dBFS |
 | Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | `Audio/pluck_002.ogg` | 162 ms | −6.00 dBFS |
-| Enter a high-stack attention state | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
-| A remaining countdown beat | `assets/audio/jelly-match/tick.wav` | `Audio/tick_001.ogg` | 45 ms | −16.67 dBFS |
+| Each full-board countdown beat | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
 
 The names describe intended event use. The drop and pluck sources were selected
 for contrasting contact and release envelopes; the attention source is a question
@@ -77,8 +76,12 @@ measured peaks.
 
 Drive each cue from the same committed event as its visible contact or release.
 Do not play merge or clear for every animation frame or every affected card.
-Keep attention entry separate from the sparse countdown beat; avoid a repeating
-alarm. Tap pronunciation remains the primary learning sound. While a word plays,
+The full-board clock triggers one danger recording at each remaining second,
+including entry. The border uses that same clock: bright for 180 ms, fading to
+its normal outline by 550 ms, then resting until the next second. Reduced motion
+uses a steady warning outline. A matching contact immediately stops warning
+audio and removes the border flash; pause, exit and expiry stop the warning too.
+Tap pronunciation remains the primary learning sound. While a word plays,
 duck Jelly Match effects by about 12 dB and use a small bounded voice pool.
 Mute, pause, backgrounding and leaving the mode must stop pending and playing
 Jelly cues. Reuse the existing chest reward gain and lifecycle for earned chests.
@@ -96,7 +99,7 @@ python tools/import-jelly-match-assets.py --check
 ```
 
 The importer rejects different source archive hashes, extracts only into its
-source directory, and reproduces the four PNGs, four WAVs and manifest. The check
+source directory, and reproduces the four PNGs, three WAVs and manifest. The check
 mode only reads files and verifies hashes, texture format, PCM format, zero edges
 and headroom. Normal game builds use the acquired files and need no asset service
 or network synthesis.

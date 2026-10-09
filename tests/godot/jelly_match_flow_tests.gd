@@ -139,6 +139,7 @@ func _run() -> void:
 	app.audio.halt()
 	app.queue_free()
 	await settle()
+	await _warning_audio_flow(directory)
 	await _uncapped_reward_checks(directory)
 	await _reward_conflict_checks(directory)
 	for file in DirAccess.get_files_at(directory):
@@ -146,6 +147,73 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Jelly Match flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _jelly_cue_playing(audio, cue: String = "") -> bool:
+	for player: AudioStreamPlayer in audio._jelly_players:
+		if player.playing and player.stream != null and (cue.is_empty() or player.stream.resource_path == audio.JELLY_PATHS[cue]):
+			return true
+	return false
+
+
+func _warning_audio_flow(directory: String) -> void:
+	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory, "warning-growth.cfg")
+	app.jelly_reward_save_path = directory + "/warning-jelly-rewards.cfg"
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/warning-medals.cfg", directory + "/warning-legacy.cfg")
+	app._presentation.path = directory + "/warning-presentation.cfg"
+	root.add_child(app)
+	await settle()
+	app.audio.set_muted(false)
+	app.choose_mode("jelly")
+	app._jelly.set_process(false)
+	var game = app._jelly.game
+	var cues: Array[String] = []
+	app._jelly.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
+	game.step(28.0)
+	check(app._mode_id == "jelly" and _jelly_cue_playing(app.audio, "danger") and cues.count("danger") == 1
+		and not app.audio.voice.playing, "Choosing Jelly enables its first warning without a word tap")
+	game.step(1.0)
+	check(_jelly_cue_playing(app.audio, "danger") and cues.count("danger") == 2,
+		"The next model beat reaches GameUI's warning audio without additional input")
+	for interruption: String in ["menu", "background"]:
+		var elapsed: float = game.full_elapsed
+		var warning_count: int = cues.count("danger")
+		if interruption == "menu":
+			app._show_mode_menu()
+		else:
+			app.on_page_hidden()
+		game.step(5.0)
+		check(game.paused and game.full_elapsed == elapsed and not _jelly_cue_playing(app.audio)
+			and cues.count("danger") == warning_count, "%s stops warning audio and freezes its timeline" % interruption)
+		if interruption == "menu":
+			app._hide_mode_menu()
+		else:
+			app.on_page_visible()
+		check(not _jelly_cue_playing(app.audio, "danger"), "%s return does not replay the interrupted warning" % interruption)
+		game.step(1.0)
+		check(not game.paused and _jelly_cue_playing(app.audio, "danger") and cues.count("danger") == warning_count + 1,
+			"The next live beat restores warning audio after %s" % interruption)
+	var chosen := pair(game)
+	app._jelly._activate(chosen[0].id)
+	app._jelly._activate(chosen[1].id)
+	check(not game.fusion.is_empty() and not _jelly_cue_playing(app.audio, "danger") and _jelly_cue_playing(app.audio, "merge"),
+		"A real selected pair silences the warning while preserving its rescue merge sound")
+	game.step(game.FUSION_SECONDS)
+	game.step(game.spawn_interval)
+	check(_jelly_cue_playing(app.audio, "danger"), "Refilling the rescued board starts a fresh audible warning")
+	game.finish_round()
+	check(game.phase == "finished" and not _jelly_cue_playing(app.audio), "Finishing stops the active warning through GameUI")
+	app.choose_mode("memory")
+	app.choose_mode("jelly")
+	app._jelly.set_process(false)
+	app._jelly.game.step(28.0)
+	check(_jelly_cue_playing(app.audio, "danger"), "A replacement Jelly round owns a new warning")
+	app.choose_mode("memory")
+	check(app._mode_id == "memory" and not _jelly_cue_playing(app.audio), "Switching modes stops the previous Jelly warning")
+	app.audio.halt()
+	app.queue_free()
+	await settle()
 
 
 func _uncapped_reward_checks(directory: String) -> void:

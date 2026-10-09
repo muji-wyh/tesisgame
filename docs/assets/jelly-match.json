@@ -162,27 +162,6 @@
       "pitch_shift": 0,
       "time_stretch": 1,
       "loop": false
-    },
-    {
-      "id": "tick",
-      "path": "assets/audio/jelly-match/tick.wav",
-      "sha256": "0fce645feaa9294d717b0f5d0342b62b83d237758474620c8b7a5266200adc97",
-      "source": "Audio/tick_001.ogg",
-      "source_sha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
-      "seconds": 0.044989,
-      "sample_rate": 44100,
-      "channels": 1,
-      "pcm_bits": 16,
-      "source_decoded_peak_dbfs": -0.805,
-      "linear_gain": 0.195095821,
-      "peak_dbfs": -16.668,
-      "rms_dbfs": -38.779,
-      "onset_minus_40_dbfs_seconds": 6.8e-05,
-      "attack_frames": 44,
-      "release_frames": 441,
-      "pitch_shift": 0,
-      "time_stretch": 1,
-      "loop": false
     }
   ],
   "reuse": {

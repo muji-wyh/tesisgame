@@ -28,6 +28,7 @@ func _run() -> void:
 	_test_long_round()
 	_test_catalog_levels()
 	_test_signal_reentry()
+	_test_danger_signal_reentry()
 	print("Jelly Match model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -263,17 +264,21 @@ func _test_full_board_timeout() -> void:
 	model.step(28.0)
 	check(model.cells.size() == 24 and model.snapshot().full_remaining == 8.0,
 		"Eight paired spawns fill the board and expose an eight-second countdown")
-	check(events.cues.count("danger") == 1 and events.cues.count("tick") == 1,
-		"Full-board danger and its first second tick each emit once")
+	check(events.cues == ["danger"], "A newly full board emits one warning at elapsed zero")
 	for second in range(7):
-		model.step(1.0)
+		model.step(0.999)
+		check(events.cues.size() == second + 1, "A warning never precedes its next one-second boundary")
+		model.step(0.001)
 		check(model.phase == "playing" and events.finished.is_empty(), "Each remaining second still allows a matching chance")
-		check(events.cues.count("tick") == second + 2, "Each displayed remaining second has exactly one tick")
+		check(events.cues.size() == second + 2 and events.cues.count("danger") == second + 2
+			and is_equal_approx(model.full_elapsed, float(second + 1)),
+			"Each displayed remaining second has exactly one warning on its own clock boundary")
 	model.step(0.999)
 	check(model.phase == "playing", "A nearly expired countdown does not end early")
 	model.step(0.001)
 	check(model.phase == "finished" and events.finished.size() == 1, "A continuously full board ends exactly once at eight seconds")
-	check(events.cues.count("tick") == 8 and events.cues.count("danger") == 1, "No extra countdown cue fires at expiry")
+	check(events.cues.size() == 8 and events.cues.count("danger") == 8,
+		"Exactly eight warning beats cover elapsed zero through seven, without an expiry cue")
 	check(events.finished[0].chest_count == 0 and events.finished[0].cleared_pairs == 0
 		and events.finished[0].words.is_empty(), "Uncleared chest tiles do not award rewards")
 	var ended: Dictionary = model.snapshot()
@@ -296,29 +301,42 @@ func _test_danger_rescue_and_pause() -> void:
 	check(model.phase == "playing" and model.full_elapsed > 7.8, "The last countdown fraction remains playable")
 	var pair: Array[int] = _pair(model)
 	var danger: float = model.full_elapsed
+	var warnings: int = events.cues.count("danger")
+	check(warnings == 8, "A late rescue follows all eight warning beats of the original countdown")
 	check(model.try_merge(pair[0], pair[0]) == "ignored" and model.full_elapsed == danger,
 		"A canceled drop does not reset the full-board countdown")
 	check(model.try_merge(pair[0], pair[1]) == "correct", "A correct merge can rescue a nearly expired full board")
 	model.step(0.6)
-	check(model.full_elapsed == danger and model.phase == "playing", "Fusion freezes danger even beyond its former expiry")
+	check(model.full_elapsed == danger and model.phase == "playing" and events.cues.count("danger") == warnings,
+		"Fusion freezes danger and emits no warning during a committed rescue")
 	model.set_paused(true)
 	var paused_state: Dictionary = model.snapshot()
+	var paused_cues: Array = events.cues.duplicate()
 	model.step(50.0)
-	check(model.snapshot() == paused_state, "Pause freezes cell age, fusion, spawning and countdown together")
+	check(model.snapshot() == paused_state and events.cues == paused_cues,
+		"Pause freezes cell age, fusion, spawning, countdown, and audio cues together")
 	model.set_paused(false)
 	model.step(0.45)
-	check(model.cells.size() == 22 and model.full_elapsed == -1.0 and events.finished.is_empty(),
+	check(model.cells.size() == 22 and model.full_elapsed == -1.0 and events.finished.is_empty()
+		and events.cues.count("danger") == warnings,
 		"Completing the rescue cancels the old countdown")
 	model.step(model.spawn_interval)
-	check(model.cells.size() == 24 and model.full_elapsed == 0.0 and events.cues.count("danger") == 2,
+	check(model.cells.size() == 24 and model.full_elapsed == 0.0 and events.cues.count("danger") == warnings + 1,
 		"Filling the board again starts a fresh, complete danger window")
 	model.set_paused(true)
 	paused_state = model.snapshot()
+	paused_cues = events.cues.duplicate()
 	model.step(20.0)
-	check(model.snapshot() == paused_state, "Pause also freezes a full board outside fusion")
+	check(model.snapshot() == paused_state and events.cues == paused_cues,
+		"A paused full board cannot schedule another warning")
 	model.set_paused(false)
-	model.step(7.9)
-	check(model.phase == "playing", "Resumed danger retains its remaining time")
+	model.step(0.999)
+	check(events.cues == paused_cues, "Resume keeps the original beat phase without replaying its entry warning")
+	model.step(0.001)
+	check(events.cues.count("danger") == warnings + 2, "The next resumed warning waits for the next clock boundary")
+	model.step(6.9)
+	check(model.phase == "playing" and events.cues.count("danger") == warnings + 8,
+		"Resumed danger retains its remaining time and exact remaining warning beats")
 
 
 func _test_finish_and_reset() -> void:
@@ -434,3 +452,40 @@ func _test_signal_reentry() -> void:
 	check(reset_events.cues.is_empty() and reset_model.generated_pairs == 4,
 		"A synchronous round reset prevents stale wrong feedback reaching the next round")
 	reset_model.word_attempted.disconnect(reset_on_wrong)
+
+
+func _test_danger_signal_reentry() -> void:
+	for action: String in ["pause", "finish", "reset", "fusion"]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(), 3, 18)
+		var interrupt: Callable = func(cue: String) -> void:
+			if cue != "danger":
+				return
+			match action:
+				"pause":
+					model.set_paused(true)
+				"finish":
+					model.finish_round()
+				"reset":
+					model.configure(_vocabulary(), 3, 18)
+				"fusion":
+					var chosen: Array[int] = _pair(model)
+					model.try_merge(chosen[0], chosen[1])
+		model.cue_requested.connect(interrupt)
+		model.step(28.5)
+		var expected: Array = ["danger", "merge"] if action == "fusion" else ["danger"]
+		check(events.cues == expected, "A synchronous %s at the warning cannot leak another old countdown cue" % action)
+		match action:
+			"pause":
+				check(model.paused and is_zero_approx(model.full_elapsed), "Pausing inside a warning freezes its clock at the beat")
+			"finish":
+				check(model.phase == "finished" and events.finished.size() == 1 and model.chest_count == 0,
+					"Finishing inside a warning closes the round once without an unearned reward")
+			"reset":
+				check(model.phase == "playing" and model.generated_pairs == 4 and model.full_elapsed == -1.0,
+					"Resetting inside a warning leaves the new round's supply and countdown untouched")
+			"fusion":
+				check(not model.fusion.is_empty() and is_zero_approx(model.full_elapsed) and events.attempts.is_empty(),
+					"A rescue inside a warning freezes the clock without granting premature learning credit")
+		model.cue_requested.disconnect(interrupt)

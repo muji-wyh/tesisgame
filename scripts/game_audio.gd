@@ -22,10 +22,9 @@ const JELLY_PATHS := {
 	"merge": "res://assets/audio/jelly-match/merge.wav",
 	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
-	"tick": "res://assets/audio/jelly-match/tick.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
 }
-const JELLY_GAINS := {"merge": 0.7, "pop": 0.64, "danger": 0.52, "tick": 0.52, "reward": 0.36}
+const JELLY_GAINS := {"merge": 0.7, "pop": 0.64, "danger": 0.52, "reward": 0.36}
 const JELLY_SPEECH_DB: float = -12.0
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
@@ -103,6 +102,7 @@ var _round_celebration_gains: Dictionary = {}
 var _round_celebration_next_player: int = 0
 var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_gains: Dictionary = {}
+var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
 
 
@@ -223,12 +223,15 @@ func stop_ui_click() -> void:
 func play_jelly_cue(cue_name: String) -> void:
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
+	if cue_name in ["danger", "merge"]:
+		stop_jelly_danger()
 	if _jelly_players.is_empty():
 		for index in range(3):
 			_jelly_players.append(_player(1.0))
 	var player: AudioStreamPlayer = _jelly_players[_jelly_next_player]
 	_jelly_next_player = (_jelly_next_player + 1) % _jelly_players.size()
 	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
+	_jelly_cues[player] = cue_name
 	_update_jelly_gain()
 	_play(player, JELLY_PATHS[cue_name])
 	set_process(true)
@@ -240,10 +243,21 @@ func _update_jelly_gain() -> void:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
 
+func stop_jelly_danger() -> void:
+	# Cancel pending requests as well as audible tails; a rescue owns the sound
+	# from its first contact, and delayed frames never stack warning recordings.
+	for player: AudioStreamPlayer in _jelly_players:
+		if _jelly_cues.get(player, "") == "danger":
+			_stop(player)
+			player.stream = null
+			_jelly_cues.erase(player)
+
+
 func stop_jelly_sounds() -> void:
 	for player: AudioStreamPlayer in _jelly_players:
 		_stop(player)
 		player.stream = null
+	_jelly_cues.clear()
 	_jelly_next_player = 0
 
 
