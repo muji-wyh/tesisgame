@@ -13,6 +13,7 @@ require('./lv3-vocabulary-art.cjs').checkWordMotion(root);
 require('./word-library-art.cjs').checkWordLibrary(root);
 require('./word-library-motion.cjs').checkWordLibraryMotion(root);
 require('./prepare-jelly-reward-art.cjs').checkJellyRewardArt(root);
+require('./prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
 runGodot(['--headless', '--path', root, '--import']);
 const audio = collectRequiredAudio(root);
 const inputs = snapshotInputs(root);

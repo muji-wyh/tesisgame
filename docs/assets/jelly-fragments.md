@@ -24,15 +24,22 @@ establish visible beats; they do not constitute a normal-speed audio review.
 
 The adaptation preserves the existing 0.65-second pickup flight. Synthesis
 assembles four portions of the actual closed-chest artwork. Upgrade motion uses
-the closed chest, a local glow, one material-change accent, and full-screen
-paper confetti. Intermediate chests never run the final opening or saving
+a rigid upward hop and a full vertical-axis turn of the acquired closed 3D
+chest for tiers 1-4. The new material appears at the back-facing apex, with
+two expanding light rings, sourced radial streaks and short glints. Royal and
+Crystal preserve their original 2D artwork with the same hop, roll and reveal
+beats instead of inventing unseen rear geometry. Full-screen paper confetti
+accompanies both paths. Intermediate chests never run the final opening or saving
 callbacks. Motion, sound and the chest-change accent share one performance
 clock. The gameplay model owns fragment credit and tier changes; the visual
 timeline does not grant rewards.
 
 After the pickup reaches the HUD and its progress segment fills, the milestone
 performance lasts 2.15 seconds.
-Its preparation and convergence lead to the chest reveal at 0.72 seconds; the
+A 0.18-second anticipation leads into the lift and turn, the new chest appears
+at 0.72 seconds, and the body lands at 1.26 seconds before returning to its
+static HUD size. Its peak is 1.48 times the resting icon size, anchored in the
+existing HUD without a modal. The the
 sound accent, upgraded art and confetti emission use this same reveal event.
 The chest settles in its existing gameplay HUD while the paper spreads across
 the viewport and falls away. There is no dimming panel, centered reward page,
@@ -137,6 +144,32 @@ reused without copying a new soundtrack from this motion reference; their
 provenance and extraction limits remain in
 [the chest audio record](chest-reference-audio.md).
 
+## Extra motion textures
+
+Chest synthesis and upgrade use two additional textures from the same acquired
+Toon FX 1.52 package by Kenneth Foldal Moe (Archanor VFX), under the Standard
+Unity Asset Store EULA documented above. Both sources are static, 512 x 512,
+8-bit RGBA PNGs. The source `Textures/glowlines.png` provides radial light
+streaks and `Textures/sparkle.png` provides a four-point glint; both were
+inspected over a dark background. Their animation is authored in the game;
+no Unity prefab, shader or script is executed, and no video frames are shipped.
+
+| Acquired source | Private runtime input | Bytes | Source / output SHA-256 |
+| --- | --- | ---: | --- |
+| `Textures/glowlines.png` | `assets/chests/milestone/rays.png` | 19,013 | `75ecb9a8d2c20b4892dc45160decb6d18387ce3892f7fc8ee2401d5f8773d8c1` |
+| `Textures/sparkle.png` | `assets/chests/milestone/sparkle.png` | 50,052 | `e8387f9328d38d0b10706814f0c3500debaf1ba2133a8c80a65ef636a8238856` |
+
+Restore these byte-for-byte private inputs with
+`node tools/prepare-chest-milestone-art.cjs`, then run `npm run import`.
+The optional first argument is the acquired package's `Textures` directory.
+Preparation validates both source hashes, sizes and PNG dimensions before
+writing either output, and creates lossless imports without mipmaps, resizing,
+channel remapping or alpha premultiplication. The PNGs and their import files
+remain ignored and ship only in the compiled game. The Web build verifies
+both private inputs without silently restoring them. The focused
+`chest-milestone-art` Node suite covers exact copying, preserved resource UIDs,
+idempotence, invalid sources and changed import settings.
+
 ## Lifecycle and review boundary
 
 Queued milestone visuals must stay attached to their round and fragment event.
@@ -172,3 +205,13 @@ Only the paper uses top-level canvas drawing, so Voice Pop's live arena remains
 clipped. A separate native render verifies full-viewport paper through a clipped
 parent and its immediate removal when that parent is hidden. These captures are
 muted visual checks; the unchanged reward sounds were not acoustically reviewed.
+
+The revised reference-style motion is captured at 60 fps in the real Jelly
+scene, including a held drag, synthesis and a tier 1-to-2 upgrade. Native
+390 x 844 and 844 x 390 captures check the local silhouette, rings and paper;
+reduced-motion captures retain the closed static HUD art. The capture is muted:
+existing assembly/reward recordings and cue times are unchanged, and no new
+acoustic-quality claim follows from the visual review. Focused tests verify
+all four 3D tiers stay closed and inside a fixed camera envelope through a full
+turn, use at most two 512px surfaces, and stop rendering when hidden or cleared.
+The original chest-opening mechanism remains independent.

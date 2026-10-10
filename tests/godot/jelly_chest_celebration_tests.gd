@@ -1,6 +1,8 @@
 extends SceneTree
 
 const Celebration = preload("res://scripts/jelly_chest_celebration.gd")
+const RewardModel = preload("res://scripts/chest_reward_model.gd")
+const ChestModel = preload("res://scripts/chest_model_view.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
 const BEFORE = preload("res://assets/chests/energy/closed.png")
@@ -37,8 +39,10 @@ func _run() -> void:
 	_check_reentry(view)
 	_check_reduced_motion(view)
 	_check_layouts(view)
+	_check_model_lifecycle(view)
 	view.clear()
 	view.free()
+	_check_closed_models()
 	_check_owner_lifecycle()
 	print("Jelly chest celebration: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -173,6 +177,147 @@ func _check_layouts(view) -> void:
 
 func _rect(values: Array) -> Rect2:
 	return Rect2(Vector2(float(values[0]), float(values[1])), Vector2(float(values[2]), float(values[3])))
+
+
+func _models_stopped(models) -> bool:
+	for model in models._pool.values():
+		if model.snapshot().active or model.render_target_update_mode != SubViewport.UPDATE_DISABLED:
+			return false
+	return true
+
+
+func _check_model_lifecycle(view) -> void:
+	_begin(view, 1, 2)
+	check(view._models._pool.size() == 2 and _models_stopped(view._models),
+		"The incoming and outgoing models prepare without rendering during fragment flight")
+	view.advance(Celebration.ARRIVAL_SECONDS + 0.35)
+	check(not view._model_sample.is_empty() and view._models._pool[1].snapshot().active,
+		"The visible upgrade samples its live closed model on the existing reward clock")
+	var elapsed: float = view._elapsed
+	view.reduced_motion = true
+	check(view._model_sample.is_empty() and _models_stopped(view._models)
+		and is_equal_approx(view._elapsed, elapsed),
+		"Enabling reduced motion stops all model rendering without restarting the milestone")
+	view.reduced_motion = false
+	check(not view._model_sample.is_empty() and is_equal_approx(view._elapsed, elapsed),
+		"Restoring motion resamples the same point of the three-dimensional turn")
+	view.hide()
+	check(_models_stopped(view._models), "A hidden presentation disables both model render targets immediately")
+	view.show()
+	view.advance(Celebration.PERFORMANCE_SECONDS)
+	check(not view.is_active() and view._model_sample.is_empty() and _models_stopped(view._models),
+		"A completed milestone retains no active renderer or stale model sample")
+	_begin(view, 2, 3, true)
+	view.advance(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.2)
+	check(view.visible and view._model_sample.is_empty() and _models_stopped(view._models),
+		"A wholly reduced-motion milestone never requests a three-dimensional render")
+	view.clear()
+	check(view._models._pool.is_empty() and view._models.get_child_count() == 0
+		and view._model_sample.is_empty(),
+		"Clearing a round detaches every model surface and its last texture sample")
+
+
+func _check_closed_models() -> void:
+	var models := RewardModel.new()
+	root.add_child(models)
+	models.set_active(false)
+	for tier in range(1, 5):
+		models.prepare(tier)
+		check(models._pool.has(tier), "Chest tier %d loads its acquired articulated model" % tier)
+		if not models._pool.has(tier):
+			continue
+		check(models._pool.size() <= RewardModel.POOL_LIMIT and models.get_child_count() <= 2,
+			"Preparing tier %d keeps at most two model surfaces attached" % tier)
+		var model = models._pool[tier]
+		var sample: Dictionary = models.sample(tier, 0.0)
+		check(not sample.is_empty() and sample.texture != null and sample.bounds.has_area(),
+			"Tier %d exposes its real render surface and stable closed framing" % tier)
+		var rest: Array = model.snapshot().parts.duplicate(true)
+		var camera: Transform3D = model._camera.transform
+		var camera_size: float = model._camera.size
+		var closed: Rect2 = model.closed_bounds()
+		var envelope: Rect2 = model.design_bounds()
+		model.set_pose(0.75, 0.5, 0.4, 2.0, 1.0, Color.YELLOW, false)
+		check(model.snapshot().parts != rest, "Tier %d has a genuine opening mechanism to keep shut during a reward turn" % tier)
+		var closed_throughout: bool = true
+		var fixed_camera: bool = true
+		var contained: bool = true
+		var genuine_yaw: bool = true
+		for index in range(17):
+			var yaw: float = float(index) / 16.0 * TAU
+			models.sample(tier, yaw)
+			var state: Dictionary = model.snapshot()
+			closed_throughout = closed_throughout and state.parts == rest and state.open_amount == 0.0 \
+				and state.pressure == 0.0 and state.light_strength == 0.0
+			fixed_camera = fixed_camera and model._camera.transform == camera \
+				and is_equal_approx(model._camera.size, camera_size) \
+				and model.closed_bounds() == closed and model.design_bounds() == envelope
+			genuine_yaw = genuine_yaw and model._rig.basis.x.is_equal_approx(Basis(Vector3.UP, yaw).x)
+			for corner in range(8):
+				var point: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
+				contained = contained and Rect2(0, 0, 1024, 1024).has_point(point)
+		check(closed_throughout, "Tier %d turns with the exact closed lid, lock and handle poses and no cavity light" % tier)
+		check(genuine_yaw, "Tier %d rotates the actual three-dimensional rig through a full turn" % tier)
+		check(fixed_camera and contained, "Tier %d fits every turned corner inside one fixed camera crop" % tier)
+		model.set_display_size(Vector2(2000, 2000))
+		check(model.snapshot().resolution == 512 and _models_stopped(models),
+			"Tier %d respects the small HUD render budget and stays disabled when inactive" % tier)
+	check(models._pool.size() == 2 and models._pool.has(3) and models._pool.has(4),
+		"Advancing through four tiers retains only the latest two reusable model surfaces")
+	var before_invalid: Array = models._order.duplicate()
+	check(models.sample(0, 0.0).is_empty() and models.sample(5, 0.0).is_empty()
+		and models.sample(4, NAN).is_empty() and models.sample(4, INF).is_empty()
+		and models._order == before_invalid,
+		"Unsupported art and invalid angles use the static fallback without growing or mutating the pool")
+	models.set_active(true)
+	models.sample(4, 0.6)
+	var active = models._pool[4]
+	check(active.render_target_update_mode == SubViewport.UPDATE_ONCE,
+		"A changed reward angle schedules one render instead of an unconditional viewport loop")
+	active.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	models.sample(4, 0.6)
+	check(active.render_target_update_mode == SubViewport.UPDATE_DISABLED,
+		"Sampling an unchanged closed turn does not render again")
+	models.set_active(false)
+	models.sample(4, 0.9)
+	check(_models_stopped(models), "Sampling a paused reward cannot reactivate either model renderer")
+	var retired: Array = models._pool.values()
+	models.clear()
+	var detached: bool = true
+	for model in retired:
+		detached = detached and model.get_parent() == null and not model.snapshot().active \
+			and model.render_target_update_mode == SubViewport.UPDATE_DISABLED
+	check(detached and models._pool.is_empty() and models._order.is_empty(),
+		"Clearing the pool disables and detaches every viewport before deferred disposal")
+	_check_original_opening(models)
+	models.free()
+
+
+func _check_original_opening(models) -> void:
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(RewardModel.MANIFEST_PATH))
+	var style: Dictionary = catalog.styles.harvest
+	var original: Dictionary = style.duplicate(true)
+	var model := ChestModel.new()
+	root.add_child(model)
+	check(model.configure(style), "The original opening scene still accepts its unmodified source style")
+	var camera: Transform3D = model._camera.transform
+	var camera_size: float = model._camera.size
+	var framing: Rect2 = model.design_bounds()
+	model.set_pose(0.78, 0.3, 0.2, 0.45, 0.9, Color.YELLOW, false)
+	var opening: Dictionary = model.snapshot().duplicate(true)
+	models.prepare(2)
+	models.sample(2, PI)
+	check(style == original and models._styles.harvest == original,
+		"Reward framing overrides neither the original style nor the shared catalog")
+	check(model.snapshot() == opening and model._camera.transform == camera
+		and is_equal_approx(model._camera.size, camera_size) and model.design_bounds() == framing,
+		"A separate reward turn leaves an already opening chest and its camera untouched")
+	model.set_closed_turn(PI)
+	model.set_pose(0.78, 0.3, 0.2, 0.45, 0.9, Color.YELLOW, false)
+	check(model.snapshot() == opening and model._camera.transform == camera
+		and model.design_bounds() == framing,
+		"Normal continuous opening can resume exactly after a closed-turn sample")
+	model.free()
 
 
 func _advance_owner(view, seconds: float) -> void:

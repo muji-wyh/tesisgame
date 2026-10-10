@@ -296,6 +296,29 @@ func set_pose(open_amount: float, pressure: float, pulse: float, idle_time: floa
 	_request_render()
 
 
+func set_closed_turn(yaw: float) -> void:
+	if not is_instance_valid(_model) or not is_finite(yaw):
+		return
+	# Reward turns use the acquired closed geometry, independently of the
+	# opening mechanism. The caller supplies the entire deterministic clock.
+	var key: Array = ["closed-turn", yaw]
+	if key == _pose_key:
+		return
+	_pose_key = key
+	_idle_sample_key.clear()
+	_open_amount = 0.0
+	_pressure = 0.0
+	_idle_time = 0.0
+	_light_strength = 0.0
+	_reduced_motion = false
+	_pose_mechanism(0.0, 0.0, 0.0, 0.0, true)
+	_rig.rotation = Vector3(0.0, yaw, 0.0)
+	_interior_light.position = _rig.transform * _cavity
+	set_interior_light(0.0, Color.WHITE)
+	_dirty = true
+	_request_render()
+
+
 func _pose_mechanism(amount: float, pressure: float, pulse: float, clock: float, reduce: bool) -> void:
 	# Restore all authored layers first. A source clip may omit a lock or
 	# handle track; its additive tension must never accumulate across frames.
