@@ -101,6 +101,7 @@ func _age_milestones(directory: String) -> void:
 		app._record_growth("age-three-%d" % index, ids, true)
 	check(app.growth.age == 3 and app.growth.level == 19 and app.growth.learning_age() == 4,
 		"Completing the real 80-word age-three set earns Age 3 independently of Lv19")
+	check(app._pip_age_label.text == "Age 3", "The earned Age 3 appears beside Pip after promotion")
 	for mascot in [app.duck, app._phrase.pip, app._round_celebration.pip]:
 		check(mascot.growth_age == 3, "Every gameplay and celebration Pip follows earned age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
@@ -115,6 +116,18 @@ func _age_milestones(directory: String) -> void:
 	app._record_growth("age-three-mistake", [ids[0]], false)
 	check(app.growth.level == 19 and app.growth.age == 3 and app.duck.growth_age == 3,
 		"A later mistake resets a word without regressing either growth axis or appearance")
+	for next_age in range(4, 13):
+		var next_words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == next_age)
+		var next_ids: Array = next_words.map(func(word: Dictionary) -> String: return str(word.id))
+		for index in range(Growth.MASTERY_STREAK):
+			app._record_growth("age-%d-%d" % [next_age, index], next_ids, true)
+	check(app.growth.age == 12 and app._pip_age_label.text == "Age 12+" and app.duck.growth_age == 12,
+		"The final earned age retains its plus sign beside Pip independently of numeric Lv")
+	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
+		root.size = viewport_size
+		await settle()
+		_badge_geometry(app, viewport_size, "Age 12+ Jelly")
+	root.size = Vector2i(1366, 768)
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -138,10 +151,10 @@ func _badge_states() -> void:
 			check(badge.level_label.text == state.label
 				and badge.count_label.text == ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.level_mastered, state.level_required]),
 				"Growth facts retain the exact earned level and new-word progress")
-			check(badge.tooltip_text.contains("%d of %d words mastered" % [state.mastered, state.total])
-				and badge.tooltip_text.contains("View your words")
+			check(badge.tooltip_text.contains(state.label) and not badge.tooltip_text.contains(state.age_label)
+				and not badge.tooltip_text.contains("current age set") and badge.tooltip_text.contains("View your words")
 				and str(badge.get("accessibility_name")) == badge.tooltip_text,
-				"The compact visual count retains its mastery meaning and notebook action in the accessible description")
+				"The Lv description retains the level target and notebook action without Pip age")
 			if int(state.level) < 99:
 				var next_level: String = "Lv%d" % (int(state.level) + 1)
 				check(badge.tooltip_text.contains("reach " + next_level),
@@ -164,7 +177,7 @@ func _badge_states() -> void:
 			check(badge.get_global_rect().encloses(badge.bar.get_global_rect())
 				and badge.bar.is_visible_in_tree() and not badge.bar.show_percentage,
 				"Every badge size keeps its actual mastery bar inside the clickable entry")
-			for label: Label in [badge.level_label, badge.count_label, badge.age_label]:
+			for label: Label in [badge.level_label, badge.count_label]:
 				if label.is_visible_in_tree():
 					check(badge.get_global_rect().grow(0.5).encloses(label.get_global_rect()),
 						"Visible badge text stays inside the %s entry" % footprint)
@@ -172,8 +185,8 @@ func _badge_states() -> void:
 					var font_size: int = label.get_theme_font_size("font_size")
 					check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x + 0.5,
 						"The full %s label fits without clipping in the %s entry" % [label.text, footprint])
-			check(badge.count_label.visible == not compact and badge.age_label.visible == not compact,
-				"Compact badges keep level and progress while secondary copy moves to the accessible description")
+			check(badge.count_label.visible == not compact,
+				"Compact badges keep level and progress while the count remains available in the description")
 			check(badge.bar.size.y >= (7.5 if compact else 19.5),
 				"The mastery track remains visibly substantial instead of resembling a divider")
 			if not compact:
@@ -208,13 +221,31 @@ func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
 			check(not rect.intersects(child.get_global_rect()), "%s keeps growth separate from neighboring toolbar actions" % context)
 	check(not rect.intersects(app._mode_heading_button.get_global_rect()),
 		"%s keeps growth separate from the game selector" % context)
+	var age: Label = app._pip_age_label
+	var age_rect: Rect2 = age.get_global_rect()
+	var pip_rect: Rect2 = app.duck.get_global_rect()
+	check(age.is_visible_in_tree() and age.text == app.growth.snapshot().age_label
+		and age.get_parent() == app._header_duck_slot and not badge.is_ancestor_of(age),
+		"%s attaches the earned age to Pip instead of the Lv display" % context)
+	check(age.mouse_filter == Control.MOUSE_FILTER_IGNORE and age.focus_mode == Control.FOCUS_NONE,
+		"%s keeps the age caption passive without intercepting gameplay or creating a second action" % context)
+	check(Rect2(Vector2.ZERO, Vector2(viewport_size)).encloses(age_rect)
+		and app._header_duck_slot.get_global_rect().grow(0.5).encloses(age_rect)
+		and not age_rect.intersects(rect) and not age_rect.intersects(pip_rect),
+		"%s keeps the complete age caption with Pip without clipping or covering Lv" % context)
+	var font: Font = age.get_theme_font("font")
+	check(font.get_string_size(age.text, HORIZONTAL_ALIGNMENT_LEFT, -1, age.get_theme_font_size("font_size")).x <= age.size.x + 0.5,
+		"%s fits the full %s caption" % [context, age.text])
+	check(pip_rect.size.x >= 43.5 and pip_rect.size.y >= 43.5
+		and app.duck.tooltip_text.contains(age.text) and app.duck.tooltip_text.contains("Change game mode"),
+		"%s preserves Pip's reachable menu action and announces age with the character" % context)
 
 
 func _responsive_badge(app) -> void:
 	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
 		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
 		"The notebook entry and mastery bar share one toolbar button without a separate full-width row")
-	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app._growth_button.age_label.text == "Baby"
+	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app._pip_age_label.text == "Baby"
 		and app._growth_bar.value == 0.0,
 		"A new device presents the first one-word level target independently of Baby age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
@@ -252,6 +283,7 @@ func _load_failure(directory: String) -> void:
 	check(not app.growth.ready and app.model.cards.is_empty(), "An unreadable growth save blocks scored play")
 	check(app._growth_button.level_label.text == "Lv…" and app._growth_bar.value == 0.0,
 		"The persistent entry shows unavailable progress while the saved level cannot be loaded")
+	check(app._pip_age_label.text.is_empty(), "An unreadable save does not invent a starting Pip age")
 	check(app._storage_retry_button.is_visible_in_tree() and app._message.visible,
 		"The initial load failure explains how to recover")
 	check(not app.new_round(101, false, "", "pop"), "Mode switching cannot bypass the growth load gate")

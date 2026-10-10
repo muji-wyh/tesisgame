@@ -60,10 +60,11 @@ async function chooseTheme(page, index) {
 }
 
 function contentBounds(bounds) {
-  const scale = uiScale(bounds), shortJelly = bounds.library?.current === 'jelly' && bounds.height * scale <= 440;
-  const padding = Math.ceil((shortJelly ? 4 : 12) / scale);
-  const gap = Math.ceil((shortJelly || bounds.width * scale < 360 ? 4 : 8) / scale);
-  const header = Math.ceil((shortJelly ? 44 : 56) / scale), board = bounds.growth?.board;
+  const scale = uiScale(bounds), mode = bounds.library?.current, height = bounds.height * scale;
+  const shortHeader = (mode === 'jelly' && height <= 440) || (['match', 'memory'].includes(mode) && height <= 360);
+  const padding = Math.ceil((shortHeader ? 4 : 12) / scale);
+  const gap = Math.ceil((shortHeader || bounds.width * scale < 360 ? 4 : 8) / scale);
+  const header = Math.ceil((shortHeader ? 44 : bounds.width * scale < 480 ? 60 : 56) / scale), board = bounds.growth?.board;
   const inset = Math.max(Math.ceil(12 / scale), Math.round((bounds.width - 1040 / scale) / 2));
   const x = board?.visible ? board.rect[0] : inset;
   const width = board?.visible ? board.rect[2] : bounds.width - inset * 2;
@@ -198,10 +199,10 @@ function headerPoint(bounds, key = 'rewards') {
 }
 
 function pipHeaderRect(bounds) {
-  const content = contentBounds(bounds), scale = uiScale(bounds);
-  const shortJelly = bounds.library?.current === 'jelly' && bounds.height * scale <= 440;
-  const side = (shortJelly ? 44 : 52) / scale;
-  return { x: content.x, y: content.padding + (shortJelly ? 0 : 2 / scale), width: side, height: side };
+  const pip = bounds.growth?.pip;
+  if (!pip?.visible || !Array.isArray(pip.rect)) throw new Error('Pip is not visible in the gameplay header.');
+  const [x, y, width, height] = pip.rect;
+  return { x, y, width, height };
 }
 
 async function openRewards(page) {

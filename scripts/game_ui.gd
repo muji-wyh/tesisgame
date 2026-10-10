@@ -118,6 +118,7 @@ var _pair_settlement_pending: bool = false
 var duck: Mascot
 var _header_duck_slot: Panel
 var _header_duck_art_slot: Control
+var _pip_age_label: Label
 var _header: HBoxContainer
 var _header_spacer: Control
 var _toolbar: HBoxContainer
@@ -563,6 +564,11 @@ func _build_controls() -> void:
 	_header_duck_art_slot = Control.new()
 	_header_duck_art_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_duck_slot.add_child(_header_duck_art_slot)
+	_pip_age_label = Style.label("", 13)
+	_pip_age_label.name = "PipAgeLabel"
+	_pip_age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pip_age_label.add_theme_color_override("font_color", Color("#42644e"))
+	_header_duck_slot.add_child(_pip_age_label)
 	_header_spacer = Control.new()
 	_header_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2569,16 +2575,20 @@ func _fit_mode_buttons() -> void:
 	_pair_reward_row.custom_minimum_size.y = (34.0 if size.y * css_scale <= 440 else 46.0) / css_scale
 	_layout_pair_reward()
 	var short_header: bool = _short_game_header()
+	var age_below_pip: bool = size.x * css_scale < 480 and not short_header
 	_header_spacer.show()
 	var gap: int = ceili((4 if short_header or size.x * css_scale < 360 else 8) / css_scale)
 	_main_column.add_theme_constant_override("separation", gap)
 	_header.add_theme_constant_override("separation", gap)
-	_header.custom_minimum_size.y = ceilf((44 if short_header else 56) / css_scale)
+	_header.custom_minimum_size.y = ceilf((44 if short_header else 60 if age_below_pip else 56) / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	_header_duck_slot.custom_minimum_size = Vector2(ceilf((44 if short_header else 52) / css_scale), ceilf((44 if short_header else 56) / css_scale))
-	_header_duck_art_slot.position = Vector2(0, 0 if short_header else 2 / css_scale)
-	_header_duck_art_slot.size = Vector2.ONE * ((44 if short_header else 52) / css_scale)
+	_header_duck_slot.custom_minimum_size = Vector2(52 if age_below_pip else 98 if short_header else 108, 44 if short_header else 60 if age_below_pip else 56) / css_scale
+	_header_duck_art_slot.position = Vector2(4 if age_below_pip else 0, 0 if short_header or age_below_pip else 2) / css_scale
+	_header_duck_art_slot.size = Vector2.ONE * ((44 if short_header or age_below_pip else 52) / css_scale)
+	_pip_age_label.add_theme_font_size_override("font_size", ceili((11 if age_below_pip else 12 if short_header else 13) / css_scale))
+	_pip_age_label.position = Vector2(0, 44) / css_scale if age_below_pip else Vector2(48 if short_header else 56, 12 if short_header else 18) / css_scale
+	_pip_age_label.size = Vector2(52, 16) / css_scale if age_below_pip else Vector2(50 if short_header else 52, 20) / css_scale
 	_header_duck_slot.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
 	var heading_focus: int = _mode_heading_button.focus_mode
@@ -4262,6 +4272,7 @@ func _update_duck() -> void:
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
 	var visible_here: bool = not in_collection
+	_pip_age_label.visible = visible_here and not _pip_age_label.text.is_empty()
 	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
@@ -4300,8 +4311,9 @@ func _update_duck() -> void:
 		return
 	duck.compact = false
 	var opens_menu: bool = not in_collection and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
-	duck.tooltip_text = "" if in_collection else "Pip: change game mode" if opens_menu else "Pip the duck. Press for a new move!"
-	_set_accessibility_name(duck, "Pip: change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else "Pip the duck. Press for a new move.")
+	var pip_identity: String = "Pip" if _pip_age_label.text.is_empty() else "Pip · " + _pip_age_label.text
+	duck.tooltip_text = pip_identity + (". Change game mode" if opens_menu else ". Press for a new move!")
+	_set_accessibility_name(duck, pip_identity + (". Change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else ". Press for a new move."))
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
 	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
 	duck.size = rect.size
@@ -4503,6 +4515,7 @@ func _refresh_growth() -> void:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)
+	_pip_age_label.text = str(state.age_label) if state.ready else ""
 	_collection_title.text = "%s · %s" % [state.label, "Baby Pip" if state.age == 0 else "Pip · " + state.age_label] if state.ready else "Grow with Pip"
 	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
 	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
@@ -4523,8 +4536,9 @@ func _style_growth_progress() -> void:
 func _publish_growth_view() -> void:
 	if _host == null or not is_instance_valid(_growth_button):
 		return
-	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar)]
+	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar), _growth_control(_pip_age_label)]
 	var state := {"visible": collection_page.visible, "controls": controls}
+	state["pip"] = _growth_control(duck)
 	state["vocabulary"] = _vocabulary_snapshot()
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		controls.append(_growth_control(_vocabulary_retry))
@@ -4550,7 +4564,7 @@ func _growth_control(control: Control) -> Dictionary:
 	var result := {"name": str(control.name), "visible": control.is_visible_in_tree(),
 		"focused": control.has_focus(),
 		"disabled": control.disabled if control is BaseButton else false,
-		"text": control.text if control is Button else "",
+		"text": control.text if control is Button or control is Label else "",
 		"description": control.tooltip_text,
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
 	if control is Range:

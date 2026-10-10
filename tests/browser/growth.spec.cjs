@@ -76,13 +76,23 @@ async function expectHeaderBadge(page) {
   const layout = await view(page), bounds = await metrics(page);
   const badge = layout.controls.find(control => control.name === 'GrowthProgressButton');
   const bar = layout.controls.find(control => control.name === 'GrowthProgressBar');
+  const age = layout.controls.find(control => control.name === 'PipAgeLabel');
   expect(badge.visible).toBe(true);
   expect(badge.disabled).toBe(false);
   expect(badge.description).toContain(state.label);
-  expect(badge.description).toContain(state.age_label);
-  expect(badge.description).toContain(`${state.mastered} of ${state.total} words mastered`);
-  expect(badge.description).toContain(`Master ${state.level_remaining} new`);
-  expect(badge.description).toContain(`Lv${state.level + 1}`);
+  expect(badge.description).not.toContain(state.age_label);
+  expect(badge.description).not.toContain('current age set');
+  expect(badge.description).toContain('View your words');
+  if (state.level_completed) expect(badge.description).toContain('Maximum level reached');
+  else {
+    expect(badge.description).toContain(`Master ${state.level_remaining} new`);
+    expect(badge.description).toContain(`Lv${state.level + 1}`);
+  }
+  expect(age?.visible).toBe(true);
+  expect(age.text).toBe(state.age_label);
+  expect(layout.pip?.visible).toBe(true);
+  expect(layout.pip.description).toContain(state.age_label);
+  expect(layout.pip.description).toContain('Change game mode');
   expect(bar.visible).toBe(true);
   const [x, y, width, height] = badge.rect;
   const [barX, barY, barWidth, barHeight] = bar.rect;
@@ -101,10 +111,29 @@ async function expectHeaderBadge(page) {
   expect(barX + barWidth, 'The progress track stays inside its entry button').toBeLessThanOrEqual(x + width + 0.5);
   expect(barY + barHeight).toBeLessThanOrEqual(y + height + 0.5);
   const pip = pipHeaderRect(bounds);
-  expect(Math.abs(y + height / 2 - pip.y - pip.height / 2) * bounds.scale,
-    'Pip and the growth badge share the same header row').toBeLessThanOrEqual(2);
+  const [ageX, ageY, ageWidth, ageHeight] = age.rect;
+  expect(ageX).toBeGreaterThanOrEqual(0);
+  expect(ageY).toBeGreaterThanOrEqual(0);
+  expect(ageX + ageWidth).toBeLessThanOrEqual(bounds.width + 0.5);
+  expect(ageY + ageHeight).toBeLessThanOrEqual(bounds.height + 0.5);
+  expect(ageX + ageWidth, 'Age belongs to Pip at the left of the Lv display').toBeLessThan(x);
+  expect(pip.width * bounds.scale, 'Pip remains a reachable menu target').toBeGreaterThanOrEqual(43.5);
+  expect(pip.height * bounds.scale).toBeGreaterThanOrEqual(43.5);
+  const beside = ageX >= pip.x + pip.width - 0.5;
+  if (beside) {
+    expect((ageX - pip.x - pip.width) * bounds.scale, 'The age caption sits beside Pip').toBeLessThanOrEqual(6);
+    // Godot rounds font metrics in logical pixels before scaling the canvas to CSS pixels.
+    expect(Math.abs(ageY + ageHeight / 2 - pip.y - pip.height / 2) * bounds.scale).toBeLessThanOrEqual(2);
+  } else {
+    expect(ageY).toBeGreaterThanOrEqual(pip.y + pip.height - 0.5);
+    expect((ageY - pip.y - pip.height) * bounds.scale, 'The narrow caption stays directly below Pip').toBeLessThanOrEqual(2);
+    expect(Math.abs(ageX + ageWidth / 2 - pip.x - pip.width / 2) * bounds.scale).toBeLessThanOrEqual(1);
+  }
+  const clusterTop = Math.min(pip.y, ageY), clusterBottom = Math.max(pip.y + pip.height, ageY + ageHeight);
+  expect(Math.abs(y + height / 2 - (clusterTop + clusterBottom) / 2) * bounds.scale,
+    'Pip and age share the same header row as the Lv display').toBeLessThanOrEqual(2);
   expect(pip.x + pip.width).toBeLessThan(x);
-  return { state, layout, badge, bar, bounds };
+  return { state, layout, badge, bar, age, bounds };
 }
 
 test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete notebook', async ({ page }, info) => {
@@ -118,10 +147,13 @@ test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete no
   expect((await growth(page)).total).toBe(80);
   expect(await page.evaluate(() => ['leaderboardState', 'playroomState'].some(name => name in window.wordBuddiesHost))).toBe(false);
   await expect.poll(async () => Boolean((await view(page)).board)).toBe(true);
-  const { layout, badge, bounds } = await expectHeaderBadge(page);
+  const { layout, badge, age, bounds } = await expectHeaderBadge(page);
   expect(badge.rect[1] + badge.rect[3]).toBeLessThanOrEqual(layout.board.rect[1] - 2);
-  expect((layout.board.rect[1] - badge.rect[1] - badge.rect[3]) * bounds.scale,
-    'The board begins below the single header without a separate growth row').toBeLessThanOrEqual(18);
+  const headerBottom = Math.max(badge.rect[1] + badge.rect[3], age.rect[1] + age.rect[3],
+    layout.pip.rect[1] + layout.pip.rect[3]);
+  const rewardStripHeight = bounds.height * bounds.scale <= 440 ? 34 : 46;
+  expect((layout.board.rect[1] - headerBottom) * bounds.scale - rewardStripHeight,
+    'The board follows the header and chest feedback strip without an extra growth row').toBeLessThanOrEqual(20);
   await page.screenshot({ path: info.outputPath('growth-board.png'), scale: 'css' });
   await pressNamed(page, 'GrowthProgressButton');
   await expect.poll(async () => (await view(page)).catalog?.word_count).toBe(80);
@@ -320,6 +352,7 @@ test('mastering the complete age 3 cohort grows Pip while independent Lv progres
   await expect.poll(async () => (await growth(page)).age).toBe(3);
   expect((await growth(page)).streaks.apple).toBe(MASTERY_STREAK);
   const promoted = await expectHeaderBadge(page);
+  expect(promoted.age.text).toBe('Age 3');
   expect(promoted.state.level).toBe(19);
   expect(promoted.state.learning_age).toBe(4);
   expect(promoted.state.lifetime_mastered).toBe(80);

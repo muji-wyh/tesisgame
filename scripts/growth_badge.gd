@@ -4,7 +4,6 @@ const Style = preload("res://scripts/ui_style.gd")
 
 var level_label: Label
 var count_label: Label
-var age_label: Label
 var bar: ProgressBar
 var compact: bool = false
 var _scale: float = 1.0
@@ -31,9 +30,6 @@ func _init() -> void:
 	count_label.add_theme_font_override("font", Style.HEADING_FONT)
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(count_label)
-	age_label = Style.label("Baby", 10)
-	age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	add_child(age_label)
 	resized.connect(_layout)
 	fit(1.0, false)
 
@@ -44,9 +40,8 @@ func configure(state: Dictionary) -> void:
 	var level: int = state.get("level", 0)
 	level_label.text = str(state.get("label", "Lv0")) if ready else "Lv…"
 	count_label.text = ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.get("level_mastered", 0), state.get("level_required", 1)]) if ready else "Unavailable"
-	age_label.text = str(state.get("age_label", "Baby")) if ready else ""
 	bar.value = float(state.get("level_progress", 0.0)) * 100.0 if ready else 0.0
-	var description: String = "%s. Pip: %s. %d of %d words mastered in your current age set." % [level_label.text, age_label.text, state.get("mastered", 0), state.get("total", 0)]
+	var description: String = "%s." % level_label.text
 	if not ready:
 		description = "Learning progress is unavailable. Retry saving to load it."
 	elif state.get("level_completed", false):
@@ -85,7 +80,6 @@ func fit(css_scale: float, use_compact: bool, tiny: bool = false) -> void:
 			track.set("content_margin_" + edge, 0.0)
 		bar.add_theme_stylebox_override(key, track)
 	count_label.visible = not compact
-	age_label.visible = not compact
 	_style_type()
 	reset_size()
 	if not _state.is_empty():
@@ -99,8 +93,6 @@ func _style_type() -> void:
 	level_label.add_theme_color_override("font_color", Style.INK)
 	count_label.add_theme_font_size_override("font_size", ceili(11 / _scale))
 	count_label.add_theme_color_override("font_color", Color("#2b5141"))
-	age_label.add_theme_font_size_override("font_size", ceili(10 / _scale))
-	age_label.add_theme_color_override("font_color", Color("#42644e"))
 
 
 func _layout() -> void:
@@ -112,5 +104,3 @@ func _layout() -> void:
 	bar.size = Vector2(size.x - bar.position.x - (8 if _tiny else 10 if compact else 2) / _scale, (8 if compact else 20) / _scale)
 	count_label.position = bar.position + Vector2(2, 0) / _scale
 	count_label.size = Vector2(bar.size.x - 4 / _scale, bar.size.y)
-	age_label.position = Vector2(bar.position.x, 36 / _scale)
-	age_label.size = Vector2(bar.size.x, 14 / _scale)
