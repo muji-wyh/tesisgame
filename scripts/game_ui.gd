@@ -1213,7 +1213,9 @@ func _jelly_hear(word: Dictionary) -> void:
 func _jelly_audio(cue: String) -> void:
 	if not _jelly_interaction_allowed():
 		return
-	if cue == "wrong":
+	if cue == "danger_end":
+		audio.stop_jelly_danger()
+	elif cue == "wrong":
 		audio.play_pair_feedback(false)
 	elif cue == "chest":
 		audio.play_jelly_cue("fragment")

@@ -233,7 +233,7 @@ func stop_ui_click() -> void:
 func play_jelly_cue(cue_name: String) -> void:
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
-	if cue_name in ["danger", "merge"]:
+	if cue_name == "danger":
 		stop_jelly_danger()
 	if _jelly_players.is_empty():
 		for index in range(3):
@@ -241,6 +241,9 @@ func play_jelly_cue(cue_name: String) -> void:
 			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
 			_jelly_players.append(channel)
 	var player: AudioStreamPlayer = _jelly_players[_jelly_next_player]
+	if cue_name != "danger" and _jelly_cues.get(player, "") == "danger":
+		# A concurrent merge must not steal the still-active countdown warning.
+		player = _jelly_players[(_jelly_next_player + 1) % _jelly_players.size()]
 	if cue_name in JELLY_SECONDARY_CUES:
 		# Short input and material cues must not steal answers, rewards or warnings.
 		var idle: Array[AudioStreamPlayer] = []
@@ -265,8 +268,8 @@ func _update_jelly_gain() -> void:
 
 
 func stop_jelly_danger() -> void:
-	# Cancel pending requests as well as audible tails; a rescue owns the sound
-	# from its first contact, and delayed frames never stack warning recordings.
+	# Cancel pending requests as well as audible tails once a clear makes space.
+	# Replacing a countdown beat also prevents stacked warning recordings.
 	for player: AudioStreamPlayer in _jelly_players:
 		if _jelly_cues.get(player, "") == "danger":
 			_stop(player)

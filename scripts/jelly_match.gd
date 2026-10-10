@@ -399,7 +399,8 @@ func _allowed() -> bool:
 	return _configured and not _paused and is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 func _can_play() -> bool:
-	return _allowed() and game.phase == "playing" and not _result_visible and not _reward_presentation.is_active()
+	return _allowed() and game.phase == "playing" and not _result_visible \
+		and not (_reward_presentation.is_active() and game.fusions.is_empty())
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
@@ -982,16 +983,27 @@ func _reward_cue(cue: String) -> void:
 func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
 	if not _configured:
 		return
+	var generation: int = _generation
+	_cue("danger_end")
+	if generation != _generation or not _configured or game.phase != "playing":
+		return
 	if awarded > 0 and not reduced_motion:
 		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0})
 	if _reward_presentation.is_active() and game.fusions.is_empty():
+		cancel_input()
+		if generation != _generation or not _configured or game.phase != "playing":
+			return
 		game.set_paused(true)
 	_refresh_hud()
 
 func _chest_milestone(previous_tier: int, tier: int) -> void:
 	if not _configured or game.phase != "playing":
 		return
-	cancel_input()
+	var generation: int = _generation
+	if game.fusions.is_empty():
+		cancel_input()
+		if generation != _generation or not _configured or game.phase != "playing":
+			return
 	_reward_presentation.reduced_motion = reduced_motion
 	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
 	game.set_paused(game.fusions.is_empty())
@@ -1021,7 +1033,7 @@ func _finished(result: Dictionary) -> void:
 	_publish()
 
 func _finish_round() -> void:
-	if not _can_play() or not game.fusions.is_empty() or _pointer != NO_POINTER:
+	if not _can_play() or _pointer != NO_POINTER:
 		return
 	cancel_input()
 	game.finish_round()
@@ -1104,7 +1116,7 @@ func _refresh_controls() -> void:
 	chests_button.disabled = not _allowed() or _result_transition
 	replay_button.disabled = not _allowed() or _result_transition
 	finish_button.visible = _configured and game.phase == "playing" and not _result_visible
-	finish_button.disabled = not _can_play() or not game.fusions.is_empty() or _pointer != NO_POINTER
+	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
 	drop_button.disabled = not _can_play() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
 	if drop_button.disabled:
@@ -1322,7 +1334,7 @@ func _animate_result() -> void:
 		image.modulate.a = 1.0 if reduced_motion else smoothstep(0.0, 0.2, p)
 
 func danger_feedback() -> Dictionary:
-	var active: bool = _can_play() and game.fusions.is_empty() and float(game.full_elapsed) >= 0.0
+	var active: bool = _can_play() and float(game.full_elapsed) >= 0.0
 	var strength: float = 0.0
 	if active:
 		# The model emits a warning at this same second boundary. Keep a quiet

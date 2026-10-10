@@ -149,10 +149,14 @@ func _run() -> void:
 	var supply_before: Array = game.snapshot().upcoming.duplicate(true)
 	var cells_before: Array = game.cells.duplicate(true)
 	game.step(0.4)
-	check(game.cleared_pairs == 0 and game.spawn_elapsed == spawn_before and game.cells == cells_before
+	check(game.cleared_pairs == 0 and is_equal_approx(game.spawn_elapsed, spawn_before + 0.4)
 		and game.snapshot().upcoming == supply_before,
-		"Fusion neither credits early nor advances the drop, active fall or advertised supply")
+		"Fusion delays learning credit while the ordinary supply clock continues")
+	for index in range(game.cells.size()):
+		check(is_equal_approx(float(game.cells[index].age), float(cells_before[index].age) + 0.4),
+			"Every real falling tile keeps aging while another pair merges")
 	app._show_mode_menu()
+	cells_before = game.cells.duplicate(true)
 	var fusion_before: float = game.fusion.elapsed
 	game.step(20)
 	check(game.paused and game.fusion.elapsed == fusion_before and game.cells == cells_before
@@ -388,9 +392,10 @@ func _warning_audio_flow(directory: String) -> void:
 	app._jelly._press(-1, app._jelly._tiles[int(chosen[0].id)].get_global_rect().get_center())
 	app._jelly._move(target)
 	app._jelly._release(target)
-	check(not game.fusion.is_empty() and not _jelly_cue_playing(app.audio, "danger") and _jelly_cue_playing(app.audio, "merge"),
-		"A real dragged pair silences the warning while preserving its rescue merge sound")
+	check(not game.fusion.is_empty() and _jelly_cue_playing(app.audio, "danger") and _jelly_cue_playing(app.audio, "merge"),
+		"A real dragged pair keeps the active danger warning alongside its merge sound")
 	game.step(game.FUSION_SECONDS)
+	check(not _jelly_cue_playing(app.audio, "danger"), "The completed rescue stops its obsolete warning tail")
 	check(game.chest_count == 0 and not app._jelly_rewards.has_pending(),
 		"The warning-only rescue leaves no pending treasure that would correctly gate a new board")
 	fill_board(game)

@@ -507,7 +507,9 @@ test.describe('manual jelly supply', () => {
           }
         }
 
-        const tiles = await availablePair(page), beforeFusion = await jelly(page);
+        const tiles = await availablePair(page, { chest: false }), beforeFusion = await jelly(page);
+        expect(beforeFusion.preview.enabled, 'The next batch is ready before the matching gesture').toBe(true);
+        const duringFusionIds = beforeFusion.upcoming.map(tile => tile.id);
         const previewPoint = center(beforeFusion.preview.rect, await metrics(page));
         await page.evaluate(({ point, pointerKind }) => {
           window.jellyManualPreviewEvents = [];
@@ -526,27 +528,30 @@ test.describe('manual jelly supply', () => {
         }, { point: previewPoint, pointerKind: pointer });
         await dragPair(page, tiles);
         await expect.poll(async () => (await jelly(page)).fusions.length,
-          { intervals: [30], timeout: 2000, message: 'The real drag commits and publishes its fusion before testing the disabled preview' }).toBe(1);
+          { intervals: [30], timeout: 2000, message: 'The real drag commits before requesting another batch during its animation' }).toBe(1);
+        expect((await jelly(page)).preview.enabled, 'Fusion keeps manual dispatch available').toBe(true);
         await press(previewPoint);
         await expectClear(page, beforeFusion.cleared_pairs + 1, tiles);
         const fusionFrames = (await page.evaluate(() => window.jellySupplyTimeline)).filter(frame => frame.fusion);
         expect(fusionFrames.length).toBeGreaterThan(0);
-        const committed = fusionFrames[0];
         const previewEvents = await page.evaluate(() => window.jellyManualPreviewEvents);
         expect(previewEvents.map(event => event.type), 'The test observes the real preview press and release')
           .toEqual(pointer === 'touch' ? ['touchstart', 'touchend'] : ['pointerdown', 'pointerup']);
         for (const event of previewEvents) {
           expect(event.trusted).toBe(true);
           expect(event.fusion, 'Both preview input events occur during the committed fusion, not after it').toBe(true);
-          expect(event.previewEnabled).toBe(false);
-          expect(event.generated).toBe(committed.generated);
-          expect(event.spawnElapsed).toBe(committed.spawnElapsed);
         }
-        for (const frame of fusionFrames) {
-          expect(frame.previewEnabled).toBe(false);
-          expect(frame.generated, 'A preview press during fusion cannot dispatch another batch').toBe(committed.generated);
-          expect(frame.spawnElapsed, 'A rejected preview press cannot restart the paused supply clock').toBe(committed.spawnElapsed);
-        }
+        expect(previewEvents[0].previewEnabled, 'The real press reaches an enabled dispatch region').toBe(true);
+        const dispatchedDuringFusion = fusionFrames.filter(frame => frame.generated === beforeFusion.generated_tiles + 4);
+        expect(dispatchedDuringFusion.length, 'The requested batch enters the board before the current fusion disappears').toBeGreaterThan(0);
+        expect(dispatchedDuringFusion.some(frame => duringFusionIds.some(id =>
+          frame.ghosts.some(ghost => ghost.id === id && ghost.visible))),
+        'The new falling batch retains its landing shadows during fusion').toBe(true);
+        const dispatchedAges = dispatchedDuringFusion.map(frame => frame.tiles.find(tile => tile.id === duringFusionIds[0])?.age)
+          .filter(Number.isFinite);
+        expect(Math.max(...dispatchedAges) - Math.min(...dispatchedAges),
+          'Newly released jellies continue falling while another pair fuses').toBeGreaterThan(0.05);
+        expect((await jelly(page)).generated_tiles, 'One preview press still consumes only one batch').toBe(beforeFusion.generated_tiles + 4);
 
         await openModeMenu(page);
         await expect.poll(async () => (await jelly(page)).paused).toBe(true);
@@ -570,7 +575,7 @@ test.describe('manual jelly supply', () => {
   }
 });
 
-test('preview pressure builds with the dispatch clock and freezes during menus and fusion', async ({ page }, info) => {
+test('preview pressure builds through fusion and pauses only with the menu', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const poses = state => state.preview.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion }));
@@ -638,12 +643,18 @@ test('preview pressure builds with the dispatch clock and freezes during menus a
   await expectClear(page, before + 1, tiles);
   const fusion = (await page.evaluate(() => window.jellySupplyTimeline)).filter(frame => frame.fusion);
   expect(fusion.length, 'Observe several ordinary frames of the committed fusion').toBeGreaterThanOrEqual(3);
+  const supplyCycles = new Map();
   for (const frame of fusion) {
-    expect(frame.spawnElapsed, 'A committed fusion freezes the dispatch clock').toBe(fusion[0].spawnElapsed);
-    expect(frame.preview, 'Preview poses stay still throughout the matching animation').toEqual(fusion[0].preview);
-    expect(frame.previewEnabled, 'Fusion disables manual dispatch until every animation finishes').toBe(false);
-    expect(frame.previewControl.disabled).toBe(true);
+    if (!supplyCycles.has(frame.generated)) supplyCycles.set(frame.generated, []);
+    supplyCycles.get(frame.generated).push(frame);
   }
+  const uninterrupted = [...supplyCycles.values()].sort((a, b) => b.length - a.length)[0];
+  expect(uninterrupted.at(-1).spawnElapsed - uninterrupted[0].spawnElapsed,
+    'A committed fusion leaves the dispatch clock running').toBeGreaterThan(0.1);
+  expect(uninterrupted.at(-1).preview, 'The queued jelly skins keep moving throughout the matching animation')
+    .not.toEqual(uninterrupted[0].preview);
+  expect(fusion.some(frame => frame.previewEnabled && !frame.previewControl.disabled),
+    'Fusion permits manual dispatch whenever the normal capacity and falling checks allow it').toBe(true);
   const motionPath = info.outputPath('jelly-preview-motion.json');
   fs.writeFileSync(motionPath, JSON.stringify({
     early: { elapsed: early.spawn_elapsed, slots: poses(early) },
@@ -728,6 +739,7 @@ test.describe('concurrent jelly gestures', () => {
             generated: state.generated_tiles, spawnElapsed: state.spawn_elapsed, drag: state.drag,
             contact: state.contact,
             finishDisabled: state.finish?.disabled, fragments: state.fragment_count, chests: state.chest_count,
+            rewardActive: Boolean(state.reward_presentation?.active),
             fusions: (state.fusions || []).map(item => ({ id: item.attempt_id, elapsed: item.elapsed })),
             effects: state.fusion_effects || [] });
         };
@@ -789,10 +801,13 @@ test.describe('concurrent jelly gestures', () => {
         'The second drop starts its own effect before the first pair receives credit').toBe(true);
         expect(active.some(frame => frame.cleared === before.cleared_pairs + 1 && frame.fusions.length === 1),
           'Completing the older pair preserves the younger independent animation').toBe(true);
-        for (const frame of active) {
-          expect(frame.generated, 'New supply stays paused until every accepted pair disappears').toBe(active[0].generated);
-          expect(frame.spawnElapsed, 'Concurrent gestures cannot restart the falling clock').toBe(active[0].spawnElapsed);
-          expect(frame.finishDisabled, 'Finish cannot discard a pending independent award').toBe(true);
+        expect(active.some((frame, index) => index > 0 && frame.generated === active[index - 1].generated &&
+          frame.spawnElapsed > active[index - 1].spawnElapsed),
+        'Supply time advances while independent matching animations overlap').toBe(true);
+        expect(active.some(frame => !frame.drag.active && frame.drag.source === -1 && !frame.finishDisabled),
+          'Finish becomes available as soon as the pointer is released, while fusion continues').toBe(true);
+        for (const frame of active.filter(frame => !frame.rewardActive && frame.drag.source === -1)) {
+          expect(frame.finishDisabled, 'An accepted pair alone never disables Finish').toBe(false);
         }
         await page.waitForTimeout(300);
         expect((await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 2);
@@ -818,6 +833,42 @@ test.describe('concurrent jelly gestures', () => {
       expect(errors).toEqual([]);
     });
   }
+});
+
+test('Finish remains available during fusion and settles only completed pairs', async ({ page }, info) => {
+  const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+  const completedPair = await availablePair(page, { chest: false });
+  await dragPair(page, completedPair);
+  await expectClear(page, 1, completedPair);
+  const pendingPair = await availablePair(page, { chest: false });
+  const before = await jelly(page), savedGrowth = await growthSave(page), bounds = await metrics(page);
+  await observeTimeline(page);
+  const from = center(pendingPair[0].rect, bounds), to = center(pendingPair[1].rect, bounds);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(to.x, to.y, { steps: 2 });
+  await page.mouse.up();
+  await expect.poll(async () => (await jelly(page)).fusions.length,
+    { intervals: [25], timeout: 2000, message: 'A real matching drag begins its independent animation' }).toBe(1);
+  const merging = await jelly(page);
+  expect(merging.finish.disabled, 'The completed gesture leaves Finish usable before the pair disappears').toBe(false);
+  await pressControl(page, merging.finish);
+  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  const ended = await jelly(page);
+  expect(ended.phase).toBe('finished');
+  expect(ended.fusions).toEqual([]);
+  expect(ended.score).toBe(before.score);
+  expect(ended.cleared_pairs).toBe(before.cleared_pairs);
+  expect(ended.fragment_count).toBe(before.fragment_count);
+  expect(ended.chest_count).toBe(before.chest_count);
+  await page.waitForTimeout(1200);
+  expect((await jelly(page)).score, 'An abandoned animation cannot award a later point').toBe(before.score);
+  expect(await growthSave(page), 'Finish cannot turn an incomplete fusion into a learning success').toBe(savedGrowth);
+  await info.attach('jelly-finish-during-fusion.json', {
+    body: JSON.stringify(await page.evaluate(() => window.jellyObservedTimeline)), contentType: 'application/json'
+  });
+  await page.screenshot({ path: info.outputPath('jelly-finish-during-fusion.png'), scale: 'css' });
+  expect(errors).toEqual([]);
 });
 
 test('real drag and touch pairs earn learning once, then reveal and open their exact treasure', async ({ page }, info) => {
@@ -1041,6 +1092,12 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
     await page.mouse.up();
   }
   const rescued = await expectClear(page, 1, rescue);
+  const rescueAnimation = await page.evaluate(() => window.jellyObservedTimeline
+    .filter(frame => frame.fusion && frame.fullElapsed >= 0));
+  expect(rescueAnimation.length, 'The rescue remains visible while the full-board countdown continues').toBeGreaterThanOrEqual(2);
+  expect(rescueAnimation.at(-1).fullElapsed, 'Matching animation time still counts toward the full-board deadline')
+    .toBeGreaterThan(rescueAnimation[0].fullElapsed);
+  expect(rescueAnimation.every(frame => frame.danger.active), 'The warning stays active until the pair actually clears').toBe(true);
   expect(rescued.cells).toHaveLength(22);
   expect(rescued.full_elapsed, 'A completed rescue cancels the entire previous countdown').toBe(-1);
   expect(rescued.danger).toEqual({ active: false, strength: 0 });

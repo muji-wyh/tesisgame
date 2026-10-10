@@ -131,67 +131,64 @@ func step(delta: float) -> void:
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and phase == "playing" and not paused and generation == _generation:
-		if not fusions.is_empty():
-			# Advance every active merge to the next shared event boundary. Supply,
-			# airborne tiles, and danger stay paused until the final merge releases.
-			var consumed: float = remaining
-			for active in fusions:
-				var boundary: float = FUSION_SECONDS if bool(active.popped) else POP_SECONDS
-				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
-			for active in fusions:
-				active.elapsed = float(active.elapsed) + consumed
-			remaining -= consumed
-			# A callback may add, stop, or replace merges. Iterate the current batch
-			# only, and recheck each receipt before publishing another event.
-			for active in fusions.duplicate():
+		# Every animation and gameplay clock shares this time slice. Stop at the
+		# nearest event so callbacks can safely pause, finish, or replace the round.
+		var consumed: float = remaining
+		for active in fusions:
+			var boundary: float = FUSION_SECONDS if bool(active.popped) else POP_SECONDS
+			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
+		var full: bool = cells.size() >= CAPACITY
+		var danger_running: bool = full and full_elapsed >= 0.0
+		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
+		if danger_running:
+			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
+		elif full:
+			consumed = minf(consumed, maxf(0.0, _settling_remaining()))
+		else:
+			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
+		_age_cells(consumed)
+		for active in fusions:
+			active.elapsed = float(active.elapsed) + consumed
+		if danger_running:
+			full_elapsed += consumed
+		elif not full:
+			spawn_elapsed += consumed
+		remaining -= consumed
+		# Resolve a clear before a simultaneous danger deadline or supply event.
+		# A pair that disappears at the deadline has made space in time.
+		for active in fusions.duplicate():
+			if generation != _generation or phase != "playing" or paused:
+				break
+			if _fusion_index(str(active.attempt_id)) < 0:
+				continue
+			if not bool(active.popped) and float(active.elapsed) + EPSILON >= POP_SECONDS:
+				active.popped = true
+				cue_requested.emit("pop")
 				if generation != _generation or phase != "playing" or paused:
 					break
-				if _fusion_index(str(active.attempt_id)) < 0:
-					continue
-				if not bool(active.popped) and float(active.elapsed) + EPSILON >= POP_SECONDS:
-					active.popped = true
-					cue_requested.emit("pop")
-					if generation != _generation or phase != "playing" or paused:
-						break
-				if float(active.elapsed) + EPSILON >= FUSION_SECONDS:
-					_complete_fusion(str(active.attempt_id))
-		elif cells.size() >= CAPACITY:
-			var settling: float = _settling_remaining()
-			if settling > EPSILON:
-				var settle_delta: float = minf(remaining, settling)
-				_age_cells(settle_delta)
-				remaining -= settle_delta
-				if _settling_remaining() > EPSILON:
-					continue
-			if full_elapsed < 0.0:
+			if float(active.elapsed) + EPSILON >= FUSION_SECONDS:
+				_complete_fusion(str(active.attempt_id))
+		if generation != _generation or phase != "playing" or paused:
+			break
+		if cells.size() >= CAPACITY:
+			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 				_start_danger()
 				if generation != _generation or phase != "playing" or paused:
 					break
-				if not fusions.is_empty():
-					continue
-			var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
-			var consumed: float = minf(remaining, maxf(0.0, next_second - full_elapsed))
-			_age_cells(consumed)
-			full_elapsed += consumed
-			remaining -= consumed
-			if full_elapsed + EPSILON >= FULL_SECONDS:
-				finish_round()
-			elif full_elapsed + EPSILON >= next_second:
-				cue_requested.emit("danger")
-		else:
-			var consumed: float = minf(remaining, maxf(0.0, spawn_interval - spawn_elapsed))
-			_age_cells(consumed)
-			spawn_elapsed += consumed
-			remaining -= consumed
-			if spawn_elapsed + EPSILON >= spawn_interval:
-				spawn_elapsed = 0.0
-				_spawn_drop()
+			if danger_running and full_elapsed + EPSILON >= next_second:
+				if full_elapsed + EPSILON >= FULL_SECONDS:
+					finish_round()
+				else:
+					cue_requested.emit("danger")
+		elif spawn_elapsed + EPSILON >= spawn_interval:
+			spawn_elapsed = 0.0
+			_spawn_drop()
 	if generation == _generation:
 		changed.emit()
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and fusions.is_empty() \
+	return phase == "playing" and not paused \
 		and cells.size() < CAPACITY and not upcoming.is_empty() \
 		and _settling_remaining() <= EPSILON
 
@@ -485,9 +482,9 @@ func _complete_fusion(attempt_id: String) -> void:
 		if int(cells[index].id) in [int(completed.a_id), int(completed.b_id)]:
 			awarded += 1 if bool(cells[index].chest) else 0
 			cells.remove_at(index)
-	# Keep other reserved pairs and held tiles in place while their effects run.
-	if fusions.is_empty():
-		_apply_gravity()
+	# Other fusions retain ownership by tile ID while their visual snapshots
+	# finish independently. Settle every live stack immediately after this clear.
+	_apply_gravity()
 	full_elapsed = -1.0
 	cleared_pairs += 1
 	var previous_tier: int = chest_tier
@@ -532,9 +529,9 @@ func _apply_gravity() -> void:
 			if int(stack[index].row) != row:
 				var cell: Dictionary = stack[index]
 				var distance: int = row - int(cell.row)
-				if bool(cell.get("arrival", false)) and float(cell.age) < Motion.contact_at(cell):
-					# A paused incoming tile resumes at the same visible height even
-					# when the completed clear moves its landing destination downward.
+				if float(cell.age) < Motion.contact_at(cell):
+					# Keep an airborne tile's height and velocity when another clear
+					# moves its landing destination downward, including local collapses.
 					cell.row = row
 					cell.falling_rows = int(cell.falling_rows) + distance
 				else:

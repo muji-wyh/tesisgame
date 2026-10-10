@@ -254,10 +254,21 @@ func _check_pending_fusion_pause(view, words: Array, manifest: Dictionary) -> vo
 	var second: Array[int] = _matching_pair(view)
 	check(second.size() == 2 and view.game.try_merge(second[0], second[1]) == "correct",
 		"Another accepted fusion retains its independent completion deadline")
+	var other: Array[int] = _matching_pair(view)
+	check(other.size() == 2, "An unrelated pair remains available before the fragment threshold")
+	var point: Vector2 = view._tiles[other[0]].get_global_rect().get_center()
+	check(view._press(4, point), "An unrelated jelly can be held before synthesis queues")
+	view._move(point + Vector2(24.0, 0.0))
 	_advance_owner(view, 0.85)
 	check(view.game.fusions.size() == 1 and view._reward_presentation.is_active()
 		and not view._reward_presentation.visible and view.game.fragment_count == 4,
 		"The fourth fragment queues synthesis while the later accepted jelly finishes")
+	check(view._can_play() and view.snapshot().drag.active and int(view.snapshot().drag.source) == other[0],
+		"A queued chest presentation cannot interrupt a drag while a sibling is still disappearing")
+	view.cancel_input()
+	view._refresh_controls()
+	check(not view.finish_button.disabled and view.navigation_controls().has(view.finish_button),
+		"A pending synthesis keeps Finish available until the reward presentation actually begins")
 	view.pause(true)
 	var state: Dictionary = view.game.snapshot()
 	_advance_owner(view, 1.0)
@@ -265,8 +276,8 @@ func _check_pending_fusion_pause(view, words: Array, manifest: Dictionary) -> vo
 	view.pause(false)
 	_advance_owner(view, 0.21)
 	check(view.game.fusions.is_empty() and view.game.cleared_pairs == 2
-		and view._reward_presentation.is_active(),
-		"Resuming allows the accepted sibling to finish instead of deadlocking behind its queued reward")
+		and view._reward_presentation.is_active() and not view._can_play() and view.finish_button.disabled,
+		"Only the actual chest presentation gates gameplay after the final sibling finishes")
 	_advance_owner(view, 0.7)
 	check(view._reward_presentation.visible and view.game.fragment_count == 4 and view.game.chest_count == 1,
 		"Synthesis then starts once with the previously committed single chest")

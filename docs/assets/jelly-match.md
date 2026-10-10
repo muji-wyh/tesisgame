@@ -99,12 +99,20 @@ The bounded supply bags preserve a possible match on every full board.
 
 The entire upcoming area also acts as a manual drop control. A tap or click
 releases the displayed batch immediately when the round is active, every board
-tile has settled, no pair is fusing and the well has room. It uses the same
+tile has settled and the well has room, including during a fusion. It uses the same
 four-tile dispatch, column selection, gravity and landing projections as a timed
 drop; a nearly full board still accepts only its remaining capacity. The supply
 clock resets after an accepted manual drop, so the next timed batch receives a
 full interval. Dropping a batch does not score a point, award treasure or record
 a learning attempt.
+
+Fusion reserves only its own two tiles. Other pairs, pronunciation, automatic
+supply, manual supply and Finish remain available during the merge and clear
+animation. Airborne tiles and the full-board countdown keep advancing. A clear
+stops the warning when it actually makes space; a clear exactly at the countdown
+deadline wins. Finish cancels unfinished pairs without crediting them, while
+retaining completed scores, learning attempts and fragments. Gravity responds to
+each completed pair immediately, including when other fusions are still active.
 
 The control has the accessible name and tooltip `Drop the next jellies`, while
 the visible layout retains its four previews without a `Next` label or progress
@@ -128,7 +136,7 @@ release. Each squeeze takes 70 ms, followed by one small overshoot and a dying
 tail. A delayed crown sway and slight slot offsets keep the four bodies from
 moving in rigid unison. The painted foot stays fixed above the source contact
 shadow; labels, pictures, chest markers and input rectangles remain stationary.
-Pause and fusion freeze the same pose. New supply starts at rest; a full board
+Menu pause freezes the pose; fusion leaves anticipation running. New supply starts at rest; a full board
 and reduced motion display neutral previews. No new visual or audio asset is
 introduced for anticipation; the existing CC0 gel skins and contact shadow are
 reused.
@@ -137,7 +145,7 @@ Each landing projection reuses the same acquired gel silhouette at its actual
 destination, without word, picture or chest content. It remains stationary while
 its incoming tile descends, then disappears at contact. The original painted
 contact shadow still accompanies the landing. No additional placeholder artwork
-is introduced. Fusion freezes descent and the supply clock; a shifted support
+is introduced. Descent and the supply clock continue during fusion; a shifted support
 retargets the destination while preserving the incoming tile's visible height.
 Reduced motion places the incoming tile at its destination without a projection
 or descent, keeping the same readiness gate. The full-board warning starts only
@@ -333,7 +341,7 @@ not subjective listening approval.
 Batch supply checks compare each dispatched group with its committed previews,
 including a partially filled final group. Each tile descends over multiple frames
 and lands on its own stationary projection. Native model, view and flow checks
-cover frozen anticipation and descent during fusion, support changes and the
+cover concurrent anticipation and descent during fusion, support changes and the
 complete full-board rescue window.
 Desktop and phone captures cover the external queue and fixed-ratio well. After
 live resize, Windows WebKit retains its previously documented

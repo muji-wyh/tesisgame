@@ -31,6 +31,8 @@ func _run() -> void:
 	_test_fall_physics()
 	_test_landing_timeline()
 	_test_fusion_timeline()
+	_test_supply_during_fusion()
+	_test_fusion_deadline_order()
 	_test_fragment_thresholds()
 	_test_fragment_milestone_reentry()
 	_test_concurrent_fragment_milestone()
@@ -38,7 +40,8 @@ func _run() -> void:
 	_test_concurrent_fusion_lifecycle()
 	_test_held_source_after_gravity()
 	_test_concurrent_fusion_reentry()
-	_test_fusion_freezes_arrival()
+	_test_fusion_allows_arrival()
+	_test_overlapping_gravity_continuity()
 	_test_wrong_and_ignored_attempts()
 	_test_full_board_timeout()
 	_test_danger_rescue_and_pause()
@@ -359,13 +362,16 @@ func _test_manual_drop_guards() -> void:
 	model.set_paused(false)
 	var pair: Array[int] = _pair(model)
 	model.try_merge(pair[0], pair[1])
-	blocked = model.snapshot()
-	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
-		"An active fusion retains its supply pause when the preview is clicked")
+	var generated: int = model.generated_tiles
+	check(model.can_drop_now() and model.drop_now() and model.generated_tiles == generated + Model.DROP_COUNT,
+		"An active fusion permits the ordinary manual preview release")
+	model.configure(_vocabulary(), 3, 73)
+	pair = _pair(model)
+	model.try_merge(pair[0], pair[1])
 	model.step(0.8)
-	blocked = model.snapshot()
-	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
-		"Disappearance also blocks manual release through the end of the fusion")
+	generated = model.generated_tiles
+	check(model.can_drop_now() and model.drop_now() and model.generated_tiles == generated + Model.DROP_COUNT,
+		"Disappearance permits a manual release when the board is otherwise ready")
 	model.finish_round()
 	blocked = model.snapshot()
 	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
@@ -625,12 +631,12 @@ func _test_fusion_timeline() -> void:
 	check(events.cues == ["merge", "pop"], "The pop cue occurs at 0.7 seconds")
 	model.step(0.349)
 	check(model.cells.size() == count_before and events.attempts.is_empty(), "A nearly finished fusion does not credit early")
-	check(is_equal_approx(float(model.tile_by_id(incoming_id).age), saved_age),
-		"An incoming tile freezes in the air throughout fusion")
+	check(is_equal_approx(float(model.tile_by_id(incoming_id).age), saved_age + 1.049),
+		"An incoming tile continues its descent and recovery throughout fusion")
 	model.step(0.001)
 	check(model.cells.size() == count_before - 2 and model.fusion.is_empty() and model.cleared_pairs == 1,
 		"The 1.05 second fusion clears exactly two tiles")
-	check(is_equal_approx(model.spawn_elapsed, saved_spawn), "Spawning remains frozen throughout fusion")
+	check(is_equal_approx(model.spawn_elapsed, saved_spawn + Model.FUSION_SECONDS), "The supply clock advances throughout fusion")
 	check(events.attempts.size() == 1 and events.attempts[0].correct
 		and events.attempts[0].words.size() == 1, "A successful clear emits one unique-word learning event")
 	check(model.fragment_count == 1 and model.chest_count == 0 and model.chest_tier == 0
@@ -700,10 +706,15 @@ func _test_overlapping_fusions() -> void:
 		for candidate in original.cells:
 			if candidate.id == cell.id:
 				previous = candidate
-		check(cell == previous, "Earlier clears do not move or age any tile while another fusion is active")
+		check(int(cell.row) >= int(previous.row) and cell.word == previous.word,
+			"An earlier clear applies gravity without replacing a sibling or its word")
+		if int(cell.row) == int(previous.row):
+			check(is_equal_approx(float(cell.age), float(previous.age) + Model.FUSION_SECONDS),
+				"Unaffected tiles keep aging while a sibling fusion remains active")
 	check(model.upcoming == original.upcoming and model.generated_tiles == original.generated_tiles
 		and is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed)) and model.full_elapsed == -1.0,
-		"Overlapping clears keep supply paused and the first completed rescue cancels danger")
+		"A full board holds supply until the first completed rescue makes space and cancels danger")
+	_assert_board(model, "Gravity while a sibling fusion remains reserved")
 	model.step(0.05)
 	check(events.cues.count("pop") == 2 and model.fusion.popped,
 		"The second elastic pop follows its own clock instead of the previous clear")
@@ -717,12 +728,12 @@ func _test_overlapping_fusions() -> void:
 		and is_equal_approx(float(events.completed[1].fusion.elapsed), Model.FUSION_SECONDS),
 		"Completion receipts identify the exact pair and cannot duplicate learning credit")
 	check(model.upcoming == original.upcoming and model.generated_tiles == original.generated_tiles
-		and is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed)),
-		"Falling and supply remain frozen through the final disappearance boundary")
+		and is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed) + 0.4),
+		"Supply advances in the free space while the final disappearance is still playing")
 	_assert_board(model, "Concurrent fusion final gravity")
 	model.step(0.05)
-	check(is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed) + 0.05),
-		"The supply clock resumes only after all active fusions finish")
+	check(is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed) + 0.45),
+		"Finishing the final fusion does not reset the running supply clock")
 
 
 func _earn_fragment(model) -> bool:
@@ -905,8 +916,9 @@ func _test_concurrent_fusion_lifecycle() -> void:
 	model.step(0.25)
 	check(model.cleared_pairs == 1 and model.fusions.size() == 1
 		and is_equal_approx(float(model.fusion.elapsed), 0.25)
-		and model.tile_by_id(int(incoming.id)) == incoming,
-		"Resume preserves overlap timing and freezes an incoming tile until the last pair finishes")
+		and model.tile_by_id(int(incoming.id)).word == incoming.word
+		and is_equal_approx(model.spawn_elapsed, 1.05),
+		"Resume preserves overlap timing while the ordinary supply clock advances")
 	var result: Dictionary = model.finish_round()
 	check(result.cleared_pairs == 1 and result.fragment_count == 1 and result.chest_count == 0 and model.fusions.is_empty()
 		and events.attempts.size() == 1 and events.completed.size() == 1,
@@ -1024,41 +1036,33 @@ func _test_concurrent_fusion_reentry() -> void:
 		"A pair accepted during an event callback gets its full independent timeline within a long frame")
 
 
-func _test_fusion_freezes_arrival() -> void:
+func _test_fusion_allows_arrival() -> void:
 	var model = Model.new()
 	model.configure(_vocabulary(), 3, 31)
-	model.drop_now()
-	model.step(0.25)
-	var incoming: Dictionary = model.cells.back().duplicate(true)
-	var pair: Array[int] = []
-	for support in model.cells:
-		if int(support.column) != int(incoming.column) or not model.is_settled(support):
-			continue
-		for other in model.cells:
-			if support.word.id == other.word.id and support.kind != other.kind:
-				pair = [int(support.id), int(other.id)]
-	check(pair.size() == 2, "The incoming column has a settled supporting pair available for a retargeted landing")
-	if pair.is_empty():
-		return
-	var original_y: float = float(incoming.row) - float(Motion.sample(incoming).lift_rows)
-	var committed: Array = model.upcoming.duplicate(true)
-	model.try_merge(pair[0], pair[1])
-	model.step(Model.FUSION_SECONDS - 0.001)
-	check(model.tile_by_id(int(incoming.id)) == incoming,
-		"Fusion suspends every property of the airborne tile before its support clears")
+	var pair: Array[int] = _pair(model)
+	check(model.try_merge(pair[0], pair[1]) == "correct", "A starter pair begins before the player releases more supply")
+	model.step(0.85)
+	check(model.drop_now(), "A new batch can start during the disappearance stage")
+	var incoming: Array = model.cells.slice(INITIAL_COUNT).duplicate(true)
+	check(incoming.size() == Model.DROP_COUNT, "The disappearance release still contains all four advertised tiles")
+	model.step(0.199)
+	for arrival in incoming:
+		var moving: Dictionary = model.tile_by_id(int(arrival.id))
+		check(is_equal_approx(float(moving.age), 0.199)
+			and float(Motion.sample(moving).lift_rows) < float(Motion.sample(arrival).lift_rows),
+			"Every new arrival visibly descends before the previous pair disappears")
+	var before: Dictionary = {}
+	for arrival in incoming:
+		var moving: Dictionary = model.tile_by_id(int(arrival.id))
+		before[moving.id] = float(moving.row) - float(Motion.sample(moving).lift_rows)
 	model.step(0.001)
-	var retargeted: Dictionary = model.tile_by_id(int(incoming.id))
-	var resumed_y: float = float(retargeted.row) - float(Motion.sample(retargeted).lift_rows)
-	check(int(retargeted.row) > int(incoming.row) and retargeted.arrival
-		and is_equal_approx(float(retargeted.age), float(incoming.age)) and is_equal_approx(resumed_y, original_y),
-		"Removing support extends the fall without teleporting or restarting its descent")
-	check(model.upcoming == committed, "A moving landing target cannot rewrite advertised supply")
-	model.step(0.05)
-	var resumed: Dictionary = model.tile_by_id(int(incoming.id))
-	check(float(resumed.age) > float(incoming.age)
-		and float(resumed.row) - float(Motion.sample(resumed).lift_rows) > resumed_y,
-		"The frozen arrival continues downward immediately after fusion completes")
-
+	for arrival in incoming:
+		var moving: Dictionary = model.tile_by_id(int(arrival.id))
+		var y: float = float(moving.row) - float(Motion.sample(moving).lift_rows)
+		check(y >= float(before[moving.id]) and y - float(before[moving.id]) < 0.05
+			and is_equal_approx(float(moving.age), 0.2),
+			"Clearing support retargets an airborne tile without a teleport or a restarted descent")
+	_assert_board(model, "A disappearance with simultaneous arrivals")
 
 func _test_wrong_and_ignored_attempts() -> void:
 	var model = Model.new()
@@ -1132,35 +1136,34 @@ func _test_danger_rescue_and_pause() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 14)
-	model.step(_danger_start_seconds() + Model.FULL_SECONDS - 0.1)
-	check(model.phase == "playing" and model.full_elapsed > 7.8, "The last countdown fraction remains playable")
+	model.step(_danger_start_seconds() + 5.8)
 	var pair: Array[int] = _pair(model)
 	var danger: float = model.full_elapsed
 	var warnings: int = events.cues.count("danger")
-	check(warnings == 8, "A late rescue follows all eight warning beats of the original countdown")
 	check(model.try_merge(pair[0], pair[0]) == "ignored" and model.full_elapsed == danger,
 		"A canceled drop does not reset the full-board countdown")
-	check(model.try_merge(pair[0], pair[1]) == "correct", "A correct merge can rescue a nearly expired full board")
+	check(model.try_merge(pair[0], pair[1]) == "correct", "A correct merge starts while the countdown remains active")
 	model.step(0.6)
-	check(model.full_elapsed == danger and model.phase == "playing" and events.cues.count("danger") == warnings,
-		"Fusion freezes danger and emits no warning during a committed rescue")
+	check(is_equal_approx(model.full_elapsed, danger + 0.6) and model.phase == "playing"
+		and events.cues.count("danger") == warnings + 1,
+		"Fusion retains the running danger clock and its next warning beat")
 	model.set_paused(true)
 	var paused_state: Dictionary = model.snapshot()
 	var paused_cues: Array = events.cues.duplicate()
 	model.step(50.0)
 	check(model.snapshot() == paused_state and events.cues == paused_cues,
-		"Pause freezes cell age, fusion, spawning, countdown, and audio cues together")
+		"Menu pause still freezes cell age, fusion, spawning, countdown, and cues together")
 	model.set_paused(false)
 	model.step(0.45)
-	check(model.cells.size() == 22 and model.full_elapsed == -1.0 and events.finished.is_empty()
-		and events.cues.count("danger") == warnings,
-		"Completing the rescue cancels the old countdown")
+	check(model.cells.size() == 22 and model.full_elapsed == -1.0 and events.finished.is_empty(),
+		"Completing the rescue before the deadline cancels the countdown")
+	warnings = events.cues.count("danger")
 	model.step(model.spawn_interval)
 	check(model.cells.size() == 24 and model.full_elapsed == -1.0,
 		"A partial replacement batch fills the two free slots but waits for landing before danger")
 	model.step(_settle_remaining(model))
 	check(model.cells.size() == 24 and is_zero_approx(model.full_elapsed) and events.cues.count("danger") == warnings + 1,
-		"The replacement batch's final landing starts a fresh, complete danger window")
+		"The replacement batch starts a fresh complete danger window after landing")
 	model.set_paused(true)
 	paused_state = model.snapshot()
 	paused_cues = events.cues.duplicate()
@@ -1169,13 +1172,12 @@ func _test_danger_rescue_and_pause() -> void:
 		"A paused full board cannot schedule another warning")
 	model.set_paused(false)
 	model.step(0.999)
-	check(events.cues == paused_cues, "Resume keeps the original beat phase without replaying its entry warning")
+	check(events.cues == paused_cues, "Resume keeps the beat phase without replaying its entry warning")
 	model.step(0.001)
 	check(events.cues.count("danger") == warnings + 2, "The next resumed warning waits for the next clock boundary")
 	model.step(6.9)
 	check(model.phase == "playing" and events.cues.count("danger") == warnings + 8,
-		"Resumed danger retains its remaining time and exact remaining warning beats")
-
+		"Resumed danger retains its remaining time and exact warning beats")
 
 func _test_finish_and_reset() -> void:
 	var model = Model.new()
@@ -1338,6 +1340,103 @@ func _test_danger_signal_reentry() -> void:
 				check(model.phase == "playing" and model.generated_tiles == INITIAL_COUNT and model.full_elapsed == -1.0,
 					"Resetting inside a warning leaves the new round's supply and countdown untouched")
 			"fusion":
-				check(not model.fusion.is_empty() and is_zero_approx(model.full_elapsed) and events.attempts.is_empty(),
-					"A rescue inside a warning freezes the clock without granting premature learning credit")
+				check(not model.fusion.is_empty() and is_equal_approx(model.full_elapsed, 0.5) and events.attempts.is_empty(),
+					"A rescue inside a warning advances both clocks without granting premature learning credit")
 		model.cue_requested.disconnect(interrupt)
+
+
+func _test_supply_during_fusion() -> void:
+	for start_elapsed: float in [9.75, 9.2]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(), 3, 26)
+		model.step(start_elapsed)
+		var pair: Array[int] = _pair(model)
+		var advertised: Array = model.upcoming.duplicate(true)
+		model.try_merge(pair[0], pair[1])
+		model.step(Model.INITIAL_SPAWN_INTERVAL - start_elapsed)
+		check(model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT and model.fusions.size() == 1,
+			"The automatic supply boundary dispatches during both merge and disappearance")
+		for tile in advertised:
+			check(not model.tile_by_id(int(tile.id)).is_empty(), "The concurrent drop consumes the exact advertised identities")
+		check(is_zero_approx(model.spawn_elapsed) and events.attempts.is_empty(),
+			"Supply resets its own clock without completing or crediting the active pair")
+		model.step(0.05)
+		for tile in advertised:
+			check(is_equal_approx(float(model.tile_by_id(int(tile.id)).age), 0.05),
+				"An automatically dispatched batch ages independently during the active effect")
+		model.step(Model.FUSION_SECONDS - float(model.fusion.elapsed))
+		check(model.cleared_pairs == 1 and events.attempts.size() == 1
+			and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT,
+			"A concurrent automatic drop neither duplicates the pair nor dispatches twice")
+		_assert_board(model, "Supply crossing an active fusion")
+	var one_step = Model.new()
+	var split_steps = Model.new()
+	for model in [one_step, split_steps]:
+		model.configure(_vocabulary(), 3, 26)
+		model.step(9.5)
+		var pair: Array[int] = _pair(model)
+		model.try_merge(pair[0], pair[1])
+	one_step.step(1.5)
+	for index in range(30):
+		split_steps.step(0.05)
+	var snapshots: Array = [one_step.snapshot(), split_steps.snapshot()]
+	for snapshot in snapshots:
+		snapshot.spawn_elapsed = snappedf(float(snapshot.spawn_elapsed), 0.000001)
+		for cell in snapshot.cells:
+			cell.age = snappedf(float(cell.age), 0.000001)
+	check(snapshots[0] == snapshots[1],
+		"A long frame and small frames preserve identical concurrent spawn, clear, gravity, and reward state")
+
+
+func _test_fusion_deadline_order() -> void:
+	for remaining: float in [Model.FUSION_SECONDS, 0.1]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(), 3, 14)
+		model.step(_danger_start_seconds() + Model.FULL_SECONDS - remaining)
+		var pair: Array[int] = _pair(model, true, true)
+		model.try_merge(pair[0], pair[1])
+		model.step(Model.FUSION_SECONDS)
+		if is_equal_approx(remaining, Model.FUSION_SECONDS):
+			check(model.phase == "playing" and model.cleared_pairs == 1 and model.full_elapsed == -1.0
+				and events.finished.is_empty() and events.attempts.size() == 1,
+				"A clear completing exactly at the danger deadline wins the tie and rescues the board")
+		else:
+			check(model.phase == "finished" and model.fusions.is_empty() and model.cleared_pairs == 0
+				and events.finished.size() == 1 and events.attempts.is_empty() and events.fragments.is_empty(),
+				"A still-full board expires during an unfinished fusion without granting its unearned reward")
+
+
+func _test_overlapping_gravity_continuity() -> void:
+	var model = Model.new()
+	model.configure([_word("same")], 3, 31)
+	var ids: Array[int] = []
+	for index in range(model.cells.size()):
+		var cell: Dictionary = model.cells[index]
+		cell.column = 0
+		cell.row = Model.ROWS - 1 - index
+		cell.kind = "word" if index % 2 == 0 else "picture"
+		cell.age = Model.SETTLE_SECONDS
+		cell.falling_rows = 0
+		cell.arrival = false
+		ids.append(int(cell.id))
+	model.try_merge(ids[0], ids[1])
+	model.step(0.1)
+	model.try_merge(ids[2], ids[3])
+	model.step(Model.FUSION_SECONDS - 0.1)
+	var falling: Dictionary = model.tile_by_id(ids[5])
+	check(model.fusions.size() == 1 and falling.falling_rows == 2 and not falling.arrival,
+		"The first disappearance starts local gravity while a sibling fusion remains reserved")
+	model.step(0.0999)
+	var before: Dictionary = model.tile_by_id(ids[5])
+	var before_y: float = float(before.row) - float(Motion.sample(before).lift_rows)
+	model.step(0.0001)
+	var after: Dictionary = model.tile_by_id(ids[5])
+	var after_y: float = float(after.row) - float(Motion.sample(after).lift_rows)
+	check(model.fusions.is_empty() and model.cleared_pairs == 2 and int(after.row) == int(before.row) + 2
+		and is_equal_approx(float(after.age), 0.1) and int(after.falling_rows) == 4,
+		"A sibling disappearance extends an existing local collapse without resetting its clock")
+	check(after_y >= before_y and after_y - before_y < 0.01,
+		"A retargeted local collapse preserves its visible position and downward motion")
+	_assert_board(model, "Successive clears during local gravity")

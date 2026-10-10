@@ -72,6 +72,8 @@ func _run() -> void:
 	_check_wrong_drop(view)
 	_check_fusion(view)
 	_check_concurrent_fusions(view)
+	_check_finish_during_fusion(view)
+	_check_preview_during_fusion(view)
 	_check_drag_across_fusion_completion(view)
 	_check_concurrent_fusion_lifecycle(view)
 	_check_fusion_interruption(view)
@@ -432,7 +434,7 @@ func _check_preview_cancel_and_rollover(view) -> void:
 
 
 func _check_preview_lifecycle_gates(view) -> void:
-	for state: String in ["airborne", "paused", "hidden", "fusion", "disappearance", "full", "results", "stopped", "drag"]:
+	for state: String in ["airborne", "paused", "hidden", "full", "results", "stopped", "drag"]:
 		_reset(view, false, state != "airborne")
 		var point: Vector2 = _rect(view.snapshot().preview.rect).get_center()
 		match state:
@@ -440,11 +442,6 @@ func _check_preview_lifecycle_gates(view) -> void:
 				view.pause(true)
 			"hidden":
 				view.hide()
-			"fusion", "disappearance":
-				var pair: Array[int] = _pair(view)
-				_drag_pair(view, pair[0], pair[1])
-				if state == "disappearance":
-					_advance(view, 0.8)
 			"full":
 				view.game.step(4.0 * view.game.spawn_interval)
 				view._sync_tiles()
@@ -609,11 +606,11 @@ func _check_preview_motion(view) -> void:
 	var pair: Array[int] = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	_advance(view, 0.4)
-	check(not view.game.fusion.is_empty() and view.snapshot().preview.slots == late_slots,
-		"Fusion freezes the pending batch's pressure strain with its supply clock")
+	check(not view.game.fusion.is_empty() and view.snapshot().preview.slots != late_slots
+		and int(view.snapshot().preview.slots[0].id) == int(late_slots[0].id),
+		"Fusion keeps the pending batch's pressure strain advancing with its supply clock")
 	_advance(view, view.game.FUSION_SECONDS - 0.4 + 0.00001)
-	_advance(view, view.game.spawn_interval - view.game.spawn_elapsed + 0.00001)
-	_check_preview_pose(view, "The following dispatched batch")
+	_check_preview_pose(view, "The batch dispatched during disappearance")
 	var dispatched: Array = view.snapshot().preview.slots
 	check(int(dispatched[0].id) != int(first[0].id) and float(dispatched[0].motion.intensity) < 0.121,
 		"Dispatch resets the replacement preview to gentle motion instead of inheriting urgency")
@@ -839,16 +836,20 @@ func _check_landing_lifecycle(view) -> void:
 	var pair: Array[int] = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	view._process(0.4)
-	check(incoming.size() == 4 and not view.game.fusion.is_empty() and not cues.has("land"),
-		"Fusion suspends all four arrivals without adding a landing sound")
+	check(incoming.size() == 4 and not view.game.fusion.is_empty(),
+		"The four arrivals keep descending while a separate pair is merging")
 	for arrival: Dictionary in incoming:
 		var held: Dictionary = falling[int(arrival.id)]
-		check(is_equal_approx(float(arrival.age), float(held.age))
-			and view._tiles[int(arrival.id)].get_global_rect().position.is_equal_approx(Vector2(held.position)),
-			"Fusion freezes arrival %s at its current height" % arrival.id)
+		check(is_equal_approx(float(arrival.age), float(held.age) + 0.4)
+			and view._tiles[int(arrival.id)].get_global_rect().position.y > Vector2(held.position).y,
+			"Fusion allows arrival %s to move toward its landing" % arrival.id)
+	_advance(view, 0.3, 1.0 / 240.0)
+	check(cues.count("land") > 0 and not view.game.fusion.is_empty(),
+		"Landing feedback remains audible before a separate fusion completes")
+	var contacts: int = cues.count("land")
 	view.stop()
 	view._process(0.4)
-	check(not cues.has("land"), "Stopping the mode cannot revive a pending landing")
+	check(cues.count("land") == contacts, "Stopping the mode cannot revive a pending landing")
 
 
 func _check_gesture_audio(view) -> void:
@@ -1398,12 +1399,15 @@ func _check_danger_lifecycle(view) -> void:
 	var pair: Array[int] = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	check(not view.game.fusion.is_empty(), "A correct match starts a real rescue fusion on the full board")
-	_check_danger_hidden(view, "Starting a rescue fusion")
+	check(bool(view.danger_feedback().active), "Starting a rescue keeps the full-board border warning visible")
 	view._process(0.4)
-	check(is_equal_approx(float(view.game.full_elapsed), elapsed) and cues.count("danger") == warnings,
-		"Rescue fusion suspends the old countdown without continuing its warning sounds")
+	check(is_equal_approx(float(view.game.full_elapsed), elapsed + 0.4) and cues.count("danger") == warnings
+		and bool(view.danger_feedback().active),
+		"Rescue fusion advances the existing countdown and its border pulse")
 	for delta: float in [0.4, 0.25]:
 		view._process(delta)
+	check(cues.count("danger") == warnings + 1, "The next warning beat remains audible while the rescue completes")
+	warnings = cues.count("danger")
 	check(view.game.cells.size() == view.game.CAPACITY - 2 and view.game.full_elapsed < 0.0,
 		"Completing the rescue makes space and clears the model's danger clock")
 	_check_danger_hidden(view, "Completing a rescue fusion")
@@ -1450,7 +1454,7 @@ func _check_fusion(view) -> void:
 	_drag_pair(view, pair[0], pair[1])
 	check(heard.size() == 1 and not view.game.fusion.is_empty(), "Dragging reads the held word and starts fusion only when released on its matching partner")
 	check(attempts.is_empty() and view.game.chest_count == 0, "A matching contact does not credit a clear or treasure before fusion completes")
-	check(view.finish_button.disabled and view._can_play(), "Fusion keeps other jellies interactive while preventing early finish")
+	check(not view.finish_button.disabled and view._can_play(), "Fusion keeps other jellies and Finish interactive")
 	view._process(0.10)
 	check(view._tiles[pair[0]].visible and view._tiles[pair[1]].visible and not _effect(view).merged.visible,
 		"Fusion begins with two separate droplets moving into contact")
@@ -1495,7 +1499,7 @@ func _check_concurrent_fusions(view) -> void:
 		var elapsed: float = view.game.spawn_elapsed
 		var generated: int = view.game.generated_tiles
 		_advance(view, delay)
-		check(view._can_play() and view.finish_button.disabled, "Other jellies remain playable during merge and elastic release")
+		check(view._can_play() and not view.finish_button.disabled, "Other jellies and Finish remain available during merge and elastic release")
 		check(not view._press(-1, first_home), "A participating jelly cannot begin a second gesture")
 		view._activate(first[0])
 		check(heard.size() == 1 and view.game.fusions.size() == 1, "Reserved jellies cannot replay pronunciation or create a duplicate fusion")
@@ -1504,8 +1508,6 @@ func _check_concurrent_fusions(view) -> void:
 			view._release(_center(view, id))
 		check(heard.size() == 3 and attempts.is_empty() and view.game.fusions.size() == 1,
 			"Consecutive taps on other matching jellies remain pronunciation only during an active fusion")
-		view.finish_button.pressed.emit()
-		check(view.game.phase == "playing" and finishes.is_empty(), "A synthetic Finish press cannot interrupt an unearned clear")
 		check(view._press(4, _center(view, second[0])), "Touch can pick up an unrelated jelly while another pair animates")
 		view._move(second_target_home)
 		check(view.snapshot().drag.active and view.snapshot().drag.target == second[1]
@@ -1517,8 +1519,8 @@ func _check_concurrent_fusions(view) -> void:
 			"A second valid drop starts its own fusion immediately instead of being ignored or queued")
 		check(view.snapshot().fusion_effects.size() == 2 and attempts.is_empty(),
 			"Both accepted effects are observable before either receives learning credit")
-		check(cues.count("merge") == 2 and is_equal_approx(view.game.spawn_elapsed, elapsed)
-			and view.game.generated_tiles == generated, "Two independent merge sounds do not restart the paused supply")
+		check(cues.count("merge") == 2 and is_equal_approx(view.game.spawn_elapsed, elapsed + delay)
+			and view.game.generated_tiles == generated, "Two independent merge sounds do not reset the advancing supply clock")
 		var first_id: String = str(view.game.fusions[0].attempt_id)
 		var second_id: String = str(view.game.fusions[1].attempt_id)
 		_advance(view, view.game.FUSION_SECONDS - delay)
@@ -1527,14 +1529,15 @@ func _check_concurrent_fusions(view) -> void:
 		check(view.game.fusions.size() == 1 and str(view.game.fusions[0].attempt_id) == second_id
 			and view._fusion_visuals.size() == 1 and view._fusion_visuals.has(second_id),
 			"Completing the older pair removes only its own material and face")
-		check(view.finish_button.disabled and view._can_play()
-			and is_equal_approx(view.game.spawn_elapsed, elapsed) and view.game.generated_tiles == generated,
-			"Supply and Finish remain paused until the final independent fusion completes")
-		check(view._global_rect(view._tile_rect(view._cell(second[1]))).get_center().is_equal_approx(second_target_home),
-			"Earlier removal cannot shift the still-animating pair's destination")
+		check(not view.finish_button.disabled and view._can_play()
+			and is_equal_approx(view.game.spawn_elapsed, elapsed + view.game.FUSION_SECONDS)
+			and view.game.generated_tiles == generated,
+			"Supply and Finish stay available while a sibling fusion completes")
+		check(view._global_rect(view._tile_rect(view.game.fusion.b)).get_center().is_equal_approx(second_target_home),
+			"Gravity can update board occupancy while the sibling's authored effect keeps its original anchor")
 		_advance(view, delay)
 		check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.disabled,
-			"The final disappearance releases all effects and enables Finish")
+			"The final disappearance releases all effects and leaves Finish available")
 		check(attempts.size() == 2 and attempts[1].id == second_id and first_id != second_id
 			and bool(attempts[0].correct) and bool(attempts[1].correct) and view.game.fragment_count == fragments,
 			"Independent pairs receive distinct, exactly-once word and marked-fragment credits")
@@ -1542,7 +1545,7 @@ func _check_concurrent_fusions(view) -> void:
 		view._release(second_target_home)
 		_advance(view, 0.2)
 		check(attempts.size() == 2 and view.game.fragment_count == fragments and view.game.spawn_elapsed > elapsed,
-			"A repeated release cannot duplicate awards and ordinary supply resumes after all fusions")
+			"A repeated release cannot duplicate awards or interrupt ordinary supply")
 
 
 func _check_drag_across_fusion_completion(view) -> void:
@@ -1921,3 +1924,80 @@ func _check_signal_reentry(view) -> void:
 	check(not view._configured and int(view.snapshot().drag.selected) == -1,
 		"Leaving from a synchronous pronunciation callback cannot restore stale input ownership")
 	view.word_requested.disconnect(leave_on_word)
+	for action: String in ["stop", "configure", "finish"]:
+		_reset(view)
+		var completed: Array[int] = [0]
+		var interrupt_clear: Callable = func(cue: String) -> void:
+			if cue != "danger_end":
+				return
+			completed[0] += 1
+			match action:
+				"stop":
+					view.stop()
+				"configure":
+					view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
+					view.set_process(false)
+				"finish":
+					view.game.finish_round()
+		view.audio_requested.connect(interrupt_clear)
+		pair = _pair(view, true)
+		_drag_pair(view, pair[0], pair[1])
+		_advance(view, view.game.FUSION_SECONDS)
+		check(completed[0] == 1 and view._loot_flights.is_empty() and view._fusion_visuals.is_empty(),
+			"A synchronous %s at danger cancellation cannot restore the old clear's loot flight or effect" % action)
+		if action == "configure":
+			check(view.game.cleared_pairs == 0 and view.game.fragment_count == 0 and view.game.fusions.is_empty(),
+				"Reconfiguration from the warning-end callback leaves the new round free of stale rewards")
+		elif action == "finish":
+			check(finishes.size() == 1 and finishes[0].cleared_pairs == 1 and finishes[0].fragment_count == 1,
+				"Finishing from warning cancellation settles the already completed pair exactly once")
+		else:
+			check(not view._configured, "Stopping from warning cancellation leaves the board stopped")
+		view.audio_requested.disconnect(interrupt_clear)
+	_reset(view)
+
+
+func _check_preview_during_fusion(view) -> void:
+	for delay: float in [0.2, 0.8]:
+		_reset(view)
+		var pair: Array[int] = _pair(view)
+		_drag_pair(view, pair[0], pair[1])
+		_advance(view, delay)
+		var count: int = view.game.generated_tiles
+		var advertised: Array = view.game.upcoming.duplicate(true)
+		check(not view.drop_button.disabled and bool(view.snapshot().preview.enabled),
+			"Both merge and disappearance keep the normal preview control enabled")
+		var point: Vector2 = _rect(view.snapshot().preview.rect).get_center()
+		check(view._press(4, point), "A touch can press the preview while a pair animates")
+		view._release(point)
+		check(view.game.generated_tiles == count + 4 and view.game.fusions.size() == 1
+			and attempts.is_empty() and not view.finish_button.disabled,
+			"Preview release dispatches immediately without completing the pair or blocking Finish")
+		for tile in advertised:
+			check(view._tiles.has(int(tile.id)), "The advertised tiles become real view controls during the active effect")
+	_reset(view)
+
+
+func _check_finish_during_fusion(view) -> void:
+	for delay: float in [0.2, 0.8]:
+		_reset(view)
+		var first: Array[int] = _pair(view, true)
+		_drag_pair(view, first[0], first[1])
+		_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS)
+		var earned: int = view.game.fragment_count
+		var score: int = view.game.cleared_pairs
+		var pair: Array[int] = _pair(view)
+		_drag_pair(view, pair[0], pair[1])
+		_advance(view, delay)
+		check(not view.finish_button.disabled and view.navigation_controls().has(view.finish_button),
+			"Finish remains reachable by keyboard and controller during both effect stages")
+		view.finish_button.pressed.emit()
+		check(view.game.phase == "finished" and finishes.size() == 1
+			and view.game.fragment_count == earned and view.game.cleared_pairs == score
+			and attempts.size() == 1 and view.game.fusions.is_empty() and view._fusion_visuals.is_empty(),
+			"Finish preserves completed score and fragments while cancelling the unfinished effect")
+		view.finish_button.pressed.emit()
+		_advance(view, 2.0)
+		check(finishes.size() == 1 and attempts.size() == 1 and view.game.fragment_count == earned,
+			"Repeated Finish and stale animation time cannot replay a canceled pair or settlement")
+	_reset(view)

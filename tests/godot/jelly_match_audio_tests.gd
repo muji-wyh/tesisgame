@@ -168,8 +168,11 @@ func _check_warning_cancellation(audio) -> void:
 	var clear: AudioStreamPlayer = audio._jelly_players[1]
 	audio.play_jelly_cue("merge")
 	var merge: AudioStreamPlayer = audio._jelly_players[2]
+	check(warning.playing and warning.stream.resource_path == Audio.JELLY_PATHS.danger,
+		"Starting a merge preserves the active full-board warning")
+	audio.stop_jelly_danger()
 	check(not warning.playing and warning.stream == null,
-		"Starting a rescue merge immediately stops the previous warning tail")
+		"Completing a rescue stops the previous warning tail")
 	check(clear.playing and clear.stream.resource_path == Audio.JELLY_PATHS.pop
 		and merge.playing and merge.stream.resource_path == Audio.JELLY_PATHS.merge,
 		"Selective warning cancellation preserves unrelated clear audio and the new merge")
@@ -177,6 +180,7 @@ func _check_warning_cancellation(audio) -> void:
 	audio.play_jelly_cue("danger")
 	audio.play_jelly_cue("danger")
 	audio.play_jelly_cue("merge")
+	audio.stop_jelly_danger()
 	check(not audio._jelly_players[0].playing and audio._jelly_players[0].stream == null
 		and not audio._jelly_players[1].playing and audio._jelly_players[1].stream == null
 		and audio._jelly_players[2].playing,
@@ -192,7 +196,7 @@ func _check_warning_cancellation(audio) -> void:
 
 
 func _check_pending_warnings() -> void:
-	for interruption: String in ["merge", "mute", "halt"]:
+	for interruption: String in ["clear", "mute", "halt"]:
 		var audio := DelayedDangerAudio.new()
 		root.add_child(audio)
 		audio.interact("spring", false)
@@ -201,8 +205,9 @@ func _check_pending_warnings() -> void:
 		check(not warning.playing and warning.stream == null,
 			"The %s fixture holds warning preparation before playback" % interruption)
 		match interruption:
-			"merge":
+			"clear":
 				audio.play_jelly_cue("merge")
+				audio.stop_jelly_danger()
 			"mute":
 				audio.set_muted(true)
 				audio.set_muted(false)
@@ -214,7 +219,7 @@ func _check_pending_warnings() -> void:
 		await process_frame
 		check(not warning.playing and warning.stream == null,
 			"A pending warning cannot restart after %s even when its asset finishes preparing" % interruption)
-		if interruption == "merge":
+		if interruption == "clear":
 			check(audio._jelly_players[1].stream != null
 				and audio._jelly_players[1].stream.resource_path == Audio.JELLY_PATHS.merge,
 				"Canceling delayed danger leaves the already requested rescue sound intact")
