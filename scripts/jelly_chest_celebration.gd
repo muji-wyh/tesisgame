@@ -139,7 +139,7 @@ func _update_model_visibility() -> void:
 func _sync_confetti() -> void:
 	var age: float = _elapsed - ARRIVAL_SECONDS
 	_confetti.sample(age - REVEAL_SECONDS if is_active() and _revealed and not reduced_motion else -1.0,
-		PERFORMANCE_SECONDS - REVEAL_SECONDS, 1.0 - smoothstep(1.91, PERFORMANCE_SECONDS, age))
+		PERFORMANCE_SECONDS - REVEAL_SECONDS)
 
 
 func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:

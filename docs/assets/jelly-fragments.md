@@ -52,6 +52,11 @@ The shared `reward_confetti.gd` renderer also accompanies every earned-chest
 reveal in the Match, Memory, Phrase Builder, Voice Pop and Jelly Match finales.
 Those finales sample the burst from 1.8 to 3 seconds on their existing clock;
 rounds without a chest omit it. Reduced motion keeps the static reward instead.
+Each paper follows a complete rise, flutter and descent within that owner's
+reveal window. Horizontal launch speed decays into a bounded sideways drift;
+staggered particles stay opaque until they pass below the viewport bottom.
+The chest's local fade does not fade the full-screen paper. This keeps the
+existing input and completion timing without cutting the burst off at its apex.
 
 The Jelly Match gameplay HUD uses a segmented halo around the existing chest
 art instead of a numeric fragment counter. Four segments fill to unlock the
