@@ -4,7 +4,7 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
-  jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_match_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
+  jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
   growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [

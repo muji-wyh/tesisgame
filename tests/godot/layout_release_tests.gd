@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -17,10 +19,16 @@ func settle() -> void:
 		await process_frame
 
 func _run() -> void:
-	var directory := "user://layout-release-%d" % OS.get_process_id()
+	var directory := "user://layout-release-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	app._presentation.muted = true
+	app._presentation.reduced_motion = true
+	app._presentation.has_motion_override = true
+	check(app._presentation.save_preferences(), "Layout release uses isolated presentation preferences")
 	root.size = Vector2i(679, 900)
 	root.add_child(app)
 	await settle()
@@ -50,7 +58,7 @@ func _run() -> void:
 				check(viewport.encloses(control.get_global_rect()), "Storage failure keeps header control on screen at %s: %s" % [dimensions, control.name])
 		for phase in ["won"]:
 			# Use a persisted chest reservation; chance outcomes have separate coverage.
-			preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+			Fixture.earn_pair_chest(app)
 			app.model.phase = phase
 			app.model.chest_state = "opened"
 			app._refresh()
@@ -61,9 +69,20 @@ func _run() -> void:
 		app._refresh()
 		app._show_collection()
 		await settle()
-		app.theme_buttons[0].grab_focus()
-		app._move_focus(Vector2.RIGHT)
-		check(root.gui_get_focus_owner() == app.theme_buttons[1], "Controller Right traverses the single-row world strip")
+		if app._world_choices.is_visible_in_tree():
+			app.theme_buttons[0].grab_focus()
+			app._move_focus(Vector2.RIGHT)
+			check(root.gui_get_focus_owner() == app.theme_buttons[1],
+				"Controller Right traverses the visible world strip at " + str(dimensions))
+		else:
+			check(app._compact_world.is_visible_in_tree() and app._valid_focus(app._compact_world),
+				"Short layouts expose the compact world control instead of the hidden strip")
+			var next_theme: String = app.Model.THEMES[posmod(app.Model.THEMES.find(app.model.theme_id) + 1, app.Model.THEMES.size())]
+			var cards_before: Array = app.model.cards.duplicate(true)
+			app._compact_world.grab_focus()
+			app._controller_accept()
+			check(app.model.theme_id == next_theme and app.model.cards == cards_before,
+				"Controller activation cycles the compact world control without replacing the round")
 		var scale: float = app.Style.ui_scale(app)
 		var back_height: float = app._collection_back.size.y * scale
 		check(back_height >= 44 and back_height <= 46, "More keeps its compact Back target at " + str(dimensions))

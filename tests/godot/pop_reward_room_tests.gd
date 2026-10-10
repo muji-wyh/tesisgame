@@ -17,6 +17,8 @@ class Storage extends RefCounted:
 	var jelly_writes: int = 0
 	var coin_text: Variant = null
 	var coin_writes: int = 0
+	var coin_writable: bool = true
+	var coin_write_limit: int = -1
 
 	func popRewardState() -> Variant:
 		return text if readable else false
@@ -42,7 +44,7 @@ class Storage extends RefCounted:
 		return coin_text
 
 	func saveCoinWalletState(value: String, expected: Variant) -> bool:
-		if coin_text != expected:
+		if not coin_writable or (coin_write_limit >= 0 and coin_writes >= coin_write_limit) or coin_text != expected:
 			return false
 		coin_text = value
 		coin_writes += 1
@@ -83,6 +85,9 @@ func _run() -> void:
 	await _jelly_save_retry_checks()
 	await _jelly_accumulation_checks()
 	await _jelly_tier_room_checks()
+	await _result_context_checks()
+	await _collect_all_checks()
+	await _collect_failure_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -186,6 +191,142 @@ func _make_jelly_room(storage: Storage):
 	room.connect_storage(storage)
 	room.set_process(false)
 	return room
+
+
+func _result_context_checks() -> void:
+	var room = _make_jelly_room(Storage.new())
+	check(room.configure("result-room", 1, "ocean", _manifest, false, 3), "Prepare a live tier-three result chest")
+	room.set_result_context({"score": 420, "chest_tier": 3, "chest_count": 1})
+	check(room._heading.text == "Round results" and room._result_score.text == "420"
+		and room._progress.text == "Chest Lv. 3" and room._back.text == "Play again",
+		"Result context presents the score, earned tier and replay action")
+	var actions: Array[String] = []
+	room.replay_requested.connect(func() -> void: actions.append("replay"))
+	room.exit_requested.connect(func() -> void: actions.append("exit"))
+	room._back.pressed.emit()
+	check(actions == ["replay"] and not room._paused and room.has_pending(),
+		"The result action requests replay without hiding, consuming or exiting the room itself")
+	for dimensions in [Vector2i(320, 496), Vector2i(390, 772), Vector2i(568, 248), Vector2i(667, 248), Vector2i(1000, 700)]:
+		root.size = dimensions
+		room.size = Vector2(dimensions) / Style.ui_scale(room)
+		room._layout()
+		for frame in range(4):
+			await process_frame
+		var card: Dictionary = room._cards[0]
+		check(room.get_global_rect().grow(1.0).encloses(room._back.get_global_rect())
+			and not room._scroll.get_global_rect().intersects(room._back.get_global_rect()),
+			"Result Play again remains reachable below the chest stage at %s" % dimensions)
+		check(card.panel.get_global_rect().grow(1.0).encloses(card.art.get_global_rect())
+			and card.panel.get_global_rect().grow(1.0).encloses(card.hint.get_global_rect()),
+			"Result chest artwork and hold instruction remain inside their stage at %s" % dimensions)
+		check(not room._heading.get_global_rect().intersects(room._result_score.get_global_rect())
+			and not room._result_score.get_global_rect().intersects(room._progress.get_global_rect()),
+			"Result score and explanatory labels remain separate at %s" % dimensions)
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
+	check(room.get_meta("coin_wallet").balance == 150 and room._cards[0].opened
+		and room.get_meta("coin_releases")[0].animate,
+		"The result chest retains the real hold-to-open performance and animated coin release")
+	room.set_result_context({})
+	check(room._heading.text == "Chest Lv. 3" and room._back.text == "Back" and not room._result_score.visible,
+		"Clearing result context restores the existing treasure-room presentation")
+	room._back.pressed.emit()
+	check(actions == ["replay", "exit"] and room._paused, "Legacy Back still pauses and exits")
+	room.queue_free()
+	await process_frame
+
+
+func _collect_all_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("bulk-legacy", 5, "jungle", _manifest, false), "Prepare legacy treasure beyond the visible page")
+	check(room.rewards.mark_opened("bulk-legacy", 1), "A previously consumed legacy chest needs no retroactive payout")
+	check(room.configure("bulk-current", 1, "ocean", _manifest, false, 3)
+		and room.rewards.entries.size() == 5 and room._cards.size() == 3,
+		"Current results retain all unopened off-page legacy chests and the final upgraded chest")
+	room.set_result_context({"score": 80, "chest_tier": 3, "chest_count": 1})
+	var cues: Array[String] = []
+	room.chest_audio_requested.connect(func(action: String, _theme: String, _amount: float) -> void: cues.append(action))
+	_hold(room, 0, Feel.HOLD_SECONDS * 0.3)
+	cues.clear()
+	check(room.collect_all_coins() and not room.has_pending() and room.get_meta("coin_wallet").balance == 350,
+		"Replay collects four retained ordinary chests plus the tier-three chest, including off-page entries")
+	check(room.rewards.entries.all(func(entry: Dictionary) -> bool: return entry.opened)
+		and storage.coin_writes == 5 and room.get_meta("coin_releases").all(func(event: Dictionary) -> bool: return not event.animate),
+		"Bulk collection consumes each saved receipt once and reconciles without coin flights")
+	check(cues.all(func(action: String) -> bool: return action == "stop")
+		and room._active == -1 and not room._opening and not room._holding,
+		"Replay cancels the partial hold without positive chest cues or late opening callbacks")
+	var writes: int = storage.jelly_writes
+	check(room.collect_all_coins() and storage.coin_writes == 5 and storage.jelly_writes == writes,
+		"Repeated replay collection cannot add payouts or consumption writes")
+	room.queue_free()
+	await process_frame
+	for committed in [false, true]:
+		storage = Storage.new()
+		room = _make_jelly_room(storage)
+		check(room.configure("partial-%s" % committed, 1, "jungle", _manifest, false, 1), "Prepare a partially opening result chest")
+		_hold(room, 0, Feel.HOLD_SECONDS)
+		if committed:
+			room._cards[0].art._advance_animation(Feel.UNLOCK_TIME + 0.01)
+		check(room.collect_all_coins() and room.get_meta("coin_wallet").balance == 50
+			and storage.coin_writes == 1 and room.rewards.entries[0].opened,
+			"Replay collects exactly once before or after a chest's physical release")
+		check(room.get_meta("coin_releases").all(func(event: Dictionary) -> bool: return not event.animate),
+			"A partially opening chest finishes without a delayed animated deposit")
+		room.queue_free()
+		await process_frame
+
+
+func _collect_failure_checks() -> void:
+	for fail_consumption in [false, true]:
+		var storage := Storage.new()
+		var room = _make_jelly_room(storage)
+		check(room.configure("bulk-retry-%s" % fail_consumption, 1, "autumn", _manifest, false, 2),
+			"Prepare a replay collection retry fixture")
+		room.set_result_context({"score": 60, "chest_tier": 2, "chest_count": 1})
+		storage.coin_writable = fail_consumption
+		storage.writable = not fail_consumption
+		check(not room.collect_all_coins() and room._save_failed and room._collect_pending
+			and room._retry.visible and not room.rewards.entries[0].opened,
+			"A failed wallet or consumption write leaves replay collection visible and retryable")
+		check(room.get_meta("coin_wallet").balance == (100 if fail_consumption else 0),
+			"A partial replay save preserves exactly the durable side of the transaction")
+		storage.coin_writable = true
+		storage.writable = true
+		room.retry_save()
+		check(not room._save_failed and not room._collect_pending and not room.has_pending()
+			and room.get_meta("coin_wallet").balance == 100 and storage.coin_writes == 1,
+			"Retry save finishes the original bulk collection without duplicate coins")
+		check(room.get_meta("coin_releases").all(func(event: Dictionary) -> bool: return not event.animate),
+			"Successful bulk retry reconciles silently instead of opening a chest animation")
+		room.queue_free()
+		await process_frame
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("bulk-partial", 5, "jungle", _manifest, false), "Prepare failure after some off-page rewards can be collected")
+	storage.coin_write_limit = 2
+	check(not room.collect_all_coins() and room.get_meta("coin_wallet").balance == 100
+		and room.rewards.entries.filter(func(entry: Dictionary) -> bool: return entry.opened).size() == 2,
+		"A later failed payout retains earlier durable collections and the unopened remainder")
+	storage.coin_write_limit = -1
+	room.retry_save()
+	check(not room.has_pending() and room.get_meta("coin_wallet").balance == 250 and storage.coin_writes == 5,
+		"Retry continues from saved entry identities across pages without paying earlier entries again")
+	room.queue_free()
+	await process_frame
+	storage = Storage.new()
+	room = _make_jelly_room(storage)
+	storage.writable = false
+	check(not room.configure("bulk-unsaved-batch", 1, "ocean", _manifest, false, 3), "An unsaved result batch remains a draft")
+	check(not room.collect_all_coins() and room.get_meta("coin_wallet").balance == 0,
+		"Replay cannot discard a result whose original treasure batch is still unsaved")
+	storage.writable = true
+	room.retry_save()
+	check(not room.has_pending() and room.get_meta("coin_wallet").balance == 150 and storage.coin_writes == 1,
+		"Retry persists the draft batch before silently crediting and consuming its final chest")
+	room.queue_free()
+	await process_frame
 
 
 func _jelly_tier_checks() -> void:
