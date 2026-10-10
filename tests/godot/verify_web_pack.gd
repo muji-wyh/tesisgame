@@ -400,7 +400,11 @@ func _verify_growth() -> int:
 		return 1
 	var ages: Array = []
 	for stage: Dictionary in stages.stages:
-		ages.append(stage.get("age", -1))
+		var stage_age: Variant = stage.get("age", -1)
+		if not (stage_age is int or stage_age is float) or float(stage_age) != floorf(float(stage_age)):
+			printerr("Pip age must be a whole number.")
+			failures += 1
+		ages.append(int(stage_age))
 		for source in stage.art.values():
 			if not ResourceLoader.exists("res://" + str(source)):
 				printerr("Missing Pip growth art: " + str(source))
