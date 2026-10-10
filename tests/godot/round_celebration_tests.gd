@@ -41,6 +41,7 @@ func _run() -> void:
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
 	_check_reward_counts(view, data.chests)
+	_check_confetti(view, data.chests)
 	_check_no_chest(view, data.chests)
 	_check_score_summary(view, data.chests)
 	_check_lifecycle(view, data.chests)
@@ -219,6 +220,23 @@ func _check_score_summary(view, manifest: Dictionary) -> void:
 	view.stop()
 
 
+func _check_confetti(view, manifest: Dictionary) -> void:
+	_begin(view, manifest, "paper")
+	_step(view, 1.79)
+	check(not view.snapshot().confetti, "Paper waits for the chest reveal")
+	_step(view, 0.02)
+	check(view.snapshot().confetti and view._confetti.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"The earned chest reveals full-screen paper without capturing any input")
+	view.set_reduced_motion(true)
+	check(not view.snapshot().confetti, "Turning on reduced motion removes paper immediately")
+	view.set_reduced_motion(false)
+	check(view.snapshot().confetti, "Restoring motion samples the same reward clock")
+	_step(view, 1.2)
+	check(not view.snapshot().confetti, "Paper clears before the invitation can be used")
+	view.stop()
+	check(not view.snapshot().confetti, "Stopping removes the effect immediately")
+
+
 func _check_no_chest(view, manifest: Dictionary) -> void:
 	var opened_before: int = _opened.size()
 	var finished_before: int = _finished.size()
@@ -389,7 +407,9 @@ func _render_review(view, manifest: Dictionary) -> void:
 		_begin(view, manifest, "render-" + theme_id, false, false, 1, theme_id)
 		_step(view, 0.52)
 		await _capture(output + "/" + theme_id + "-leap.png")
-		_step(view, 2.49)
+		_step(view, 1.56)
+		await _capture(output + "/" + theme_id + "-confetti.png")
+		_step(view, 0.93)
 		await _capture(output + "/" + theme_id + "-ready.png")
 		view.stop()
 	for dimensions: Vector2i in [Vector2i(390, 844), Vector2i(844, 390)]:
@@ -397,6 +417,8 @@ func _render_review(view, manifest: Dictionary) -> void:
 		view.position = Vector2(16, 50)
 		view.size = Vector2(dimensions) - Vector2(32, 74)
 		_begin(view, manifest, "render-" + str(dimensions), false)
-		_step(view, 3.01)
+		_step(view, 2.08)
+		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + "-confetti.png")
+		_step(view, 0.93)
 		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + ".png")
 		view.stop()

@@ -67,7 +67,8 @@ func _check_timeline(view) -> void:
 	check(view.snapshot().revealed and heard.size() == 2 and heard[1].cue == "reward"
 		and is_equal_approx(float(heard[1].state.elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
 		"The finished chest reveal and reward sound share one exact boundary")
-	check(not view.snapshot().confetti, "Initial synthesis does not pretend to be a chest upgrade")
+	check(view.snapshot().confetti and view.snapshot().kind == "synthesis",
+		"The first unlocked chest receives the same full-screen paper celebration as upgrades")
 	view.advance(1.43)
 	check(not view.is_active() and not view.visible and heard.size() == 2,
 		"A completed synthesis releases the scene without looping its animation")
@@ -85,6 +86,10 @@ func _check_timeline(view) -> void:
 		"A stalled frame still publishes assembly and reveal at their separate authored boundaries")
 	check(view.snapshot().confetti and view._heading.text == "Chest upgraded!"
 		and view._caption.text == "Chest Lv. 2", "Upgrade reveals its precise level together with full-screen confetti")
+	view.reduced_motion = true
+	check(not view.snapshot().confetti, "Changing motion preferences removes the burst immediately")
+	view.reduced_motion = false
+	check(view.snapshot().confetti, "Restoring motion samples the existing milestone instead of restarting it")
 
 
 func _check_queue(view) -> void:

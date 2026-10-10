@@ -34,7 +34,11 @@ After the pickup reaches the HUD, the milestone performance lasts 2.15 seconds.
 Its preparation and convergence lead to the chest reveal at 0.72 seconds; the
 sound accent, upgraded art and confetti emission use this same reveal event.
 The chest settles while the paper spreads across the viewport and falls away.
-Synthesis uses the same reveal rhythm without the upgrade's full-screen burst.
+Synthesis and upgrades both play the full-screen burst when the chest appears.
+The shared `reward_confetti.gd` renderer also accompanies every earned-chest
+reveal in the Match, Memory, Phrase Builder, Voice Pop and Jelly Match finales.
+Those finales sample the burst from 1.8 to 3 seconds on their existing clock;
+rounds without a chest omit it. Reduced motion keeps the static reward instead.
 
 ## Chest art
 

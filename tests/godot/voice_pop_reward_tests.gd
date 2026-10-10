@@ -92,7 +92,7 @@ func _test_scene(dimensions: Vector2i) -> void:
 			view.advance_reward_presentation(1.4)
 			check(view.snapshot().reward_presentation.revealed and view._displayed_chest_tier == tier,
 				"The synchronized reveal updates the displayed chest tier")
-			check(bool(view.snapshot().reward_presentation.confetti) == (tier > 1), "Only upgrades play the shared full-screen confetti")
+			check(bool(view.snapshot().reward_presentation.confetti), "Unlocks and upgrades both play the shared full-screen confetti")
 			resume_after_reward(view)
 			check(not view.reward_presentation_active() and view.game.phase == "running", "Completion safely resumes the same round")
 		else:
@@ -138,6 +138,11 @@ func _test_interruption() -> void:
 	view.advance_reward_presentation(5.0)
 	check(view.snapshot().reward_presentation.elapsed == elapsed and not view.snapshot().reward_presentation.visible,
 		"A menu pause freezes the timeline and reveals the listening recovery gate")
+	for reduce: bool in [true, false]:
+		view.set_reduced_motion(reduce)
+		check(not view.snapshot().reward_presentation.visible and not view.snapshot().reward_presentation.confetti
+			and view.snapshot().reward_presentation.elapsed == elapsed,
+			"Motion preferences cannot reveal a paused chest over the listening recovery gate")
 	view.set_listening(true, true, "Listening.")
 	check(not view.snapshot().reward_paused and view.game.phase == "paused" and view.snapshot().reward_presentation.visible,
 		"Resume restarts presentation before gameplay")

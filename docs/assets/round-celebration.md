@@ -32,14 +32,20 @@ callbacks.
 leap and feet-first landing through 0.9 s, alternating steps and one wink through
 1.65 s, then a presenting gesture as the closed chest appears at 1.8 s. Pip
 settles by 2.4 s. The invitation keeps only subtle breathing and occasional
-blinking. Reduced motion uses a static happy pose with no moving halo.
+blinking. Every earned chest also reveals full-screen paper from 1.8 to 3 s,
+using the shared renderer and existing licensed atlas documented in
+[Jelly chest fragments](jelly-fragments.md). The burst ends independently of
+long pronunciation and never captures input. Reduced motion uses a static
+happy pose with no moving halo or confetti.
 
 `GameUI` owns the round identity, interruptions and input gate. Match, Memory
 and Phrase Builder wait for both the performance and the final pronunciation
 before offering `Open chest`. Phrase accepts completion only at that action.
-Voice Pop saves its existing score and reward batch first, celebrates one to
-three earned chests, then restores its original result page. Zero-chest rounds
-go straight to the result. Presentation never saves rewards or opens a chest.
+Voice Pop and Jelly Match save the score and final upgraded chest first, then
+restore their complete result page after celebration. Their zero-chest rounds
+go straight to results. Match and Memory celebrate completion even without a
+chest, omit the chest artwork and confetti, and offer Play again. Presentation
+never saves rewards or opens a chest.
 
 ## Shared recordings, separate playback
 

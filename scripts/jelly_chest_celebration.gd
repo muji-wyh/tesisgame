@@ -5,13 +5,19 @@ signal cue_requested(cue: String)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Progress = preload("res://scripts/jelly_reward_progress.gd")
+const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const ARRIVAL_SECONDS: float = 0.65
 const REVEAL_SECONDS: float = 0.72
 const PERFORMANCE_SECONDS: float = 2.15
-const COLORS: Array[Color] = [Color("#ffcf63"), Color("#ff8396"), Color("#67dbbe"), Color("#83bdff"), Color("#cf9af1")]
 
-var reduced_motion: bool = false
+var reduced_motion: bool = false:
+	set(value):
+		reduced_motion = value
+		if is_instance_valid(_confetti):
+			_sync_confetti()
+			_layout()
+			queue_redraw()
 var _events: Array[Dictionary] = []
 var _elapsed: float = 0.0
 var _serial: int = 0
@@ -19,7 +25,7 @@ var _started: bool = false
 var _revealed: bool = false
 var _heading: Label
 var _caption: Label
-var _confetti: Texture2D
+var _confetti: RewardConfetti
 
 
 func _init() -> void:
@@ -36,6 +42,8 @@ func _init() -> void:
 	_heading.add_theme_font_override("font", Style.HEADING_FONT)
 	_heading.add_theme_color_override("font_color", Color("#fff6dd"))
 	_caption.add_theme_color_override("font_color", Color("#ecfff5"))
+	_confetti = RewardConfetti.new()
+	add_child(_confetti)
 	resized.connect(_layout)
 	hide()
 
@@ -48,8 +56,6 @@ func enqueue(previous_tier: int, tier: int, before: Texture2D, after: Texture2D)
 		_elapsed = 0.0
 		_started = false
 		_revealed = false
-		if _confetti == null:
-			_confetti = load("res://assets/images/jelly-match/confetti.png") as Texture2D
 		_sync()
 
 
@@ -63,6 +69,7 @@ func clear() -> void:
 	_elapsed = 0.0
 	_started = false
 	_revealed = false
+	_confetti.hide()
 	hide()
 	queue_redraw()
 
@@ -98,12 +105,19 @@ func advance(delta: float) -> float:
 
 func _sync() -> void:
 	visible = is_active() and _elapsed >= ARRIVAL_SECONDS
+	_sync_confetti()
 	if is_active():
 		var event: Dictionary = _events[0]
 		_heading.text = "Chest upgraded!" if int(event.previous_tier) > 0 else "Chest unlocked!"
 		_caption.text = Progress.title_for_tier(int(event.tier))
 	_layout()
 	queue_redraw()
+
+
+func _sync_confetti() -> void:
+	var age: float = _elapsed - ARRIVAL_SECONDS
+	_confetti.sample(age - REVEAL_SECONDS if is_active() and _revealed and not reduced_motion else -1.0,
+		PERFORMANCE_SECONDS - REVEAL_SECONDS, 1.0 - smoothstep(1.91, PERFORMANCE_SECONDS, age))
 
 
 func _layout() -> void:
@@ -168,8 +182,6 @@ func _draw() -> void:
 			draw_set_transform(point, turn, Vector2.ONE * scale_amount)
 			draw_texture_rect(texture, _texture_rect(texture, Vector2.ZERO, edge), false, Color(1, 1, 1, fade))
 			draw_set_transform(Vector2.ZERO)
-	if upgrade and age >= REVEAL_SECONDS:
-		_draw_confetti(age - REVEAL_SECONDS, fade)
 
 
 func _draw_pieces(texture: Texture2D, center: Vector2, edge: float, progress: float, opacity: float) -> void:
@@ -186,42 +198,15 @@ func _draw_pieces(texture: Texture2D, center: Vector2, edge: float, progress: fl
 		draw_texture_rect_region(texture, rect, source, Color(1, 1, 1, opacity))
 
 
-func _draw_confetti(age: float, opacity: float) -> void:
-	if _confetti == null:
-		return
-	# Two side fountains spread over the actual viewport, including the header.
-	var screen: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
-	var origin: Vector2 = screen.position
-	var unit: float = 1.0 / Style.ui_scale(self)
-	var extent: Vector2 = screen.size
-	for index in range(108):
-		var horizontal_seed: float = fposmod(float(index) * 0.754878 + 0.31, 1.0)
-		var vertical_seed: float = fposmod(float(index) * 0.569841 + 0.27, 1.0)
-		var delay: float = float(index % 11) * 0.026
-		var t: float = age - delay
-		if t <= 0.0:
-			continue
-		var side: float = -1.0 if index % 2 == 0 else 1.0
-		var seed_value: float = fposmod(float(index) * 0.618034, 1.0)
-		var launch_x: float = 0.02 + horizontal_seed * 0.12
-		var start := origin + Vector2(extent.x * (launch_x if side < 0.0 else 1.0 - launch_x), extent.y * (0.64 + seed_value * 0.29))
-		var velocity := Vector2(-side * extent.x * (0.16 + horizontal_seed * 0.48), -extent.y * (1.05 + vertical_seed * 0.65))
-		var point: Vector2 = start + velocity * t + Vector2(0.0, extent.y * 0.65 * t * t)
-		point.x += sin(t * 6.0 + index) * 12.0 * unit
-		var paper_edge: float = lerpf(18.0, 28.0, seed_value) * unit
-		var flutter: float = cos(t * (7.0 + seed_value * 6.0) + index)
-		var dimensions := Vector2(paper_edge * maxf(0.16, absf(flutter)), paper_edge * 0.65)
-		var color: Color = COLORS[index % COLORS.size()]
-		color = color.darkened(0.20 if flutter < 0.0 else 0.0)
-		color.a = opacity * (1.0 - smoothstep(1.17, 1.43, age))
-		draw_set_transform(point, index + t * (2.0 + seed_value * 3.0))
-		draw_texture_rect_region(_confetti, Rect2(-dimensions * 0.5, dimensions), Rect2(Vector2.ZERO, _confetti.get_size() * 0.5), color)
-	draw_set_transform(Vector2.ZERO)
-
-
 func snapshot() -> Dictionary:
 	return {"active": is_active(), "visible": visible, "elapsed": _elapsed,
 		"tier": int(_events[0].tier) if is_active() else 0,
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
-		"confetti": is_active() and int(_events[0].previous_tier) > 0 and _revealed and not reduced_motion}
+		"confetti": _confetti.is_visible_in_tree(),
+		"confetti_rect": _screen_bounds()}
+
+
+func _screen_bounds() -> Array:
+	var screen: Rect2 = _confetti.get_global_transform_with_canvas() * _confetti.screen_rect()
+	return [screen.position.x, screen.position.y, screen.size.x, screen.size.y]

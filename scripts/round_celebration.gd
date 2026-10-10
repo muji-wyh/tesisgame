@@ -10,6 +10,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const DURATION: float = Mascot.CELEBRATION_SECONDS
 const CUE_TIMES := [0.25, 0.9, 1.8]
@@ -22,6 +23,7 @@ var _heading: Label
 var _caption: Label
 var _count: Label
 var _glow: TextureRect
+var _confetti: RewardConfetti
 var _round_id: String = ""
 var _active: bool = false
 var _ready_to_open: bool = false
@@ -79,6 +81,8 @@ func _init() -> void:
 	action_button.text = "Open chest"
 	action_button.pressed.connect(_request_open)
 	add_child(action_button)
+	_confetti = RewardConfetti.new()
+	add_child(_confetti)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	set_process(false)
@@ -154,6 +158,7 @@ func pause() -> void:
 	if not _active or _paused:
 		return
 	_paused = true
+	_confetti.hide()
 	pip.set_idle_paused(true)
 	chest.set_idle_paused(true)
 	_sync_processing()
@@ -178,6 +183,7 @@ func resume() -> void:
 
 
 func stop() -> void:
+	_confetti.hide()
 	_active = false
 	_paused = false
 	_ready_to_open = false
@@ -297,6 +303,7 @@ func _refresh_action() -> void:
 func _sample() -> void:
 	if not _active:
 		return
+	_confetti.sample(_elapsed - 1.8 if _chest_count > 0 and not _reduced_motion and not _paused else -1.0, DURATION - 1.8)
 	pip.set_celebration_progress(_elapsed / DURATION, _rest_elapsed)
 	pip.set_process(false)
 	# ChestView renders its authored closed pose once; its mechanical clock stays off.
@@ -382,6 +389,8 @@ func snapshot() -> Dictionary:
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
 		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(),
+		"confetti": _confetti.is_visible_in_tree(),
+		"confetti_rect": _rect(_confetti.get_global_transform_with_canvas() * _confetti.screen_rect()),
 		"cue_log": _cue_log.duplicate(),
 		"title": _heading.text, "caption": _caption.text, "score": _score,
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,

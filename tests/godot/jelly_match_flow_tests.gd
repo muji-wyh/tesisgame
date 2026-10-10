@@ -200,8 +200,12 @@ func _run() -> void:
 	var receipt: String = app._round_id
 	game.finish_round()
 	check(app._round_id == receipt and app._jelly_rewards.snapshot().chest_count == 1, "Finishing twice preserves one reward batch")
+	app._round_celebration.set_process(false)
+	app._round_celebration.advance(1.9)
+	check(app._round_celebration.snapshot().confetti, "Jelly's final earned chest also receives the shared confetti burst")
 	Fixture.finish_celebration(app)
-	check(app._jelly.visible and not app._round_celebration.is_active(), "The full result appears after celebration")
+	check(app._jelly.visible and not app._round_celebration.is_active() and not app._round_celebration.snapshot().confetti,
+		"The full result appears after celebration without lingering paper")
 	check(app._jelly_backdrop.visible, "Jelly's settlement returns to its woodland setting")
 	check(app._jelly.snapshot().score == earned_score and app._jelly.snapshot().result.title == "Round results"
 		and app._jelly.snapshot().result.caption == summary.caption,

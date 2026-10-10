@@ -41,6 +41,15 @@ func pieces(app) -> int:
 	return total
 
 
+func check_fullscreen_confetti(view, context: String) -> void:
+	var state: Dictionary = view.snapshot()
+	check(bool(state.get("confetti", false)), context + " shows confetti at the earned chest reveal")
+	var bounds: Array = state.get("confetti_rect", [])
+	var screen: Rect2 = root.get_visible_rect()
+	check(bounds.size() == 4 and Rect2(float(bounds[0]), float(bounds[1]), float(bounds[2]), float(bounds[3])).is_equal_approx(screen),
+		context + " spreads confetti across the entire viewport, including the header")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
@@ -139,6 +148,7 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " presents one earned chest through the shared manual invitation")
 	check(not app.chest_button.is_visible_in_tree() and not view.snapshot().ready,
 		mode + " keeps the unopened-chest page and invitation action unavailable during performance")
+	check(not view.snapshot().confetti, mode + " waits for its chest reveal before throwing confetti")
 	for attempt in range(3):
 		view.action_button.pressed.emit()
 		app.chest_button.button_down.emit()
@@ -148,11 +158,16 @@ func check_manual_mode(app, mode: String) -> void:
 		app._phrase.finished.emit()
 	check(pieces(app) == before and not app._holding_chest and app.model.chest_state == "closed",
 		mode + " rejects repeated early actions without starting or awarding the chest")
-	view.advance(2.99)
+	view.advance(1.9)
+	check_fullscreen_confetti(view, mode)
+	check(pieces(app) == before and not view.snapshot().ready,
+		mode + " keeps the reward and invitation gates unchanged during confetti")
+	view.advance(maxf(0.0, 2.99 - float(view.snapshot().elapsed)))
 	check(not view.snapshot().ready and view.snapshot().active and pieces(app) == before,
 		mode + " preserves the full three-second performance gate")
 	view.advance(0.02)
-	check(view.snapshot().ready and not view.action_button.disabled and view.action_button.is_visible_in_tree(),
+	check(view.snapshot().ready and not view.action_button.disabled and view.action_button.is_visible_in_tree()
+		and not view.snapshot().confetti,
 		mode + " exposes Open chest after the performance")
 	root.gui_release_focus()
 	app._refresh_controller_focus()
@@ -166,7 +181,7 @@ func check_manual_mode(app, mode: String) -> void:
 	check(view.snapshot().ready and view.snapshot().round_id == identity and app.model.chest_earned
 		and pieces(app) == before, mode + " keeps its earned reward through a menu visit without rerolling")
 	view.advance(5.0)
-	check(view.snapshot().ready and not app.chest_button.is_visible_in_tree(),
+	check(view.snapshot().ready and not app.chest_button.is_visible_in_tree() and not view.snapshot().confetti,
 		mode + " waits indefinitely for the learner's explicit invitation click")
 	view.action_button.pressed.emit()
 	check(not view.snapshot().active and app.model.phase == "won" and app.chest_button.is_visible_in_tree()
@@ -211,7 +226,9 @@ func check_no_chest_mode(app, mode: String) -> void:
 		check(not app.model.chest_earned and view.snapshot().round_id == identity and pieces(app) == before,
 			mode + " preserves its no-chest result through " + kind)
 	view.set_narration_playing(true)
-	view.advance(3.1)
+	view.advance(1.9)
+	check(not view.snapshot().confetti, mode + " never throws chest confetti for a zero-chest round")
+	view.advance(1.2)
 	view.action_button.pressed.emit()
 	check(not view.is_ready() and app._round_id == identity and pieces(app) == before,
 		mode + " waits for final pronunciation before offering another round")
@@ -241,10 +258,13 @@ func check_voice_gate(app) -> void:
 	var view = app._round_celebration
 	app.set_process(false)
 	view.set_narration_playing(true)
-	view.advance(3.1)
+	view.advance(1.9)
+	check_fullscreen_confetti(view, "Long final pronunciation")
+	view.advance(1.2)
 	check(view.snapshot().active and not view.snapshot().ready and app._phrase.completion_pending
 		and app._phrase.game.phase == "correct" and app.model.phase != "won",
 		"A long final phrase remains pending after the animation deadline")
+	check(not view.snapshot().confetti, "A long final pronunciation does not freeze or loop the confetti")
 	view.action_button.pressed.emit()
 	check(app._phrase.game.phase == "correct", "A long final phrase cannot be skipped by an early invitation callback")
 	view.set_narration_playing(false)
@@ -275,23 +295,29 @@ func check_interruption_and_replacement(app) -> void:
 		await start_manual(app, "phrase")
 		var view = app._round_celebration
 		var identity: String = view.snapshot().round_id
-		view.advance(1.0)
+		view.advance(1.9)
+		check_fullscreen_confetti(view, kind + " interruption")
 		await cover(app, kind, true)
 		view.advance(4.0)
 		view.action_button.pressed.emit()
-		check(view.snapshot().paused and not view.snapshot().ready and app._phrase.completion_pending,
+		check(view.snapshot().paused and not view.snapshot().ready and app._phrase.completion_pending
+			and not view.snapshot().confetti,
 			kind + " suspends a pending performance and rejects stale input")
 		await cover(app, kind, false)
 		view.set_process(false)
-		check(not view.snapshot().paused and view.snapshot().elapsed < 0.3 and view.snapshot().round_id == identity,
+		check(not view.snapshot().paused and view.snapshot().elapsed < 0.3 and view.snapshot().round_id == identity
+			and not view.snapshot().confetti,
 			kind + " resumes the same earned round with a fresh complete performance")
-		view.advance(3.1)
+		view.advance(1.9)
+		check_fullscreen_confetti(view, kind + " resume")
+		view.advance(1.2)
 		check(view.snapshot().ready, kind + " eventually returns to the explicit invitation")
 		await cover(app, kind, true)
 		view.action_button.pressed.emit()
 		await cover(app, kind, false)
 		view.set_process(false)
-		check(view.snapshot().ready and view.snapshot().round_id == identity and app._phrase.game.phase == "correct",
+		check(view.snapshot().ready and view.snapshot().round_id == identity and app._phrase.game.phase == "correct"
+			and not view.snapshot().confetti,
 			kind + " restores a ready invitation without replaying or entering the chest")
 	var old_id: String = app._round_celebration.snapshot().round_id
 	var before: int = pieces(app)
@@ -299,7 +325,7 @@ func check_interruption_and_replacement(app) -> void:
 	app._round_celebration.open_requested.emit(old_id)
 	app._round_celebration.performance_finished.emit(old_id)
 	app._round_celebration.cue_requested.emit(old_id, "reward")
-	check(not app._round_celebration.snapshot().active and app._phrase.game.completed == 0
+	check(not app._round_celebration.snapshot().active and not app._round_celebration.snapshot().confetti and app._phrase.game.completed == 0
 		and app.model.phase != "won" and pieces(app) == before,
 		"Late callbacks for the previous ID cannot alter, reward, or restart the new round")
 
@@ -330,7 +356,11 @@ func check_pop_result(app, fragments: int) -> void:
 		if not app._pop.game.targets.is_empty():
 			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
 		if app._pop.reward_presentation_active():
-			app._pop.advance_reward_presentation(3.0)
+			app._pop.advance_reward_presentation(1.5)
+			check_fullscreen_confetti(app._pop._reward_presentation, "Pop chest milestone")
+			check(not app._pop.clip_contents and not app._pop_speech_active,
+				"Pop milestone confetti reaches beyond the game panel with its microphone stopped")
+			app._pop.advance_reward_presentation(1.5)
 			app._pop.set_listening(true, true, "Listening.")
 	check(app._pop.game.fragment_count == fragments and app._pop.game.chest_count == chest_count
 		and app._pop.game.chest_tier == chest_tier,
@@ -345,7 +375,8 @@ func check_pop_result(app, fragments: int) -> void:
 		and int(saved_result.chest_tier) == chest_tier and int(saved_result.fragment_count) == fragments,
 		"Pop retains its actual fragments and one final chest tier before celebration")
 	if chest_count == 0:
-		check(not app._round_celebration.snapshot().active and app._pop.is_visible_in_tree(),
+		check(not app._round_celebration.snapshot().active and not app._round_celebration.snapshot().confetti
+			and app._pop.is_visible_in_tree(),
 			"A zero-chest Pop result skips celebration and immediately presents the complete result")
 		return
 	var view = app._round_celebration
@@ -377,8 +408,10 @@ func check_pop_result(app, fragments: int) -> void:
 	app._pop_finished(summary)
 	check(not app._pop_rewards_shown and view.snapshot().round_id == identity and view.snapshot().elapsed < 0.3,
 		"Covered Pop actions and duplicate completion cannot open rewards or replace the performance")
-	view.advance(3.1)
-	check(not view.snapshot().active and app._pop.is_visible_in_tree() and not app._pop_rewards_shown,
+	view.advance(1.9)
+	check_fullscreen_confetti(view, "Pop final tier-%d chest" % chest_tier)
+	view.advance(1.2)
+	check(not view.snapshot().active and not view.snapshot().confetti and app._pop.is_visible_in_tree() and not app._pop_rewards_shown,
 		"Pop automatically returns to its full result after the shared performance")
 	check(app._pop.game.summary() == summary and app._round_result == saved_result
 		and app._pop._review_buttons.size() == summary.hit_words.size() + summary.missed_words.size(),

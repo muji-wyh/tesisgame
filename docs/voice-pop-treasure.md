@@ -15,7 +15,7 @@ Scores, combos, time bonuses, and word mastery retain their existing rules.
 The gameplay HUD shows the current chest level and fragments toward the next
 milestone. A marked card's reward flies toward the HUD. Synthesis and upgrades
 reuse Jelly Match's chest performance, production glow and Toon FX confetti;
-upgrades celebrate across the full screen. The microphone and round timer pause
+both milestones celebrate across the full screen. The microphone and round timer pause
 during the performance and resume afterward. Menus, backgrounding, reduced
 motion, and leaving the mode follow the same cancellation boundaries as gameplay.
 The result shows the actual score, fragment count and final chest level, with an
