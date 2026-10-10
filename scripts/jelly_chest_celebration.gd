@@ -3,8 +3,6 @@ extends Control
 
 signal cue_requested(cue: String)
 
-const Style = preload("res://scripts/ui_style.gd")
-const Progress = preload("res://scripts/jelly_reward_progress.gd")
 const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const ARRIVAL_SECONDS: float = 0.65
@@ -16,15 +14,13 @@ var reduced_motion: bool = false:
 		reduced_motion = value
 		if is_instance_valid(_confetti):
 			_sync_confetti()
-			_layout()
 			queue_redraw()
 var _events: Array[Dictionary] = []
 var _elapsed: float = 0.0
 var _serial: int = 0
 var _started: bool = false
 var _revealed: bool = false
-var _heading: Label
-var _caption: Label
+var _anchor := Rect2()
 var _confetti: RewardConfetti
 
 
@@ -32,20 +28,17 @@ func _init() -> void:
 	name = "JellyChestCelebration"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 80
-	_heading = Style.label("", 30)
-	_caption = Style.label("", 18)
-	for label: Label in [_heading, _caption]:
-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		add_child(label)
-	_heading.add_theme_font_override("font", Style.HEADING_FONT)
-	_heading.add_theme_color_override("font_color", Color("#fff6dd"))
-	_caption.add_theme_color_override("font_color", Color("#ecfff5"))
 	_confetti = RewardConfetti.new()
+	# Only the paper escapes arena clipping; live cards and other effects stay in it.
+	_confetti.top_level = true
 	add_child(_confetti)
-	resized.connect(_layout)
 	hide()
+
+
+func set_chest_anchor(rect: Rect2) -> void:
+	# The owner supplies its existing HUD chest bounds, never a gameplay modal.
+	_anchor = rect
+	queue_redraw()
 
 
 func enqueue(previous_tier: int, tier: int, before: Texture2D, after: Texture2D) -> void:
@@ -109,11 +102,6 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 func _sync() -> void:
 	visible = is_active() and _started
 	_sync_confetti()
-	if is_active():
-		var event: Dictionary = _events[0]
-		_heading.text = "Chest upgraded!" if int(event.previous_tier) > 0 else "Chest unlocked!"
-		_caption.text = Progress.title_for_tier(int(event.tier))
-	_layout()
 	queue_redraw()
 
 
@@ -121,24 +109,6 @@ func _sync_confetti() -> void:
 	var age: float = _elapsed - ARRIVAL_SECONDS
 	_confetti.sample(age - REVEAL_SECONDS if is_active() and _revealed and not reduced_motion else -1.0,
 		PERFORMANCE_SECONDS - REVEAL_SECONDS, 1.0 - smoothstep(1.91, PERFORMANCE_SECONDS, age))
-
-
-func _layout() -> void:
-	var unit: float = 1.0 / Style.ui_scale(self)
-	var compact: bool = size.y < 280.0 * unit
-	var center := Vector2(size.x * 0.5, size.y * 0.5)
-	var edge: float = minf(250.0 * unit, minf(size.x * 0.62, size.y * 0.56))
-	_heading.position = Vector2(0, maxf(4.0 * unit, center.y - edge * 0.63 - 42.0 * unit))
-	_heading.size = Vector2(size.x, 38.0 * unit)
-	_heading.add_theme_font_size_override("font_size", ceili((23.0 if compact else 30.0) * unit))
-	_caption.position = Vector2(0, minf(size.y - 34.0 * unit, center.y + edge * 0.58))
-	_caption.size = Vector2(size.x, 30.0 * unit)
-	_caption.add_theme_font_size_override("font_size", ceili(18.0 * unit))
-	if is_active():
-		var age: float = maxf(0.0, _elapsed - ARRIVAL_SECONDS)
-		var opacity: float = 1.0 if reduced_motion else smoothstep(REVEAL_SECONDS - 0.1, REVEAL_SECONDS + 0.12, age)
-		_heading.modulate.a = opacity
-		_caption.modulate.a = opacity
 
 
 func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
@@ -150,15 +120,14 @@ func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
 
 
 func _draw() -> void:
-	if not is_active() or not _started:
+	if not is_active() or not _started or not _anchor.has_area():
 		return
 	var event: Dictionary = _events[0]
 	var age: float = _elapsed - ARRIVAL_SECONDS
-	var unit: float = 1.0 / Style.ui_scale(self)
-	var edge: float = minf(250.0 * unit, minf(size.x * 0.62, size.y * 0.56))
-	var center: Vector2 = size * 0.5
+	var edge: float = minf(_anchor.size.x, _anchor.size.y)
+	var center: Vector2 = _anchor.get_center()
 	var fade: float = 1.0 if reduced_motion else smoothstep(0.0, 0.16, age) * (1.0 - smoothstep(1.91, PERFORMANCE_SECONDS, age))
-	draw_style_box(Style.box(Color("#143b36", 0.93 * fade), Color.TRANSPARENT, 22), Rect2(Vector2.ZERO, size))
+	var chest_opacity: float = 1.0 if reduced_motion else smoothstep(0.0, 0.16, age)
 	var after: Texture2D = event.after
 	var before: Texture2D = event.before
 	var upgrade: bool = int(event.previous_tier) > 0
@@ -172,7 +141,7 @@ func _draw() -> void:
 	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * glow_edge * 0.5, Vector2.ONE * glow_edge), false,
 		Color("#ffdc8d", light * 0.86 * fade))
 	if not upgrade and age < REVEAL_SECONDS:
-		_draw_pieces(after, center, edge, age / REVEAL_SECONDS, fade)
+		_draw_pieces(after, center, edge, age / REVEAL_SECONDS, chest_opacity)
 	else:
 		var texture: Texture2D = before if age < REVEAL_SECONDS else after
 		if texture != null:
@@ -183,7 +152,7 @@ func _draw() -> void:
 			var turn: float = sin(clampf(age / 1.2, 0.0, 1.0) * TAU) * 0.1
 			var scale_amount: float = 1.0 + sin(reveal * PI) * 0.1
 			draw_set_transform(point, turn, Vector2.ONE * scale_amount)
-			draw_texture_rect(texture, _texture_rect(texture, Vector2.ZERO, edge), false, Color(1, 1, 1, fade))
+			draw_texture_rect(texture, _texture_rect(texture, Vector2.ZERO, edge), false, Color(1, 1, 1, chest_opacity))
 			draw_set_transform(Vector2.ZERO)
 
 
@@ -207,6 +176,7 @@ func snapshot() -> Dictionary:
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
 		"confetti": _confetti.is_visible_in_tree(),
+		"anchor": [_anchor.position.x, _anchor.position.y, _anchor.size.x, _anchor.size.y],
 		"confetti_rect": _screen_bounds()}
 
 

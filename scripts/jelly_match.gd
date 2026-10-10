@@ -317,7 +317,7 @@ func pause(value: bool = true) -> void:
 	if _paused == value:
 		return
 	_paused = value
-	game.set_paused(value or (_reward_presentation.is_active() and game.fusions.is_empty()))
+	game.set_paused(value)
 	cancel_input()
 	if not value:
 		_result_transition = false
@@ -406,8 +406,7 @@ func _allowed() -> bool:
 	return _configured and not _paused and is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 func _can_play() -> bool:
-	return _allowed() and game.phase == "playing" and not _result_visible \
-		and not (_reward_presentation.is_active() and game.fusions.is_empty())
+	return _allowed() and game.phase == "playing" and not _result_visible
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
@@ -831,17 +830,16 @@ func _process(delta: float) -> void:
 		_rejection.elapsed += delta
 		if float(_rejection.elapsed) >= 0.34:
 			_rejection.clear()
-	var remaining: float = delta
 	# Advance only flights that existed before this frame's simulation. A clear
 	# inside game.step() starts a new flight, not one already aged by the frame.
-	var loot_ready: bool = _loot_flights.is_empty() and not _loot_meter.is_filling()
+	var loot_ready: bool = _reward_pickup_ready()
 	_advance_loot_feedback(delta)
-	if _reward_presentation.is_active() and game.fusions.is_empty():
-		remaining = advance_reward_presentation(delta, loot_ready)
+	if _reward_presentation.is_active():
+		advance_reward_presentation(delta, loot_ready)
 	if generation != _generation or not _allowed():
 		return
-	if game.phase == "playing" and (not _reward_presentation.is_active() or not game.fusions.is_empty()):
-		game.step(remaining)
+	if game.phase == "playing":
+		game.step(delta)
 	if generation != _generation or not _allowed():
 		return
 	for id in _snapbacks.keys():
@@ -866,6 +864,18 @@ func _process(delta: float) -> void:
 				_landing_cooldown = 0.12
 				audio_requested.emit("land")
 				break
+
+func _reward_pickup_ready() -> bool:
+	if _loot_meter.is_filling():
+		return false
+	if _loot_flights.is_empty():
+		return true
+	# Later pickups can fly while an earlier, fully arrived milestone celebrates.
+	var arrived: int = game.fragment_count
+	for flight: Dictionary in _loot_flights:
+		arrived -= int(flight.get("amount", 1))
+	var tier: int = int(_reward_presentation.snapshot().tier)
+	return tier > 0 and arrived >= 4 + (tier - 1) * 5
 
 func _advance_loot_feedback(delta: float) -> void:
 	var remaining: float = delta
@@ -1017,37 +1027,26 @@ func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
 		return
 	if awarded > 0 and not reduced_motion:
 		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0, "amount": awarded})
-	if _reward_presentation.is_active() and game.fusions.is_empty():
-		cancel_input()
-		if generation != _generation or not _configured or game.phase != "playing":
-			return
-		game.set_paused(true)
 	_refresh_hud()
 
 func _chest_milestone(previous_tier: int, tier: int) -> void:
 	if not _configured or game.phase != "playing":
 		return
-	var generation: int = _generation
-	if game.fusions.is_empty():
-		cancel_input()
-		if generation != _generation or not _configured or game.phase != "playing":
-			return
 	_reward_presentation.reduced_motion = reduced_motion
 	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
-	game.set_paused(game.fusions.is_empty())
 	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1))
 	_refresh_hud()
 	_refresh_controls()
 	_publish()
 
 func advance_reward_presentation(delta: float, pickup_ready: bool = true) -> float:
-	if not _allowed() or not game.fusions.is_empty():
+	if not _allowed():
 		return 0.0
 	var generation: int = _generation
 	var remaining: float = _reward_presentation.advance(delta, pickup_ready)
 	if generation != _generation or not _allowed():
 		return 0.0
-	game.set_paused(_paused or _reward_presentation.is_active())
+	_refresh_hud()
 	_refresh_controls()
 	return remaining
 
@@ -1125,7 +1124,7 @@ func _refresh_hud() -> void:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
-	_loot_icon.visible = _configured and not _result_visible
+	_loot_icon.visible = _configured and not _result_visible and not _reward_presentation.visible
 	_loot_meter.visible = _configured and not _result_visible
 	_loot_detail.visible = _configured and not _result_visible
 	_sync_preview()
@@ -1294,6 +1293,7 @@ func _layout() -> void:
 	_result.position = Vector2.ZERO
 	_result.size = size
 	_reward_presentation.size = size
+	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
 	_layout_result(scale_factor, edge)
 	_sync_positions()
 	_refresh_fusion()

@@ -347,6 +347,7 @@ func check_pop_result(app, fragments: int) -> void:
 	check(app.new_round(820 + fragments, false, "", "pop"), "A Pop fragment fixture starts cleanly")
 	app._start_pop_listening()
 	app._pop.set_listening(true, true, "Listening.")
+	app._pop_speech_active = true
 	app._pop.set_process(false)
 	var iterations: int = 0
 	while app._pop.game.fragment_count < fragments and iterations < 180 and app._pop.game.phase != "finished":
@@ -358,10 +359,10 @@ func check_pop_result(app, fragments: int) -> void:
 		if app._pop.reward_presentation_active():
 			app._pop.advance_reward_presentation(1.5)
 			check_fullscreen_confetti(app._pop._reward_presentation, "Pop chest milestone")
-			check(not app._pop.clip_contents and not app._pop_speech_active,
-				"Pop milestone confetti reaches beyond the game panel with its microphone stopped")
+			check(app._pop.clip_contents and app._pop_speech_active and app._pop._listening
+				and app._pop.game.phase == "running",
+				"Pop milestone confetti spans the viewport while gameplay stays clipped and its microphone remains active")
 			app._pop.advance_reward_presentation(1.5)
-			app._pop.set_listening(true, true, "Listening.")
 	check(app._pop.game.fragment_count == fragments and app._pop.game.chest_count == chest_count
 		and app._pop.game.chest_tier == chest_tier,
 		"Real recognized marked targets produce exactly %d fragments and final chest tier %d" % [fragments, chest_tier])

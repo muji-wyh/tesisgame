@@ -475,7 +475,6 @@ func _build_controls() -> void:
 	_pop.chests_requested.connect(_show_pop_rewards)
 	_pop.chest_earned.connect(_pop_chest_earned)
 	_pop.reward_cue_requested.connect(_pop_reward_cue)
-	_pop.reward_presentation_changed.connect(_pop_reward_presentation_changed)
 	_pop.hear_requested.connect(_pop_hear)
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
@@ -724,7 +723,7 @@ func _show_mode_menu() -> void:
 		return
 	# Speech ownership can outlive a denied/failed microphone. Resume only a
 	# recognizer that was listening or connecting when the menu interrupted it.
-	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting or _pop.reward_presentation_active())
+	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
 	_mode_menu.show()
 	_sync_round_celebration()
 	_on_input_canceled()
@@ -1474,20 +1473,6 @@ func _pop_reward_cue(cue: String) -> void:
 		return
 	audio.interact(model.theme_id, false)
 	audio.play_jelly_cue("fragment" if cue == "loot" else cue)
-
-
-func _pop_reward_presentation_changed(active: bool) -> void:
-	if _mode_id != "pop" or _rebuilding:
-		return
-	if active:
-		if not _stop_pop_listening():
-			_pop.pause()
-			_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
-			return
-		audio.stop_voice()
-		audio.stop_pip_reaction()
-	elif _pop.game.phase == "paused" and not _page_hidden and not collection_page.visible and not _mode_menu_open() and not _pop_rewards_shown:
-		_start_pop_listening()
 
 
 func _show_pop_rewards() -> void:
@@ -3402,7 +3387,8 @@ func _on_voice_state(arguments: Array) -> void:
 		_pop.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
 		# Recognition rolls over after an utterance. Let that word's short
 		# emotion finish while the recognizer reconnects automatically.
-		if not bool(arguments[1]) and not _pop._reconnecting and not _pop.reward_presentation_active():
+		if not bool(arguments[1]) and not _pop._reconnecting:
+			audio.stop_jelly_sounds()
 			audio.stop_pop_sounds()
 			audio.stop_pip_reaction()
 			duck.settle()

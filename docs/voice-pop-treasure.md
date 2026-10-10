@@ -14,10 +14,12 @@ Scores, combos, time bonuses, and word mastery retain their existing rules.
 
 The gameplay HUD shows the current chest level and fragments toward the next
 milestone. A marked card's reward flies toward the HUD. Synthesis and upgrades
-reuse Jelly Match's chest performance, production glow and Toon FX confetti;
-both milestones celebrate across the full screen. The microphone and round timer pause
-during the performance and resume afterward. Menus, backgrounding, reduced
-motion, and leaving the mode follow the same cancellation boundaries as gameplay.
+reuse Jelly Match's chest performance within the HUD, production glow and Toon FX
+confetti over the current screen. Recognition, target motion and the round timer
+continue throughout unlocks and upgrades. Menus, backgrounding and actual
+microphone interruptions freeze the effects with gameplay; reduced motion keeps
+the updated chest without confetti. Leaving or completing the round clears
+pending milestone effects before the existing results flow.
 The result shows the actual score, fragment count and final chest level, with an
 Open chest action only when treasure exists. A round below four fragments does
 not create a chest or show a chest celebration.

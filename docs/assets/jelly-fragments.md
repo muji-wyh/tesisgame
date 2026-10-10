@@ -34,7 +34,12 @@ After the pickup reaches the HUD and its progress segment fills, the milestone
 performance lasts 2.15 seconds.
 Its preparation and convergence lead to the chest reveal at 0.72 seconds; the
 sound accent, upgraded art and confetti emission use this same reveal event.
-The chest settles while the paper spreads across the viewport and falls away.
+The chest settles in its existing gameplay HUD while the paper spreads across
+the viewport and falls away. There is no dimming panel, centered reward page,
+input lock, or automatic gameplay pause. Jelly dragging, merging, dropping,
+danger countdowns and Finish remain available; Voice Pop keeps its timer,
+targets and microphone running. Only actual menu, background and voice-session
+pauses freeze the effects. End-of-round results keep their existing flow.
 Synthesis and upgrades both play the full-screen burst when the chest appears.
 The shared `reward_confetti.gd` renderer also accompanies every earned-chest
 reveal in the Match, Memory, Phrase Builder, Voice Pop and Jelly Match finales.
@@ -48,8 +53,8 @@ over 0.32 seconds when its pickup flight arrives, with one 0.55-second local
 accent using the existing `portal_glow.png` texture documented below. The ring
 advances only for time after each actual arrival, even on a slow frame or with
 overlapping pickups. Newly launched fragments receive their full flight. A
-milestone waits until that visible segment fill completes before covering the
-HUD with the chest synthesis or upgrade performance. The reward total remains
+milestone waits until that visible segment fill completes before animating the
+chest inside that same HUD. The reward total remains
 committed when the jelly clears; this arrival gate controls presentation only.
 The ring holds full until the milestone reveals its chest, then begins the next upgrade.
 It has no idle movement and disappears on the result page. Its clock follows
@@ -146,10 +151,10 @@ Ignored source-review outputs are in `build/jelly-fragments-review/`. They are
 local review artifacts, not public routes or shipped content. The source-frame
 inspection and resource checks are separate from gameplay and sound review.
 
-The final real-scene captures cover synthesis and upgrade at 1280 x 800, plus
+The earlier real-scene captures cover synthesis and upgrade at 1280 x 800, plus
 project-scaled 390 x 844 portrait and 844 x 390 landscape. Frame review confirmed
 sharp chest artwork, viewport-wide paper distribution, and separated, unclipped
-title, chest and level labels. Normal-speed recordings include the runtime cue
+title, chest and level labels in the previous centered presentation. Normal-speed recordings include the runtime cue
 track. Cue timestamps and audio peaks were checked; subjective timbre and
 physical-device playback remain outside this review.
 
@@ -158,3 +163,12 @@ menu pause/resume during pending fusions, exact presentation boundaries,
 reentrant stop/new-round callbacks, reduced motion, final-tier persistence,
 save retry and duplicate reward protection. The private confetti input also
 passes read-only source, format, hash and import-setting validation.
+
+The current HUD presentation was captured in the real Jelly scene at 1000 x 800,
+390 x 844 and 844 x 390. A 60 fps native capture follows a held drag through
+fragment arrival, meter fill, assembly and confetti while the spawn clock keeps
+advancing. The reduced-motion captures retain the same HUD without paper.
+Only the paper uses top-level canvas drawing, so Voice Pop's live arena remains
+clipped. A separate native render verifies full-viewport paper through a clipped
+parent and its immediate removal when that parent is hidden. These captures are
+muted visual checks; the unchanged reward sounds were not acoustically reviewed.

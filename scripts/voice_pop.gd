@@ -9,7 +9,6 @@ signal round_finished(summary: Dictionary)
 signal chests_requested
 signal chest_earned(count: int)
 signal reward_cue_requested(cue: String)
-signal reward_presentation_changed(active: bool)
 signal hear_requested(word: Dictionary)
 signal status_changed(snapshot: Dictionary)
 
@@ -197,10 +196,9 @@ func advance_reward_presentation(delta: float) -> void:
 		return
 	if not reward_presentation_active():
 		_displayed_chest_tier = game.chest_tier
-		clip_contents = true
-		_update_hud()
+	_update_hud()
+	if not reward_presentation_active():
 		_publish(true)
-		reward_presentation_changed.emit(false)
 
 
 func set_pending_chests(count: int) -> void:
@@ -409,7 +407,6 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_reward_paused = false
 	_displayed_chest_tier = 0
 	_loot_flights.clear()
-	clip_contents = true
 	_last_launch_uid = 0
 	_clear_transcript()
 	_settle_result_feedback()
@@ -434,19 +431,6 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 
 func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_build()
-	# stopSpeech callbacks belong to the reward performance, not a microphone error.
-	if _reward_presentation.is_active():
-		_enabled = enabled
-		_listening = false
-		_listening_tick_usec = -1
-		if listening and _reward_paused:
-			_reward_paused = false
-			clip_contents = false
-			_reward_presentation.visible = float(_reward_presentation.snapshot().elapsed) >= ChestCelebration.ARRIVAL_SECONDS
-			_gate.hide()
-			_hud.show()
-			reward_presentation_changed.emit(true)
-		return
 	var was_running: bool = _listening and game.phase == "running"
 	if was_running and not listening:
 		_sync_game_clock()
@@ -461,6 +445,9 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_publish(true)
 		return
 	if listening:
+		_reward_paused = false
+		if reward_presentation_active():
+			_reward_presentation._sync()
 		_pending = false
 		_reconnecting = false
 		if game.phase == "ready":
@@ -473,6 +460,8 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_results.hide()
 		_hud.show()
 	else:
+		_reward_paused = true
+		_reward_presentation.hide()
 		_listening_tick_usec = -1
 		var transient: bool = enabled and _pending_message(message)
 		_clear_transcript(not (transient and game.phase in ["running", "paused"]))
@@ -493,6 +482,7 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_gate.visible = not _reconnecting
 		_hud.visible = _reconnecting
 	_layout()
+	_update_hud()
 	_refresh_targets()
 	_publish(true)
 	_emit_launches()
@@ -628,16 +618,6 @@ func _present_hits(struck: Array) -> void:
 	for milestone: Dictionary in milestones:
 		_reward_presentation.enqueue(int(milestone.previous_chest_tier), int(milestone.chest_tier),
 			_chest_art.texture(int(milestone.previous_chest_tier)), _chest_art.texture(int(milestone.chest_tier)))
-	if not milestones.is_empty():
-		game.pause()
-		_listening = false
-		_listening_tick_usec = -1
-		_reward_paused = false
-		clip_contents = false
-		# Stop recognition before the first assembly cue can reach the microphone.
-		reward_presentation_changed.emit(true)
-		if round != game.round_id or _stopped or _finished_sent:
-			return
 	_refresh_targets()
 	_update_hud()
 	_publish(true)
@@ -662,7 +642,6 @@ func pause() -> void:
 	_reward_paused = true
 	if reward_presentation_active():
 		_reward_presentation.hide()
-		clip_contents = true
 	cancel_result_input()
 	_clear_slices()
 	if _finished_sent:
@@ -706,7 +685,6 @@ func stop() -> void:
 	_reward_presentation.clear()
 	_reward_paused = false
 	_loot_flights.clear()
-	clip_contents = true
 	_message = ""
 	game.stop()
 	_clear_slices()
@@ -723,7 +701,6 @@ func finish_round() -> void:
 	_reward_presentation.clear()
 	_reward_paused = false
 	_loot_flights.clear()
-	clip_contents = true
 	game.stop()
 	_finish()
 
@@ -732,6 +709,8 @@ func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if _reward_presentation != null:
 		_reward_presentation.reduced_motion = value
+		if _reward_paused:
+			_reward_presentation.hide()
 	if value:
 		_loot_flights.clear()
 	if value:
@@ -747,8 +726,6 @@ func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	if not is_visible_in_tree():
 		return result
-	if _reward_presentation.is_active() and not _reward_paused:
-		return result
 	if _gate != null and _gate.visible:
 		if not retry_button.disabled:
 			result.append(retry_button)
@@ -763,8 +740,6 @@ func controls() -> Array[Control]:
 
 
 func default_focus() -> Control:
-	if _reward_presentation.is_active() and not _reward_paused:
-		return null
 	if _results != null and _results.visible:
 		if is_instance_valid(chests_button) and not chests_button.disabled:
 			return chests_button
@@ -990,6 +965,7 @@ func _update_hud() -> void:
 	_chest_progress_label.text = "%d / 5 FRAGMENTS TO UPGRADE" % (5 if tier < game.chest_tier else int(progress.fragments_toward_next)) if tier > 0 else "CHEST FRAGMENTS"
 	_reward_icon.texture = _chest_art.texture(tier)
 	_reward_icon.modulate.a = 1.0 if tier > 0 else 0.6
+	_reward_icon.visible = not _reward_presentation.visible
 	var celebrating: bool = _hud_hit_age < HUD_HIT_DURATION
 	var visible_text: String = _transcript if not _transcript.is_empty() else " · ".join(_hud_hit_words) if celebrating else ""
 	if transcript_label.text != visible_text:
@@ -1284,6 +1260,7 @@ func _layout() -> void:
 	var reward_font: int = 12 if reward_width * scale < 280.0 else 13
 	_reward_icon.position = Vector2(8, 5) / scale
 	_reward_icon.size = Vector2(38, 32) / scale
+	_reward_presentation.set_chest_anchor(Rect2(_reward_hud.position + _reward_icon.position, _reward_icon.size))
 	_place_label(_score_label, Rect2(51.0 / scale, 5.0 / scale, reward_width * 0.48 - 43.0 / scale, 19.0 / scale), reward_font)
 	_place_label(_chest_count_label, Rect2(reward_width * 0.48 + 10.0 / scale, 5.0 / scale, reward_width * 0.52 - 22.0 / scale, 19.0 / scale), reward_font)
 	_place_label(_chest_progress_label, Rect2(51.0 / scale, 25.0 / scale, reward_width - 63.0 / scale, 14.0 / scale), 10)
@@ -1438,8 +1415,7 @@ func _draw() -> void:
 	var scale: float = Style.ui_scale(self)
 	_ensure_draw_styles(scale)
 	draw_style_box(_backdrop_style, Rect2(Vector2.ZERO, size))
-	if not reward_presentation_active():
-		_draw_atmosphere(scale)
+	_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
 		var side: float = time_label.size.x
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
@@ -1710,6 +1686,10 @@ func _draw_slice_score(burst: Dictionary, center: Vector2, scale: float, progres
 
 func _finish() -> void:
 	_finished_sent = true
+	_reward_presentation.clear()
+	_reward_paused = false
+	_loot_flights.clear()
+	_displayed_chest_tier = game.chest_tier
 	_listening = false
 	_listening_tick_usec = -1
 	_clear_transcript()

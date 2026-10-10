@@ -64,6 +64,7 @@ func _create_app():
 	app.choose_mode("pop")
 	Fixture.choose_pop_player(app)
 	app._pop.set_listening(true, true, "Listening.")
+	app._pop_speech_active = true
 	app._pop.set_process(false)
 	return app
 
@@ -81,16 +82,16 @@ func _earn_fragments(app, count: int, finish_presentation: bool = true) -> void:
 		check(app._pop.game.fragment_count == before + 1,
 			"A successful transcript slices its visible chest-marked word and earns one fragment")
 		if app._pop.reward_presentation_active():
-			check(app._pop.game.phase == "paused" and not app._pop._listening,
-				"Chest assembly and upgrade wait with voice recognition and round time paused")
+			check(app._pop.game.phase == "running" and app._pop._listening and app._pop_speech_active,
+				"Chest assembly and upgrade keep the microphone session and round running")
 			var remaining: float = app._pop.game.remaining
-			app._pop._advance_game(3.0)
-			check(app._pop.game.remaining == remaining, "The chest presentation cannot consume answer time")
+			app._pop._advance_game(0.1)
+			check(is_equal_approx(app._pop.game.remaining, remaining - 0.1), "The round clock advances during the chest presentation")
 			if not finish_presentation:
 				return
 			app._pop.advance_reward_presentation(3.0)
-			check(not app._pop.reward_presentation_active(), "The chest milestone completes before live speech resumes")
-			app._pop.set_listening(true, true, "Listening.")
+			check(not app._pop.reward_presentation_active() and app._pop._listening and app._pop_speech_active,
+				"The chest milestone completes without restarting live speech")
 			app._pop.set_process(false)
 
 
@@ -142,6 +143,7 @@ func _fragment_flow_checks(fragments: int) -> void:
 			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries,
 			"Play again starts a fresh round while preserving the previous unopened final chest")
 		app._pop.set_listening(true, true, "Listening.")
+		app._pop_speech_active = true
 		app._pop.set_process(false)
 		await _earn_fragments(app, 4)
 		await _finish_pop(app)
@@ -208,7 +210,7 @@ func _early_exit_checks() -> void:
 	for fragments in [3, 4]:
 		var app = await _create_app()
 		await _earn_fragments(app, fragments, false)
-		check(app._pop.game.phase == ("paused" if fragments == 4 else "running"),
+		check(app._pop.game.phase == "running",
 			"Prepare a live round exit during a partial recipe or active chest assembly")
 		app.choose_mode("match")
 		check(app._mode_id == "match" and not app._pop.reward_presentation_active()
