@@ -502,7 +502,7 @@ test('Pip growth preview stays local and is removed from an older Web export wit
     write(fixture, `tools/${name}`, fs.readFileSync(path.join(root, 'tools', name)));
   }
   const catalog = JSON.parse(fs.readFileSync(path.join(original, 'stages.json'), 'utf8'));
-  assert.equal(catalog.stages.length, 10);
+  assert.deepEqual(catalog.stages.map(stage => stage.age), [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   const previewFiles = ['index.html', 'preview.js', 'preview.css', 'stages.json',
     'Nunito-600.ttf', 'Nunito-800.ttf', 'FONT-LICENSE.txt', 'audio/manifest.json',
     ...catalog.stages.flatMap(stage => [...Object.values(stage.previewArt), stage.newVoice.previewPath])].sort();

@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Mascot = preload("res://scripts/duck_mascot.gd")
-const LEVELS := [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const AGES := [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 const FACES := ["neutral", "listening", "thinking", "delighted", "proud", "encourage", "surprised", "sleepy", "wink", "blink"]
 const HAPPY_FACES := ["delighted", "wink", "proud"]
 const RUNTIME_CASES := ["neutral", "listening", "thinking", "curious", "greeting", "hit-start", "hit-middle", "hit-tail", "miss-start", "miss-tail"]
@@ -108,7 +108,7 @@ func _check_attention_and_priority(duck) -> void:
 		"Changing attention never restarts pronunciation or covers its speaking face")
 	duck.set_speaking(false)
 	check(duck.expression_name() == "listening", "Finishing pronunciation returns to the active attention face")
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	for action in ["peekaboo", "high-five", "dance-wave"]:
 		duck.settle()
 		duck.set_attention("listening")
@@ -229,16 +229,16 @@ func _check_wardrobes_and_bounds(duck) -> void:
 	for scenario in ["listening", "thinking", "curious", "greeting", "hit-middle", "miss-tail"]:
 		_select_runtime_case(duck, scenario)
 		var before := [duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()]
-		for level in LEVELS:
-			var theme := "Lv%d" % level
-			duck.set_growth_level(level)
-			check([duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()] == before and duck.growth_level == level,
+		for age in AGES:
+			var theme := "Age%d" % age
+			duck.set_growth_age(age)
+			check([duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()] == before and duck.growth_age == age,
 				"The " + theme + " wardrobe keeps the current " + scenario + " expression and its timing")
 			var sheets: Array[Texture2D] = [duck._expression_sheet, duck._expression_heads]
 			check(sheets.all(func(sheet: Texture2D) -> bool: return (sheet != null
 				and sheet.get_height() > 0 and sheet.get_width() == sheet.get_height() * FACES.size())),
 				"The " + theme + " wardrobe supplies ten aligned full-body and articulated-head cells")
-			duck.set_growth_level(level)
+			duck.set_growth_age(age)
 			check(sheets == [duck._expression_sheet, duck._expression_heads] and [duck._attention, duck._reaction, duck.reaction_left, duck._gameplay_reaction, duck._gameplay_left, duck.expression_name()] == before,
 				"Refreshing an unchanged wardrobe retains its expression resources and every deadline")
 			check(duck.get_rect() == bounds and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),
@@ -301,7 +301,7 @@ func _check_rendered_faces(duck) -> void:
 	artwork.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	artwork.position = Vector2(PADDING, PADDING)
 	viewport.add_child(artwork)
-	var metadata := {"rows": LEVELS, "atlas_columns": FACES, "runtime_columns": RUNTIME_CASES}
+	var metadata := {"rows": AGES, "atlas_columns": FACES, "runtime_columns": RUNTIME_CASES}
 	var manifest := FileAccess.open(directory + "/contact-sheets.json", FileAccess.WRITE)
 	check(manifest != null, "The expression contact sheets have an English row and column key")
 	if manifest != null:
@@ -315,10 +315,10 @@ func _check_rendered_faces(duck) -> void:
 		await _render_atlases(viewport, duck, artwork, edge, directory)
 		artwork.hide()
 		duck.show()
-		var montage := Image.create(cell * RUNTIME_CASES.size(), cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
+		var montage := Image.create(cell * RUNTIME_CASES.size(), cell * AGES.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
-		for row in range(LEVELS.size()):
-			duck.set_growth_level(LEVELS[row])
+		for row in range(AGES.size()):
+			duck.set_growth_age(AGES[row])
 			var frames: Array[PackedByteArray] = []
 			for column in range(RUNTIME_CASES.size()):
 				_select_runtime_case(duck, RUNTIME_CASES[column])
@@ -326,13 +326,13 @@ func _check_rendered_faces(duck) -> void:
 				frame.convert(Image.FORMAT_RGBA8)
 				var used: Rect2i = _visible_bounds(frame)
 				check(used.has_area() and Rect2i(1, 1, cell - 2, cell - 2).encloses(used),
-					"The actual " + ("Lv%d" % LEVELS[row]) + " " + RUNTIME_CASES[column] + " mascot is complete at %d pixels" % edge)
+					"The actual " + ("Age%d" % AGES[row]) + " " + RUNTIME_CASES[column] + " mascot is complete at %d pixels" % edge)
 				frames.append(frame.get_data())
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, row * cell))
 			check(frames[0] != frames[1] and frames[0] != frames[2] and frames[1] != frames[2],
-				"Rest, listening and thinking render distinct actual pixels in " + ("Lv%d" % LEVELS[row]) + " at %d pixels" % edge)
+				"Rest, listening and thinking render distinct actual pixels in " + ("Age%d" % AGES[row]) + " at %d pixels" % edge)
 			check(frames[5] != frames[6] and frames[6] != frames[7] and frames[8] != frames[9],
-				"Result faces visibly progress through their authored phases in " + ("Lv%d" % LEVELS[row]) + " at %d pixels" % edge)
+				"Result faces visibly progress through their authored phases in " + ("Age%d" % AGES[row]) + " at %d pixels" % edge)
 			await _check_rendered_reduced_motion(viewport, duck, edge)
 		check(montage.save_png(directory + "/runtime-%d.png" % edge) == OK,
 			"Actual %d-pixel expressions are saved for independent visual review" % edge)
@@ -347,10 +347,10 @@ func _render_atlases(viewport: SubViewport, duck, artwork: TextureRect, edge: in
 	duck.hide()
 	artwork.show()
 	for part in ["full", "heads"]:
-		var montage := Image.create(cell * FACES.size(), cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
+		var montage := Image.create(cell * FACES.size(), cell * AGES.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
-		for row in range(LEVELS.size()):
-			duck.set_growth_level(LEVELS[row])
+		for row in range(AGES.size()):
+			duck.set_growth_age(AGES[row])
 			var sheet: Texture2D = duck._expression_sheet if part == "full" else duck._expression_heads
 			var source_edge: float = sheet.get_height()
 			var frames: Array[PackedByteArray] = []
@@ -364,9 +364,9 @@ func _render_atlases(viewport: SubViewport, duck, artwork: TextureRect, edge: in
 				frame.convert(Image.FORMAT_RGBA8)
 				var used: Rect2i = _visible_bounds(frame)
 				check(used.has_area() and Rect2i(PADDING, PADDING, edge, edge).encloses(used),
-					"The " + ("Lv%d" % LEVELS[row]) + " " + FACES[column] + " " + part + " atlas cell has isolated, visible artwork at %d pixels" % edge)
+					"The " + ("Age%d" % AGES[row]) + " " + FACES[column] + " " + part + " atlas cell has isolated, visible artwork at %d pixels" % edge)
 				var pixels: PackedByteArray = frame.get_data()
-				check(not frames.has(pixels), "The " + ("Lv%d" % LEVELS[row]) + " " + FACES[column] + " " + part
+				check(not frames.has(pixels), "The " + ("Age%d" % AGES[row]) + " " + FACES[column] + " " + part
 					+ " expression has its own rendered pixels at %d pixels" % edge)
 				frames.append(pixels)
 				montage.blend_rect(frame, Rect2i(Vector2i.ZERO, viewport.size), Vector2i(column * cell, row * cell))

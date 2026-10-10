@@ -305,7 +305,7 @@ test('the manifest records exactly fourteen original paths, hashes and image dim
   }
 });
 
-test('every chest image belongs to original art, derived rigs or an embedded model material', () => {
+test('every chest image belongs to original art, derived rigs, verified milestone effects or an embedded model material', () => {
   const files = listFiles(chestRoot);
   const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
   assert.equal(rigs.version, 1);
@@ -328,9 +328,13 @@ test('every chest image belongs to original art, derived rigs or an embedded mod
     assert.equal(sha256(actual), sha256(image.bytes), `${image.path} is the exact embedded source texture`);
     assert.deepEqual(imageDimensions(actual), imageDimensions(image.bytes), `${image.path} retains source dimensions`);
   }
+  const milestoneTextures = require('../tools/prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
+  assert.deepEqual(milestoneTextures.map(texture => texture.path), [
+    'assets/chests/milestone/rays.png', 'assets/chests/milestone/sparkle.png'
+  ]);
   assert.deepEqual(files.filter((file) => /\.(?:png|jpe?g)$/i.test(file)).sort(), [
     ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture),
-    ...modelImages.map(image => image.path)
+    ...modelImages.map(image => image.path), ...milestoneTextures.map(texture => texture.path)
   ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
 });

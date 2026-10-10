@@ -566,13 +566,13 @@ func _test_data(words: Array) -> void:
 	var source_json: String = FileAccess.get_file_as_string("res://words.json")
 	var expected_words: Array = words.duplicate(true)
 	for word in expected_words:
-		var imported_image: String = "assets/imported-unity/" + word.id + ".png"
-		if ResourceLoader.exists("res://" + imported_image):
-			word.image = imported_image
+		if not word.image.is_empty():
+			word.image = "assets/images/word-library/" + word.id + ".webp"
+			word.art_key = "library/" + word.id
 	var data = data_script.new()
 	check(data.load_all(), "Runtime JSON and imported chest manifest load: " + data.error)
 	check(data.words == expected_words,
-		"Godot preserves every vocabulary field and selects only each word's available image override")
+		"Godot preserves vocabulary fields while selecting the reviewed library image and its provenance")
 	check(FileAccess.get_file_as_string("res://words.json") == source_json,
 		"Runtime image overrides never rewrite the original words.json")
 	if not data.chests.is_empty():
@@ -914,7 +914,7 @@ func _test_scene() -> void:
 		app._show_collection()
 		check(app._collection_back.has_focus() if has_property(app, "_collection_back") else false,
 			"Opening rewards moves keyboard focus to Back")
-		check(has_property(app, "_status_announcement") and app._status_announcement.contains("Lv3"),
+		check(has_property(app, "_status_announcement") and app._status_announcement.begins_with(app.growth.snapshot().label + " · "),
 			"Opening growth announces the current learning level")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
@@ -1037,7 +1037,7 @@ func _test_scene() -> void:
 	check(app.collection_page.visible and app._collection_back.has_focus(),
 		"Controller Y opens My Rewards without restarting the round")
 	app.set_reduced_motion(true)
-	check(app._status_announcement.contains("Lv3"),
+	check(app._status_announcement.begins_with(app.growth.snapshot().label + " · "),
 		"Changing motion preference preserves the collection announcement")
 	app.set_reduced_motion(false)
 	joy_tap(JOY_BUTTON_B)

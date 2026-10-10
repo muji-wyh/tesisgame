@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks: int = 0
 var failures: int = 0
 
@@ -16,6 +18,8 @@ func check(condition: bool, message: String) -> void:
 
 
 func _run() -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.size = Vector2i(960, 720)
 	var app = load("res://scenes/main.tscn").instantiate()
 	var properties: Array = app.get_property_list().map(
 		func(property: Dictionary) -> String: return property.name)
@@ -25,6 +29,8 @@ func _run() -> void:
 	var directory := "user://adventure-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "The adventure fixture has isolated storage")
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	Fixture.install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -136,6 +142,7 @@ func _run() -> void:
 	for word in words:
 		app._on_voice_result([word.text, true])
 		app.feedback_timer.timeout.emit()
+	Fixture.finish_celebration(app)
 	check(app.model.phase == "won" and app.chest_button.is_visible_in_tree() and not app._voice_mode,
 		"Voice-earned matches use the same chest result and exit listening")
 	app.new_round(22)
@@ -155,6 +162,7 @@ func _run() -> void:
 	app._hide_collection()
 	await create_timer(0.8).timeout
 	check(app.model.phase == "won", "The final answer automatically completes after closing the collection")
+	Fixture.finish_celebration(app)
 	check(app._focus_candidates().has(app.chest_button), "The earned chest becomes reachable after closing the collection")
 	await _check_result_lifecycle_layout(app)
 	app.on_page_hidden()
@@ -181,6 +189,7 @@ func _match(app, word: Dictionary) -> void:
 	app.cards[word.id + ":word"].pressed.emit()
 	app.cards[word.id + ":image"].pressed.emit()
 	app._continue_match()
+	Fixture.finish_celebration(app)
 
 
 func _retry_mismatches(app) -> void:
@@ -239,6 +248,7 @@ func _check_result_lifecycle_layout(app) -> void:
 			else:
 				for word in _pairs(app):
 					_match(app, word)
+			Fixture.finish_celebration(app)
 			await process_frame
 			await process_frame
 			check(app.model.phase == "won" and app.model.chest_state == "closed"

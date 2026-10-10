@@ -161,7 +161,7 @@ func fit(available: Vector2, factor: float) -> void:
 		Style.action_button(button, Style.GOOD)
 		button.custom_minimum_size = Vector2(0, 44 / factor)
 		button.add_theme_font_size_override("font_size", ceili(13 / factor))
-	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (50.0 if tiny else 64.0 if css.y < 500 else 90.0 if short else 164.0) if compact_grid else (76.0 if short else 108.0)
+	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (50.0 if tiny else 64.0 if css.y < 500 else 90.0 if short else 164.0) if compact_grid else (60.0 if css.y < 600 else 76.0 if short else 108.0)
 	for tile: Dictionary in _tiles:
 		tile.button.custom_minimum_size = Vector2(0, tile_height / factor)
 		for state in ["normal", "hover", "pressed", "hover_pressed"]:

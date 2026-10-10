@@ -58,7 +58,7 @@ func _run() -> void:
 	var pictured_words: Array = all_words.filter(func(word: Dictionary) -> bool: return app.Data.supports_mode(word, "match"))
 	check(all_words.size() >= 1550 and pictured_words.size() >= 1250 and pictured_words.size() < all_words.size(), "The expanded curriculum retains at least 1,250 production picture cards plus contextual phrase words")
 	# Unlock the isolated layout fixture only; production gameplay still derives its level from mastery.
-	app.growth.level = 12
+	app.growth.age = 11
 	app._refresh_growth()
 	var representatives: Array = []
 	for age in range(3, 13):

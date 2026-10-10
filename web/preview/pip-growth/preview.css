@@ -20,9 +20,9 @@ main{max-width:1264px;margin:auto;padding:32px 36px 24px}
 h1,h2,h3,p{margin-top:0}
 h1{font-size:clamp(32px,4vw,46px);line-height:1.13;letter-spacing:-1.8px;margin-bottom:12px;font-weight:900}
 .introduction>p:last-child{margin:0;color:var(--muted);font-size:16px;max-width:590px}
-.level-picker{display:flex;gap:8px;padding:6px 4px 16px;margin-left:-4px;overflow-x:auto;scrollbar-width:thin}
-.level-tab{background:transparent;border:1px solid #dce3d5;border-radius:13px;min-width:74px;min-height:46px;padding:8px 14px;font-weight:850;white-space:nowrap;flex:1}
-.level-tab[aria-current=true]{background:var(--ink);border-color:var(--ink);color:#fffdf5;box-shadow:0 3px 0 #182e271a}
+.age-picker{display:flex;gap:8px;padding:6px 4px 16px;margin-left:-4px;overflow-x:auto;scrollbar-width:thin}
+.age-tab{background:transparent;border:1px solid #dce3d5;border-radius:13px;min-width:74px;min-height:46px;padding:8px 14px;font-weight:850;white-space:nowrap;flex:1}
+.age-tab[aria-current=true]{background:var(--ink);border-color:var(--ink);color:#fffdf5;box-shadow:0 3px 0 #182e271a}
 .stage-review{display:grid;grid-template-columns:minmax(320px,.92fr) minmax(360px,1.08fr);background:#fffef9;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 7px 20px #28453805}
 .character-panel{display:flex;flex-direction:column;align-items:center;background:var(--stage);padding:22px 24px 18px;min-height:540px;position:relative}
 .character-toolbar{display:flex;align-items:center;justify-content:space-between;align-self:stretch;gap:20px}
@@ -36,7 +36,7 @@ h1{font-size:clamp(32px,4vw,46px);line-height:1.13;letter-spacing:-1.8px;margin-
 .stage-paging>span{font-weight:800;font-size:14px;color:var(--accent)}
 .circle-button{border:1px solid #29433d25;background:#ffffff8c;border-radius:50%;width:40px;height:40px;font-size:21px;line-height:1}
 .stage-details{padding:32px 36px;min-width:0}
-.level-label{font-size:13px;font-weight:900;color:var(--accent);margin-bottom:4px;letter-spacing:.025em}
+.age-label{font-size:13px;font-weight:900;color:var(--accent);margin-bottom:4px;letter-spacing:.025em}
 .stage-details>h2{font-size:34px;line-height:1.15;letter-spacing:-1px;margin-bottom:10px;font-weight:900}
 .stage-description{font-size:15px;color:var(--muted);min-height:46px;margin-bottom:23px;max-width:470px}
 .new-move{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:17px 0;margin-bottom:21px}
@@ -69,7 +69,7 @@ h1{font-size:clamp(32px,4vw,46px);line-height:1.13;letter-spacing:-1.8px;margin-
 .journey-card[aria-current=true]{border:2px solid var(--accent);padding:13px 9px 12px;background:var(--stage)}
 .journey-card .miniature{width:130px;max-width:100%;height:130px;margin-bottom:5px}
 .journey-card svg{display:block;width:100%;height:100%}
-.journey-card .mini-level{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:2px}
+.journey-card .mini-age{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:2px}
 .journey-card strong{font-size:13px;font-weight:900;line-height:1.3}
 .journey-card .mini-moves{font-size:11px;color:var(--muted);margin-top:5px}
 .review-note{margin-top:28px;border-top:1px solid var(--border);padding-top:21px;color:var(--muted);font-size:12px;line-height:1.65;max-width:870px}
@@ -82,6 +82,6 @@ h1{font-size:clamp(32px,4vw,46px);line-height:1.13;letter-spacing:-1.8px;margin-
 .load-error{background:#fff0e4;padding:20px;border-radius:12px;color:#7b3a1e}
 .visually-hidden{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 @media(max-width:900px){.page-header{padding:21px 24px}main{padding:26px 24px 24px}.stage-review{grid-template-columns:minmax(260px,.9fr) minmax(310px,1.1fr)}.stage-details{padding:27px 24px}.character-panel{padding:20px 18px 18px}.character-art{min-height:255px}.journey-card .miniature{height:110px}.new-move{gap:10px}.primary-button{padding:11px}.stage-details>h2{font-size:29px}}
-@media(max-width:700px){.page-header{padding:18px 20px}.brand{font-size:19px}.brand span{display:none}.back-link{font-size:12px}main{padding:26px 18px 20px}.introduction{margin-bottom:20px}.introduction>p:last-child{font-size:14px}.eyebrow{font-size:10px;letter-spacing:.09em}h1{font-size:35px;letter-spacing:-1.25px}.level-picker{gap:6px}.level-tab{min-width:62px;padding:8px 11px;min-height:43px;font-size:13px}.stage-review{grid-template-columns:1fr}.character-panel{min-height:330px;padding:15px 18px 14px}.character-art{height:242px;min-height:0;max-width:275px;flex:none}.pose-caption{font-size:12px;margin:0 0 10px}.stage-paging{padding-top:10px}.circle-button{width:36px;height:36px}.stage-paging>span{font-size:12px}.character-toolbar{position:absolute;top:15px;left:18px;right:18px}.character-art{margin-top:20px}.stage-details{padding:25px 24px 24px}.stage-description{min-height:0;margin-bottom:19px}.new-move{margin-bottom:18px}.action-list{margin-bottom:18px}.section-heading{display:block}.section-heading h2{font-size:23px}.section-heading>p{max-width:none;margin-top:8px}.whole-journey{margin-top:32px}.journey-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.journey-card .miniature{height:140px;width:140px}.journey-card strong{font-size:14px}.journey-card .mini-level,.journey-card .mini-moves{font-size:12px}.review-note{font-size:11px}.voice-row>p{font-size:15px}}
+@media(max-width:700px){.page-header{padding:18px 20px}.brand{font-size:19px}.brand span{display:none}.back-link{font-size:12px}main{padding:26px 18px 20px}.introduction{margin-bottom:20px}.introduction>p:last-child{font-size:14px}.eyebrow{font-size:10px;letter-spacing:.09em}h1{font-size:35px;letter-spacing:-1.25px}.age-picker{gap:6px}.age-tab{min-width:62px;padding:8px 11px;min-height:43px;font-size:13px}.stage-review{grid-template-columns:1fr}.character-panel{min-height:330px;padding:15px 18px 14px}.character-art{height:242px;min-height:0;max-width:275px;flex:none}.pose-caption{font-size:12px;margin:0 0 10px}.stage-paging{padding-top:10px}.circle-button{width:36px;height:36px}.stage-paging>span{font-size:12px}.character-toolbar{position:absolute;top:15px;left:18px;right:18px}.character-art{margin-top:20px}.stage-details{padding:25px 24px 24px}.stage-description{min-height:0;margin-bottom:19px}.new-move{margin-bottom:18px}.action-list{margin-bottom:18px}.section-heading{display:block}.section-heading h2{font-size:23px}.section-heading>p{max-width:none;margin-top:8px}.whole-journey{margin-top:32px}.journey-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.journey-card .miniature{height:140px;width:140px}.journey-card strong{font-size:14px}.journey-card .mini-age,.journey-card .mini-moves{font-size:12px}.review-note{font-size:11px}.voice-row>p{font-size:15px}}
 @media(max-width:370px){main{padding-left:12px;padding-right:12px}.stage-details{padding:23px 18px}.primary-button{font-size:12px}.voice-panel{padding:13px}.voice-row{gap:10px}.voice-button{padding:8px 10px}.journey-card strong{font-size:12px}.journey-card .miniature{height:118px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

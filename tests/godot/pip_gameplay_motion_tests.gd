@@ -193,7 +193,7 @@ func _check_rendered_faces(duck) -> void:
 		var montage := Image.create(cell * 6, cell * LEVELS.size(), false, Image.FORMAT_RGBA8)
 		montage.fill(Color("#fff7df"))
 		for theme_index in range(LEVELS.size()):
-			duck.set_growth_level(LEVELS[theme_index])
+			duck.set_growth_age(LEVELS[theme_index])
 			var frames: Array[PackedByteArray] = []
 			for column in range(6):
 				var correct: bool = column < 3

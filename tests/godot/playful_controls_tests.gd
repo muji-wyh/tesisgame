@@ -39,7 +39,7 @@ func _run() -> void:
 
 
 func _test_duck(duck) -> void:
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	duck.set_proactive_allowed(false)
 	var original_children: int = duck.get_child_count()
 	var captions: Array[String] = []

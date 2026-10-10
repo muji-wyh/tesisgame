@@ -156,7 +156,7 @@ func _check_backdrop(app) -> void:
 func _check_growth_navigation(app) -> void:
 	_click(app, app.collection_button, "The growth navigation button")
 	_click(app, app._age_buttons["4"], "A preview age selector")
-	check(app.growth.level == 3, "Previewing a future tier cannot unlock it")
+	check(app.growth.level == 0 and app.growth.age == 0, "Previewing a future tier cannot unlock it")
 	_click(app, app._age_buttons["3"], "The current vocabulary age selector")
 	_click(app, app.theme_buttons[1], "The world selector")
 	var count: int = app.audio.click_count

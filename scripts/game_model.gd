@@ -81,7 +81,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	if not required_word_id.is_empty() and not repeating:
 		var requested_words: Array = pool.filter(func(word: Dictionary) -> bool: return word.id == required_word_id)
 		if requested_words.is_empty():
-			error = "The requested word is unavailable at this learning level."
+			error = "The requested word is unavailable in this learning age group."
 			return false
 		pool.erase(requested_words[0])
 		pool.push_front(requested_words[0])

@@ -88,7 +88,7 @@ test('Growth notebook and Back preserve the Match board and selected card', asyn
   await expect(page.locator('#selection-status')).toHaveText(`${selected.kind}: ${selected.word}`);
   const saved = await record(page), medals = await record(page, MEDAL_KEY);
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await expect(page.locator('#game-status')).toContainText('Six correct answers');
   await page.screenshot({ path: testInfo.outputPath('more-worlds-preserves-lesson.png'), scale: 'css' });
   const back = collectionHeaderRect(await metrics(page), 'back');

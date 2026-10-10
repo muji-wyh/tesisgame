@@ -928,7 +928,7 @@ func _can_browse_collection() -> bool:
 func _show_age_catalog() -> void:
 	audio.stop_voice()
 	var band: Dictionary = Data.age_band(str(_catalog_age))
-	if _catalog_age > growth.level:
+	if _catalog_age > growth.learning_age():
 		band.name += " · Preview"
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == _catalog_age)
 	_age_catalog.configure(words, band, Data.theme(model.theme_id), growth.snapshot())
@@ -951,8 +951,8 @@ func _back_from_collection() -> void:
 func _refresh_age_choices() -> void:
 	for id in _age_buttons:
 		_age_buttons[id].set_pressed_no_signal(int(id) == _catalog_age)
-		_age_buttons[id].tooltip_text = "Preview: unlock by mastering the previous level" if int(id) > growth.level else "Review this level's words"
-	_age_notice.text = "Preview only. Master every word in your current level to unlock this stage." if _catalog_age > growth.level else "Six correct answers in a row master a word. A mistake resets that word; your level stays."
+		_age_buttons[id].tooltip_text = "Preview: complete the previous age's words to unlock" if int(id) > growth.learning_age() else "Review this age's words"
+	_age_notice.text = "Preview only. Complete your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "Six correct answers in a row master a word. A mistake resets that word; earned Lv and age stay."
 	if _growth_save_failed:
 		_age_notice.text = "Learning progress could not be saved. Return to the game and choose Retry saving."
 	_refresh_growth()
@@ -1108,7 +1108,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	audio.halt()
 	_stop_feedback_animations()
 	_last_phase = ""
-	if not model.reset(_learning_words(), seed_value, repeat_lesson, adventure_id, required_word_id, str(growth.level), _mode_id in ["match", "memory"]):
+	if not model.reset(_learning_words(), seed_value, repeat_lesson, adventure_id, required_word_id, str(growth.learning_age()), _mode_id in ["match", "memory"]):
 		_rebuilding = false
 		_show_error(model.error)
 		return false
@@ -1138,7 +1138,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _mode_id == "phrase":
 		_phrase.set_reduced_motion(reduced_motion)
 		_phrase.set_muted(audio.muted or not audio.available)
-		if not _phrase.configure(_learning_words(), str(growth.level), model.theme_id, seed_value):
+		if not _phrase.configure(_learning_words(), str(growth.learning_age()), model.theme_id, seed_value):
 			_rebuilding = false
 			_show_error(_phrase.game.error)
 			return false
@@ -1148,7 +1148,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_pop_rewards.configure_saved(data.chests, reduced_motion)
 			_pop_rewards_shown = true
 	if _mode_id == "jelly":
-		if not _jelly.configure(_learning_words(), growth.level, Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
+		if not _jelly.configure(_learning_words(), growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
 			_show_error(_jelly.game.error)
 			return false
@@ -1188,7 +1188,7 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_pop_reward_saved = false
 	_pop_reward_theme = ""
 	var pool: Array = _learning_words().filter(func(word: Dictionary) -> bool:
-		return Data.word_age(word) <= growth.level and Data.supports_mode(word, "pop"))
+		return Data.word_age(word) <= growth.learning_age() and Data.supports_mode(word, "pop"))
 	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a._growth_priority > b._growth_priority)
 	var target_pool: Array = pool.filter(func(word: Dictionary) -> bool: return word._growth_priority > 0)
 	_pop.configure(target_pool if target_pool.size() >= 5 else pool, reduced_motion, seed_value)
@@ -3745,7 +3745,7 @@ func _show_collection() -> void:
 		if not collection_page.is_ancestor_of(control):
 			_collection_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
-	_catalog_age = growth.level
+	_catalog_age = growth.learning_age()
 	collection_page.show()
 	_sync_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
@@ -3779,7 +3779,7 @@ func _hide_collection() -> void:
 
 
 func _announce_collection_state() -> void:
-	var announcement := _growth_summary.text + " " + _age_notice.text
+	var announcement := _collection_title.text + ". " + _growth_summary.text + " " + _age_notice.text
 	if _journey_save_failed:
 		announcement += " " + _world_save_notice.text
 	_announce_status(announcement)
@@ -3884,7 +3884,7 @@ func _play_duck() -> void:
 func _learning_words() -> Array:
 	var words: Array = data.words.duplicate(true)
 	for word: Dictionary in words:
-		word["_growth_priority"] = (2 if Data.word_age(word) == growth.level else 1) if not growth.is_mastered(str(word.id)) else 0
+		word["_growth_priority"] = (2 if Data.word_age(word) == growth.learning_age() else 1) if not growth.is_mastered(str(word.id)) else 0
 	return words
 
 
@@ -3913,8 +3913,10 @@ func _record_growth(attempt_id: String, words: Array, correct: bool) -> void:
 	if _growth_save_failed != was_failed:
 		# Memory, Phrase and Pop do not otherwise refresh the shared header per answer.
 		_refresh.call_deferred()
-	if bool(result.leveled_up):
-		_announce_status("Pip grew to %s! New words and a new action are ready." % growth.snapshot().label)
+	if bool(result.get("aged_up", false)):
+		_announce_status("Pip grew to %s! %s. Meet Pip's new look." % [growth.snapshot().age_label, growth.snapshot().label])
+	elif bool(result.leveled_up):
+		_announce_status("%s! Keep mastering new words to grow." % growth.snapshot().label)
 
 
 func _sync_growth_load_notice() -> void:
@@ -3931,9 +3933,12 @@ func _refresh_growth() -> void:
 	var state: Dictionary = growth.snapshot()
 	for mascot in [duck, _phrase.pip, _round_celebration.pip]:
 		if is_instance_valid(mascot):
-			mascot.set_growth_level(growth.level)
+			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)
-	_growth_summary.text = "%s  ·  %d of %d words mastered%s" % [state.label, state.mastered, state.total, "  ·  All stages unlocked!" if state.completed else "  ·  Grow one word at a time."]
+	_collection_title.text = "%s · %s" % [state.label, "Baby Pip" if state.age == 0 else "Pip · " + state.age_label] if state.ready else "Grow with Pip"
+	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
+	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
+	_growth_summary.text = "%s · %d words learned\n%s: %d / %d mastered%s" % [level_summary, state.lifetime_mastered, age_target, state.mastered, state.total, " · All ages unlocked!" if state.completed else " · Master this set to help Pip grow."] if state.ready else "Learning progress is unavailable. Retry saving to load it."
 	var serialized: String = JSON.stringify(state)
 	if _host != null and serialized != _growth_published:
 		_growth_published = serialized

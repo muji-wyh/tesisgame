@@ -376,8 +376,8 @@ func _assert_workload(after: bool) -> bool:
 		"match": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matched_cards >= 4)
 		"memory": valid = state.cards == 10 and state.phase in ["waiting", "matching", "feedback"] and (not after or state.matches >= 2)
 		"voice-pop": valid = state.hud_visible and state.phase == "running" and state.elapsed > 0 and ((state.targets > 0 and state.draw_targets > 0) if not after else (state.hits == 3 and _target_workload_recorded()))
-		"growth": valid = state.catalog_visible and state.age == 3 and state.level == 3 and state.word_count == 80 \
-			and state.summary.begins_with("Lv3") and state.progress_unchanged \
+		"growth": valid = state.catalog_visible and state.age == 3 and state.level == 0 and state.word_count == 80 \
+			and state.summary.begins_with("1 new word to Lv1") and state.progress_unchanged \
 			and (not after or (_actions.size() == 3 and _actions[0].action == "browse_age" and _actions[0].age == 4 \
 				and _actions[1].action == "browse_age" and _actions[1].age == 3 and _actions[2].action == "growth_word"))
 		"catalog":

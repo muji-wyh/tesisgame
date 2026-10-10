@@ -21,10 +21,14 @@ func settle() -> void:
 
 
 func _run() -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.size = Vector2i(960, 720)
 	var directory := "user://layout-test-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -35,8 +39,8 @@ func _run() -> void:
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", "Play time", "Find 3 pairs"]),
 		"The gameplay header has no redundant title")
-	check(app._mode_buttons.size() == 4 and app.MODES.keys() == ["match", "memory", "pop", "phrase"],
-		"Pip's mode switch contains all four games")
+	check(app._mode_buttons.size() == 5 and app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly"],
+		"Pip's mode switch contains all five games")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
 		root.size = dimensions
 		app.size = dimensions
@@ -64,11 +68,16 @@ func _run() -> void:
 					check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "Navigation fits the viewport")
 					var scale: float = app.Style.ui_scale(app)
 					check(control.size.x * scale >= 44 and control.size.y * scale >= 44, "Navigation keeps a 44px touch target")
-			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button]:
+			for control in [app.hint_button, app._voice_button, app._memory.study_button]:
 				if control.is_visible_in_tree():
 					check(control.text.is_empty() and is_equal_approx(control.size.x, control.size.y)
 						and control.get_parent() == app._toolbar and is_equal_approx(control.size.y, ceilf(44 / css_scale)),
 						"Header actions share one aligned row of 44 CSS-pixel square icons")
+			check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
+				and app._growth_button.level_label.text == app.growth.snapshot().label
+				and app._growth_button.get_global_rect().grow(0.5).encloses(app._growth_bar.get_global_rect())
+				and is_equal_approx(app._growth_button.get_global_rect().get_center().y, app._toolbar.get_global_rect().get_center().y),
+				"The level badge opens learning progress with its track contained in the aligned header target")
 			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 				"Closed mode choices leave more space for gameplay at %s %s" % [dimensions, mode])
 			if mode == "match":
@@ -79,6 +88,14 @@ func _run() -> void:
 				check(app.grid.size.x * app.grid.size.y >= 0.6 * dimensions.x * dimensions.y,
 					"The matching board owns at least 60% of a portrait screen")
 	await _test_voice_layout(app)
+	app._show_collection()
+	await settle()
+	check(app._compact_world.is_visible_in_tree() and not app._world_choices.is_visible_in_tree(),
+		"Short landscape notebooks retain the compact world selector without crowding the word catalog")
+	app._hide_collection()
+	root.size = Vector2i(960, 720)
+	app.size = Vector2(960, 720)
+	await settle()
 	app.choose_mode("match")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
@@ -111,8 +128,8 @@ func _run() -> void:
 	await settle()
 	check(app._age_catalog.is_visible_in_tree() and app._growth_summary.is_visible_in_tree(),
 		"Growth presents progress and a vocabulary catalog without the retired room")
-	check(app._collection_title.text == "Grow with Pip" and not app.has_method("_show_reward_section"),
-		"The growth notebook preserves a single title and world settings")
+	check(app._collection_title.text == "Lv0 · Baby Pip" and not app.has_method("_show_reward_section"),
+		"The growth notebook combines the independent level and Pip age in one title")
 	for dimensions in [Vector2i(480, 900), Vector2i(1040, 900)]:
 		root.size = dimensions
 		app.size = dimensions
@@ -125,7 +142,7 @@ func _run() -> void:
 		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
 			"World choices remain available below the growth catalogue")
 		check(app._world_grid is HBoxContainer, "World choices remain in one horizontally scrollable row at every width")
-		check(app._world_grid.get_theme_constant("separation") == roundi(6 / scale),
+		check(app._world_grid.get_theme_constant("separation") == ceili(6 / scale),
 			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")
 		for index in range(app.theme_buttons.size()):
 			var button: Button = app.theme_buttons[index]
@@ -134,11 +151,11 @@ func _run() -> void:
 				and button.get("accessibility_name") == palette.name and button.icon != null
 				and button.icon_alignment == HORIZONTAL_ALIGNMENT_CENTER,
 				"Every World icon retains its exact tooltip and accessible name")
-			check(button.size.is_equal_approx(Vector2.ONE * ceilf(52 / scale))
+			check(button.size.is_equal_approx(Vector2.ONE * (44 / scale))
 				and is_equal_approx(button.global_position.y, app.theme_buttons[0].global_position.y),
-				"Every World icon keeps a larger 52 CSS-pixel square target in one row")
-			check(button.get_theme_constant("icon_max_width") == ceili(36 / scale),
-				"World artwork uses a 36 CSS-pixel icon cap")
+				"Every World icon keeps a 44 CSS-pixel square touch target in one row")
+			check(button.get_theme_constant("icon_max_width") == ceili(30 / scale),
+				"World artwork uses a 30 CSS-pixel icon cap")
 	app._hide_collection()
 	app._progress_ready = false
 	app._save_error = true

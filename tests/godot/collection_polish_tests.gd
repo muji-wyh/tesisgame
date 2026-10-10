@@ -27,19 +27,20 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	check(app.MODES.keys() == ["match", "memory", "pop", "phrase"],
-		"The game offers Match, Memory, Voice Pop, and Phrase Builder in that order")
+	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly"],
+		"The game offers Match, Memory, Voice Pop, Phrase Builder, and Jelly Match in that order")
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
 		"Entering the game opens the Match board")
 	check(app.find_child("Mode_match", true, false).button_pressed and app.find_child("Mode_learn", true, false) == null
 		and app.cards.size() == 10 and app.model.hints_remaining == 3 and not app._voice_mode,
 		"Match starts selected with a ready board, three hints, and no microphone")
-	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop", "Mode_phrase"],
+	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop", "Mode_phrase", "Mode_jelly"],
 		"The actual mode choices preserve their requested order inside the popover")
 	# This fixture exercises an earned chest; chance outcomes have separate coverage.
 	app.model.chest_earned = true

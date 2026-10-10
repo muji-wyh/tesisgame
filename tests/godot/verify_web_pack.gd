@@ -395,10 +395,12 @@ func _verify_excluded_content_absent() -> int:
 func _verify_growth() -> int:
 	var failures: int = 0
 	var stages: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/pip-growth-stages.json"))
-	if not stages is Dictionary or not stages.get("stages") is Array or stages.stages.size() != 10:
-		printerr("All ten Pip growth stages must ship in the game pack.")
+	if not stages is Dictionary or not stages.get("stages") is Array or stages.stages.size() != 11:
+		printerr("Baby Pip and all ten age appearances must ship in the game pack.")
 		return 1
+	var ages: Array = []
 	for stage: Dictionary in stages.stages:
+		ages.append(stage.get("age", -1))
 		for source in stage.art.values():
 			if not ResourceLoader.exists("res://" + str(source)):
 				printerr("Missing Pip growth art: " + str(source))
@@ -406,4 +408,7 @@ func _verify_growth() -> int:
 		if not ResourceLoader.exists("res://" + str(stage.newVoice.path)):
 			printerr("Missing Pip growth voice: " + str(stage.newVoice.path))
 			failures += 1
+	if ages != [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+		printerr("Pip artwork must follow the complete independent age sequence.")
+		failures += 1
 	return failures

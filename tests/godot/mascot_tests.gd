@@ -276,7 +276,7 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 	duck.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	duck.settle()
 	duck.set_proactive_allowed(true)
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	var resting_image: Image = await _capture_dance(viewport, duck)
 	check(resting_image.save_png(evidence_directory + "/idle.png") == OK, "The original resting mascot is saved for visual comparison")
 	var resting: PackedByteArray = resting_image.get_data()
@@ -330,7 +330,7 @@ func _check_drawn_idle_dances(duck: Button) -> void:
 		"Reduced motion keeps the actual mascot pixels still beyond the next invitation interval")
 	duck.set_reduced_motion(false)
 	duck.settle()
-	duck.set_growth_level(3)
+	duck.set_growth_age(3)
 	duck.reparent(root)
 	duck.position = original_position
 	duck.size = original_size

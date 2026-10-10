@@ -355,7 +355,7 @@
         Match and Memory practise the same five words. Tap Pip in the upper-left corner to open the game-mode menu and switch games. Tap outside the menu or press Escape to close it.
         In Phrase Builder, listen to Pip and drag words onto the answer line. Lift a card upward, then drag it to reorder or return it to the word bank. Tapping also adds or returns a word. Swipe either word row sideways to reveal more words. While dragging, hold at an answer edge to scroll farther. After checking, focus the answer line and use Left or Right to review long phrases. The waveform bar replays the phrase and displays its text when muted. The progress bar tracks completed phrases.
         Check your answer when every slot is filled. Wrong answers stay editable with unlimited retries.
-        Complete three phrases, then choose Open chest to collect your gift. New adventure starts another three phrases. Phrase difficulty follows your unlocked learning level.
+        Complete three phrases, then choose Open chest to collect your gift. New adventure starts another three phrases. Phrase difficulty follows your current learning age.
         Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
         Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
@@ -368,13 +368,14 @@
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         Completing Match or Memory has a 50% chance to earn one chest, with at most one per round. Pip celebrates every completed round. Choose Open chest if a chest drops, or Play again to start a fresh round without one. Phrase Builder still earns one chest after three phrases. Every mode celebrates an earned chest with full-screen confetti; reduced motion keeps the reward display still.
         New adventure appears at the bottom-right after the chest opens and saves. It starts another Phrase Builder round after that game, or a fresh Match round after the card games. Retry saving appears only if a reward could not be saved.
-        Your learning journey starts at Lv3. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
+        Your learning journey starts at Lv0 with Baby Pip. Level and age grow independently. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
         In any game, correctly completing an activity involving a word adds one to that word's streak. A wrong answer resets its streak. Six consecutive correct answers mark the word as mastered. Replaying audio, peeking, and moving cards do not count as answers.
         Voice Pop credits each accepted spoken target once. Unrecognized speech, silence, and unattended words do not count as wrong answers.
         In Jelly Match, pictures and words fall into four columns. Tap a jelly to hear it, or drag it onto its matching picture or word. With a keyboard or controller, select a jelly to hear its word. Only dragging makes a match. A correct pair merges and clears while other jellies keep falling and remain playable. Each cleared pair credits its word once. A wrong pairing resets the involved words; releasing outside a tile is not an answer.
         Jelly Match speeds up as pairs are cleared. A full board starts an eight-second countdown. Clearing a pair cancels the countdown. Each cleared chest-marked jelly earns one chest fragment. Four fragments unlock one chest; every five additional fragments upgrade that same chest. Finish ends the current round; after Pip celebrates, open the final upgraded chest or choose Play again to start immediately. Unopened treasure stays on this device and accumulates across rounds. Open chests on a later result to collect it, even if that round earns no new chest.
-        Master every word at your current level to unlock the next. An earned level never goes down, even if a mastered word later needs more practice. Lv12+ is the final level.
-        Open your learning progress to browse the words at each age, see mastered words and practice streaks, and hear their pronunciation. Future levels are available to review; gameplay uses your unlocked vocabulary.
+        Master your first word to reach Lv1, then two more new words to reach Lv2. Later levels require progressively more new words, up to Lv99. Each word contributes to level progress only the first time you master it. An earned level never goes down, even if a mastered word later needs more practice.
+        Master every word in the age 3 vocabulary to grow Baby Pip to Age 3 and start learning the age 4 words. Complete each following vocabulary cohort to grow Pip through Age 12+. Pip's appearance and actions follow age. Earned ages never go down.
+        Open your learning progress to see your next level goal, browse the words at each age, see mastered words and practice streaks, and hear their pronunciation. Future age groups are available to review; gameplay uses your unlocked vocabulary.
         Your progress stays on this device without a player name or profile. An unsaved progress message lets you retry a failed save.
         Eight worlds offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Your chosen world is remembered.
         When you earn a chest, hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
@@ -384,7 +385,7 @@
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
       <p id="selection-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="growth-status" class="sr-only" role="status" aria-label="Learning progress" aria-live="polite" data-snapshot="{}"></p>
-      <div id="learning-progress" class="sr-only" role="progressbar" aria-label="Level vocabulary mastery"
+      <div id="learning-progress" class="sr-only" role="progressbar" aria-label="Progress toward the next level"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
       <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
       <p id="jelly-reward-status" class="sr-only" aria-label="Jelly Match treasures" data-snapshot="{}"></p>
@@ -3020,19 +3021,29 @@
           let value;
           try { value = JSON.parse(text); } catch { return; }
           if (!value || typeof value !== 'object' || Array.isArray(value) ||
-              !Number.isInteger(value.level) || value.level < 3 || value.level > 12 ||
+              !Number.isInteger(value.level) || value.level < 0 || value.level > 99 ||
+              !Number.isInteger(value.age) || (value.age !== 0 && (value.age < 3 || value.age > 12)) ||
+              value.learning_age !== (value.age === 0 ? 3 : Math.min(value.age + 1, 12)) ||
               !Number.isInteger(value.mastered) || !Number.isInteger(value.total) ||
-              value.mastered < 0 || value.total < value.mastered) return;
+              value.mastered < 0 || value.total < value.mastered ||
+              !Number.isInteger(value.level_mastered) || !Number.isInteger(value.level_required) ||
+              !Number.isInteger(value.level_remaining) || value.level_mastered < 0 ||
+              value.level_required < value.level_mastered || value.level_remaining < 0 ||
+              !Number.isFinite(value.level_progress) || value.level_progress < 0 || value.level_progress > 1) return;
           const status = document.getElementById('growth-status');
           status.dataset.snapshot = JSON.stringify(value);
-          const level = value.level === 12 ? 'Lv12+' : `Lv${value.level}`;
-          const message = `${level}. ${value.mastered} of ${value.total} words mastered.` +
-            (value.completed ? ' You mastered the final level!' : '') +
+          const age = value.age === 0 ? 'Baby' : `Age ${value.age === 12 ? '12+' : value.age}`;
+          const learningAge = value.learning_age === 12 ? '12+' : value.learning_age;
+          const message = `Lv${value.level}. Pip: ${age}. ` +
+            (value.level_completed ? 'Maximum level reached. ' :
+              `${value.level_mastered} of ${value.level_required} new words toward Lv${value.level + 1}. `) +
+            `Age ${learningAge} vocabulary: ${value.mastered} of ${value.total} words mastered.` +
+            (value.completed ? ' All age stages completed!' : '') +
             (value.ready === false ? ' Learning progress could not be loaded. Retry before you play.' :
               value.save_ok === false ? ' Learning progress is waiting to be saved. Please retry.' : '');
           if (status.textContent !== message) status.textContent = message;
           const progress = document.getElementById('learning-progress');
-          progress.setAttribute('aria-valuenow', String(value.total ? Math.round(value.mastered / value.total * 100) : 0));
+          progress.setAttribute('aria-valuenow', String(Math.round(value.level_progress * 100)));
           progress.setAttribute('aria-valuetext', message);
         },
         popRewardState() {

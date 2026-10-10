@@ -402,8 +402,10 @@ func _check_layout(view) -> void:
 
 func _check_catalog_text(view) -> void:
 	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	var legacy: Array = catalog.filter(func(word: Dictionary) -> bool: return not word.has("part_of_speech"))
-	check(legacy.size() == 350, "Synthetic tiny component fixtures retain the complete legacy vocabulary")
+	# Editorial metadata now covers legacy entries too; their preserved prefix
+	# remains the canonical original set (also verified by the asset contract).
+	var legacy: Array = catalog.slice(0, 350)
+	check(legacy.size() == 350 and legacy.front().id == "cat" and legacy.back().id == "abacus", "Synthetic tiny component fixtures retain the complete legacy vocabulary")
 	var lesson: Array = catalog.filter(func(word: Dictionary) -> bool: return word.id in ["cat", "dog", "fish", "duck", "cow"])
 	# The tiny standalone fixtures predate the expanded vocabulary and are not
 	# produced by the game host. Keep their original 350-word regression coverage;

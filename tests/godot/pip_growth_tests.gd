@@ -34,18 +34,18 @@ func _run() -> void:
 	root.add_child(duck)
 	duck.size = Vector2(120, 120)
 	duck.set_proactive_allowed(false)
-	check(duck.growth_level == 3 and duck.growth_actions() == ["wave"], "A new Pip starts at Lv 3 with one intentional gesture")
+	check(duck.growth_age == 0 and duck.growth_actions() == ["wave"], "A new Pip starts as Baby with one intentional gesture")
 	var input_bounds: Rect2 = duck.get_rect()
 	var child_count: int = duck.get_child_count()
 	var appearance_paths: Array[String] = []
-	for level in range(3, 13):
+	for age in [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 		duck.settle()
-		duck.set_growth_level(level)
-		check(duck.growth_level == level, "Pip selects the requested growth level %d" % level)
-		check(duck.growth_actions() == ACTIONS.slice(0, level - 2), "Lv %d retains every previously learned gesture" % level)
+		duck.set_growth_age(age)
+		check(duck.growth_age == age, "Pip selects the requested growth age %d" % age)
+		check(duck.growth_actions() == ACTIONS.slice(0, maxi(1, age - 2)), "Age %d retains every previously learned gesture" % age)
 		var art: Texture2D = duck._outfit_sheet
-		check(art != null and art.resource_path == "res://assets/images/mascots/growth/pip-lv%d.svg" % level,
-			"Lv %d loads its own ordinary production atlas" % level)
+		check(art != null and art.resource_path == ("res://assets/images/mascots/growth/pip-baby.svg" if age == 0 else "res://assets/images/mascots/growth/pip-lv%d.svg" % age),
+			"Age %d loads its own ordinary production atlas" % age)
 		if art == null:
 			continue
 		appearance_paths.append(art.resource_path)
@@ -54,14 +54,14 @@ func _run() -> void:
 		for index in range(sheets.size()):
 			var sheet: Texture2D = sheets[index]
 			check(sheet != null and sheet.get_height() == 360 and sheet.get_width() == 360 * cells[index],
-				"Lv %d sheet %d retains 3x source cells and transparent margins" % [level, index])
-		check(ResourceLoader.exists(duck.growth_voice_path(), "AudioStream"), "Lv %d has an acquired local voice recording" % level)
+				"Age %d sheet %d retains 3x source cells and transparent margins" % [age, index])
+		check(ResourceLoader.exists(duck.growth_voice_path(), "AudioStream"), "Age %d has an acquired local voice recording" % age)
 		for theme_id in THEMES:
 			duck.set_outfit_theme(theme_id)
-			check(duck._outfit_sheet == art and duck.growth_level == level and duck.theme_id == theme_id,
-				"World %s does not overwrite Lv %d Pip" % [theme_id, level])
-		var action: String = ACTIONS[level - 3]
-		check(not duck.perform_trick(action).is_empty(), "Lv %d can explicitly perform its newly unlocked gesture" % level)
+			check(duck._outfit_sheet == art and duck.growth_age == age and duck.theme_id == theme_id,
+				"World %s does not overwrite Age %d Pip" % [theme_id, age])
+		var action: String = ACTIONS[maxi(0, age - 3)]
+		check(not duck.perform_trick(action).is_empty(), "Age %d can explicitly perform its newly unlocked gesture" % age)
 		var remaining: float = duck._idle_left
 		check(duck.perform_trick(action).is_empty() and duck._idle_left == remaining,
 			"Repeated taps cannot restart or stack a running growth gesture")
@@ -70,11 +70,11 @@ func _run() -> void:
 			"A manually requested growth gesture finishes even with proactive motion disabled")
 		check(duck.get_rect() == input_bounds and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation) and duck.get_child_count() == child_count,
 			"Growth motion preserves input ownership and never creates transient nodes")
-		if level < 12:
-			check(duck.perform_trick(ACTIONS[level - 2]).is_empty() and duck._idle_action.is_empty(),
-				"Lv %d cannot play next level's locked gesture" % level)
-	check(appearance_paths.size() == 10 and appearance_paths.all(func(value: String) -> bool: return appearance_paths.count(value) == 1),
-		"All ten stages have a loaded production appearance")
+		if age < 12:
+			check(duck.perform_trick(ACTIONS[maxi(1, age - 2)]).is_empty() and duck._idle_action.is_empty(),
+				"Age %d cannot play next age's locked gesture" % age)
+	check(appearance_paths.size() == 11 and appearance_paths.all(func(value: String) -> bool: return appearance_paths.count(value) == 1),
+		"Baby and all ten ages have a loaded production appearance")
 	_check_motion_contract()
 	_check_lifecycle(duck)
 	_check_feedback(duck)
@@ -113,7 +113,7 @@ func _check_motion_contract() -> void:
 
 func _check_lifecycle(duck) -> void:
 	duck.settle()
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	duck.set_reduced_motion(true)
 	check(duck.perform_growth_action("dance-hop") and duck.expression_name() == "delighted" and not duck.is_processing(),
 		"Reduced motion acknowledges a requested gesture without starting an animation loop")
@@ -133,29 +133,29 @@ func _check_lifecycle(duck) -> void:
 	check(not duck.perform_growth_action("wave"), "Actual word pronunciation takes priority over growth gestures")
 	duck.set_speaking(false)
 	duck.set_proactive_allowed(true)
-	duck.set_growth_level(3)
+	duck.set_growth_age(0)
 	for invitation in range(4):
 		duck._idle_wait = 0.01
 		duck._process(0.05)
-		check(duck._idle_action == "wave", "Lv 3 autonomous motion cannot borrow an unearned higher-level dance")
+		check(duck._idle_action == "wave", "Baby autonomous motion cannot borrow an unearned higher-age dance")
 		_step(duck, 2.0)
 	duck.set_proactive_allowed(false)
 	duck.settle()
 
 
 func _check_feedback(duck) -> void:
-	duck.set_growth_level(3)
+	duck.set_growth_age(0)
 	duck.react_gameplay(true)
 	check(duck._gameplay_reaction == "happy" and duck._gameplay_left > 0.0,
-		"The first level retains complete correct-answer emotional feedback")
+		"The first age retains complete correct-answer emotional feedback")
 	_step(duck, 1.5)
 	duck.react_gameplay(false)
 	check(duck._gameplay_reaction == "sad" and duck.expression_name() == "thinking",
-		"The first level retains thoughtful, supportive wrong-answer feedback")
+		"The first age retains thoughtful, supportive wrong-answer feedback")
 	duck.set_celebration_progress(0.4)
 	check(duck._celebration_progress == 0.4 and duck.expression_name() == "delighted" and not duck.perform_growth_action("wave"),
-		"Shared round celebration stays available at Lv 3 and blocks unrelated gestures")
-	duck.set_growth_level(4)
+		"Shared round celebration stays available for Baby and blocks unrelated gestures")
+	duck.set_growth_age(4)
 	check(duck._celebration_progress == 0.4 and duck.expression_name() == "delighted",
 		"A new growth appearance cannot restart or interrupt the shared celebration timeline")
 	duck.clear_celebration()

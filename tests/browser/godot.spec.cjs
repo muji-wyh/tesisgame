@@ -155,12 +155,12 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   await pressGamepad(page, 5);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await pressGamepad(page, 9);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await pressGamepad(page, 1);
@@ -484,7 +484,7 @@ test('new adventures rotate after the chest is opened and growth navigation pres
   const unopened = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(unopened);
@@ -527,7 +527,7 @@ test('Pip follows the board and chest while growth preserves rewards without ext
   await holdChestUntilOpen(page, resultScreenPoint(bounds));
   const earnedProgress = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await page.screenshot({ path: testInfo.outputPath('pip-growth.png'), scale: 'css' });
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(earnedProgress);
   await page.keyboard.press('Escape');

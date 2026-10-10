@@ -38,13 +38,13 @@ async function run() {
       await page.waitForFunction(() => window.pipGrowthPreview?.snapshot().ready);
       await page.evaluate(() => document.fonts.ready);
       await page.locator('#motion-toggle').click();
-      for (let level = posesOnly ? 12 : 3; level <= 12; level++) {
-        await page.locator(`.level-tab[data-level="${level}"]`).click();
-        await page.waitForFunction(wanted => window.pipGrowthPreview.snapshot().level === wanted && document.querySelector('#character-art svg'), level);
-        assert.equal(await page.locator('.action-button').count(), level - 2);
-        assert.equal(await page.locator('#voice-select option').count(), level - 2);
-        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, `${profile.name} Lv${level}: horizontal overflow`);
-        await page.locator('#stage-review').screenshot({ path: path.join(output, `${profile.name}-lv${level}.png`) });
+      for (const age of posesOnly ? [12] : [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
+        await page.locator(`.age-tab[data-age="${age}"]`).click();
+        await page.waitForFunction(wanted => window.pipGrowthPreview.snapshot().age === wanted && document.querySelector('#character-art svg'), age);
+        assert.equal(await page.locator('.action-button').count(), Math.max(1, age - 2));
+        assert.equal(await page.locator('#voice-select option').count(), Math.max(1, age - 2));
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, `${profile.name} Age${age}: horizontal overflow`);
+        await page.locator('#stage-review').screenshot({ path: path.join(output, `${profile.name}-age${age}.png`) });
       }
       await page.locator('.whole-journey').screenshot({ path: path.join(output, `${profile.name}-all-stages.png`) });
       await page.locator('#play-new-move').click();
@@ -65,12 +65,12 @@ async function run() {
         await page.waitForFunction(() => window.pipGrowthPreview.snapshot().playing);
         await page.waitForTimeout(700);
         assert.equal(await page.evaluate(() => window.pipGrowthPreview.snapshot().playing), true);
-        await page.locator('.level-tab[data-level="3"]').click();
+        await page.locator('.age-tab[data-age="3"]').click();
         assert.equal(await page.evaluate(() => window.pipGrowthPreview.snapshot().playing), false, 'Switching stage must stop previous voice.');
         await page.locator('#motion-toggle').click();
         await page.screenshot({ path: path.join(output, 'desktop-full.png'), fullPage: true });
       }
-      console.log(`${profile.name}: ${posesOnly ? 'final wing poses' : 'ten stages'}, cumulative controls, responsive layout and reduced-motion state passed.`);
+      console.log(`${profile.name}: ${posesOnly ? 'final wing poses' : 'Baby and ten ages'}, cumulative controls, responsive layout and reduced-motion state passed.`);
     } finally { await browser.close(); }
   }
   assert.deepEqual(errors, []);

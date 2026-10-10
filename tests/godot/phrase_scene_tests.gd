@@ -88,7 +88,7 @@ func _run() -> void:
 	var questions_before_age: Array = view.game.questions.duplicate(true)
 	var answer_before_age: Array = view.game.answer.duplicate()
 	await _choose_age(app, "12")
-	check(app._catalog_age == 12 and app.growth.level == 3 and view.game.questions == questions_before_age
+	check(app._catalog_age == 12 and app.growth.level == 0 and app.growth.age == 0 and view.game.questions == questions_before_age
 		and view.game.answer == answer_before_age,
 		"Previewing a future age preserves the current phrase and cannot unlock words")
 	view.answer_buttons[0].pressed.emit()
@@ -739,7 +739,7 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	check(app._mode_id == "phrase" and app._phrase.is_visible_in_tree() and app._phrase.game.questions.size() == 3
 		and app._phrase.game.phase == "building" and app._phrase.game.completed == 0 and app._phrase.game.mistakes == 0,
 		"Public New adventure starts another fresh three-question Phrase Builder round")
-	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) <= app.growth.level),
+	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) <= app.growth.learning_age()),
 		"The next Phrase Builder round uses the earned level rather than a future catalogue preview")
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().surprise.active,
 		"A new phrase round keeps saved progress and clears the previous displayed gift")
@@ -767,6 +767,7 @@ func _check_layout(app, directory: String) -> void:
 	var saved := ConfigFile.new()
 	var growth_path: String = directory + "/growth.cfg"
 	check(saved.load(growth_path) == OK, "The advanced layout fixture starts from the saved learning state")
+	saved.set_value("growth", "version", 1)
 	saved.set_value("growth", "level", 12)
 	# Leave this four-word phrase unmastered so the learning-priority selector
 	# can choose it ahead of longer, already-mastered phrases in the curriculum.
@@ -775,13 +776,13 @@ func _check_layout(app, directory: String) -> void:
 		if not ["bright", "red", "birthday", "balloon"].has(str(word.id)):
 			streaks[str(word.id)] = 6
 	saved.set_value("growth", "streaks", streaks)
-	check(saved.save(growth_path) == OK and app.growth.load_state() and app.growth.level == 12,
-		"The advanced layout fixture loads an earned Lv12+ state")
+	check(saved.save(growth_path) == OK and app.growth.load_state() and app.growth.age == 12 and app.growth.learning_age() == 12,
+		"The advanced layout fixture loads an migrated completed age-12 state with all vocabulary available")
 	app._refresh_growth()
 	var probe = PhraseModel.new()
 	var layout_seed: int = -1
 	for seed_value in range(128):
-		if probe.reset(app._learning_words(), str(app.growth.level), seed_value) and probe.current_question().words.size() == 4:
+		if probe.reset(app._learning_words(), str(app.growth.learning_age()), seed_value) and probe.current_question().words.size() == 4:
 			layout_seed = seed_value
 			break
 	check(layout_seed >= 0 and app.new_round(layout_seed, false, "", "phrase"), "A four-word, six-choice fixture starts through the real round API")

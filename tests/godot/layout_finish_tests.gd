@@ -27,6 +27,8 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -47,16 +49,16 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_title.text == "Grow with Pip" and app.theme_buttons.size() == 8
+	check(app._collection_title.text == "Lv0 · Baby Pip" and app.theme_buttons.size() == 8
 		and app._world_scroll.is_ancestor_of(app._world_grid),
-		"Growth keeps a single title plus a persistent World strip")
+		"Growth keeps a single level-and-age title plus a persistent World strip")
 	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
 		"The shared strip has no retained World heading or tagline fields")
 	var css_scale: float = app.Style.ui_scale(app)
 	check(app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y
 		and app._age_catalog.get_global_rect().end.y <= app._world_scroll.global_position.y,
 		"Age choices precede the word catalog and world settings follow it")
-	check(app._world_grid is HBoxContainer and app._world_grid.get_theme_constant("separation") == roundi(6 / css_scale),
+	check(app._world_grid is HBoxContainer and app._world_grid.get_theme_constant("separation") == ceili(6 / css_scale),
 		"Eight World icons form one row with six CSS-pixel gaps")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")
 	check(app._collection_back.text.is_empty() and is_equal_approx(app._collection_back.size.x, app._collection_back.size.y),
@@ -65,9 +67,9 @@ func _run() -> void:
 		return button.is_visible_in_tree() and button.icon != null and button.tooltip_text == button.name and button.get("accessibility_name") == button.name),
 		"World icons have clear native tooltips and accessible names")
 	for button in app.theme_buttons:
-		check(button.text.is_empty() and button.size.is_equal_approx(Vector2.ONE * ceilf(52 / css_scale))
-			and button.get_theme_constant("icon_max_width") == ceili(36 / css_scale),
-			"Each named World icon has a 52 CSS-pixel square target and 36 CSS-pixel artwork")
+		check(button.text.is_empty() and button.size.is_equal_approx(Vector2.ONE * (44 / css_scale))
+			and button.get_theme_constant("icon_max_width") == ceili(30 / css_scale),
+			"Each named World icon has a 44 CSS-pixel square touch target and 30 CSS-pixel artwork")
 	check(not app.has_method("_show_reward_section") and app.find_child("Rewards_medals", true, false) == null,
 		"Obsolete collection routes and Medals navigation are removed")
 	check(app._age_catalog.is_visible_in_tree() and app.find_child("PipRoom", true, false) == null,

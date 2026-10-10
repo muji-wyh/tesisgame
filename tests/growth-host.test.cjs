@@ -26,7 +26,7 @@ test('learning saves are verified synchronously and leave existing rewards and s
   ]);
   const storage = { getItem: name => records.get(name) ?? null, setItem: (name, value) => records.set(name, value) };
   assert.equal(host(storage).growthState(), null);
-  const value = '[growth]\nversion=1\nlevel=3\nstreaks={"apple":6}\nreceipts=["round-1:match-1"]\n';
+  const value = '[growth]\nversion=2\nlevel=1\nage=0\nstreaks={"apple":6}\nmastered_words=["apple"]\nreceipts=["round-1:match-1"]\n';
   assert.equal(host(storage).saveGrowthState(value, null), true);
   assert.equal(host(storage).growthState(), value);
   assert.equal(records.get('wordBuddies.medalProgress'), 'medals');
@@ -88,22 +88,39 @@ test('presentation saves report blocked and silently discarded writes instead of
   assert.equal(writes, 0);
 });
 
-test('growth snapshots use text and expose precise mastery progress without executable markup', () => {
+test('growth snapshots distinguish level progress, Pip age, and vocabulary mastery without executable markup', () => {
   const status = { dataset: {}, textContent: '' };
   const attributes = new Map();
   const progress = { setAttribute: (name, value) => attributes.set(name, value) };
   const bridge = host({}, { getElementById: id => id === 'growth-status' ? status : progress });
-  bridge.growthStatus(JSON.stringify({ level: 4, mastered: 5, total: 20, save_ok: true, error: '<script>bad()</script>' }));
-  assert.equal(status.textContent, 'Lv4. 5 of 20 words mastered.');
-  assert.equal(attributes.get('aria-valuenow'), '25');
+  const initial = { level: 0, age: 0, learning_age: 3, mastered: 0, total: 80,
+    level_mastered: 0, level_required: 1, level_remaining: 1, level_progress: 0, save_ok: true };
+  bridge.growthStatus(JSON.stringify(initial));
+  assert.equal(status.textContent, 'Lv0. Pip: Baby. 0 of 1 new words toward Lv1. Age 3 vocabulary: 0 of 80 words mastered.');
+  assert.equal(attributes.get('aria-valuenow'), '0');
+  bridge.growthStatus(JSON.stringify({ ...initial, level: 4, mastered: 5,
+    level_mastered: 2, level_required: 3, level_remaining: 1, level_progress: 2 / 3, error: '<script>bad()</script>' }));
+  assert.equal(status.textContent, 'Lv4. Pip: Baby. 2 of 3 new words toward Lv5. Age 3 vocabulary: 5 of 80 words mastered.');
+  assert.equal(attributes.get('aria-valuenow'), '67', 'The header progress follows the next level, not the age cohort percentage');
   assert.equal(JSON.parse(status.dataset.snapshot).error, '<script>bad()</script>');
-  bridge.growthStatus(JSON.stringify({ level: 12, mastered: 20, total: 20, completed: true, save_ok: false }));
-  assert.match(status.textContent, /^Lv12\+.*mastered the final level.*waiting to be saved/);
+  bridge.growthStatus(JSON.stringify({ ...initial, level: 12, age: 3, learning_age: 4, mastered: 5, total: 100 }));
+  assert.equal(status.textContent, 'Lv12. Pip: Age 3. 0 of 1 new words toward Lv13. Age 4 vocabulary: 5 of 100 words mastered.');
+  bridge.growthStatus(JSON.stringify({ ...initial, level: 99, age: 12, learning_age: 12, mastered: 20, total: 20,
+    level_mastered: 0, level_required: 0, level_remaining: 0, level_progress: 1,
+    level_completed: true, completed: true, save_ok: false }));
+  assert.equal(status.textContent, 'Lv99. Pip: Age 12+. Maximum level reached. Age 12+ vocabulary: 20 of 20 words mastered. All age stages completed! Learning progress is waiting to be saved. Please retry.');
+  assert.equal(attributes.get('aria-valuenow'), '100');
   const before = status.dataset.snapshot;
-  for (const invalid of ['oops', '[]', '{"level":99,"mastered":0,"total":1}', '{"level":3,"mastered":8,"total":1}']) {
+  const malformed = [{ level: -1 }, { level: 100 }, { level: 1.5 }, { age: 1 }, { age: 13 }, { age: 3.5 },
+    { learning_age: 12 }, { mastered: 81 }, { level_mastered: -1 }, { level_required: -1 },
+    { level_remaining: -1 }, { level_progress: 1.1 }, { level_progress: '0.5' }];
+  for (const invalid of ['oops', '[]', '{}', ...malformed.map(fields => JSON.stringify({ ...initial, ...fields }))]) {
     bridge.growthStatus(invalid);
     assert.equal(status.dataset.snapshot, before);
   }
+  bridge.growthStatus(JSON.stringify({ ...initial, ready: false, save_ok: false }));
+  assert.match(status.textContent, /could not be loaded\. Retry before you play\.$/);
+  assert.doesNotMatch(status.textContent, /waiting to be saved/);
 });
 
 test('retired identity and room interfaces are absent while the old theme is only read for migration', () => {

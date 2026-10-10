@@ -11,9 +11,11 @@ const catalog = JSON.parse(bytes(path.join(root, 'data/pip-growth-stages.json'))
 const preview = JSON.parse(bytes(path.join(__dirname, 'stages.json')));
 const audio = JSON.parse(bytes(path.join(__dirname, 'audio/manifest.json')));
 assert.deepEqual(preview, catalog, 'Runtime and preview catalogs must agree.');
-assert.deepEqual(catalog.stages.map(stage => stage.level), [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-assert.equal(catalog.stages[9].label, 'Lv 12+');
-assert.equal(new Set(catalog.stages.map(stage => stage.id)).size, 10);
+assert.deepEqual(catalog.stages.map(stage => stage.age), [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+assert.equal(catalog.stages[0].label, 'Baby');
+assert.equal(catalog.stages[10].label, 'Age 12+');
+assert.equal(new Set(catalog.stages.map(stage => stage.id)).size, 11);
+assert.ok(catalog.stages.every(stage => !Object.hasOwn(stage, 'level')), 'Pip appearance must not depend on mastery level.');
 assert.deepEqual(audio.profile, { voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%' });
 assert.deepEqual(catalog.voice.profile, audio.profile);
 assert.equal(catalog.voice.autoplay, false);
@@ -21,12 +23,12 @@ assert.equal(audio.files.length, 10);
 const artwork = new Set();
 let checked = 0;
 catalog.stages.forEach((stage, index) => {
-  assert.equal(stage.actions.length, index + 1, `${stage.id}: repertoire must grow one move per level.`);
+  assert.equal(stage.actions.length, Math.max(1, index), `${stage.id}: repertoire must follow completed curriculum age.`);
   assert.equal(new Set(stage.actions).size, stage.actions.length);
-  assert.equal(stage.voices.length, index + 1);
+  assert.equal(stage.voices.length, Math.max(1, index));
   assert.equal(stage.actions.at(-1), stage.newAction.id);
   assert.equal(stage.voices.at(-1), stage.newVoice.id);
-  if (index) {
+  if (index > 1) {
     assert.deepEqual(stage.actions.slice(0, -1), catalog.stages[index - 1].actions);
     assert.deepEqual(stage.voices.slice(0, -1), catalog.stages[index - 1].voices);
   }
@@ -48,7 +50,7 @@ catalog.stages.forEach((stage, index) => {
   assert.deepEqual(recording, bytes(path.join(__dirname, stage.newVoice.previewPath)));
   assert.ok(recording.length > 3000, `${stage.id}: truncated voice recording.`);
 });
-assert.equal(artwork.size, 10, 'All ten stages need distinct authored compositions.');
+assert.equal(artwork.size, 11, 'Baby and all ten ages need distinct authored compositions.');
 for (const weight of [600, 800]) assert.deepEqual(bytes(path.join(__dirname, `Nunito-${weight}.ttf`)), bytes(path.join(root, `assets/fonts/Nunito-${weight}.ttf`)));
 assert.ok(fs.existsSync(path.join(__dirname, 'FONT-LICENSE.txt')));
-console.log(`Pip growth asset contract passed: 10 distinct stages, ${checked} matching SVG sheets, 10 cumulative repertoires, and 10 verified Ava recordings.`);
+console.log(`Pip age asset contract passed: Baby and 10 ages, ${checked} matching SVG sheets, cumulative repertoires, and 10 verified Ava recordings.`);

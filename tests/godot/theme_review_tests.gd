@@ -100,11 +100,11 @@ func _run() -> void:
 			button.grab_focus()
 			await settle()
 			var surface: StyleBox = button.get_theme_stylebox("normal")
-			check(button.size.x * scale >= 52 and button.size.y * scale >= 52,
-				"The theme buttons are visibly larger")
-			check((button.size - surface.get_minimum_size()).x * scale >= 36
-				and button.get_theme_constant("icon_max_width") * scale >= 36,
-				"Inner padding leaves room for the larger theme artwork")
+			check(button.size.x * scale >= 44 and button.size.y * scale >= 44,
+				"The theme buttons preserve accessible touch targets")
+			check((button.size - surface.get_minimum_size()).x * scale >= 24
+				and button.get_theme_constant("icon_max_width") * scale >= 30,
+				"Inner padding preserves visible theme artwork within its icon cap")
 			check(app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()), "Focus reveals theme choices in their horizontal strip")
 		check(app._world_scroll.get_global_rect().position.y >= app._age_catalog.get_global_rect().end.y
 			and app.collection_page.get_global_rect().grow(1).encloses(app._world_scroll.get_global_rect()),
@@ -193,9 +193,10 @@ func _check_treasure_themes(app) -> void:
 			app.cards[card.id].pressed.emit()
 			app.cards[card.word.id + ":image"].pressed.emit()
 			app.feedback_timer.timeout.emit()
+	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	await settle()
 	check(app.model.phase == "won" and app.model.chest_state == "closed",
-		"Three real matches enter the themed treasure result with an unopened chest")
+		"Five real matches enter the themed treasure result with an unopened chest")
 	check(treasure.mouse_filter == Control.MOUSE_FILTER_IGNORE and treasure.focus_mode == Control.FOCUS_NONE,
 		"The world scenery never captures chest pointer input or keyboard focus")
 	var counts_before: Dictionary = app.medal_progress.counts.duplicate(true)

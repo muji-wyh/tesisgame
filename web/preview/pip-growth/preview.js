@@ -295,8 +295,8 @@ async function selectStage(index, scroll = false) {
   const stage = catalog.stages[index];
   document.documentElement.style.setProperty('--accent', stage.accent);
   document.documentElement.style.setProperty('--stage', stage.background);
-  byId('stage-counter').textContent = `${String(index + 1).padStart(2, '0')} / 10`;
-  byId('level-label').textContent = stage.label;
+  byId('stage-counter').textContent = `${String(index + 1).padStart(2, '0')} / ${catalog.stages.length}`;
+  byId('age-label').textContent = stage.label;
   byId('stage-name').textContent = stage.name;
   byId('stage-name-small').textContent = `${stage.label} · ${stage.name}`;
   byId('stage-description').textContent = stage.description;
@@ -307,7 +307,7 @@ async function selectStage(index, scroll = false) {
   byId('character-art').setAttribute('aria-label', `${stage.label} ${stage.name}, ${stage.description}`);
   byId('previous-stage').disabled = index === 0;
   byId('next-stage').disabled = index === catalog.stages.length - 1;
-  document.querySelectorAll('[data-level]').forEach(button => button.setAttribute('aria-current', String(Number(button.dataset.level) === stage.level)));
+  document.querySelectorAll('[data-age]').forEach(button => button.setAttribute('aria-current', String(Number(button.dataset.age) === stage.age)));
   const actions = stage.actions.map(id => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -320,7 +320,7 @@ async function selectStage(index, scroll = false) {
     return button;
   });
   byId('action-list').replaceChildren(...actions);
-  const options = catalog.stages.filter(item => stage.voices.includes(item.newVoice.id)).reverse().map(item => {
+  const options = catalog.stages.filter((item, index) => stage.voices.includes(item.newVoice.id) && catalog.stages.findIndex(previous => previous.newVoice.id === item.newVoice.id) === index).reverse().map(item => {
     const option = document.createElement('option');
     option.value = item.newVoice.id;
     option.textContent = `${item.label} · ${item.newVoice.text}`;
@@ -329,7 +329,7 @@ async function selectStage(index, scroll = false) {
   byId('voice-select').replaceChildren(...options);
   byId('voice-select').value = stage.newVoice.id;
   updateVoice();
-  history.replaceState(null, '', `#lv${stage.level}`);
+  history.replaceState(null, '', `#age${stage.age}`);
   const art = await stageArt(stage);
   if (token !== selectionToken) return;
   rig = createRig(art);
@@ -347,27 +347,27 @@ async function initialize() {
   catalog.stages.forEach((stage, index) => {
     const tab = document.createElement('button');
     tab.type = 'button';
-    tab.className = 'level-tab';
-    tab.dataset.level = stage.level;
+    tab.className = 'age-tab';
+    tab.dataset.age = stage.age;
     tab.textContent = stage.label;
     tab.addEventListener('click', () => selectStage(index).catch(showError));
-    byId('level-picker').append(tab);
+    byId('age-picker').append(tab);
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'journey-card';
-    card.dataset.level = stage.level;
+    card.dataset.age = stage.age;
     card.setAttribute('aria-label', `Meet ${stage.label} ${stage.name}`);
     const miniature = document.createElement('span');
     miniature.className = 'miniature';
-    const level = document.createElement('span');
-    level.className = 'mini-level';
-    level.textContent = stage.label;
+    const age = document.createElement('span');
+    age.className = 'mini-age';
+    age.textContent = stage.label;
     const name = document.createElement('strong');
     name.textContent = stage.name;
     const moves = document.createElement('span');
     moves.className = 'mini-moves';
     moves.textContent = `${stage.actions.length} ${stage.actions.length === 1 ? 'move' : 'moves'} · ${stage.voices.length} ${stage.voices.length === 1 ? 'hello' : 'hellos'}`;
-    card.append(miniature, level, name, moves);
+    card.append(miniature, age, name, moves);
     card.addEventListener('click', () => selectStage(index, true).catch(showError));
     byId('journey-grid').append(card);
     staticCards.set(stage.id, miniature);
@@ -387,8 +387,8 @@ async function initialize() {
     byId('pose-caption').textContent = reducedMotion ? 'Reduced motion · still full of curiosity.' : 'Ready to say hello.';
     requestFrame();
   });
-  const requested = Number(location.hash.replace('#lv', ''));
-  const index = catalog.stages.findIndex(stage => stage.level === requested);
+  const requested = Number(location.hash.replace('#age', ''));
+  const index = catalog.stages.findIndex(stage => stage.age === requested);
   await selectStage(index < 0 ? 0 : index);
   await Promise.all(catalog.stages.map(async stage => {
     const art = await stageArt(stage);
@@ -415,6 +415,6 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', stopVoice);
 window.pipGrowthPreview = Object.freeze({
-  snapshot: () => ({ level: catalog?.stages[selectedIndex].level, action: activeAction?.id || null, playing, reducedMotion, expression: rig?.expression, ready: document.body.dataset.ready === 'true' })
+  snapshot: () => ({ age: catalog?.stages[selectedIndex].age, action: activeAction?.id || null, playing, reducedMotion, expression: rig?.expression, ready: document.body.dataset.ready === 'true' })
 });
 initialize().catch(showError);

@@ -9,14 +9,22 @@ const growth = page => page.locator('#growth-status').evaluate(node => JSON.pars
 const view = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.view || '{}'));
 const phrase = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.phrase || '{}'));
 
-async function seed(page, level, streaks) {
-  const record = `[growth]\nversion=1\nlevel=${level}\nstreaks=${JSON.stringify(streaks)}\nreceipts=[]\n`;
+async function seedRecord(page, record) {
   await page.addInitScript(({ key, record }) => {
     if (!sessionStorage.getItem('growth-test-seeded')) {
       localStorage.setItem(key, record);
       sessionStorage.setItem('growth-test-seeded', 'true');
     }
   }, { key: KEY, record });
+}
+
+async function seedLegacyCohort(page, learningAge, streaks) {
+  // Deliberately exercise the production migration from the previous cohort-based level save.
+  await seedRecord(page, `[growth]\nversion=1\nlevel=${learningAge}\nstreaks=${JSON.stringify(streaks)}\nreceipts=[]\n`);
+}
+
+async function seedCurrentState(page, { level = 0, age = 0, streaks = {}, masteredWords = [] }) {
+  await seedRecord(page, `[growth]\nversion=2\nlevel=${level}\nage=${age}\nstreaks=${JSON.stringify(streaks)}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=[]\n`);
 }
 
 async function press(page, control) {
@@ -61,14 +69,17 @@ async function expectHeaderBadge(page) {
   await expect.poll(async () => {
     const bar = (await view(page)).controls?.find(control => control.name === 'GrowthProgressBar');
     return bar ? bar.value / bar.max_value : -1;
-  }, { message: 'The visible growth bar follows current mastered-word progress' }).toBeCloseTo(state.progress, 6);
+  }, { message: 'The visible growth bar follows the next Lv goal independently of the age cohort' }).toBeCloseTo(state.level_progress, 6);
   const layout = await view(page), bounds = await metrics(page);
   const badge = layout.controls.find(control => control.name === 'GrowthProgressButton');
   const bar = layout.controls.find(control => control.name === 'GrowthProgressBar');
   expect(badge.visible).toBe(true);
   expect(badge.disabled).toBe(false);
   expect(badge.description).toContain(state.label);
+  expect(badge.description).toContain(state.age_label);
   expect(badge.description).toContain(`${state.mastered} of ${state.total} words mastered`);
+  expect(badge.description).toContain(`Master ${state.level_remaining} new`);
+  expect(badge.description).toContain(`Lv${state.level + 1}`);
   expect(bar.visible).toBe(true);
   const [x, y, width, height] = badge.rect;
   const [barX, barY, barWidth, barHeight] = bar.rect;
@@ -93,10 +104,14 @@ async function expectHeaderBadge(page) {
   return { state, layout, badge, bar, bounds };
 }
 
-test('new device starts directly at Lv3 with a compact header badge and complete notebook', async ({ page }, info) => {
+test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete notebook', async ({ page }, info) => {
   const errors = await openGame(page);
   await expect(page).toHaveTitle(/Grow with Pip/);
-  await expect.poll(async () => (await growth(page)).level).toBe(3);
+  await expect.poll(async () => (await growth(page)).level).toBe(0);
+  expect((await growth(page)).age).toBe(0);
+  expect((await growth(page)).age_label).toBe('Baby');
+  expect((await growth(page)).learning_age).toBe(3);
+  expect((await growth(page)).level_required).toBe(1);
   expect((await growth(page)).total).toBe(80);
   expect(await page.evaluate(() => ['leaderboardState', 'playroomState'].some(name => name in window.wordBuddiesHost))).toBe(false);
   await expect.poll(async () => Boolean((await view(page)).board)).toBe(true);
@@ -111,7 +126,8 @@ test('new device starts directly at Lv3 with a compact header badge and complete
   await pressNamed(page, 'GrowthAge4');
   await expect.poll(async () => (await view(page)).catalog?.age_band).toBe('4');
   expect((await view(page)).notice).toContain('Preview only');
-  expect((await growth(page)).level).toBe(3);
+  expect((await growth(page)).level).toBe(0);
+  expect((await growth(page)).age).toBe(0);
   await page.screenshot({ path: info.outputPath('growth-notebook.png'), scale: 'css' });
   await pressNamed(page, 'GrowthBack');
   await expect.poll(async () => (await view(page)).visible).toBe(false);
@@ -121,8 +137,8 @@ test('new device starts directly at Lv3 with a compact header badge and complete
 test('partial growth remains accessible in every mode on desktop, narrow, and short screens', async ({ page }, info) => {
   test.skip(info.project.name !== 'desktop-chromium', 'The responsive matrix runs once; device projects retain the real growth-flow coverage.');
   test.setTimeout(240000);
-  const mastered = cohort.slice(0, 20);
-  await seed(page, 3, Object.fromEntries(mastered.map(word => [word.id, 6])));
+  const mastered = cohort.slice(0, 21);
+  await seedLegacyCohort(page, 3, Object.fromEntries(mastered.map(word => [word.id, 6])));
   const errors = await openGame(page);
   const cases = [
     { mode: 'match', width: 1366, height: 768 },
@@ -140,7 +156,10 @@ test('partial growth remains accessible in every mode on desktop, narrow, and sh
     await chooseMode(page, item.mode);
     await expect.poll(async () => (await metrics(page)).library.current).toBe(item.mode);
     const badge = await expectHeaderBadge(page);
-    expect(badge.state.level).toBe(3);
+    expect(badge.state.level).toBe(8);
+    expect(badge.state.age).toBe(0);
+    expect(badge.state.level_mastered).toBe(1);
+    expect(badge.state.level_required).toBe(4);
     expect(badge.state.mastered).toBe(mastered.length);
     expect(badge.state.progress).toBeCloseTo(mastered.length / cohort.length, 6);
     await page.screenshot({ path: info.outputPath(`growth-header-${item.mode}-${item.width}x${item.height}.png`), scale: 'css' });
@@ -156,7 +175,7 @@ test('partial growth remains accessible in every mode on desktop, narrow, and sh
 
 test('real Match and Memory answers persist shared streaks while peek is neutral', async ({ page }) => {
   test.setTimeout(150000);
-  await seed(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
+  await seedLegacyCohort(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
   const errors = await openGame(page);
   const cards = await discoverMatchCards(page);
   const picture = cards.find(card => card.kind === 'Picture');
@@ -202,7 +221,7 @@ test('real Match and Memory answers persist shared streaks while peek is neutral
 });
 
 test('Phrase Builder credits all target words after correction and keeps unused distractors neutral', async ({ page }) => {
-  await seed(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
+  await seedLegacyCohort(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
   const errors = await openGame(page, { mode: 'phrase' });
   await expect.poll(async () => (await phrase(page)).phase).toBe('building');
   const initial = await phrase(page);
@@ -231,36 +250,67 @@ test('Phrase Builder credits all target words after correction and keeps unused 
   expect(errors).toEqual([]);
 });
 
-test('sixth real success promotes Pip and the new level survives a reload', async ({ page }, info) => {
+test('the first mastered word earns Lv1 and two more earn Lv2 while Pip remains a baby', async ({ page }) => {
+  await seedCurrentState(page, { streaks: Object.fromEntries(cohort.map(word => [word.id, 5])) });
+  const errors = await openGame(page);
+  const cards = await discoverMatchCards(page);
+  const targets = [...new Set(cards.map(card => card.word))].slice(0, 3);
+  expect(targets).toHaveLength(3);
+  for (const [index, word] of targets.entries()) {
+    for (const card of cards.filter(card => card.word === word)) await matchTap(page, card);
+    await expect.poll(async () => (await growth(page)).lifetime_mastered).toBe(index + 1);
+    const current = await growth(page);
+    expect(current.level).toBe(index === 2 ? 2 : 1);
+    expect(current.age).toBe(0);
+    expect(current.learning_age).toBe(3);
+    expect(current.streaks[word]).toBe(6);
+    await expectHeaderBadge(page);
+  }
+  await page.reload();
+  await enterGame(page);
+  await expect.poll(async () => (await growth(page)).level).toBe(2);
+  expect((await growth(page)).age).toBe(0);
+  expect((await growth(page)).lifetime_mastered).toBe(3);
+  expect(errors).toEqual([]);
+});
+
+test('mastering the complete age 3 cohort grows Pip while independent Lv progress survives a reload', async ({ page }, info) => {
   const streaks = Object.fromEntries(cohort.map(word => [word.id, word.id === 'apple' ? 5 : 6]));
-  await seed(page, 3, streaks);
+  await seedLegacyCohort(page, 3, streaks);
   const errors = await openGame(page);
   const before = await expectHeaderBadge(page);
   expect(before.state.mastered).toBe(cohort.length - 1);
-  expect(before.bar.value / before.bar.max_value).toBeCloseTo((cohort.length - 1) / cohort.length, 6);
+  expect(before.state.level).toBe(19);
+  expect(before.state.age).toBe(0);
+  expect(before.bar.value / before.bar.max_value).toBeCloseTo(1 / 7, 6);
+  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=2/);
   const cards = await discoverMatchCards(page);
   expect(cards.filter(card => card.word === 'apple')).toHaveLength(2);
   for (const card of cards.filter(card => card.word === 'apple')) await matchTap(page, card);
-  await expect.poll(async () => (await growth(page)).level).toBe(4);
+  await expect.poll(async () => (await growth(page)).age).toBe(3);
   expect((await growth(page)).streaks.apple).toBe(6);
   const promoted = await expectHeaderBadge(page);
-  expect(promoted.state.level).toBe(4);
+  expect(promoted.state.level).toBe(19);
+  expect(promoted.state.learning_age).toBe(4);
+  expect(promoted.state.lifetime_mastered).toBe(80);
   expect(promoted.state.total).toBe(words.filter(word => word.min_age === 4).length);
   expect(promoted.state.mastered).toBe(0);
-  expect(promoted.bar.value).toBe(0);
+  expect(promoted.bar.value / promoted.bar.max_value).toBeCloseTo(2 / 7, 6);
   await pressNamed(page, 'GrowthProgressButton');
   await expect.poll(async () => (await view(page)).catalog?.age_band).toBe('4');
-  await page.screenshot({ path: info.outputPath('level-four.png'), scale: 'css' });
+  await page.screenshot({ path: info.outputPath('age-three-level-nineteen.png'), scale: 'css' });
   await page.reload();
   await enterGame(page);
-  await expect.poll(async () => (await growth(page)).level).toBe(4);
+  await expect.poll(async () => (await growth(page)).age).toBe(3);
+  expect((await growth(page)).level).toBe(19);
+  expect((await growth(page)).learning_age).toBe(4);
   expect(errors).toEqual([]);
 });
 
 test('two open game tabs preserve each other\'s completed word practice', async ({ page, context }, info) => {
   test.setTimeout(150000);
   test.skip(info.project.name !== 'desktop-chromium', 'Cross-tab storage is covered once on desktop.');
-  await seed(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
+  await seedLegacyCohort(page, 3, Object.fromEntries(cohort.map(word => [word.id, 2])));
   const errors = await openGame(page);
   const other = await context.newPage();
   try {

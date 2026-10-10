@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "Grow with Pip",
-  "status": "Interactive growth-stage design review",
-  "description": "Ten proposed stage compositions derived from integrated Pip production artwork. Age labels describe the learning journey, not a physical transformation or a developmental diagnosis.",
+  "status": "Interactive age-stage design review",
+  "description": "Baby Pip and ten age compositions derived from integrated production artwork. Pip appearance follows completed curriculum ages, independently of word-mastery levels. These stages are not a developmental diagnosis.",
   "artSource": "assets/images/mascots/pip-dance-parts.svg",
   "wardrobeSource": "assets/images/mascots/outfits/wardrobe.svg",
   "expressionsSource": "assets/images/mascots/pip-expression-heads.svg",
@@ -29,12 +29,69 @@
     },
     "postprocessing": "none",
     "autoplay": false,
-    "scope": "Explicit preview playback or level-up recognition; never gameplay guidance."
+    "scope": "Explicit preview playback or age-growth recognition; never gameplay guidance."
   },
   "stages": [
     {
-      "level": 3,
-      "label": "Lv 3",
+      "age": 0,
+      "label": "Baby",
+      "id": "baby",
+      "name": "Baby Pip",
+      "description": "A downy little duckling with a round face, tiny wings, and a gentle first hello.",
+      "accent": "#b7824e",
+      "background": "#fbefdc",
+      "compositionStatus": "proposed-stage-composition",
+      "source": {
+        "head": null,
+        "body": null,
+        "palette": {
+          "#F6D36E": "#F7DB91",
+          "#FFE68E": "#FFF0B9",
+          "#FFDE7F": "#FFE4A1",
+          "#F3AE65": "#F0BB81",
+          "#F3B39B": "#F4B9AA"
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(.84 .76) translate(-61 -104)",
+          "head": "translate(61 77) scale(1.025) translate(-61 -72)",
+          "wings": "translate(61 87) scale(.78 .82) translate(-61 -80)",
+          "feet": "translate(61 106) scale(.78 .78) translate(-61 -105)"
+        }
+      },
+      "art": {
+        "regular": "assets/images/mascots/growth/pip-baby.svg",
+        "idle": "assets/images/mascots/growth/pip-baby-idle.svg",
+        "parts": "assets/images/mascots/growth/pip-baby-parts.svg",
+        "expressions": "assets/images/mascots/growth/pip-baby-expressions.svg",
+        "expressionHeads": "assets/images/mascots/growth/pip-baby-expression-heads.svg"
+      },
+      "previewArt": {
+        "regular": "art/pip-baby.svg",
+        "idle": "art/pip-baby-idle.svg",
+        "parts": "art/pip-baby-parts.svg",
+        "expressions": "art/pip-baby-expressions.svg",
+        "expressionHeads": "art/pip-baby-expression-heads.svg"
+      },
+      "actions": [
+        "wave"
+      ],
+      "newAction": {
+        "id": "wave",
+        "label": "Hello wave"
+      },
+      "voices": [
+        "pip-growth-sprout"
+      ],
+      "newVoice": {
+        "id": "pip-growth-sprout",
+        "text": "Hello! I'm Pip.",
+        "path": "assets/audio/pip-growth/sprout.mp3",
+        "previewPath": "audio/sprout.mp3"
+      }
+    },
+    {
+      "age": 3,
+      "label": "Age 3",
       "id": "sprout",
       "name": "Sprout",
       "description": "A soft mint shirt and an open, curious face. The first little hello.",
@@ -81,8 +138,8 @@
       }
     },
     {
-      "level": 4,
-      "label": "Lv 4",
+      "age": 4,
+      "label": "Age 4",
       "id": "little-helper",
       "name": "Little Helper",
       "description": "Leaf-green overalls, ready for small discoveries and helping hands.",
@@ -128,8 +185,8 @@
       }
     },
     {
-      "level": 5,
-      "label": "Lv 5",
+      "age": 5,
+      "label": "Age 5",
       "id": "curious-scout",
       "name": "Curious Scout",
       "description": "A honey-yellow cap joins the familiar overalls: ready to venture out.",
@@ -182,8 +239,8 @@
       }
     },
     {
-      "level": 6,
-      "label": "Lv 6",
+      "age": 6,
+      "label": "Age 6",
       "id": "story-finder",
       "name": "Story Finder",
       "description": "A raspberry beret and deep teal overalls for an imaginative storyteller.",
@@ -240,8 +297,8 @@
       }
     },
     {
-      "level": 7,
-      "label": "Lv 7",
+      "age": 7,
+      "label": "Age 7",
       "id": "trail-buddy",
       "name": "Trail Buddy",
       "description": "A sage field hat and pocketed vest make room for a growing collection of words.",
@@ -301,8 +358,8 @@
       }
     },
     {
-      "level": 8,
-      "label": "Lv 8",
+      "age": 8,
+      "label": "Age 8",
       "id": "wayfinder",
       "name": "Wayfinder",
       "description": "A flower-trimmed trail hat and a warm scarf: calm, cheerful, and prepared.",
@@ -362,8 +419,8 @@
       }
     },
     {
-      "level": 9,
-      "label": "Lv 9",
+      "age": 9,
+      "label": "Age 9",
       "id": "word-maker",
       "name": "Word Maker",
       "description": "A cornflower beret and a maker's apron turn familiar words into new ideas.",
@@ -429,8 +486,8 @@
       }
     },
     {
-      "level": 10,
-      "label": "Lv 10",
+      "age": 10,
+      "label": "Age 10",
       "id": "sky-explorer",
       "name": "Sky Explorer",
       "description": "A bright explorer cap meets a pearl field suit, with an amber instrument panel.",
@@ -498,8 +555,8 @@
       }
     },
     {
-      "level": 11,
-      "label": "Lv 11",
+      "age": 11,
+      "label": "Age 11",
       "id": "bright-navigator",
       "name": "Bright Navigator",
       "description": "A cream navigator cap and blue field suit carry a more confident silhouette.",
@@ -565,8 +622,8 @@
       }
     },
     {
-      "level": 12,
-      "label": "Lv 12+",
+      "age": 12,
+      "label": "Age 12+",
       "id": "kind-guide",
       "name": "Kind Guide",
       "description": "An amber beret, deep teal jacket, and gold details. Still the same friendly Pip.",

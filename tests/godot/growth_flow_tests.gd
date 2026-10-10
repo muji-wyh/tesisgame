@@ -45,7 +45,7 @@ func _run() -> void:
 	Fixture.install(app, directory)
 	root.add_child(app)
 	await settle()
-	check(app.growth.ready and app.growth.level == 3, "A new device starts at Lv3 without a player gate")
+	check(app.growth.ready and app.growth.level == 0 and app.growth.age == 0, "A new device starts at Lv0 with Baby Pip without a player gate")
 	check(app.model.cards.size() == 10, "The real game starts with a playable Match board")
 	if app.model.cards.size() != 10:
 		app.queue_free()
@@ -62,10 +62,10 @@ func _run() -> void:
 	app._show_collection()
 	await settle()
 	check(app.collection_page.visible and app._age_catalog.word_count() == 80, "Notebook lists the complete current cohort")
-	check(app._age_catalog.snapshot().growth.level == 3, "Notebook shows saved mastery state")
+	check(app._age_catalog.snapshot().growth.age == 0, "Notebook shows saved mastery state")
 	app._choose_age_band("12")
 	await settle()
-	check(app.growth.level == 3 and app._catalog_age == 12, "Future preview cannot change the earned level")
+	check(app.growth.age == 0 and app._catalog_age == 12, "Future preview cannot change the earned level")
 	check(app._age_catalog.word_count() > 0 and app._age_notice.text.begins_with("Preview only"), "Future words are labelled as locked previews")
 	app._hide_collection()
 	app.on_page_hidden()
@@ -80,45 +80,77 @@ func _run() -> void:
 	app.queue_free()
 	await settle()
 	await _load_failure(directory)
+	await _age_milestones(directory)
 	for file in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory.path_join(file))
 	DirAccess.remove_absolute(directory)
 	print("Growth flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
+
+func _age_milestones(directory: String) -> void:
+	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory, "age-milestones.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	root.add_child(app)
+	await settle()
+	app.audio.set_muted(true)
+	var words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 3)
+	var ids: Array = words.map(func(word: Dictionary) -> String: return str(word.id))
+	for index in range(6):
+		app._record_growth("age-three-%d" % index, ids, true)
+	check(app.growth.age == 3 and app.growth.level == 19 and app.growth.learning_age() == 4,
+		"Completing the real 80-word age-three set earns Age 3 independently of Lv19")
+	for mascot in [app.duck, app._phrase.pip, app._round_celebration.pip]:
+		check(mascot.growth_age == 3, "Every gameplay and celebration Pip follows earned age")
+	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
+		check(app.new_round(813, false, "", mode), "%s uses the next age cohort independently of Lv19" % mode)
+		check(app.model.age_band_id == "4", "%s shares the age-four learning target" % mode)
+		check(app.duck.growth_age == 3, "Starting %s cannot promote Pip from Lv19" % mode)
+	app._show_collection()
+	await settle()
+	check(app._catalog_age == 4 and app._age_catalog.word_count() == 99 and app._collection_title.text.contains("Age 3"),
+		"Notebook distinguishes earned Age 3 from the next 99-word Age 4 set")
+	app._hide_collection()
+	app._record_growth("age-three-mistake", [ids[0]], false)
+	check(app.growth.level == 19 and app.growth.age == 3 and app.duck.growth_age == 3,
+		"A later mistake resets a word without regressing either growth axis or appearance")
+	app.audio.halt()
+	app.queue_free()
+	await settle()
+
 func _badge_states() -> void:
 	var badge = Badge.new()
 	root.add_child(badge)
 	var states: Array[Dictionary] = [
-		{"ready": true, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "practice_progress": 0.75},
-		{"ready": true, "level": 3, "label": "Lv3", "mastered": 17, "total": 80, "progress": 17.0 / 80.0, "practice_progress": 0.95},
-		{"ready": true, "level": 11, "label": "Lv11", "mastered": 89, "total": 120, "progress": 89.0 / 120.0},
-		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 0, "total": 120, "progress": 0.0},
-		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 30, "total": 120, "progress": 0.25},
-		{"ready": true, "level": 12, "label": "Lv12+", "mastered": 120, "total": 120, "progress": 1.0, "completed": true},
-		{"ready": false, "level": 3, "label": "Lv3", "mastered": 0, "total": 80, "progress": 0.0, "save_ok": false}
+		{"ready": true, "level": 0, "label": "Lv0", "age_label": "Baby", "level_mastered": 0, "level_required": 1, "level_remaining": 1, "level_progress": 0.0, "mastered": 0, "total": 80, "progress": 0.0, "practice_progress": 0.75},
+		{"ready": true, "level": 1, "label": "Lv1", "age_label": "Baby", "level_mastered": 1, "level_required": 2, "level_remaining": 1, "level_progress": 0.5, "mastered": 2, "total": 80, "progress": 2.0 / 80.0},
+		{"ready": true, "level": 20, "label": "Lv20", "age_label": "Age 3", "level_mastered": 3, "level_required": 7, "level_remaining": 4, "level_progress": 3.0 / 7.0, "mastered": 19, "total": 99, "progress": 19.0 / 99.0},
+		{"ready": true, "level": 98, "label": "Lv98", "age_label": "Age 11", "level_mastered": 29, "level_required": 30, "level_remaining": 1, "level_progress": 29.0 / 30.0, "mastered": 88, "total": 89, "progress": 88.0 / 89.0},
+		{"ready": true, "level": 99, "label": "Lv99", "age_label": "Age 12+", "level_mastered": 0, "level_required": 0, "level_remaining": 0, "level_progress": 1.0, "level_completed": true, "mastered": 89, "total": 89, "progress": 1.0, "completed": true},
+		{"ready": false, "level": 0, "label": "Lv0", "level_progress": 0.0, "mastered": 0, "total": 80, "progress": 0.0, "save_ok": false}
 	]
 	for state: Dictionary in states:
 		badge.configure(state)
-		check(absf(badge.bar.value - float(state.progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
+		check(absf(badge.bar.value - float(state.level_progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
 			"The badge fills only for mastered words, never partial practice evidence")
 		if bool(state.ready):
 			check(badge.level_label.text == state.label
-				and badge.count_label.text == "%d / %d" % [state.mastered, state.total],
-				"Growth facts retain the exact earned level and mastered cohort count")
+				and badge.count_label.text == ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.level_mastered, state.level_required]),
+				"Growth facts retain the exact earned level and new-word progress")
 			check(badge.tooltip_text.contains("%d of %d words mastered" % [state.mastered, state.total])
 				and badge.tooltip_text.contains("View your words")
 				and str(badge.get("accessibility_name")) == badge.tooltip_text,
 				"The compact visual count retains its mastery meaning and notebook action in the accessible description")
-			if int(state.level) < 12:
-				var next_level: String = "Lv12+" if int(state.level) == 11 else "Lv%d" % (int(state.level) + 1)
+			if int(state.level) < 99:
+				var next_level: String = "Lv%d" % (int(state.level) + 1)
 				check(badge.tooltip_text.contains("reach " + next_level),
 					"The earned level retains the correct next-stage target without crowding the badge")
 			else:
-				check(not badge.tooltip_text.contains("Lv13") and not badge.tooltip_text.contains("reach "),
+				check(not badge.tooltip_text.contains("Lv100") and not badge.tooltip_text.contains("reach "),
 					"The final stage offers word review without inventing a further level")
 				if bool(state.get("completed", false)):
-					check(badge.tooltip_text.contains("All stages unlocked"),
+					check(badge.tooltip_text.contains("Maximum level reached"),
 						"The completed final stage keeps its completion meaning accessible")
 		else:
 			check(badge.level_label.text == "Lv…" and badge.count_label.text == "Unavailable"
@@ -132,7 +164,7 @@ func _badge_states() -> void:
 			check(badge.get_global_rect().encloses(badge.bar.get_global_rect())
 				and badge.bar.is_visible_in_tree() and not badge.bar.show_percentage,
 				"Every badge size keeps its actual mastery bar inside the clickable entry")
-			for label: Label in [badge.level_label, badge.count_label, badge.target_label]:
+			for label: Label in [badge.level_label, badge.count_label, badge.target_label, badge.age_label]:
 				if label.is_visible_in_tree():
 					check(badge.get_global_rect().grow(0.5).encloses(label.get_global_rect()),
 						"Visible badge text stays inside the %s entry" % footprint)
@@ -156,7 +188,7 @@ func _badge_states() -> void:
 				check(badge.count_label.z_index > badge.bar.z_index
 					or (badge.count_label.z_index == badge.bar.z_index and badge.count_label.get_index() > badge.bar.get_index()),
 					"The mastery count paints above the track and remains readable across its fill")
-			check(absf(badge.bar.value - float(state.progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
+			check(absf(badge.bar.value - float(state.level_progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
 				"Responsive fitting cannot change saved mastery progress")
 	badge.configure(states[1])
 	badge.focus_mode = Control.FOCUS_NONE
@@ -184,9 +216,9 @@ func _responsive_badge(app) -> void:
 	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
 		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
 		"The notebook entry and mastery bar share one toolbar button without a separate full-width row")
-	check(app._growth_button.level_label.text == "Lv3" and app._growth_button.count_label.text == "0 / 80"
+	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app._growth_button.age_label.text == "Baby"
 		and app._growth_bar.value == 0.0,
-		"A new device presents the actual zero of eighty mastered words")
+		"A new device presents the first one-word level target independently of Baby age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
 		check(app.new_round(720, false, "", mode), "%s starts for growth HUD layout coverage" % mode)
 		for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 768)]:
@@ -303,8 +335,8 @@ func _memory(app) -> void:
 	app._storage_retry_button.pressed.emit()
 	check(app.growth.streak(next_word.id) == mini(6, next_before + 1) and app.growth.snapshot().pending_count == 0,
 		"Retry saves the queued Memory answer exactly once")
-	check(is_equal_approx(app._growth_bar.value, progress_before + 100.0 / 80.0),
-		"The successful retry advances the badge by exactly one mastered word")
+	check(app.growth.level == 1 and app._growth_button.level_label.text == "Lv1" and app.growth.age == 0 and app.duck.growth_age == 0 and is_equal_approx(app._growth_bar.value, 0.0),
+		"The first mastered word earns Lv1 while Baby Pip and the age cohort remain unchanged")
 	view.continue_feedback()
 
 func _phrase(app) -> void:

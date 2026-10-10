@@ -27,6 +27,8 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
+	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
 	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly"], "All five game modes are available")
@@ -40,10 +42,14 @@ func _run() -> void:
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_lesson"),
 		"The removed Learn mode creates no tab or hidden lesson view")
 	check(FileAccess.file_exists("res://scripts/icon_button.gd"), "Toolbar and peek controls share drawn icons")
-	for button in [app.collection_button, app.hint_button, app._voice_button]:
+	for button in [app.hint_button, app._voice_button]:
 		check(button.text.is_empty(), "The top-right actions use icons rather than text")
 		check(is_equal_approx(button.size.x, button.size.y) and button.size.x >= 44 and button.size.x <= 48,
 			"Toolbar actions are compact square touch targets")
+	check(app.collection_button == app._growth_button and app._growth_button.level_label.text == "Lv0"
+		and app._growth_button.size.x >= 44 and app._growth_button.size.y >= 44
+		and app._growth_button.get_global_rect().encloses(app._growth_bar.get_global_rect()),
+		"The separate level-progress entry keeps a readable badge and a full touch target")
 	check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 		"Gameplay keeps the mode choices inside Pip's closed popover")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:

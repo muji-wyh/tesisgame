@@ -1030,10 +1030,10 @@ func _run() -> void:
 			"Leaving Voice Pop retains no active result celebration")
 		view.set_process(true)
 	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
-	app.growth.level = 3
+	app.growth.age = 0
 	app.choose_mode("pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
-	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_age(word) <= app.growth.level),
+	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_age(word) <= app.growth.learning_age()),
 		"Voice Pop uses only unlocked vocabulary")
 	app._pop.set_process(false)
 	app._on_voice_state([true, true, "Listening."])

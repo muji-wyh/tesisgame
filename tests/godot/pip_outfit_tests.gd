@@ -2,7 +2,7 @@ extends SceneTree
 
 const Pip = preload("res://scripts/duck_mascot.gd")
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
-const LEVELS := [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const AGES := [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 const CELL := Vector2i(168, 168)
 var checks := 0
 var failures := 0
@@ -50,18 +50,18 @@ func _sheets(duck: Button) -> Array[Texture2D]:
 
 
 func _check_contract(duck: Button) -> void:
-	check(duck.growth_level == 3 and duck.growth_actions() == ["wave"], "Pip begins as Lv3 Sprout with the first unlocked gesture")
+	check(duck.growth_age == 0 and duck.growth_actions() == ["wave"], "Pip begins as Baby with the first unlocked gesture")
 	var events: Array[String] = []
 	duck.pressed.connect(func() -> void: events.append("pressed"))
 	var bounds: Rect2 = duck.get_global_rect()
 	var nodes := duck.get_child_count()
-	for level in LEVELS:
-		duck.set_growth_level(level)
+	for age in AGES:
+		duck.set_growth_age(age)
 		var sheets: Array[Texture2D] = _sheets(duck)
 		check(sheets.all(func(texture: Texture2D): return texture != null and texture.get_height() > 0), "Every growth stage loads all five production atlases")
 		for index in range(sheets.size()):
 			check(sheets[index].get_width() == sheets[index].get_height() * [4, 4, 6, 10, 10][index], "Every imported pose and limb retains its square atlas cell dimensions")
-		check(duck.growth_actions().size() == level - 2, "Each new level adds one action while retaining the earlier repertoire")
+		check(duck.growth_actions().size() == maxi(1, age - 2), "Each new age adds one action while retaining the earlier repertoire")
 		for scenario in ["quiet", "gesture", "speaking", "listening", "result", "reduced"]:
 			_reset_visual(duck)
 			match scenario:
@@ -76,10 +76,10 @@ func _check_contract(duck: Button) -> void:
 			var before := _activity(duck)
 			for theme in THEMES:
 				duck.set_outfit_theme(theme)
-				check(duck.theme_id == theme and duck.growth_level == level and _sheets(duck) == sheets
+				check(duck.theme_id == theme and duck.growth_age == age and _sheets(duck) == sheets
 					and _activity(duck) == before, "World " + theme + " preserves the earned appearance and active " + scenario)
-			duck.set_growth_level(level)
-			check(_sheets(duck) == sheets and _activity(duck) == before, "Refreshing an unchanged level retains resources and every animation deadline")
+			duck.set_growth_age(age)
+			check(_sheets(duck) == sheets and _activity(duck) == before, "Refreshing an unchanged age retains resources and every animation deadline")
 			duck.set_outfit_theme("unknown-world")
 			check(duck.theme_id == "spring" and _sheets(duck) == sheets and _activity(duck) == before, "An unknown world falls back safely without replacing growth artwork")
 	check(events.is_empty() and duck.get_child_count() == nodes, "Appearance changes create no activation, audio players, timer or effect nodes")
@@ -135,13 +135,13 @@ func _check_rendered_wardrobes(duck: Button) -> void:
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(viewport)
 	duck.reparent(viewport)
-	var sheet := Image.create(CELL.x * LEVELS.size(), CELL.y * 10, false, Image.FORMAT_RGBA8)
+	var sheet := Image.create(CELL.x * AGES.size(), CELL.y * 10, false, Image.FORMAT_RGBA8)
 	sheet.fill(Color("#F1F6F4"))
 	var outfits: Array[PackedByteArray] = []
 	var smalls: Array[PackedByteArray] = []
-	for column in range(LEVELS.size()):
+	for column in range(AGES.size()):
 		_reset_visual(duck)
-		duck.set_growth_level(LEVELS[column])
+		duck.set_growth_age(AGES[column])
 		var resting: Image = await _capture(viewport, duck)
 		_save_cell(resting, sheet, column, 0)
 		check(not outfits.has(resting.get_data()), "Every earned stage has a distinct complete rendered silhouette")
@@ -182,7 +182,7 @@ func _check_rendered_wardrobes(duck: Button) -> void:
 		var still: Image = await _capture(viewport, duck)
 		_advance(duck, 14.0)
 		check((await _capture(viewport, duck)).get_data() == still.get_data(), "Reduced motion keeps each stage's invitation completely static")
-	check(sheet.save_png(directory + "/native-contact-sheet.png") == OK, "All ten growth appearances and their live poses are saved together")
+	check(sheet.save_png(directory + "/native-contact-sheet.png") == OK, "Baby and all ten age appearances and their live poses are saved together")
 	check(sheet.get_region(Rect2i(0, 0, sheet.get_width(), CELL.y * 2)).save_png(directory + "/native-resting-header.png") == OK, "Full-size and header appearances are available for independent review")
 	duck.reparent(root)
 	viewport.queue_free()

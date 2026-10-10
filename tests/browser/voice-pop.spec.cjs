@@ -665,7 +665,7 @@ test('Voice Pop starts with browser recognition without voice users or local mod
   await popOne(page);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   expect(legacyRequests).toEqual([]);
   expect(errors).toEqual([]);
@@ -1757,7 +1757,7 @@ test('speech failure and More pause the round, then Resume keeps the remaining t
   expect((await state(page)).hits).toBe(paused.hits);
   const more = headerPoint(await metrics(page));
   await tap(page, more.x, more.y);
-  await expect(page.locator('#game-status')).toContainText('Lv3');
+  await expect(page.locator('#game-status')).toContainText('Lv0');
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   await page.keyboard.press('Escape');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');

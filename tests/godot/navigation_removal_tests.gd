@@ -27,6 +27,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
@@ -72,8 +73,8 @@ func _run() -> void:
 	app._show_collection()
 	await settle()
 	var before_words: Array = app.model.lesson_words.duplicate(true)
-	check(app._age_catalog.is_visible_in_tree() and app._collection_title.text == "Grow with Pip",
-		"The growth catalog replaces the retired Pip room")
+	check(app._age_catalog.is_visible_in_tree() and app._collection_title.text == "Lv0 · Baby Pip",
+		"The independent level-and-age word catalog replaces the retired Pip room")
 	for retired in ["_start_gift_adventure", "_show_leaderboard", "_select_room_item"]:
 		check(not app.has_method(retired), "Retired navigation cannot be invoked: " + retired)
 	check(app._world_choices.is_visible_in_tree() and app._world_scroll.is_ancestor_of(app._world_grid),
@@ -87,8 +88,8 @@ func _run() -> void:
 			var scale: float = app.Style.ui_scale(app)
 			button.grab_focus()
 			await settle()
-			check(button.is_visible_in_tree() and button.size.x * scale >= 52 and button.size.x * scale < 54
-				and button.size.y * scale >= 52 and button.size.y * scale < 54
+			check(button.is_visible_in_tree() and button.size.x * scale >= 44 and button.size.x * scale < 46
+				and button.size.y * scale >= 44 and button.size.y * scale < 46
 				and app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
 				"Focus reveals each full-size world choice within its own strip")
 			check(button.text.is_empty() and button.tooltip_text == app.Data.theme(app.model.THEMES[index]).name,

@@ -49,7 +49,7 @@ func _run() -> void:
 	duck.draw.connect(func() -> void: draws += 1)
 	root.add_child(duck)
 	duck.size = Vector2(112, 112)
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	await reset()
 	check(draws > 0, "The fixture observes real CanvasItem redraws")
 	await _check_discrete_frames()
@@ -118,7 +118,7 @@ func _check_continuous_frames() -> void:
 func _check_explicit_changes() -> void:
 	await reset()
 	var before: int = draws
-	duck.set_growth_level(11)
+	duck.set_growth_age(11)
 	await settle()
 	check(draws > before, "An earned growth appearance change redraws a quiet mascot")
 	before = draws

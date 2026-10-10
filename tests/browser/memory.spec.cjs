@@ -364,7 +364,7 @@ test('Memory held peek is cancelled by More and page lifecycle without changing 
   const saved = await medalRecord(page), backs = await screenshot(page, testInfo, 'memory-before-peek-cancel');
   await withMemoryPeek(page, async () => {
     await pressGamepad(page, 3);
-    await expect(page.locator('#game-status')).toContainText('Lv3');
+    await expect(page.locator('#game-status')).toContainText('Lv0');
   });
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toContainText(READY);

@@ -29,7 +29,9 @@ test('all ten age catalogues preserve the current lesson and cannot unlock later
     const view = await growthView(page);
     expect(view.catalog.word_count).toBe(words.filter(word => word.min_age === id).length);
     expect(view.notice).toContain(id === 3 ? 'Six correct answers' : 'Preview only');
-    expect((await growthState(page)).level).toBe(3);
+    expect((await growthState(page)).level).toBe(0);
+    expect((await growthState(page)).age).toBe(0);
+    expect((await growthState(page)).learning_age).toBe(3);
     expect(await saved(page)).toBe(initial);
     expect(await page.locator('#selection-status').textContent()).toBe(selection);
   }
@@ -41,7 +43,8 @@ test('all ten age catalogues preserve the current lesson and cannot unlock later
   await page.reload();
   await enterGame(page);
   expect((await matchWords(page)).every(text => words.find(word => word.text === text)?.min_age === 3)).toBe(true);
-  expect((await growthState(page)).level).toBe(3);
+  expect((await growthState(page)).level).toBe(0);
+  expect((await growthState(page)).age).toBe(0);
   expect(errors).toEqual([]);
 });
 

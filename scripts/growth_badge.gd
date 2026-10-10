@@ -5,6 +5,7 @@ const Style = preload("res://scripts/ui_style.gd")
 var level_label: Label
 var count_label: Label
 var target_label: Label
+var age_label: Label
 var bar: ProgressBar
 var _level_plate: Panel
 var compact: bool = false
@@ -26,17 +27,20 @@ func _init() -> void:
 	bar.show_percentage = false
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bar)
-	level_label = Style.label("Lv3", 18)
+	level_label = Style.label("Lv0", 18)
 	level_label.add_theme_font_override("font", Style.HEADING_FONT)
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(level_label)
 	target_label = Style.label("›", 16)
 	target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(target_label)
-	count_label = Style.label("0 / 80", 11)
+	count_label = Style.label("0 / 1", 11)
 	count_label.add_theme_font_override("font", Style.HEADING_FONT)
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(count_label)
+	age_label = Style.label("Baby", 10)
+	age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	add_child(age_label)
 	resized.connect(_layout)
 	mouse_entered.connect(_refresh_surface)
 	mouse_exited.connect(_refresh_surface)
@@ -48,18 +52,18 @@ func _init() -> void:
 func configure(state: Dictionary) -> void:
 	_state = state
 	var ready: bool = state.get("ready", false)
-	var level: int = state.get("level", 3)
-	level_label.text = str(state.get("label", "Lv3")) if ready else "Lv…"
-	count_label.text = "%d / %d" % [state.get("mastered", 0), state.get("total", 0)] if ready else "Unavailable"
-	var next_label: String = "Lv12+" if level == 11 else "Lv%d" % (level + 1)
-	bar.value = float(state.get("progress", 0.0)) * 100.0 if ready else 0.0
-	var description: String = "%s. %d of %d words mastered." % [level_label.text, state.get("mastered", 0), state.get("total", 0)]
+	var level: int = state.get("level", 0)
+	level_label.text = str(state.get("label", "Lv0")) if ready else "Lv…"
+	count_label.text = ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.get("level_mastered", 0), state.get("level_required", 1)]) if ready else "Unavailable"
+	age_label.text = str(state.get("age_label", "Baby")) if ready else ""
+	bar.value = float(state.get("level_progress", 0.0)) * 100.0 if ready else 0.0
+	var description: String = "%s. Pip: %s. %d of %d words mastered in your current age set." % [level_label.text, age_label.text, state.get("mastered", 0), state.get("total", 0)]
 	if not ready:
 		description = "Learning progress is unavailable. Retry saving to load it."
-	elif state.get("completed", false):
-		description += " All stages unlocked."
-	elif level < 12:
-		description += " Master every word to reach %s." % next_label
+	elif state.get("level_completed", false):
+		description += " Maximum level reached."
+	else:
+		description += " Master %d new %s to reach Lv%d." % [state.get("level_remaining", 1), "word" if state.get("level_remaining", 1) == 1 else "words", level + 1]
 	tooltip_text = description + " View your words."
 	set("accessibility_name", tooltip_text)
 	bar.set("accessibility_name", description)
@@ -90,6 +94,7 @@ func fit(css_scale: float, use_compact: bool, tiny: bool = false) -> void:
 			track.set("content_margin_" + edge, 0.0)
 		bar.add_theme_stylebox_override(key, track)
 	count_label.visible = not compact
+	age_label.visible = not compact
 	_style_type()
 	_refresh_surface()
 	reset_size()
@@ -104,6 +109,8 @@ func _style_type() -> void:
 	level_label.add_theme_color_override("font_color", Color("#67471f"))
 	count_label.add_theme_font_size_override("font_size", ceili(11 / _scale))
 	count_label.add_theme_color_override("font_color", Color("#2b5141"))
+	age_label.add_theme_font_size_override("font_size", ceili(10 / _scale))
+	age_label.add_theme_color_override("font_color", Color("#42644e"))
 	target_label.add_theme_font_size_override("font_size", ceili(16 / _scale))
 	target_label.add_theme_color_override("font_color", Color("#42644e"))
 
@@ -130,6 +137,8 @@ func _layout() -> void:
 	bar.size = Vector2(size.x - bar.position.x - (8 if _tiny else 10 if compact else 14) / _scale, (8 if compact else 20) / _scale)
 	count_label.position = bar.position + Vector2(2, 0) / _scale
 	count_label.size = Vector2(bar.size.x - 4 / _scale, bar.size.y)
+	age_label.position = Vector2(bar.position.x, 36 / _scale)
+	age_label.size = Vector2(bar.size.x, 14 / _scale)
 	target_label.position = Vector2(size.x - 13 / _scale, bar.position.y - 1 / _scale)
 	target_label.size = Vector2(12, 20) / _scale
 	target_label.visible = not compact

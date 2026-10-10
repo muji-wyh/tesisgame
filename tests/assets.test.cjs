@@ -118,16 +118,26 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 4139); // 2,862 preserved imports and 1,277 additional vocabulary motion atlases.
+  // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
+  assert.equal(textureImports.length, 2862 + 1277 + 5 + 3);
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);
+  const rewardTextures = [
+    require('../tools/prepare-jelly-reward-art.cjs').checkJellyRewardArt(root),
+    ...require('../tools/prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root)
+  ];
+  const rewardImports = new Set(rewardTextures.map(texture => path.join(root, texture.path + '.import')));
+  assert.equal(rewardImports.size, 3);
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     // The fusion shader reads signed distances from alpha; lossy compression would distort its surface.
     if (materialImports.has(filename)) {
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/fix_alpha_border=false$/m, filename);
+      assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
+    } else if (rewardImports.has(filename)) {
+      assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
     } else {
       assert.match(metadata, /^compress\/mode=1$/m, filename);

@@ -122,7 +122,7 @@ async function compareScenery(page, testInfo, phase, samples) {
 async function closeRewards(page) {
   const back = collectionHeaderRect(await metrics(page), 'back');
   await tap(page, back.x + back.width / 2, back.y + back.height / 2);
-  await expect(page.locator('#game-status')).not.toContainText('Lv3');
+  await expect(page.locator('#game-status')).not.toContainText('Lv0');
   await rendered(page);
 }
 

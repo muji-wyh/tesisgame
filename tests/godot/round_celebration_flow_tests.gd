@@ -88,7 +88,7 @@ func _run() -> void:
 func reward_seed(app, earned: bool) -> int:
 	var probe := MatchModel.new()
 	for seed_value in range(128):
-		if probe.reset(app._learning_words(), seed_value, false, "", "", str(app.growth.level), true) \
+		if probe.reset(app._learning_words(), seed_value, false, "", "", str(app.growth.learning_age()), true) \
 			and probe.chest_earned == earned:
 			return seed_value
 	check(false, "The deterministic reward fixtures include both chance outcomes")

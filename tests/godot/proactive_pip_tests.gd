@@ -47,7 +47,7 @@ func _advance(duck, seconds: float) -> void:
 
 
 func _check_direct_reactions(duck) -> void:
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	var original_rect: Rect2 = duck.get_global_rect()
 	var children: int = duck.get_child_count()
 	var captions: Array[String] = []
@@ -96,7 +96,7 @@ func _check_direct_reactions(duck) -> void:
 
 
 func _check_proactive_contract(duck) -> bool:
-	duck.set_growth_level(3)
+	duck.set_growth_age(3)
 	duck.settle()
 	check(not _observe_idle(duck, 40.0), "Unsolicited invitations are disabled by default")
 	check(duck.has_method("note_activity"), "Pip exposes note_activity for meaningful user input")
@@ -204,7 +204,7 @@ func _check_idle_timing(duck) -> void:
 
 
 func _check_activity_preemption(duck) -> void:
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	_start_invitation(duck)
 	duck.note_activity()
 	check(duck._idle_action.is_empty() and is_zero_approx(duck._idle_left) and duck.pose == 0
@@ -317,7 +317,7 @@ func _check_drawn_reactions(duck) -> void:
 
 
 func _check_drawn_invitations(duck) -> void:
-	duck.set_growth_level(12)
+	duck.set_growth_age(12)
 	duck.settle()
 	var resting: PackedByteArray = await _capture(duck)
 	var seen: Array[String] = []

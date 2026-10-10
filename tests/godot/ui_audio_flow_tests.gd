@@ -636,12 +636,14 @@ func _check_pop_launch_audio(app) -> void:
 
 
 func _check_pop_hit_audio(app) -> void:
-	app.choose_mode("pop")
+	check(app.new_round(184, false, "", "pop"), "The slice-audio fixture starts a deterministic real Pop round")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	app.audio.set_muted(false)
 	await process_frame
 	app._on_voice_state([true, true, "Listening. Say an English word."])
-	var channel_count: int = app.audio.get_child_count()
+	# Chest-marked targets may initialize their separate reward channels. The
+	# slice pool itself must stay bounded and retain its three original players.
+	var slice_players: Array[AudioStreamPlayer] = app.audio._pop_players.duplicate()
 	var expected_paths: Array[String] = app.audio._pop_slice_paths.duplicate()
 	if expected_paths.is_empty():
 		expected_paths.append(_slice_fallback())
@@ -653,12 +655,14 @@ func _check_pop_hit_audio(app) -> void:
 	check(not app.audio.music.playing and not app.audio.voice.playing
 		and not app.audio.effect.playing,
 		"Popping a target uses its dedicated slice voice without BGM, UI clicks or word/report speech")
-	check(_pop_hit_visible_word(app) and _pop_playing(app.audio) == 2
+	var second_hit: bool = _pop_hit_visible_word(app)
+	check(second_hit and _pop_playing(app.audio) == 2
 		and expected_paths.has(_last_slice_path(app.audio))
 		and (expected_paths.size() < 2 or _last_slice_path(app.audio) != first_path)
 		and app.audio.last_pop_player() != first_player and first_player.playing
-		and app.audio.get_child_count() == channel_count,
-		"Consecutive real targets preserve the previous slice tail on separate bounded voices")
+		and slice_players.size() == 3 and app.audio._pop_players == slice_players,
+		"Consecutive real targets preserve the previous slice tail on separate bounded voices: hit=%s, playing=%d, previous=%s, slice_channels=%d" % [
+			second_hit, _pop_playing(app.audio), first_player.playing, app.audio._pop_players.size()])
 	var last_path: String = app.audio._last_pop_slice_path
 	var random_state: int = app.audio._pop_slice_rng.state
 	app.audio.set_muted(true)

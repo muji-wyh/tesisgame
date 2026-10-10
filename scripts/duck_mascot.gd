@@ -51,7 +51,7 @@ var pose: int = 0
 var reaction_left: float = 0.0
 var accent: Color = Style.GOOD
 var theme_id: String = "spring"
-var growth_level: int = 3
+var growth_age: int = 0
 var _growth_stage: Dictionary = {}
 static var _growth_definitions: Array = []
 var _outfit_sheet: Texture2D
@@ -85,7 +85,7 @@ var _celebration_rest: float = 0.0
 
 func _ready() -> void:
 	_idle_rng.randomize()
-	set_growth_level(growth_level)
+	set_growth_age(growth_age)
 	set_outfit_theme(theme_id)
 	name = "Pip"
 	custom_minimum_size = Vector2(72, 72)
@@ -122,9 +122,9 @@ func set_outfit_theme(value: String) -> void:
 	queue_redraw()
 
 
-func set_growth_level(value: int) -> void:
-	var chosen: int = clampi(value, 3, 12)
-	if growth_level == chosen and not _growth_stage.is_empty():
+func set_growth_age(value: int) -> void:
+	var chosen: int = 0 if value < 3 else clampi(value, 3, 12)
+	if growth_age == chosen and not _growth_stage.is_empty():
 		return
 	if _growth_definitions.is_empty():
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(GROWTH_CATALOG_PATH))
@@ -132,11 +132,11 @@ func set_growth_level(value: int) -> void:
 			_growth_definitions = parsed.stages
 	var stage: Dictionary = {}
 	for definition in _growth_definitions:
-		if definition is Dictionary and int(definition.get("level", 0)) == chosen:
+		if definition is Dictionary and int(definition.get("age", -1)) == chosen:
 			stage = definition
 			break
 	if stage.is_empty():
-		push_error("Missing Pip growth stage for level %d." % chosen)
+		push_error("Missing Pip growth stage for age %d." % chosen)
 		return
 	var art: Dictionary = stage.get("art", {})
 	var sheets: Array[Texture2D] = []
@@ -147,7 +147,7 @@ func set_growth_level(value: int) -> void:
 			push_error("Missing Pip growth artwork: " + asset_path)
 			return
 		sheets.append(texture)
-	growth_level = chosen
+	growth_age = chosen
 	_growth_stage = stage.duplicate(true)
 	_outfit_sheet = sheets[0]
 	_outfit_idle_sheet = sheets[1]

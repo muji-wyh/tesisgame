@@ -1,5 +1,8 @@
 extends SceneTree
 
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const WordArt = preload("res://scripts/word_art.gd")
+
 var checks := 0
 var failures := 0
 
@@ -25,17 +28,31 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	var directory := "user://playful-words-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
+	# Picture reactions span the curriculum. Migrate an isolated advanced save
+	# instead of granting future-age words to a new Baby player or using real saves.
+	var saved := ConfigFile.new()
+	saved.set_value("growth", "version", 1)
+	saved.set_value("growth", "level", 12)
+	saved.set_value("growth", "streaks", {})
+	saved.set_value("growth", "receipts", [])
+	check(saved.save(directory + "/growth.cfg") == OK, "The advanced picture fixture saves its isolated migration state")
 	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	root.add_child(app)
 	await settle()
+	check(app.growth.ready and app.growth.age == 11 and app.growth.learning_age() == 12,
+		"The migrated picture fixture can access all curriculum words without altering player progress")
 	app.set_reduced_motion(false)
 	app.audio.set_muted(true)
 	var poses: Array = []
 	for entry in [["ball", "play-time"], ["bell", "music-makers"], ["rocket", "space-trip"],
 		["fish", "animal-friends"], ["boat", "on-the-move"], ["flower", "great-outdoors"]]:
 		var id: String = entry[0]
-		check(app.new_round(42, false, entry[1], "match", id), "A real Match board includes the animated noun " + id)
+		var started: bool = app.new_round(42, false, entry[1], "match", id)
+		check(started, "A real Match board includes the animated noun " + id)
+		if not started:
+			continue
 		await settle()
 		var card = app.cards[id + ":image"]
 		var word_card = app.cards[id + ":word"]
@@ -68,11 +85,14 @@ func _run() -> void:
 		app._hide_collection()
 	check(poses.size() == 6 and poses[0] != poses[1] and poses[2] != poses[3],
 		"Nouns use different trajectories rather than one universal bounce")
-	check(app.new_round(42, false, "play-time", "match", "book"), "An unanimated noun also has a real Match pair")
+	check(app.new_round(42, false, "play-time", "match", "book"), "A noun without an extra picture reaction also has a real Match pair")
 	await settle()
 	app.cards["book:word"].pressed.emit()
 	app.cards["book:image"].pressed.emit()
-	check(app.cards["book:image"]._word_play.get("_tween") == null, "Unlisted nouns keep their original static picture")
+	check(app.cards["book:image"]._word_play.get("_tween") == null
+		and app.cards["book:image"].picture.texture is AtlasTexture
+		and WordArt.source_path(app.cards["book:image"].picture.texture) == "res://assets/images/word-library/book.webp",
+		"Other nouns retain their authored word-art animation without an unrelated transform reaction")
 	app.set_reduced_motion(true)
 	app.new_round(42, false, "play-time", "match", "ball")
 	app.audio.set_muted(false)

@@ -61,7 +61,7 @@ func _run() -> void:
 		library.fit(Vector2(dimensions) - Vector2(24, 24), 1.0)
 		for frame in range(8):
 			await process_frame
-		check(library.size.x <= dimensions.x - 23 and library.size.y <= dimensions.y - 23, "Library fits " + str(dimensions))
+		check(library.size.x <= dimensions.x - 23 and library.size.y <= dimensions.y - 23, "Library fits %s: actual %s" % [dimensions, library.size])
 		for button in library.buttons + [library.sound_button, library.motion_button, library.close_button]:
 			check(library.get_global_rect().grow(1).encloses(button.get_global_rect()) and button.size.y >= 44, "All choices and settings remain reachable at " + str(dimensions))
 	library.queue_free()
