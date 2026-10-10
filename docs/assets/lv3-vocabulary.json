@@ -1,0 +1,1300 @@
+{
+  "schema": 1,
+  "age": 3,
+  "count": 69,
+  "status": "Integrated and source image checks passed",
+  "description": "Shared dimensional vocabulary illustrations. Context-only words retain their existing text-based treatment.",
+  "providers": {
+    "fluent-emoji": {
+      "creator": "Microsoft Corporation",
+      "source": "https://github.com/microsoft/fluentui-emoji",
+      "revision": "1ffb34c752ecf5d402f04cfb4b392c77f57c54bc",
+      "license": "MIT",
+      "licenseFile": "docs/assets/licenses/fluent-emoji.txt",
+      "status": "Acquired and source artwork visually inspected",
+      "animations": [],
+      "modifications": "Transparent margin normalized to a 256-pixel canvas. The doll uses the single female doll cropped from Japanese dolls."
+    },
+    "kenney-blender": {
+      "creator": "Kenney; scene composition, poses, material adaptation and offline rendering by Codex",
+      "license": "CC0-1.0",
+      "packs": [
+        {
+          "id": "food-kit",
+          "creator": "Kenney",
+          "source": "https://kenney.nl/assets/food-kit",
+          "license": "CC0-1.0",
+          "licenseFile": "docs/assets/licenses/kenney-food-kit.txt",
+          "archiveUrl": "https://kenney.nl/media/pages/assets/food-kit/83086fa91c-1719418518/kenney_food-kit.zip",
+          "archiveSha256": "cdad90853682499b94c9fda2f87678b24bfd8f3264e0ed323f6b6a27fd7c6f6f",
+          "status": "Acquired; adapted and rendered offline; source geometry is not exported",
+          "animations": []
+        },
+        {
+          "id": "furniture-kit",
+          "creator": "Kenney",
+          "source": "https://kenney.nl/assets/furniture-kit",
+          "license": "CC0-1.0",
+          "licenseFile": "docs/assets/licenses/kenney-furniture-kit.txt",
+          "archiveUrl": "https://kenney.nl/media/pages/assets/furniture-kit/440e0608a4-1677580847/kenney_furniture-kit.zip",
+          "archiveSha256": "e67652d0932cee41683f74711c03d3e192a2af9979ef8e6b237711f5482d46b0",
+          "status": "Acquired; adapted and rendered offline; source geometry is not exported",
+          "animations": []
+        },
+        {
+          "id": "animated-characters-protagonists",
+          "creator": "Kenney",
+          "source": "https://kenney.nl/assets/animated-characters-protagonists",
+          "license": "CC0-1.0",
+          "licenseFile": "docs/assets/licenses/kenney-animated-characters-protagonists.txt",
+          "archiveUrl": "https://kenney.nl/media/pages/assets/animated-characters-protagonists/608191acc4-1774773108/kenney_animated-characters-protagonists.zip",
+          "archiveSha256": "ec3787de70fa2200256848d74201b10f6b6c3126594e9857bf989753312c2b84",
+          "status": "Acquired; adapted and rendered offline; source geometry is not exported",
+          "animations": [
+            "idle",
+            "jump",
+            "run"
+          ]
+        },
+        {
+          "id": "toy-car-kit",
+          "creator": "Kenney",
+          "source": "https://kenney.nl/assets/toy-car-kit",
+          "license": "CC0-1.0",
+          "licenseFile": "docs/assets/licenses/kenney-toy-car-kit.txt",
+          "archiveUrl": "https://kenney.nl/media/pages/assets/toy-car-kit/42e19cc426-1736346027/kenney_toy-car-kit.zip",
+          "archiveSha256": "26c11bbb77102b8dd00cdaf7b2c7ab692416d750dd064de886d809acec346782",
+          "status": "Acquired; adapted and rendered offline; source geometry is not exported",
+          "animations": []
+        }
+      ],
+      "animations": "Source rig includes idle, jump and run; delivered vocabulary images are static",
+      "modifications": "Source mesh smoothing, edge rounding, retargeted static poses, plain clothing textures, selected teaching props, studio lighting and transparent rendering. No image generation API used.",
+      "rendererScripts": [
+        "tools/vocabulary-art/render-studio.py",
+        "tools/vocabulary-art/render-scenes.py"
+      ]
+    }
+  },
+  "files": [
+    {
+      "id": "cat",
+      "path": "assets/images/words/lv3-cat.png",
+      "sha256": "32e9d6ae620d41edc29430886a593ec65ab050a1265341094d000ea0b3e26178",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Cat/3D/cat_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Cat/3D/cat_3d.png",
+        "sha256": "5d3fcbbfb0be45d9be0ade47fe4eb1b97d33130fe67d46a8db697e434f13289b"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "dog",
+      "path": "assets/images/words/lv3-dog.png",
+      "sha256": "8a6395ae701fa06378a1fe5fb0ab79c1a5723f6015ad431c0d75118089b7de95",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Dog/3D/dog_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Dog/3D/dog_3d.png",
+        "sha256": "27ce5eadb088d9c7a5658b6c3b6aa4484c7a75983e8e1a9988845a54f90f1bcb"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "sun",
+      "path": "assets/images/words/lv3-sun.png",
+      "sha256": "069906aee7faaad6ddef5bdf0fcc18fae32798547f455aa2d47a71cd3453ba9c",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Sun/3D/sun_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sun/3D/sun_3d.png",
+        "sha256": "c9bb15d03d4b1e6151d97e12119ac93bbd2bcb5e713a49c1fcfc11ece54caec1"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "ball",
+      "path": "assets/images/words/lv3-ball.png",
+      "sha256": "01c618f712cb7b9b818f3bea4d654c4161f6f1afba97c6441a2feb12fcc1dfec",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Soccer ball/3D/soccer_ball_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Soccer%20ball/3D/soccer_ball_3d.png",
+        "sha256": "bf8597110e987c13b8a3ac0c317d6903cef29499faa04de695b5fc37dbb5a053"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "car",
+      "path": "assets/images/words/lv3-car.png",
+      "sha256": "e030dff4c0be7990e4dd29b963b5a84d4bacdc7624b699446224e9319f0b7ebb",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Automobile/3D/automobile_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Automobile/3D/automobile_3d.png",
+        "sha256": "0fabb870cfe90fb7ba7cebfa689a0e62012ff5658fd6cab05898573d9d268b73"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "apple",
+      "path": "assets/images/words/lv3-apple.png",
+      "sha256": "3cec1bbaf6eee9e11200fee37fac6be60214420faf4cafe9407ea23332cda7eb",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Red apple/3D/red_apple_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Red%20apple/3D/red_apple_3d.png",
+        "sha256": "7e37f4ad4d227d283f9afad0605fcddf67406bf8c6c4964419efbd23de7ad60c"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "fish",
+      "path": "assets/images/words/lv3-fish.png",
+      "sha256": "fa541e7b1d44fcf2b4b6c90a6bb018f02dfb5b8ee4f0e2c492812024a0e43ddc",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Fish/3D/fish_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Fish/3D/fish_3d.png",
+        "sha256": "d219342f1f416f2a89b5f6d412743bc809ac75d3be3d8cff0bc0cf5af5e288fa"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "duck",
+      "path": "assets/images/words/lv3-duck.png",
+      "sha256": "33dfbf87a6cf965a87e668f640c6d455d5d592faec2bfdc8ebc13f1ca8962726",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Duck/3D/duck_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Duck/3D/duck_3d.png",
+        "sha256": "c45934c5d609fc03e9713d66ada5e08034b0b27bf29a37a39c726633b5c2d2e4"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "cow",
+      "path": "assets/images/words/lv3-cow.png",
+      "sha256": "8a5408861aec54ac6353bb07b024d36f854c7dc625dd587839c0ca495aa19531",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Cow/3D/cow_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Cow/3D/cow_3d.png",
+        "sha256": "38ab704ca4ffc464f7ac13ab05fe525c2e0e628d2a3e1fb12d51af4114b7d110"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "pig",
+      "path": "assets/images/words/lv3-pig.png",
+      "sha256": "7cf1df3825d25729d0cf4b9f2263a9a12325ccab991dec57040d86d5a1ab6f9a",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Pig/3D/pig_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Pig/3D/pig_3d.png",
+        "sha256": "a99ba267149dd19533d06385704da9961b8b1079bb45ae580d7f405f41c958b6"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "banana",
+      "path": "assets/images/words/lv3-banana.png",
+      "sha256": "67fdd30507b9c86affdae8f5e0d2c2155860e7eaedd29309686a417880794c71",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Banana/3D/banana_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Banana/3D/banana_3d.png",
+        "sha256": "b82cd3cc7e56e70026b599aeec5d811568b507adc96473bf854096f5e67d92a5"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "egg",
+      "path": "assets/images/words/lv3-egg.png",
+      "sha256": "fac4bd2faf395a58ee3cf5bf855790c7d7260722934888ccb726f24bbad86e12",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Egg/3D/egg_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Egg/3D/egg_3d.png",
+        "sha256": "efc307f317a1b758eb43152e1354fb407b3cb587f849db15c9ac0f9fcb025400"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "bread",
+      "path": "assets/images/words/lv3-bread.png",
+      "sha256": "4505024565748068fd62f74b7442db383371639c57ee797e0b078f18b25f8413",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Bread/3D/bread_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bread/3D/bread_3d.png",
+        "sha256": "648d935809d028ce4b583a77a2206d11c54ff981d392703c7fb68dd5c90f0315"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "milk",
+      "path": "assets/images/words/lv3-milk.png",
+      "sha256": "5390da0f6ac7a2a4e6b9ae4130f981488b81b652cf7a641b47cea3071866f4e0",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Glass of milk/3D/glass_of_milk_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Glass%20of%20milk/3D/glass_of_milk_3d.png",
+        "sha256": "7ee5292b46edaa06d94bf719b02ffae4c96e95a8ae7f960cb90f24f1ccd99320"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "water",
+      "path": "assets/images/words/lv3-water.png",
+      "sha256": "3c52f718ed0754528bbb22b76809c3becb98fff099fce0e7dad829c7dad90a1e",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "water",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "73c39cd7f66da4e9066cf9f3051696a87da97eb972c156cfd63d8835e198a72e",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/glass.glb",
+            "sha256": "acc1dcb7fa436fefd2bbb0ac6eef1e54c04ea543b051e2a3a9c26bf36c253e78"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "eye",
+      "path": "assets/images/words/lv3-eye.png",
+      "sha256": "2bc77fe5feaf40e63fac9f2f65f20a08a57a0957a2ff2b159c0396d06e70ef0c",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Eye/3D/eye_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Eye/3D/eye_3d.png",
+        "sha256": "72637d9098e4918172b9e2b3d0001ad9fe501cbb48bf770c3469ef4bfd93f52f"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "ear",
+      "path": "assets/images/words/lv3-ear.png",
+      "sha256": "7fdf625587af9b6d47ccc7f4c9f3bf667d347b721304124fafc994850f5a862f",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Ear/Light/3D/ear_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Ear/Light/3D/ear_3d_light.png",
+        "sha256": "58e87de24881516077f54c488b52d9dedfd87e037799fda9f73dc52c79b2c45e"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "nose",
+      "path": "assets/images/words/lv3-nose.png",
+      "sha256": "dd37d1001164b6bb9e4bc2847f1023a042838db83105799ed7bc4df7a898ce77",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Nose/Light/3D/nose_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Nose/Light/3D/nose_3d_light.png",
+        "sha256": "555abbe0ec9f0ddffa64452fe1a62436be30962877f2e7ab8f04ffa37d172ced"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "mouth",
+      "path": "assets/images/words/lv3-mouth.png",
+      "sha256": "b01b0f3ee8061bcf884ca8af404d6f56d042f48f17690edcca48ee257a24f66f",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Mouth/3D/mouth_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Mouth/3D/mouth_3d.png",
+        "sha256": "96fcfe41b70fd1f536cf5ff3f9eeb376c9c1448d06d9bf6d7b3979a92f000237"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "hand",
+      "path": "assets/images/words/lv3-hand.png",
+      "sha256": "ad1696455f8f397ebc629864daf46c688d90b2ab44fb2cd6b0c98326a3879874",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Hand with fingers splayed/Light/3D/hand_with_fingers_splayed_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Hand%20with%20fingers%20splayed/Light/3D/hand_with_fingers_splayed_3d_light.png",
+        "sha256": "805b3498def2e29724ef85d2e3a5ca6efa3fcab9b89e6d14327149edf9563435"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "foot",
+      "path": "assets/images/words/lv3-foot.png",
+      "sha256": "83e99bfbae728c9791daefcb950279dac7dec2154725f3cc76110da09a4438ae",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Foot/Light/3D/foot_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Foot/Light/3D/foot_3d_light.png",
+        "sha256": "20fbca5f711ada7bf1450b9416baa89ae1beb1e5304dfdd91acb114ae9e451dd"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "hat",
+      "path": "assets/images/words/lv3-hat.png",
+      "sha256": "6d7a4df2467c2bad362ab2df15846df917bd38ac8f4699df6093804f79f19476",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Womans hat/3D/womans_hat_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Womans%20hat/3D/womans_hat_3d.png",
+        "sha256": "f5888e3c50c93b2d249f35fd97af2473ff4207bb9cb149669dcf781d4bc04184"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "shirt",
+      "path": "assets/images/words/lv3-shirt.png",
+      "sha256": "de2d5c29654d12ad7b758f4cbe1aee2d929ade1a33d7b6562c7c485f1a1dc3f3",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/T-shirt/3D/t-shirt_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/T-shirt/3D/t-shirt_3d.png",
+        "sha256": "e343973ae02fc0cb537413d0ddaf7bd45f41acf22854898321367567909375d7"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "shoe",
+      "path": "assets/images/words/lv3-shoe.png",
+      "sha256": "2f97975be07a4b4d8a090becd55fcac663fd61368861b93276d7f3d9fba0d6e1",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Running shoe/3D/running_shoe_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Running%20shoe/3D/running_shoe_3d.png",
+        "sha256": "33cdf4673e2a909e096dd6301ba50903e0d3507429bb4bc8e219211a825ca2c6"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "tree",
+      "path": "assets/images/words/lv3-tree.png",
+      "sha256": "6ff8615288d898a81e5c963309d4f8f19e160de28dc80a3571c370eb0d73cb7a",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Deciduous tree/3D/deciduous_tree_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Deciduous%20tree/3D/deciduous_tree_3d.png",
+        "sha256": "3c13998c6b866d824703327296c0317de5f079c2b31a6c22defd49d819d6e7f9"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "bus",
+      "path": "assets/images/words/lv3-bus.png",
+      "sha256": "9cf62e02a54db41ec0a4ce2ffe73798e7f20d88f3415568c4e4ef4c76f8c1daa",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Bus/3D/bus_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bus/3D/bus_3d.png",
+        "sha256": "d34d9d19e0d9f2751f464905561a29e6c0031fb43f24b3af5ed8d56586a6ed5d"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "book",
+      "path": "assets/images/words/lv3-book.png",
+      "sha256": "936af7c1ea04c5f4c1bcb3de04c2f2853cf597a32bc626da6f9f48e195739944",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Open book/3D/open_book_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Open%20book/3D/open_book_3d.png",
+        "sha256": "c6b7de9724d8ca47f900238d8cb34c2ac7346a12c8cea91c176b30f8a39d628d"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "doll",
+      "path": "assets/images/words/lv3-doll.png",
+      "sha256": "b5ea8930e972da65f34258d860179b5f945c391c2e0eefc30872e790b7eb963a",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Japanese dolls/3D/japanese_dolls_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Japanese%20dolls/3D/japanese_dolls_3d.png",
+        "sha256": "1614327e39fbd872da69f00547c478443bb0f929a2d06112d15a846b26554d1f",
+        "crop": {
+          "left": 125,
+          "top": 5,
+          "width": 120,
+          "height": 235
+        }
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "bed",
+      "path": "assets/images/words/lv3-bed.png",
+      "sha256": "2de5017dad0d0d1f47d0b1436e2dbe7dd439edb72f294e06bee3dd62fe6ea135",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "bed",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "bfe4a74422c69ea895e9424299f01d468bd2bd72b6502b5ee3accb945ddab311",
+        "models": [
+          {
+            "path": "furniture-kit/Models/GLTF format/bedSingle.glb",
+            "sha256": "ca00c63f9a12da3138d902b2f5f18e0360fb6e8a5ac42ccb4bc3f185724b65d1"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "chair",
+      "path": "assets/images/words/lv3-chair.png",
+      "sha256": "b87536de54e522d626b776ba2e6caac283c4ec47c68becfb1a28e66d997831c4",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Chair/3D/chair_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Chair/3D/chair_3d.png",
+        "sha256": "6e7dce648deb73ec3ee960a505ad6449fad5c5538808b2c3ffb73e053f0e5c2c"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "cup",
+      "path": "assets/images/words/lv3-cup.png",
+      "sha256": "5d4c4dbdc090e8e68271522e1b3957398be83f4b2088aa3754e54727503a324f",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "cup",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "18bb50ed7b6d412e5afe5e1be40e6fe1566cb7435fecae6463d04deefeed6c8e",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/cup-tea.glb",
+            "sha256": "c2d60aeca48197b75ddb9f1ba145bd5e9c9e66e720b8ab67947f0b2a49ee1edd"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "spoon",
+      "path": "assets/images/words/lv3-spoon.png",
+      "sha256": "24bfa7865802c6861a2865f62126f247d8b74cdb1fac6de4da89db6361116b05",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Spoon/3D/spoon_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Spoon/3D/spoon_3d.png",
+        "sha256": "d9e9bf6e9bce8672625dc841bf0ce6f3c545a5212d893ac24558c8a9cd811433"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "bird",
+      "path": "assets/images/words/lv3-bird.png",
+      "sha256": "38f6d5ecace844f86642ca666f72980024dc65d0a90612b0f8ef86956f60ba76",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Bird/3D/bird_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bird/3D/bird_3d.png",
+        "sha256": "eeb6e0a3a54f7b5ec2b32995a1062ba3380eebd5f9a00d7158f3cfbb978c31a2"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "clap",
+      "path": "assets/images/words/lv3-clap.png",
+      "sha256": "325e183edf0bca8c18efcbc908076e6ad363036da6fe76933a60b04412126017",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Clapping hands/Light/3D/clapping_hands_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Clapping%20hands/Light/3D/clapping_hands_3d_light.png",
+        "sha256": "95c59b8c56ff491fafd0711137c09b8df932b06af6c7c5263a12cfcf7f3fe9a1"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "close",
+      "path": "assets/images/words/lv3-close.png",
+      "sha256": "f5db6f9ff90b03fafce15c03e099c7baaefa0fba3cb29a0567819dd9e7f9452b",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "close",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "f7f6e0766346cb4b3fae598a4c4e2543ee85e1d57de4d751be7ae437b54bdd63",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "furniture-kit/Models/GLTF format/doorway.glb",
+            "sha256": "08983e299822140d580eb55d4b4e4e4552c37bb6e88571e41d2b7b5d2eef987e"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "dance",
+      "path": "assets/images/words/lv3-dance.png",
+      "sha256": "baa4a23b37ac2dc78af8f31c4dd0bfa3c6ed8f7f5adefdbdfc7980801e2092b9",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Woman dancing/Light/3D/woman_dancing_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Woman%20dancing/Light/3D/woman_dancing_3d_light.png",
+        "sha256": "6a597626d56b91ebf0cc91ca97352591b6db5decdfdbf2d8785c64110f1a22a9"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "drink",
+      "path": "assets/images/words/lv3-drink.png",
+      "sha256": "d7cf54fe00926feea50f0e1b1e08e1ccfff2e42e6e3fec4192718f33046da390",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "drink",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "6033f48211e9bd0806f8646dead14e5a734d2141eb8fb0ab18836641ba0be838",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "food-kit/Models/GLB format/glass.glb",
+            "sha256": "acc1dcb7fa436fefd2bbb0ac6eef1e54c04ea543b051e2a3a9c26bf36c253e78"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "eat",
+      "path": "assets/images/words/lv3-eat.png",
+      "sha256": "75ca180dc9d41ef18375ea8b051bc4d9a3b21c3ed51ece4c42f2341b18b44464",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "eat",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "3660a625e0c9af2dcfd82c41c82be54326dba0a1beb06ef850e23a60132679ae",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "food-kit/Models/GLB format/loaf.glb",
+            "sha256": "d2e490046b919e8b793b1f479b9b3ee941c8fb9e657163d073223f2a39c5f563"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "go",
+      "path": "assets/images/words/lv3-go.png",
+      "sha256": "f215b39438375ecd6fdd8a4562706cc029a0ea0b683d5eea9c94b7ef25ba4d66",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "go",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "aeee86175264adb86003d8553a8d274ffdb06b620db09caac312c9e4984a209d",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "furniture-kit/Models/GLTF format/doorwayOpen.glb",
+            "sha256": "cf05e165ea26dbbeaab4dc6296c143ef5f5a001e2ab5af9cd4fd65739408317e"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "help",
+      "path": "assets/images/words/lv3-help.png",
+      "sha256": "7bf2ada85b63abc31aa3a13f2c439f9c666e4f1e6bba6a734a4f7d00bde21acf",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "help",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "df8bf40d8833dd6bbad88d75452ffd56c129ac06f1d70fc48bdf0a87d47a8d57",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "hug",
+      "path": "assets/images/words/lv3-hug.png",
+      "sha256": "918e542c4895a3243af201a5ae09f0159f959b3a414608dcfe5923a81cc4175c",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/People hugging/3D/people_hugging_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/People%20hugging/3D/people_hugging_3d.png",
+        "sha256": "6fa8b93833d8708195dc8e3dfc94c10c80ca838647e27deb0ed53e95e96ab844"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "jump",
+      "path": "assets/images/words/lv3-jump.png",
+      "sha256": "85235e46c61bc397acfddf5b820d7e5e48893848afe82bda517e69382cfbb968",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "jump",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "84267139767f73eada2a284e01137e8d6fbfdf7af05f78d4f62c2ccb835f62a0",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "open",
+      "path": "assets/images/words/lv3-open.png",
+      "sha256": "338f5f90833b9f56f7758647d12951a83c5d18db11ce12a74984076c5a23113d",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "open",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "d79f2ae7beca96c69e9f0d1fd0c799b4364fe719f2e1596911b8f2c5ce103651",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "furniture-kit/Models/GLTF format/doorway.glb",
+            "sha256": "08983e299822140d580eb55d4b4e4e4552c37bb6e88571e41d2b7b5d2eef987e"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "play",
+      "path": "assets/images/words/lv3-play.png",
+      "sha256": "a58d1d5db4e7562bcb7223c2f728771b09fc22689eb97f810ac1d46ceefaf88d",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "play",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "f3db1ced37a56041b951fca43b34d6b89eb2eda6038a24153f2b80d3f3028f30",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "toy-car-kit/Models/GLB format/vehicle-racer.glb",
+            "sha256": "2cdf369f231bf3e38bdf3a376144971f1b4d1a1e558000047ac927c5ac81a42c"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "run",
+      "path": "assets/images/words/lv3-run.png",
+      "sha256": "092f8148ca401ede893ff77847d1e19ef2af5d05f781f6fbf0a80e1a14b96f83",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "run",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "52bb7622fb3f52997a92e42e8f8cded8705ac851f479e903b9fe7923d4eb1f72",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "sing",
+      "path": "assets/images/words/lv3-sing.png",
+      "sha256": "45a3c25bd0df2f3c23cc9aec357f8872090dd923bcd3fab6e20930f833f303e3",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Woman singer/Light/3D/woman_singer_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Woman%20singer/Light/3D/woman_singer_3d_light.png",
+        "sha256": "547a16edb7a2156329b1d78c6ad7e36e1ef6b4c931a2b73aa60cebac1e68f6ed"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "sit",
+      "path": "assets/images/words/lv3-sit.png",
+      "sha256": "155af51a96f6e76101364695915a6fa85bdc92f49ebca94a525d9069e2c4d95f",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "sit",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "5181587a849e716b88088a2e5f5bd3a0313f8239c7e8c0873775d9e22481e7b0",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          },
+          {
+            "path": "furniture-kit/Models/GLTF format/chairRounded.glb",
+            "sha256": "53f4933ec547179c499f04dbda1231cf44b83ec82c7f4ab981cdf680aee5c973"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "sleep",
+      "path": "assets/images/words/lv3-sleep.png",
+      "sha256": "457c982d77171d94edb4a3013a3ed5bcfc4e5ae5f54cb1256f7beddb8b5c8e67",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Person in bed/Light/3D/person_in_bed_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Person%20in%20bed/Light/3D/person_in_bed_3d_light.png",
+        "sha256": "8f10099db6a2d8577eae857f73b7833dff475744175ee553ba4f65e59dd24be5"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "walk",
+      "path": "assets/images/words/lv3-walk.png",
+      "sha256": "1982debd7adf7ba429237d8659d8675103b75a1604cb4199dbccf70db81d3a20",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "walk",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "c6ab6e97c485879a4ec52e3bad8527e64ec3e088d62ef8384f05c6b1093556f2",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "happy",
+      "path": "assets/images/words/lv3-happy.png",
+      "sha256": "32e619a0b8e73b87a343b14753f596e468a90f1e6581ce3db4b93a3817d1c0a2",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Smiling face with smiling eyes/3D/smiling_face_with_smiling_eyes_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Smiling%20face%20with%20smiling%20eyes/3D/smiling_face_with_smiling_eyes_3d.png",
+        "sha256": "73dce77bd423b2531809763025d20faca40d2391fd12dc1fc88a986872d8214a"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "sad",
+      "path": "assets/images/words/lv3-sad.png",
+      "sha256": "fe2d0675546e6154d82420efa956f02851f3f6b30a11c471d08ddfff80a5022c",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Disappointed face/3D/disappointed_face_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Disappointed%20face/3D/disappointed_face_3d.png",
+        "sha256": "5906087403a9abb8938f9e524c7df20727c7314ccb077a9ec7ab46bbd7e26fa8"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "big",
+      "path": "assets/images/words/lv3-big.png",
+      "sha256": "77691bdd3d8cf440b5830be6a3618af4963f02648e5e6294b762530dce46a763",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "big",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "5fe4f75feeaa9bb32c6cbb02099b0481423d0d488a16d4b5e82cb7cbf510c6a5",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "small",
+      "path": "assets/images/words/lv3-small.png",
+      "sha256": "52c4e20e22814a3e0c497de5316f97481f8d33690a0641ad3280cc385b9b11ad",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "small",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "5fdb8d29d38f199ffaa020c80853686f4771a3a30ba3d9ef890498928ae39536",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "good",
+      "path": "assets/images/words/lv3-good.png",
+      "sha256": "41820bea8db3713c3fecf83b0cda9e7b5bc9e0902db9b6e5903ed24bd0369362",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Thumbs up/Light/3D/thumbs_up_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Thumbs%20up/Light/3D/thumbs_up_3d_light.png",
+        "sha256": "6c8a58409a16669ee4a9180b1cbbe4805825feb81e112cc2bdafd907c9ab75e3"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "red",
+      "path": "assets/images/words/lv3-red.png",
+      "sha256": "25902d572e1e0d9fd2d841e29463abdf1595be0c1619127e702ba2eeb7f92ab1",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Red circle/3D/red_circle_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Red%20circle/3D/red_circle_3d.png",
+        "sha256": "3c2db2998b57dfde1666e065d482d401a6c5b5ab98a4ad0f1f852edef7aa7790"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "blue",
+      "path": "assets/images/words/lv3-blue.png",
+      "sha256": "c682c3fe9dba6c70e6a99aad56257e7ce29e9fd8ef5eb3fe647da7c3b59d1fa4",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Blue circle/3D/blue_circle_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Blue%20circle/3D/blue_circle_3d.png",
+        "sha256": "2f18c5c4e03b8c14ff5cc31d8a78ad9f0a7b3040c9119b0efdfc4a4046a74954"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "yellow",
+      "path": "assets/images/words/lv3-yellow.png",
+      "sha256": "5cc2adf1f3b7bb3bb7882d2b3f69b2cef7125c311f30e94efa8631b33cad92b1",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Yellow circle/3D/yellow_circle_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Yellow%20circle/3D/yellow_circle_3d.png",
+        "sha256": "5ff1a237a0e38abdfbf302c22ef1e1367dd4f9560345cfe341ec28c66af798d3"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "in",
+      "path": "assets/images/words/lv3-in.png",
+      "sha256": "ae68f839964852b4d38713a0dc7c840dfa933c51ef0b26f1c91fe732abac66b5",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "in",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "79c1f24047cf4bdbdbca13bd2f60067fd68d1fbe6b8b332135b39578a742ca0c",
+        "models": [
+          {
+            "path": "furniture-kit/Models/GLTF format/cardboardBoxOpen.glb",
+            "sha256": "960da412564774c75e7b32f9af0100895e1edb877fc1e70dd34ee2422a2196d4"
+          },
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "on",
+      "path": "assets/images/words/lv3-on.png",
+      "sha256": "58c3ae5ac7f84620c7cec6abd5d08d3027c4a5dea53fc154dcb795bc71dc4b3e",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "on",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "c972a62bdac02cb495343d67e2c38103aaeab66a373e33b5751e0d2dfc39e2fa",
+        "models": [
+          {
+            "path": "furniture-kit/Models/GLTF format/cardboardBoxClosed.glb",
+            "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81"
+          },
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "up",
+      "path": "assets/images/words/lv3-up.png",
+      "sha256": "06fee62e2b813f5c736a31f39015c233aa1fbbe2b13cd150e21e232bbb4e98a4",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Up arrow/3D/up_arrow_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Up%20arrow/3D/up_arrow_3d.png",
+        "sha256": "4f01db9cddb09aaf01741dd39695aa71dff1d3871f2537e9ccfa68f8bc3047c8"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "down",
+      "path": "assets/images/words/lv3-down.png",
+      "sha256": "17c20f3b91756bcadca140c14dc60423a38cbed8b7983be03dbf3777d8eeb526",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Down arrow/3D/down_arrow_3d.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Down%20arrow/3D/down_arrow_3d.png",
+        "sha256": "cb1059241bdc6409798f70be74381e4683042a33181f887de1e6b551f39a2513"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "one",
+      "path": "assets/images/words/lv3-one.png",
+      "sha256": "5a411e1e54cb2fe575bb70d66634a9d0f77fb01e08cd122e109b5328f12f2ec1",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "one",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "7dc7223b00ed6fa9728e3a81e85280aa0e4e41c6e5d16f24fff4f186b081c55c",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "two",
+      "path": "assets/images/words/lv3-two.png",
+      "sha256": "cccd043906b6c47b2fd52578b44970e3a4549c60d9ddf764b0d8826bbcd146c7",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "two",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "a7ad84ccb0a6f6e834fe46fca6468262b9ca5c7895422692c96be786d6953038",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "three",
+      "path": "assets/images/words/lv3-three.png",
+      "sha256": "1154b05f34e510273328395a8526900fe303a73a6b395901397befdabd13cdaa",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "three",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "61db2ac8978b67d92a51626dba1ab01ae84c253a59150545e01c572a3970f29e",
+        "models": [
+          {
+            "path": "food-kit/Models/GLB format/apple.glb",
+            "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "toy",
+      "path": "assets/images/words/lv3-toy.png",
+      "sha256": "a27205b5ea97f9112ef43583a4a3cc2a8f0211f62392ec3b59878bb17247a6cf",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "toy",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "c0b57cf7f3f1321c1f91562d036c93d580ca03d8bdabdbcb2778b5da40f869e2",
+        "models": [
+          {
+            "path": "toy-car-kit/Models/GLB format/vehicle-racer.glb",
+            "sha256": "2cdf369f231bf3e38bdf3a376144971f1b4d1a1e558000047ac927c5ac81a42c"
+          },
+          {
+            "path": "toy-car-kit/Models/GLB format/item-cone.glb",
+            "sha256": "9fb546dc8d86e15d9e0d6008f721b3bcd83645d107c0ab68634c25e243a7f6f6"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "baby",
+      "path": "assets/images/words/lv3-baby.png",
+      "sha256": "5db4b3c350cb5f8c7910ab172b5be08074b102f76f077dd4f1c2956f52f0140b",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Baby/Light/3D/baby_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Baby/Light/3D/baby_3d_light.png",
+        "sha256": "7d3d166f410f103fc7d0f0c4de3ab5eedef4fb701495fd2c7425a07757f144d5"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "mother",
+      "path": "assets/images/words/lv3-mother.png",
+      "sha256": "9a080af6307326293943c1b05ee6dace084e5c6bf51cc250c1af0cdc42472502",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Woman feeding baby/Light/3D/woman_feeding_baby_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Woman%20feeding%20baby/Light/3D/woman_feeding_baby_3d_light.png",
+        "sha256": "3c97bccbc0e63e1e650eacc44680a88319f269fc1f6206f6b50f7199582016df"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "father",
+      "path": "assets/images/words/lv3-father.png",
+      "sha256": "f712d468ce732791c2ad2b5eda2a79598396cf812920a6e1681fb3ba06a16740",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "fluent-emoji",
+        "path": "assets/Man feeding baby/Light/3D/man_feeding_baby_3d_light.png",
+        "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Man%20feeding%20baby/Light/3D/man_feeding_baby_3d_light.png",
+        "sha256": "52ec23f64d06ddb426404f1366ae4396e965ff97d5dedc314ab40f2137c3ddb1"
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    },
+    {
+      "id": "hello",
+      "path": "assets/images/words/lv3-hello.png",
+      "sha256": "45b1f32d83adbe541a8c2f0aa53024921a90a1fc782d698d55ce686265df0e34",
+      "width": 256,
+      "height": 256,
+      "source": {
+        "provider": "kenney-blender",
+        "scene": "hello",
+        "renderer": "Blender 5.2.2 LTS",
+        "renderSha256": "204f77f70eb4bd75b55339c7b06ec14918c14f743f11c3c343505150fabc7c6e",
+        "models": [
+          {
+            "path": "animated-characters-protagonists/Model/characterMedium.fbx",
+            "sha256": "18835fef534eede635b081ee7fe647d01a885550a591d2e6bf071010906167d8"
+          }
+        ]
+      },
+      "animations": [],
+      "status": "Integrated and source image checks passed"
+    }
+  ]
+}

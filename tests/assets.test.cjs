@@ -83,7 +83,7 @@ function assetFiles(directory) {
   return names.filter((name) => !name.endsWith('.import')).sort();
 }
 
-test('mobile textures use high-quality WebP without reducing their source resolution', () => {
+test('mobile artwork uses high-quality WebP and shader data stays lossless at source resolution', () => {
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
@@ -118,10 +118,20 @@ test('mobile textures use high-quality WebP without reducing their source resolu
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 1486); // Existing artwork, 35 new word symbols, ten Pip stages, and three mode illustrations.
+  assert.equal(textureImports.length, 1569); // 1,500 existing textures plus 69 reviewed Lv3 replacements.
+  const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
+  const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
+  assert.equal(materialImports.size, 4);
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
-    assert.match(metadata, /^compress\/mode=1$/m, filename);
+    // The fusion shader reads signed distances from alpha; lossy compression would distort its surface.
+    if (materialImports.has(filename)) {
+      assert.match(metadata, /^compress\/mode=0$/m, filename);
+      assert.match(metadata, /^process\/fix_alpha_border=false$/m, filename);
+      assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
+    } else {
+      assert.match(metadata, /^compress\/mode=1$/m, filename);
+    }
     assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
     assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
@@ -359,12 +369,18 @@ test('seasonal reward SVGs use the requested seasonal palette', () => {
   }
 });
 
-test('the image directories contain exactly the 1357 pictured vocabulary and reward assets', () => {
+test('the image directories contain exactly the 1426 vocabulary, replacement and reward assets', () => {
+  const { checkLv3Art } = require('../tools/lv3-vocabulary-art.cjs');
+  const lv3 = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/lv3-vocabulary.json'), 'utf8'));
+  assert.equal(checkLv3Art(root, lv3).pictures, 69);
   const expected = [
-    ['words', words.filter(word => word.image).map(({ image }) => path.basename(image))],
+    ['words', [
+      ...words.filter(word => word.image).map(({ image }) => path.basename(image)),
+      ...lv3.files.map(({ path: filename }) => path.basename(filename))
+    ]],
     ['rewards', [...seasons.map(({ id }) => `${id}.svg`), ...rewardSymbols.map((symbol) => path.basename(symbol))]]
   ];
-  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 1357);
+  assert.equal(expected.reduce((count, [, names]) => count + names.length, 0), 1426);
   for (const [directory, names] of expected) {
     const fullPath = path.join(root, 'assets', 'images', directory);
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);

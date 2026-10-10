@@ -15,6 +15,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Ava speech](ava-voice.md) | Approved voice profile, all 1,888 word, phrase and prompt recordings, generation, and source hashes |
 | [Pip growth](pip-growth.md) | Ten appearances, cumulative actions and ten character voice recordings |
 | [Growth vocabulary artwork](growth-vocabulary.md) | 35 new sourced pictures and contextual vocabulary without invented images |
+| [Lv3 vocabulary refresh](lv3-vocabulary.md) | 69 shared dimensional illustrations, Blender scenes, source rights, and local comparison gallery |
 | [Expanded vocabulary artwork](mulberry-vocabulary.md) | 900 sourced Mulberry illustrations, license, curriculum manifests, and reproducible import |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |

@@ -48,8 +48,8 @@ func _run() -> void:
 	await _choose_mode(app, "phrase")
 	var view = app._phrase
 	_check_first_candidate_row(view)
-	check(app._mode_id == "phrase" and app.MODES.has("phrase") and app._mode_buttons.size() == 4,
-		"The library launches Phrase Builder alongside all three existing modes")
+	check(app._mode_id == "phrase" and app.MODES.has("phrase") and app._mode_buttons.size() == 5,
+		"The library launches Phrase Builder alongside all four other modes")
 	check(view.is_visible_in_tree() and not app.grid.visible and not app._memory.visible and not app._pop.visible,
 		"Phrase Builder owns the visible playfield")
 	check(view.game.questions.size() == 3 and view.game.phase == "building" and view.game.completed == 0,
@@ -767,6 +767,13 @@ func _check_layout(app, directory: String) -> void:
 	var growth_path: String = directory + "/growth.cfg"
 	check(saved.load(growth_path) == OK, "The advanced layout fixture starts from the saved learning state")
 	saved.set_value("growth", "level", 12)
+	# Leave this four-word phrase unmastered so the learning-priority selector
+	# can choose it ahead of longer, already-mastered phrases in the curriculum.
+	var streaks: Dictionary = {}
+	for word: Dictionary in app.data.words:
+		if not ["bright", "red", "birthday", "balloon"].has(str(word.id)):
+			streaks[str(word.id)] = 6
+	saved.set_value("growth", "streaks", streaks)
 	check(saved.save(growth_path) == OK and app.growth.load_state() and app.growth.level == 12,
 		"The advanced layout fixture loads an earned Lv12+ state")
 	app._refresh_growth()

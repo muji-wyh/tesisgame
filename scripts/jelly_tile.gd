@@ -197,8 +197,8 @@ func _layout() -> void:
 	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
 	_picture.visible = not _projection and (kind == "picture" or combined)
 	_label.visible = not _projection and (kind == "word" or combined)
-	_picture.position = size * (Vector2(0.31, 0.25) if combined else Vector2(0.25, 0.29))
-	_picture.size = size * (Vector2(0.38, 0.34) if combined else Vector2(0.50, 0.46))
+	_picture.position = size * (Vector2(0.26, 0.18) if combined else Vector2(0.18, 0.20))
+	_picture.size = size * (Vector2(0.48, 0.42) if combined else Vector2(0.64, 0.58))
 	_label.position = size * Vector2(0.13, 0.60 if combined else 0.35)
 	_label.size = size * Vector2(0.74, 0.20 if combined else 0.30)
 	var font_size: int = maxi(10, int(size.x * (0.15 if combined else 0.21)))
@@ -206,6 +206,6 @@ func _layout() -> void:
 	while font_size > 9 and Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available:
 		font_size -= 1
 	_label.add_theme_font_size_override("font_size", font_size)
-	_badge.position = size * Vector2(0.59, 0.56)
-	_badge.size = size * 0.42
+	_badge.position = size * Vector2(0.69, 0.70)
+	_badge.size = size * 0.30
 	set_support(0.0, 0.0, not _projection)

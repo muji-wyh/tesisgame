@@ -355,6 +355,11 @@ func load_all() -> bool:
 		var imported_image: String = "assets/imported-unity/" + word.id + ".png"
 		if ResourceLoader.exists("res://" + imported_image):
 			word.image = imported_image
+		if int(word.min_age) == 3 and not word.image.is_empty():
+			var reviewed_image: String = "assets/images/words/lv3-%s.png" % word.id
+			if ResourceLoader.exists("res://" + reviewed_image):
+				word.image = reviewed_image
+				word.art_key = "lv3/" + str(word.id)
 	value = _read_json("res://assets/chests/manifest.json")
 	if not error.is_empty():
 		return false

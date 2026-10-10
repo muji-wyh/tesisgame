@@ -54,6 +54,12 @@ func _verify() -> void:
 			if picture == null or picture.get_width() <= 0 or picture.get_height() <= 0:
 				printerr("Word picture is missing from the startup pack: " + word.image)
 				failures += 1
+			if int(word.get("min_age", 0)) == 3:
+				var reviewed_path: String = "res://assets/images/words/lv3-%s.png" % word.id
+				var reviewed: Texture2D = load(reviewed_path)
+				if reviewed == null or reviewed.get_size() != Vector2(256, 256):
+					printerr("Reviewed Lv3 picture is missing from the startup pack: " + reviewed_path)
+					failures += 1
 		var stream: AudioStream = load("res://" + word.audio)
 		if stream == null or stream.get_length() <= 0.0:
 			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
