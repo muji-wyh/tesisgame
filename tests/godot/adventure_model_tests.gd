@@ -139,25 +139,51 @@ func _round_snapshot(model) -> Dictionary:
 func _test_round_chest_chance(words: Array) -> void:
 	var lesson: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["cat", "dog", "fish", "duck", "apple"])
 	var earned: int = 0
+	var planned_slots: Dictionary = {}
 	var model = Model.new()
 	var twin = Model.new()
+	check(is_equal_approx(Model.ROUND_CHEST_CHANCE, 0.5), "Chance rewards use one fifty-percent roll per round")
 	for seed_value in range(128):
 		check(model.reset(lesson, seed_value, false, "", "", "3", true)
 			and twin.reset(lesson, seed_value, false, "", "", "3", true), "A chance-reward round starts with a stable seed")
-		var outcome: bool = model.chest_earned
+		var planned_pair: int = model.chest_reward_pair
+		var outcome: bool = planned_pair > 0
+		check(planned_pair >= 0 and planned_pair <= Model.MATCH_PAIR_COUNT,
+			"A round plans either no reward or exactly one successful pair for its reveal")
+		planned_slots[planned_pair] = int(planned_slots.get(planned_pair, 0)) + 1
 		earned += 1 if outcome else 0
-		check(twin.chest_earned == outcome, "The same round seed reproduces its chest outcome")
+		check(not model.chest_earned and not twin.chest_earned,
+			"A planned chest is not earned before a successful pair")
+		check(twin.chest_reward_pair == planned_pair, "The same round seed reproduces its single reveal slot")
 		check(not model.begin_open(), "A possible reward cannot be opened before a completed round")
+		model.select(str(model.lesson_words[0].id) + ":word")
+		check(model.select(str(model.lesson_words[1].id) + ":image") == "wrong"
+			and not model.chest_earned and model.chest_reward_pair == planned_pair,
+			"A wrong pair cannot reveal a chest or replace the successful-pair plan")
+		model.resolve_feedback()
 		model.request_hint()
 		model.set_theme("ocean")
-		for word in model.lesson_words:
-			model.match_spoken_word(str(word.id))
+		check(model.chest_reward_pair == planned_pair and not model.chest_earned,
+			"Hints and theme changes neither redraw the reveal slot nor award the chest")
+		for pair_index in range(model.lesson_words.size()):
+			var word: Dictionary = model.lesson_words[pair_index]
+			var previously_earned: bool = model.chest_earned
+			check(model.match_spoken_word(str(word.id)) == "correct"
+				and model.chest_earned == previously_earned and model.chest_reward_pair == planned_pair,
+				"A successful pair preserves the plan and leaves reward commitment to the host")
+			if pair_index + 1 == planned_pair:
+				model.chest_earned = true
 			model.resolve_feedback()
-		check(model.phase == "won" and model.chest_earned == outcome,
-			"Completing every pair preserves the single predetermined reward outcome")
+			check(model.chest_earned == (outcome and pair_index + 1 >= planned_pair)
+				and model.chest_reward_pair == planned_pair,
+				"Resolving feedback retains only the chest committed at the host's planned pair")
+			if model.phase != "won":
+				check(not model.begin_open(), "A revealed reward still waits for the complete round before opening")
+		check(model.phase == "won" and model.chest_earned == outcome and model.chest_reward_pair == planned_pair,
+			"Completing every pair preserves the single committed reward outcome")
 		model.resolve_feedback()
 		model.match_spoken_word(str(model.lesson_words[0].id))
-		check(model.chest_earned == outcome and model.begin_open() == outcome,
+		check(model.chest_earned == outcome and model.chest_reward_pair == planned_pair and model.begin_open() == outcome,
 			"Duplicate completion does not reroll or open an unearned chest")
 		if outcome:
 			check(not model.begin_open() and model.finish_open() and not model.finish_open() and not model.begin_open(),
@@ -167,15 +193,21 @@ func _test_round_chest_chance(words: Array) -> void:
 				"A no-chest round never creates an opening or reward ID")
 		var before: Dictionary = _round_snapshot(model)
 		check(not model.reset(lesson, seed_value + 1, false, "", "", "missing-level", true)
-			and _round_snapshot(model) == before, "Rejected resets preserve reward ownership")
+			and _round_snapshot(model) == before and model.chest_reward_pair == planned_pair,
+			"Rejected resets preserve reward ownership and the planned reveal slot")
 	check(earned >= 40 and earned <= 88,
 		"The deterministic round sample includes both outcomes at the configured fifty-percent chance")
+	check(int(planned_slots.get(0, 0)) == 128 - earned,
+		"Every no-reward round has no successful pair scheduled to reveal a chest")
+	for pair_index in range(1, Model.MATCH_PAIR_COUNT + 1):
+		check(int(planned_slots.get(pair_index, 0)) > 0,
+			"Reward reveals can belong to successful pair %d, including the final pair" % pair_index)
 	check(model.reset(lesson, 19) and model.chest_earned,
 		"Hosts that do not request a chance reward keep their guaranteed reward behavior")
 	check(model.reset(lesson, 19, true, "", "", "3", true)
 		and twin.reset(lesson, 19, true, "", "", "3", true)
-		and model.chest_earned == twin.chest_earned,
-		"Starting a new replay replaces the reward outcome once without carrying over a prior claim")
+		and model.chest_reward_pair == twin.chest_reward_pair and not model.chest_earned and not twin.chest_earned,
+		"Starting a new replay replaces the reveal plan once without carrying over a prior claim")
 
 
 func _check_safe_lesson(model) -> void:

@@ -141,8 +141,8 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 	app.choose_mode("match")
 	await settle()
 	_check_bars(app, context + " Match")
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

@@ -36,6 +36,12 @@ func _check_click_routes() -> void:
 	app.audio.halt()
 	app.medal_progress.counts["spring-1"] = 1
 	app._refresh_collection()
+	# Prepare the result states before measuring whether companion input writes.
+	for mode in ["match", "memory"]:
+		app._mode_id = mode
+		preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+		check(app.medal_progress.finish_pair_round(mode, app._round_id), "Prepare a completed companion fixture")
+	app._mode_id = "match"
 	# Refreshing reduced motion schedules container layout before Pip can be hit.
 	await _settle()
 	var saved: Dictionary = _saved_files(directory)
@@ -104,8 +110,8 @@ func _check_click_routes() -> void:
 
 
 func _show_result_companion(app) -> void:
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 	app.model.phase = "won"
 	if app._mode_id == "memory":
 		app._memory.memory.phase = "won"

@@ -40,15 +40,15 @@ func _pieces(app) -> int:
 	return total
 
 
-func _win(app, seed_value: int) -> void:
+func _win(app, seed_value: int, theme_id: String = "spring") -> void:
 	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 	check(app.new_round(seed_value), "The next real Match round starts")
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 	check(not surprise.active and str(surprise.kind).is_empty() and surprise.play_count == surprise_count,
 		"A new round clears the decorative gift without replaying an automatically settled opening")
-	app.choose_theme("spring")
+	app.choose_theme(theme_id)
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
 			app.cards[card.id].pressed.emit()
@@ -78,7 +78,8 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 		and app.audio._chest_players.all(func(player): return not player.playing or player.stream == app.audio._chest_stream(app.chest.theme_id, "cancel")),
 		reason + " stops the pressure bed and old accents, allowing only the brief release feedback")
 	check(app.model.chest_state == "closed" and app.chest.mode == "closed" and _pieces(app) == pieces
-		and app._pending_fragment.is_empty() and app.model.reward_id.is_empty() and app.model.reward_theme.is_empty(),
+		and app._pending_fragment.is_empty() and app.model.reward_id.is_empty()
+		and app.model.reward_theme == app.medal_progress.pair_round(app._mode_id).theme,
 		reason + " leaves the earned chest closed without awarding a piece")
 	app._advance_ui(2.0)
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
@@ -287,7 +288,7 @@ func _run() -> void:
 	app._advance_ui(0.4)
 	app.choose_theme("winter")
 	_check_cancelled(app, 2, "Changing worlds during an unfinished hold")
-	check(app.chest.theme_id == "winter", "A new world cannot inherit the previous world's hold or sound")
+	check(app.chest.theme_id == "spring", "Changing worlds cancels the hold while retaining the earned Spring chest")
 	app.choose_theme("spring")
 	app.chest_button.grab_focus()
 	var accept := InputEventJoypadButton.new()
@@ -395,8 +396,10 @@ func _run() -> void:
 	var storage := BrowserStorage.new()
 	app.medal_progress = progress_script.new(directory + "/retry.cfg", directory + "/retry-legacy.cfg", storage)
 	check(app.medal_progress.load_progress(), "The retry scenario starts with isolated browser storage")
+	app._round_id = ""
 	app.set_reduced_motion(false)
 	_win(app, 85)
+	var reward_writes: int = storage.writes
 	storage.fail_write = true
 	_begin(app)
 	app._advance_ui(1.21)
@@ -424,10 +427,10 @@ func _run() -> void:
 	check(app._save_error and _pieces(app) == 0 and not app._chest_reward_announced
 		and not app.audio._chest_rewarded, "A failed reward save never announces a saved reward")
 	var failed_save_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-	check(failed_save_surprise.active and not str(failed_save_surprise.kind).is_empty() and storage.writes == 0,
+	check(failed_save_surprise.active and not str(failed_save_surprise.kind).is_empty() and storage.writes == reward_writes,
 		"The opening's decorative gift does not depend on or create a successful save")
 	app._retry_reward_save()
-	check(storage.writes == 0 and not app.audio._chest_rewarded,
+	check(storage.writes == reward_writes and not app.audio._chest_rewarded,
 		"Repeated failed retries do not play a success sound")
 	check(app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
 		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind,
@@ -438,14 +441,14 @@ func _run() -> void:
 		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind
 		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
 		and app.chest.hold_effect_snapshot().surprise.age == failed_save_surprise.age
-		and storage.writes == 0,
+		and storage.writes == reward_writes,
 		"Backgrounding freezes the revealed gift while the failed reward save remains pending")
 	app.on_page_visible()
 	app.audio.set_muted(true)
 	app.audio.set_muted(false)
 	storage.fail_write = false
 	app._retry_reward_save()
-	check(storage.writes == 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
+	check(storage.writes == reward_writes + 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
 		"An explicit successful retry after background/mute saves and announces the waiting reward once")
 	app.chest._advance_animation(60.0)
 	check(app.chest.hold_effect_snapshot().surprise.active
@@ -456,7 +459,7 @@ func _run() -> void:
 		"A successful retry after interruption never replays missed physical sounds")
 	app._retry_reward_save()
 	app._on_chest_opened()
-	check(storage.writes == 1 and _pieces(app) == 1, "Stale retries and callbacks cannot write a second reward")
+	check(storage.writes == reward_writes + 1 and _pieces(app) == 1, "Stale retries and callbacks cannot write a second reward")
 	_win(app, 86)
 	_begin(app)
 	app._advance_ui(1.21)
@@ -765,11 +768,15 @@ func _check_release_commitment(directory: String) -> void:
 	app.chest.set_process(false)
 	app.chest._advance_animation(Feel.RELEASE_TIME)
 	check(app.new_round(seed_value + 1) and app.model.phase == "waiting"
-		and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
+		and _pieces(app) == pieces + 1 and storage.writes == writes + 2,
 		"Explicitly skipping the committed tail still saves its single earned reward before the next round")
+	var writes_after_restart: int = storage.writes
+	var new_pair: Dictionary = app.medal_progress.pair_round(app._mode_id)
+	check(new_pair.get("id", "") == app._round_id and not new_pair.get("awarded", false),
+		"Restart also saves the new round reservation without awarding its chest")
 	app._on_chest_opened()
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
-	check(_pieces(app) == pieces + 1 and storage.writes == writes + 1,
+	check(_pieces(app) == pieces + 1 and storage.writes == writes_after_restart,
 		"Late callbacks from the skipped opening cannot award the next round")
 	check(not app.chest.hold_effect_snapshot().surprise.active
 		and app.chest.hold_effect_snapshot().surprise.play_count == before_skip_surprise,
@@ -865,8 +872,7 @@ func _check_gameplay_pixels(directory: String) -> void:
 		root.size = dimensions
 		for theme_id in app.data.THEMES:
 			seed_value += 1
-			_win(app, seed_value)
-			app.choose_theme(theme_id)
+			_win(app, seed_value, theme_id)
 			app.set_process(false)
 			app.chest.set_process(false)
 			for frame in range(4):

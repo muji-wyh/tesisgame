@@ -38,8 +38,8 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(false)
 	app.new_round(17)
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	app.choose_theme("spring")
 	var adventure: Variant = app.model.get("adventure_name")
 	check(adventure is String and not str(adventure).is_empty()
@@ -112,8 +112,8 @@ func _run() -> void:
 	app._refresh()
 	check(app.medal_progress.completed_count("winter") == 6, "A completed season retains six earned medals")
 	app.new_round(19)
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	words = _pairs(app)
 	_match(app, words[0])
 	_retry_mismatches(app)
@@ -135,8 +135,8 @@ func _run() -> void:
 		and not app._outcome.is_visible_in_tree(),
 		"Repeated mistakes without matches never replace the board with results")
 	app.new_round(21)
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	words = _pairs(app)
 	app._on_voice_state([true, true, "Listening"])
 	for word in words:
@@ -146,8 +146,8 @@ func _run() -> void:
 	check(app.model.phase == "won" and app.chest_button.is_visible_in_tree() and not app._voice_mode,
 		"Voice-earned matches use the same chest result and exit listening")
 	app.new_round(22)
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	words = _pairs(app)
 	for word in words.slice(0, 4):
 		_match(app, word)
@@ -236,8 +236,8 @@ func _check_result_lifecycle_layout(app) -> void:
 			seed_value += 1
 			root.size = dimensions
 			app.new_round(seed_value, false, "", mode)
-			# This fixture exercises an earned chest; chance outcomes have separate coverage.
-			app.model.chest_earned = true
+			# Use a persisted chest reservation; chance outcomes have separate coverage.
+			preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 			app.set_reduced_motion(false)
 			if mode == "memory":
 				for word in app.model.lesson_words:

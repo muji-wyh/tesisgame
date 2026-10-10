@@ -18,6 +18,7 @@ const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
+const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -85,6 +86,12 @@ class RewardSparkle:
 var model := Model.new()
 var data := Data.new()
 var medal_progress := MedalProgress.new()
+var _pair_reward: PairChestReward
+var _pair_reward_row: Control
+var _pair_words: Array[String] = []
+var _pair_proposed_pair: int = 0
+var _pair_save_failed: bool = false
+var _pair_settlement_pending: bool = false
 var duck: Mascot
 var _header_duck_slot: Panel
 var _header_duck_art_slot: Control
@@ -400,6 +407,16 @@ func _build_controls() -> void:
 	collection_button = _growth_button
 	_growth_bar = _growth_button.bar
 	_build_mode_menu()
+	_pair_reward = PairChestReward.new()
+	_pair_reward.name = "PairChestReward"
+	_pair_reward.cue_requested.connect(_pair_reward_cue)
+	_pair_reward_row = Control.new()
+	_pair_reward_row.name = "PairRewardSpace"
+	_pair_reward_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(_pair_reward_row)
+	_pair_reward_row.add_child(_pair_reward)
+	_pair_reward.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_pair_reward_row.resized.connect(_layout_pair_reward)
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
 	_voice_space.custom_minimum_size = Vector2(0, 112)
@@ -714,7 +731,7 @@ func _play_ui_click(source: Control = null) -> void:
 
 func _show_mode_menu() -> void:
 	if _mode_menu_open() or _page_hidden or collection_page.visible \
-		or (not model.phase in ["waiting", "matching", "feedback"] and not _round_celebration_active()) or model.chest_state == "opening" \
+		or (not model.phase in ["waiting", "matching", "feedback"] and not _round_celebration_active() and not _pair_reward_revealing() and not _pair_save_failed) or model.chest_state == "opening" \
 		or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_mode_menu_resume_voice = _voice_mode
@@ -1058,6 +1075,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_refresh()
 		_layout()
 		return false
+	if not _settle_pair_reward():
+		_refresh()
+		return false
 	if not _settle_jelly_round():
 		return false
 	if not _settle_pop_reward():
@@ -1113,6 +1133,14 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_show_error(model.error)
 		return false
 	_round_id = GrowthState.make_round_id()
+	_pair_words.clear()
+	_pair_proposed_pair = model.chest_reward_pair
+	_pair_save_failed = false
+	_pair_settlement_pending = false
+	_pair_reward.clear()
+	if _mode_id in ["match", "memory"]:
+		_pair_reward.configure(_round_id, model.theme_id, data.chests, reduced_motion)
+		_sync_pair_reward()
 	_memory_attempt = 0
 	_celebration_seen_id = ""
 	_round_result.clear()
@@ -1554,8 +1582,10 @@ func _begin_round_celebration(chest_count: int) -> void:
 	duck.settle()
 	var score: int = int(_round_result.get("score", 0)) if _mode_id in ["pop", "jelly"] else -1
 	var theme_id: String = _jelly_reward_theme if _mode_id == "jelly" else _pop_reward_theme if _mode_id == "pop" else model.theme_id
+	if _mode_id in ["match", "memory"] and not model.reward_theme.is_empty():
+		theme_id = model.reward_theme
 	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id in ["pop", "jelly"] else 0
-	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score, chest_tier)
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score, chest_tier, _mode_id in ["match", "memory"] and model.chest_earned)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
@@ -1574,6 +1604,7 @@ func _start_round_celebration_audio() -> void:
 
 
 func _sync_round_celebration() -> void:
+	_sync_pair_presentation()
 	if not _round_celebration_active():
 		return
 	var allowed: bool = _round_celebration_allowed()
@@ -1764,6 +1795,8 @@ func _memory_answer(words: Array, correct: bool) -> void:
 	_record_growth("memory-%d" % _memory_attempt, words.map(func(word: Dictionary) -> String: return str(word.id)), correct)
 	audio.play_pair_feedback(correct)
 	_react_to_gameplay(correct)
+	if correct and not words.is_empty():
+		_pair_matched(str(words[0].id))
 
 
 func _memory_finished(won: bool, found: Array) -> void:
@@ -1806,7 +1839,10 @@ func _memory_prompt() -> void:
 func _refresh() -> void:
 	if _rebuilding:
 		return
-	if _mode_id in ["match", "memory"] and model.phase == "won" and model.chest_state == "closed" and not _settling_chest:
+	if _mode_id in ["match", "memory"] and model.phase == "won" and not _settling_chest and not _pair_save_failed:
+		_sync_pair_reward()
+	var pair_revealing: bool = _pair_reward_revealing()
+	if _mode_id in ["match", "memory"] and model.phase == "won" and model.chest_state == "closed" and not _settling_chest and not pair_revealing and not _pair_save_failed:
 		_begin_round_celebration(1 if model.chest_earned else 0)
 	var celebrating: bool = _round_celebration_active()
 	var theme_changed: bool = str(_active_palette.get("id", "")) != model.theme_id
@@ -1815,7 +1851,7 @@ func _refresh() -> void:
 		audio.prepare_chest(model.theme_id)
 		# Multi-chest modes keep the theme of their already saved reward batch.
 		if _round_celebration_active() and not _mode_id in ["pop", "jelly"]:
-			_round_celebration.apply_theme(model.theme_id, data.chests)
+			_round_celebration.apply_theme(model.reward_theme if not model.reward_theme.is_empty() else model.theme_id, data.chests)
 	var palette: Dictionary = _active_palette
 	_background.color = Style.PAPER.lerp(palette.background, 0.16)
 	if theme_changed:
@@ -1861,7 +1897,7 @@ func _refresh() -> void:
 	_style_voice_button()
 	_result_retry_button.visible = _save_error
 	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
-	var playing: bool = model.phase in ["waiting", "matching", "feedback"]
+	var playing: bool = model.phase in ["waiting", "matching", "feedback"] or pair_revealing or (_pair_save_failed and _mode_id in ["match", "memory"])
 	_storage_retry_button.add_theme_font_size_override("font_size", 16)
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
 	_storage_retry_button.tooltip_text = medal_progress.error if _save_error else growth.error
@@ -1869,9 +1905,9 @@ func _refresh() -> void:
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = growth.error if _journey_save_failed else ""
 	_refresh_growth()
-	if not playing and _voice_mode:
+	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
 		_stop_voice()
-	_voice_button.visible = playing and _mode_id == "match"
+	_voice_button.visible = model.phase in ["waiting", "matching", "feedback"] and _mode_id == "match"
 	_refresh_hint()
 	_match_playfield.visible = playing and _mode_id == "match"
 	grid.visible = playing and _mode_id == "match"
@@ -1888,6 +1924,7 @@ func _refresh() -> void:
 	_message.hide()
 	_outcome.visible = not playing and not celebrating
 	_sync_round_celebration()
+	_sync_pair_presentation()
 	_refresh_match_cards()
 	if not model.hint_ids.is_empty():
 		_message.text = "Hint: match the %s cards." % model.card_by_id(model.hint_ids[0]).word.text
@@ -2166,13 +2203,18 @@ func _layout() -> void:
 	_fit_content.call_deferred()
 
 
+func _short_game_header() -> bool:
+	var height: float = size.y * Style.ui_scale(self)
+	return (_mode_id == "jelly" and height <= 440) or (_mode_id in ["match", "memory"] and height <= 360)
+
+
 func _fit_content() -> void:
 	# Containers grow to transient child minima, but do not shrink back with anchors alone.
 	if _content_margins != null:
 		var scale: float = Style.ui_scale(self)
-		var short_jelly: bool = _mode_id == "jelly" and size.y * scale <= 440
+		var short_header: bool = _short_game_header()
 		for edge in ["top", "bottom"]:
-			_content_margins.add_theme_constant_override("margin_" + edge, ceili((4 if short_jelly else 12) / scale))
+			_content_margins.add_theme_constant_override("margin_" + edge, ceili((4 if short_header else 12) / scale))
 		for edge in ["left", "right"]:
 			_content_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 1040 / scale) * 0.5)))
 		_content_margins.size = size
@@ -2219,17 +2261,19 @@ func _fit_grid() -> void:
 
 func _fit_mode_buttons() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	var short_jelly: bool = _mode_id == "jelly" and size.y * css_scale <= 440
+	_pair_reward_row.custom_minimum_size.y = (34.0 if size.y * css_scale <= 440 else 46.0) / css_scale
+	_layout_pair_reward()
+	var short_header: bool = _short_game_header()
 	_header_spacer.show()
-	var gap: int = ceili((4 if short_jelly or size.x * css_scale < 360 else 8) / css_scale)
+	var gap: int = ceili((4 if short_header or size.x * css_scale < 360 else 8) / css_scale)
 	_main_column.add_theme_constant_override("separation", gap)
 	_header.add_theme_constant_override("separation", gap)
-	_header.custom_minimum_size.y = ceilf((44 if short_jelly else 56) / css_scale)
+	_header.custom_minimum_size.y = ceilf((44 if short_header else 56) / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	_header_duck_slot.custom_minimum_size = Vector2(ceilf((44 if short_jelly else 52) / css_scale), ceilf((44 if short_jelly else 56) / css_scale))
-	_header_duck_art_slot.position = Vector2(0, 0 if short_jelly else 2 / css_scale)
-	_header_duck_art_slot.size = Vector2.ONE * ((44 if short_jelly else 52) / css_scale)
+	_header_duck_slot.custom_minimum_size = Vector2(ceilf((44 if short_header else 52) / css_scale), ceilf((44 if short_header else 56) / css_scale))
+	_header_duck_art_slot.position = Vector2(0, 0 if short_header else 2 / css_scale)
+	_header_duck_art_slot.size = Vector2.ONE * ((44 if short_header else 52) / css_scale)
 	_header_duck_slot.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
 	var heading_focus: int = _mode_heading_button.focus_mode
@@ -2240,8 +2284,8 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.text = str(MODES[_mode_id]) + "  ›"
 	_mode_heading.add_theme_font_size_override("font_size", ceili((22 if size.x * css_scale >= 680 else 15) / css_scale))
 	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 and not short_jelly else 0
-	_mode_subheading.visible = size.x * css_scale >= 680 and not short_jelly
+	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 and not short_header else 0
+	_mode_subheading.visible = size.x * css_scale >= 680 and not short_header
 	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP", "phrase": "LISTEN AND BUILD  /  3 PHRASES", "jelly": "DRAG A MATCH  /  MAKE ROOM"}.get(_mode_id, "GROW WITH PIP")
 	_mode_subheading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_subheading.offset_top = 32 / css_scale
@@ -2525,6 +2569,7 @@ func choose_theme(id: String) -> void:
 
 
 func set_reduced_motion(value: bool) -> void:
+	_pair_reward.set_reduced_motion(value)
 	reduced_motion = value
 	WordArt.set_reduced_motion(value)
 	if _host != null:
@@ -2555,7 +2600,7 @@ func set_reduced_motion(value: bool) -> void:
 
 
 func _open_chest() -> void:
-	if _round_celebration_active() and not _settling_chest:
+	if (_round_celebration_active() or _pair_reward_revealing()) and not _settling_chest:
 		return
 	if model.phase != "won" or not model.chest_earned or model.chest_state != "closed":
 		return
@@ -2566,16 +2611,21 @@ func _open_chest() -> void:
 			_cancel_chest_hold()
 			_refresh()
 			return
-	_pending_fragment = medal_progress.next_fragment(model.theme_id)
+	var pair: Dictionary = medal_progress.pair_round(_mode_id)
+	var saved_pair: bool = _mode_id in ["match", "memory"] and pair.get("id", "") == _round_id and pair.get("awarded", false)
+	_pending_fragment = pair.fragment.duplicate(true) if saved_pair else medal_progress.next_fragment(model.theme_id)
 	if not medal_progress.error.is_empty():
 		_save_error = true
 		_cancel_chest_hold()
 		_refresh()
 		return
-	var id: String = _pending_fragment.medal_id if not _pending_fragment.is_empty() else Data.medals(model.theme_id).back().id
+	var id: String = _pending_fragment.medal_id if not _pending_fragment.is_empty() else Data.medals(pair.theme if saved_pair else model.theme_id).back().id
 	if not model.begin_open(id):
 		_cancel_chest_hold()
 		return
+	if saved_pair:
+		model.reward_theme = pair.theme
+		chest.configure_skin(Data.theme(pair.theme), data.chests)
 	_hold_elapsed = 0.0
 	_chest_reward_announced = false
 	if not _settling_chest:
@@ -2647,7 +2697,10 @@ func _settle_released_chest() -> void:
 
 
 func _commit_fragment(explicit_retry: bool = false) -> void:
-	if not _pending_fragment.is_empty() and not medal_progress.claim(_pending_fragment):
+	var pair: Dictionary = medal_progress.pair_round(_mode_id)
+	var saved_pair: bool = _mode_id in ["match", "memory"] and pair.get("id", "") == _round_id and pair.get("awarded", false)
+	var saved: bool = medal_progress.settle_pair_reward(_mode_id, _round_id) if saved_pair else (_pending_fragment.is_empty() or medal_progress.claim(_pending_fragment))
+	if not saved:
 		_save_error = true
 		_refresh()
 		return
@@ -2665,6 +2718,16 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 
 func _retry_reward_save() -> void:
 	if not _save_error or collection_page.visible:
+		return
+	if _pair_save_failed:
+		if not _progress_ready:
+			_load_collected_rewards()
+		if _progress_ready:
+			if _pair_settlement_pending:
+				_settle_pair_reward()
+			else:
+				_sync_pair_reward()
+		_refresh()
 		return
 	if not _progress_ready:
 		_progress_ready = medal_progress.load_progress()
@@ -3162,6 +3225,14 @@ func _audio_status(message: String) -> void:
 
 
 func _announce_status(message: String) -> void:
+	# Keep pair feedback in the same live-region update as the board status.
+	# Otherwise an immediate refresh can replace it before a reader speaks it.
+	if _mode_id in ["match", "memory"] and _pair_reward_revealing() \
+		and _pair_reward_row.is_visible_in_tree() and not _page_hidden \
+		and not collection_page.visible and not _mode_menu_open():
+		var notice: String = "Chest found!" if model.chest_earned else "No chest this pair."
+		if not message.begins_with(notice):
+			message = notice + " " + message
 	_status_announcement = message
 	if _host != null:
 		_host.announce(message)
@@ -3515,7 +3586,7 @@ func _stop_feedback_animations() -> void:
 
 
 func _start_chest_hold() -> void:
-	if _round_celebration_active():
+	if _round_celebration_active() or _pair_reward_revealing():
 		return
 	if _holding_chest or _page_hidden or collection_page.visible or _save_error \
 		or model.phase != "won" or not model.chest_earned or model.chest_state != "closed":
@@ -3601,6 +3672,11 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	var pair_was_revealing: bool = _pair_reward_revealing()
+	_sync_pair_presentation()
+	_pair_reward.advance(delta)
+	if pair_was_revealing and not _pair_reward_revealing() and model.phase == "won":
+		_refresh()
 	_sync_round_celebration()
 	_celebration_publish_left -= delta
 	if _celebration_publish_left <= 0.0:
@@ -3787,6 +3863,13 @@ func _announce_collection_state() -> void:
 
 func _load_collected_rewards() -> void:
 	_progress_ready = medal_progress.load_progress()
+	if _progress_ready:
+		for mode in ["match", "memory"]:
+			var pair: Dictionary = medal_progress.pair_round(mode)
+			if pair.get("awarded", false) and not pair.get("settled", false):
+				_progress_ready = medal_progress.settle_pair_reward(mode, pair.id)
+				if not _progress_ready:
+					break
 	_save_error = not _progress_ready
 	_sync_collected_rewards()
 
@@ -3891,6 +3974,103 @@ func _learning_words() -> Array:
 func _match_growth_answer(id: String, words: Array[String], correct: bool) -> void:
 	if _mode_id == "match" and not _rebuilding:
 		_record_growth(id, words, correct)
+		if correct and not words.is_empty():
+			_pair_matched(words[0])
+
+
+func _pair_matched(word_id: String) -> void:
+	if _pair_words.has(word_id) or _round_id.is_empty():
+		return
+	_pair_words.append(word_id)
+	if _sync_pair_reward() and not model.chest_earned:
+		_pair_reward.show_pair_result(_round_id, false)
+	_refresh()
+
+
+func _sync_pair_reward() -> bool:
+	if _mode_id not in ["match", "memory"] or _round_id.is_empty():
+		return true
+	var pair: Dictionary = medal_progress.pair_round(_mode_id)
+	if pair.get("id", "") != _round_id:
+		pair = medal_progress.begin_pair_round(_mode_id, _round_id, _pair_proposed_pair)
+	if pair.is_empty():
+		_pair_save_failed = true
+		_save_error = true
+		return false
+	model.chest_reward_pair = int(pair.pair)
+	if not pair.awarded and int(pair.pair) > 0 and _pair_words.size() >= int(pair.pair):
+		if not medal_progress.record_pair_reward(_mode_id, _round_id, model.theme_id):
+			_pair_save_failed = true
+			_save_error = true
+			return false
+		pair = medal_progress.pair_round(_mode_id)
+		model.chest_earned = true
+		model.reward_theme = str(pair.theme)
+		_pair_reward.configure(_round_id, pair.theme, data.chests, reduced_motion)
+		_pair_reward.show_pair_result(_round_id, true)
+	if pair.awarded:
+		model.chest_earned = true
+		model.reward_theme = str(pair.theme)
+	if model.phase == "won" and not pair.completed:
+		if not medal_progress.finish_pair_round(_mode_id, _round_id):
+			_pair_save_failed = true
+			_save_error = true
+			return false
+	if _pair_save_failed:
+		_save_error = false
+	_pair_save_failed = false
+	return true
+
+
+func _settle_pair_reward() -> bool:
+	if _mode_id not in ["match", "memory"] or _round_id.is_empty():
+		return true
+	# Unavailable reward storage must not trap an untouched practice board.
+	# Once answers exist, preserve their pending outcome until it can be saved.
+	if _pair_words.is_empty() and not model.chest_earned and _pair_save_failed:
+		return true
+	if not _sync_pair_reward():
+		return false
+	var pair: Dictionary = medal_progress.pair_round(_mode_id)
+	if pair.get("id", "") == _round_id and pair.get("awarded", false):
+		_pair_settlement_pending = true
+		if not medal_progress.settle_pair_reward(_mode_id, _round_id):
+			_pair_save_failed = true
+			_save_error = true
+			return false
+		model.chest_state = "opened"
+		_pair_settlement_pending = false
+		_pair_save_failed = false
+		_save_error = false
+		_refresh_collection()
+	return true
+
+
+func _pair_reward_revealing() -> bool:
+	return is_instance_valid(_pair_reward) and bool(_pair_reward.snapshot().get("performance_active", false))
+
+
+func _sync_pair_presentation() -> void:
+	if not is_instance_valid(_pair_reward):
+		return
+	var allowed: bool = _mode_id in ["match", "memory"] and not _page_hidden and not _rebuilding \
+		and not collection_page.visible and not _mode_menu_open() and not _speech_debug_active \
+		and not _round_celebration_active() and (model.phase != "won" or _pair_reward_revealing() or _pair_save_failed)
+	if not allowed and _pair_reward_row.visible:
+		audio.stop_jelly_sounds()
+	_pair_reward.set_paused(not allowed)
+	_pair_reward_row.visible = allowed
+
+
+func _layout_pair_reward() -> void:
+	if is_instance_valid(_pair_reward):
+		_pair_reward.set_toast_bounds(Rect2(Vector2.ZERO, _pair_reward.size))
+
+
+func _pair_reward_cue(round_id: String, cue: String) -> void:
+	if round_id != _round_id or _page_hidden or _mode_menu_open() or collection_page.visible or _voice_listening:
+		return
+	audio.play_jelly_cue(cue)
 
 
 func _phrase_growth_answer(id: String, words: Array[String], correct: bool) -> void:

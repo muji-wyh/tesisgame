@@ -194,8 +194,8 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	app._memory.study_button.button_up.emit()
 	check(app.audio.click_count == count, "Memory cards and peeking have no menu click")
 	app.new_round(42, true, "", "match")
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	for card in app.model.cards:
 		if card.kind == "word":
 			app.cards[card.id].pressed.emit()

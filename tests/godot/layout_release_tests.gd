@@ -49,8 +49,8 @@ func _run() -> void:
 			if control.is_visible_in_tree():
 				check(viewport.encloses(control.get_global_rect()), "Storage failure keeps header control on screen at %s: %s" % [dimensions, control.name])
 		for phase in ["won"]:
-			# This fixture exercises an earned chest; chance outcomes have separate coverage.
-			app.model.chest_earned = true
+			# Use a persisted chest reservation; chance outcomes have separate coverage.
+			preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 			app.model.phase = phase
 			app.model.chest_state = "opened"
 			app._refresh()

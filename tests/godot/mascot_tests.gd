@@ -78,8 +78,8 @@ func _run() -> void:
 			"The header Pip opens game modes without starting a companion trick or greeting")
 		app._hide_mode_menu()
 		var playing_phase: String = app.model.phase
-		# This fixture exercises an earned chest; chance outcomes have separate coverage.
-		app.model.chest_earned = true
+		# Use a persisted chest reservation; chance outcomes have separate coverage.
+		preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 		app.model.phase = "won"
 		app._refresh()
 		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)

@@ -184,8 +184,8 @@ func _check_treasure_themes(app) -> void:
 		return
 	var data = load("res://scripts/game_data.gd")
 	check(app.new_round(732, false, "", "match"), "The treasure-world fixture starts a real Match round")
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	check(not treasure.visible and not treasure.is_visible_in_tree(), "Active play hides the treasure scene")
 	app.choose_theme("spring")
 	for card in app.model.cards:
@@ -204,10 +204,10 @@ func _check_treasure_themes(app) -> void:
 		app.choose_theme(theme_id)
 		await settle()
 		_check_treasure_palette(treasure, data.theme(theme_id), "before opening")
-		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == theme_id,
-			"The unopened chest follows the selected " + theme_id + " world")
-		check(app.medal_progress.counts == counts_before and app.model.reward_theme.is_empty(),
-			"Viewing the " + theme_id + " treasure world cannot claim a medal piece")
+		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == "spring",
+			"The earned Spring chest is preserved in the selected " + theme_id + " world")
+		check(app.medal_progress.counts == counts_before and app.model.reward_theme == "spring",
+			"Viewing the " + theme_id + " treasure world cannot claim or replace the frozen reward")
 	app.choose_theme("spring")
 	await settle()
 	var point: Vector2 = app.chest_button.get_global_rect().get_center()

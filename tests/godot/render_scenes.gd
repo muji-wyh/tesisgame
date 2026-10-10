@@ -40,8 +40,9 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	for season in ["spring", "summer", "autumn", "winter"]:
 		app.new_round(105)
-		# This fixture exercises an earned chest; chance outcomes have separate coverage.
-		app.model.chest_earned = true
+		app.choose_theme(season)
+		# Use a persisted chest reservation; chance outcomes have separate coverage.
+		preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 		for word in app.model.cards:
 			if word.kind != "word":
 				continue
@@ -50,7 +51,7 @@ func _run() -> void:
 					app.model.select(word.id)
 					app.model.select(picture.id)
 					app.model.resolve_feedback()
-		app.choose_theme(season)
+		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 		await create_timer(0.2).timeout
 		await _capture(season + "-closed")
 		app.chest_button.button_down.emit()

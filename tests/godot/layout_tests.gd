@@ -49,7 +49,7 @@ func _run() -> void:
 			await settle()
 			var view: Control = app._match_playfield if mode == "match" else app._memory if mode == "memory" else app._phrase
 			var css_scale: float = app.Style.ui_scale(app)
-			var play_top: int = 76
+			var play_top: int = 130 if mode in ["match", "memory"] else 76
 			check(absf(view.get_global_rect().position.y * css_scale - play_top) <= 2,
 				"%s %s: the responsive header leaves play at %d CSS pixels: %s" % [dimensions, mode, play_top, view.get_global_rect()])
 			check(app._header_duck_slot.get_global_rect().end.x <= app._toolbar.global_position.x,
@@ -165,8 +165,8 @@ func _run() -> void:
 		check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "A saving problem does not push game controls off the screen")
 	app._progress_ready = true
 	app._save_error = false
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

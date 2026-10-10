@@ -64,8 +64,8 @@ func _tap_control(control: Control) -> void:
 		await process_frame
 
 func _win(app) -> void:
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	if app._mode_id == "memory":
 		for word in app.model.lesson_words:
 			for index in range(app._memory.memory.cards.size()):

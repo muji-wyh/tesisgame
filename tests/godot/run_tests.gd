@@ -67,8 +67,8 @@ func wrong_pair_for(model) -> Array:
 
 
 func win_round(app) -> void:
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
@@ -791,8 +791,8 @@ func _test_play_improvements(app) -> void:
 		for reward in rewards.slice(0, 5):
 			completed[reward.id] = true
 		set_completed_rewards(app, completed)
-		win_round(app)
 		app.choose_theme(season)
+		win_round(app)
 		app._open_chest()
 		check(app.model.reward_id == rewards[5].id,
 			"A chest chooses the last unfinished medal before any duplicate: " + season)
@@ -801,8 +801,8 @@ func _test_play_improvements(app) -> void:
 		check(app.model.reward_id == locked_reward, "Repeated opening cannot reroll the reward")
 		app.new_round(6)
 		app.medal_progress.counts[rewards[5].id] = 3
-		win_round(app)
 		app.choose_theme(season)
+		win_round(app)
 		app._open_chest()
 		check(not data_script.reward(app.model.reward_id).is_empty() and app.model.reward_theme == season,
 			"Completing a seasonal collection does not prevent future chest opening")
@@ -1044,8 +1044,9 @@ func _test_scene() -> void:
 	await process_frame
 	check(not app.collection_page.visible and app.model.cards == cards_before_controller,
 		"Controller B closes My Rewards and preserves the active round")
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
+	app.choose_theme("spring")
 	var first_pair: Array = pairs_for(app.model)[0]
 	app.cards[first_pair[1]].grab_focus()
 	app.cards[first_pair[0]].pressed.emit()
@@ -1076,8 +1077,8 @@ func _test_scene() -> void:
 	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		app.choose_theme(season)
 		await process_frame
-		check(app.chest.theme_id == season, "Closed chest follows selected season")
-		var chest_style: String = app.data.theme(season).chest
+		check(app.chest.theme_id == "spring", "The earned closed chest retains Spring when selecting " + season)
+		var chest_style: String = app.data.theme("spring").chest
 		var expected_pieces: int = 9 if chest_style == "crystal" else 5 if chest_style in ["royal", "energy"] else 1
 		var live: Dictionary = app.chest.hold_effect_snapshot().get("live_model", {})
 		check(app.chest.piece_count() == expected_pieces
@@ -1139,8 +1140,8 @@ func _test_scene() -> void:
 		"An internal fixture reset clears the reward and chest performance")
 	check(app.feedback_timer.is_stopped(), "An internal fixture reset cancels the feedback timer")
 	app.set_reduced_motion(false)
-	win_round(app)
 	prepare_completion(app)
+	win_round(app)
 	app.chest_button.grab_focus()
 	joy_button(JOY_BUTTON_A, true)
 	await process_frame
@@ -1252,8 +1253,8 @@ func _test_scene() -> void:
 	check_no_collectible_presentation(app, "Background cancellation has no collectible artwork or queued flight")
 	app.on_page_visible()
 	app.new_round(91)
-	win_round(app)
 	prepare_completion(app)
+	win_round(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._advance_ui(1.21)
@@ -1265,8 +1266,8 @@ func _test_scene() -> void:
 	check(app.collection_button.scale == Vector2.ONE, "Opening the growth notebook keeps its entry at its normal scale")
 	app._hide_collection()
 	app.new_round(91)
-	win_round(app)
 	prepare_completion(app)
+	win_round(app)
 	app.chest_button.button_down.emit()
 	if app.has_method("_process"):
 		app._advance_ui(1.21)

@@ -39,6 +39,7 @@ var _cue_log: Array[String] = []
 var _performance_emitted: bool = false
 var _open_emitted: bool = false
 var _chest_count: int = 1
+var _chest_announced: bool = false
 var _chest_tier: int = 0
 var _score: int = -1
 var _theme_id: String = "spring"
@@ -99,12 +100,13 @@ func _label(text: String, node_name: String) -> Label:
 
 
 func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
-		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0) -> void:
+		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0, chest_announced: bool = false) -> void:
 	if round_id.is_empty() or (_active and round_id == _round_id):
 		return
 	stop()
 	_round_id = round_id
 	_chest_count = maxi(0, chest_count)
+	_chest_announced = chest_announced
 	_chest_tier = maxi(0, chest_tier) if _chest_count > 0 else 0
 	_score = score
 	_reduced_motion = reduce
@@ -260,7 +262,7 @@ func advance(delta: float) -> void:
 	while _cue_index < CUE_TIMES.size() and _elapsed >= float(CUE_TIMES[_cue_index]):
 		var cue: String = CUE_NAMES[_cue_index]
 		_cue_index += 1
-		if cue == "reward" and _chest_count == 0:
+		if cue == "reward" and (_chest_count == 0 or _chest_announced):
 			continue
 		if delta <= 0.5:
 			_cue_log.append(cue)
@@ -303,7 +305,7 @@ func _refresh_action() -> void:
 func _sample() -> void:
 	if not _active:
 		return
-	_confetti.sample(_elapsed - 1.8 if _chest_count > 0 and not _reduced_motion and not _paused else -1.0, DURATION - 1.8)
+	_confetti.sample(_elapsed - 1.8 if _chest_count > 0 and not _chest_announced and not _reduced_motion and not _paused else -1.0, DURATION - 1.8)
 	pip.set_celebration_progress(_elapsed / DURATION, _rest_elapsed)
 	pip.set_process(false)
 	# ChestView renders its authored closed pose once; its mechanical clock stays off.
@@ -388,7 +390,7 @@ func snapshot() -> Dictionary:
 	return {"round_id": _round_id, "theme": _theme_id, "active": _active, "ready": _ready_to_open,
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
-		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(),
+		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(), "chest_announced": _chest_announced,
 		"confetti": _confetti.is_visible_in_tree(),
 		"confetti_rect": _rect(_confetti.get_global_transform_with_canvas() * _confetti.screen_rect()),
 		"cue_log": _cue_log.duplicate(),

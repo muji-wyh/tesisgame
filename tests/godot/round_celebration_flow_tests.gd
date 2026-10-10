@@ -89,22 +89,63 @@ func reward_seed(app, earned: bool) -> int:
 	var probe := MatchModel.new()
 	for seed_value in range(128):
 		if probe.reset(app._learning_words(), seed_value, false, "", "", str(app.growth.learning_age()), true) \
-			and probe.chest_earned == earned:
+			and (probe.chest_reward_pair > 0) == earned:
 			return seed_value
 	check(false, "The deterministic reward fixtures include both chance outcomes")
 	return 0
 
 
+func reset_pair_fixture(app) -> void:
+	# Complete the ordinary mode exit before isolating the next seeded policy.
+	# Otherwise an unfinished reservation intentionally survives the new seed.
+	check(app.new_round(713, false, "", "phrase"), "A pair fixture leaves its prior round through the normal mode route")
+	var before: Dictionary = app.medal_progress.counts.duplicate(true)
+	var config := ConfigFile.new()
+	check(config.load(app.medal_progress._save_path) == OK, "The isolated pair fixture reads its current medal save")
+	if config.has_section("pair_chests"):
+		config.erase_section("pair_chests")
+	check(config.save(app.medal_progress._save_path) == OK and app.medal_progress.load_progress(),
+		"The seeded fixture clears only pair reservations and pity history")
+	check(app.medal_progress.counts == before, "Isolating a pair fixture preserves every previously earned medal piece")
+
+
+func check_pair_reveal(app, mode: String, already_checked: bool) -> bool:
+	if already_checked or not app.model.chest_earned:
+		return already_checked
+	var view = app._pair_reward
+	view.advance(view.REVEAL_SECONDS + 0.01)
+	var state: Dictionary = view.snapshot()
+	check(state.earned and state.performance_active and state.confetti_visible,
+		mode + " reveals its earned chest and confetti on the actual successful pair")
+	var screen: Rect2 = view._confetti.get_global_transform_with_canvas() * view._confetti.screen_rect()
+	check(screen.is_equal_approx(root.get_visible_rect()),
+		mode + " pair reward confetti reaches the entire viewport")
+	check(not app._round_celebration_active() and not app.chest_button.is_visible_in_tree()
+		and (app._match_playfield.is_visible_in_tree() if mode == "match" else app._memory.is_visible_in_tree()),
+		mode + " keeps the live board visible while its nonmodal chest reveal plays")
+	check(view.mouse_filter == Control.MOUSE_FILTER_IGNORE and view.focus_mode == Control.FOCUS_NONE,
+		mode + " chest feedback cannot capture a card press or controller focus")
+	return true
+
+
 func start_manual(app, mode: String, earned: bool = true) -> void:
+	if mode in ["match", "memory"]:
+		reset_pair_fixture(app)
 	var seed_value: int = reward_seed(app, earned) if mode in ["match", "memory"] else 713
 	check(app.new_round(seed_value, false, "", mode), "A fresh " + mode + " round starts")
-	check(app.model.chest_earned == earned, mode + " retains its seeded chest outcome at round creation")
+	if mode in ["match", "memory"]:
+		check(not app.model.chest_earned and (app.model.chest_reward_pair > 0) == earned,
+			mode + " reserves its seeded chance without awarding a chest at round creation")
+	else:
+		check(app.model.chest_earned == earned, mode + " retains its guaranteed completion reward")
 	await settle()
+	var pair_reveal_checked: bool = false
 	if mode == "match":
 		var words: Array = app.model.lesson_words.duplicate(true)
 		for word in words:
 			app.cards[str(word.id) + ":word"].pressed.emit()
 			app.cards[str(word.id) + ":image"].pressed.emit()
+			pair_reveal_checked = check_pair_reveal(app, mode, pair_reveal_checked)
 			app._continue_match()
 	elif mode == "memory":
 		var view = app._memory
@@ -116,6 +157,7 @@ func start_manual(app, mode: String, earned: bool = true) -> void:
 			for index in range(view.memory.cards.size()):
 				if view.memory.cards[index].word.id == card.word.id:
 					view.card_buttons[index].pressed.emit()
+			pair_reveal_checked = check_pair_reveal(app, mode, pair_reveal_checked)
 			view.continue_feedback()
 	else:
 		var view = app._phrase
@@ -129,6 +171,12 @@ func start_manual(app, mode: String, earned: bool = true) -> void:
 			if question < 2:
 				view.pip._process(view.pip.GAMEPLAY_HAPPY_SECONDS + 0.01)
 				view.action_button.pressed.emit()
+	if mode in ["match", "memory"]:
+		check(app.model.chest_earned == earned and pair_reveal_checked == earned,
+			mode + " completes all five real pairs with exactly its planned reward outcome")
+		# The final pair's inline effect completes before the separate round finale.
+		app._pair_reward.advance(3.0)
+		app._refresh()
 	app._round_celebration.set_process(false)
 	check(app._round_celebration.snapshot().active, mode + " reaches the shared performance through real game controls")
 
@@ -148,7 +196,7 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " presents one earned chest through the shared manual invitation")
 	check(not app.chest_button.is_visible_in_tree() and not view.snapshot().ready,
 		mode + " keeps the unopened-chest page and invitation action unavailable during performance")
-	check(not view.snapshot().confetti, mode + " waits for its chest reveal before throwing confetti")
+	check(not view.snapshot().confetti, mode + " begins its round finale without an early confetti burst")
 	for attempt in range(3):
 		view.action_button.pressed.emit()
 		app.chest_button.button_down.emit()
@@ -159,9 +207,14 @@ func check_manual_mode(app, mode: String) -> void:
 	check(pieces(app) == before and not app._holding_chest and app.model.chest_state == "closed",
 		mode + " rejects repeated early actions without starting or awarding the chest")
 	view.advance(1.9)
-	check_fullscreen_confetti(view, mode)
+	if mode in ["match", "memory"]:
+		check(view.snapshot().get("chest_announced", false) and not view.snapshot().confetti
+			and not view.snapshot().cue_log.has("reward"),
+			mode + " keeps the earned chest invitation without replaying its already seen reward burst or cue")
+	else:
+		check_fullscreen_confetti(view, mode)
 	check(pieces(app) == before and not view.snapshot().ready,
-		mode + " keeps the reward and invitation gates unchanged during confetti")
+		mode + " keeps the reward and invitation gates unchanged during the finale")
 	view.advance(maxf(0.0, 2.99 - float(view.snapshot().elapsed)))
 	check(not view.snapshot().ready and view.snapshot().active and pieces(app) == before,
 		mode + " preserves the full three-second performance gate")

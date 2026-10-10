@@ -16,8 +16,8 @@ func check(condition: bool, message: String) -> void:
 
 
 func win(app) -> void:
-	# This fixture exercises an earned chest; chance outcomes have separate coverage.
-	app.model.chest_earned = true
+	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
 			app.cards[card.id].pressed.emit()
@@ -140,6 +140,9 @@ func _run() -> void:
 	var blocked_path := directory + "/blocked.cfg"
 	var failing_progress = progress_script.new(blocked_path, directory + "/old.cfg")
 	check(failing_progress.load_progress(), "The failing save fixture starts with valid storage")
+	failing_progress.counts = app.medal_progress.counts.duplicate(true)
+	failing_progress._pair_state = app.medal_progress._pair_state.duplicate(true)
+	check(failing_progress._persist(failing_progress.counts), "The failure fixture retains the earned chest receipt")
 	DirAccess.remove_absolute(blocked_path)
 	DirAccess.make_dir_absolute(blocked_path)
 	app.medal_progress = failing_progress
@@ -150,8 +153,7 @@ func _run() -> void:
 	check_no_collectible_presentation(app, "A failed save")
 	var pending: Dictionary = app._pending_fragment.duplicate()
 	var lesson_before_retry: Array = app.model.lesson_words.duplicate(true)
-	app.medal_progress = progress_script.new(directory + "/retry.cfg", directory + "/old.cfg")
-	check(app.medal_progress.load_progress(), "The retry fixture can store progress")
+	check(DirAccess.remove_absolute(blocked_path) == OK, "Repair the blocked save destination without replacing its pending receipt")
 	app._result_retry_button.pressed.emit()
 	check(not app._save_error and app.model.phase == "won"
 		and app.model.lesson_words == lesson_before_retry and app.medal_progress.count_for(pending.medal_id) == pending.after,
@@ -161,7 +163,6 @@ func _run() -> void:
 	check(app.model.phase == "won" and app.model.lesson_words == lesson_before_retry
 		and app.medal_progress.count_for(pending.medal_id) == pending.after,
 		"A stale successful retry cannot restart the lesson or award another piece")
-	DirAccess.remove_absolute(blocked_path)
 	app.new_round(11)
 	for index in range(1, 7):
 		app.medal_progress.counts["winter-%d" % index] = 3

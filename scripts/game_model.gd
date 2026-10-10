@@ -26,6 +26,7 @@ var adventure_name: String = "Word explorers"
 var age_band_id: String = "3"
 var chest_state: String = "closed"
 var chest_earned: bool = true
+var chest_reward_pair: int = 0
 var reward_theme: String = ""
 var reward_id: String = ""
 var error: String = ""
@@ -108,9 +109,10 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	mistakes = 0
 	phase = "waiting"
 	chest_state = "closed"
-	# The outcome belongs to this round. Repeated completion, theme changes and
-	# reopening a result must never draw another chance or create another chest.
-	chest_earned = rng.randf() < ROUND_CHEST_CHANCE if random_chest_reward else true
+	# One draw per round, then one successful pair reveals the possible chest.
+	# The host applies durable pity and commits ownership at that pair.
+	chest_reward_pair = rng.randi_range(1, MATCH_PAIR_COUNT) if random_chest_reward and rng.randf() < ROUND_CHEST_CHANCE else 0
+	chest_earned = not random_chest_reward
 	reward_theme = ""
 	reward_id = ""
 	error = ""
