@@ -1,6 +1,9 @@
 extends SceneTree
 
 const Feel = preload("res://scripts/chest_feel.gd")
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Wallet = preload("res://scripts/coin_wallet.gd")
 
 class BrowserStorage:
 	extends RefCounted
@@ -41,13 +44,11 @@ func _pieces(app) -> int:
 
 
 func _win(app, seed_value: int, theme_id: String = "spring") -> void:
-	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 	check(app.new_round(seed_value), "The next real Match round starts")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
-	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-	check(not surprise.active and str(surprise.kind).is_empty() and surprise.play_count == surprise_count,
-		"A new round clears the decorative gift without replaying an automatically settled opening")
+	check(not app._coin_flight.snapshot().active and app._coin_counter.target == app.coin_wallet.balance,
+		"A new round synchronizes saved coins without replaying an automatically settled reward")
 	app.choose_theme(theme_id)
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
@@ -67,9 +68,10 @@ func _begin(app) -> void:
 
 
 func _check_cancelled(app, pieces: int, reason: String) -> void:
-	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-	check(not surprise.active and str(surprise.kind).is_empty(),
-		reason + " leaves no decorative gift from the cancelled opening")
+	var coins: int = app.coin_wallet.balance
+	var coin_receipts: int = app._coin_flight._seen.size()
+	check(not app._coin_flight.snapshot().active,
+		reason + " leaves no coin flight from the cancelled opening")
 	check(not app._holding_chest and is_zero_approx(app._hold_elapsed)
 		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		reason + " clears the hold and visible progress immediately")
@@ -79,7 +81,7 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 		reason + " stops the pressure bed and old accents, allowing only the brief release feedback")
 	check(app.model.chest_state == "closed" and app.chest.mode == "closed" and _pieces(app) == pieces
 		and app._pending_fragment.is_empty() and app.model.reward_id.is_empty()
-		and app.model.reward_theme == app.medal_progress.pair_round(app._mode_id).theme,
+		and app.model.reward_theme == RewardProgress.theme_for_tier(1),
 		reason + " leaves the earned chest closed without awarding a piece")
 	app._advance_ui(2.0)
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
@@ -87,9 +89,9 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 	app._on_chest_opened()
 	check(app.model.chest_state == "closed" and _pieces(app) == pieces,
 		reason + " cannot complete later from an old frame or finish callback")
-	check(not app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.play_count == surprise.play_count,
-		reason + " cannot launch a decorative gift from stale completion callbacks")
+	check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins
+		and app._coin_flight._seen.size() == coin_receipts,
+		reason + " cannot launch coins or increase their saved balance from stale completion callbacks")
 	var next_player: int = app.audio._chest_next_player
 	app._on_chest_cue(app.chest.theme_id, "hold_pulse", 1)
 	app._on_chest_cue(app.chest.theme_id, "tension_pulse", 1)
@@ -103,6 +105,7 @@ func _run() -> void:
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "The scene uses isolated reward storage")
 	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory)
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._mode_id = "match"
 	root.add_child(app)
@@ -150,7 +153,7 @@ func _run() -> void:
 	check(not cues.any(func(item): return item[1] == "charge_step"),
 		"The hold keeps its first progress star silent until one third of the complete buildup")
 	app._advance_ui(0.02)
-	check(app.model.chest_state == "closed" and cues.back() == ["spring", "charge_step", 1],
+	check(app.model.chest_state == "closed" and cues.back() == [RewardProgress.theme_for_tier(1), "charge_step", 1],
 		"The first progress star lights during the hold immediately before confirmation")
 	app._advance_ui(0.08)
 	state = app.chest.hold_effect_snapshot()
@@ -158,7 +161,7 @@ func _run() -> void:
 		"Completing confirmation keeps the gesture held while gathering advances")
 	check(app._holding_chest and not app.chest_button.disabled,
 		"The opening keeps both its held gesture and button release path active")
-	check(cues.filter(func(item): return item[1] == "charge_step") == [["spring", "charge_step", 1]],
+	check(cues.filter(func(item): return item[1] == "charge_step") == [[RewardProgress.theme_for_tier(1), "charge_step", 1]],
 		"The automatic handoff does not replay the first progress star")
 	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
 		and app.audio._chest_phase == "opening",
@@ -202,13 +205,13 @@ func _run() -> void:
 		"A stale completion after repressing cannot save or skip the new hold")
 	app._advance_ui(1.0)
 	cues.clear()
-	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
+	var coin_receipts: int = app._coin_flight._seen.size()
 	app.chest.finish_immediately()
 	app.chest_button.button_up.emit()
-	var first_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-	check(first_surprise.active and not str(first_surprise.kind).is_empty()
-		and first_surprise.play_count == surprise_count + 1,
-		"The visible completed opening launches exactly one decorative gift")
+	check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().flights == 1
+		and app._coin_flight._seen.size() == coin_receipts + 1 and app.coin_wallet.balance == 50
+		and app._coin_counter.target == 0 and not app.chest.hold_effect_snapshot().surprise.active,
+		"The completed opening saves 50 coins and launches one flight before the counter increases")
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")
 	check(app.audio._chest_rewarded and app._chest_reward_announced,
@@ -221,12 +224,15 @@ func _run() -> void:
 	app._advance_ui(2.0)
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().active,
 		"Repeated opening callbacks and a hold on the opened chest cannot duplicate the reward")
-	check(app.chest.hold_effect_snapshot().surprise.play_count == first_surprise.play_count
-		and app.chest.hold_effect_snapshot().surprise.kind == first_surprise.kind,
-		"Repeated completion and button signals do not reroll or replay the decorative gift")
+	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == coin_receipts + 1
+		and app._coin_counter.target == 50 and app.coin_wallet.balance == 50,
+		"Arriving coins finish at the saved total without repeated callbacks adding another flight or payout")
 	var saved = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(saved.load_progress() and saved.count_for("spring-1") == 1,
 		"The single earned piece survives reloading the real save")
+	var saved_coins := Wallet.new(directory + "/coins.cfg")
+	check(saved_coins.load_state() and saved_coins.balance == 50,
+		"The first chest's 50 coins survive reloading the isolated wallet")
 
 	_win(app, 82)
 	_begin(app)
@@ -288,7 +294,8 @@ func _run() -> void:
 	app._advance_ui(0.4)
 	app.choose_theme("winter")
 	_check_cancelled(app, 2, "Changing worlds during an unfinished hold")
-	check(app.chest.theme_id == "spring", "Changing worlds cancels the hold while retaining the earned Spring chest")
+	check(app.chest.theme_id == RewardProgress.theme_for_tier(1),
+		"Changing worlds cancels the hold while retaining the ordinary tier-one chest")
 	app.choose_theme("spring")
 	app.chest_button.grab_focus()
 	var accept := InputEventJoypadButton.new()
@@ -400,6 +407,8 @@ func _run() -> void:
 	app.set_reduced_motion(false)
 	_win(app, 85)
 	var reward_writes: int = storage.writes
+	var coins_before_retry: int = app.coin_wallet.balance
+	var flights_before_retry: int = app._coin_flight._seen.size()
 	storage.fail_write = true
 	_begin(app)
 	app._advance_ui(1.21)
@@ -426,23 +435,20 @@ func _run() -> void:
 	app.chest.finish_immediately()
 	check(app._save_error and _pieces(app) == 0 and not app._chest_reward_announced
 		and not app.audio._chest_rewarded, "A failed reward save never announces a saved reward")
-	var failed_save_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-	check(failed_save_surprise.active and not str(failed_save_surprise.kind).is_empty() and storage.writes == reward_writes,
-		"The opening's decorative gift does not depend on or create a successful save")
+	check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins_before_retry + 50
+		and app._pending_coin_reward.amount == 50 and storage.writes == reward_writes,
+		"A saved coin receipt waits for the remaining chest save before its flight is announced")
 	app._retry_reward_save()
 	check(storage.writes == reward_writes and not app.audio._chest_rewarded,
 		"Repeated failed retries do not play a success sound")
-	check(app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
-		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind,
-		"A failed save retry does not reroll the visible decorative gift")
+	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry
+		and app.coin_wallet.balance == coins_before_retry + 50,
+		"Failed retries neither replay a coin flight nor credit the saved receipt again")
 	app.on_page_hidden()
 	app.chest._advance_animation(60.0)
-	check(app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind
-		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count
-		and app.chest.hold_effect_snapshot().surprise.age == failed_save_surprise.age
-		and storage.writes == reward_writes,
-		"Backgrounding freezes the revealed gift while the failed reward save remains pending")
+	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry
+		and app.coin_wallet.balance == coins_before_retry + 50 and storage.writes == reward_writes,
+		"Backgrounding preserves the saved coins without hidden flights while chest settlement remains pending")
 	app.on_page_visible()
 	app.audio.set_muted(true)
 	app.audio.set_muted(false)
@@ -450,11 +456,12 @@ func _run() -> void:
 	app._retry_reward_save()
 	check(storage.writes == reward_writes + 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
 		"An explicit successful retry after background/mute saves and announces the waiting reward once")
-	app.chest._advance_animation(60.0)
-	check(app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.kind == failed_save_surprise.kind
-		and app.chest.hold_effect_snapshot().surprise.play_count == failed_save_surprise.play_count,
-		"A successful save retry retains the same gift without replaying its flight")
+	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry + 1
+		and app.coin_wallet.balance == coins_before_retry + 50 and app._coin_counter.target == coins_before_retry + 50,
+		"Successful settlement acknowledges already counted coins without a backward counter jump or replay after backgrounding")
+	app._advance_ui(2.0)
+	check(not app._coin_flight.snapshot().active and app._coin_counter.target == app.coin_wallet.balance,
+		"The recovered coin flight finishes at the durable balance")
 	check(not app.audio._chest_seen.has("release0") and not app.audio._chest_seen.has("unlock0"),
 		"A successful retry after interruption never replays missed physical sounds")
 	app._retry_reward_save()
@@ -586,6 +593,8 @@ func _run() -> void:
 func _check_release_commitment(directory: String) -> void:
 	var storage := BrowserStorage.new()
 	var app = load("res://scenes/main.tscn").instantiate()
+	check(DirAccess.make_dir_recursive_absolute(directory + "/committed") == OK, "Isolate committed-opening wallet and learning saves")
+	Fixture.install(app, directory + "/committed")
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(
 		directory + "/committed.cfg", directory + "/committed-legacy.cfg", storage)
 	app._mode_id = "match"
@@ -603,6 +612,8 @@ func _check_release_commitment(directory: String) -> void:
 		_win(app, seed_value)
 		var pieces: int = _pieces(app)
 		var writes: int = storage.writes
+		var coins: int = app.coin_wallet.balance
+		var flights: int = app._coin_flight._seen.size()
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
@@ -637,18 +648,17 @@ func _check_release_commitment(directory: String) -> void:
 		app.chest._advance_animation(Feel.OPEN_SECONDS - released.opening_time - 0.001)
 		check(app.model.chest_state == "opening" and _pieces(app) == pieces and storage.writes == writes,
 			"Letting go does not shorten the five-second opening performance")
-		var before_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-		check(not before_surprise.active, "The decorative gift waits until the entire opening is complete")
+		check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins,
+			"Coins wait until the entire opening is complete")
 		var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate()
 		app.chest._advance_animation(0.002)
-		var completed_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 		check(app.model.chest_state == "opened" and _pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"The released opening saves once at its original deadline and keeps its themed glow")
-		check(completed_surprise.active and not str(completed_surprise.kind).is_empty()
-			and completed_surprise.play_count == before_surprise.play_count + 1
-			and app.growth.snapshot().streaks == growth_before,
-			"Completion adds one displayed gift without collecting a sticker or another saved reward")
+		check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().flights == 1
+			and app._coin_flight._seen.size() == flights + 1 and app.coin_wallet.balance == coins + 50
+			and app._coin_counter.target == coins and app.growth.snapshot().streaks == growth_before,
+			"Completion saves 50 coins and launches them before counting, without another learning attempt")
 		app.chest_button.button_up.emit()
 		app.chest.cancel_open(true)
 		app._on_chest_opened()
@@ -657,35 +667,32 @@ func _check_release_commitment(directory: String) -> void:
 		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Repeated releases and old callbacks cannot retract or duplicate the opened reward")
-		check(app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count
-			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind,
-			"Old release and completion callbacks preserve the same decorative gift")
-		app.chest._advance_animation(60.0)
-		var retained_surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
-		check(retained_surprise.active and retained_surprise.kind == completed_surprise.kind
-			and retained_surprise.play_count == completed_surprise.play_count
-			and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+		check(app._coin_flight.snapshot().flights == 1 and app._coin_flight._seen.size() == flights + 1
+			and app.coin_wallet.balance == coins + 50,
+			"Old release and completion callbacks cannot duplicate the in-flight coins")
+		app._advance_ui(2.0)
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
+			and app.coin_wallet.balance == coins + 50 and _pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.growth.snapshot().streaks == growth_before,
-			"The settled gift stays visible without adding save writes, pieces or collected words")
+			"Coin arrivals finish at the saved balance without another chest write or learning attempt")
 		var cue_count: int = cues.size()
 		app.on_page_hidden()
 		app.chest._advance_animation(60.0)
-		check(app.chest.hold_effect_snapshot().surprise == retained_surprise,
-			"Backgrounding freezes the earned gift instead of discarding it")
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
+			and app.coin_wallet.balance == coins + 50,
+			"Backgrounding keeps the earned total without hidden coin flights")
 		app.on_page_visible()
 		app.chest.set_process(false)
 		app.chest._advance_animation(60.0)
-		check(app.chest.hold_effect_snapshot().surprise.active
-			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind
-			and app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count
-			and cues.size() == cue_count and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
-			"Returning to the result preserves its gift without replaying chest cues or saving again")
+		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights + 1
+			and app.coin_wallet.balance == coins + 50 and cues.size() == cue_count
+			and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
+			"Returning to the result retains coins without replaying their flight, chest cues or writes")
 		app.set_reduced_motion(true)
 		app.chest._advance_animation(60.0)
-		check(app.chest.hold_effect_snapshot().surprise.active
-			and app.chest.hold_effect_snapshot().surprise.kind == completed_surprise.kind
-			and app.chest.hold_effect_snapshot().surprise.play_count == completed_surprise.play_count,
-			"Changing motion preference preserves the earned gift on the result")
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
+			and app._coin_flight._seen.size() == flights + 1,
+			"Changing motion preference preserves the earned counter without replaying the coins")
 		app.set_reduced_motion(false)
 
 	for interruption in ["background", "More", "native focus"]:
@@ -693,7 +700,8 @@ func _check_release_commitment(directory: String) -> void:
 		_win(app, seed_value)
 		var pieces: int = _pieces(app)
 		var writes: int = storage.writes
-		var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
+		var coins: int = app.coin_wallet.balance
+		var flights: int = app._coin_flight._seen.size()
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
@@ -709,9 +717,9 @@ func _check_release_commitment(directory: String) -> void:
 			and cues.is_empty() and not app.audio._chest_rewarded and not app.audio.chest_charge.playing
 			and app.audio._chest_players.all(func(player): return not player.playing),
 			interruption + " silently saves the committed opening without replaying its remaining sounds")
-		check(not app.chest.hold_effect_snapshot().surprise.active
-			and app.chest.hold_effect_snapshot().surprise.play_count == surprise_count,
-			interruption + " settles the opening without launching a hidden decorative gift")
+		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights
+			and app.coin_wallet.balance == coins + 50 and app._coin_counter.target == coins + 50,
+			interruption + " settles 50 coins directly into the counter without a hidden flight")
 		match interruption:
 			"background": app.on_page_visible()
 			"More": app._hide_collection()
@@ -722,9 +730,9 @@ func _check_release_commitment(directory: String) -> void:
 		check(_pieces(app) == pieces + 1 and storage.writes == writes + 1 and cues.is_empty()
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Returning from " + interruption + " retains the saved light without a late sound or duplicate reward")
-		check(not app.chest.hold_effect_snapshot().surprise.active
-			and app.chest.hold_effect_snapshot().surprise.play_count == surprise_count,
-			"Returning from " + interruption + " cannot replay a decorative gift that was skipped")
+		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights
+			and app.coin_wallet.balance == coins + 50,
+			"Returning from " + interruption + " cannot replay or credit silently settled coins")
 
 	for interruption in ["background", "More"]:
 		seed_value += 1
@@ -762,7 +770,8 @@ func _check_release_commitment(directory: String) -> void:
 	_win(app, seed_value)
 	var pieces: int = _pieces(app)
 	var writes: int = storage.writes
-	var before_skip_surprise: int = app.chest.hold_effect_snapshot().surprise.play_count
+	var coins_before_skip: int = app.coin_wallet.balance
+	var flights_before_skip: int = app._coin_flight._seen.size()
 	_begin(app)
 	app._advance_ui(Feel.HOLD_SECONDS)
 	app.chest.set_process(false)
@@ -778,9 +787,9 @@ func _check_release_commitment(directory: String) -> void:
 	app.chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
 	check(_pieces(app) == pieces + 1 and storage.writes == writes_after_restart,
 		"Late callbacks from the skipped opening cannot award the next round")
-	check(not app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.play_count == before_skip_surprise,
-		"Skipping to another round clears decorative state without a late gift flight")
+	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_skip
+		and app.coin_wallet.balance == coins_before_skip + 50 and app._coin_counter.target == coins_before_skip + 50,
+		"Skipping to another round credits the earned coins once without a late flight")
 	app.audio.halt()
 	app.free()
 	await process_frame
@@ -851,6 +860,8 @@ func _motion_window(trace: Array, start: float, end: float) -> Dictionary:
 
 func _check_gameplay_pixels(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
+	check(DirAccess.make_dir_recursive_absolute(directory + "/pixels") == OK, "Isolate rendered-opening wallet and learning saves")
+	Fixture.install(app, directory + "/pixels")
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/visible.cfg", directory + "/visible-legacy.cfg")
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND

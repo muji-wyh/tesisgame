@@ -1,0 +1,102 @@
+{
+  "source": {
+    "title": "Toon FX",
+    "version": "1.52",
+    "creator": "Kenneth Foldal Moe (Archanor VFX)",
+    "url": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601",
+    "license": "Standard Unity Asset Store EULA",
+    "license_url": "https://unity.com/legal/as-terms",
+    "local_path": "C:/uworks/AssetsSource/Toon FX [1.52]/Textures/coins.png",
+    "sha256": "ee6f261c5c0ef92aeef1f1885375336d472f166bd6835ee18957626f46a98077",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "status": "Previously acquired local package; inspected and converted"
+  },
+  "processing": {
+    "cell_crop": [
+      48,
+      48,
+      464,
+      464
+    ],
+    "gold_luminance_stops": [
+      [
+        111,
+        [
+          146,
+          94,
+          12
+        ]
+      ],
+      [
+        165,
+        [
+          226,
+          156,
+          27
+        ]
+      ],
+      [
+        200,
+        [
+          255,
+          206,
+          65
+        ]
+      ],
+      [
+        236,
+        [
+          255,
+          239,
+          157
+        ]
+      ],
+      [
+        255,
+        [
+          255,
+          250,
+          210
+        ]
+      ]
+    ],
+    "resampling": "Pillow Lanczos with original alpha",
+    "unity_code_or_prefabs_imported": false
+  },
+  "outputs": {
+    "gold-coin.png": {
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 16547,
+      "sha256": "3e8d860ec36b65d3cc2dd5540902d9b148762c0480195d29f33d91767b09cd9e"
+    },
+    "gold-coins.png": {
+      "size": [
+        256,
+        256
+      ],
+      "bytes": 42494,
+      "sha256": "f56e93b9bc0c375f3c0d01501460c38e45e19acaed8b0442dd959800fe235220"
+    }
+  },
+  "atlas": {
+    "columns": 2,
+    "rows": 2,
+    "cell_size": [
+      128,
+      128
+    ],
+    "angles": [
+      "front",
+      "edge",
+      "flat",
+      "tilted"
+    ],
+    "animation": "Four authored views, not a sequential spin flipbook"
+  }
+}

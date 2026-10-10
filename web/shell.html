@@ -368,6 +368,7 @@
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         Match and Memory each have a 50% base chance to earn one chest per round, with at most one per round. Each successful word-picture pair tells you whether it found a chest. After two completed rounds without a chest, the next round guarantees one; Match and Memory track this separately. A found chest celebrates on the current board with chest effects and full-screen confetti while you keep matching. Pip celebrates every completed round. Choose Open chest after finishing if a chest drops, or Play again to start a fresh round without one. Phrase Builder still earns one chest after three phrases. Every mode celebrates an earned chest with full-screen confetti; reduced motion keeps the reward display still.
         New adventure appears at the bottom-right after the chest opens and saves. It starts another Phrase Builder round after that game, or a fresh Match round after the card games. Retry saving appears only if a reward could not be saved.
+        Opening an ordinary chest gives 50 coins. Higher chest levels give 50 coins per level. Match and Memory earn ordinary chests. Coins fly from the opened chest into the top coin display; the total rolls upward only as they arrive. Your coin balance is saved on this device.
         Your learning journey starts at Lv0 with Baby Pip. Level and age grow independently. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
         In any game, correctly completing an activity involving a word adds one to that word's streak. A wrong answer resets its streak. Six consecutive correct answers mark the word as mastered. Replaying audio, peeking, and moving cards do not count as answers.
         Voice Pop credits each accepted spoken target once. Unrecognized speech, silence, and unattended words do not count as wrong answers.
@@ -389,6 +390,7 @@
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
       <p id="pop-reward-status" class="sr-only" role="status" aria-label="Voice Pop treasures" aria-live="polite" data-snapshot="{}"></p>
       <p id="jelly-reward-status" class="sr-only" aria-label="Jelly Match treasures" data-snapshot="{}"></p>
+      <p id="coin-status" class="sr-only" aria-label="Coins" data-snapshot="{}"></p>
       <p id="audio-status" class="sr-only" role="status" aria-live="polite"></p>
       <p id="pop-status" class="sr-only" role="status" aria-label="Voice Pop" aria-live="polite" aria-atomic="true"
         data-phase="idle" data-remaining="50" data-base-duration="50" data-hits="0" data-score="0" data-combo="0" data-best-combo="0" data-bonus-time="0" data-targets="[]" data-controls="[]" data-hud="{}" data-results-hits="{}"></p>
@@ -2948,6 +2950,28 @@
             if (localStorage.getItem('growWithPip.growth.v1') !== expectedText) return false;
             localStorage.setItem('growWithPip.growth.v1', text);
             return localStorage.getItem('growWithPip.growth.v1') === text;
+          } catch { return false; }
+        },
+        coinStatus(json) {
+          let value;
+          try { value = JSON.parse(json); } catch (_) { return; }
+          if (!value || typeof value !== 'object') return;
+          const node = document.getElementById('coin-status');
+          const amount = Number.isSafeInteger(value.balance) && value.balance >= 0 ? value.balance : 0;
+          node.dataset.snapshot = JSON.stringify(value);
+          node.textContent = value.available ? `${amount} coins` : 'Coin balance unavailable. Retry saving.';
+        },
+        coinWalletState() {
+          try { return localStorage.getItem('growWithPip.coinWallet.v1'); }
+          catch { return false; }
+        },
+        saveCoinWalletState(text, expectedText) {
+          if (typeof text !== 'string' || !text.length || new TextEncoder().encode(text).length > 4 * 1024 * 1024) return false;
+          if (expectedText !== null && typeof expectedText !== 'string') return false;
+          try {
+            if (localStorage.getItem('growWithPip.coinWallet.v1') !== expectedText) return false;
+            localStorage.setItem('growWithPip.coinWallet.v1', text);
+            return localStorage.getItem('growWithPip.coinWallet.v1') === text;
           } catch { return false; }
         },
         presentationState() {

@@ -4,6 +4,7 @@ signal exit_requested
 signal changed(state: Dictionary)
 signal chest_audio_requested(action: String, theme_id: String, progress: float)
 signal chest_cue_requested(theme_id: String, cue: String, step: int)
+signal coins_released(id: String, reward: Dictionary, origin: Vector2, animate: bool)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
@@ -23,6 +24,7 @@ var allow_repeated_themes: bool = false
 var page_size: int = 3
 var reduced_motion: bool = false
 var interaction_allowed: Callable
+var credit_coins: Callable
 var _cards: Array[Dictionary] = []
 var _manifest: Dictionary = {}
 var _configured_id: String = ""
@@ -286,7 +288,8 @@ func _build_cards() -> void:
 		_cards.append({"panel": panel, "light": light, "art": art, "entry_index": entry_index,
 			"button": button, "hint": hint, "caption": caption,
 			"theme": str(entry.theme), "tier": tier, "tier_label": tier_label,
-			"opened": bool(entry.opened), "announced": bool(entry.opened)})
+			"opened": bool(entry.opened), "announced": bool(entry.opened),
+			"reward_id": str(entry.get("reward_id", "")), "coin_reward": {}})
 		button.focus_entered.connect(_ensure_chest_visible.bind(button))
 		button.focus_entered.connect(_refresh_captions)
 		button.mouse_entered.connect(_refresh_captions)
@@ -459,6 +462,26 @@ func _released(index: int) -> void:
 func _commit(index: int) -> bool:
 	if _cards[index].opened:
 		return true
+	# Validate ownership against the current durable batch before a coin receipt
+	# can be issued. A different tab may have appended and moved these entries.
+	if not rewards.load_state() or rewards.round_id != _configured_id:
+		_save_failed = true
+		_unsaved_index = index
+		return false
+	var entry_index: int = _cards[index].entry_index
+	if entry_index >= rewards.entries.size() or str(rewards.entries[entry_index].get("reward_id", "")) != _cards[index].reward_id:
+		_save_failed = true
+		_unsaved_index = index
+		return false
+	if not rewards.entries[entry_index].opened and credit_coins.is_valid():
+		var credit: Dictionary = credit_coins.call(_cards[index].reward_id, maxi(1, int(_cards[index].tier)))
+		if not bool(credit.get("ok", false)):
+			rewards.error = "Could not save your coins. Please retry."
+			_save_failed = true
+			_unsaved_index = index
+			return false
+		if int(credit.get("amount", 0)) > 0:
+			_cards[index].coin_reward = credit
 	if rewards.mark_opened(_configured_id, int(_cards[index].entry_index)):
 		_cards[index].opened = true
 		if rewards.last_open_was_duplicate:
@@ -490,9 +513,11 @@ func _announce(index: int) -> void:
 	if _cards[index].announced or not _cards[index].opened:
 		return
 	_cards[index].announced = true
+	coins_released.emit(_cards[index].reward_id, _cards[index].coin_reward,
+		_cards[index].art.get_global_transform() * _cards[index].art._cavity_origin(),
+		not _settling and not _paused and is_visible_in_tree())
 	if _settling or _paused or not is_visible_in_tree():
 		return
-	_cards[index].art.show_surprise()
 	chest_audio_requested.emit("reward", _cards[index].theme, 0.0)
 
 

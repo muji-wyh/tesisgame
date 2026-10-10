@@ -13,6 +13,9 @@ const Chest = preload("res://scripts/chest_view.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
 const TreasureBackdrop = preload("res://scripts/treasure_backdrop.gd")
 const MedalProgress = preload("res://scripts/medal_progress.gd")
+const CoinWallet = preload("res://scripts/coin_wallet.gd")
+const CoinCounter = preload("res://scripts/coin_counter.gd")
+const CoinFlight = preload("res://scripts/coin_reward_flight.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
@@ -86,6 +89,11 @@ class RewardSparkle:
 var model := Model.new()
 var data := Data.new()
 var medal_progress := MedalProgress.new()
+var coin_wallet := CoinWallet.new()
+var _coin_counter: CoinCounter
+var _coin_flight: CoinFlight
+var _pending_coin_reward: Dictionary = {}
+var _coin_published: String = ""
 var _pair_reward: PairChestReward
 var _pair_reward_row: Control
 var _pair_words: Array[String] = []
@@ -133,7 +141,6 @@ var _mode_menu: Control
 var _mode_panel: GameLibrary
 var _mode_heading_button: Button
 var _mode_heading: Label
-var _mode_subheading: Label
 var _presentation := PresentationPreferences.new()
 var _library_published := ""
 var _mode_menu_focus_modes: Dictionary = {}
@@ -287,6 +294,9 @@ func _ready() -> void:
 		return
 	growth.configure(data.words)
 	_growth_save_failed = not growth.load_state()
+	coin_wallet.load_state()
+	_coin_counter.available = coin_wallet.ready
+	_coin_flight.sync(coin_wallet.balance)
 	_load_collected_rewards()
 	_build_collection()
 	if OS.has_feature("web"):
@@ -373,15 +383,13 @@ func _build_controls() -> void:
 	_mode_heading_button.tooltip_text = "Choose a game, adjust sound or motion"
 	_mode_heading_button.pressed.connect(_toggle_mode_menu)
 	_header_spacer.add_child(_mode_heading_button)
+	_coin_counter = CoinCounter.new()
+	_header_spacer.add_child(_coin_counter)
 	_header_spacer.resized.connect(_layout_game_heading)
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading = Style.label("Match", 22)
 	_mode_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_mode_heading_button.add_child(_mode_heading)
-	_mode_subheading = Style.label("GROW WITH PIP  /  CHOOSE A GAME", 10)
-	_mode_subheading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_mode_subheading.add_theme_color_override("font_color", Style.MUTED)
-	_mode_heading_button.add_child(_mode_subheading)
 	_toolbar = HBoxContainer.new()
 	_toolbar.alignment = BoxContainer.ALIGNMENT_END
 	_toolbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -497,6 +505,8 @@ func _build_controls() -> void:
 	_pop.hide()
 	column.add_child(_pop)
 	_pop_rewards = PopRewardRoom.new()
+	_pop_rewards.credit_coins = _credit_coins
+	_pop_rewards.coins_released.connect(_present_room_coins)
 	_pop_rewards.name = "PopRewardRoom"
 	_pop_rewards.max_chests = 0
 	_pop_rewards.allow_repeated_themes = true
@@ -527,6 +537,8 @@ func _build_controls() -> void:
 	_jelly.hide()
 	column.add_child(_jelly)
 	_jelly_rewards = PopRewardRoom.new()
+	_jelly_rewards.credit_coins = _credit_coins
+	_jelly_rewards.coins_released.connect(_present_room_coins)
 	_jelly_rewards.name = "JellyRewardRoom"
 	_jelly_rewards.storage_kind = "jelly"
 	_jelly_rewards.max_chests = 0
@@ -643,6 +655,10 @@ func _build_controls() -> void:
 	add_child(duck)
 	_set_accessibility_name(duck, "Pip the duck. Press for a new move.")
 	_outcome.hide()
+	_coin_flight = CoinFlight.new()
+	_coin_flight.counter = _coin_counter
+	add_child(_coin_flight)
+	_coin_flight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	# Input is dispatched child-first; observe it before interactive descendants consume it.
 	var observer := InputActivityObserver.new()
 	observer.name = "InputActivity"
@@ -742,6 +758,7 @@ func _show_mode_menu() -> void:
 	# recognizer that was listening or connecting when the menu interrupted it.
 	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
 	_mode_menu.show()
+	_coin_flight.sync(coin_wallet.balance)
 	_sync_round_celebration()
 	_on_input_canceled()
 	_stop_controller_actions()
@@ -1070,6 +1087,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_jelly_treasure: bool = true) -> bool:
+	_coin_flight.sync(coin_wallet.balance)
 	if not growth.ready:
 		_growth_save_failed = true
 		_refresh()
@@ -1098,7 +1116,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if model.chest_state == "opening":
 		chest.finish_immediately()
 	_settling_chest = false
-	if (_save_error and not _pending_fragment.is_empty()) or (model.phase == "won" and model.chest_earned and model.chest_state != "opened"):
+	if (_save_error and (not _pending_fragment.is_empty() or model.chest_state == "opened")) or (model.phase == "won" and model.chest_earned and model.chest_state != "opened"):
 		_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
 		return false
 	_stop_voice()
@@ -1119,6 +1137,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_phrase.stop()
 	duck.settle()
 	_pending_fragment.clear()
+	_pending_coin_reward.clear()
 	_save_error = not _progress_ready
 	feedback_timer.stop()
 	feedback_timer.paused = false
@@ -1139,7 +1158,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pair_settlement_pending = false
 	_pair_reward.clear()
 	if _mode_id in ["match", "memory"]:
-		_pair_reward.configure(_round_id, model.theme_id, data.chests, reduced_motion)
+		_pair_reward.configure(_round_id, JellyRewardProgress.theme_for_tier(1), data.chests, reduced_motion)
 		_sync_pair_reward()
 	_memory_attempt = 0
 	_celebration_seen_id = ""
@@ -1344,6 +1363,7 @@ func _show_jelly_rewards() -> void:
 
 
 func _hide_jelly_rewards() -> void:
+	_coin_flight.sync(coin_wallet.balance)
 	_jelly_rewards.pause()
 	_controller_holding_jelly_chest = false
 	_jelly_rewards_shown = false
@@ -1526,6 +1546,7 @@ func _show_pop_rewards() -> void:
 
 
 func _hide_pop_rewards() -> void:
+	_coin_flight.sync(coin_wallet.balance)
 	_pop_rewards.pause()
 	_controller_holding_pop_chest = false
 	_pop_rewards_shown = false
@@ -1900,8 +1921,8 @@ func _refresh() -> void:
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"] or pair_revealing or (_pair_save_failed and _mode_id in ["match", "memory"])
 	_storage_retry_button.add_theme_font_size_override("font_size", 16)
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
-	_storage_retry_button.tooltip_text = medal_progress.error if _save_error else growth.error
-	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed)
+	_storage_retry_button.tooltip_text = coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error
+	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed or not coin_wallet.ready or not coin_wallet.error.is_empty())
 	_world_save_notice.visible = _journey_save_failed
 	_world_save_notice.tooltip_text = growth.error if _journey_save_failed else ""
 	_refresh_growth()
@@ -1963,7 +1984,7 @@ func _refresh() -> void:
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
 	if won:
-		var reward_id: String = model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
+		var reward_id: String = JellyRewardProgress.theme_for_tier(1) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		var reward_palette: Dictionary = Data.theme(reward_id)
 		chest.reduced_motion = reduced_motion
 		chest.configure_skin(reward_palette, data.chests)
@@ -2284,12 +2305,6 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.text = str(MODES[_mode_id]) + "  ›"
 	_mode_heading.add_theme_font_size_override("font_size", ceili((22 if size.x * css_scale >= 680 else 15) / css_scale))
 	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_mode_heading.offset_bottom = -14 / css_scale if size.x * css_scale >= 680 and not short_header else 0
-	_mode_subheading.visible = size.x * css_scale >= 680 and not short_header
-	_mode_subheading.text = {"match": "FIND 5 PAIRS  /  PICTURE + WORD", "memory": "TURN TWO CARDS  /  FIND A PAIR", "pop": "SAY THE WORD  /  WATCH IT POP", "phrase": "LISTEN AND BUILD  /  3 PHRASES", "jelly": "DRAG A MATCH  /  MAKE ROOM"}.get(_mode_id, "GROW WITH PIP")
-	_mode_subheading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_mode_subheading.offset_top = 32 / css_scale
-	_mode_subheading.add_theme_font_size_override("font_size", ceili(10 / css_scale))
 	_layout_game_heading()
 	_mode_panel.configure(_mode_id, audio.muted if audio != null else false, reduced_motion)
 	_layout_mode_menu()
@@ -2321,12 +2336,18 @@ func _layout_game_heading() -> void:
 	if centered_width >= title_width:
 		width = minf(width, centered_width)
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	var coin_height: float = (20.0 if _short_game_header() else 24.0) / scale
 	_mode_heading_button.size = Vector2(width, _header_spacer.size.y)
 	_mode_heading_button.position = Vector2(clampf(center - width * 0.5, 0.0, maxf(0.0, available - width)), 0)
 	_mode_heading_button.visible = available >= maxf(64 / scale, title_width) and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
-	_mode_subheading.visible = size.x * scale >= 680 and not (_mode_id == "jelly" and size.y * scale <= 440) \
-		and width >= _mode_subheading.get_minimum_size().x
-	_mode_heading.offset_bottom = -14 / scale if _mode_subheading.visible else 0
+	_mode_heading.offset_bottom = -coin_height - 2 / scale
+	var coin_width: float = minf(available, (90.0 if coin_wallet.balance < 1000000 else 124.0) / scale)
+	_coin_counter.size = Vector2(coin_width, coin_height)
+	_coin_counter.position = Vector2(clampf(center - coin_width * 0.5, 0.0, maxf(0.0, available - coin_width)), _header_spacer.size.y - coin_height)
+	if not _mode_heading_button.visible:
+		_coin_counter.position.y = (_header_spacer.size.y - coin_height) * 0.5
+	_coin_counter.visible = available > 30 / scale
+	_coin_counter.queue_redraw()
 
 
 func _layout_mode_menu() -> void:
@@ -2624,8 +2645,8 @@ func _open_chest() -> void:
 		_cancel_chest_hold()
 		return
 	if saved_pair:
-		model.reward_theme = pair.theme
-		chest.configure_skin(Data.theme(pair.theme), data.chests)
+		model.reward_theme = JellyRewardProgress.theme_for_tier(1)
+		chest.configure_skin(Data.theme(model.reward_theme), data.chests)
 	_hold_elapsed = 0.0
 	_chest_reward_announced = false
 	if not _settling_chest:
@@ -2674,8 +2695,6 @@ func _on_chest_opened() -> void:
 	_finish_chest_drag()
 	if not model.finish_open():
 		return
-	if not _settling_chest and not _page_hidden and not collection_page.visible and chest.is_visible_in_tree():
-		chest.show_surprise()
 	# Physical completion stops the bed even if the following save fails.
 	# The success accent remains gated by the separate persistence result.
 	audio.finish_chest_motion()
@@ -2696,7 +2715,46 @@ func _settle_released_chest() -> void:
 	_settling_chest = was_settling
 
 
+func _single_chest_receipt() -> String:
+	return ("pair:" + _mode_id + ":" if _mode_id in ["match", "memory"] else "phrase:") + _round_id
+
+
+func _credit_coins(id: String, tier: int) -> Dictionary:
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var result: Dictionary = coin_wallet.credit(id, tier)
+	_coin_counter.available = coin_wallet.ready and bool(result.ok)
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	if result.ok and result.duplicate and not _coin_flight.snapshot().active \
+		and _pending_coin_reward.is_empty() and not _pop_rewards_shown and not _jelly_rewards_shown:
+		_coin_flight.sync(coin_wallet.balance)
+	return result
+
+
+func _present_room_coins(id: String, reward: Dictionary, origin: Vector2, animate: bool) -> void:
+	_present_coins(id, reward, origin, animate)
+
+
+func _present_coins(id: String, reward: Dictionary, origin: Vector2, animate: bool = true) -> void:
+	if animate and not _page_hidden and not collection_page.visible and not _mode_menu_open():
+		_coin_flight.reduced_motion = reduced_motion
+		_coin_flight.present(id, reward, origin)
+	else:
+		_coin_flight.sync(coin_wallet.balance)
+	if int(reward.get("amount", 0)) > 0:
+		_announce_status("%d coins from your chest. Total: %d coins." % [reward.amount, coin_wallet.balance])
+
+
 func _commit_fragment(explicit_retry: bool = false) -> void:
+	var receipt: String = _single_chest_receipt()
+	var credit: Dictionary = _credit_coins(receipt, 1)
+	if not credit.ok:
+		_save_error = true
+		_refresh()
+		return
+	if int(credit.amount) > 0:
+		_pending_coin_reward = credit
 	var pair: Dictionary = medal_progress.pair_round(_mode_id)
 	var saved_pair: bool = _mode_id in ["match", "memory"] and pair.get("id", "") == _round_id and pair.get("awarded", false)
 	var saved: bool = medal_progress.settle_pair_reward(_mode_id, _round_id) if saved_pair else (_pending_fragment.is_empty() or medal_progress.claim(_pending_fragment))
@@ -2707,6 +2765,8 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 	_save_error = false
 	if not _chest_reward_announced:
 		_chest_reward_announced = true
+		_present_coins(receipt, _pending_coin_reward, chest.get_global_transform() * chest._cavity_origin(), not _settling_chest)
+		_pending_coin_reward.clear()
 		if not _settling_chest and not _page_hidden and not collection_page.visible:
 			if explicit_retry:
 				audio.interact(model.reward_theme)
@@ -2730,8 +2790,7 @@ func _retry_reward_save() -> void:
 		_refresh()
 		return
 	if not _progress_ready:
-		_progress_ready = medal_progress.load_progress()
-		_save_error = not _progress_ready
+		_load_collected_rewards()
 		if _progress_ready:
 			_build_collection()
 		_refresh()
@@ -2742,6 +2801,7 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	_coin_flight.sync(coin_wallet.balance)
 	audio.stop_ui_click()
 	_hide_mode_menu(false, false)
 	if is_instance_valid(_pop_rewards):
@@ -3597,9 +3657,9 @@ func _start_chest_hold() -> void:
 	_drag_distance = 0.0
 	_dragging_chest = true
 	_drag_has_anchor = false
-	audio.interact(model.theme_id)
+	audio.interact(chest.theme_id)
 	audio.stop_voice()
-	audio.prepare_chest(model.theme_id)
+	audio.prepare_chest(chest.theme_id)
 	chest.begin_hold()
 	audio.set_chest_charge(0.0)
 	_publish_chest_charge(0.0)
@@ -3672,6 +3732,12 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	_coin_flight.reduced_motion = reduced_motion
+	if _page_hidden or collection_page.visible or _mode_menu_open():
+		if _coin_flight.snapshot().active:
+			_coin_flight.sync(coin_wallet.balance)
+	else:
+		_coin_flight.advance(delta)
 	var pair_was_revealing: bool = _pair_reward_revealing()
 	_sync_pair_presentation()
 	_pair_reward.advance(delta)
@@ -3683,6 +3749,7 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 		_celebration_publish_left = 0.05
 		_publish_round_celebration()
 		_publish_growth_view()
+		_publish_coins()
 	_update_duck()
 	if Engine.get_process_frames() != _voice_match_origin_frame:
 		_advance_voice_match_feedback(delta)
@@ -3772,6 +3839,10 @@ func _save_journey() -> void:
 func _retry_storage() -> void:
 	if collection_page.visible:
 		return
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+		_coin_counter.available = coin_wallet.ready
+		_coin_flight.sync(coin_wallet.balance)
 	if _save_error:
 		_retry_reward_save()
 	if _journey_save_failed:
@@ -3791,6 +3862,7 @@ func _retry_storage() -> void:
 func _show_collection() -> void:
 	if collection_page.visible:
 		return
+	_coin_flight.sync(coin_wallet.balance)
 	# Preserve prepared and hard-error gates; only an interrupted live or pending
 	# recognizer needs paused wording. Capture this before host stop callbacks.
 	var pause_pop: bool = _mode_id == "pop" and (_pop.game.phase in ["running", "finished"] \
@@ -3861,16 +3933,30 @@ func _announce_collection_state() -> void:
 	_announce_status(announcement)
 
 
+func _publish_coins() -> void:
+	if _host == null:
+		return
+	var state: Dictionary = _coin_flight.snapshot()
+	state["balance"] = coin_wallet.balance
+	state["available"] = coin_wallet.ready and coin_wallet.error.is_empty()
+	var value: String = JSON.stringify(state)
+	if value != _coin_published:
+		_coin_published = value
+		_host.coinStatus(value)
+
+
 func _load_collected_rewards() -> void:
 	_progress_ready = medal_progress.load_progress()
 	if _progress_ready:
 		for mode in ["match", "memory"]:
 			var pair: Dictionary = medal_progress.pair_round(mode)
 			if pair.get("awarded", false) and not pair.get("settled", false):
-				_progress_ready = medal_progress.settle_pair_reward(mode, pair.id)
+				var credit: Dictionary = _credit_coins("pair:" + mode + ":" + str(pair.id), 1)
+				_progress_ready = credit.ok and medal_progress.settle_pair_reward(mode, pair.id)
 				if not _progress_ready:
 					break
 	_save_error = not _progress_ready
+	_coin_flight.sync(coin_wallet.balance)
 	_sync_collected_rewards()
 
 
@@ -4005,12 +4091,12 @@ func _sync_pair_reward() -> bool:
 			return false
 		pair = medal_progress.pair_round(_mode_id)
 		model.chest_earned = true
-		model.reward_theme = str(pair.theme)
-		_pair_reward.configure(_round_id, pair.theme, data.chests, reduced_motion)
+		model.reward_theme = JellyRewardProgress.theme_for_tier(1)
+		_pair_reward.configure(_round_id, model.reward_theme, data.chests, reduced_motion)
 		_pair_reward.show_pair_result(_round_id, true)
 	if pair.awarded:
 		model.chest_earned = true
-		model.reward_theme = str(pair.theme)
+		model.reward_theme = JellyRewardProgress.theme_for_tier(1)
 	if model.phase == "won" and not pair.completed:
 		if not medal_progress.finish_pair_round(_mode_id, _round_id):
 			_pair_save_failed = true
@@ -4034,11 +4120,13 @@ func _settle_pair_reward() -> bool:
 	var pair: Dictionary = medal_progress.pair_round(_mode_id)
 	if pair.get("id", "") == _round_id and pair.get("awarded", false):
 		_pair_settlement_pending = true
-		if not medal_progress.settle_pair_reward(_mode_id, _round_id):
+		var credit: Dictionary = _credit_coins(_single_chest_receipt(), 1)
+		if not credit.ok or not medal_progress.settle_pair_reward(_mode_id, _round_id):
 			_pair_save_failed = true
 			_save_error = true
 			return false
 		model.chest_state = "opened"
+		_coin_flight.sync(coin_wallet.balance)
 		_pair_settlement_pending = false
 		_pair_save_failed = false
 		_save_error = false

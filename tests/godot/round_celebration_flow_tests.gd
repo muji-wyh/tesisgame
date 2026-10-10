@@ -117,6 +117,8 @@ func check_pair_reveal(app, mode: String, already_checked: bool) -> bool:
 	var state: Dictionary = view.snapshot()
 	check(state.earned and state.performance_active and state.confetti_visible,
 		mode + " reveals its earned chest and confetti on the actual successful pair")
+	check(view.chest.theme_id == RewardProgress.theme_for_tier(1),
+		mode + " pair reveal uses the ordinary tier-one chest")
 	var screen: Rect2 = view._confetti.get_global_transform_with_canvas() * view._confetti.screen_rect()
 	check(screen.is_equal_approx(root.get_visible_rect()),
 		mode + " pair reward confetti reaches the entire viewport")
@@ -184,6 +186,7 @@ func start_manual(app, mode: String, earned: bool = true) -> void:
 func check_manual_mode(app, mode: String) -> void:
 	var before: int = pieces(app)
 	await start_manual(app, mode)
+	var coins_before: int = app.coin_wallet.balance
 	var view = app._round_celebration
 	var identity: String = view.snapshot().round_id
 	var prior_controller_mode: bool = app._controller_mode
@@ -194,6 +197,9 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " controller refresh chooses a visible allowed control during the performance")
 	check(view.is_visible_in_tree() and view.snapshot().chest_count == 1 and not view.snapshot().automatic,
 		mode + " presents one earned chest through the shared manual invitation")
+	if mode in ["match", "memory"]:
+		check(view.chest.theme_id == RewardProgress.theme_for_tier(1),
+			mode + " shared invitation retains the ordinary chest skin")
 	check(not app.chest_button.is_visible_in_tree() and not view.snapshot().ready,
 		mode + " keeps the unopened-chest page and invitation action unavailable during performance")
 	check(not view.snapshot().confetti, mode + " begins its round finale without an early confetti burst")
@@ -248,10 +254,13 @@ func check_manual_mode(app, mode: String) -> void:
 	app._advance_ui(Feel.HOLD_SECONDS)
 	check(app.model.chest_state == "opened" and pieces(app) == before + 1,
 		mode + " preserves the existing hold-to-open reward commitment")
+	check(app.coin_wallet.balance == coins_before + 50 and app._coin_flight.snapshot().active,
+		mode + " launches exactly 50 saved coins after the accepted chest opening")
 	view.open_requested.emit(identity)
 	view.performance_finished.emit(identity)
 	app.chest.opened.emit()
-	check(pieces(app) == before + 1 and app.model.chest_state == "opened",
+	check(pieces(app) == before + 1 and app.model.chest_state == "opened"
+		and app.coin_wallet.balance == coins_before + 50 and app._coin_flight.snapshot().flights == 1,
 		mode + " ignores duplicate performance, invitation, and chest completion callbacks")
 	app.set_reduced_motion(false)
 	app._controller_mode = prior_controller_mode

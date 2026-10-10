@@ -2,6 +2,7 @@ extends SceneTree
 
 const Progress = preload("res://scripts/medal_progress.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 var checks: int = 0
 var failures: int = 0
 var serial: int = 0
@@ -90,14 +91,19 @@ func _run() -> void:
 func check_reward(mode: String, slot: int) -> void:
 	var app = await make_app(mode, slot)
 	check(not app.model.chest_earned, mode + " does not own a chest at creation")
+	check(app.coin_wallet.ready and app.coin_wallet.balance == 0, mode + " begins with its isolated empty wallet")
 	for index in range(5):
 		match_pair(app, index)
 		check(app.model.chest_earned == (index + 1 >= slot), mode + " reveals at its reserved successful pair")
 		check(pieces(app) == 0, mode + " saves ownership without prematurely opening the chest")
+		check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
+			mode + " saves chest ownership without prematurely awarding its coins")
 		if index + 1 == slot:
 			app._advance_ui(0.22)
 			check(app._status_announcement.begins_with("Chest found!"), mode + " preserves the earned chest announcement after board refresh")
 			check(app._pair_reward.snapshot().confetti_visible and app._pair_reward.chest.is_visible_in_tree(), mode + " plays chest and full-screen paper on the live board")
+			check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1),
+				mode + " reveals an ordinary tier-one chest independently of the selected world")
 			check(not app._round_celebration.is_active(), mode + " keeps completion controls out of the pair reward")
 			var elapsed: float = app._pair_reward.snapshot().elapsed
 			app._show_mode_menu()
@@ -124,8 +130,11 @@ func check_reward(mode: String, slot: int) -> void:
 	app.set_reduced_motion(true)
 	app._open_chest()
 	check(app.model.chest_state == "opened" and pieces(app) == 1, mode + " opens the one saved chest")
+	check(app.chest.theme_id == RewardProgress.theme_for_tier(1) and app.coin_wallet.balance == 50
+		and app._coin_flight.snapshot().active, mode + " opening saves 50 coins and starts their flight from the ordinary chest")
 	app._on_chest_opened()
-	check(pieces(app) == 1, mode + " duplicate opening cannot duplicate contents")
+	check(pieces(app) == 1 and app.coin_wallet.balance == 50 and app._coin_flight.snapshot().flights == 1,
+		mode + " duplicate opening cannot duplicate contents or the coin flight")
 	app.queue_free()
 	await settle()
 
@@ -147,6 +156,8 @@ func check_failure(mode: String) -> void:
 	storage.writable = true
 	app._retry_storage()
 	check(not app._pair_save_failed and not app._pair_settlement_pending and pieces(app) == 1, mode + " retry actually commits pending exit settlement")
+	check(app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
+		mode + " exit retry settles the same coin receipt without a hidden flight")
 	check(app.new_round(2, false, "", "phrase") and pieces(app) == 1, mode + " leaving midround settles its earned chest once")
 	app.queue_free()
 	await settle()
@@ -192,5 +203,7 @@ func check_reload(mode: String) -> void:
 	app._retry_storage()
 	check(not app._pair_save_failed and app._progress_ready, mode + " startup recovery can retry without another reload")
 	check(pieces(app) == 1 and not app.model.chest_earned, mode + " reload settles prior treasure before a fresh round")
+	check(app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
+		mode + " reload recovery credits one saved chest without replaying its coin animation")
 	app.queue_free()
 	await settle()

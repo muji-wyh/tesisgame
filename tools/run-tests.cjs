@@ -10,6 +10,7 @@ const groups = {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
       'pair_chest_progress_tests', 'pair_chest_reward_tests', 'pair_chest_flow_tests',
+      'coin_wallet_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests',
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests',
       'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
@@ -19,7 +20,7 @@ const groups = {
     node: [
       'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
       'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'web-server', 'performance-benchmark', 'ui-click-assets', 'interface-click-host',
-      'vocabulary-library-preparation', 'word-library-motion'
+      'vocabulary-library-preparation', 'word-library-motion', 'coin-wallet-host'
     ]
   },
   flow: {

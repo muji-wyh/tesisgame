@@ -1,0 +1,3 @@
+# Licensed production artwork is embedded in the compiled game, not redistributed.
+*.png
+*.png.import

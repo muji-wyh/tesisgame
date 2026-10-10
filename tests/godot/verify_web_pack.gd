@@ -41,6 +41,13 @@ func _verify() -> void:
 	if confetti == null or confetti.get_size() != Vector2(512, 512):
 		printerr("The reviewed Jelly chest-upgrade confetti atlas is missing from the startup pack.")
 		failures += 1
+	for filename: String in ["gold-coin.png", "gold-coins.png"]:
+		var coin_path: String = "res://assets/coins/" + filename
+		var coin: Texture2D = load(coin_path) if ResourceLoader.exists(coin_path) else null
+		var expected_size: Vector2 = Vector2(128, 128) if filename == "gold-coin.png" else Vector2(256, 256)
+		if coin == null or coin.get_size() != expected_size:
+			printerr("The reviewed coin artwork is missing or incorrectly sized in the startup pack: " + coin_path)
+			failures += 1
 	failures += _verify_excluded_content_absent()
 	for name in ["body", "heading"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
@@ -329,8 +336,9 @@ func _verify_phrases(words: Array) -> int:
 func _verify_excluded_content_absent() -> int:
 	var failures := 0
 	var build_only_sources := ["res://assets/fonts/Nunito-600.ttf", "res://assets/fonts/Nunito-800.ttf",
-		"res://assets/images/mascots/outfits/wardrobe.svg"]
-	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-"]
+		"res://assets/images/mascots/outfits/wardrobe.svg", "res://assets/coins/prepare.py",
+		"res://assets/coins/manifest.json", "res://assets/coins/review-contact.png"]
+	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-", "review-contact.png-"]
 	var historical_word_imports: Dictionary = {}
 	var original_words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if original_words is Array:

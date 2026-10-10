@@ -64,12 +64,20 @@ func load_state() -> bool:
 			or not saved_receipts is Array or saved_receipts.size() > MAX_RECEIPTS:
 			return _fail("Your treasure save could not be understood.")
 		var themes: Array[String] = []
-		for entry in saved_entries:
+		var reward_ids: Dictionary = {}
+		for index in range(saved_entries.size()):
+			var entry: Variant = saved_entries[index]
 			if not entry is Dictionary or not entry.get("theme") is String or not Data.THEMES.has(entry.theme) \
 				or (not allow_repeated_themes and themes.has(entry.theme)) or not entry.get("opened") is bool:
 				return _fail("Your treasure save contains an invalid chest.")
 			themes.append(entry.theme)
-			var restored: Dictionary = {"theme": entry.theme, "opened": entry.opened}
+			# Old inventories lacked per-chest identity. Derive it before any
+			# pruning or append can move the entry to a different batch/index.
+			var reward_id: Variant = entry.get("reward_id", _reward_id(saved_id, index))
+			if not _valid_reward_id(reward_id) or reward_ids.has(reward_id):
+				return _fail("Your treasure save contains an invalid or repeated reward ID.")
+			reward_ids[reward_id] = true
+			var restored: Dictionary = {"theme": entry.theme, "opened": entry.opened, "reward_id": reward_id}
 			if entry.has("tier"):
 				if not entry.tier is int or entry.tier < 1:
 					return _fail("Your treasure save contains an invalid chest level.")
@@ -131,7 +139,7 @@ func create_batch(id: String, themes: Array[String], tiers: Array[int] = []) -> 
 		if not Data.THEMES.has(theme_id) or (not allow_repeated_themes and seen.has(theme_id)):
 			return _fail("Choose different treasure styles for this round.")
 		seen.append(theme_id)
-		var entry: Dictionary = {"theme": theme_id, "opened": false}
+		var entry: Dictionary = {"theme": theme_id, "opened": false, "reward_id": _reward_id(id, index)}
 		if not tiers.is_empty() and tiers[index] > 0:
 			entry["tier"] = tiers[index]
 		next_entries.append(entry)
@@ -177,6 +185,12 @@ func mark_opened(id: String, index: int) -> bool:
 
 
 func _persist(id: String, next: Array[Dictionary], receipts: Array[String]) -> bool:
+	var reward_ids: Dictionary = {}
+	for entry in next:
+		var reward_id: Variant = entry.get("reward_id")
+		if not _valid_reward_id(reward_id) or reward_ids.has(reward_id):
+			return _fail("This treasure has an invalid or repeated reward ID.")
+		reward_ids[reward_id] = true
 	var config := ConfigFile.new()
 	config.set_value("treasure", "version", VERSION)
 	config.set_value("treasure", "round_id", id)
@@ -209,6 +223,20 @@ func _persist(id: String, next: Array[Dictionary], receipts: Array[String]) -> b
 
 func _storage_path() -> String:
 	return "user://jelly-rewards-v1.cfg" if storage_kind == "jelly" and _path == DEFAULT_PATH else _path
+
+
+func _reward_id(id: String, index: int) -> String:
+	return "%s:%s:%d" % [storage_kind, id, index]
+
+
+func _valid_reward_id(value: Variant) -> bool:
+	if not value is String or value.length() > 512 or not value.begins_with(storage_kind + ":") \
+		or value.length() <= storage_kind.length() + 1 or value.strip_edges() != value:
+		return false
+	for index in range(value.length()):
+		if value.unicode_at(index) < 32 or value.unicode_at(index) == 127:
+			return false
+	return true
 
 
 func _fail(message: String) -> bool:

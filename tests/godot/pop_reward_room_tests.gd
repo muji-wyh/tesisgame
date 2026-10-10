@@ -5,6 +5,7 @@ const State = preload("res://scripts/pop_reward_state.gd")
 const Room = preload("res://scripts/pop_reward_room.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const Wallet = preload("res://scripts/coin_wallet.gd")
 const PIXEL_TOLERANCE: float = 0.1
 
 class Storage extends RefCounted:
@@ -14,6 +15,8 @@ class Storage extends RefCounted:
 	var writable: bool = true
 	var writes: int = 0
 	var jelly_writes: int = 0
+	var coin_text: Variant = null
+	var coin_writes: int = 0
 
 	func popRewardState() -> Variant:
 		return text if readable else false
@@ -33,6 +36,16 @@ class Storage extends RefCounted:
 			return false
 		jelly_text = value
 		jelly_writes += 1
+		return true
+
+	func coinWalletState() -> Variant:
+		return coin_text
+
+	func saveCoinWalletState(value: String, expected: Variant) -> bool:
+		if coin_text != expected:
+			return false
+		coin_text = value
+		coin_writes += 1
 		return true
 
 var checks: int = 0
@@ -163,6 +176,7 @@ func _jelly_state_checks() -> void:
 
 func _make_jelly_room(storage: Storage):
 	var room := Room.new()
+	_attach_wallet(room, storage)
 	room.storage_kind = "jelly"
 	room.max_chests = 0
 	room.allow_repeated_themes = true
@@ -502,7 +516,7 @@ func _state_checks() -> void:
 	check(state.mark_opened("one", 1), "Opening writes the selected chest")
 	check(state.mark_opened("one", 1) and storage.writes == initial_writes + 1,
 		"Duplicate completion callbacks never write or award twice")
-	check(state.last_open_was_duplicate, "A duplicate durable receipt is reported to suppress repeat surprises")
+	check(state.last_open_was_duplicate, "A duplicate durable receipt is reported to suppress repeated reward presentations")
 	check(not state.mark_opened("other", 0), "A stale round cannot consume the current reward")
 	storage.writable = false
 	check(not state.mark_opened("one", 0) and not state.entries[0].opened,
@@ -535,11 +549,27 @@ func _state_checks() -> void:
 
 func _make_room(storage: Storage):
 	var room := Room.new()
+	_attach_wallet(room, storage)
 	root.add_child(room)
 	room.size = Vector2(880, 640)
 	room.connect_storage(storage)
 	room.set_process(false)
 	return room
+
+
+func _attach_wallet(room, storage: Storage) -> void:
+	var wallet := Wallet.new("user://unused-room-wallet.cfg", storage)
+	check(wallet.load_state(), "Room fixtures load an isolated durable coin wallet")
+	# Match GameUI's retry boundary while keeping this room fixture isolated.
+	room.credit_coins = func(id: String, tier: int) -> Dictionary:
+		if not wallet.ready or not wallet.error.is_empty():
+			wallet.load_state()
+		return wallet.credit(id, tier)
+	room.set_meta("coin_wallet", wallet)
+	var releases: Array[Dictionary] = []
+	room.set_meta("coin_releases", releases)
+	room.coins_released.connect(func(id: String, reward: Dictionary, origin: Vector2, animate: bool) -> void:
+		releases.append({"id": id, "reward": reward.duplicate(true), "origin": origin, "animate": animate}))
 
 
 func _hold(room, index: int, seconds: float) -> void:
@@ -665,12 +695,14 @@ func _room_checks() -> void:
 	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
 	room._finished(0)
 	check(reward_audio.size() == 1 and storage.writes == 2,
-		"Letting go after release completes one surprise without duplicating the save")
+		"Letting go after release completes one coin reward without duplicating the save")
 	check(room._cards[0].caption.text.to_lower().contains("opened")
 		and room._cards[0].button.accessibility_name.contains("Opened"),
 		"A completed chest visibly reports its opened state without inviting another hold")
-	check(room._cards[0].art.hold_effect_snapshot().surprise.play_count == 1,
-		"The room uses the shared chest surprise effect")
+	check(room.get_meta("coin_wallet").balance == 50 and room.get_meta("coin_releases").size() == 1
+		and room.get_meta("coin_releases")[0].reward.amount == 50 and room.get_meta("coin_releases")[0].animate
+		and not room._cards[0].art.hold_effect_snapshot().surprise.active,
+		"The room emits one 50-coin flight from its completed chest after durable credit")
 	check(room.configure("room-one", 3, "space", _manifest, false) and room.snapshot().opened_count == 1,
 		"Reentering the same round preserves opened chests")
 	_hold(room, 1, Feel.HOLD_SECONDS)
@@ -684,13 +716,17 @@ func _room_checks() -> void:
 	check(room._cards[1].art.mode == "opened" and room.snapshot().opened_count == 2 and reward_audio.size() == 1,
 		"Backgrounding after release settles the saved chest silently")
 	room.resume()
-	check(reward_audio.size() == 1 and room._cards[1].art.hold_effect_snapshot().surprise.play_count == 0,
-		"Resuming does not replay a silently settled surprise")
+	check(reward_audio.size() == 1 and room.get_meta("coin_wallet").balance == 100
+		and room.get_meta("coin_releases").size() == 2 and not room.get_meta("coin_releases")[1].animate,
+		"Resuming does not replay the coins that were settled silently during backgrounding")
 	room.set_reduced_motion(true)
 	_hold(room, 2, Feel.HOLD_SECONDS)
 	check(room.snapshot().opened_count == 3 and not room.has_pending() and reward_audio.size() == 2,
 		"Reduced motion keeps the hold confirmation and opens the final chest once")
 	check(storage.writes == 4, "Three rewards require one batch write and one durable write per chest")
+	check(storage.coin_writes == 3 and room.get_meta("coin_wallet").balance == 150
+		and room.get_meta("coin_releases").size() == 3,
+		"All three chests credit exactly one 50-coin receipt and one presentation event each")
 	room.queue_free()
 	await process_frame
 	var restored = _make_room(storage)
@@ -698,6 +734,8 @@ func _room_checks() -> void:
 		"A fresh room restores every opened chest after a reload")
 	check(not restored.has_pending() and restored.navigation_controls().size() == 1,
 		"Restored opened chests cannot be activated again")
+	check(restored.get_meta("coin_wallet").balance == 150 and restored.get_meta("coin_releases").is_empty()
+		and storage.coin_writes == 3, "Restoring an opened room preserves coins without crediting or presenting them again")
 	for card in restored._cards:
 		check(card.art.mode == "opened" and card.art.hold_effect_snapshot().surprise.play_count == 0,
 			"Restoring durable state never replays the chest animation or surprise")
@@ -754,50 +792,53 @@ func _retained_rewards_checks() -> void:
 	var storage := Storage.new()
 	var room = _make_room(storage)
 	check(room.configure("retained-rewards", 3, "ocean", _manifest, false),
-		"Prepare three earned chances for simultaneous persistent gifts")
+		"Prepare three earned chests for independently saved coin rewards")
 	var reward_audio: Array[String] = []
 	room.chest_audio_requested.connect(func(action: String, theme_id: String, _progress: float) -> void:
 		if action == "reward":
 			reward_audio.append(theme_id))
-	var gifts: Array[Dictionary] = []
 	for index in range(3):
 		if index == 2:
 			room.set_reduced_motion(true)
 		_hold(room, index, Feel.HOLD_SECONDS)
 		room._cards[index].art._advance_animation(Feel.OPEN_SECONDS)
 		room._cards[index].art._advance_animation(0.2)
-		var flying: Dictionary = room._cards[index].art.hold_effect_snapshot().surprise
+		var releases: Array = room.get_meta("coin_releases")
+		check(releases.size() == index + 1 and releases[index].reward.amount == 50
+			and releases[index].id == room.rewards.entries[index].reward_id
+			and room.get_meta("coin_wallet").balance == (index + 1) * 50,
+			"Each completed chest emits its own durable 50-coin receipt once")
+		var saved_events: Array = releases.duplicate(true)
 		room.pause()
 		room._cards[index].art._advance_animation(60.0)
-		check(flying.active and room._cards[index].art.hold_effect_snapshot().surprise == flying,
-			"Pausing preserves the current gift and freezes its flight")
+		check(room.get_meta("coin_releases") == saved_events and room.get_meta("coin_wallet").balance == (index + 1) * 50,
+			"Pausing retains saved coins without emitting another presentation event")
 		room.resume()
 		room._cards[index].art.set_process(false)
 		room._cards[index].art._advance_animation(60.0)
-		gifts.append(room._cards[index].art.hold_effect_snapshot().surprise)
 	check(room.snapshot().opened_count == 3 and storage.writes == 4 and reward_audio.size() == 3,
-		"Opening all three persistent gifts keeps one saved receipt and one success sound per chest")
+		"Opening all three chests keeps one durable opening receipt and one success sound per chest")
 	for index in range(3):
 		var art = room._cards[index].art
 		art._advance_animation(600.0)
-		art.show_surprise()
-		var retained: Dictionary = art.hold_effect_snapshot().surprise
-		check(retained.active and retained.kind == gifts[index].kind
-			and retained.play_count == gifts[index].play_count,
-			"All three opened chests retain their own gifts together after later openings and long idle time")
-	check(storage.writes == 4 and reward_audio.size() == 3,
-		"Persistent gift display cannot replay reward audio or save additional receipts")
+		room._announce(index)
+		room._finished(index)
+		check(not art.hold_effect_snapshot().surprise.active and room.get_meta("coin_releases").size() == 3
+			and room.get_meta("coin_wallet").balance == 150,
+			"Later openings, long idle time and stale completion callbacks cannot replay earlier coin rewards")
+	check(storage.writes == 4 and storage.coin_writes == 3 and reward_audio.size() == 3,
+		"Repeated presentation cannot replay reward audio or save extra opening or coin receipts")
 	room.hide()
 	for card in room._cards:
 		check(not card.art.hold_effect_snapshot().surprise.active,
-			"Leaving the reward room removes each gift from its stage")
+			"Coin-only rewards leave no decorative gift on a hidden chest stage")
 	room.show()
 	room.resume()
 	for index in range(3):
-		room._cards[index].art.show_surprise()
-		check(not room._cards[index].art.hold_effect_snapshot().surprise.active
-			and room._cards[index].art.hold_effect_snapshot().surprise.play_count == gifts[index].play_count,
-			"Reentering an opened batch cannot reroll or replay gifts that were left behind")
+		room._announce(index)
+		check(room.get_meta("coin_releases").size() == 3 and room.get_meta("coin_wallet").balance == 150
+			and storage.coin_writes == 3,
+			"Reentering an opened batch cannot replay or repay coins from earlier chest receipts")
 	room.queue_free()
 	await process_frame
 
@@ -885,7 +926,9 @@ func _responsive_resize_checks() -> void:
 	var room := Room.new()
 	room.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(room)
-	room.connect_storage(Storage.new())
+	var storage := Storage.new()
+	_attach_wallet(room, storage)
+	room.connect_storage(storage)
 	check(room.configure("responsive-treasure", 3, "spring", _manifest, false),
 		"Prepare one treasure stage for repeated desktop and phone resizing")
 	room.set_process(false)
@@ -943,7 +986,9 @@ func _deferred_layout_checks() -> void:
 		room.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		column.add_child(room)
 		header.custom_minimum_size.y = 72.0 / Style.ui_scale(room)
-		room.connect_storage(Storage.new())
+		var storage := Storage.new()
+		_attach_wallet(room, storage)
+		room.connect_storage(storage)
 		room.size = Vector2.ZERO
 		var published: Array[Dictionary] = []
 		room.changed.connect(func(value: Dictionary) -> void: published.append(value.duplicate(true)))
