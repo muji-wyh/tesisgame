@@ -22,6 +22,7 @@ const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
+const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -96,6 +97,8 @@ var _pending_coin_reward: Dictionary = {}
 var _coin_published: String = ""
 var _pair_reward: PairChestReward
 var _pair_reward_row: Control
+var _reward_confetti: RewardConfetti
+var _confetti_reward_keys: Dictionary = {}
 var _pair_words: Array[String] = []
 var _pair_proposed_pair: int = 0
 var _pair_save_failed: bool = false
@@ -418,6 +421,7 @@ func _build_controls() -> void:
 	_pair_reward = PairChestReward.new()
 	_pair_reward.name = "PairChestReward"
 	_pair_reward.cue_requested.connect(_pair_reward_cue)
+	_pair_reward.confetti_requested.connect(_pair_confetti_requested)
 	_pair_reward_row = Control.new()
 	_pair_reward_row.name = "PairRewardSpace"
 	_pair_reward_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -504,6 +508,7 @@ func _build_controls() -> void:
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
+	_pop._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("pop"))
 	_pop_rewards = PopRewardRoom.new()
 	_pop_rewards.credit_coins = _credit_coins
 	_pop_rewards.coins_released.connect(_present_room_coins)
@@ -536,6 +541,7 @@ func _build_controls() -> void:
 	_jelly.changed.connect(_publish_jelly)
 	_jelly.hide()
 	column.add_child(_jelly)
+	_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("jelly"))
 	_jelly_rewards = PopRewardRoom.new()
 	_jelly_rewards.credit_coins = _credit_coins
 	_jelly_rewards.coins_released.connect(_present_room_coins)
@@ -560,6 +566,7 @@ func _build_controls() -> void:
 	_round_celebration.performance_finished.connect(_on_round_celebration_finished)
 	_round_celebration.open_requested.connect(_accept_round_chest)
 	_round_celebration.cue_requested.connect(_round_celebration_cue)
+	_round_celebration.confetti_requested.connect(_round_confetti_requested)
 	column.add_child(_round_celebration)
 	_round_celebration.hide()
 	_outcome = Control.new()
@@ -660,6 +667,9 @@ func _build_controls() -> void:
 	_coin_flight.counter = _coin_counter
 	add_child(_coin_flight)
 	_coin_flight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_reward_confetti = RewardConfetti.new()
+	add_child(_reward_confetti)
+	visibility_changed.connect(_sync_reward_confetti)
 	# Input is dispatched child-first; observe it before interactive descendants consume it.
 	var observer := InputActivityObserver.new()
 	observer.name = "InputActivity"
@@ -804,6 +814,7 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 		return
 	_mode_menu_pointer = -2
 	_mode_menu.hide()
+	_sync_reward_confetti()
 	for control in _mode_menu_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _mode_menu_focus_modes[control]
@@ -1154,6 +1165,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_show_error(model.error)
 		return false
 	_round_id = GrowthState.make_round_id()
+	_clear_reward_confetti()
 	_pair_words.clear()
 	_pair_proposed_pair = model.chest_reward_pair
 	_pair_save_failed = false
@@ -1233,6 +1245,7 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_stop_round_celebration()
 	_celebration_seen_id = ""
 	_round_id = GrowthState.make_round_id()
+	_clear_reward_confetti()
 	_round_result.clear()
 	_pop_reward_saved = false
 	_pop_reward_theme = ""
@@ -1600,6 +1613,59 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 			"reward": audio.chest_reward(theme_id, progress > 0.0)
 
 
+func _reward_confetti_allowed() -> bool:
+	return is_visible_in_tree() and not _page_hidden and not _rebuilding and not _speech_debug_active \
+		and is_instance_valid(collection_page) and not collection_page.visible and not _mode_menu_open()
+
+
+func _sync_reward_confetti() -> void:
+	if not is_instance_valid(_reward_confetti):
+		return
+	if reduced_motion and _reward_confetti.is_active():
+		_reward_confetti.clear()
+	_reward_confetti.set_paused(reduced_motion or not _reward_confetti_allowed())
+
+
+func _clear_reward_confetti() -> void:
+	_confetti_reward_keys.clear()
+	if is_instance_valid(_reward_confetti):
+		_reward_confetti.clear()
+
+
+func _request_reward_confetti(round_id: String, mode: String, tier: int) -> void:
+	if round_id.is_empty() or round_id != _round_id or mode != _mode_id or tier <= 0 \
+		or reduced_motion or not _reward_confetti_allowed():
+		return
+	# The same earned chest may later appear in a round finale. Its paper burst
+	# belongs to the reward, not to every presentation of that reward.
+	var key: String = "%s:%s:%d" % [round_id, mode, tier]
+	if _confetti_reward_keys.has(key):
+		return
+	_confetti_reward_keys[key] = true
+	_sync_reward_confetti()
+	_reward_confetti.burst(key)
+
+
+func _fragment_confetti_requested(mode: String) -> void:
+	if mode != _mode_id or mode not in ["jelly", "pop"]:
+		return
+	var presentation: Dictionary = _jelly._reward_presentation.snapshot() if mode == "jelly" else _pop._reward_presentation.snapshot()
+	_request_reward_confetti(_round_id, mode, int(presentation.get("tier", 0)))
+
+
+func _pair_confetti_requested(round_id: String) -> void:
+	if _mode_id in ["match", "memory"]:
+		_request_reward_confetti(round_id, _mode_id, 1)
+
+
+func _round_confetti_requested(round_id: String) -> void:
+	if not _round_celebration.is_active() or round_id != _round_celebration.current_round_id():
+		return
+	var state: Dictionary = _round_celebration.snapshot()
+	if int(state.chest_count) > 0:
+		_request_reward_confetti(round_id, _mode_id, maxi(1, int(state.chest_tier)))
+
+
 func _round_celebration_active() -> bool:
 	return is_instance_valid(_round_celebration) and _round_celebration.is_active()
 
@@ -1642,6 +1708,7 @@ func _start_round_celebration_audio() -> void:
 
 
 func _sync_round_celebration() -> void:
+	_sync_reward_confetti()
 	_sync_pair_presentation()
 	if not _round_celebration_active():
 		return
@@ -2609,6 +2676,7 @@ func choose_theme(id: String) -> void:
 func set_reduced_motion(value: bool) -> void:
 	_pair_reward.set_reduced_motion(value)
 	reduced_motion = value
+	_sync_reward_confetti()
 	WordArt.set_reduced_motion(value)
 	if _host != null:
 		_host.presentationSettings(value, audio.muted)
@@ -2818,6 +2886,7 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	_reward_confetti.set_paused(true)
 	_coin_flight.sync(coin_wallet.balance)
 	audio.stop_ui_click()
 	_hide_mode_menu(false, false)
@@ -2866,6 +2935,7 @@ func on_page_hidden() -> void:
 func on_page_visible() -> void:
 	if _speech_debug_active:
 		_page_hidden = false
+		_sync_reward_confetti()
 		return
 	var resume_music: bool = _page_hidden and _resume_music_after_background
 	_page_hidden = false
@@ -3482,6 +3552,7 @@ func _close_speech_debug(restore_audio: bool = true) -> bool:
 
 
 func _exit_tree() -> void:
+	_clear_reward_confetti()
 	_stop_round_celebration()
 	_close_speech_debug(false)
 
@@ -3749,6 +3820,8 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	_sync_reward_confetti()
+	_reward_confetti.advance(delta)
 	_coin_flight.reduced_motion = reduced_motion
 	if _page_hidden or collection_page.visible or _mode_menu_open():
 		if _coin_flight.snapshot().active:

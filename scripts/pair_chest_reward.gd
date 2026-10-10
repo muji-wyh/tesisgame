@@ -2,11 +2,11 @@ extends Control
 ## Nonmodal pair feedback. The caller owns the roll, reward and saved receipt.
 
 signal cue_requested(round_id: String, cue: String)
+signal confetti_requested(round_id: String)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
-const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
@@ -16,7 +16,6 @@ const MISS_SECONDS: float = 0.80
 
 var chest: ChestView
 var _title: Label
-var _confetti: RewardConfetti
 var _round_id: String = ""
 var _theme_id: String = "spring"
 var _manifest: Dictionary = {}
@@ -55,10 +54,6 @@ func _init() -> void:
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(_title)
-	_confetti = RewardConfetti.new()
-	# Only the paper leaves the compact HUD row; it completes its full viewport fall.
-	_confetti.top_level = true
-	add_child(_confetti)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	hide()
@@ -140,6 +135,10 @@ func advance(delta: float) -> void:
 	_elapsed = minf(duration, _elapsed + delta)
 	if _earned and not _revealed and _elapsed >= REVEAL_SECONDS:
 		_revealed = true
+		if not _reduced_motion:
+			confetti_requested.emit(_round_id)
+			if generation != _serial or _round_id.is_empty():
+				return
 		_cue_log.append("reward")
 		cue_requested.emit(_round_id, "reward")
 		# A host may leave the round, mute or reconfigure while handling the cue.
@@ -160,7 +159,6 @@ func clear() -> void:
 	_revealed = false
 	_render_until_frame = -1
 	_cue_log.clear()
-	_confetti.hide()
 	chest.hide()
 	chest.set_idle_paused(true)
 	_title.text = ""
@@ -173,7 +171,7 @@ func snapshot() -> Dictionary:
 		"active": _performance_active or _earned, "performance_active": _performance_active,
 		"earned": _earned, "paused": _paused, "reduced_motion": _reduced_motion,
 		"elapsed": _elapsed, "revealed": _revealed, "message": _title.text,
-		"confetti_visible": _confetti.is_visible_in_tree(), "cue_log": _cue_log.duplicate(),
+		"cue_log": _cue_log.duplicate(),
 		"anchor": _anchor, "toast_rect": _toast_rect, "chest_rect": _chest_rect,
 		"chest_mode": chest.mode, "mouse_filter": mouse_filter}
 
@@ -194,8 +192,6 @@ func _sample() -> void:
 	visible = not _round_id.is_empty() and (_performance_active or _earned)
 	chest.visible = _earned
 	_title.text = "Chest found!" if _earned and _performance_active else "Chest ready" if _earned else "No chest this pair" if _performance_active else ""
-	_confetti.sample(_elapsed - REVEAL_SECONDS if _earned and _revealed and _performance_active
-		and not _paused and not _reduced_motion and is_visible_in_tree() else -1.0)
 	_layout()
 	if not was_visible and chest.is_visible_in_tree():
 		_warm_chest()
@@ -205,7 +201,6 @@ func _sample() -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
-		_confetti.hide()
 		_maintain_chest_render()
 	else:
 		_warm_chest()

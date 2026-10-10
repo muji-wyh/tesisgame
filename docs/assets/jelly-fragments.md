@@ -50,15 +50,19 @@ danger countdowns and Finish remain available; Voice Pop keeps its timer,
 targets and microphone running. Only actual menu, background and voice-session
 pauses freeze the effects. End-of-round results keep their existing flow.
 Synthesis and upgrades both play the full-screen burst when the chest appears.
-The shared `reward_confetti.gd` renderer also accompanies every earned-chest
-reveal in the Match, Memory, Phrase Builder, Voice Pop and Jelly Match finales.
-Those finales sample the burst from 1.8 to 3 seconds on their existing clock;
-rounds without a chest omit it. Reduced motion keeps the static reward instead.
-Each paper follows a complete rise, flutter and descent within that owner's
-reveal window. Horizontal launch speed decays into a bounded sideways drift;
-staggered particles stay opaque until they pass below the viewport bottom.
-The chest's local fade does not fade the full-screen paper. This keeps the
-existing input and completion timing without cutting the burst off at its apex.
+The shared `reward_confetti.gd` renderer accompanies earned-chest reveals in
+Match, Memory, Phrase Builder, Voice Pop and Jelly Match. GameUI owns its
+dedicated viewport CanvasLayer, so arena clipping, layout bounds and the game
+header cannot cut off the paper. A reveal starts one independent 6.4-second
+burst, keyed to the current round, mode and chest tier. The chest and Pip retain
+their original completion gates while the paper continues over the current
+game or result screen. A 0.55-0.8-second launch spreads across the full width;
+the descent then takes more than four seconds, with gentle sideways drift,
+slow flutter and a bounded terminal speed. Each piece stays opaque until its
+entire footprint passes below the viewport bottom, with staggered exits.
+Menu and background pauses hide and freeze the tail. Leaving the round or
+starting another clears it; reduced motion suppresses it. Round identity
+prevents an already announced chest from bursting again at the finale.
 
 The Jelly Match gameplay HUD uses a segmented halo around the existing chest
 art instead of a numeric fragment counter. Four segments fill to unlock the

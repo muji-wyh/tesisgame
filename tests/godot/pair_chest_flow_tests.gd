@@ -101,32 +101,37 @@ func check_reward(mode: String, slot: int) -> void:
 		if index + 1 == slot:
 			app._advance_ui(0.22)
 			check(app._status_announcement.begins_with("Chest found!"), mode + " preserves the earned chest announcement after board refresh")
-			check(app._pair_reward.snapshot().confetti_visible and app._pair_reward.chest.is_visible_in_tree(), mode + " plays chest and full-screen paper on the live board")
+			check(app._reward_confetti.snapshot().visible and app._pair_reward.chest.is_visible_in_tree(), mode + " plays chest and full-screen paper on the live board")
 			check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1),
 				mode + " reveals an ordinary tier-one chest independently of the selected world")
 			check(not app._round_celebration.is_active(), mode + " keeps completion controls out of the pair reward")
 			var elapsed: float = app._pair_reward.snapshot().elapsed
+			var paper_ages: Array = app._reward_confetti.snapshot().ages.duplicate()
 			app._show_mode_menu()
 			app._advance_ui(0.5)
-			check(not app._pair_reward.snapshot().confetti_visible and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " menu hides and pauses pair effects")
+			check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
+				and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " menu hides and pauses pair effects")
 			app._hide_mode_menu()
 			app._refresh()
 			app.on_page_hidden()
 			app._advance_ui(0.5)
-			check(not app._pair_reward.snapshot().confetti_visible and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " background pauses without repeating the drop")
+			check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
+				and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " background pauses without repeating the drop")
 			app.on_page_visible()
 			app._pair_matched(str(app.model.lesson_words[index].id))
 			check(app._pair_words.size() == index + 1, mode + " duplicate callbacks cannot count twice")
 		continue_pair(app)
 		if index == 1 and slot == 1:
 			check(app._pair_words.size() == 2 and app._pair_reward_revealing(), mode + " accepts another pair during chest animation")
-	check(app.model.phase == "won" and not app._round_celebration.is_active(), mode + " lets final paper finish before the finale")
+	check(app.model.phase == "won" and not app._round_celebration.is_active(), mode + " lets the compact chest reveal finish before the finale")
 	app._open_chest()
 	app._start_chest_hold()
 	check(not app._holding_chest and app.model.chest_state == "closed" and pieces(app) == 0, mode + " rejects hidden chest actions during the final pair effect")
 	app._advance_ui(2.5)
 	check(app._round_celebration.is_active() and app._round_celebration.snapshot().chest_announced, mode + " retains the normal finale without a second reward burst")
 	Fixture.finish_celebration(app)
+	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.size() == 1,
+		mode + " retains one shared paper tail beyond the compact chest and Pip performances")
 	app.set_reduced_motion(true)
 	app._open_chest()
 	check(app.model.chest_state == "opened" and pieces(app) == 1, mode + " opens the one saved chest")

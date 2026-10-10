@@ -7,6 +7,7 @@ const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jung
 var checks: int = 0
 var failures: int = 0
 var cues: Array[String] = []
+var reveals: Array[String] = []
 
 
 func _initialize() -> void:
@@ -33,6 +34,7 @@ func _run() -> void:
 	view.size = Vector2(960, 640)
 	view.set_toast_bounds(Rect2(100, 72, 760, 46))
 	view.cue_requested.connect(func(id: String, cue: String) -> void: cues.append(id + ":" + cue))
+	view.confetti_requested.connect(func(id: String) -> void: reveals.append(id))
 	check(view.configure("round-a", "spring", data.chests, false), "A valid round configures its existing theme chest")
 	check(not view.snapshot().active and not view.visible and view.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"The empty reward row adds no visible content or input target")
@@ -45,30 +47,28 @@ func _run() -> void:
 	check(not view.snapshot().active and not view.visible and cues.is_empty(), "No-chest feedback quietly clears without sound or paper")
 	check(view.show_pair_result("round-a", true), "A committed successful pair starts the chest result")
 	view.advance(PairReward.REVEAL_SECONDS - 0.01)
-	check(cues.is_empty() and not view.snapshot().confetti_visible, "Paper and sound wait for the actual reveal beat")
+	check(cues.is_empty() and reveals.is_empty(), "Paper and sound wait for the actual reveal beat")
 	view.advance(0.02)
-	check(cues == ["round-a:reward"] and view.snapshot().confetti_visible and view.snapshot().performance_active,
-		"The reveal emits one round-bound cue and starts viewport paper")
-	var screen: Rect2 = view._confetti.screen_rect()
-	check(screen.size.is_equal_approx(Vector2(960, 640)) and view._confetti.top_level,
-		"Confetti spans the viewport instead of the compact HUD row")
+	check(cues == ["round-a:reward"] and reveals == ["round-a"] and view.snapshot().performance_active,
+		"The reveal emits one round-bound sound and one request for the shared screen overlay")
 	check(not view.show_pair_result("round-a", true) and not view.show_pair_result("round-a", false),
 		"Duplicate or later pairs cannot restart the earned chest or replace its status")
 	var before_pause: float = view.snapshot().elapsed
 	view.set_paused(true)
 	view.advance(5.0)
-	check(view.snapshot().elapsed == before_pause and not view.snapshot().confetti_visible,
-		"Menu or background pause hides paper and preserves the current timeline")
+	check(view.snapshot().elapsed == before_pause and reveals == ["round-a"],
+		"Menu or background pause preserves the current timeline without another reveal")
 	view.set_paused(false)
 	view.advance(0.1)
-	check(view.snapshot().elapsed > before_pause and cues.size() == 1, "Resume continues without replaying the reward cue")
+	check(view.snapshot().elapsed > before_pause and cues.size() == 1 and reveals.size() == 1,
+		"Resume continues without replaying the reward cue or screen overlay request")
 	view.advance(1.0)
-	check(view.snapshot().confetti_visible and view.snapshot().performance_active,
-		"The overlay remains present through the paper descent")
+	check(view.snapshot().performance_active and reveals.size() == 1,
+		"The compact chest performance continues independently after its single reveal request")
 	view.advance(2.0)
 	check(not view.snapshot().performance_active and view.snapshot().active and view.snapshot().earned,
 		"The performance ends while its earned chest remains visible")
-	check(view.snapshot().message == "Chest ready" and view.snapshot().chest_mode == "closed" and not view.snapshot().confetti_visible,
+	check(view.snapshot().message == "Chest ready" and view.snapshot().chest_mode == "closed" and reveals.size() == 1,
 		"The compact settled status retains a closed chest without opening or repeated paper")
 	check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation), "The closed chest settles exactly to its authored dimensions")
 	for theme_id: String in THEMES:
@@ -77,7 +77,7 @@ func _run() -> void:
 		view.advance(0.5)
 		check(view.chest.theme_id == theme_id and view.chest.mode == "closed" and view.chest.piece_count() > 0,
 			"Theme " + theme_id + " reuses real closed chest artwork")
-		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation) and not view.snapshot().confetti_visible,
+		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation) and reveals == ["round-a"],
 			"Reduced motion preserves a static earned status in " + theme_id)
 		view.advance(2.0)
 		check(not view.snapshot().performance_active and view.snapshot().earned,
@@ -85,8 +85,8 @@ func _run() -> void:
 	for area: Rect2 in [Rect2(12, 64, 336, 46), Rect2(12, 40, 780, 46), Rect2(12, 64, 184, 42)]:
 		view.set_toast_bounds(area)
 		check(area.encloses(view.snapshot().toast_rect), "The status remains inside the host's reserved toolbar row")
-		check(view._title.mouse_filter == Control.MOUSE_FILTER_IGNORE and view.chest.mouse_filter == Control.MOUSE_FILTER_IGNORE
-			and view._confetti.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		check(view.mouse_filter == Control.MOUSE_FILTER_IGNORE and view._title.mouse_filter == Control.MOUSE_FILTER_IGNORE
+			and view.chest.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 			"All pair reward visuals leave gameplay input with the live board")
 	view.clear()
 	view.advance(10.0)
@@ -98,7 +98,8 @@ func _run() -> void:
 			view.clear())
 	view.show_pair_result("reentrant", true)
 	view.advance(0.3)
-	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view._confetti.visible,
+	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view.visible
+		and reveals.count("reentrant") <= 1,
 		"A host navigation during the sound cue cannot revive an obsolete reward")
 	view.free()
 	print("Pair chest reward: %d assertions, %d failures" % [checks, failures])

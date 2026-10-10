@@ -11,6 +11,7 @@ const AFTER = preload("res://assets/chests/royal/closed.png")
 var checks: int = 0
 var failures: int = 0
 var heard: Array[Dictionary] = []
+var reveals: Array[Dictionary] = []
 
 
 func _initialize() -> void:
@@ -34,6 +35,7 @@ func _run() -> void:
 	view.set_chest_anchor(Rect2(20, 16, 72, 72))
 	view.cue_requested.connect(func(cue: String) -> void:
 		heard.append({"cue": cue, "state": view.snapshot()}))
+	view.confetti_requested.connect(func() -> void: reveals.append(view.snapshot()))
 	_check_timeline(view)
 	_check_queue(view)
 	_check_reentry(view)
@@ -52,6 +54,7 @@ func _run() -> void:
 func _begin(view, previous: int = 0, tier: int = 1, reduced: bool = false) -> void:
 	view.clear()
 	heard.clear()
+	reveals.clear()
 	view.reduced_motion = reduced
 	view.enqueue(previous, tier, BEFORE, AFTER)
 
@@ -73,13 +76,14 @@ func _check_timeline(view) -> void:
 	check(view.snapshot().revealed and heard.size() == 2 and heard[1].cue == "reward"
 		and is_equal_approx(float(heard[1].state.elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
 		"The finished chest reveal and reward sound share one exact boundary")
-	check(view.snapshot().confetti and view.snapshot().kind == "synthesis",
-		"The first unlocked chest receives the same full-screen paper celebration as upgrades")
+	check(reveals.size() == 1 and reveals[0].kind == "synthesis"
+		and is_equal_approx(float(reveals[0].elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
+		"The first unlocked chest requests shared paper at its exact reveal boundary")
 	view.advance(1.43)
 	check(not view.is_active() and not view.visible and heard.size() == 2,
 		"A completed synthesis releases the scene without looping its animation")
 	view.advance(30.0)
-	check(heard.size() == 2, "An idle timeline cannot replay either reward cue")
+	check(heard.size() == 2 and reveals.size() == 1, "An idle timeline cannot replay reward sound or paper")
 	_begin(view, 1, 2)
 	var before: Dictionary = view.snapshot()
 	for delta: float in [-1.0, 0.0, INF, NAN]:
@@ -90,12 +94,11 @@ func _check_timeline(view) -> void:
 		and is_equal_approx(float(heard[0].state.elapsed), Celebration.ARRIVAL_SECONDS)
 		and is_equal_approx(float(heard[1].state.elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
 		"A stalled frame still publishes assembly and reveal at their separate authored boundaries")
-	check(view.snapshot().confetti and view.snapshot().kind == "upgrade" and view.snapshot().tier == 2,
-		"Upgrade reveals its precise level together with full-screen confetti")
+	check(reveals.size() == 1 and reveals[0].kind == "upgrade" and reveals[0].tier == 2,
+		"Upgrade publishes its precise level with one shared screen-overlay request")
 	view.reduced_motion = true
-	check(not view.snapshot().confetti, "Changing motion preferences removes the burst immediately")
 	view.reduced_motion = false
-	check(view.snapshot().confetti, "Restoring motion samples the existing milestone instead of restarting it")
+	check(reveals.size() == 1, "Changing motion preferences cannot replay an already published milestone")
 
 
 func _check_queue(view) -> void:
@@ -111,7 +114,8 @@ func _check_queue(view) -> void:
 	check(heard.size() == 3 and heard[0].cue == "assemble" and heard[1].cue == "reward"
 		and heard[2].cue == "assemble", "Queue order preserves each chest's own sound sequence")
 	view.advance(total)
-	check(not view.is_active() and heard.size() == 4 and heard[3].cue == "reward",
+	check(not view.is_active() and heard.size() == 4 and heard[3].cue == "reward"
+		and reveals.size() == 2 and reveals[0].tier == 1 and reveals[1].tier == 2,
 		"Each queued milestone completes exactly once")
 	view.enqueue(3, 3, BEFORE, AFTER)
 	view.enqueue(3, 2, BEFORE, AFTER)
@@ -148,10 +152,10 @@ func _check_reduced_motion(view) -> void:
 	view.advance(0.64)
 	check(not view.visible, "Reduced motion preserves the fragment arrival gate")
 	view.advance(0.02)
-	check(view.visible and not view.snapshot().confetti,
+	check(view.visible and reveals.is_empty(),
 		"Reduced motion shows the static HUD chest without flying paper")
 	view.advance(0.72)
-	check(view.snapshot().revealed and not view.snapshot().confetti and heard.size() == 2,
+	check(view.snapshot().revealed and reveals.is_empty() and heard.size() == 2,
 		"Reduced motion preserves the same reward gate and one sound per milestone")
 	view.advance(2.0)
 	check(not view.is_active(), "Static presentation finishes after the same duration")
@@ -166,12 +170,9 @@ func _check_layouts(view) -> void:
 		view.set_chest_anchor(anchor)
 		check(_rect(view.snapshot().anchor).is_equal_approx(anchor),
 			"%s keeps the chest effect at its supplied HUD location" % dimensions)
-		check(_rect(view.snapshot().confetti_rect).is_equal_approx(root.get_visible_rect()),
-			"%s celebrates across the current viewport instead of a replacement page" % dimensions)
 	check(view.mouse_filter == Control.MOUSE_FILTER_IGNORE
-		and view._confetti.mouse_filter == Control.MOUSE_FILTER_IGNORE
 		and view.find_children("*", "BaseButton", true, false).is_empty(),
-		"The HUD celebration and full-screen paper cannot capture a game gesture")
+		"The HUD celebration cannot capture a game gesture")
 	check(view.find_children("*", "Label", true, false).is_empty(),
 		"An in-game chest milestone does not add a modal title over the board")
 
@@ -480,15 +481,15 @@ func _check_pending_fusions(view, words: Array, manifest: Dictionary) -> void:
 	check(view._reward_presentation.visible and view.game.fragment_count == 4 and view.game.chest_count == 1,
 		"Synthesis then starts once with the previously committed single chest")
 	_advance_owner(view, 0.7)
-	check(view._reward_presentation.snapshot().confetti and view.snapshot().drag.active
+	check(view._reward_presentation.snapshot().revealed and view.snapshot().drag.active
 		and int(view.snapshot().drag.source) == other[0],
-		"Full-screen confetti starts over the current board without dropping the held jelly")
+		"The chest reveal reaches its paper-request beat without dropping the held jelly")
 	var destination: Vector2 = view._tiles[other[1]].get_global_rect().get_center()
 	view._move(destination)
 	view._release(destination)
 	check(view.game.fusions.size() == 1 and not view.snapshot().drag.active
-		and view._reward_presentation.snapshot().confetti,
-		"Releasing the preserved drag onto its partner accepts a new fusion while paper is falling")
+		and view._reward_presentation.snapshot().revealed,
+		"Releasing the preserved drag onto its partner accepts a new fusion during the reward reveal")
 	check(not view.finish_button.disabled and view.navigation_controls().has(view.finish_button),
 		"Finish remains available during an in-game chest celebration")
 	view.stop()
@@ -499,7 +500,8 @@ func _check_active_gameplay(view, words: Array, manifest: Dictionary) -> void:
 		view.configure(words, 3, Data.theme("spring"), manifest, reduced, 42)
 		view._chest_milestone(0, 1)
 		_advance_owner(view, 1.4)
-		check(view._reward_presentation.visible and view._reward_presentation.snapshot().confetti == (not reduced),
+		check(view._reward_presentation.visible and view._reward_presentation.snapshot().revealed
+			and view._reward_presentation.snapshot().reduced_motion == reduced,
 			"The input fixture reaches a live chest reveal with the selected motion preference")
 		var pair: Array[int] = _matching_pair(view)
 		check(pair.size() == 2, "The live reward screen retains an available pair")
@@ -578,8 +580,8 @@ func _check_finish_during_reward(view, words: Array, manifest: Dictionary) -> vo
 		"The finish fixture unlocks a real chest through a marked match")
 	_advance_owner(view, 2.9)
 	check(view.game.fragment_count == 4 and view.game.chest_count == 1
-		and view._reward_presentation.snapshot().confetti,
-		"A committed chest is already earned while its confetti is active")
+		and view._reward_presentation.snapshot().revealed,
+		"A committed chest is already earned when its paper-request beat is reached")
 	view._chest_milestone(1, 2)
 	check(view._reward_presentation.snapshot().queued == 2,
 		"Finishing is exercised with both active and queued visual milestones")
@@ -594,7 +596,6 @@ func _check_finish_during_reward(view, words: Array, manifest: Dictionary) -> vo
 		and int(results[0].chest_count) == 1 and int(results[0].chest_tier) == 1
 		and int(results[0].fragment_count) == 4 and int(results[0].score) == 1,
 		"Finish during confetti settles the exact earned chest once despite repeated clicks")
-	check(not view._reward_presentation.is_active() and not view._reward_presentation.visible
-		and not view._reward_presentation.snapshot().confetti,
-		"Finishing clears the active paper and every queued visual upgrade immediately")
+	check(not view._reward_presentation.is_active() and not view._reward_presentation.visible,
+		"Finishing clears every queued chest motion while its paper tail remains the host's responsibility")
 	view.stop()

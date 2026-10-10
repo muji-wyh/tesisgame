@@ -10,6 +10,7 @@ var failures: int = 0
 var _finished: Array[String] = []
 var _opened: Array[String] = []
 var _cues: Array[String] = []
+var _reveals: Array[String] = []
 
 
 func _initialize() -> void:
@@ -38,6 +39,7 @@ func _run() -> void:
 	view.performance_finished.connect(func(id: String) -> void: _finished.append(id))
 	view.open_requested.connect(func(id: String) -> void: _opened.append(id))
 	view.cue_requested.connect(func(id: String, cue: String) -> void: _cues.append(id + ":" + cue))
+	view.confetti_requested.connect(func(id: String) -> void: _reveals.append(id))
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
 	_check_reward_counts(view, data.chests)
@@ -223,18 +225,23 @@ func _check_score_summary(view, manifest: Dictionary) -> void:
 func _check_confetti(view, manifest: Dictionary) -> void:
 	_begin(view, manifest, "paper")
 	_step(view, 1.79)
-	check(not view.snapshot().confetti, "Paper waits for the chest reveal")
+	check(not _reveals.has("paper"), "The screen-overlay request waits for the chest reveal")
 	_step(view, 0.02)
-	check(view.snapshot().confetti and view._confetti.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-		"The earned chest reveals full-screen paper without capturing any input")
+	check(_reveals.count("paper") == 1 and view.snapshot().reward_revealed,
+		"The earned chest publishes exactly one round-bound screen-overlay request")
 	view.set_reduced_motion(true)
-	check(not view.snapshot().confetti, "Turning on reduced motion removes paper immediately")
 	view.set_reduced_motion(false)
-	check(view.snapshot().confetti, "Restoring motion samples the same reward clock")
+	check(_reveals.count("paper") == 1, "Changing motion preferences does not replay the already published reveal")
+	view.pause()
+	view.resume()
+	view.set_process(false)
+	_step(view, 1.81)
+	check(_reveals.count("paper") == 1, "Restarting an interrupted performance cannot request another burst for the same chest")
 	_step(view, 1.2)
-	check(not view.snapshot().confetti, "Paper clears before the invitation can be used")
+	check(view.is_ready() and _reveals.count("paper") == 1,
+		"The invitation gate completes independently of the shared paper tail")
 	view.stop()
-	check(not view.snapshot().confetti, "Stopping removes the effect immediately")
+	check(not view.snapshot().reward_revealed, "Stopping clears the local reveal identity")
 
 
 func _check_no_chest(view, manifest: Dictionary) -> void:
@@ -252,7 +259,7 @@ func _check_no_chest(view, manifest: Dictionary) -> void:
 	view.action_button.pressed.emit()
 	_step(view, 3.01)
 	check(not view.is_ready() and _opened.size() == opened_before and _finished.size() == finished_before
-		and view.snapshot().cue_log == ["step", "step-detail"],
+		and view.snapshot().cue_log == ["step", "step-detail"] and not _reveals.has("no-chest"),
 		"No-chest completion still waits for narration and omits the treasure reveal sound")
 	view.set_narration_playing(false)
 	check(view.is_ready() and view.controls() == [view.action_button] and view.action_button.visible
@@ -337,11 +344,13 @@ func _check_reduced_and_stalls(view, manifest: Dictionary) -> void:
 	_step(view, 1.51)
 	check(view.is_ready() and not view.is_processing() and is_zero_approx(view._glow.modulate.a),
 		"Reduced motion reaches the same deadline with no halo or idle processing")
+	check(not _reveals.has("reduced"), "Reduced motion never requests a moving paper overlay")
 	_begin(view, manifest, "stall")
 	var prior_cues: int = _cues.size()
 	view.advance(2.7)
 	check(_cues.size() == prior_cues and view.snapshot().cue_log.is_empty() and not view.is_ready(),
 		"A stalled frame consumes missed sound beats without a catch-up burst")
+	check(_reveals.count("stall") == 1, "A stalled frame still publishes the earned visual reveal exactly once")
 	view.advance(0.31)
 	check(view.is_ready() and _cues.size() == prior_cues, "After a stall the final deadline still resolves once")
 	var prior_finished: int = _finished.size()
@@ -408,7 +417,7 @@ func _render_review(view, manifest: Dictionary) -> void:
 		_step(view, 0.52)
 		await _capture(output + "/" + theme_id + "-leap.png")
 		_step(view, 1.56)
-		await _capture(output + "/" + theme_id + "-confetti.png")
+		await _capture(output + "/" + theme_id + "-reveal.png")
 		_step(view, 0.93)
 		await _capture(output + "/" + theme_id + "-ready.png")
 		view.stop()
@@ -418,7 +427,7 @@ func _render_review(view, manifest: Dictionary) -> void:
 		view.size = Vector2(dimensions) - Vector2(32, 74)
 		_begin(view, manifest, "render-" + str(dimensions), false)
 		_step(view, 2.08)
-		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + "-confetti.png")
+		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + "-reveal.png")
 		_step(view, 0.93)
 		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + ".png")
 		view.stop()

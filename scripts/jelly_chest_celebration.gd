@@ -2,8 +2,8 @@ extends Control
 ## Presentation only: the model commits fragments before this timeline starts.
 
 signal cue_requested(cue: String)
+signal confetti_requested
 
-const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
@@ -15,7 +15,7 @@ const PERFORMANCE_SECONDS: float = 2.15
 var reduced_motion: bool = false:
 	set(value):
 		reduced_motion = value
-		if is_instance_valid(_confetti):
+		if is_instance_valid(_models):
 			_sync()
 var _events: Array[Dictionary] = []
 var _elapsed: float = 0.0
@@ -23,7 +23,6 @@ var _serial: int = 0
 var _started: bool = false
 var _revealed: bool = false
 var _anchor := Rect2()
-var _confetti: RewardConfetti
 var _models: RewardModel
 var _model_sample: Dictionary = {}
 
@@ -32,10 +31,6 @@ func _init() -> void:
 	name = "JellyChestCelebration"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 80
-	_confetti = RewardConfetti.new()
-	# Only the paper escapes arena clipping; live cards and other effects stay in it.
-	_confetti.top_level = true
-	add_child(_confetti)
 	_models = RewardModel.new()
 	add_child(_models)
 	visibility_changed.connect(_update_model_visibility)
@@ -70,7 +65,6 @@ func clear() -> void:
 	_elapsed = 0.0
 	_started = false
 	_revealed = false
-	_confetti.hide()
 	_model_sample.clear()
 	_models.clear()
 	hide()
@@ -97,6 +91,10 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 				return 0.0
 		if not _revealed and _elapsed >= ARRIVAL_SECONDS + REVEAL_SECONDS:
 			_revealed = true
+			if not reduced_motion:
+				confetti_requested.emit()
+				if generation != _serial or not is_active():
+					return 0.0
 			cue_requested.emit("reward")
 			if generation != _serial or not is_active():
 				return 0.0
@@ -120,7 +118,6 @@ func _sync() -> void:
 		var tier: int = int(event.tier) if _revealed else int(event.previous_tier)
 		if tier > 0:
 			_model_sample = _models.sample(tier, _motion(age).yaw)
-	_sync_confetti()
 	queue_redraw()
 
 
@@ -134,12 +131,6 @@ func _prepare_models() -> void:
 func _update_model_visibility() -> void:
 	if is_instance_valid(_models):
 		_models.set_active(is_visible_in_tree() and not reduced_motion)
-
-
-func _sync_confetti() -> void:
-	var age: float = _elapsed - ARRIVAL_SECONDS
-	_confetti.sample(age - REVEAL_SECONDS if is_active() and _revealed and not reduced_motion else -1.0,
-		PERFORMANCE_SECONDS - REVEAL_SECONDS)
 
 
 func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
@@ -290,11 +281,4 @@ func snapshot() -> Dictionary:
 		"tier": int(_events[0].tier) if is_active() else 0,
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
-		"confetti": _confetti.is_visible_in_tree(),
-		"anchor": [_anchor.position.x, _anchor.position.y, _anchor.size.x, _anchor.size.y],
-		"confetti_rect": _screen_bounds()}
-
-
-func _screen_bounds() -> Array:
-	var screen: Rect2 = _confetti.get_global_transform_with_canvas() * _confetti.screen_rect()
-	return [screen.position.x, screen.position.y, screen.size.x, screen.size.y]
+		"anchor": [_anchor.position.x, _anchor.position.y, _anchor.size.x, _anchor.size.y]}

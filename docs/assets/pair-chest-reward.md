@@ -34,8 +34,10 @@ the inline effect.
 
 A new earned chest appears with a short grounded hop and settles beside
 "Chest found!". The 0.12-second reveal drives its `reward` cue, the small local
-light accent and the shared viewport confetti. Paper receives its full 1.43-second
-trajectory; the presentation ends at 1.95 seconds. The closed chest then remains
+light accent and the shared viewport confetti. GameUI keeps the paper in its own
+CanvasLayer for a 6.4-second burst, including over four seconds of slow descent.
+The compact chest presentation still ends at 1.95 seconds; the paper tail continues
+through the same round's result and opening screens. The closed chest then remains
 as "Chest ready" until the host clears the round. Later pair callbacks cannot
 restart the earned chest or overwrite it with an unsuccessful drop.
 
@@ -80,11 +82,13 @@ without running an idle or opening animation.
   let the owning game control timing and lifecycle without pausing gameplay.
 - `snapshot()` distinguishes `performance_active` from a settled earned status.
   A final pair may finish its visual before the owner moves to a result page.
+- `confetti_requested(round_id)` emits once at reveal; GameUI owns the viewport
+  layer, independent clock and round-scoped deduplication.
 - `cue_requested(round_id, "reward")` is presentation-only; the host retains
   pronunciation ducking, mute handling and audio cancellation.
 
 `tests/godot/pair_chest_reward_tests.gd` covers source themes, timing, viewport
-paper duration, duplicate and stale results, pause, reduced motion, narrow HUD
+reveal signaling, duplicate and stale results, pause, reduced motion, narrow HUD
 bounds, pointer pass-through, clearing and reentrant navigation from a cue.
 `pair_chest_progress_tests.gd` covers the separate pity records, durable
 reservations, save failures, reload recovery, legacy migration, stale browser

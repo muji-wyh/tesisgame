@@ -62,8 +62,11 @@ func _test_scene(dimensions: Vector2i) -> void:
 	await settle()
 	var awards: Array[int] = []
 	var cues: Array[String] = []
+	var reveals: Array[int] = []
 	view.chest_earned.connect(func(count: int) -> void: awards.append(count))
 	view.reward_cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	view._reward_presentation.confetti_requested.connect(func() -> void:
+		reveals.append(int(view._reward_presentation.snapshot().tier)))
 	check(view.snapshot().fragment_count == 0 and view.snapshot().hud.chests.text == "0 / 4",
 		"A new round shows the four-fragment goal")
 	check(view.snapshot().hud.next_chest.text == "CHEST FRAGMENTS" and view.snapshot().hud.score.text == "0 POINTS",
@@ -87,9 +90,10 @@ func _test_scene(dimensions: Vector2i) -> void:
 			view.advance_reward_presentation(1.4)
 			check(view.snapshot().reward_presentation.revealed and view._displayed_chest_tier == tier,
 				"The synchronized reveal updates the displayed chest tier")
-			check(bool(view.snapshot().reward_presentation.confetti), "Unlocks and upgrades both play the shared full-screen confetti")
-			check(view.clip_contents and view._reward_presentation._confetti.top_level,
-				"Only confetti escapes arena clipping while live target and fragment effects stay bounded")
+			check(reveals.size() == tier and reveals.back() == tier,
+				"Unlocks and upgrades each request one shared screen-overlay burst at reveal")
+			check(view.clip_contents and view._reward_presentation.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+				"Live target and fragment effects stay bounded while the host owns nonblocking paper")
 			check(not view._reward_icon.visible and view._hud.visible and not view._gate.visible,
 				"The animated HUD chest replaces only its static icon while gameplay remains visible")
 			var hits: int = view.game.hits
@@ -133,10 +137,12 @@ func _test_interruption() -> void:
 	view.configure(WORDS, false, 7)
 	view.set_process(false)
 	view.set_listening(true, true, "Listening.")
+	var reveals: Array[bool] = []
+	view._reward_presentation.confetti_requested.connect(func() -> void: reveals.append(true))
 	for index in range(4):
 		strike(view, true, "pause-%d" % index)
 	view.advance_reward_presentation(1.5)
-	check(view.snapshot().reward_presentation.confetti, "The interruption fixture reaches visible confetti")
+	check(reveals.size() == 1, "The interruption fixture requests one paper burst")
 	var elapsed: float = float(view.snapshot().reward_presentation.elapsed)
 	view.pause()
 	view.advance_reward_presentation(5.0)
@@ -144,7 +150,7 @@ func _test_interruption() -> void:
 		"A menu pause freezes the timeline and reveals the listening recovery gate")
 	for reduce: bool in [true, false]:
 		view.set_reduced_motion(reduce)
-		check(not view.snapshot().reward_presentation.visible and not view.snapshot().reward_presentation.confetti
+		check(not view.snapshot().reward_presentation.visible and reveals.size() == 1
 			and view.snapshot().reward_presentation.elapsed == elapsed,
 			"Motion preferences cannot reveal a paused chest over the listening recovery gate")
 	view.set_listening(true, true, "Listening.")
@@ -153,15 +159,15 @@ func _test_interruption() -> void:
 	view.hide()
 	view.advance_reward_presentation(4.0)
 	check(view.snapshot().reward_paused and view.snapshot().reward_presentation.elapsed == elapsed
-		and not view._reward_presentation._confetti.is_visible_in_tree(),
-		"Hiding behind a page or collection removes top-level confetti and pauses the active milestone")
+		and not view._reward_presentation.is_visible_in_tree() and reveals.size() == 1,
+		"Hiding behind a page pauses the active milestone without requesting another paper burst")
 	view.show()
 	view.set_process(false)
 	view.set_listening(true, true, "Listening.")
 	view.set_reduced_motion(true)
 	view.advance_reward_presentation(0.5)
-	check(view.snapshot().reward_presentation.reduced_motion and not view.snapshot().reward_presentation.confetti,
-		"Reduced motion preserves the milestone without motion or confetti")
+	check(view.snapshot().reward_presentation.reduced_motion and reveals.size() == 1,
+		"Reduced motion preserves the milestone without requesting further motion")
 	view.stop()
 	view.advance_reward_presentation(4.0)
 	check(not view._listening and not view.reward_presentation_active() and view._loot_flights.is_empty(),
@@ -219,7 +225,7 @@ func _test_live_queue_and_expiry() -> void:
 		"Continuous recognized words can queue the next chest upgrade during its unlock animation")
 	view.advance_reward_presentation(1.5)
 	view._advance_game(0.1)
-	check(view.game.phase == "running" and view.snapshot().reward_presentation.confetti,
+	check(view.game.phase == "running" and view.snapshot().reward_presentation.revealed,
 		"Targets and the live clock continue under the queued milestone confetti")
 	var finished: Array[Dictionary] = []
 	view.round_finished.connect(func(result: Dictionary) -> void: finished.append(result))
@@ -227,9 +233,9 @@ func _test_live_queue_and_expiry() -> void:
 	view.advance_reward_presentation(10.0)
 	check(finished.size() == 1 and finished[0].chest_tier == 2 and finished[0].chest_count == 1,
 		"Natural expiry during confetti settles the final accepted chest exactly once")
-	check(not view.reward_presentation_active() and not view.snapshot().reward_presentation.confetti
+	check(not view.reward_presentation_active()
 		and view._loot_flights.is_empty() and not view._listening and view._results.visible,
-		"Natural expiry clears old milestone visuals before presenting the full results")
+		"Natural expiry clears local milestone motion before presenting the full results")
 	check(view.controls().has(view.chests_button) and view.default_focus() == view.chests_button,
 		"Cancelled milestone animations cannot block results controls")
 	view.queue_free()
@@ -256,7 +262,7 @@ func _test_listening_recovery() -> void:
 		and float(view.snapshot().reward_presentation.elapsed) == elapsed,
 		"Recognizer rollover freezes the milestone without covering the retained playfield")
 	view.set_listening(true, true, "Listening.")
-	check(view._listening and view.game.phase == "running" and view.snapshot().reward_presentation.confetti
+	check(view._listening and view.game.phase == "running" and view.snapshot().reward_presentation.revealed
 		and not view._reward_icon.visible
 		and view.game.round_id == round_id, "Recognizer rollover resumes the same game and milestone together")
 	view.set_listening(false, false, "Microphone unavailable.")
