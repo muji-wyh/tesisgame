@@ -119,9 +119,9 @@ func _check_opening(view) -> void:
 		check(view.game.cells.size() == 6 and is_equal_approx(view.game.spawn_elapsed, 2.0),
 			"Pausing the opening preserves the remaining reading time")
 		view.pause(false)
-		_advance(view, 4.99)
+		_advance(view, 7.99)
 		check(view.game.cells.size() == 6 and _arrivals(view).is_empty(),
-			"The opening has no automatic arrivals before the complete seven seconds")
+			"The opening has no automatic arrivals before the complete ten seconds")
 		_advance(view, 0.02)
 		check(_arrivals(view).size() == 4 and view.game.cells.size() == 10,
 			"The first automatic batch uses the normal visible four-tile descent")

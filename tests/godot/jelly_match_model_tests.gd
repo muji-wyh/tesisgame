@@ -156,8 +156,8 @@ func _test_configuration() -> void:
 	check(model.configure(words, 3, 19), "A pictured eligible curriculum starts Jelly Match")
 	check(model.phase == "playing" and model.cells.size() == INITIAL_COUNT,
 		"The initial board has only six settled tiles and no automatic arrivals")
-	check(model.generated_tiles == INITIAL_COUNT and model.spawn_interval == 7.0,
-		"Each four-tile drop leaves seven seconds to read and match")
+	check(model.generated_tiles == INITIAL_COUNT and model.spawn_interval == 10.0,
+		"Each opening four-tile drop leaves ten seconds to read and match")
 	var initial_ids: Array[String] = []
 	var initial_chests: int = 0
 	for cell in model.cells:
@@ -214,11 +214,11 @@ func _test_supply_and_gravity() -> void:
 	for seed_value in range(12):
 		var model = Model.new()
 		model.configure(_vocabulary(), 3, seed_value)
-		model.step(6.999)
-		check(model.cells.size() == INITIAL_COUNT, "The next drop does not arrive before seven seconds")
+		model.step(9.999)
+		check(model.cells.size() == INITIAL_COUNT, "The next drop does not arrive before ten seconds")
 		model.step(0.001)
 		check(model.cells.size() == INITIAL_COUNT + Model.DROP_COUNT and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT,
-			"The seven-second boundary supplies exactly four tiles")
+			"The ten-second boundary supplies exactly four tiles")
 		for drop_index in range(4):
 			model.step(model.spawn_interval)
 			_assert_board(model, "Seed %d, drop %d" % [seed_value, drop_index + 2])
@@ -632,7 +632,7 @@ func _test_fusion_timeline() -> void:
 		"Chest credit and its cue happen once after a marked pair clears")
 	check(model.try_merge(pair[0], pair[1]) == "ignored" and events.attempts.size() == 1,
 		"Removed tile IDs cannot replay learning or rewards")
-	check(is_equal_approx(model.spawn_interval, 6.93), "The first clear makes only a small change to the seven-second pace")
+	check(is_equal_approx(model.spawn_interval, 9.95), "The first clear gently reduces the ten-second interval by 0.05 seconds")
 	_assert_board(model, "Completed fusion")
 
 
@@ -1054,7 +1054,7 @@ func _test_long_round() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure([_word("repeat")], 3, 2)
-	for index in range(75):
+	for index in range(100):
 		while _pair(model, false).is_empty():
 			model.step(model.spawn_interval - model.spawn_elapsed)
 		model.step(Model.SETTLE_SECONDS)
@@ -1064,10 +1064,10 @@ func _test_long_round() -> void:
 			break
 		check(model.try_merge(pair[0], pair[1]) == "correct", "Long-round matching remains responsive")
 		model.step(Model.FUSION_SECONDS)
-		check(model.spawn_interval >= 3.5 and model.spawn_interval <= 7.0,
+		check(model.spawn_interval >= 6.0 and model.spawn_interval <= 10.0,
 			"Spawn acceleration always remains within its specified limits")
-		if model.cleared_pairs in [20, 50]:
-			var expected_interval: float = 5.6 if model.cleared_pairs == 20 else 3.5
+		if model.cleared_pairs in [20, 50, 80]:
+			var expected_interval: float = 9.0 if model.cleared_pairs == 20 else 7.5 if model.cleared_pairs == 50 else 6.0
 			check(is_equal_approx(model.spawn_interval, expected_interval),
 				"%d completed pairs leave %.1f seconds between four-tile drops" % [model.cleared_pairs, expected_interval])
 			var generated: int = model.generated_tiles
@@ -1077,15 +1077,15 @@ func _test_long_round() -> void:
 			model.step(0.001)
 			check(model.generated_tiles == generated + expected_drop,
 				"An accelerated boundary dispatches one batch, limited only by available space")
-		elif model.cleared_pairs == 49:
-			check(model.spawn_interval > 3.5, "The fastest pace is not reached before fifty completed pairs")
+		elif model.cleared_pairs == 79:
+			check(model.spawn_interval > 6.0, "The fastest pace is not reached before eighty completed pairs")
 		_assert_board(model, "Long-round clear %d" % index)
-	check(model.cleared_pairs == 75 and model.spawn_interval == 3.5, "Long play holds the minimum three-and-a-half-second interval")
+	check(model.cleared_pairs == 100 and model.spawn_interval == 6.0, "Long play holds the minimum six-second interval")
 	check(model.chest_count > 3, "Jelly rewards have no unrelated three-chest cap")
 	var awarded: int = 0
 	for count in events.chests:
 		awarded += int(count)
-	check(awarded == model.chest_count and events.attempts.size() == 75,
+	check(awarded == model.chest_count and events.attempts.size() == 100,
 		"Repeated play credits exactly one success per clear and exactly its marked tiles")
 	var attempt_ids: Dictionary = {}
 	for attempt in events.attempts:

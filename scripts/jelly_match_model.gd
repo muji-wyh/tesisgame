@@ -19,9 +19,9 @@ const UPCOMING_COUNT: int = DROP_COUNT
 const SUPPLY_BATCH_PAIRS: int = 3
 const SETTLE_SECONDS: float = Motion.MAX_SETTLE_SECONDS
 # Leave time to listen, find the picture, and drag before the next drop arrives.
-const INITIAL_SPAWN_INTERVAL: float = 7.0
-const MIN_SPAWN_INTERVAL: float = 3.5
-const SPEEDUP_PER_PAIR: float = 0.07
+const INITIAL_SPAWN_INTERVAL: float = 10.0
+const MIN_SPAWN_INTERVAL: float = 6.0
+const SPEEDUP_PER_PAIR: float = 0.05
 const FUSION_SECONDS: float = 1.05
 const POP_SECONDS: float = 0.7
 const FULL_SECONDS: float = 8.0

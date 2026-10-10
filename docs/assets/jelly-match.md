@@ -78,15 +78,17 @@ for planted compression, 105 ms for a restrained rebound and 110 ms to settle.
 Longer falls stretch the gel slightly more in the air and compress it more
 firmly on contact (up to 24% of its height). The foot stays planted throughout
 the single rebound, with no repeated bouncing. The landing cue and projection
-retirement share the actual contact boundary. The four-tile supply interval
-and eight-second rescue countdown are unchanged.
+retirement share the actual contact boundary. The eight-second rescue countdown
+is independent of this motion.
 Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
 
 Supply dispatches four tiles together. Six settled tiles provide the initial
-matching layout. The first automatic batch waits for the full seven-second
+matching layout. The first automatic batch waits for the full ten-second
 interval; the upcoming area can still release it immediately on request.
-New rounds and replays receive the same opening interval. Four committed upcoming
+Each cleared pair shortens the interval by 0.05 seconds, down to a six-second
+minimum after 80 pairs. This leaves nine seconds at 20 pairs and 7.5 seconds at
+50 pairs. New rounds and replays receive the same opening interval. Four committed upcoming
 tiles appear outside the well: a compact two-by-two group on wide screens and
 a horizontal strip above it on phones. There is no visible heading or countdown
 bar. Their picture/word kind, artwork and chest markers come from the actual
