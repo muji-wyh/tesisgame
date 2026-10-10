@@ -21,6 +21,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Expanded vocabulary artwork](mulberry-vocabulary.md) | 900 sourced Mulberry illustrations, license, curriculum manifests, and reproducible import |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |
+| [Jelly chest fragments](jelly-fragments.md) | One upgradable chest per round, milestone motion reference, acquired confetti atlas, source rights and restoration |
 | [Reference pair feedback](pair-feedback-audio.md) | Match, Memory, and Phrase Builder right/wrong excerpts, source provenance, extraction and required build assets |
 | [Reference menu click](ui-click-audio.md) | Shared native and loading-screen selection cue, source provenance, extraction, and required build asset |
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |

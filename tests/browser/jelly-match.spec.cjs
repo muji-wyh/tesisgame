@@ -186,6 +186,8 @@ async function expectNoJudgment(page, before, savedGrowth, tiles) {
   expect(after.error).toBe(before.error);
   expect(after.cleared_pairs).toBe(before.cleared_pairs);
   expect(after.score).toBe(before.score);
+  expect(after.fragment_count).toBe(before.fragment_count);
+  expect(after.chest_tier).toBe(before.chest_tier);
   expect(after.chest_count).toBe(before.chest_count);
   for (const tile of tiles) expect(after.tiles.some(item => item.id === tile.id)).toBe(true);
   expect(await growthSave(page), 'Listening must not persist either a correct or incorrect learning attempt').toBe(savedGrowth);
@@ -200,6 +202,26 @@ async function expectClear(page, count, tiles) {
   return state;
 }
 
+async function earnFragments(page, total) {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return state.phase === 'playing' && !state.reward_presentation?.active && !state.fusions?.length;
+    }, { timeout: 15000, message: 'Chest synthesis or upgrade finishes before the next real drag' }).toBe(true);
+    const state = await jelly(page);
+    if (state.fragment_count >= total) return state;
+    let chosen = pair(state, { chest: true }) || pair(state);
+    if (!chosen) {
+      if (state.preview.enabled) await pressRect(page, state.preview.rect);
+      chosen = await availablePair(page);
+    }
+    const before = await jelly(page);
+    await dragPair(page, chosen);
+    await expectClear(page, before.cleared_pairs + 1, chosen);
+  }
+  throw new Error(`Real Jelly clears did not reach ${total} fragments.`);
+}
+
 async function observeTimeline(page) {
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
@@ -207,7 +229,7 @@ async function observeTimeline(page) {
     const record = () => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       window.jellyObservedTimeline.push({ at: performance.now(), phase: state.phase,
-        cleared: state.cleared_pairs, chests: state.chest_count,
+        cleared: state.cleared_pairs, fragments: state.fragment_count, chests: state.chest_count, tier: state.chest_tier,
         generated: state.generated_tiles, spawnInterval: state.spawn_interval,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
         effect: state.fusion_effect,
@@ -691,7 +713,7 @@ test.describe('concurrent jelly gestures', () => {
       }, { message: 'Two independent settled pairs are available for overlapping real gestures' }).toBeGreaterThanOrEqual(2);
       const [first, second] = pairs;
       const before = await jelly(page), bounds = await metrics(page), learning = await growth(page);
-      const expectedChests = [...first, ...second].filter(tile => tile.chest).length;
+      const expectedFragments = [...first, ...second].filter(tile => tile.chest).length;
       const expectedLearning = new Map();
       for (const tiles of [first, second]) {
         const id = tiles[0].word.id;
@@ -705,7 +727,7 @@ test.describe('concurrent jelly gestures', () => {
           window.jellyConcurrentTimeline.push({ at: performance.now(), cleared: state.cleared_pairs,
             generated: state.generated_tiles, spawnElapsed: state.spawn_elapsed, drag: state.drag,
             contact: state.contact,
-            finishDisabled: state.finish?.disabled, chests: state.chest_count,
+            finishDisabled: state.finish?.disabled, fragments: state.fragment_count, chests: state.chest_count,
             fusions: (state.fusions || []).map(item => ({ id: item.attempt_id, elapsed: item.elapsed })),
             effects: state.fusion_effects || [] });
         };
@@ -747,7 +769,8 @@ test.describe('concurrent jelly gestures', () => {
         expect(completed.fusions).toEqual([]);
         expect(completed.fusion_effects).toEqual([]);
         expect(completed.finish.disabled).toBe(false);
-        expect(completed.chest_count).toBe(before.chest_count + expectedChests);
+        expect(completed.fragment_count).toBe(before.fragment_count + expectedFragments);
+        expect(completed.chest_count).toBe(0);
         for (const tile of [...first, ...second]) expect(completed.tiles.some(item => item.id === tile.id)).toBe(false);
         for (const [id, count] of expectedLearning) {
           await expect.poll(async () => (await growth(page)).streaks[id]).toBe(count);
@@ -773,7 +796,8 @@ test.describe('concurrent jelly gestures', () => {
         }
         await page.waitForTimeout(300);
         expect((await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 2);
-        expect((await jelly(page)).chest_count).toBe(before.chest_count + expectedChests);
+        expect((await jelly(page)).fragment_count).toBe(before.fragment_count + expectedFragments);
+        expect((await jelly(page)).chest_count).toBe(0);
         for (const [id, count] of expectedLearning) expect((await growth(page)).streaks[id]).toBe(count);
       } finally {
         if (down) {
@@ -818,9 +842,17 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   if (info.project.use.browserName === 'chromium') await touchDragPair(page, marked);
   else await dragPair(page, marked);
   const completed = await expectClear(page, 2, marked);
-  expect(completed.chest_count).toBe(1);
-  expect(completed.loot.count).toBe(1);
+  expect(completed.fragment_count).toBe(1);
+  expect(completed.chest_count).toBe(0);
+  expect(completed.loot.fragments).toBe(1);
+  expect(completed.loot.count).toBe(0);
   await expect.poll(async () => (await growth(page)).streaks[marked[0].word.id]).toBe(markedBefore + 1);
+  const unlocked = await earnFragments(page, 4);
+  expect(unlocked.chest_count).toBe(1);
+  expect(unlocked.chest_tier).toBe(1);
+  expect(unlocked.loot.count).toBe(1);
+  const finalScore = unlocked.score;
+  const learningAfterPlay = await growthSave(page);
   await page.screenshot({ path: info.outputPath('jelly-earned-chest.png'), scale: 'css' });
 
   await pressControl(page, (await jelly(page)).finish);
@@ -828,17 +860,18 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
     { message: 'Earned loot receives the shared Pip celebration' }).toBe(true);
   const summary = await celebrationState(page);
   expect(summary.title).toBe('Round results');
-  expect(summary.score).toBe(2);
-  expect(summary.caption).toBe('Score: 2 · Chests: 1');
+  expect(summary.score).toBe(finalScore);
+  expect(summary.caption).toBe(`Score: ${finalScore} · Chest Lv. 1`);
   expect((await jelly(page)).result.visible, 'Results cannot be used during the celebration').toBe(false);
   await expect.poll(async () => (await jelly(page)).result.visible,
     { timeout: 15000, message: 'The performance naturally reveals the Jelly result' }).toBe(true);
   const result = await jelly(page);
   expect(result.phase).toBe('finished');
-  expect(result.score).toBe(2);
+  expect(result.score).toBe(finalScore);
   expect(result.result.title).toBe('Round results');
-  expect(result.result.caption).toBe('Score: 2 · Chests: 1');
+  expect(result.result.caption).toBe(`Score: ${finalScore} · Chest Lv. 1`);
   expect(result.chest_count).toBe(1);
+  expect(result.chest_tier).toBe(1);
   expect(result.result.open.text).toBe('Open chest');
   expectInCanvas(result.result.open.rect, await metrics(page), 'The earned-chest action fits the screen');
   expectInCanvas(result.result.replay.rect, await metrics(page), 'The replay action fits the screen');
@@ -876,8 +909,7 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   await rendered(page);
   expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS), 'An opened chest cannot write a second receipt').toBe(afterOpen);
   expect(await page.evaluate(key => localStorage.getItem(key), POP_REWARDS), 'Jelly rewards never overwrite Pop treasure').toBe(oldPopSave);
-  expect((await growth(page)).streaks[first[0].word.id]).toBe(firstBefore + 1);
-  expect((await growth(page)).streaks[marked[0].word.id]).toBe(markedBefore + 1);
+  expect(await growthSave(page), 'Opening a chest never adds another learning attempt').toBe(learningAfterPlay);
   await page.screenshot({ path: info.outputPath('jelly-opened-treasure.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
@@ -888,15 +920,19 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   const marked = await availablePair(page, { chest: true });
   if (info.project.use.browserName === 'chromium') await touchDragPair(page, marked);
   else await dragPair(page, marked);
-  const earned = await expectClear(page, 1, marked);
+  const firstFragment = await expectClear(page, 1, marked);
+  expect(firstFragment.fragment_count).toBe(1);
+  expect(firstFragment.chest_count).toBe(0);
+  const earned = await earnFragments(page, 4);
   expect(earned.chest_count).toBe(1);
+  expect(earned.chest_tier).toBe(1);
 
   await pressControl(page, earned.finish);
   await expect.poll(async () => (await celebrationState(page)).active,
     { message: 'The earned chest completes its ordinary celebration before replay' }).toBe(true);
   await expect.poll(async () => (await jelly(page)).result.visible, { timeout: 15000 }).toBe(true);
   const firstResult = await jelly(page);
-  expect(firstResult.result.caption).toBe('Score: 1 · Chests: 1');
+  expect(firstResult.result.caption).toBe(`Score: ${earned.score} · Chest Lv. 1`);
   const savedTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
   expect(savedTreasure).toContain(firstResult.round_id);
 
@@ -910,6 +946,8 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   expect((await treasure(page)).visible, 'Unopened rewards do not interrupt replay').toBe(false);
   expect((await metrics(page)).library.visible, 'Replay does not send the player to mode selection').toBe(false);
   expect(replay.score).toBe(0);
+  expect(replay.fragment_count).toBe(0);
+  expect(replay.chest_tier).toBe(0);
   expect(replay.chest_count).toBe(0);
   expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS),
     'Starting the next board leaves the earned treasure durable').toBe(savedTreasure);
@@ -927,7 +965,7 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   expect(secondResult.round_id).toBe(replay.round_id);
   expect(secondResult.score).toBe(0);
   expect(secondResult.chest_count).toBe(0);
-  expect(secondResult.result.caption).toBe('Score: 0 · Chests: 0');
+  expect(secondResult.result.caption).toBe('Score: 0 · Fragments: 0 / 4');
   expect(secondResult.result.open.visible, 'A zero-loot result still offers the saved unopened chest').toBe(true);
   expect(secondResult.result.open.text).toBe('Open chest');
   expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(savedTreasure);
@@ -1029,7 +1067,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(ended.cleared_pairs).toBe(1);
   expect(ended.score).toBe(1);
   expect(ended.result.title).toBe('Round results');
-  expect(ended.result.caption).toBe('Score: 1 · Chests: 0');
+  expect(ended.result.caption).toBe('Score: 1 · Fragments: 0 / 4');
   expect(ended.chest_count).toBe(0);
   expect(ended.result.open.visible).toBe(false);
   expect(ended.result.replay.visible).toBe(true);

@@ -37,6 +37,10 @@ func _verify() -> void:
 		printerr("The startup pack must preserve the three original chest styles and five distinct live models.")
 		failures += 1
 	print("Treasure: %d chest types and %d live animated models checked in the startup pack." % [catalog.chests.styles.size(), chest_models])
+	var confetti := load("res://assets/images/jelly-match/confetti.png") as Texture2D
+	if confetti == null or confetti.get_size() != Vector2(512, 512):
+		printerr("The reviewed Jelly chest-upgrade confetti atlas is missing from the startup pack.")
+		failures += 1
 	failures += _verify_excluded_content_absent()
 	for name in ["body", "heading"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font

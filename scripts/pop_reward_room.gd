@@ -11,6 +11,7 @@ const UiClick = preload("res://scripts/ui_click.gd")
 const State = preload("res://scripts/pop_reward_state.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const TreasureScroll = preload("res://scripts/treasure_scroll.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 
@@ -26,6 +27,7 @@ var _cards: Array[Dictionary] = []
 var _manifest: Dictionary = {}
 var _configured_id: String = ""
 var _draft_themes: Array[String] = []
+var _draft_tiers: Array[int] = []
 var _active: int = -1
 var _holding: bool = false
 var _opening: bool = false
@@ -142,7 +144,7 @@ func has_pending() -> bool:
 	return _save_failed or _unsaved_index >= 0 or rewards.has_pending()
 
 
-func configure(id: String, chest_count: int, preferred_theme: String, manifest: Dictionary, reduce: bool) -> bool:
+func configure(id: String, chest_count: int, preferred_theme: String, manifest: Dictionary, reduce: bool, final_chest_tier: int = 0) -> bool:
 	_manifest = manifest
 	reduced_motion = reduce
 	if not _configured_id.is_empty() and _configured_id != id and (_unsaved_index >= 0 or _save_failed):
@@ -157,7 +159,10 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 	_page_index = 0
 	var count: int = maxi(0, chest_count) if max_chests == 0 else clampi(chest_count, 0, max_chests)
 	_draft_themes = _choose_themes(id, count, preferred_theme, allow_repeated_themes)
-	_save_failed = not rewards.create_batch(id, _draft_themes)
+	_draft_tiers.clear()
+	if storage_kind == "jelly" and final_chest_tier > 0 and count == 1:
+		_draft_tiers.append(final_chest_tier)
+	_save_failed = not rewards.create_batch(id, _draft_themes, _draft_tiers)
 	if not _save_failed:
 		_sync_saved_batch()
 	_unsaved_index = -1
@@ -169,8 +174,11 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 func _sync_saved_batch() -> void:
 	_configured_id = rewards.round_id
 	_draft_themes.clear()
+	_draft_tiers.clear()
 	for entry in rewards.entries:
 		_draft_themes.append(str(entry.theme))
+		if storage_kind == "jelly":
+			_draft_tiers.append(int(entry.get("tier", 0)))
 
 
 func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
@@ -255,6 +263,13 @@ func _build_cards() -> void:
 		panel.add_child(art)
 		art.configure_skin(palette, _manifest)
 		art.reduced_motion = reduced_motion
+		var tier: int = int(entry.get("tier", 0))
+		var tier_label := Style.label(JellyRewardProgress.title_for_tier(tier) if tier > 0 else "", 14)
+		tier_label.name = "ChestTier"
+		tier_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tier_label.add_theme_color_override("font_color", Style.GOOD)
+		tier_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.add_child(tier_label)
 		var button := Button.new()
 		button.name = "%sTreasureChest%d" % ["Jelly" if storage_kind == "jelly" else "Pop", entry_index]
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -271,7 +286,8 @@ func _build_cards() -> void:
 		hint.add_child(caption)
 		_cards.append({"panel": panel, "light": light, "art": art, "entry_index": entry_index,
 			"button": button, "hint": hint, "caption": caption,
-			"theme": str(entry.theme), "opened": bool(entry.opened), "announced": bool(entry.opened)})
+			"theme": str(entry.theme), "tier": tier, "tier_label": tier_label,
+			"opened": bool(entry.opened), "announced": bool(entry.opened)})
 		button.focus_entered.connect(_ensure_chest_visible.bind(button))
 		button.focus_entered.connect(_refresh_captions)
 		button.mouse_entered.connect(_refresh_captions)
@@ -300,8 +316,11 @@ func _batch_entries() -> Array[Dictionary]:
 	if rewards.round_id == _configured_id:
 		entries.assign(rewards.entries)
 	if entries.is_empty():
-		for theme_id in _draft_themes:
-			entries.append({"theme": theme_id, "opened": false})
+		for index in range(_draft_themes.size()):
+			var entry: Dictionary = {"theme": _draft_themes[index], "opened": false}
+			if index < _draft_tiers.size() and _draft_tiers[index] > 0:
+				entry["tier"] = _draft_tiers[index]
+			entries.append(entry)
 	return entries
 
 
@@ -511,7 +530,7 @@ func retry_save() -> void:
 		_save_failed = false
 		configure_saved(_manifest, reduced_motion)
 	else:
-		_save_failed = not rewards.create_batch(_configured_id, _draft_themes)
+		_save_failed = not rewards.create_batch(_configured_id, _draft_themes, _draft_tiers)
 		if not _save_failed:
 			_sync_saved_batch()
 			_build_cards()
@@ -589,6 +608,8 @@ func _refresh_captions() -> void:
 		elif index == _active:
 			message = "You can let go!" if card.art.opening_committed() else "Keep holding..."
 		card.button.accessibility_name = str(Data.theme(card.theme).name) + " chest. " + message
+		if int(card.tier) > 0:
+			card.button.accessibility_name = "Tier %d. " % int(card.tier) + card.button.accessibility_name
 		if index == _active and not card.art.opening_committed():
 			card.button.accessibility_name += " Release to cancel."
 		card.caption.text = message
@@ -619,6 +640,7 @@ func _refresh() -> void:
 	_notice.text = rewards.error if _save_failed else ""
 	_notice.visible = _save_failed
 	var state: Dictionary = snapshot()
+	_heading.text = JellyRewardProgress.title_for_tier(int(_cards[0].tier)) if state.chest_count == 1 and not _cards.is_empty() and int(_cards[0].tier) > 0 else "Your treasure"
 	_progress.text = "%d / %d opened" % [state.opened_count, state.chest_count]
 	var pages: int = _page_count()
 	_previous_page.visible = pages > 1
@@ -701,6 +723,13 @@ func _layout() -> void:
 		card.button.size = Vector2(card_w * 0.84, card_h - 12 / s)
 		card.art.position = Vector2.ZERO
 		card.art.size = Vector2(card_w, art_h)
+		card.tier_label.visible = int(card.tier) > 0 and _batch_entries().size() > 1
+		card.tier_label.position = Vector2.ZERO
+		card.tier_label.size = Vector2(card_w, 24 / s)
+		card.tier_label.add_theme_font_size_override("font_size", ceili(14 / s))
+		if card.tier_label.visible:
+			card.art.position.y = 24 / s
+			card.art.size.y -= 24 / s
 		card.light.size = Vector2.ONE * minf(card_w, art_h * 1.15)
 		card.light.position = Vector2((card_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
 		var hint_width: float = minf(card.button.size.x, 184 / s)
@@ -781,6 +810,7 @@ func snapshot() -> Dictionary:
 		var rect: Rect2 = card.button.get_global_rect()
 		var art_rect: Rect2 = card.art.get_global_rect()
 		entries.append({"index": card.entry_index, "theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
+			"tier": int(card.tier),
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
 			"disabled": card.button.disabled, "control": str(card.button.name),

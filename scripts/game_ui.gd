@@ -20,6 +20,7 @@ const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
+const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
@@ -1214,8 +1215,8 @@ func _jelly_audio(cue: String) -> void:
 		return
 	if cue == "wrong":
 		audio.play_pair_feedback(false)
-	elif cue in ["reward", "chest"]:
-		audio.play_jelly_cue("reward")
+	elif cue == "chest":
+		audio.play_jelly_cue("fragment")
 	else:
 		audio.play_jelly_cue(cue)
 
@@ -1229,7 +1230,8 @@ func _jelly_finished(result: Dictionary) -> void:
 	if _mode_id != "jelly" or not _round_result.is_empty():
 		return
 	_round_result = result.duplicate(true)
-	_jelly_reward_theme = model.theme_id
+	var tier: int = int(result.get("chest_tier", 0))
+	_jelly_reward_theme = JellyRewardProgress.theme_for_tier(tier) if tier > 0 else model.theme_id
 	audio.stop_jelly_sounds()
 	var count: int = int(result.get("chest_count", 0))
 	if count > 0:
@@ -1246,7 +1248,9 @@ func _jelly_finished(result: Dictionary) -> void:
 
 
 func _jelly_result_summary() -> String:
-	return "Round results. Score: %d. Chests: %d." % [int(_round_result.get("score", 0)), int(_round_result.get("chest_count", 0))]
+	var summary: String = "Round results. Score: %d. Chests: %d." % [int(_round_result.get("score", 0)), int(_round_result.get("chest_count", 0))]
+	var tier: int = int(_round_result.get("chest_tier", 0))
+	return summary + " Chest level: %d." % tier if tier > 0 else summary
 
 
 func _save_jelly_round_reward() -> bool:
@@ -1254,7 +1258,8 @@ func _save_jelly_round_reward() -> bool:
 	if count <= 0 or _jelly_reward_saved:
 		return true
 	# Unopened treasure carries across replays without changing its earned theme.
-	_jelly_reward_saved = _jelly_rewards.configure(_round_id, count, _jelly_reward_theme, data.chests, reduced_motion)
+	_jelly_reward_saved = _jelly_rewards.configure(_round_id, 1, _jelly_reward_theme, data.chests, reduced_motion,
+		int(_round_result.get("chest_tier", 0)))
 	return _jelly_reward_saved
 
 
@@ -1503,7 +1508,9 @@ func _begin_round_celebration(chest_count: int) -> void:
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
 	var score: int = int(_round_result.get("score", 0)) if _mode_id == "jelly" else -1
-	_round_celebration.begin(_round_id, model.theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score)
+	var theme_id: String = _jelly_reward_theme if _mode_id == "jelly" else model.theme_id
+	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id == "jelly" else 0
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score, chest_tier)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()

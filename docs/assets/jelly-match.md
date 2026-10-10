@@ -212,9 +212,11 @@ portrait and short landscape. These are local renders and simulated browser
 devices, not physical phone or subjective audio approval.
 
 Each fully cleared pair earns one point. The round summary displays the score
-and exact chest count from entry, including zero-loot rounds. Rounds with treasure
+and final chest tier, or the fragment total when no chest was unlocked. Four
+fragments unlock one chest; every five more upgrade it. Rounds with treasure
 keep Pip's existing reward presentation before revealing the opening action;
-the summary uses `Round results` rather than a level-completion message.
+the summary uses `Round results` rather than a level-completion message. See
+[chest fragments](jelly-fragments.md) for the reward and animation details.
 
 | Event | Runtime path | Original source | Duration | Peak |
 | --- | --- | --- | ---: | ---: |

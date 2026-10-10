@@ -26,10 +26,13 @@ const JELLY_PATHS := {
 	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
+	"fragment": UI_CLICK_PATH,
+	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
 }
 const JELLY_GAINS := {
 	"pick": 0.64, "release": 0.38, "land": 0.35,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
+	"fragment": 0.30, "assemble": 0.28,
 }
 const JELLY_SECONDARY_CUES := ["pick", "release", "land"]
 const JELLY_SPEECH_DB: float = -6.0

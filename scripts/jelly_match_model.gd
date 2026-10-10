@@ -6,7 +6,8 @@ signal word_attempted(attempt_id: String, word_ids: Array[String], correct: bool
 signal fusion_started(payload: Dictionary)
 signal fusion_completed(payload: Dictionary, awarded: int)
 signal cue_requested(cue: String)
-signal chest_awarded(count: int)
+signal fragments_awarded(count: int)
+signal chest_milestone(previous_tier: int, new_tier: int)
 signal finished(result: Dictionary)
 
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -25,6 +26,8 @@ const SPEEDUP_PER_PAIR: float = 0.05
 const FUSION_SECONDS: float = 1.05
 const POP_SECONDS: float = 0.7
 const FULL_SECONDS: float = 8.0
+const CHEST_UNLOCK_FRAGMENTS: int = 4
+const CHEST_UPGRADE_FRAGMENTS: int = 5
 const EPSILON: float = 0.000001
 
 var cells: Array[Dictionary] = []
@@ -36,6 +39,8 @@ var fusion: Dictionary:
 var phase: String = "finished"
 var paused: bool = false
 var cleared_pairs: int = 0
+var fragment_count: int = 0
+var chest_tier: int = 0
 var chest_count: int = 0
 var generated_tiles: int = 0
 var spawn_interval: float = INITIAL_SPAWN_INTERVAL
@@ -68,6 +73,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	phase = "finished"
 	paused = false
 	cleared_pairs = 0
+	fragment_count = 0
+	chest_tier = 0
 	chest_count = 0
 	generated_tiles = 0
 	spawn_interval = INITIAL_SPAWN_INTERVAL
@@ -272,8 +279,24 @@ func score() -> int:
 	return cleared_pairs
 
 
-func snapshot() -> Dictionary:
+static func reward_progress(total: int) -> Dictionary:
+	var fragments: int = maxi(0, total)
+	var tier: int = 0
+	var progress: int = fragments
+	var required: int = CHEST_UNLOCK_FRAGMENTS
+	if fragments >= CHEST_UNLOCK_FRAGMENTS:
+		tier = 1 + int((fragments - CHEST_UNLOCK_FRAGMENTS) / float(CHEST_UPGRADE_FRAGMENTS))
+		progress = (fragments - CHEST_UNLOCK_FRAGMENTS) % CHEST_UPGRADE_FRAGMENTS
+		required = CHEST_UPGRADE_FRAGMENTS
 	return {
+		"fragment_count": fragments, "chest_tier": tier,
+		"chest_count": 1 if tier > 0 else 0,
+		"fragments_toward_next": progress, "fragments_required": required
+	}
+
+
+func snapshot() -> Dictionary:
+	var state: Dictionary = {
 		"cells": cells.duplicate(true), "upcoming": upcoming.duplicate(true),
 		"fusion": fusion.duplicate(true), "fusions": fusions.duplicate(true),
 		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs, "score": score(),
@@ -283,16 +306,19 @@ func snapshot() -> Dictionary:
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
 		"error": error, "result": _result.duplicate(true)
 	}
+	state.merge(reward_progress(fragment_count), true)
+	return state
 
 
 func finish_round() -> Dictionary:
 	if phase == "finished":
 		return _result.duplicate(true)
 	# An interrupted fusion has not cleared its tiles yet, so it earns no attempt
-	# or chest. Previously completed clears are already reflected in the result.
+	# or fragment. Previously completed clears are already reflected in the result.
 	phase = "finished"
 	fusions.clear()
-	_result = {"cleared_pairs": cleared_pairs, "score": score(), "chest_count": chest_count, "words": []}
+	_result = {"cleared_pairs": cleared_pairs, "score": score(), "words": []}
+	_result.merge(reward_progress(fragment_count))
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
 	var result: Dictionary = _result.duplicate(true)
@@ -464,7 +490,16 @@ func _complete_fusion(attempt_id: String) -> void:
 		_apply_gravity()
 	full_elapsed = -1.0
 	cleared_pairs += 1
-	chest_count += awarded
+	var previous_tier: int = chest_tier
+	fragment_count += awarded
+	var reward: Dictionary = reward_progress(fragment_count)
+	var new_tier: int = int(reward.chest_tier)
+	chest_tier = new_tier
+	chest_count = int(reward.chest_count)
+	completed.merge({
+		"fragment_count": fragment_count,
+		"previous_chest_tier": previous_tier, "chest_tier": chest_tier
+	})
 	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - cleared_pairs * SPEEDUP_PER_PAIR)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	var generation: int = _generation
@@ -476,7 +511,11 @@ func _complete_fusion(attempt_id: String) -> void:
 	if generation != _generation or phase != "playing":
 		return
 	if awarded > 0:
-		chest_awarded.emit(awarded)
+		fragments_awarded.emit(awarded)
+		if generation != _generation or phase != "playing":
+			return
+		if new_tier > previous_tier:
+			chest_milestone.emit(previous_tier, new_tier)
 		if generation == _generation and phase == "playing":
 			cue_requested.emit("chest")
 

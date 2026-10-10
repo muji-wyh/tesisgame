@@ -18,6 +18,9 @@ const FusionArt = preload("res://scripts/jelly_fusion.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const Chest = preload("res://scripts/chest_view.gd")
+const Data = preload("res://scripts/game_data.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
 const MOUSE_POINTER: int = -1
@@ -67,6 +70,9 @@ var _contact_label_kind: String = ""
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_count: Label
+var _loot_detail: Label
+var _reward_presentation: ChestCelebration
+var _displayed_chest_tier: int = 0
 var _notice: Label
 var _result: Control
 var _result_title: Label
@@ -101,6 +107,8 @@ func _init() -> void:
 	_loot_icon = _image(self)
 	_loot_count = _label(self, "0", 24)
 	_loot_count.name = "JellyLootCount"
+	_loot_detail = _label(self, "Fragments", 11)
+	_loot_detail.name = "JellyFragmentProgress"
 	drop_button = Button.new()
 	drop_button.name = "JellyDropNow"
 	drop_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -131,8 +139,11 @@ func _init() -> void:
 	_result_caption = _label(_result, "", 17)
 	_result_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_result_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	for index in range(3):
+	for index in range(1):
 		_result_chests.append(_image(_result))
+	_reward_presentation = ChestCelebration.new()
+	add_child(_reward_presentation)
+	_reward_presentation.cue_requested.connect(_reward_cue)
 	chests_button = _button("Open chests", "JellyOpenChests", _open_chests)
 	replay_button = _button("Play again", "JellyReplay", _replay)
 	finish_button = Button.new()
@@ -147,6 +158,7 @@ func _init() -> void:
 		word_attempted.emit(id, ids, correct))
 	game.cue_requested.connect(_cue)
 	game.fusion_completed.connect(_fusion_completed)
+	game.chest_milestone.connect(_chest_milestone)
 	game.finished.connect(_finished)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
@@ -185,6 +197,7 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 			loaded.append(texture)
 		_surfaces = loaded
 	reduced_motion = reduced
+	_displayed_chest_tier = 0
 	_result_visible = false
 	_result_transition = false
 	_result_elapsed = 0.0
@@ -222,26 +235,37 @@ func _prepare_chest() -> void:
 	if _theme.is_empty() or _manifest.is_empty() or not is_inside_tree():
 		return
 	var id: String = str(_theme.get("id", "spring"))
+	_apply_chest_texture(_chest_for_theme(id))
+	# Warm the first reward before its four pieces come together.
+	_chest_for_theme(RewardProgress.theme_for_tier(maxi(1, game.chest_tier)))
+	_chest_for_theme(RewardProgress.theme_for_tier(maxi(2, game.chest_tier + 1)))
+
+func _chest_for_theme(id: String) -> Texture2D:
+	if _manifest.is_empty() or not is_inside_tree():
+		return null
 	if not _chest_cache.has(id):
 		var viewport := SubViewport.new()
 		viewport.name = "JellyChest_" + id
-		viewport.size = Vector2i(256, 256)
+		viewport.size = Vector2i(768, 768)
 		viewport.transparent_bg = true
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		add_child(viewport)
 		var art := Chest.new()
 		viewport.add_child(art)
-		art.size = Vector2(256, 256)
+		art.size = Vector2(768, 768)
 		art.reduced_motion = true
-		art.configure_skin(_theme, _manifest)
+		art.configure_skin(Data.theme(id), _manifest)
 		_chest_cache[id] = {"viewport": viewport, "art": art, "frames": 0, "texture": viewport.get_texture(), "cropped": false}
-	_apply_chest_texture(_chest_cache[id].texture)
+	return _chest_cache[id].texture
+
+func _reward_texture(tier: int = -1) -> Texture2D:
+	return _chest_for_theme(RewardProgress.theme_for_tier(game.chest_tier if tier < 0 else tier))
 
 func _apply_chest_texture(texture: Texture2D) -> void:
 	_chest_texture = texture
-	_loot_icon.texture = _chest_texture
+	_loot_icon.texture = _reward_texture()
 	for chest: TextureRect in _result_chests:
-		chest.texture = _chest_texture
+		chest.texture = _reward_texture()
 	for tile in _tiles.values():
 		tile.set_chest_texture(texture)
 	for preview: Tile in _preview_tiles:
@@ -272,6 +296,8 @@ func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
 	reduced_motion = value
+	_reward_presentation.reduced_motion = value
+	_reward_presentation._sync()
 	_snapbacks.clear()
 	_loot_flights.clear()
 	_sync_tiles()
@@ -286,7 +312,7 @@ func pause(value: bool = true) -> void:
 	if _paused == value:
 		return
 	_paused = value
-	game.set_paused(value)
+	game.set_paused(value or (_reward_presentation.is_active() and game.fusions.is_empty()))
 	cancel_input()
 	if not value:
 		_result_transition = false
@@ -304,6 +330,7 @@ func settle() -> void:
 
 func stop() -> void:
 	_generation += 1
+	_reward_presentation.clear()
 	_configured = false
 	game.paused = true
 	settle()
@@ -372,7 +399,7 @@ func _allowed() -> bool:
 	return _configured and not _paused and is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 func _can_play() -> bool:
-	return _allowed() and game.phase == "playing" and not _result_visible
+	return _allowed() and game.phase == "playing" and not _result_visible and not _reward_presentation.is_active()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
@@ -796,8 +823,13 @@ func _process(delta: float) -> void:
 		_rejection.elapsed += delta
 		if float(_rejection.elapsed) >= 0.34:
 			_rejection.clear()
-	if game.phase == "playing":
-		game.step(delta)
+	var remaining: float = delta
+	if _reward_presentation.is_active() and game.fusions.is_empty():
+		remaining = advance_reward_presentation(delta)
+	if generation != _generation or not _allowed():
+		return
+	if game.phase == "playing" and (not _reward_presentation.is_active() or not game.fusions.is_empty()):
+		game.step(remaining)
 	if generation != _generation or not _allowed():
 		return
 	for id in _snapbacks.keys():
@@ -941,15 +973,48 @@ func _cue(cue: String) -> void:
 	if _allowed():
 		audio_requested.emit(cue)
 
+func _reward_cue(cue: String) -> void:
+	if cue == "reward":
+		_displayed_chest_tier = int(_reward_presentation.snapshot().tier)
+		_refresh_hud()
+	_cue(cue)
+
 func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
 	if not _configured:
 		return
 	if awarded > 0 and not reduced_motion:
 		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0})
+	if _reward_presentation.is_active() and game.fusions.is_empty():
+		game.set_paused(true)
 	_refresh_hud()
+
+func _chest_milestone(previous_tier: int, tier: int) -> void:
+	if not _configured or game.phase != "playing":
+		return
+	cancel_input()
+	_reward_presentation.reduced_motion = reduced_motion
+	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
+	game.set_paused(game.fusions.is_empty())
+	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1))
+	_refresh_hud()
+	_refresh_controls()
+	_publish()
+
+func advance_reward_presentation(delta: float) -> float:
+	if not _allowed() or not game.fusions.is_empty():
+		return 0.0
+	var generation: int = _generation
+	var remaining: float = _reward_presentation.advance(delta)
+	if generation != _generation or not _allowed():
+		return 0.0
+	game.set_paused(_paused or _reward_presentation.is_active())
+	_refresh_controls()
+	return remaining
 
 func _finished(result: Dictionary) -> void:
 	cancel_input()
+	_reward_presentation.clear()
+	_displayed_chest_tier = game.chest_tier
 	_clear_fusion_visuals()
 	_refresh_controls()
 	round_finished.emit(result.duplicate(true))
@@ -970,7 +1035,10 @@ func result_reveal() -> void:
 	_result_elapsed = 0.0
 	_result.show()
 	_result_title.text = "Round results"
-	_result_caption.text = "Score: %d · Chests: %d" % [game.score(), game.chest_count]
+	_result_caption.text = "Score: %d · Chest Lv. %d" % [game.score(), game.chest_tier] if game.chest_count > 0 else \
+		"Score: %d · Fragments: %d / 4" % [game.score(), game.fragment_count]
+	for chest: TextureRect in _result_chests:
+		chest.texture = _reward_texture()
 	chests_button.text = "Open chest" if maxi(game.chest_count, _pending_chests) == 1 else "Open chests"
 	_layout()
 	_sync_tiles()
@@ -999,8 +1067,13 @@ func _replay() -> void:
 	_publish()
 
 func _refresh_hud() -> void:
-	_loot_count.text = str(game.chest_count)
-	_loot_count.set("accessibility_name", "%d chests collected" % game.chest_count)
+	var progress: Dictionary = game.reward_progress(game.fragment_count)
+	var displayed_tier: int = _displayed_chest_tier if _reward_presentation.is_active() else game.chest_tier
+	_loot_count.text = "Lv. %d" % displayed_tier if displayed_tier > 0 else "%d / 4" % mini(4, game.fragment_count)
+	_loot_detail.text = "%d / 5 to upgrade" % (5 if displayed_tier < game.chest_tier else int(progress.fragments_toward_next)) if displayed_tier > 0 else "Chest fragments"
+	_loot_count.set("accessibility_name", "%d fragments. Chest level %d. %d of %d toward the next reward." % [game.fragment_count, game.chest_tier, progress.fragments_toward_next, progress.fragments_required])
+	_loot_icon.texture = _reward_texture(displayed_tier)
+	_loot_icon.modulate.a = 1.0 if displayed_tier > 0 else 0.58
 	var state: Dictionary = game.snapshot()
 	var full: bool = float(game.full_elapsed) >= 0.0
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
@@ -1010,6 +1083,7 @@ func _refresh_hud() -> void:
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
 	_loot_icon.visible = _configured
 	_loot_count.visible = _configured
+	_loot_detail.visible = _configured and not _result_visible
 	_sync_preview()
 
 func set_pending_chests(count: int) -> void:
@@ -1140,8 +1214,12 @@ func _layout() -> void:
 	_loot_icon.size = Vector2(44, 44) / scale_factor
 	_loot_count.position = Vector2(hud_x + 46.0 / scale_factor, hud_y)
 	_loot_count.size = Vector2(hud_width - 46.0 / scale_factor, 44.0 / scale_factor)
-	_loot_count.add_theme_font_size_override("font_size", ceili(24 / scale_factor))
 	_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_loot_count.add_theme_font_size_override("font_size", ceili(19.0 / scale_factor))
+	_loot_detail.position = Vector2(hud_x, hud_y + 44.0 / scale_factor)
+	_loot_detail.size = Vector2(hud_width, 21.0 / scale_factor)
+	_loot_detail.add_theme_font_size_override("font_size", ceili(11.0 / scale_factor))
+	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if _compact_hud:
 		_loot_icon.size = Vector2(40, 40) / scale_factor
 		_loot_icon.position.x = hud_x + (hud_width - _loot_icon.size.x) * 0.5
@@ -1149,6 +1227,8 @@ func _layout() -> void:
 		_loot_count.size = Vector2(hud_width, 26.0 / scale_factor)
 		_loot_count.add_theme_font_size_override("font_size", ceili(20 / scale_factor))
 		_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_loot_detail.position.y = hud_y + 65.0 / scale_factor
+		_loot_detail.add_theme_font_size_override("font_size", ceili(9.0 / scale_factor))
 	var preview_width: float = minf(144.0 / scale_factor, size.x - _board.end.x - edge * 2.0) if wide else minf(248.0 / scale_factor, size.x - 92.0 / scale_factor - edge * 2.0)
 	var preview_x: float = _board.end.x + edge if wide else size.x - edge - preview_width
 	var preview_y: float = _board.position.y if wide else 0.0
@@ -1177,6 +1257,7 @@ func _layout() -> void:
 	finish_button.size = Vector2(finish_width, 44.0 / scale_factor)
 	_result.position = Vector2.ZERO
 	_result.size = size
+	_reward_presentation.size = size
 	_layout_result(scale_factor, edge)
 	if _result_visible:
 		_loot_icon.position = Vector2(edge, edge)
@@ -1313,6 +1394,10 @@ func snapshot() -> Dictionary:
 		result.landing_ghosts.append({"visible": ghost.is_visible_in_tree(), "id": ghost.tile_id, "rect": _rect(ghost.get_global_rect())})
 	result["fusion_rect"] = first_effect.get("rect", [])
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
+	result["loot"]["fragments"] = game.fragment_count
+	result["loot"]["tier"] = game.chest_tier
+	result["loot"]["progress_text"] = _loot_detail.text
+	result["reward_presentation"] = _reward_presentation.snapshot()
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
 		"open": _control(chests_button), "replay": _control(replay_button)}
 	result["finish"] = _control(finish_button)

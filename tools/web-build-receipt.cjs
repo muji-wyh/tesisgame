@@ -13,7 +13,7 @@ const INPUTS = [
   'docs/assets/word-library.json', 'tools/word-library-art.cjs',
   'docs/assets/word-library-motion.json', 'tools/word-library-motion.cjs', 'tools/vocabulary-art/library-motion-map.json',
   'tests/godot/verify_web_pack.gd',
-  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'web-build-receipt']
+  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'prepare-jelly-reward-art', 'web-build-receipt']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');

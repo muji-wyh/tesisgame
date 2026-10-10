@@ -58,6 +58,7 @@ func _run() -> void:
 	_manifest = data.chests
 	_state_checks()
 	_jelly_state_checks()
+	_jelly_tier_checks()
 	await _room_checks()
 	await _single_chest_layout_checks()
 	await _retained_rewards_checks()
@@ -67,6 +68,7 @@ func _run() -> void:
 	await _jelly_pagination_checks()
 	await _jelly_save_retry_checks()
 	await _jelly_accumulation_checks()
+	await _jelly_tier_room_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -169,6 +171,83 @@ func _make_jelly_room(storage: Storage):
 	room.connect_storage(storage)
 	room.set_process(false)
 	return room
+
+
+func _jelly_tier_checks() -> void:
+	var storage := Storage.new()
+	var state = _jelly_state(storage)
+	check(state.create_batch("legacy-jelly", ["ocean", "space"]), "An existing Jelly save can contain several unopened chests")
+	var legacy_text: String = storage.jelly_text
+	check(state.load_state() and storage.jelly_text == legacy_text and not state.entries[0].has("tier"),
+		"Loading a legacy chest does not relabel, upgrade or rewrite it")
+	check(state.create_batch("final-tier", ["autumn"], [2]) and state.entries.size() == 3
+		and state.entries[0].theme == "ocean" and state.entries[1].theme == "space"
+		and not state.entries[0].has("tier") and state.entries[2].tier == 2,
+		"A round appends only its final upgraded chest while keeping all legacy loot intact")
+	var restored = _jelly_state(storage)
+	check(restored.load_state() and restored.entries[2].tier == 2 and restored.entries[2].theme == "autumn",
+		"Reload preserves both the final tier and its corresponding chest artwork")
+	var writes: int = storage.jelly_writes
+	check(restored.create_batch("final-tier", ["winter"], [99]) and storage.jelly_writes == writes
+		and restored.entries[2].tier == 2 and restored.entries[2].theme == "autumn",
+		"Repeated completion cannot add an intermediate chest or alter the saved final tier")
+	check(restored.mark_opened("final-tier", 2) and restored.entries[2].tier == 2,
+		"Opening the final chest retains its tier alongside its durable receipt")
+	check(restored.create_batch("later-tier", ["winter"], [300]) and restored.entries.size() == 3
+		and restored.entries[2].tier == 300 and not restored.entries[2].opened,
+		"Higher numeric tiers are preserved without capping them to the available art variants")
+	writes = storage.jelly_writes
+	check(restored.create_batch("final-tier", ["spring"], [1]) and restored.entries[2].tier == 300
+		and storage.jelly_writes == writes, "An older round callback cannot recreate an opened upgraded chest")
+	check(not restored.create_batch("bad-count", ["spring"], [1, 2])
+		and not restored.create_batch("bad-tier", ["spring"], [-1]) and storage.jelly_writes == writes,
+		"Invalid tier metadata cannot replace valid saved treasure")
+	var pop := State.new("user://unused-pop-tier.cfg", storage)
+	check(not pop.create_batch("pop-tier", ["spring"], [1]) and storage.text == null,
+		"Jelly upgrade metadata cannot alter Voice Pop's reward contract")
+	var malformed := ConfigFile.new()
+	malformed.parse(storage.jelly_text)
+	malformed.set_value("treasure", "entries", [{"theme": "spring", "opened": false, "tier": -1}])
+	storage.jelly_text = malformed.encode_to_text()
+	check(not restored.load_state(), "Corrupt persisted tiers fail safely instead of silently losing a chest")
+
+
+func _jelly_tier_room_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("single-upgraded", 1, "ocean", _manifest, true, 3),
+		"A final upgraded Jelly chest configures through the real reward room")
+	check(room.snapshot().chest_count == 1 and room.snapshot().chests[0].tier == 3
+		and room.snapshot().chests[0].theme == "ocean" and room.snapshot().heading == "Chest Lv. 3"
+		and room._cards[0].button.accessibility_name.begins_with("Tier 3."),
+		"The reward room displays and announces one final chest at its earned level")
+	var writes: int = storage.jelly_writes
+	check(room.configure("single-upgraded", 1, "winter", _manifest, true, 6)
+		and room.snapshot().chests[0].tier == 3 and room.snapshot().chests[0].theme == "ocean"
+		and storage.jelly_writes == writes, "Repeated room configuration preserves the original final reward")
+	room.queue_free()
+	await process_frame
+	room = _make_jelly_room(storage)
+	check(room.configure_saved(_manifest, true) and room.snapshot().chest_count == 1
+		and room.snapshot().chests[0].tier == 3 and room.snapshot().heading == "Chest Lv. 3",
+		"Restoring the opening page shows the same upgraded chest after reload")
+	_hold(room, 0, Feel.HOLD_SECONDS)
+	check(room.snapshot().opened_count == 1 and not room.has_pending() and room.rewards.entries[0].tier == 3,
+		"Holding opens precisely that saved final chest once")
+	room.queue_free()
+	await process_frame
+	storage = Storage.new()
+	room = _make_jelly_room(storage)
+	storage.writable = false
+	check(not room.configure("retry-upgraded", 1, "autumn", _manifest, true, 2)
+		and room.snapshot().chests[0].tier == 2, "A failed write keeps the final tier visible and retryable")
+	storage.writable = true
+	room.retry_save()
+	check(not room.snapshot().save_failed and room.rewards.entries.size() == 1
+		and room.rewards.entries[0].tier == 2 and room.rewards.entries[0].theme == "autumn",
+		"Retry durably writes the final tier without generating intermediate rewards")
+	room.queue_free()
+	await process_frame
 
 
 func _jelly_pagination_checks() -> void:

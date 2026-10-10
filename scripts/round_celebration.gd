@@ -9,6 +9,7 @@ const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
+const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const DURATION: float = Mascot.CELEBRATION_SECONDS
 const CUE_TIMES := [0.25, 0.9, 1.8]
@@ -36,6 +37,7 @@ var _cue_log: Array[String] = []
 var _performance_emitted: bool = false
 var _open_emitted: bool = false
 var _chest_count: int = 1
+var _chest_tier: int = 0
 var _score: int = -1
 var _theme_id: String = "spring"
 var _palette: Dictionary = {}
@@ -93,12 +95,13 @@ func _label(text: String, node_name: String) -> Label:
 
 
 func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
-		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1) -> void:
+		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0) -> void:
 	if round_id.is_empty() or (_active and round_id == _round_id):
 		return
 	stop()
 	_round_id = round_id
 	_chest_count = maxi(1, chest_count)
+	_chest_tier = maxi(0, chest_tier)
 	_score = score
 	_reduced_motion = reduce
 	_automatic = automatic
@@ -108,6 +111,8 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 	_heading.text = "Round results" if _score >= 0 else "You did it!"
 	_caption.text = "Score: %d · Chests: %d" % [_score, _chest_count] if _score >= 0 else \
 		"You earned a treasure chest!" if _chest_count == 1 else "You earned %d treasure chests!" % _chest_count
+	if _chest_tier > 0:
+		_caption.text = "Score: %d · %s" % [_score, JellyRewardProgress.title_for_tier(_chest_tier)]
 	_count.text = "" if _chest_count == 1 else "x%d" % _chest_count
 	action_button.text = "Open chest" if _chest_count == 1 else "Open chests"
 	pip.set_reduced_motion(reduce)
@@ -360,7 +365,7 @@ func snapshot() -> Dictionary:
 	return {"round_id": _round_id, "theme": _theme_id, "active": _active, "ready": _ready_to_open,
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
-		"chest_count": _chest_count, "cue_log": _cue_log.duplicate(),
+		"chest_count": _chest_count, "chest_tier": _chest_tier, "cue_log": _cue_log.duplicate(),
 		"title": _heading.text, "caption": _caption.text, "score": _score,
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),

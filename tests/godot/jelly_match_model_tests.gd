@@ -31,6 +31,9 @@ func _run() -> void:
 	_test_fall_physics()
 	_test_landing_timeline()
 	_test_fusion_timeline()
+	_test_fragment_thresholds()
+	_test_fragment_milestone_reentry()
+	_test_concurrent_fragment_milestone()
 	_test_overlapping_fusions()
 	_test_concurrent_fusion_lifecycle()
 	_test_held_source_after_gravity()
@@ -79,14 +82,16 @@ func _settle_remaining(model) -> float:
 
 
 func _observe(model) -> Dictionary:
-	var events: Dictionary = {"attempts": [], "cues": [], "fusions": [], "completed": [], "chests": [], "finished": []}
+	var events: Dictionary = {"attempts": [], "cues": [], "fusions": [], "completed": [], "fragments": [], "milestones": [], "finished": []}
 	model.word_attempted.connect(func(attempt_id: String, word_ids: Array[String], correct: bool) -> void:
 		events.attempts.append({"id": attempt_id, "words": word_ids.duplicate(), "correct": correct}))
 	model.cue_requested.connect(func(cue: String) -> void: events.cues.append(cue))
 	model.fusion_started.connect(func(payload: Dictionary) -> void: events.fusions.append(payload.duplicate(true)))
 	model.fusion_completed.connect(func(payload: Dictionary, awarded: int) -> void:
 		events.completed.append({"fusion": payload.duplicate(true), "awarded": awarded}))
-	model.chest_awarded.connect(func(count: int) -> void: events.chests.append(count))
+	model.fragments_awarded.connect(func(count: int) -> void: events.fragments.append(count))
+	model.chest_milestone.connect(func(previous_tier: int, new_tier: int) -> void:
+		events.milestones.append({"previous_tier": previous_tier, "new_tier": new_tier}))
 	model.finished.connect(func(result: Dictionary) -> void: events.finished.append(result.duplicate(true)))
 	return events
 
@@ -317,7 +322,7 @@ func _test_manual_drop() -> void:
 		and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT
 		and model.cells.slice(0, INITIAL_COUNT) == existing and model.spawn_elapsed == 0.0,
 		"Manual dispatch resets only the supply clock without fast-forwarding existing tiles")
-	check(change_count[0] == 1 and events.attempts.is_empty() and events.chests.is_empty()
+	check(change_count[0] == 1 and events.attempts.is_empty() and events.fragments.is_empty()
 		and events.cues.is_empty() and model.cleared_pairs == 0 and model.chest_count == 0,
 		"Manual dispatch publishes its state once without learning, score, or rewards")
 	for index in range(Model.DROP_COUNT):
@@ -408,7 +413,7 @@ func _test_manual_drop_partial_batch() -> void:
 			"A partial batch preserves its unconsumed advertised suffix in order")
 	model.step(_settle_remaining(model))
 	check(model.full_elapsed == 0.0 and events.cues == ["danger"]
-		and events.attempts.is_empty() and events.chests.is_empty(),
+		and events.attempts.is_empty() and events.fragments.is_empty(),
 		"A manually completed board starts the ordinary full countdown only after all arrivals settle")
 	_assert_board(model, "Partial manual dispatch")
 
@@ -628,8 +633,9 @@ func _test_fusion_timeline() -> void:
 	check(is_equal_approx(model.spawn_elapsed, saved_spawn), "Spawning remains frozen throughout fusion")
 	check(events.attempts.size() == 1 and events.attempts[0].correct
 		and events.attempts[0].words.size() == 1, "A successful clear emits one unique-word learning event")
-	check(model.chest_count == 1 and events.chests == [1] and events.cues == ["merge", "pop", "chest"],
-		"Chest credit and its cue happen once after a marked pair clears")
+	check(model.fragment_count == 1 and model.chest_count == 0 and model.chest_tier == 0
+		and events.fragments == [1] and events.cues == ["merge", "pop", "chest"],
+		"Fragment credit and its pickup cue happen once after a marked pair clears")
 	check(model.try_merge(pair[0], pair[1]) == "ignored" and events.attempts.size() == 1,
 		"Removed tile IDs cannot replay learning or rewards")
 	check(is_equal_approx(model.spawn_interval, 9.95), "The first clear gently reduces the ten-second interval by 0.05 seconds")
@@ -685,10 +691,10 @@ func _test_overlapping_fusions() -> void:
 		and model.fusions.size() == 1 and model.fusion.a_id == second[0]
 		and is_equal_approx(float(model.fusion.elapsed), 0.65),
 		"The first pair clears at 1.05 seconds while the newer pair keeps its original clock")
-	check(model.chest_count == 1 and events.chests == [1] and events.completed.size() == 1
+	check(model.fragment_count == 1 and model.chest_count == 0 and events.fragments == [1] and events.completed.size() == 1
 		and events.completed[0].fusion.a_id == first[0] and events.completed[0].fusion.b_id == first[1]
 		and events.completed[0].awarded == 1,
-		"A completed pair publishes exactly its own source tiles and earned chest")
+		"A completed pair publishes exactly its own source tiles and earned fragment")
 	for cell in model.cells:
 		var previous: Dictionary = {}
 		for candidate in original.cells:
@@ -703,8 +709,8 @@ func _test_overlapping_fusions() -> void:
 		"The second elastic pop follows its own clock instead of the previous clear")
 	model.step(0.35)
 	check(model.fusions.is_empty() and model.fusion.is_empty() and model.cleared_pairs == 2
-		and model.chest_count == 2 and events.completed.size() == 2 and events.chests == [1, 1],
-		"Both overlapping pairs complete independently with one success and one chest each")
+		and model.fragment_count == 2 and model.chest_count == 0 and events.completed.size() == 2 and events.fragments == [1, 1],
+		"Both overlapping pairs complete independently with one success and one fragment each")
 	check(events.attempts.size() == 3 and events.attempts[1].correct and events.attempts[2].correct
 		and events.attempts[1].id != events.attempts[2].id
 		and events.completed[1].fusion.a_id == second[0]
@@ -717,6 +723,163 @@ func _test_overlapping_fusions() -> void:
 	model.step(0.05)
 	check(is_equal_approx(model.spawn_elapsed, float(original.spawn_elapsed) + 0.05),
 		"The supply clock resumes only after all active fusions finish")
+
+
+func _earn_fragment(model) -> bool:
+	var before: int = model.fragment_count
+	for _attempt in range(32):
+		model.step(_settle_remaining(model))
+		var pair: Array[int] = _pair(model, true, true)
+		if pair.is_empty():
+			pair = _pair(model)
+		if pair.is_empty():
+			if not model.drop_now():
+				return false
+			continue
+		if model.try_merge(pair[0], pair[1]) != "correct":
+			return false
+		model.step(Model.FUSION_SECONDS)
+		if model.fragment_count > before:
+			return true
+	return false
+
+
+func _test_fragment_thresholds() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(100), 3, 72)
+	check(model.snapshot().fragments_toward_next == 0 and model.snapshot().fragments_required == 4,
+		"A new round needs four fragments before it promises a chest")
+	for expected_total in range(1, 15):
+		check(_earn_fragment(model), "A real marked clear can earn fragment %d" % expected_total)
+		check(model.fragment_count == expected_total, "Each marked pair adds exactly one fragment")
+		var state: Dictionary = model.snapshot()
+		if expected_total < 4:
+			check(model.chest_count == 0 and model.chest_tier == 0
+				and state.fragments_toward_next == expected_total and state.fragments_required == 4,
+				"One to three fragments cannot be opened as a chest")
+		elif expected_total < 9:
+			check(model.chest_count == 1 and model.chest_tier == 1
+				and state.fragments_toward_next == expected_total - 4 and state.fragments_required == 5,
+				"The first chest is complete at four and needs five new fragments to upgrade")
+		elif expected_total < 14:
+			check(model.chest_count == 1 and model.chest_tier == 2
+				and state.fragments_toward_next == expected_total - 9 and state.fragments_required == 5,
+				"The ninth fragment upgrades the same chest and starts a fresh five-fragment step")
+		else:
+			check(model.chest_count == 1 and model.chest_tier == 3 and state.fragments_toward_next == 0,
+				"The fourteenth fragment upgrades one chest again without retaining intermediate chests")
+		var latest: Dictionary = events.completed.back().fusion
+		check(latest.fragment_count == expected_total and latest.chest_tier == model.chest_tier,
+			"Each flight receipt captures its committed fragment total and tier")
+	check(events.fragments.size() == 14 and events.milestones == [
+		{"previous_tier": 0, "new_tier": 1},
+		{"previous_tier": 1, "new_tier": 2},
+		{"previous_tier": 2, "new_tier": 3}
+	], "Only the fourth, ninth, and fourteenth fragment publish synthesis or upgrade milestones")
+	var result: Dictionary = model.finish_round()
+	check(result.fragment_count == 14 and result.chest_count == 1 and result.chest_tier == 3
+		and result.fragments_toward_next == 0 and result.fragments_required == 5,
+		"Results contain only the final upgraded chest and accurate leftover fragment progress")
+	model.finish_round()
+	model.step(30.0)
+	check(events.finished.size() == 1 and events.milestones.size() == 3 and events.fragments.size() == 14,
+		"Repeated settlement cannot synthesize, upgrade, or award an earlier chest again")
+	model.configure(_vocabulary(), 3, 72)
+	check(model.fragment_count == 0 and model.chest_count == 0 and model.chest_tier == 0,
+		"Replay starts with zero fragments and no prior round's chest")
+	var high_tier: Dictionary = Model.reward_progress(49)
+	check(high_tier.chest_count == 1 and high_tier.chest_tier == 10 and high_tier.fragments_toward_next == 0,
+		"Reward accounting continues beyond the number of available chest illustrations")
+	var invalid: Dictionary = Model.reward_progress(-3)
+	check(invalid.fragment_count == 0 and invalid.chest_count == 0 and invalid.fragments_toward_next == 0,
+		"Presentation progress safely clamps an invalid negative fragment total")
+
+
+func _test_fragment_milestone_reentry() -> void:
+	for interruption: String in ["none", "finish_on_fragment", "reset_on_fragment", "finish_on_milestone", "reset_on_milestone"]:
+		var model = Model.new()
+		var events: Dictionary = _observe(model)
+		model.configure(_vocabulary(100), 3, 19)
+		for index in range(3):
+			check(_earn_fragment(model), "The milestone reentry fixture earns its first three fragments")
+		var trace: Array[String] = []
+		model.fusion_completed.connect(func(payload: Dictionary, awarded: int) -> void:
+			if awarded > 0:
+				trace.append("flight")
+				check(payload.previous_chest_tier == 0 and payload.chest_tier == 1
+					and model.chest_count == 1 and model.fragment_count == 4,
+					"The final chest is committed before any flight or milestone callback"))
+		model.fragments_awarded.connect(func(_count: int) -> void:
+			trace.append("fragment")
+			if interruption == "finish_on_fragment":
+				model.finish_round()
+			elif interruption == "reset_on_fragment":
+				model.configure(_vocabulary(), 3, 19))
+		model.chest_milestone.connect(func(_previous: int, _next: int) -> void:
+			trace.append("milestone")
+			if interruption == "finish_on_milestone":
+				model.finish_round()
+			elif interruption == "reset_on_milestone":
+				model.configure(_vocabulary(), 3, 19))
+		model.cue_requested.connect(func(cue: String) -> void:
+			if cue == "chest":
+				trace.append("sound"))
+		# This pair is reserved directly so a reset cannot let the fixture loop
+		# accidentally award another fragment from its newly configured round.
+		model.step(_settle_remaining(model))
+		while _pair(model, true, true).is_empty():
+			var unmarked: Array[int] = _pair(model)
+			if unmarked.is_empty():
+				model.drop_now()
+			else:
+				model.try_merge(unmarked[0], unmarked[1])
+				model.step(Model.FUSION_SECONDS)
+			model.step(_settle_remaining(model))
+		var pair: Array[int] = _pair(model, true, true)
+		model.try_merge(pair[0], pair[1])
+		model.step(Model.FUSION_SECONDS)
+		if interruption == "none":
+			check(trace == ["flight", "fragment", "milestone", "sound"],
+				"The preserved pickup flight begins before the synthesis milestone and pickup sound")
+		elif interruption.ends_with("fragment"):
+			check(trace == ["flight", "fragment"] and events.milestones.is_empty(),
+				"Finishing or resetting inside fragment delivery prevents a stale milestone and sound")
+		else:
+			check(trace == ["flight", "fragment", "milestone"] and events.milestones.size() == 1,
+				"Finishing or resetting inside a milestone prevents a stale pickup sound")
+		if interruption.begins_with("finish"):
+			check(events.finished.size() == 1 and events.finished[0].chest_tier == 1
+				and events.finished[0].chest_count == 1 and events.finished[0].fragment_count == 4,
+				"An interrupted presentation settles the already earned chest exactly once")
+		elif interruption.begins_with("reset"):
+			check(model.fragment_count == 0 and model.chest_tier == 0 and model.chest_count == 0,
+				"A reset during reward delivery cannot leak the old tier into the new round")
+
+
+func _test_concurrent_fragment_milestone() -> void:
+	var model = Model.new()
+	var events: Dictionary = _observe(model)
+	model.configure(_vocabulary(100), 3, 18)
+	for index in range(3):
+		check(_earn_fragment(model), "Concurrent threshold fixture earns its first three fragments")
+	model.step(_danger_start_seconds())
+	var first: Array[int] = _pair(model, true, true)
+	check(first.size() == 2 and model.try_merge(first[0], first[1]) == "correct",
+		"A marked pair begins the fourth-fragment fusion")
+	var second: Array[int] = _pair(model, true, true)
+	check(second.size() == 2 and model.try_merge(second[0], second[1]) == "correct",
+		"A separate marked pair can merge while the unlock is in flight")
+	model.step(Model.FUSION_SECONDS)
+	check(model.fragment_count == 5 and model.chest_count == 1 and model.chest_tier == 1
+		and model.snapshot().fragments_toward_next == 1 and events.milestones.size() == 1,
+		"Concurrent fragment completions unlock one chest and retain the next fragment toward its upgrade")
+	var first_receipt: Dictionary = events.completed[-2].fusion
+	var second_receipt: Dictionary = events.completed[-1].fusion
+	check(first_receipt.fragment_count == 4 and first_receipt.previous_chest_tier == 0
+		and first_receipt.chest_tier == 1 and second_receipt.fragment_count == 5
+		and second_receipt.previous_chest_tier == 1 and second_receipt.chest_tier == 1,
+		"Concurrent completion payloads retain independent milestone receipts for their own flights")
 
 
 func _test_concurrent_fusion_lifecycle() -> void:
@@ -745,11 +908,11 @@ func _test_concurrent_fusion_lifecycle() -> void:
 		and model.tile_by_id(int(incoming.id)) == incoming,
 		"Resume preserves overlap timing and freezes an incoming tile until the last pair finishes")
 	var result: Dictionary = model.finish_round()
-	check(result.cleared_pairs == 1 and result.chest_count == 1 and model.fusions.is_empty()
+	check(result.cleared_pairs == 1 and result.fragment_count == 1 and result.chest_count == 0 and model.fusions.is_empty()
 		and events.attempts.size() == 1 and events.completed.size() == 1,
 		"Finishing retains an earlier completed pair but cancels every pending fusion")
 	model.step(20.0)
-	check(model.finish_round() == result and events.finished.size() == 1 and events.chests == [1],
+	check(model.finish_round() == result and events.finished.size() == 1 and events.fragments == [1],
 		"Finishing or stepping an interrupted overlap cannot repeat rewards")
 	model.configure(_vocabulary(), 3, 42)
 	first = _pair(model)
@@ -841,9 +1004,9 @@ func _test_concurrent_fusion_reentry() -> void:
 		model.fusion_completed.connect(interrupt)
 		model.step(2.0)
 		check(events.attempts.size() == 1 and events.completed.size() == 1
-			and events.chests.is_empty() and events.cues.count("chest") == 0 and model.fusions.is_empty(),
+			and events.fragments.is_empty() and events.cues.count("chest") == 0 and model.fusions.is_empty(),
 			"A synchronous %s from a completion cannot leak the old chest cue or sibling completion" % action)
-		check(model.chest_count == (1 if action == "finish" else 0),
+		check(model.fragment_count == (1 if action == "finish" else 0) and model.chest_count == 0,
 			"A completion callback retains earned rewards only in the finished round")
 	var chained = Model.new()
 	var chained_events: Dictionary = _observe(chained)
@@ -1027,19 +1190,20 @@ func _test_finish_and_reset() -> void:
 	model.try_merge(pair[0], pair[1])
 	model.step(0.8)
 	var result: Dictionary = model.finish_round()
-	check(result.chest_count == 1 and result.cleared_pairs == 1 and result.score == 1 and model.snapshot().score == 1 and result.words.size() == 1,
+	check(result.fragment_count == 1 and result.chest_count == 0 and result.cleared_pairs == 1 and result.score == 1 and model.snapshot().score == 1 and result.words.size() == 1,
 		"Explicit exit preserves completed rewards and unique successful words")
 	check(model.fusion.is_empty() and events.attempts.size() == 1 and events.finished.size() == 1,
 		"Exit cancels an unfinished fusion without success credit")
 	model.step(10.0)
-	check(model.finish_round() == result and events.chests == [1] and events.finished.size() == 1,
+	check(model.finish_round() == result and events.fragments == [1] and events.finished.size() == 1,
 		"Repeated exit cannot duplicate a reward or finish event")
 	result.words[0].id = "tampered"
 	check(model.finish_round().words[0].id != "tampered", "Finish results cannot mutate saved model state")
 	model.set_paused(true)
 	check(model.configure(_vocabulary(), 3, 5), "A finished or paused model can start a new round")
 	check(model.phase == "playing" and not model.paused and model.fusion.is_empty()
-		and model.chest_count == 0 and model.cleared_pairs == 0 and model.full_elapsed == -1.0,
+		and model.fragment_count == 0 and model.chest_tier == 0 and model.chest_count == 0
+		and model.cleared_pairs == 0 and model.full_elapsed == -1.0,
 		"Configure resets all lifecycle and reward state")
 	model.step(Model.SETTLE_SECONDS)
 	pair = _pair(model)
@@ -1081,11 +1245,11 @@ func _test_long_round() -> void:
 			check(model.spawn_interval > 6.0, "The fastest pace is not reached before eighty completed pairs")
 		_assert_board(model, "Long-round clear %d" % index)
 	check(model.cleared_pairs == 100 and model.spawn_interval == 6.0, "Long play holds the minimum six-second interval")
-	check(model.chest_count > 3, "Jelly rewards have no unrelated three-chest cap")
+	check(model.chest_count == 1 and model.chest_tier > 3, "A long round keeps upgrading one chest without an unrelated tier cap")
 	var awarded: int = 0
-	for count in events.chests:
+	for count in events.fragments:
 		awarded += int(count)
-	check(awarded == model.chest_count and events.attempts.size() == 100,
+	check(awarded == model.fragment_count and events.attempts.size() == 100,
 		"Repeated play credits exactly one success per clear and exactly its marked tiles")
 	var attempt_ids: Dictionary = {}
 	for attempt in events.attempts:

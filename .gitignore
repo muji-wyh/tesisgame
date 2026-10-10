@@ -11,6 +11,9 @@ build/*
 !build/.gdignore
 # Licensed Unity Store textures are shipped only inside the compiled game.
 assets/imported-unity/
+# Toon FX confetti is a licensed private input embedded in the game pack.
+assets/images/jelly-match/confetti.png
+assets/images/jelly-match/confetti.png.import
 # Retired licensed Talk Quest sources remain private and are excluded from the game.
 assets/talk_quest/monsters/*.glb
 assets/talk_quest/monsters/*.glb.import

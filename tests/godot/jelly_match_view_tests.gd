@@ -1467,8 +1467,8 @@ func _check_fusion(view) -> void:
 	view._process(0.29)
 	check(cues.count("pop") == 1 and attempts.is_empty(), "The visual pop shares the model's timed sound event before credit")
 	view._process(0.34)
-	check(attempts.size() == 1 and bool(attempts[0].correct) and view.game.chest_count == 1,
-		"One completed fusion grants exactly one word credit and its marked chest")
+	check(attempts.size() == 1 and bool(attempts[0].correct) and view.game.fragment_count == 1 and view.game.chest_count == 0,
+		"One completed fusion grants exactly one word credit and its marked fragment")
 	check(not view._tiles.has(pair[0]) and not view._tiles.has(pair[1]) and view._fusion_visuals.is_empty(),
 		"Cleared droplets disappear and the model supplies gravity")
 	check(view._fusion_visuals.is_empty(), "The completed clear also releases the shared material effect")
@@ -1486,9 +1486,9 @@ func _check_concurrent_fusions(view) -> void:
 			continue
 		var first: Array = pairs[0]
 		var second: Array = pairs[1]
-		var chests: int = 0
+		var fragments: int = 0
 		for id: int in first + second:
-			chests += 1 if bool(view._cell(id).chest) else 0
+			fragments += 1 if bool(view._cell(id).chest) else 0
 		var first_home: Vector2 = view._global_rect(view._tile_rect(view._cell(first[0]))).get_center()
 		var second_target_home: Vector2 = _center(view, second[1])
 		_drag_pair(view, first[0], first[1])
@@ -1536,12 +1536,12 @@ func _check_concurrent_fusions(view) -> void:
 		check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.disabled,
 			"The final disappearance releases all effects and enables Finish")
 		check(attempts.size() == 2 and attempts[1].id == second_id and first_id != second_id
-			and bool(attempts[0].correct) and bool(attempts[1].correct) and view.game.chest_count == chests,
-			"Independent pairs receive distinct, exactly-once word and marked-chest credits")
+			and bool(attempts[0].correct) and bool(attempts[1].correct) and view.game.fragment_count == fragments,
+			"Independent pairs receive distinct, exactly-once word and marked-fragment credits")
 		check(cues.count("pop") == 2 and view.game.cleared_pairs == 2, "Both timelines pop once and score once")
 		view._release(second_target_home)
 		_advance(view, 0.2)
-		check(attempts.size() == 2 and view.game.chest_count == chests and view.game.spawn_elapsed > elapsed,
+		check(attempts.size() == 2 and view.game.fragment_count == fragments and view.game.spawn_elapsed > elapsed,
 			"A repeated release cannot duplicate awards and ordinary supply resumes after all fusions")
 
 
@@ -1638,8 +1638,8 @@ func _check_fusion_interruption(view) -> void:
 	check(_effect(view).merged.get_rect().is_equal_approx(static_pose) and _effect(view).merged._surface.scale == Vector2.ONE
 		and not _effect(view).art.visible and attempts.is_empty(), "Reduced motion keeps the combined tile still while honoring the original completion boundary")
 	view._process(0.33)
-	check(attempts.size() == 1 and attempts[0].correct and view.game.chest_count == 1
-		and view._fusion_visuals.is_empty(), "Resuming a reduced-motion fusion awards its word and chest once at the original end")
+	check(attempts.size() == 1 and attempts[0].correct and view.game.fragment_count == 1 and view.game.chest_count == 0
+		and view._fusion_visuals.is_empty(), "Resuming a reduced-motion fusion awards its word and fragment once at the original end")
 	_reset(view)
 	pair = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
@@ -1697,16 +1697,34 @@ func _check_deferred_release(view) -> void:
 		"A genuinely missing native release cancels instead of guessing a drop")
 
 
+func _earn_fragments(view, total: int) -> void:
+	for attempt in range(200):
+		view.advance_reward_presentation(8.0)
+		if view.game.fragment_count >= total:
+			break
+		_advance(view, view.game.SETTLE_SECONDS)
+		var chosen: Array[int] = _pair(view, true)
+		if chosen.is_empty():
+			chosen = _pair(view)
+		if chosen.is_empty():
+			view.game.drop_now()
+			continue
+		_drag_pair(view, chosen[0], chosen[1])
+		_advance(view, view.game.FUSION_SECONDS)
+	view.advance_reward_presentation(8.0)
+	view._refresh_controls()
+	check(view.game.fragment_count >= total and view.game.chest_count == 1,
+		"Real marked clears collect enough fragments to present one final chest")
+
+
 func _check_result_gate(view) -> void:
 	_reset(view)
 	var opened: Array[int] = []
 	var replayed: Array[int] = []
 	view.chests_requested.connect(func() -> void: opened.append(1))
 	view.replay_requested.connect(func() -> void: replayed.append(1))
-	var pair: Array[int] = _pair(view, true)
-	_drag_pair(view, pair[0], pair[1])
-	for delta: float in [0.4, 0.4, 0.25]:
-		view._process(delta)
+	_earn_fragments(view, 4)
+	var score_before: int = view.game.score()
 	view.finish_button.pressed.emit()
 	check(finishes.size() == 1 and view.game.phase == "finished", "Finish emits a settled result once")
 	view._open_chests()
@@ -1716,8 +1734,9 @@ func _check_result_gate(view) -> void:
 	view.result_reveal()
 	check(view._result.visible and view.chests_button.visible and view.replay_button.visible,
 		"The root explicitly reveals the complete result after celebration")
-	check(view.snapshot().score == 1 and view.snapshot().result.title == "Round results"
-		and view.snapshot().result.caption == "Score: 1 · Chests: 1", "The settled result reports completed pairs and exact loot")
+	check(view.snapshot().score == score_before and view.snapshot().result.title == "Round results"
+		and view.snapshot().result.caption == "Score: %d · Chest Lv. 1" % score_before,
+		"The settled result reports completed pairs and the single unlocked chest's level")
 	for dimensions: Vector2 in [Vector2(390, 640), Vector2(844, 235), Vector2(320, 260)]:
 		view.size = dimensions
 		view._layout()
@@ -1736,8 +1755,8 @@ func _check_result_gate(view) -> void:
 	view.finish_button.pressed.emit()
 	view.result_reveal()
 	check(not view.chests_button.visible and view.replay_button.visible, "A zero-chest round offers replay without a false opening action")
-	check(view.snapshot().score == 0 and view.snapshot().result.caption == "Score: 0 · Chests: 0",
-		"An empty round explicitly reports zero score and zero loot")
+	check(view.snapshot().score == 0 and view.snapshot().result.caption == "Score: 0 · Fragments: 0 / 4",
+		"An empty round explicitly reports zero score and its incomplete fragment collection")
 	view.size = Vector2(1000, 720)
 
 
@@ -1752,7 +1771,7 @@ func _check_reduced_motion_and_cache(view) -> void:
 		"Reduced motion shows a stationary combined picture and word: %s -> %s, scale %s" % [static_rect, _effect(view).merged.get_rect(), _effect(view).merged._surface.scale])
 	for delta: float in [0.3, 0.25]:
 		view._process(delta)
-	check(view._loot_flights.is_empty() and view.game.chest_count == 1,
+	check(view._loot_flights.is_empty() and view.game.fragment_count == 1 and view.game.chest_count == 0,
 		"Reduced motion removes flight while preserving the actual reward")
 	var texture: Texture2D = view._chest_texture
 	view.apply_theme(Data.theme("spring"), data.chests)

@@ -69,7 +69,12 @@ func load_state() -> bool:
 				or (not allow_repeated_themes and themes.has(entry.theme)) or not entry.get("opened") is bool:
 				return _fail("Your treasure save contains an invalid chest.")
 			themes.append(entry.theme)
-			next_entries.append({"theme": entry.theme, "opened": entry.opened})
+			var restored: Dictionary = {"theme": entry.theme, "opened": entry.opened}
+			if entry.has("tier"):
+				if storage_kind != "jelly" or not entry.tier is int or entry.tier < 1:
+					return _fail("Your treasure save contains an invalid chest level.")
+				restored["tier"] = entry.tier
+			next_entries.append(restored)
 		for receipt in saved_receipts:
 			if not receipt is String or receipt.is_empty() or receipt.length() > 200 or next_receipts.has(receipt):
 				return _fail("Your treasure history could not be understood.")
@@ -89,13 +94,16 @@ func has_pending() -> bool:
 	return false
 
 
-func create_batch(id: String, themes: Array[String]) -> bool:
+func create_batch(id: String, themes: Array[String], tiers: Array[int] = []) -> bool:
 	if not load_state():
 		return false
 	if id == round_id:
 		return true
 	if id.is_empty() or id.length() > 200 or themes.is_empty() or (max_chests > 0 and themes.size() > max_chests):
 		return _fail("This round has no treasure to open.")
+	if not tiers.is_empty() and (storage_kind != "jelly" or tiers.size() != themes.size()
+		or tiers.any(func(tier: int) -> bool: return tier < 0)):
+		return _fail("This round has an invalid chest level.")
 	if has_pending() and storage_kind != "jelly":
 		return _fail("Open your saved treasure before starting another reward batch.")
 	if _receipts.has(id):
@@ -115,11 +123,15 @@ func create_batch(id: String, themes: Array[String]) -> bool:
 			if receipts.size() > MAX_RECEIPTS:
 				receipts.pop_front()
 	var seen: Array[String] = []
-	for theme_id in themes:
+	for index in range(themes.size()):
+		var theme_id: String = themes[index]
 		if not Data.THEMES.has(theme_id) or (not allow_repeated_themes and seen.has(theme_id)):
 			return _fail("Choose different treasure styles for this round.")
 		seen.append(theme_id)
-		next_entries.append({"theme": theme_id, "opened": false})
+		var entry: Dictionary = {"theme": theme_id, "opened": false}
+		if not tiers.is_empty() and tiers[index] > 0:
+			entry["tier"] = tiers[index]
+		next_entries.append(entry)
 	if not _persist(id, next_entries, receipts):
 		return false
 	round_id = id

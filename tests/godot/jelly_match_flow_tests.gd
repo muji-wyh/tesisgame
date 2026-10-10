@@ -4,6 +4,7 @@ const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const RewardState = preload("res://scripts/pop_reward_state.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 var checks := 0
 var failures := 0
 
@@ -56,6 +57,42 @@ func fill_board(game) -> void:
 		game.step(maxf(0.000001, remaining))
 	check(game.cells.size() == game.CAPACITY and is_zero_approx(float(game.full_elapsed)),
 		"A full board waits for every arrival in its final batch to settle before warning")
+
+
+func earn_fragments(view, total: int) -> void:
+	var game = view.game
+	for attempt in range(400):
+		view.advance_reward_presentation(8.0)
+		if game.fragment_count >= total or game.phase != "playing":
+			break
+		game.step(game.SETTLE_SECONDS)
+		var chosen: Array = []
+		var unmarked: Array = []
+		var budget: int = total - int(game.fragment_count)
+		for a: Dictionary in game.cells:
+			if not game.is_settled(a) or game.is_fusing(int(a.id)):
+				continue
+			for b: Dictionary in game.cells:
+				if not game.is_settled(b) or game.is_fusing(int(b.id)):
+					continue
+				var reward: int = int(bool(a.chest)) + int(bool(b.chest))
+				if a.word.id == b.word.id and a.kind != b.kind and reward > 0 and reward <= budget:
+					chosen = [a, b]
+					break
+				elif a.word.id == b.word.id and a.kind != b.kind and reward == 0:
+					unmarked = [a, b]
+			if not chosen.is_empty():
+				break
+		if chosen.is_empty():
+			chosen = unmarked
+		if chosen.is_empty():
+			var falling: bool = game.cells.any(func(cell: Dictionary) -> bool: return not game.is_settled(cell))
+			game.step(game.SETTLE_SECONDS if falling else game.spawn_interval + game.SETTLE_SECONDS)
+			continue
+		check(game.try_merge(chosen[0].id, chosen[1].id) == "correct", "A real dragged pair contributes to the fragment reward fixture")
+		game.step(game.FUSION_SECONDS)
+	view.advance_reward_presentation(8.0)
+	check(game.fragment_count == total, "Completed marked merges reach exactly %d chest fragments" % total)
 
 
 func _run() -> void:
@@ -122,7 +159,8 @@ func _run() -> void:
 		and game.snapshot().upcoming == supply_before, "The game menu freezes fusion, falling tiles and supply together")
 	app._hide_mode_menu()
 	game.step(0.66)
-	check(game.cleared_pairs == 1 and game.chest_count == 1, "Resuming completes one pair and one chest")
+	check(game.cleared_pairs == 1 and game.fragment_count == 1 and game.chest_count == 0,
+		"Resuming completes one pair and one fragment without prematurely granting a chest")
 	check(int(app.growth.snapshot().streaks.get(word_id, 0)) == 1, "One eliminated pair credits its word exactly once")
 	app._jelly.word_attempted.emit("jelly-1", [word_id] as Array[String], true)
 	check(int(app.growth.snapshot().streaks.get(word_id, 0)) == 1, "A repeated event receipt cannot double credit growth")
@@ -141,14 +179,17 @@ func _run() -> void:
 	app.on_page_visible()
 	check(not game.paused, "Returning restores the same board")
 	check(app._jelly_backdrop.visible, "Returning restores the same woodland without replaying scenery")
+	earn_fragments(app._jelly, 4)
+	var earned_score: int = game.cleared_pairs
 	game.finish_round()
 	check(app._round_celebration.is_active() and not app._jelly.visible, "A positive result enters the shared Pip celebration")
 	check(not app._jelly_backdrop.visible, "The shared reward presentation owns its own background")
 	var summary: Dictionary = app._round_celebration.snapshot()
-	check(app._round_result.score == 1 and summary.score == 1 and summary.title == "Round results"
-		and summary.caption == "Score: 1 · Chests: 1" and is_equal_approx(app._round_celebration._heading.modulate.a, 1.0)
+	check(app._round_result.score == earned_score and summary.score == earned_score and summary.title == "Round results"
+		and summary.chest_tier == 1 and summary.caption == "Score: %d · Chest Lv. 1" % earned_score
+		and is_equal_approx(app._round_celebration._heading.modulate.a, 1.0)
 		and is_equal_approx(app._round_celebration._caption.modulate.a, 1.0),
-		"The real result immediately reports the completed pair's score and earned chest")
+		"The real result reports its actual score and single synthesized chest tier")
 	check(app._jelly_rewards.has_pending() and FileAccess.file_exists(app.jelly_reward_save_path), "Earned treasure is durable before its result action")
 	app._show_jelly_rewards()
 	check(not app._jelly_rewards_shown, "Treasure cannot open through the celebration gate")
@@ -158,7 +199,7 @@ func _run() -> void:
 	Fixture.finish_celebration(app)
 	check(app._jelly.visible and not app._round_celebration.is_active(), "The full result appears after celebration")
 	check(app._jelly_backdrop.visible, "Jelly's settlement returns to its woodland setting")
-	check(app._jelly.snapshot().score == 1 and app._jelly.snapshot().result.title == "Round results"
+	check(app._jelly.snapshot().score == earned_score and app._jelly.snapshot().result.title == "Round results"
 		and app._jelly.snapshot().result.caption == summary.caption,
 		"The persistent result retains the same score and chest summary after the animation")
 	check(not app.new_round(52, false, "", "jelly") and app._jelly_rewards_shown, "Mode navigation resumes pending treasure before starting a new board")
@@ -182,17 +223,23 @@ func _run() -> void:
 	game.finish_round()
 	check(not app._round_celebration.is_active() and app._jelly.visible, "Zero loot shows a result without a false reward celebration")
 	check(app._round_result.score == 0 and app._jelly.snapshot().result.title == "Round results"
-		and app._jelly.snapshot().result.caption == "Score: 0 · Chests: 0",
+		and app._jelly.snapshot().result.caption == "Score: 0 · Fragments: 0 / 4",
 		"A new zero-loot round reports its own zero totals without stale score or victory copy")
 	var zero_round_id: String = app._round_id
 	app._jelly.replay_button.pressed.emit()
 	check(app._round_id != zero_round_id and app._jelly.game.phase == "playing", "The zero-loot Play again button immediately starts another board")
 	app._jelly.set_process(false)
 	game = app._jelly.game
-	game.step(game.SETTLE_SECONDS)
-	chosen = pair(game, true)
-	game.try_merge(chosen[0].id, chosen[1].id)
-	game.step(1.05)
+	earn_fragments(app._jelly, 3)
+	game.finish_round()
+	check(app._round_result.fragment_count == 3 and app._round_result.chest_count == 0
+		and app._round_result.chest_tier == 0 and not app._round_celebration.is_active()
+		and not app._jelly_rewards.has_pending(),
+		"Ending below four fragments shows an honest result without saving or celebrating a chest")
+	app._jelly.replay_button.pressed.emit()
+	app._jelly.set_process(false)
+	game = app._jelly.game
+	earn_fragments(app._jelly, 4)
 	app.choose_mode("memory")
 	check(not app._jelly_backdrop.visible, "Switching games removes the Jelly-only scenery")
 	check(app._mode_id == "memory" and app._jelly_rewards.has_pending(), "Switching modes settles earned Jelly loot without replaying celebration")
@@ -216,7 +263,7 @@ func _run() -> void:
 	await settle()
 	await _tap_growth_checks(directory)
 	await _warning_audio_flow(directory)
-	await _uncapped_reward_checks(directory)
+	await _upgraded_reward_checks(directory)
 	await _reward_conflict_checks(directory)
 	await _replay_reward_checks(directory)
 	for file in DirAccess.get_files_at(directory):
@@ -362,37 +409,23 @@ func _warning_audio_flow(directory: String) -> void:
 	await settle()
 
 
-func _uncapped_reward_checks(directory: String) -> void:
+func _upgraded_reward_checks(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
-	Fixture.install(app, directory, "uncapped-growth.cfg")
-	app.jelly_reward_save_path = directory + "/uncapped-jelly-rewards.cfg"
-	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/uncapped-medals.cfg", directory + "/uncapped-legacy.cfg")
-	app._presentation.path = directory + "/uncapped-presentation.cfg"
+	Fixture.install(app, directory, "upgraded-growth.cfg")
+	app.jelly_reward_save_path = directory + "/upgraded-jelly-rewards.cfg"
+	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/upgraded-medals.cfg", directory + "/upgraded-legacy.cfg")
+	app._presentation.path = directory + "/upgraded-presentation.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	check(app.new_round(104, false, "", "jelly"), "An uncapped reward round starts through GameUI")
+	check(app.new_round(104, false, "", "jelly"), "An upgraded reward round starts through GameUI")
 	app._jelly.set_process(false)
 	var game = app._jelly.game
-	var attempts: int = 0
-	while game.chest_count < 4 and game.phase == "playing" and attempts < 40:
-		attempts += 1
-		var chosen := pair(game, true)
-		if chosen.is_empty():
-			chosen = pair(game)
-		if chosen.is_empty():
-			game.step(game.spawn_interval + game.SETTLE_SECONDS)
-			continue
-		game.step(game.SETTLE_SECONDS)
-		var merged: String = game.try_merge(chosen[0].id, chosen[1].id)
-		check(merged == "correct", "Real word-picture merges earn the uncapped reward")
-		if merged != "correct":
-			break
-		game.step(game.FUSION_SECONDS)
-	check(game.chest_count == 4 and game.cleared_pairs >= 4,
-		"Normal spawning and completed merges earn four chests without changing score or reward state")
-	if game.chest_count != 4:
+	earn_fragments(app._jelly, 19)
+	check(game.chest_count == 1 and game.chest_tier == 4 and game.fragment_count == 19,
+		"Nineteen real fragments synthesize one chest and upgrade it three times")
+	if game.chest_tier != 4:
 		app.audio.halt()
 		app.queue_free()
 		await settle()
@@ -402,47 +435,39 @@ func _uncapped_reward_checks(directory: String) -> void:
 	app._round_celebration.set_process(false)
 	var celebration: Dictionary = app._round_celebration.snapshot()
 	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.score == cleared
-		and app._round_result.chest_count == 4,
-		"A natural full-board timeout finishes with all four previously earned chests")
-	check(celebration.active and celebration.automatic and celebration.chest_count == 4
+		and app._round_result.chest_count == 1 and app._round_result.chest_tier == 4,
+		"A natural full-board timeout preserves the single final upgraded chest")
+	check(celebration.active and celebration.automatic and celebration.chest_count == 1 and celebration.chest_tier == 4
 		and celebration.score == cleared and celebration.title == "Round results"
-		and celebration.caption == "Score: %d · Chests: 4" % cleared
-		and app._round_celebration._count.text == "x4",
-		"The real Jelly finale reports the earned score and full reward instead of truncating it to three")
+		and celebration.caption == "Score: %d · Chest Lv. 4" % cleared
+		and app._round_celebration._count.text == "" and celebration.theme == RewardProgress.theme_for_tier(4),
+		"The finale reports one Tier 4 chest with its final artwork rather than four separate rewards")
 	var saved := RewardState.new(app.jelly_reward_save_path)
 	saved.storage_kind = "jelly"
 	saved.max_chests = 0
 	saved.allow_repeated_themes = true
-	check(saved.load_state() and saved.round_id == app._round_id and saved.entries.size() == 4,
-		"All four earned chests are durable before the celebration completes")
+	check(saved.load_state() and saved.round_id == app._round_id and saved.entries.size() == 1
+		and saved.entries[0].tier == 4 and saved.entries[0].theme == RewardProgress.theme_for_tier(4),
+		"Only the final upgraded chest is durable before the celebration completes")
 	Fixture.finish_celebration(app)
 	check(not app._round_celebration.is_active() and app._jelly.snapshot().result.visible
-		and app._round_result.chest_count == 4 and app._jelly.snapshot().score == cleared
+		and app._round_result.chest_count == 1 and app._jelly.snapshot().score == cleared
 		and app._jelly.snapshot().result.title == "Round results"
 		and app._jelly.snapshot().result.caption == celebration.caption,
-		"The completed celebration restores the same score and exact four-chest result")
+		"The completed celebration restores the same score and single upgraded reward")
 	app._jelly.chests_button.pressed.emit()
 	var room = app._jelly_rewards
 	room.set_process(false)
 	var first_page: Dictionary = room.snapshot()
-	check(app._jelly_rewards_shown and first_page.chest_count == 4 and first_page.page_count == 2
-		and first_page.page == 0 and first_page.visible_chest_count == 3,
-		"The result action opens a four-chest batch paged into three visible chests")
-	check(room.set_page(1) and room.snapshot().chest_count == 4 and room.snapshot().visible_chest_count == 1
-		and room.snapshot().chests[0].index == 3,
-		"The second page exposes the fourth durable chest at its global index")
+	check(app._jelly_rewards_shown and first_page.chest_count == 1 and first_page.page_count == 1
+		and first_page.page == 0 and first_page.visible_chest_count == 1 and first_page.chests[0].tier == 4
+		and first_page.heading == "Chest Lv. 4",
+		"The result action presents only the final upgraded chest to open")
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
-	check(room.snapshot().opened_count == 1 and saved.load_state() and saved.entries[3].opened
-		and not saved.entries[0].opened and not saved.entries[1].opened and not saved.entries[2].opened,
-		"Opening the second page commits only the fourth chest")
-	check(room.set_page(0), "The first page remains reachable after the fourth chest opens")
-	for card in room._cards:
-		room.begin_hold(card.button)
-		room.advance_hold(Feel.HOLD_SECONDS)
-	check(room.snapshot().chest_count == 4 and room.snapshot().opened_count == 4 and not room.has_pending()
-		and saved.load_state() and saved._receipts.has(app._round_id),
-		"Opening both pages completes the full four-chest batch with one durable round receipt")
+	check(room.snapshot().opened_count == 1 and saved.load_state() and saved.entries[0].opened
+		and saved.entries[0].tier == 4 and not room.has_pending() and saved._receipts.has(app._round_id),
+		"Opening the final chest completes the round with one durable receipt and no intermediate chests")
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -467,13 +492,7 @@ func _reward_conflict_checks(directory: String) -> void:
 		app._jelly.set_process(false)
 		app.choose_theme("ocean")
 		var game = app._jelly.game
-		game.step(game.SETTLE_SECONDS)
-		var chosen := pair(game, true)
-		check(chosen.size() == 2, "The conflict fixture has an earned chest pair")
-		if chosen.size() != 2:
-			break
-		game.try_merge(chosen[0].id, chosen[1].id)
-		game.step(1.05)
+		earn_fragments(app._jelly, 9)
 		var local_id: String = app._round_id
 		var foreign_id: String = "foreign-" + next_mode
 		check(external.create_batch(foreign_id, ["spring"]), "Another tab can save treasure while this round is in progress")
@@ -484,10 +503,11 @@ func _reward_conflict_checks(directory: String) -> void:
 		var room = app._jelly_rewards
 		room.set_process(false)
 		check(external.load_state() and external.round_id == local_id and external.entries.size() == 2
-			and external.entries[0].theme == "spring" and external.entries[1].theme == "ocean",
-			"Both tabs' unopened chests retain their original themes in the saved batch")
+			and external.entries[0].theme == "spring" and not external.entries[0].has("tier")
+			and external.entries[1].theme == RewardProgress.theme_for_tier(2) and external.entries[1].tier == 2,
+			"Another tab's old chest and this round's final upgraded chest retain their earned state")
 		app.choose_theme("candy")
-		check(app._jelly._theme.id == "ocean", "The result preview keeps this round's earned chest theme")
+		check(app._jelly._theme.id == RewardProgress.theme_for_tier(2), "Changing the world cannot reroll this round's upgraded chest artwork")
 		if next_mode == "jelly":
 			app._jelly.replay_button.pressed.emit()
 			check(app._round_id != local_id and app._jelly.game.phase == "playing"
@@ -544,13 +564,7 @@ func _replay_reward_checks(directory: String) -> void:
 	for index in range(3):
 		app._jelly.set_process(false)
 		var game = app._jelly.game
-		game.step(game.SETTLE_SECONDS)
-		var chosen := pair(game, true)
-		check(chosen.size() == 2, "Each replay has a fresh marked pair")
-		if chosen.size() != 2:
-			break
-		game.try_merge(chosen[0].id, chosen[1].id)
-		game.step(1.05)
+		earn_fragments(app._jelly, 4 + index * 5)
 		ids.append(app._round_id)
 		var saved_text: String = FileAccess.get_file_as_string(app.jelly_reward_save_path) if index > 0 else ""
 		if index == 2:
@@ -567,8 +581,10 @@ func _replay_reward_checks(directory: String) -> void:
 			app._jelly_rewards.retry_save()
 			check(not app._jelly_rewards._save_failed, "Retry saves this round together with earlier treasure")
 			app._hide_jelly_rewards()
-		check(app._jelly_rewards.snapshot().chest_count == index + 1 and app._round_result.chest_count == 1,
-			"Consecutive rounds accumulate unopened chests while result totals remain per round")
+		check(app._jelly_rewards.snapshot().chest_count == index + 1 and app._round_result.chest_count == 1
+			and app._round_result.chest_tier == index + 1
+			and app._jelly_rewards.rewards.entries[index].tier == index + 1,
+			"Consecutive rounds retain one final chest per round at its separately earned tier")
 		app._jelly.replay_button.pressed.emit()
 		check(app._round_id != ids[index] and app._jelly.game.phase == "playing" and not app._jelly_rewards_shown,
 			"Each saved result can replay immediately without opening any treasure")
@@ -577,9 +593,12 @@ func _replay_reward_checks(directory: String) -> void:
 	saved.max_chests = 0
 	saved.allow_repeated_themes = true
 	check(saved.load_state() and saved.entries.size() == 3 and saved.has_pending(), "Reload restores the accumulated treasure")
-	for id in ids:
-		check(saved.create_batch(id, ["spring"]) and saved.entries.size() == 3,
-			"A delayed finished-round callback cannot duplicate accumulated treasure")
+	for index in range(ids.size()):
+		check(saved.entries[index].tier == index + 1 and saved.entries[index].theme == RewardProgress.theme_for_tier(index + 1),
+			"Reload preserves each replay's final tier and corresponding chest artwork")
+		check(saved.create_batch(ids[index], ["spring"], [99]) and saved.entries.size() == 3
+			and saved.entries[index].tier == index + 1,
+			"A delayed finished-round callback cannot duplicate or overwrite upgraded treasure")
 	app.audio.halt()
 	app.queue_free()
 	await settle()
