@@ -2,6 +2,7 @@ extends SceneTree
 
 const Data = preload("res://scripts/game_data.gd")
 const Catalog = preload("res://scripts/age_word_catalog.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 
 var checks := 0
 var failures := 0
@@ -133,7 +134,7 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 				if word.image.is_empty():
 					check(picture.texture == null and not picture.visible and word.practice_modes == ["phrase"], "Contextual words remain readable without invented pictures: " + word.id)
 				else:
-					check(picture.texture != null and picture.texture.resource_path == "res://" + word.image, "The catalogue retains its production illustration: " + word.id)
+					check(picture.texture != null and WordArt.source_path(picture.texture) == "res://" + word.image, "The catalogue retains its production illustration: " + word.id)
 				var mastery: Label = button.get_meta("mastery_label")
 				var streak: int = int(progress.streaks.get(word.id, 0))
 				check(mastery.text == ("Mastered" if streak == 6 else "%d / 6" % streak), "Mastered and learning words expose their exact streak: " + word.id)

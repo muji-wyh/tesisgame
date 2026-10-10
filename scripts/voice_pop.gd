@@ -14,6 +14,7 @@ signal status_changed(snapshot: Dictionary)
 const Style = preload("res://scripts/ui_style.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const Data = preload("res://scripts/game_data.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
@@ -488,8 +489,12 @@ func _present_hits(struck: Array) -> void:
 		if not visual.is_empty():
 			if _bursts.size() >= Slice.MAX_EFFECTS:
 				_bursts.pop_front()
-			_bursts.append(Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
-				int(target.get("combo", 1))))
+			var burst: Dictionary = Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
+				int(target.get("combo", 1)))
+			var picture: Texture2D = _textures.get(str(target.word.get("id", target.word.get("text", ""))), null)
+			# Both cut halves keep the exact pose that was on screen at impact.
+			burst.picture = picture.duplicate() if picture is AtlasTexture else picture
+			_bursts.append(burst)
 		_last_hit_left = 1.15
 		hit.emit(target.word)
 	if not time_awards.is_empty():
@@ -1439,7 +1444,7 @@ func _draw_slice_half(burst: Dictionary, center: Vector2, side: float, scale: fl
 	var half_disc: PackedVector2Array = Slice.clip_half(disc, origin, normal, side)
 	if half_disc.size() >= 3:
 		_slice_canvas.draw_colored_polygon(half_disc, Color(Color("#fffaf2"), alpha))
-	var texture: Texture2D = _textures.get(str(burst.word.get("id", burst.word.get("text", ""))), null)
+	var texture: Texture2D = burst.get("picture", _textures.get(str(burst.word.get("id", burst.word.get("text", ""))), null))
 	if texture != null:
 		var original: Vector2 = texture.get_size()
 		var art_size: Vector2 = original * minf(art_edge / maxf(1.0, original.x), art_edge / maxf(1.0, original.y))
@@ -1448,7 +1453,14 @@ func _draw_slice_half(burst: Dictionary, center: Vector2, side: float, scale: fl
 			art_rect.end, Vector2(art_rect.position.x, art_rect.end.y)])
 		art_polygon = Slice.clip_half(art_polygon, origin, normal, side)
 		if art_polygon.size() >= 3:
-			_slice_canvas.draw_polygon(art_polygon, PackedColorArray([Color(1, 1, 1, alpha)]), Slice.texture_uv(art_polygon, art_rect), texture)
+			var uv: PackedVector2Array = Slice.texture_uv(art_polygon, art_rect)
+			var source: Texture2D = texture
+			if texture is AtlasTexture:
+				# Polygon drawing uses the backing image, so map frame UVs into the sheet.
+				source = texture.atlas
+				for index in range(uv.size()):
+					uv[index] = (texture.region.position + uv[index] * texture.region.size) / source.get_size()
+			_slice_canvas.draw_polygon(art_polygon, PackedColorArray([Color(1, 1, 1, alpha)]), uv, source)
 	# The cut crosses the illustration; the readable word remains on the lower half.
 	if side > 0.0:
 		_draw_slice_word(burst, capsule_size, scale, alpha)
@@ -1793,13 +1805,7 @@ func _cache_texture(word: Dictionary) -> void:
 	if _textures.has(key):
 		return
 	var image_path: String = str(word.get("image", ""))
-	_textures[key] = null
-	if image_path.is_empty():
-		return
-	if not image_path.begins_with("res://"):
-		image_path = "res://" + image_path
-	if ResourceLoader.exists(image_path):
-		_textures[key] = load(image_path)
+	_textures[key] = WordArt.texture(image_path, self)
 
 
 func _pending_message(message: String) -> bool:

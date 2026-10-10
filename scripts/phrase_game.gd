@@ -1,4 +1,6 @@
 extends Control
+
+const WordArt = preload("res://scripts/word_art.gd")
 ## Listen, drag words into a phrase, and keep correcting until it is right.
 
 signal finished
@@ -506,6 +508,7 @@ func _move_word(point: Vector2) -> void:
 		_source.modulate.a = 0.0 if _source_kind == "answer" else 0.25
 		_preview.text = Data.display_word(game.options[_drag_word])
 		_preview.icon = _source.icon
+		WordArt.bind(_preview.icon, _preview)
 		_style_tile(_preview, true, false, false, s, _drag_word, _source.size.x,
 			_source.get_theme_constant("icon_max_width") if _source.icon != null else 0)
 		_preview.size = _source.size
@@ -619,6 +622,7 @@ func _release_word(point: Vector2) -> void:
 func _settle_word(from: Rect2, target: Button) -> void:
 	_preview.text = target.text
 	_preview.icon = target.icon
+	WordArt.bind(_preview.icon, _preview)
 	var word_index: int = game.answer[answer_buttons.find(target)] if answer_buttons.has(target) else option_buttons.find(target)
 	_style_tile(_preview, true, false, false, Style.ui_scale(self), word_index,
 		target.size.x, target.get_theme_constant("icon_max_width"))
@@ -789,6 +793,7 @@ func _refresh() -> void:
 		button.visible = not completion_pending and occupied
 		button.text = Data.display_word(game.options[game.answer[index]]) if occupied else ""
 		button.icon = option_buttons[game.answer[index]].icon if occupied else null
+		WordArt.bind(button.icon, button)
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.tooltip_text = "Drag to reorder or tap to return " + button.text if occupied else "Place a word on the answer line"
@@ -816,7 +821,7 @@ func _rebuild_buttons() -> void:
 	answer_buttons.clear()
 	for index in range(game.options.size()):
 		var button := _button(Data.display_word(game.options[index]), "PhraseOption_%d" % index, _choose.bind(index))
-		button.icon = load("res://" + str(game.options[index].image)) if not str(game.options[index].image).is_empty() else null
+		button.icon = WordArt.texture(str(game.options[index].image), button)
 		button.expand_icon = true
 		button.reparent(_bank_content)
 		button.focus_entered.connect(scroll_bank_to.bind(index))
@@ -1017,7 +1022,7 @@ func _rect_snapshot(rect: Rect2) -> Array:
 
 
 func _control_snapshot(button: Button) -> Dictionary:
-	return {"name": str(button.name), "text": button.text, "icon": button.icon.resource_path if button.icon != null else "", "rect": _rect_snapshot(button.get_global_rect()), "disabled": button.disabled, "visible": button.is_visible_in_tree(), "accessibility_name": button.get("accessibility_name")}
+	return {"name": str(button.name), "text": button.text, "icon": WordArt.source_path(button.icon), "rect": _rect_snapshot(button.get_global_rect()), "disabled": button.disabled, "visible": button.is_visible_in_tree(), "accessibility_name": button.get("accessibility_name")}
 
 
 func snapshot() -> Dictionary:

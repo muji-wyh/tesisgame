@@ -1,5 +1,6 @@
 class_name JellyMatch
 extends Control
+const WordArt = preload("res://scripts/word_art.gd")
 ## A fixed portrait jelly well. The model alone owns answers, time and loot.
 
 signal word_requested(word: Dictionary)
@@ -598,7 +599,7 @@ func _picture(word: Dictionary) -> Texture2D:
 	if path.is_empty():
 		return null
 	if not _pictures.has(path):
-		_pictures[path] = load("res://" + path) as Texture2D
+		_pictures[path] = WordArt.texture(path)
 	return _pictures[path]
 
 func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> void:

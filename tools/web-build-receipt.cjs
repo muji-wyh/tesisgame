@@ -8,6 +8,7 @@ const INPUTS = [
   'docs/assets/voice-pop-reference-audio.json', 'docs/assets/pair-feedback-audio.json',
   'docs/assets/ui-click-audio.json', 'docs/assets/chest-reference-audio.json',
   'docs/assets/lv3-vocabulary.json', 'tools/lv3-vocabulary-art.cjs',
+  'docs/assets/lv3-word-motion.json',
   'tests/godot/verify_web_pack.gd',
   ...['build-web', 'package-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'web-build-receipt']
     .map(name => `tools/${name}.cjs`)

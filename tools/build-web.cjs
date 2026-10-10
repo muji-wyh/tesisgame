@@ -9,6 +9,7 @@ const root = path.resolve(__dirname, '..');
 invalidateBuildReceipt(root);
 prepare();
 require('./lv3-vocabulary-art.cjs').checkLv3Art(root);
+require('./lv3-vocabulary-art.cjs').checkWordMotion(root);
 runGodot(['--headless', '--path', root, '--import']);
 const audio = collectRequiredAudio(root);
 const inputs = snapshotInputs(root);

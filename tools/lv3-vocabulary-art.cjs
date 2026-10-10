@@ -38,7 +38,25 @@ function checkLv3Art(root = path.resolve(__dirname, '..'), manifest) {
   return { pictures: hashes.size, blender: manifest.files.filter(file => file.source.provider === 'kenney-blender').length };
 }
 
-module.exports = { checkLv3Art };
+function checkWordMotion(root = path.resolve(__dirname, '..')) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/lv3-word-motion.json')));
+  const expected = ['close', 'drink', 'eat', 'hello', 'jump', 'open', 'run', 'walk'];
+  if (manifest.license !== 'CC0-1.0' || JSON.stringify(manifest.files.map(file => file.id).sort()) !== JSON.stringify(expected)) {
+    throw new Error('Word motion must contain exactly the eight reviewed, licensed actions.');
+  }
+  for (const file of manifest.files) {
+    if (file.path !== `assets/images/word-motion/${file.id}.webp` || file.frameSide !== 128 || file.columns !== 8 ||
+        file.fps !== 24 || file.posterFrame >= file.frames || file.posterFrame < 0) throw new Error(`Invalid word motion: ${file.id}`);
+    const bytes = fs.readFileSync(path.join(root, file.path));
+    if (bytes.toString('ascii', 0, 4) !== 'RIFF' || bytes.toString('ascii', 8, 12) !== 'WEBP' ||
+        bytes.length !== file.bytes || createHash('sha256').update(bytes).digest('hex') !== file.sha256) {
+      throw new Error(`Unreviewed or incomplete word motion: ${file.id}`);
+    }
+  }
+  return { clips: manifest.files.length, frames: manifest.files.reduce((sum, file) => sum + file.frames, 0) };
+}
+
+module.exports = { checkLv3Art, checkWordMotion };
 if (require.main === module) {
   try {
     const result = checkLv3Art();

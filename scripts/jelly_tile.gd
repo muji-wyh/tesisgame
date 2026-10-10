@@ -2,6 +2,7 @@ extends Button
 ## Authored gel artwork with a separate, undistorted learning label.
 
 const Style = preload("res://scripts/ui_style.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const Surface = preload("res://scripts/jelly_surface.gdshader")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const CONTACT_SHADOW = preload("res://assets/images/jelly-match/contact-shadow.png")
@@ -80,6 +81,7 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	combined = show_both
 	_surface.texture = surface
 	_picture.texture = picture
+	WordArt.bind(picture, _picture)
 	_badge.texture = chest
 	_badge.visible = bool(cell.get("chest", false)) and not combined and not _projection
 	_accent = accent

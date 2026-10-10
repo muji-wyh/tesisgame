@@ -2,6 +2,7 @@ extends Control
 
 const Model = preload("res://scripts/game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
@@ -287,6 +288,7 @@ func _ready() -> void:
 	_presentation.load_preferences(DisplayServer.accessibility_should_reduce_animation() == 1)
 	_preferred_theme = _presentation.preferred_theme
 	reduced_motion = _presentation.reduced_motion
+	WordArt.set_reduced_motion(reduced_motion)
 	audio.set_muted(_presentation.muted)
 	call_deferred("_sync_controller_accept_startup")
 	_connect_browser()
@@ -2462,6 +2464,7 @@ func choose_theme(id: String) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	WordArt.set_reduced_motion(value)
 	if _host != null:
 		_host.presentationSettings(value, audio.muted)
 	_hint_link.set_reduced_motion(value)
@@ -3527,6 +3530,7 @@ func _finish_chest_drag() -> void:
 
 
 func _process(delta: float) -> void:
+	WordArt.advance(delta, not _page_hidden and not _mode_menu_open())
 	# Input may start a hold in this frame; delta includes time from before
 	# that press. Start counting on the next frame without delaying its pose.
 	var hold_delta: float = 0.0 if Engine.get_process_frames() == _hold_origin_frame else delta

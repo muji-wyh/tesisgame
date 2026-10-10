@@ -1,0 +1,96 @@
+{
+  "creator": "Kenney (source meshes); Grow with Pip (skeletal motion and renders)",
+  "license": "CC0-1.0",
+  "sourceRecord": "docs/assets/lv3-vocabulary.json",
+  "status": "Integrated in all word-picture consumers",
+  "files": [
+    {
+      "id": "walk",
+      "path": "assets/images/word-motion/walk.webp",
+      "frames": 40,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 19,
+      "bytes": 147512,
+      "sha256": "be44ae7cd9ed792da9b7282645dda5e5feadc447c980e304ce49870b1b07a3b4"
+    },
+    {
+      "id": "run",
+      "path": "assets/images/word-motion/run.webp",
+      "frames": 20,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 9,
+      "bytes": 78576,
+      "sha256": "1932ed43c96fe0b587a772bf36d0b255dfb60aa96473fdf60b53b26dc4a36090"
+    },
+    {
+      "id": "jump",
+      "path": "assets/images/word-motion/jump.webp",
+      "frames": 64,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 30,
+      "bytes": 197704,
+      "sha256": "a13b6b4b884562c82f5a3a0d4264ad79d86e7a55470908638a6f34f4828f1f41"
+    },
+    {
+      "id": "open",
+      "path": "assets/images/word-motion/open.webp",
+      "frames": 80,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 62,
+      "bytes": 233502,
+      "sha256": "0ff542a3ecb44fc79ac409d854c8a78fbde8b17fa7b03c042ffb21e4c143a5ef"
+    },
+    {
+      "id": "close",
+      "path": "assets/images/word-motion/close.webp",
+      "frames": 80,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 62,
+      "bytes": 223948,
+      "sha256": "5b0053140654e90b11048cd4322fe52f986b38e85bc012b85cf326a322573726"
+    },
+    {
+      "id": "drink",
+      "path": "assets/images/word-motion/drink.webp",
+      "frames": 80,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 38,
+      "bytes": 220616,
+      "sha256": "a529ae1206dd8aa9b800a3bbba19c5a74689d4d496504cae6a834a180b35adae"
+    },
+    {
+      "id": "eat",
+      "path": "assets/images/word-motion/eat.webp",
+      "frames": 80,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 38,
+      "bytes": 219760,
+      "sha256": "72aa793117c190a08236bb79570949c97e5155372cfdd393ec7c2184bd83fd2f"
+    },
+    {
+      "id": "hello",
+      "path": "assets/images/word-motion/hello.webp",
+      "frames": 72,
+      "fps": 24,
+      "frameSide": 128,
+      "columns": 8,
+      "posterFrame": 34,
+      "bytes": 227116,
+      "sha256": "2034f0be94a1a18faf7ec7f97d90d02f0154755bff090f3952994e947479b524"
+    }
+  ]
+}

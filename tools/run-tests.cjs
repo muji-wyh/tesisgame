@@ -27,7 +27,7 @@ const groups = {
       'presentation_tests', 'playful_words_tests'
     ]
   },
-  ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests', 'age_word_catalog_tests', 'vocabulary_art_tests'] },
+  ages: { godot: ['age_level_tests', 'vocabulary_layout_tests', 'age_scene_tests', 'age_word_catalog_tests', 'vocabulary_art_tests', 'word_motion_tests'] },
   cards: { godot: ['card_polish_tests'] },
   'match-groups': { godot: ['match_groups_tests', 'match_connections_tests'] },
   'hint-link': { godot: ['hint_link_tests'] },

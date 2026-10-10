@@ -2,6 +2,7 @@ extends SceneTree
 
 const Feel = preload("res://scripts/chest_feel.gd")
 const PhraseModel = preload("res://scripts/phrase_game_model.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
 
 var checks: int = 0
@@ -604,7 +605,7 @@ func _check_answer_pictures(view) -> void:
 		if index < view.game.answer.size():
 			var option_index: int = view.game.answer[index]
 			var picture_path: String = str(view.game.options[option_index].image)
-			var expected: Texture2D = load("res://" + picture_path) if not picture_path.is_empty() else null
+			var expected: Texture2D = WordArt.texture(picture_path)
 			check(button.icon == expected and button.icon == view.option_buttons[option_index].icon,
 				"The placed word retains its source picture or contextual text presentation after editing")
 		else:

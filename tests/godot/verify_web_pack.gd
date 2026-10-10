@@ -66,6 +66,15 @@ func _verify() -> void:
 			failures += 1
 	failures += _verify_phrases(words)
 	failures += _verify_growth()
+	var art = load("res://scripts/word_art.gd")
+	for id: String in art.CLIPS:
+		var motion: AtlasTexture = art.texture("assets/images/words/lv3-%s.png" % id) as AtlasTexture
+		var expected_height: int = ceili(float(art.CLIPS[id][0]) / art.COLUMNS) * art.FRAME_SIDE
+		if motion == null or motion.get_size() != Vector2(art.FRAME_SIDE, art.FRAME_SIDE) \
+			or motion.atlas.get_size() != Vector2(art.COLUMNS * art.FRAME_SIDE, expected_height):
+			printerr("An animated word atlas is missing or incomplete in the startup pack: " + id)
+			failures += 1
+	print("Vocabulary motion: eight teaching animations checked in the startup pack.")
 	var required := OS.get_cmdline_user_args()
 	if required.has("--audio-manifest"):
 		var manifest_index: int = required.find("--audio-manifest")

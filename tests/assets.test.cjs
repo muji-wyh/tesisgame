@@ -118,7 +118,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 1569); // 1,500 existing textures plus 69 reviewed Lv3 replacements.
+  assert.equal(textureImports.length, 1577); // 1,500 existing textures, 69 Lv3 pictures and eight motion atlases.
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);
@@ -386,6 +386,13 @@ test('the image directories contain exactly the 1426 vocabulary, replacement and
     assert.ok(fs.existsSync(fullPath), `Missing image directory: ${directory}`);
     assert.deepEqual(assetFiles(fullPath), names.sort());
   }
+});
+
+test('the eight teaching animations retain their reviewed frames and source rights', () => {
+  const { checkWordMotion } = require('../tools/lv3-vocabulary-art.cjs');
+  assert.deepEqual(checkWordMotion(root), { clips: 8, frames: 516 });
+  assert.deepEqual(assetFiles(path.join(root, 'assets/images/word-motion')),
+    ['close', 'drink', 'eat', 'hello', 'jump', 'open', 'run', 'walk'].map(id => `${id}.webp`));
 });
 
 test('voice prompts contain exactly eight world greetings', () => {

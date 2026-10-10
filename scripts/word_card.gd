@@ -1,5 +1,7 @@
 extends Button
 
+const WordArt = preload("res://scripts/word_art.gd")
+
 const Style = preload("res://scripts/ui_style.gd")
 const WordPlay = preload("res://scripts/word_play.gd")
 const CardMotion = preload("res://scripts/card_motion.gd")
@@ -116,7 +118,7 @@ func setup(value: Dictionary) -> void:
 	picture.offset_right = -12
 	picture.offset_bottom = -10
 	picture.visible = value.kind == "image"
-	picture.texture = load("res://" + value.word.image)
+	picture.texture = WordArt.texture(str(value.word.image), picture)
 	word_label = Style.label(value.word.text, 32)
 	word_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	word_label.clip_text = true

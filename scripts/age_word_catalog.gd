@@ -1,4 +1,5 @@
 extends VBoxContainer
+const WordArt = preload("res://scripts/word_art.gd")
 ## Browse the supplied age-eligible vocabulary without changing lesson progress.
 
 signal hear_requested(word: Dictionary)
@@ -182,6 +183,7 @@ func _rebuild_words() -> void:
 		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		picture.texture = _word_texture(str(word.get("image", "")))
+		WordArt.bind(picture.texture, picture)
 		column.add_child(picture)
 		picture.visible = picture.texture != null
 		var caption := Style.label(str(word.get("display_text", word.get("text", ""))), 14)
@@ -258,7 +260,7 @@ func _word_texture(source: String) -> Texture2D:
 		return null
 	var path: String = source if source.begins_with("res://") else "res://" + source
 	if not _textures.has(path):
-		_textures[path] = load(path) as Texture2D
+		_textures[path] = WordArt.texture(path)
 	return _textures[path]
 
 
