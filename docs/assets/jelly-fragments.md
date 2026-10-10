@@ -38,8 +38,10 @@ After the pickup reaches the HUD and its progress segment fills, the milestone
 performance lasts 2.15 seconds.
 A 0.18-second anticipation leads into the lift and turn, the new chest appears
 at 0.72 seconds, and the body lands at 1.26 seconds before returning to its
-static HUD size. Its peak is 1.48 times the resting icon size, anchored in the
-existing HUD without a modal. The the
+static HUD size. Upgrades peak at 2.5 times the resting icon size; first-chest
+synthesis retains its 1.48-times peak. The turned silhouette stays inside all
+four gameplay edges, including the lower Voice Pop HUD, then returns to its
+original anchor. Local light accents grow with the chest without adding a modal. The
 sound accent, upgraded art and confetti emission use this same reveal event.
 The chest settles in its existing gameplay HUD while the paper spreads across
 the viewport and falls away. There is no dimming panel, centered reward page,

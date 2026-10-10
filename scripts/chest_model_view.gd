@@ -416,6 +416,14 @@ func closed_bounds() -> Rect2:
 	return _design_closed
 
 
+func closed_turn_bounds() -> Rect2:
+	var result := Rect2()
+	for index in range(8):
+		var point: Vector2 = _project_point(_rig.transform * _closed_box.get_endpoint(index))
+		result = Rect2(point, Vector2.ZERO) if index == 0 else result.expand(point)
+	return result
+
+
 func cavity_point() -> Vector2:
 	# The 2D release effects and actual cavity light follow the same spatial
 	# anchor while the model turns inside its fixed framing envelope.

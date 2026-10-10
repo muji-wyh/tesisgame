@@ -65,7 +65,8 @@ func sample(tier: int, yaw: float) -> Dictionary:
 		return {}
 	var view: ModelView = _pool[tier]
 	view.set_closed_turn(yaw)
-	return {"texture": view.get_texture(), "bounds": view.closed_bounds()}
+	return {"texture": view.get_texture(), "bounds": view.closed_bounds(),
+		"turn_bounds": view.closed_turn_bounds()}
 
 
 func set_active(enabled: bool) -> void:

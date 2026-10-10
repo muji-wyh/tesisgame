@@ -157,9 +157,30 @@ func _motion(age: float) -> Dictionary:
 	var lift: float = sin(clampf((age - 0.18) / 1.08, 0.0, 1.0) * PI) * 0.30
 	var anticipation: float = sin(clampf(age / 0.18, 0.0, 1.0) * PI)
 	var settle: float = sin(clampf((age - 1.26) / 0.26, 0.0, 1.0) * PI) * 0.035
+	var growth: float = 1.50 if is_active() and int(_events[0].previous_tier) > 0 else 0.48
 	return {"yaw": turn * TAU, "lift": lift + settle - anticipation * 0.025,
-		"scale": 1.0 + smoothstep(0.10, 0.48, age) * (1.0 - smoothstep(1.0, 1.72, age)) * 0.48,
+		"scale": 1.0 + smoothstep(0.10, 0.48, age) * (1.0 - smoothstep(1.0, 1.72, age)) * growth,
 		"roll": -anticipation * 0.10 + sin(turn * TAU) * 0.055}
+
+
+func _placement(pose: Dictionary, edge: float, center: Vector2) -> Dictionary:
+	var local := Rect2(Vector2.ONE * -edge * 0.5, Vector2.ONE * edge)
+	if not _model_sample.is_empty():
+		var framing: Rect2 = _model_sample.bounds
+		var turned: Rect2 = _model_sample.turn_bounds
+		var unit: float = edge / maxf(framing.size.x, framing.size.y)
+		local = local.merge(Rect2((turned.position - framing.get_center()) * unit, turned.size * unit))
+	var scale: float = float(pose.scale)
+	var transform := Transform2D(float(pose.roll), Vector2.ONE * scale, 0.0, Vector2.ZERO)
+	var bounds: Rect2 = transform * local
+	# Fit the real turned silhouette, including its roll, at either HUD edge.
+	var available: Vector2 = (size - Vector2.ONE * 4.0).max(Vector2.ONE)
+	var fit: float = minf(1.0, minf(available.x / bounds.size.x, available.y / bounds.size.y))
+	scale *= fit
+	bounds = Rect2(bounds.position * fit, bounds.size * fit)
+	var point: Vector2 = center - Vector2(0, edge * float(pose.lift))
+	point = point.clamp(Vector2.ONE * 2.0 - bounds.position, size - Vector2.ONE * 2.0 - bounds.end)
+	return {"center": point, "scale": scale}
 
 
 func _draw() -> void:
@@ -180,29 +201,29 @@ func _draw() -> void:
 	var accent: Color = _tier_color(int(event.tier))
 	var fade: float = smoothstep(0.0, 0.10, age) * (1.0 - smoothstep(1.70, PERFORMANCE_SECONDS, age))
 	var reveal_age: float = age - REVEAL_SECONDS
-	var point: Vector2 = center - Vector2(0, edge * float(pose.lift))
-	# Keep the lifted silhouette inside the current gameplay surface on phones.
-	point.y = maxf(edge * float(pose.scale) * 0.50 + 2.0, point.y)
-	var floor_point: Vector2 = center + Vector2(0, edge * 0.36)
+	var placement: Dictionary = _placement(pose, edge, center)
+	var point: Vector2 = placement.center
+	var accent_edge: float = edge * lerpf(1.0, float(placement.scale), 0.45) if int(event.previous_tier) > 0 else edge
+	var floor_point: Vector2 = Vector2(point.x, center.y + edge * 0.36)
 	_draw_glow(floor_point, Vector2(edge * 1.42, edge * 0.30), Color("#193c47", 0.20 * fade))
 	_draw_ring(floor_point, Vector2(edge * 0.66, edge * 0.16), accent, fade * 0.85)
 	var charge: float = smoothstep(0.22, REVEAL_SECONDS, age) * (1.0 - smoothstep(REVEAL_SECONDS, 1.28, age))
-	_draw_glow(point, Vector2.ONE * edge * (1.35 + charge), Color(accent, charge * 0.64))
+	_draw_glow(point, Vector2.ONE * accent_edge * (1.35 + charge), Color(accent, charge * 0.64))
 	if reveal_age >= 0.0:
 		var rays: float = (1.0 - smoothstep(0.05, 0.85, reveal_age)) * fade
 		draw_set_transform(point, reveal_age * 0.20)
-		draw_texture_rect(RAYS, Rect2(Vector2.ONE * -edge * 1.38, Vector2.ONE * edge * 2.76), false, Color(accent.lightened(0.25), rays))
+		draw_texture_rect(RAYS, Rect2(Vector2.ONE * -accent_edge * 1.38, Vector2.ONE * accent_edge * 2.76), false, Color(accent.lightened(0.25), rays))
 		draw_set_transform(Vector2.ZERO)
 		for index in range(2):
 			var ripple: float = reveal_age - float(index) * 0.11
 			if ripple < 0.0 or ripple >= 0.76:
 				continue
-			var radius: float = edge * lerpf(0.36, 1.34, 1.0 - pow(1.0 - ripple / 0.76, 2.0))
+			var radius: float = accent_edge * lerpf(0.36, 1.34, 1.0 - pow(1.0 - ripple / 0.76, 2.0))
 			_draw_ring(point, Vector2.ONE * radius, accent, (1.0 - ripple / 0.76) * 0.85)
 	if int(event.previous_tier) == 0 and not _revealed:
-		_draw_pieces(after, point, edge * float(pose.scale), age / REVEAL_SECONDS)
+		_draw_pieces(after, point, edge * float(placement.scale), age / REVEAL_SECONDS)
 	else:
-		draw_set_transform(point, float(pose.roll), Vector2.ONE * float(pose.scale))
+		draw_set_transform(point, float(pose.roll), Vector2.ONE * float(placement.scale))
 		var texture: Texture2D = after if _revealed else before
 		var model_weight: float = smoothstep(0.12, 0.24, age) * (1.0 - smoothstep(1.32, 1.55, age))
 		if _model_sample.is_empty():
@@ -217,13 +238,13 @@ func _draw() -> void:
 	if reveal_age >= 0.0:
 		# The short local flash hides only the material swap, never the board.
 		var flash: float = 1.0 - smoothstep(0.0, 0.18, reveal_age)
-		_draw_glow(point, Vector2.ONE * edge * 1.85, Color(accent.lightened(0.72), flash * 0.94))
+		_draw_glow(point, Vector2.ONE * accent_edge * 1.85, Color(accent.lightened(0.72), flash * 0.94))
 		for index in range(5):
 			var t: float = reveal_age - 0.055 * index
 			if t < 0.0 or t >= 0.64:
 				continue
 			var direction := Vector2.from_angle(-PI * 0.85 + index * 1.08)
-			var star_point: Vector2 = point + direction * edge * (0.65 + t * 0.40)
+			var star_point: Vector2 = point + direction * accent_edge * (0.65 + t * 0.40)
 			var star_size: float = edge * 0.34 * sin(t / 0.64 * PI)
 			draw_texture_rect(SPARKLE, Rect2(star_point - Vector2.ONE * star_size * 0.5, Vector2.ONE * star_size), false, Color(accent.lightened(0.6), (1.0 - t / 0.64) * fade))
 

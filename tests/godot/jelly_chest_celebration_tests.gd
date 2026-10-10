@@ -39,6 +39,7 @@ func _run() -> void:
 	_check_reentry(view)
 	_check_reduced_motion(view)
 	_check_layouts(view)
+	_check_upgrade_containment(view)
 	_check_model_lifecycle(view)
 	view.clear()
 	view.free()
@@ -177,6 +178,42 @@ func _check_layouts(view) -> void:
 
 func _rect(values: Array) -> Rect2:
 	return Rect2(Vector2(float(values[0]), float(values[1])), Vector2(float(values[2]), float(values[3])))
+
+
+func _check_upgrade_containment(view) -> void:
+	for previous in range(1, 6):
+		_begin(view, previous, previous + 1)
+		var contained: bool = true
+		var recovered: bool = true
+		for frame in range(130):
+			var age: float = float(frame) / 60.0
+			view._elapsed = Celebration.ARRIVAL_SECONDS + age
+			view._started = true
+			view._revealed = age >= Celebration.REVEAL_SECONDS
+			view._sync()
+			var pose: Dictionary = view._motion(age)
+			for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(320, 220), Vector2(844, 235)]:
+				view.size = dimensions
+				for anchor: Rect2 in [Rect2(6, 4, 43, 43), Rect2(6, dimensions.y - 36, 38, 32), Rect2(dimensions.x - 49, 4, 43, 43)]:
+					view.set_chest_anchor(anchor)
+					var edge: float = minf(anchor.size.x, anchor.size.y)
+					var placement: Dictionary = view._placement(pose, edge, anchor.get_center())
+					var transform := Transform2D(float(pose.roll), Vector2.ONE * float(placement.scale), 0.0, placement.center)
+					var safe := Rect2(Vector2.ONE * 1.99, dimensions - Vector2.ONE * 3.98)
+					contained = contained and safe.encloses(transform * Rect2(Vector2.ONE * -edge * 0.5, Vector2.ONE * edge))
+					if not view._model_sample.is_empty():
+						var tier: int = previous + 1 if view._revealed else previous
+						var model = view._models._pool[tier]
+						var bounds: Rect2 = model.closed_bounds()
+						var unit: float = edge / maxf(bounds.size.x, bounds.size.y)
+						for corner in range(8):
+							var projected: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
+							contained = contained and safe.has_point(transform * ((projected - bounds.get_center()) * unit))
+					if frame == 0 or frame == 129:
+						recovered = recovered and Vector2(placement.center).is_equal_approx(anchor.get_center()) \
+							and is_equal_approx(float(placement.scale), 1.0)
+		check(contained, "Upgrade %d keeps every turned model corner and static fallback inside desktop and phone HUD edges" % previous)
+		check(recovered, "Upgrade %d starts and settles at the original HUD position and size" % previous)
 
 
 func _models_stopped(models) -> bool:
