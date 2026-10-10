@@ -40,6 +40,18 @@ reveal in the Match, Memory, Phrase Builder, Voice Pop and Jelly Match finales.
 Those finales sample the burst from 1.8 to 3 seconds on their existing clock;
 rounds without a chest omit it. Reduced motion keeps the static reward instead.
 
+The Jelly Match gameplay HUD uses a segmented halo around the existing chest
+art instead of a numeric fragment counter. Four segments fill to unlock the
+first chest; five segments fill for each subsequent upgrade. A segment charges
+over 0.32 seconds when its pickup flight arrives, with one 0.55-second local
+accent using the existing `portal_glow.png` texture documented below. The ring
+holds full until the milestone reveals its chest, then begins the next upgrade.
+It has no idle movement and disappears on the result page. Its clock follows
+the gameplay owner, including pause and interruption; reduced motion updates
+the segments immediately. Exact totals remain available to accessibility tools.
+The halo is an interface progress indicator, not replacement chest artwork;
+no additional image or sound asset is acquired for this presentation.
+
 ## Chest art
 
 The tier progression reuses the integrated designs in this order:

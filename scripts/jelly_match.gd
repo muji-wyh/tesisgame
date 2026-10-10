@@ -20,6 +20,7 @@ const UiClick = preload("res://scripts/ui_click.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const LootMeter = preload("res://scripts/jelly_loot_meter.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
@@ -69,7 +70,7 @@ var _contact_label: Label
 var _contact_label_kind: String = ""
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
-var _loot_count: Label
+var _loot_meter: LootMeter
 var _loot_detail: Label
 var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
@@ -104,9 +105,9 @@ func _init() -> void:
 	_contact_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_contact_label.z_index = 50
 	_contact_label.hide()
+	_loot_meter = LootMeter.new()
+	add_child(_loot_meter)
 	_loot_icon = _image(self)
-	_loot_count = _label(self, "0", 24)
-	_loot_count.name = "JellyLootCount"
 	_loot_detail = _label(self, "Fragments", 11)
 	_loot_detail.name = "JellyFragmentProgress"
 	drop_button = Button.new()
@@ -198,6 +199,7 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 		_surfaces = loaded
 	reduced_motion = reduced
 	_displayed_chest_tier = 0
+	_loot_meter.reset()
 	_result_visible = false
 	_result_transition = false
 	_result_elapsed = 0.0
@@ -300,6 +302,8 @@ func set_reduced_motion(value: bool) -> void:
 	_reward_presentation._sync()
 	_snapbacks.clear()
 	_loot_flights.clear()
+	_refresh_hud()
+	_loot_meter.settle()
 	_sync_tiles()
 	_sync_preview()
 	_refresh_fusion()
@@ -323,6 +327,8 @@ func settle() -> void:
 	cancel_input()
 	_snapbacks.clear()
 	_loot_flights.clear()
+	_refresh_hud()
+	_loot_meter.settle()
 	_sync_tiles()
 	_refresh_fusion()
 	queue_redraw()
@@ -845,6 +851,7 @@ func _process(delta: float) -> void:
 	_sync_tiles()
 	_refresh_fusion()
 	_refresh_hud()
+	_loot_meter.advance(delta)
 	_animate_result()
 	queue_redraw()
 	_publish_elapsed += delta
@@ -988,7 +995,7 @@ func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
 	if generation != _generation or not _configured or game.phase != "playing":
 		return
 	if awarded > 0 and not reduced_motion:
-		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0})
+		_loot_flights.append({"from": _tile_rect(fusion.b).get_center(), "elapsed": 0.0, "amount": awarded})
 	if _reward_presentation.is_active() and game.fusions.is_empty():
 		cancel_input()
 		if generation != _generation or not _configured or game.phase != "playing":
@@ -1080,12 +1087,16 @@ func _replay() -> void:
 
 func _refresh_hud() -> void:
 	var progress: Dictionary = game.reward_progress(game.fragment_count)
-	var displayed_tier: int = _displayed_chest_tier if _reward_presentation.is_active() else game.chest_tier
-	_loot_count.text = "Lv. %d" % displayed_tier if displayed_tier > 0 else "%d / 4" % mini(4, game.fragment_count)
-	_loot_detail.text = "%d / 5 to upgrade" % (5 if displayed_tier < game.chest_tier else int(progress.fragments_toward_next)) if displayed_tier > 0 else "Chest fragments"
-	_loot_count.set("accessibility_name", "%d fragments. Chest level %d. %d of %d toward the next reward." % [game.fragment_count, game.chest_tier, progress.fragments_toward_next, progress.fragments_required])
+	var displayed_tier: int = _displayed_chest_tier
+	var arrived: int = game.fragment_count
+	for flight: Dictionary in _loot_flights:
+		arrived -= int(flight.get("amount", 1))
+	var base: int = 4 + (displayed_tier - 1) * 5 if displayed_tier > 0 else 0
+	_loot_meter.set_progress(maxi(0, arrived - base), 5 if displayed_tier > 0 else 4, reduced_motion)
+	_loot_detail.text = "Upgrade chest" if displayed_tier > 0 else "Unlock chest"
+	_loot_meter.set("accessibility_name", "%d fragments. Chest level %d. %d of %d toward the next reward." % [game.fragment_count, game.chest_tier, progress.fragments_toward_next, progress.fragments_required])
 	_loot_icon.texture = _reward_texture(displayed_tier)
-	_loot_icon.modulate.a = 1.0 if displayed_tier > 0 else 0.58
+	_loot_icon.modulate.a = 1.0 if displayed_tier > 0 else 0.72
 	var state: Dictionary = game.snapshot()
 	var full: bool = float(game.full_elapsed) >= 0.0
 	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
@@ -1093,8 +1104,8 @@ func _refresh_hud() -> void:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
-	_loot_icon.visible = _configured
-	_loot_count.visible = _configured
+	_loot_icon.visible = _configured and not _result_visible
+	_loot_meter.visible = _configured and not _result_visible
 	_loot_detail.visible = _configured and not _result_visible
 	_sync_preview()
 
@@ -1221,25 +1232,17 @@ func _layout() -> void:
 	_gap = maxf(2.0 / scale_factor, _pitch * 0.035)
 	var hud_width: float = minf(160.0 / scale_factor, maxf(0.0, _board.position.x - edge * 2.0)) if wide else minf(110.0 / scale_factor, _board.size.x * 0.40)
 	var hud_x: float = maxf(edge, _board.position.x - hud_width - edge) if wide else edge
-	var hud_y: float = _board.position.y + 14.0 / scale_factor if wide else 20.0 / scale_factor
-	_loot_icon.position = Vector2(hud_x, hud_y)
-	_loot_icon.size = Vector2(44, 44) / scale_factor
-	_loot_count.position = Vector2(hud_x + 46.0 / scale_factor, hud_y)
-	_loot_count.size = Vector2(hud_width - 46.0 / scale_factor, 44.0 / scale_factor)
-	_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_loot_count.add_theme_font_size_override("font_size", ceili(19.0 / scale_factor))
-	_loot_detail.position = Vector2(hud_x, hud_y + 44.0 / scale_factor)
-	_loot_detail.size = Vector2(hud_width, 21.0 / scale_factor)
+	var hud_y: float = _board.position.y + 14.0 / scale_factor if wide else 0.0
+	var meter_edge: float = minf(64.0 / scale_factor, hud_width)
+	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, hud_y)
+	_loot_meter.size = Vector2.ONE * meter_edge
+	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
+	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
+	_loot_detail.position = Vector2(hud_x, hud_y + meter_edge + 2.0 / scale_factor)
+	_loot_detail.size = Vector2(hud_width, 17.0 / scale_factor)
 	_loot_detail.add_theme_font_size_override("font_size", ceili(11.0 / scale_factor))
 	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if _compact_hud:
-		_loot_icon.size = Vector2(40, 40) / scale_factor
-		_loot_icon.position.x = hud_x + (hud_width - _loot_icon.size.x) * 0.5
-		_loot_count.position = Vector2(hud_x, hud_y + 38.0 / scale_factor)
-		_loot_count.size = Vector2(hud_width, 26.0 / scale_factor)
-		_loot_count.add_theme_font_size_override("font_size", ceili(20 / scale_factor))
-		_loot_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_loot_detail.position.y = hud_y + 65.0 / scale_factor
 		_loot_detail.add_theme_font_size_override("font_size", ceili(9.0 / scale_factor))
 	var preview_width: float = minf(144.0 / scale_factor, size.x - _board.end.x - edge * 2.0) if wide else minf(248.0 / scale_factor, size.x - 92.0 / scale_factor - edge * 2.0)
 	var preview_x: float = _board.end.x + edge if wide else size.x - edge - preview_width
@@ -1271,9 +1274,6 @@ func _layout() -> void:
 	_result.size = size
 	_reward_presentation.size = size
 	_layout_result(scale_factor, edge)
-	if _result_visible:
-		_loot_icon.position = Vector2(edge, edge)
-		_loot_count.position = Vector2(edge + 46.0 / scale_factor, edge)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -1409,6 +1409,8 @@ func snapshot() -> Dictionary:
 	result["loot"]["fragments"] = game.fragment_count
 	result["loot"]["tier"] = game.chest_tier
 	result["loot"]["progress_text"] = _loot_detail.text
+	result["loot"]["progress"] = _loot_meter.snapshot()
+	result["loot"]["progress"]["rect"] = _rect(_loot_meter.get_global_rect())
 	result["reward_presentation"] = _reward_presentation.snapshot()
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
 		"open": _control(chests_button), "replay": _control(replay_button)}
