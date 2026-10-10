@@ -164,7 +164,7 @@ func _badge_states() -> void:
 			check(badge.get_global_rect().encloses(badge.bar.get_global_rect())
 				and badge.bar.is_visible_in_tree() and not badge.bar.show_percentage,
 				"Every badge size keeps its actual mastery bar inside the clickable entry")
-			for label: Label in [badge.level_label, badge.count_label, badge.target_label, badge.age_label]:
+			for label: Label in [badge.level_label, badge.count_label, badge.age_label]:
 				if label.is_visible_in_tree():
 					check(badge.get_global_rect().grow(0.5).encloses(label.get_global_rect()),
 						"Visible badge text stays inside the %s entry" % footprint)
@@ -172,13 +172,11 @@ func _badge_states() -> void:
 					var font_size: int = label.get_theme_font_size("font_size")
 					check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x + 0.5,
 						"The full %s label fits without clipping in the %s entry" % [label.text, footprint])
-			check(badge.count_label.visible == not compact and badge.target_label.visible == not compact,
+			check(badge.count_label.visible == not compact and badge.age_label.visible == not compact,
 				"Compact badges keep level and progress while secondary copy moves to the accessible description")
 			check(badge.bar.size.y >= (7.5 if compact else 19.5),
 				"The mastery track remains visibly substantial instead of resembling a divider")
 			if not compact:
-				check(badge.target_label.text == "›",
-					"The wide badge uses a quiet notebook chevron while its description carries the next-level target")
 				var track: Rect2 = badge.bar.get_global_rect()
 				var count: Rect2 = badge.count_label.get_global_rect()
 				check(track.grow(0.5).encloses(count) and track.get_center().distance_to(count.get_center()) < 0.5
