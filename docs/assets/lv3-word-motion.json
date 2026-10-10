@@ -2,15 +2,23 @@
   "creator": "Kenney (source meshes); Grow with Pip (skeletal motion and renders)",
   "license": "CC0-1.0",
   "sourceRecord": "docs/assets/lv3-vocabulary.json",
-  "adaptations": "Cheerful smile, timed blinks, head and torso counter-motion, action-specific anticipation and recovery; clip durations unchanged.",
+  "adaptations": "Keyed bright grin, delighted smile, closed-eye pleased reaction and timed blinks; stronger planted gait, open-arm jump, palm-led wave and action-specific contact reactions; clip durations unchanged.",
   "skins": [
     {
       "path": "tools/vocabulary-art/skins/child-cheerful.png",
-      "sha256": "e73a25fa8d1290ce42139c7f322c9d2f097642da54a8dc5f679c9e79f7dff24f"
+      "sha256": "f3908ee9814b0b2860d0198a0504bc2f52012f19ee42392d835cfc1acfb94800"
     },
     {
       "path": "tools/vocabulary-art/skins/child-cheerful-blink.png",
-      "sha256": "d06788bc00dc934be5d4dbe1a672f30314e44b4e5afecfbbcd755a4b8492e8e2"
+      "sha256": "eb75a8133bbf7a3c4c37d6a394a5f146a899f9a2415be9ea0345a7030f88923e"
+    },
+    {
+      "path": "tools/vocabulary-art/skins/child-cheerful-delighted.png",
+      "sha256": "15e1739804f78265a0150bec3399b7ba46f15d10ac6018c5f57c52c012d9e9d1"
+    },
+    {
+      "path": "tools/vocabulary-art/skins/child-cheerful-pleased.png",
+      "sha256": "4633ad0b90ef9b3d2696270281779da634c8c57375bd312cd971beffc885b9f0"
     }
   ],
   "status": "Integrated in all word-picture consumers",
@@ -23,8 +31,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 19,
-      "bytes": 151452,
-      "sha256": "530d63e35b29608a89e29cd47ba9e77a3e573da06cef70ec9f3d6020a454d450"
+      "bytes": 163202,
+      "sha256": "06b019240467076945ed38e5ca268ce090154df4ba8689c30927edc30239a753"
     },
     {
       "id": "run",
@@ -34,8 +42,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 9,
-      "bytes": 78030,
-      "sha256": "a82353b24e1eb285814ff592eec76e725288b936ee37138588ccb6931d03f7aa"
+      "bytes": 76292,
+      "sha256": "40cd9125e69f1304c5a39609171058c691bb54f275b44d45d6c5f841ecc283c7"
     },
     {
       "id": "jump",
@@ -45,8 +53,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 30,
-      "bytes": 195176,
-      "sha256": "1fb41265a66ec64f4a532f2ee1885d762302381df7b008ddf584aa7f44dfc5d4"
+      "bytes": 205196,
+      "sha256": "a6e8ebd2e2d178da2b9adb8ab2f2d7f1c826027ddf35374edde431982b8c861e"
     },
     {
       "id": "open",
@@ -56,8 +64,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 62,
-      "bytes": 275314,
-      "sha256": "726e171e198a03751a5d8c51710e5b30d47b923ad718e5fb1883130d4753e4b1"
+      "bytes": 283772,
+      "sha256": "9b88830afa28b99462b749ecb28a105a3fb74c26d052e12d233a96de4bc88319"
     },
     {
       "id": "close",
@@ -67,8 +75,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 62,
-      "bytes": 218056,
-      "sha256": "ba139beac34849719b530635e186c765148bfa49d1ec1ae52c4739ba2a09c2d7"
+      "bytes": 266900,
+      "sha256": "b948c84fb508503d417eb4eeb583aa8d515f65afc759b0c460beca858658c1a0"
     },
     {
       "id": "drink",
@@ -78,8 +86,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 38,
-      "bytes": 239122,
-      "sha256": "9f92d5ae78fd458c9459e44f9a335650a19f15500f35220b6004690cb94d0c0b"
+      "bytes": 264272,
+      "sha256": "2a9f794508d28c9b0a0126e4130c339825f5289d480c3bb460d5669fe3a4a69c"
     },
     {
       "id": "eat",
@@ -89,8 +97,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 38,
-      "bytes": 221366,
-      "sha256": "375bee665bfe256a5741696685612f84710e21f9c5781821281c43d0249d108f"
+      "bytes": 246470,
+      "sha256": "4f1f2d584a9603a56dc4081fbfa0d0eb792d1c38a94793862d108881b897453b"
     },
     {
       "id": "hello",
@@ -100,8 +108,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 34,
-      "bytes": 252516,
-      "sha256": "0a2aafdd3e88e6ba2ad6a67b15424cb6ad65a054af14016d15d12c80a2136a8c"
+      "bytes": 286442,
+      "sha256": "1352143e7c1c97eab683eea7a9f0e5813c317356b409bc097203889ed8aeb57f"
     }
   ]
 }

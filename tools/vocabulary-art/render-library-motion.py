@@ -36,95 +36,157 @@ def write(path, value):
 Y, X = np.mgrid[0:SIDE, 0:SIDE].astype(np.float32)
 
 
-def frame(source, entry, index, active_fraction=1):
+def cue(phase, poses):
+    """A posed accent with explicit anticipation, emphasis and recovery beats."""
+    for (start, first), (end, last) in zip(poses, poses[1:]):
+        if phase <= end:
+            progress = max(0, (phase - start) / (end - start))
+            eased = progress * progress * (3 - 2 * progress)
+            return first + (last - first) * eased
+    return poses[-1][1]
+
+
+ACCENT = [(0, 0), (.11, -.16), (.30, 1), (.42, 1), (.58, -.14), (.72, .18), (.88, 0), (1, 0)]
+SWISH = [(0, 0), (.12, -.28), (.32, 1), (.53, -.40), (.71, .14), (.89, 0), (1, 0)]
+LIFT = [(0, 0), (.13, 0), (.31, 1), (.41, .95), (.58, 0), (.72, .20), (.87, 0), (1, 0)]
+GLIDE = [(0, 0), (.14, -.12), (.41, 1), (.55, .94), (.88, 0), (1, 0)]
+CALM = [(0, 0), (.20, .15), (.46, 1), (.61, 1), (.92, 0), (1, 0)]
+
+
+def rigid_frame(ax, ay, angle=0, dx=0, dy=0, zoom=1):
+    """One undeformed camera/object transform; never stretch rigid artwork."""
+    x, y = (X - ax - dx) / zoom, (Y - ay - dy) / zoom
+    return ax + x * math.cos(angle) + y * math.sin(angle), ay - x * math.sin(angle) + y * math.cos(angle)
+
+
+def frame(source, entry, index, profile_data):
     """Inverse-map source pixels; keep alpha attached to the original geometry."""
-    phase = min(1, ((index / FRAMES + entry.get('phase', 0)) % 1) / active_fraction)
-    # Ease into and out of the movement; each family has a small settled hold.
-    phase -= math.sin(phase * math.tau) / math.tau
+    phase = min(1, ((index / FRAMES + entry.get('phase', 0)) % 1) / profile_data['activeFraction'])
+    # Stronger accents are followed by a readable rest, rather than a constant
+    # sine-wave wiggle. Stable word offsets keep a page from moving in unison.
+    accent, swish, lift = cue(phase, ACCENT), cue(phase, SWISH), cue(phase, LIFT)
+    glide, calm = cue(phase, GLIDE), cue(phase, CALM)
+    subdued = entry.get('motionTone') == 'calm'
+    if subdued:
+        accent, swish, lift = calm, .25 * calm, .25 * calm
+    travel = entry.get('translationPx', profile_data['amplitude']['translationPx'])
+    turn = math.radians(entry.get('rotationDeg', profile_data['amplitude']['rotationDeg']))
+    camera_scale = profile_data.get('cameraScale', 0)
+    framing_scale = entry.get('framingScale', profile_data.get('framingScale', 1))
     t = phase * math.tau
-    s, c = math.sin(t), math.cos(t)
     ax, ay = [v * SIDE for v in entry['anchor']]
     rx, ry, rw, rh = [v * SIDE for v in entry['focalRect']]
     cx, cy = rx + rw / 2, ry + rh / 2
     focus = np.exp(-2 * (((X - cx) / max(rw, 12)) ** 2 + ((Y - cy) / max(rh, 12)) ** 2))
-    edge_x = np.clip(np.minimum((X - rx) / max(rw * .15, 1), (rx + rw - X) / max(rw * .15, 1)), 0, 1)
-    edge_y = np.clip(np.minimum((Y - ry) / max(rh * .15, 1), (ry + rh - Y) / max(rh * .15, 1)), 0, 1)
+    feather = entry.get('edgeFeather', .15)
+    edge_x = np.clip(np.minimum((X - rx) / max(rw * feather, 1), (rx + rw - X) / max(rw * feather, 1)), 0, 1)
+    edge_y = np.clip(np.minimum((Y - ry) / max(rh * feather, 1), (ry + rh - Y) / max(rh * feather, 1)), 0, 1)
     focus *= edge_x ** 2 * (3 - 2 * edge_x) * edge_y ** 2 * (3 - 2 * edge_y)
+    # A flat interior keeps the gesture readable at card size; only its perimeter
+    # feathers into the stationary supports, rather than weakening every pixel.
+    focus = np.minimum(1, focus * 1.6)
     upper = np.clip((ay - Y) / max(ay - ry, 20), 0, 1)
     u, v = X.copy(), Y.copy()
     profile = entry['profile']
     light = np.zeros_like(X)
-    if profile == 'animal_breathe':
-        # Grounded feet, chest expansion and a small upper-body counter-lean.
-        u -= (1.2 * s * upper ** 2 + (X - ax) * .018 * s * upper) * focus
-        v += 1.3 * (1 - c) * upper * focus
+    if profile in ['animal_breathe', 'soft_toy_sway']:
+        # A curious perk and softer answering settle; feet never join the lift.
+        u -= (travel * .72 * swish * upper ** 2 + (X - ax) * .022 * accent * upper) * focus
+        v += travel * accent * upper * focus
     elif profile == 'aquatic_glide':
-        u -= 2.4 * s
-        v -= 1.2 * math.sin(t * 2) + 1.2 * np.sin((X - ax) / 45 + t) * focus
+        # A dart, suspended glide and return, keeping fins and anatomy intact.
+        u, v = rigid_frame(ax, ay, turn * swish, travel * glide, -travel * .40 * lift)
     elif profile == 'airborne_hover':
-        angle = .018 * s
-        u, v = ax + (X - ax) * math.cos(angle) + (Y - ay) * math.sin(angle), ay - (X - ax) * math.sin(angle) + (Y - ay) * math.cos(angle) - 2.4 * s
+        u, v = rigid_frame(ax, ay, turn * swish, travel * .25 * swish, -travel * lift)
     elif profile == 'plant_sway':
-        u -= 2.5 * np.sin(t + upper * .55) * upper ** 1.5
+        # Flexible tips follow the main breeze, while the stem stays planted.
+        trailing = cue(max(0, phase - .07), SWISH)
+        u -= travel * (swish * upper ** 1.5 + .24 * (trailing - swish) * upper ** 3) * focus
     elif profile == 'fabric_sway':
         flex = np.clip((Y - ay) / max(ry + rh - ay, 20), 0, 1)
-        u -= 1.8 * np.sin(t + flex * .55) * flex ** 1.5 * focus
-        light += .025 * np.sin(t + X / 18) * focus
+        trailing = cue(max(0, phase - .08), SWISH)
+        u -= travel * (swish * flex ** 1.5 + .32 * (trailing - swish) * flex ** 3) * focus
+        light += .045 * accent * flex * focus
     elif profile == 'vehicle_roll':
-        u -= 3.2 * s
-        v -= .65 * math.sin(2 * t) * focus
+        # The entire chassis stays rigid; the brief dip reads as suspension.
+        settle = cue(phase, [(0, 0), (.17, .12), (.41, -.12), (.57, .50), (.70, -.12), (.86, 0), (1, 0)])
+        u, v = rigid_frame(ax, ay, turn * swish, travel * glide, settle)
     elif profile == 'buoyant_rock':
-        angle = .035 * s
-        u, v = ax + (X - ax) * math.cos(angle) + (Y - ay) * math.sin(angle), ay - (X - ax) * math.sin(angle) + (Y - ay) * math.cos(angle) - 1.3 * c
+        u, v = rigid_frame(ax, ay, turn * swish, 0, -travel * lift)
     elif profile == 'celestial_drift':
-        angle = .035 * s
-        u, v = ax + (X - ax) * math.cos(angle) + (Y - ay) * math.sin(angle), ay - (X - ax) * math.sin(angle) + (Y - ay) * math.cos(angle) - 1.2 * s
-        light += .035 * (.5 + .5 * math.sin(t + 1)) * focus
+        u, v = rigid_frame(ax, ay, turn * swish, travel * .45 * swish, -travel * lift)
+        light += .065 * max(0, accent) * focus
     elif profile == 'weather_flow':
-        u -= 1.5 * np.sin(t + Y / 38) * focus
-        v -= .7 * s * focus
-        light += .025 * np.sin(t + Y / 32) * focus
+        u -= travel * swish * focus
+        v -= travel * .30 * lift * focus
+        light += .035 * accent * focus
     elif profile == 'water_ripple':
-        u -= 1.3 * np.sin(t + Y / 9) * focus
-        v -= .6 * np.sin(t + X / 16) * focus
-        light += .035 * np.sin(t + Y / 8) * focus
+        envelope = math.sin(math.pi * phase) ** 2
+        u -= travel * np.sin(t * 1.4 + Y / 9) * envelope * focus
+        v -= travel * .4 * np.sin(t * 1.4 + X / 16) * envelope * focus
+        light += .060 * np.sin(t * 1.4 + Y / 8) * envelope * focus
     elif profile == 'flame_flicker':
-        u -= 1.9 * np.sin(2 * t + upper * 2) * upper ** 1.5
-        v += 1.5 * math.sin(t * 2) * upper
-        light += .04 * math.sin(t * 2) * focus
+        # Local flame response must not bend a fireplace or volcano silhouette.
+        envelope = math.sin(math.pi * phase) ** 2
+        u -= travel * np.sin(2 * t + upper * 2) * upper ** 1.5 * envelope * focus
+        v += travel * math.sin(t * 2) * upper * envelope * focus
+        light += .075 * math.sin(t * 2) * envelope * focus
     elif profile == 'elastic_bounce':
-        # A soft toy's compression comes before the lift and resolves at contact.
-        lift = max(0, s) ** 2
-        compress = max(0, -s) ** 4
-        bend_u = ax + (X - ax) / (1 + .035 * compress - .02 * lift)
-        bend_v = ay + (Y - ay + 3.0 * lift) / (1 - .03 * compress + .02 * lift)
-        u += (bend_u - X) * focus
-        v += (bend_v - Y) * focus
+        # Only mapped soft toys compress. Two contacts give the hop a finish.
+        compress = cue(phase, [(0, 0), (.12, 1), (.24, 0), (.43, 0), (.58, .70), (.68, 0), (.80, .18), (.9, 0), (1, 0)])
+        local = entry.get('deformationRegion') == 'focal'
+        effective_lift = lift * (.35 if local else 1)
+        bend_u = ax + (X - ax) / (1 + .045 * compress - .008 * effective_lift)
+        bend_v = ay + (Y - ay + travel * effective_lift) / (1 - .045 * compress + .008 * effective_lift)
+        u, v = (X + (bend_u - X) * focus, Y + (bend_v - Y) * focus) if local else (bend_u, bend_v)
+        if local:
+            # Gelatin answers the contact with a supported side-to-side wobble;
+            # the serving plate and the fixed lower rim never join the motion.
+            u -= travel * swish * upper ** 1.5 * focus
     elif profile == 'supported_spin':
         # Small reversible angular inspection; do not claim continuous rotation.
-        angle = .065 * s
-        u, v = ax + (X - ax) * math.cos(angle) + (Y - ay) * math.sin(angle), ay - (X - ax) * math.sin(angle) + (Y - ay) * math.cos(angle)
+        u, v = rigid_frame(ax, ay, turn * swish)
     elif profile == 'human_gesture':
-        u -= 1.25 * s * upper ** 2 * focus
-        v += .9 * (1 - c) * upper * focus
+        u -= travel * .65 * swish * upper ** 2 * focus
+        v += travel * accent * upper * focus
     elif profile == 'face_expression':
-        # A sourced expression nods gently; do not invent unlocated eyes or lips.
-        angle = .025 * s
-        u, v = ax + (X - ax) * math.cos(angle) + (Y - ay) * math.sin(angle), ay - (X - ax) * math.sin(angle) + (Y - ay) * math.cos(angle) - .65 * (1 - c)
-        light += .018 * (1 - c) * focus
+        # Happy faces perk twice; sadness, fear and calm words stay restrained.
+        # The actual eyes and mouth always remain the acquired expression.
+        if subdued:
+            calm_amplitude = profile_data['calmAmplitude']
+            u, v = rigid_frame(ax, ay, math.radians(calm_amplitude['rotationDeg']) * calm,
+                               0, -calm_amplitude['translationPx'] * calm)
+        else:
+            u, v = rigid_frame(ax, ay, turn * swish, 0, -travel * lift, framing_scale)
+    elif profile == 'group_gesture':
+        # The embrace or feeding contact is one connected, undeformed pose.
+        u, v = rigid_frame(64, 64, turn * swish, 0, -travel * lift, framing_scale)
     elif profile == 'instrument_resonance':
-        light += .065 * max(0, math.sin(t * 2)) ** 2 * focus
+        # A two-beat optical accent, without bending keys or claiming a key press.
+        u, v = rigid_frame(64, 64, zoom=1 + camera_scale * max(0, accent))
+        beam = np.exp(-((X - (18 + 92 * phase)) / 20) ** 2)
+        light += .13 * beam * max(0, accent) * focus
     elif profile == 'diagram_focus':
-        # Semantic arrows/targets stay exactly fixed; a soft focus pass guides the eye.
-        light += .085 * (.5 - .5 * c) * focus
+        # Move the camera, not the teaching geometry: comparisons, arrows, counts
+        # and family contact poses keep their exact relative positions and hues.
+        u, v = rigid_frame(64, 64, zoom=1 + camera_scale * max(0, accent))
     elif profile == 'rigid_glint':
-        # Moving studio illumination preserves rigid silhouettes and contact points.
+        if entry.get('presentation') == 'showcase':
+            # A loose prop gives a small presentational nod, never a rubber squash.
+            u, v = rigid_frame(64, 64, turn * swish, 0, -travel * lift, framing_scale)
+        elif entry.get('presentation') == 'rock':
+            u, v = rigid_frame(ax, ay, turn * swish)
+        else:
+            # Furniture, shells and scientific sources retain all supports and
+            # anatomy. A closer camera view supplies the accent instead.
+            u, v = rigid_frame(64, 64, zoom=1 + camera_scale * max(0, accent))
         beam = np.exp(-((X - (14 + 100 * phase) + .2 * (Y - 64)) / 17) ** 2)
-        light += .105 * beam * math.sin(math.pi * phase) ** 2
+        light += .14 * beam * max(0, accent)
     elif profile == 'scene_depth':
-        # Photographs remain planar: a small camera drift, never rubber-sheet anatomy.
-        zoom = 1 + .012 * (1 - c)
-        u, v = 64 + (X - 64) / zoom - 1.1 * s, 64 + (Y - 64) / zoom - .55 * math.sin(2 * t)
+        # A complete photo/scene receives a lens move; no anatomy is deformed.
+        u, v = rigid_frame(64, 64, travel * .003 * swish,
+                           travel * .45 * glide, -travel * .25 * lift,
+                           1 + camera_scale * (calm if subdued else max(0, accent)))
     else:
         raise ValueError(f'Unsupported motion profile: {profile}')
     # Bilinear sampling in premultiplied alpha prevents dark transparent fringes.
@@ -188,7 +250,7 @@ def main():
             sheet = Image.new('RGBA', (SIDE * COLUMNS, SIDE * math.ceil(FRAMES / COLUMNS)))
             frame_hashes, margins = [], []
             for index in range(FRAMES):
-                tile = frame(pixels, entry, index, profile_data.get('activeFraction', 1))
+                tile = frame(pixels, entry, index, profile_data)
                 frame_hashes.append(digest(tile.tobytes()))
                 mask = np.asarray(tile)[..., 3] >= 200
                 yy, xx = np.where(mask)

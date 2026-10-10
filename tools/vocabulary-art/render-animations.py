@@ -20,14 +20,24 @@ spec.loader.exec_module(art)
 OUT = art.ROOT / "animated"
 FPS = 24
 STUDIES = {
-    "walk": (40, "A cheerful alternating walk with planted steps, swinging arms and a relaxed counter-turn."),
-    "run": (20, "A bright, athletic stride with pumping elbows, lifted knees and a brief flight phase."),
-    "jump": (64, "Eager preparation, a joyful open-arm leap, a soft two-foot landing and a proud recovery."),
-    "open": (80, "Pull the handle, reveal the doorway and proudly present it. The open state holds before replay."),
-    "close": (80, "Push the door shut with a small effort, then give a pleased nod. The closed state holds before replay."),
-    "drink": (80, "Eagerly lift the glass, take a clear sip, then lower it with a satisfied reaction."),
-    "eat": (80, "Lift the bread for a bite, then lower it and give a contented little chewing nod."),
-    "hello": (72, "A friendly head tilt, an open-handed three-beat wave and a gentle return to rest."),
+    "walk": (40, "A jaunty planted walk with heel-to-toe steps, generous arm swings and a bright forward-facing grin."),
+    "run": (20, "A springy running stride with lifted knees, strong opposing elbows and a delighted open expression."),
+    "jump": (64, "An eager deep crouch, joyful open-arm leap, soft two-foot landing and a proud happy finish."),
+    "open": (80, "Pull the handle, turn back with a delighted grin and present the open doorway with a generous free-hand gesture."),
+    "close": (80, "Push the door shut, turn back with a proud open smile and give a clear pleased nod while retaining the handle."),
+    "drink": (80, "Eagerly lift the glass, take a clear sip, then lower it with a closed-eye smile and a pleased hand-to-chest reaction."),
+    "eat": (80, "Lift the bread for a bite, then share a contented closed-eye smile with two soft chewing nods."),
+    "hello": (72, "A broad palm-led three-beat wave, bright grin and playful delayed head-and-shoulder follow-through."),
+}
+REVIEW_PHASES = {
+    "walk": (0, .125, .25, .375, .5, .625, .75, .875),
+    "run": (0, .125, .25, .375, .5, .625, .75, .875),
+    "jump": (0, .19, .30, .45, .62, .68, .82, .984),
+    "open": (0, .14, .36, .59, .73, .82, .90, .987),
+    "close": (0, .14, .36, .59, .73, .82, .90, .987),
+    "drink": (0, .10, .29, .46, .62, .75, .84, .987),
+    "eat": (0, .10, .29, .46, .62, .75, .84, .987),
+    "hello": (0, .12, .25, .35, .45, .55, .70, .85, .986),
 }
 
 
@@ -47,13 +57,13 @@ def mix(a, b, t):
 def reset(rig):
     for bone in rig.pose.bones:
         bone.matrix_basis = Matrix.Identity(4)
-    rig.pose.bones["Head"].scale = (1.12,) * 3
+    rig.pose.bones["Head"].scale = (1.15,) * 3
     bpy.context.view_layer.update()
 
 
-def shift_hips(rig, dz=0, dy=0):
+def shift_hips(rig, dz=0, dy=0, dx=0):
     bone = rig.pose.bones["HipsCtrl"]
-    bone.matrix = Matrix.Translation((0, dy, dz)) @ bone.matrix
+    bone.matrix = Matrix.Translation((dx, dy, dz)) @ bone.matrix
     bpy.context.view_layer.update()
 
 
@@ -65,25 +75,30 @@ def turn_bone(rig, name, angle, axis):
 
 
 def cheerful_materials(objects):
-    """Retain the acquired UVs, clothing and material; animate only the eyelids."""
-    eyes_open = bpy.data.images.load(str(art.SKINS / "child-cheerful.png"), check_existing=True)
-    eyes_closed = bpy.data.images.load(str(art.SKINS / "child-cheerful-blink.png"), check_existing=True)
-    controls = []
+    """Keep acquired UVs/materials and key purposeful face states with the action."""
+    images = {name: bpy.data.images.load(str(art.SKINS / filename), check_existing=True)
+              for name, filename in {"smile": "child-cheerful.png", "delighted": "child-cheerful-delighted.png",
+                                     "pleased": "child-cheerful-pleased.png", "blink": "child-cheerful-blink.png"}.items()}
+    controls = {name: [] for name in ("delighted", "pleased", "blink")}
     for obj in objects:
         if obj.type != "MESH":
             continue
         for material in obj.data.materials:
             nodes = material.node_tree.nodes
             skin = next(n for n in nodes if n.type == "TEX_IMAGE")
-            skin.image = eyes_open
-            blink = nodes.new("ShaderNodeTexImage")
-            blink.image = eyes_closed
-            blend = nodes.new("ShaderNodeMixRGB")
-            blend.name = "Expressive eyelids"
-            material.node_tree.links.new(skin.outputs["Color"], blend.inputs[1])
-            material.node_tree.links.new(blink.outputs["Color"], blend.inputs[2])
-            material.node_tree.links.new(blend.outputs[0], nodes.get("Principled BSDF").inputs["Base Color"])
-            controls.append(blend.inputs[0])
+            skin.image = images["smile"]
+            previous = skin.outputs["Color"]
+            for name in controls:
+                expression = nodes.new("ShaderNodeTexImage")
+                expression.image = images[name]
+                blend = nodes.new("ShaderNodeMixRGB")
+                blend.name = "Expression " + name
+                blend.inputs[0].default_value = 0
+                material.node_tree.links.new(previous, blend.inputs[1])
+                material.node_tree.links.new(expression.outputs["Color"], blend.inputs[2])
+                previous = blend.outputs[0]
+                controls[name].append(blend.inputs[0])
+            material.node_tree.links.new(previous, nodes.get("Principled BSDF").inputs["Base Color"])
     return controls
 
 
@@ -94,6 +109,26 @@ def blink_amount(word, phase):
                "close": (.12, .79), "drink": (.73,), "eat": (.75,), "hello": (.32, .78)}
     width = .035 if STUDIES[word][0] >= 64 else .045
     return max([1.0 - smooth(abs(phase-center)/width) for center in centers[word]] or [0.0])
+
+
+def expression_amounts(word, phase):
+    """Smiles share the decisive action beat; satisfaction belongs after contact."""
+    pleased = 0.0
+    if word in ("walk", "run"):
+        delighted = (.55 if word == "walk" else .80) + .18 * math.sin(phase * math.tau) ** 2
+    elif word == "jump":
+        delighted = .15 + .85 * (ramp(phase, .15, .29) - ramp(phase, .68, .85))
+        pleased = .72 * (ramp(phase, .73, .80) - ramp(phase, .86, .97))
+    elif word in ("open", "close"):
+        delighted = .18 + .82 * ramp(phase, .59, .73)
+        pleased = .48 * (ramp(phase, .77, .81) - ramp(phase, .84, .90))
+    elif word in ("drink", "eat"):
+        delighted = .32 * (ramp(phase, .01, .08) - ramp(phase, .26, .34))
+        pleased = .95 * (ramp(phase, .68, .75) - ramp(phase, .89, .99))
+    else:
+        delighted = .15 + .85 * (ramp(phase, .03, .20) - ramp(phase, .81, .98))
+    return {"delighted": delighted, "pleased": pleased,
+            "blink": blink_amount(word, phase) * (1 - pleased)}
 
 
 def limb(rig, first_name, second_name, target, bend):
@@ -142,7 +177,7 @@ def setup(word):
     art.study.clear()
     rig, objects = art.person("stand")
     expression_controls = cheerful_materials(objects)
-    root = art.move_group(objects, yaw=-.65 if word in ("walk", "run") else -.12)
+    root = art.move_group(objects, yaw=-.38 if word in ("walk", "run") else -.12)
     extras = {}
     if word in ("open", "close"):
         root.scale = (.82,) * 3
@@ -186,50 +221,71 @@ def pose(word, phase, rig, root, extra):
     relaxed_arms(rig)
     if word in ("walk", "run"):
         running = word == "run"
-        stride = .88 if running else .57
+        stride = .94 if running else .65
         # The support foot travels back at an even rate; the swing foot clears the floor.
-        shift_hips(rig, (-.075 + .10 * math.cos(phase * 4 * math.pi)) if running else (-.035 + .045 * math.cos(phase * 4 * math.pi)))
         counter_turn = math.sin(phase * 2 * math.pi)
-        turn_bone(rig, "Spine", (.105 if running else .07) * counter_turn, "Z")
+        shift_hips(rig, (-.09 + .13 * math.cos(phase * 4 * math.pi)) if running else (-.06 + .075 * math.cos(phase * 4 * math.pi)),
+                   dx=(.035 if running else .055) * counter_turn)
+        turn_bone(rig, "HipsCtrl", -.055 * counter_turn, "Z")
+        turn_bone(rig, "Spine", (.17 if running else .13) * counter_turn, "Z")
+        turn_bone(rig, "Spine", .11 if running else .035, "X")
         for side, offset, sign in [("Left", 0, 1), ("Right", .5, -1)]:
             p = (phase + offset) % 1
-            stance = .40 if running else .60
+            stance = .38 if running else .60
             if p < stance:
-                y = -stride + 2 * stride * (p / stance)
-                z = .20
-                lift = 0
+                support = p / stance
+                y = -stride + 2 * stride * support
+                push = ramp(support, .70, 1)
+                z = .20 + (.10 if running else .065) * push
+                lift = .08 * (1 - ramp(support, .04, .25)) + .10 * push
             else:
                 swing = (p - stance) / (1 - stance)
                 y = stride * (1 - 2 * smooth(swing))
-                z = .20 + (.72 if running else .32) * math.sin(math.pi * swing)
-                lift = .16 * math.sin(math.pi * swing)
+                push_release = 1 - ramp(swing, 0, .20)
+                heel_prepare = ramp(swing, .80, 1)
+                z = .20 + (.85 if running else .39) * math.sin(math.pi * swing) + (.10 if running else .065) * push_release
+                lift = .20 * math.sin(math.pi * swing) + .10 * push_release + .08 * heel_prepare
             foot(rig, side, (sign * .23, y + .15, z), lift)
             swing = math.cos((phase + offset) * 2 * math.pi)
-            hand(rig, side, (sign * (.43 if running else .60), -.25 + (.50 if running else .35) * swing,
-                             (2.04 if running else 1.55) + (.16 if running else .12) * swing),
+            hand(rig, side, (sign * (.49 if running else .65), -.25 + (.62 if running else .46) * swing,
+                             (2.09 if running else 1.57) + (.23 if running else .21) * swing),
                  (sign * .16, .35, -1) if running else None)
         if running:
             # The pelvis rises only during the two short unsupported parts of the stride.
             support_phase = phase % .5
-            root.location.z = .10 * math.sin((support_phase - .40) / .10 * math.pi) if support_phase > .40 else 0
-        art.point(rig, "Head", (.04 * counter_turn, -.07, 3.85))
+            root.location.z = .16 * math.sin((support_phase - .38) / .12 * math.pi) if support_phase > .38 else 0
+        art.point(rig, "Head", (.11 * math.sin((phase-.05) * math.tau), -.14, 3.87))
+        turn_bone(rig, "Head", -.055 * counter_turn, "Z")
     elif word == "jump":
-        crouch = .31 * (ramp(phase, .06, .22) - ramp(phase, .25, .34))
-        landing = .25 * (ramp(phase, .60, .67) - ramp(phase, .68, .81))
+        anticipation = ramp(phase, .05, .21) - ramp(phase, .23, .34)
+        crouch = .39 * (ramp(phase, .05, .22) - ramp(phase, .25, .33))
+        landing = .32 * (ramp(phase, .60, .66) - ramp(phase, .68, .80))
         grounded(rig, crouch + landing)
-        flight = (phase - .33) / .29
-        root.location.z = .95 * 4 * flight * (1 - flight) if 0 < flight < 1 else 0
-        raise_arm = ramp(phase, .23, .37) - ramp(phase, .61, .85)
+        flight = (phase - .32) / .30
+        root.location.z = 1.04 * 4 * flight * (1 - flight) if 0 < flight < 1 else 0
+        raise_arm = ramp(phase, .22, .36) - ramp(phase, .61, .80)
+        proud = ramp(phase, .77, .85) - ramp(phase, .91, .99)
+        turn_bone(rig, "Spine", .12 * anticipation + .08 * landing, "X")
         for side, sign in [("Left", 1), ("Right", -1)]:
-            anticipation = ramp(phase, .06, .21) - ramp(phase, .23, .35)
-            hand(rig, side, mix((sign * .58, -.15 + .28 * anticipation, 1.40),
-                                (sign * .99, -.09, 3.32), raise_arm))
+            target = mix((sign * .61, -.15 + .38 * anticipation, 1.36),
+                         (sign * 1.02, -.15, 3.34), raise_arm)
+            target = mix(target, (sign * .74, -.37, 2.05), proud)
+            hand(rig, side, target)
+            if proud > 0:
+                palm = mix((sign * .02, -.02, -.18), (sign * .10, -.11, .10), proud)
+                art.point(rig, side + "Hand", target + palm)
             if 0 < flight < 1:
-                foot(rig, side, (sign * .32, .15 + .22 * math.sin(flight * math.pi), .20 + .20 * math.sin(flight * math.pi)))
-        art.point(rig, "Head", (.05 * raise_arm, -.06 - .12 * (crouch + landing), 3.85))
+                peak = math.sin(flight * math.pi)
+                foot(rig, side, (sign * (.28 + .08 * peak), .15 + .29 * peak, .20 + .28 * peak), .08 * peak)
+        art.point(rig, "Head", (.10 * proud, -.07 - .18 * (crouch + landing), 3.88))
+        turn_bone(rig, "Head", -.065 * raise_arm + .09 * proud, "X")
     elif word in ("open", "close"):
-        grounded(rig)
         motion = ramp(phase, .14, .59)
+        effort = math.sin(math.pi * motion)
+        pleased = ramp(phase, .61, .77)
+        grounded(rig, .055 * effort)
+        turn_bone(rig, "Spine", .06 * effort, "X")
+        turn_bone(rig, "Spine", .14 * pleased, "Z")
         angle = (-5 - 35 * motion) if word == "open" else (-40 + 35 * motion)
         leaf = extra["leaf"]
         hinge = extra["hinge"]
@@ -239,18 +295,23 @@ def pose(word, phase, rig, root, extra):
         target = rig.matrix_world.inverted() @ grip_world
         hand(rig, "Left", target)
         art.point(rig, "LeftHand", target + rig.matrix_world.inverted().to_3x3() @ Vector((-.04, -.02, 0)))
-        pleased = ramp(phase, .62, .78)
-        free_hand = mix((-.58, -.13, 1.38), (-.90, .08, 1.95), pleased)
+        free_hand = mix((-.58, -.13, 1.38),
+                        (-.84, .50, 2.30) if word == "open" else (-.64, .24, 2.26), pleased)
         hand(rig, "Right", free_hand)
-        art.point(rig, "RightHand", free_hand + mix((0, 0, -.18), (-.17, 0, .07), pleased))
-        nod = .085 * math.sin(math.pi * (phase-.67)/.18) if .67 < phase < .85 else 0
-        art.point(rig, "Head", (.08 * pleased, -.28 + .13 * pleased - nod, 3.80))
+        art.point(rig, "RightHand", free_hand + mix((0, 0, -.18), (-.14, .08, .12), pleased))
+        nod = math.sin(math.pi * (phase-.73)/.17) if .73 < phase < .90 else 0
+        art.point(rig, "Head", (.10 * pleased, -.28 + .15 * pleased, 3.82))
         # Look back toward the learner once the doorway state is established;
         # keep the body and gripping hand anchored to the door throughout.
-        turn_bone(rig, "Head", .92 * pleased, "Z")
+        turn_bone(rig, "Head", 1.06 * pleased, "Z")
+        turn_bone(rig, "Head", .14 * nod, "X")
     elif word in ("drink", "eat"):
-        grounded(rig)
-        lift = ramp(phase, .09, .32) - ramp(phase, .62, .82)
+        anticipation = ramp(phase, .015, .06) - ramp(phase, .08, .15)
+        contented = ramp(phase, .66, .75) - ramp(phase, .89, .99)
+        grounded(rig, .04 * anticipation)
+        turn_bone(rig, "Spine", -.05 * contented, "X")
+        turn_bone(rig, "Spine", .07 * contented, "Z")
+        lift = ramp(phase, .09, .29) - ramp(phase, .61, .79)
         pivot = extra["held"]
         local = mix((.08, -.64, 1.80), (.04, -.68, 2.72 if word == "drink" else 2.78), lift)
         sip = ramp(phase, .37, .46) - ramp(phase, .55, .63)
@@ -260,23 +321,34 @@ def pose(word, phase, rig, root, extra):
         hand(rig, "Left", rig.matrix_world.inverted() @ (pivot.matrix_world @ Vector((.20, 0, -.08))))
         if word == "eat":
             hand(rig, "Right", rig.matrix_world.inverted() @ (pivot.matrix_world @ Vector((-.20, 0, -.06))))
-        contented = ramp(phase, .64, .72) - ramp(phase, .88, .99)
-        nod = (.045 if word == "eat" else .025) * math.sin(phase * math.pi * 16) * contented
-        art.point(rig, "Head", (.065 * contented, -.03 - .09 * sip + nod, 3.82))
+        reaction_phase = max(0, min(1, (phase - .70) / .25))
+        nod = (.11 if word == "eat" else .085) * math.sin(reaction_phase * math.pi * (4 if word == "eat" else 2)) * contented
+        art.point(rig, "Head", (.13 * contented, -.04 - .10 * sip, 3.84))
+        turn_bone(rig, "Head", nod, "X")
+        turn_bone(rig, "Head", -.11 * contented, "Y")
         if word == "drink":
-            hand(rig, "Right", mix((-.58, -.13, 1.38), (-.57, -.25, 1.76), .60 * lift + .30 * contented))
+            free_hand = mix((-.58, -.13, 1.38), (-.55, -.32, 1.84), .60 * lift)
+            free_hand = mix(free_hand, (-.40, -.48, 2.17), contented)
+            hand(rig, "Right", free_hand)
+            art.point(rig, "RightHand", free_hand + mix((0, 0, -.18), (.14, -.03, .04), contented))
     elif word == "hello":
-        grounded(rig, .025 * (ramp(phase, .05, .13) - ramp(phase, .14, .22)))
-        lift = ramp(phase, .06, .23) - ramp(phase, .77, .95)
+        grounded(rig, .065 * (ramp(phase, .04, .12) - ramp(phase, .14, .23)))
+        lift = ramp(phase, .055, .22) - ramp(phase, .78, .97)
         wave = math.sin((phase - .23) * math.pi * 10) * (ramp(phase, .22, .31) - ramp(phase, .70, .79))
-        target = mix((-.58, -.13, 1.38), (-.83 + .18 * wave, -.20, 3.21), lift)
+        follow = math.sin((phase - .27) * math.pi * 10) * (ramp(phase, .24, .33) - ramp(phase, .72, .82))
+        turn_bone(rig, "Spine", .07 * follow * lift, "Z")
+        turn_bone(rig, "Spine", .045 * lift, "Y")
+        target = mix((-.58, -.13, 1.38), (-.95 + .24 * wave, -.25, 3.24), lift)
         hand(rig, "Right", target)
-        palm = mix((-.035, -.02, -.19), (-.035 + .13 * wave, -.02, .21), lift)
+        palm = mix((-.035, -.02, -.19), (-.035 + .19 * wave, -.035, .22), lift)
         art.point(rig, "RightHand", target + palm)
-        hand(rig, "Left", mix((.58, -.13, 1.38), (.58, -.27, 1.65), lift))
-        art.point(rig, "Head", (.12 * lift + .018 * wave, -.04, 3.82))
-    for control in extra["expressions"]:
-        control.default_value = blink_amount(word, phase)
+        hand(rig, "Left", mix((.58, -.13, 1.38), (.54, -.35, 1.82), lift))
+        art.point(rig, "Head", (.19 * lift + .055 * follow, -.07, 3.84))
+        turn_bone(rig, "Head", -.055 * follow * lift, "Z")
+    amounts = expression_amounts(word, phase)
+    for expression, controls in extra["expressions"].items():
+        for control in controls:
+            control.default_value = amounts[expression]
     bpy.context.view_layer.update()
 
 
@@ -285,7 +357,7 @@ def frame_bounds(meshes):
     return [o.evaluated_get(graph).matrix_world @ Vector(c) for o in meshes for c in o.evaluated_get(graph).bound_box]
 
 
-def render(word, poses_only=False):
+def render(word, poses_only=False, bake_only=False):
     count, description = STUDIES[word]
     print("ANIMATION_START", word, "poses" if poses_only else "full", flush=True)
     directory = OUT / word
@@ -298,20 +370,25 @@ def render(word, poses_only=False):
     for frame in range(count):
         bpy.context.scene.frame_set(frame + 1)
         pose(word, frame / count, rig, root, extra)
-        for control in extra["expressions"]:
-            control.keyframe_insert("default_value", frame=frame + 1)
+        for controls in extra["expressions"].values():
+            for control in controls:
+                control.keyframe_insert("default_value", frame=frame + 1)
         for bone in rig.pose.bones:
             for prop in ("location", "rotation_quaternion", "scale"):
                 bone.keyframe_insert(prop, frame=frame + 1)
         for obj in moving:
             for prop in ("location", "rotation_euler", "scale"):
                 obj.keyframe_insert(prop, frame=frame + 1)
-        if frame % 4 == 0 or frame == count - 1:
-            points.extend(frame_bounds(meshes))
+        points.extend(frame_bounds(meshes))
         if word in ("open", "close"):
             desired = extra["leaf"].matrix_world @ extra["handle"]
             actual = rig.matrix_world @ rig.pose.bones["LeftHand"].head
             contact.append((actual - desired).length)
+        elif word in ("drink", "eat"):
+            for side, grip in [("Left", (.20, 0, -.08))] + ([("Right", (-.20, 0, -.06))] if word == "eat" else []):
+                desired = extra["held"].matrix_world @ Vector(grip)
+                actual = rig.matrix_world @ rig.pose.bones[side + "Hand"].head
+                contact.append((actual - desired).length)
         if (frame + 1) % 20 == 0 or frame == count - 1:
             print("ANIMATION_BAKED", word, frame + 1, "of", count, flush=True)
     for action in bpy.data.actions:
@@ -336,13 +413,15 @@ def render(word, poses_only=False):
     xmin, xmax = min(p.x for p in local), max(p.x for p in local)
     ymin, ymax = min(p.y for p in local), max(p.y for p in local)
     camera.location += camera.matrix_world.to_quaternion() @ Vector(((xmin + xmax) / 2, (ymin + ymax) / 2, 0))
-    camera.data.ortho_scale = max(xmax - xmin, ymax - ymin) * 1.17
+    # Fit every baked pose, then keep about 14 px of geometric clearance at the
+    # 256 px authoring size. This makes face and palm accents larger in tiny cards.
+    camera.data.ortho_scale = max(xmax - xmin, ymax - ymin) * 1.12
     # One high, broad shadow source keeps the small illustration grounded without
     # several long shadows competing with the hand and foot silhouettes.
     lights = [o for o in scene.objects if o.type == "LIGHT"]
     for light in lights[1:]:
         light.data.use_shadow = False
-    extent = camera.data.ortho_scale / 1.17
+    extent = camera.data.ortho_scale / 1.12
     lights[0].location = center + Vector((-1.2, -1.8, 8)) * extent
     lights[0].data.size = extent * 5
     lights[0].data.energy *= 1.4
@@ -362,14 +441,18 @@ def render(word, poses_only=False):
     metadata = {
         "id": word, "fps": FPS, "frames": count, "duration": count / FPS,
         "description": description, "source": "Adapted acquired Kenney CC0 character and prop meshes",
-        "animation": "Locally authored cheerful skeletal / prop motion with timed blinks",
-        "expression": "Smile and eyelid adaptation of the acquired Kenney child skin",
+        "animation": "Locally authored articulated performance with planted contacts, follow-through and event-timed expressions",
+        "expression": "Keyed bright grin, delighted open smile, closed-eye pleased smile and blinks adapted from the acquired Kenney child skin",
+        "performanceRevision": "expressive-action-2",
         "loop": "cut-after-hold" if word in ("open", "close") else "continuous",
         "cameraScale": camera.data.ortho_scale,
         "maximumHandContactError": max(contact) if contact else None,
     }
     (directory / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    frames = sorted(set([1, count // 4, count // 2, count * 3 // 4, count])) if poses_only else range(1, count + 1)
+    if bake_only:
+        print("ANIMATION_BAKE_COMPLETE", word, json.dumps(metadata), flush=True)
+        return
+    frames = sorted(set(1 + min(count - 1, round(phase * count)) for phase in REVIEW_PHASES[word])) if poses_only else range(1, count + 1)
     if poses_only:
         for frame in frames:
             scene.frame_set(frame)
@@ -384,10 +467,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("words", nargs="*", choices=list(STUDIES))
     parser.add_argument("--poses", action="store_true")
+    parser.add_argument("--bake-only", action="store_true", help="Save the complete keyed scene and contact metadata without rendering pixels.")
     parser.add_argument("--output-dir", type=Path, default=OUT,
                         help="Keep experimental poses separate from accepted full frame sequences.")
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else [])
     OUT = args.output_dir.resolve()
     OUT.mkdir(parents=True, exist_ok=True)
     for word in args.words or STUDIES:
-        render(word, args.poses)
+        render(word, args.poses, args.bake_only)

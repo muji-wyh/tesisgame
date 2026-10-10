@@ -11,7 +11,8 @@ sources remain local only.
 ## Acquired source and authorship
 
 The character is the acquired **Kenney Animated Characters Protagonists 1.1**
-`characterMedium.fbx`, with a locally adapted smile and timed eyelid textures.
+`characterMedium.fbx`, with locally adapted bright, delighted, pleased and blink
+expression textures, keyed to the action's contact and recovery beats.
 The door is from
 **Kenney Furniture Kit 2.0**, and the glass and loaf are from **Kenney Food Kit 2.0**.
 These production models are CC0. Source URLs, acquired archive hashes, individual
@@ -25,23 +26,30 @@ generation service, paid asset or external API is used.
 
 ## Motion and review
 
-- Walk uses a relaxed alternating gait and head/torso counter-motion; run has a faster cadence, bent elbows,
-  higher knees and short unsupported phases.
-- Jump contains eager anticipation, an open-arm leap, a two-foot landing and settling.
+- Walk uses a jaunty planted gait, heel-to-toe steps, generous arm swings and a
+  bright grin; run has a faster cadence, strong opposing elbows, higher knees
+  and short unsupported phases.
+- Jump contains an eager crouch, joyful open-arm leap, a soft two-foot landing
+  and a proud happy finish.
 - Open and close rotate the actual door leaf around its hinge, with the hand
-  following the handle. A small glance toward the learner follows the completed
-  door movement. They hold the final state before the next replay.
+  following the handle. A delighted turn and free-hand presentation follow the
+  completed door movement. They hold the final state before the next replay.
 - Drink raises and tips a held glass; eat raises a held loaf and adds a chewing
-  nod and a pleased reaction. Hello tilts the head, waves an open hand three
-  times and returns to a relaxed stance. The complete cycle remains readable.
+  nod and a closed-eye pleased reaction. Hello leads three broad waves with its
+  palm, with delayed head and shoulder follow-through before the relaxed hold.
+  The complete cycle remains readable.
 - Cameras are fitted to the full motion envelope and remain fixed. No frame is
   individually trimmed. The contact shadow comes from the rendered scene.
 
-The local page compares each animation with its previous character pose at 48,
+The original local page compares each animation with its previous character pose at 48,
 80, 120 and 192 pixels. It provides global and individual playback, replay and
 frame scrubbing. Offscreen and background playback stops; reduced-motion
 preferences start the preview paused. The door animations restart after their
 hold instead of reversing and demonstrating the opposite word.
+
+The `/cheerful/` local comparison additionally plays the previous shipped and
+revised animations side by side at 48, 80 and 128 pixels. Its snapshot atlases
+and generated page stay under `build/word-art-review/`, outside production.
 
 ## Local output and reproduction
 
@@ -54,7 +62,8 @@ Pillow installed. Run Blender 5.2.2 LTS from the repository root with:
 blender --background --factory-startup --python-exit-code 1 --python tools/vocabulary-art/render-animations.py -- walk run jump open close drink eat hello
 ```
 
-Add `--poses` to render five key poses per word before the full sequence. Full
+Add `--poses` to render action-specific review poses before the full sequence,
+and `--output-dir` to keep experimental output separate. Full
 renders contain 24 frames per second and write the baked editable `.blend`,
 per-frame transparent PNGs and metadata into `build/word-art-review/animated/`.
 

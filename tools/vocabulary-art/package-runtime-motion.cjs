@@ -29,8 +29,8 @@ async function main() {
   fs.writeFileSync(path.join(root, 'docs/assets/lv3-word-motion.json'), JSON.stringify({
     creator: 'Kenney (source meshes); Grow with Pip (skeletal motion and renders)',
     license: 'CC0-1.0', sourceRecord: 'docs/assets/lv3-vocabulary.json',
-    adaptations: 'Cheerful smile, timed blinks, head and torso counter-motion, action-specific anticipation and recovery; clip durations unchanged.',
-    skins: ['child-cheerful.png', 'child-cheerful-blink.png'].map(name => {
+    adaptations: 'Keyed bright grin, delighted smile, closed-eye pleased reaction and timed blinks; stronger planted gait, open-arm jump, palm-led wave and action-specific contact reactions; clip durations unchanged.',
+    skins: ['child-cheerful.png', 'child-cheerful-blink.png', 'child-cheerful-delighted.png', 'child-cheerful-pleased.png'].map(name => {
       const skin = `tools/vocabulary-art/skins/${name}`;
       return { path: skin, sha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, skin))).digest('hex') };
     }),

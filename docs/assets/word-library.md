@@ -10,8 +10,9 @@ practice rules or mastery progress are changed by this artwork release.
 Common objects, animals and expressive faces use acquired Microsoft Fluent Emoji
 3D illustrations (MIT). Character and prop scenes use the acquired Kenney CC0
 models described in [the Lv3 source record](lv3-vocabulary.json). Eight actions
-have [joint-based teaching animation](lv3-motion-studies.md), with a cheerful
-smile, timed blinks, body counter-motion and a readable completion pose.
+have [joint-based teaching animation](lv3-motion-studies.md), with keyed bright
+and delighted smiles, pleased closed-eye reactions, timed blinks, generous body
+gestures and a readable completion pose.
 
 Actions, spatial relationships and other educational concepts use adapted
 Mulberry Symbols by Steve Lee, from the project originally designed by Garry
@@ -45,11 +46,15 @@ Every pictured word has a shared 128-pixel animation atlas. The eight articulate
 Blender actions retain 24 fps. The remaining 1,277 illustrations have 32-frame,
 12 fps loops, with explicit per-word motion assignments in
 `tools/vocabulary-art/library-motion-map.json`. These are illustration animations,
-not newly rigged 3D models: plants sway from their support, aquatic subjects
-glide, grounded animals breathe, and water has a small surface ripple. Rigid
-objects and relationship diagrams keep their geometry and use moving illumination
-or focus instead. Photographs use restrained camera movement rather than bent
-anatomy. No extra sound is added to continuous picture playback.
+not newly rigged 3D models. A short preparation leads to a clear accent, a smaller
+follow-through and a reading hold. Plants and fabric swish from their supports,
+aquatic subjects dart into a glide, and grounded animals perk up with planted
+contacts. Selected loose props give an undeformed presentation nod. Relationship
+diagrams and supported objects use a uniform closer-look accent that preserves
+their relative geometry. Photographs keep their anatomy under a modest camera
+move. Negative emotions and restful subjects use calmer timing. Stable per-word
+offsets prevent a page of pictures from moving in unison. No extra sound is added
+to continuous picture playback.
 
 `WordArt` loads motion sheets for visible owners and releases hidden sheets after
 a short grace period. Reduced motion uses a static teaching pose. Menus and
@@ -106,7 +111,13 @@ Serve the previews with
 `/library/` provides age,
 word and size filters; `/animated/` provides playback and frame inspection.
 `/library-motion/` shows every animated picture with age, word and motion-family
-filters, playback controls and paging. All three are localhost-only review pages.
+filters, playback controls and paging. `/cheerful/` compares the previous shipped
+animation against the new motion at 48, 80 and 128 pixels, with playback, replay
+and frame inspection. To reproduce that comparison, first save the previous
+runtime manifest as `build/word-art-review/cheerful/before/manifest.json` and its
+atlases as `<id>.webp` in that directory, then run
+`node tools/vocabulary-art/make-cheerful-motion-review.cjs` after rendering.
+All preview pages remain localhost-only.
 
 ## Release checks
 
