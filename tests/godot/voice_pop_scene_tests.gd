@@ -358,6 +358,9 @@ func strike_next_bonus_word(view) -> String:
 		return ""
 	var word: String = view.game.targets[0].word.text
 	view._listening_tick_usec = -1
+	# This suite isolates time feedback; fragment milestones have dedicated tests.
+	for target: Dictionary in view.game.targets:
+		target.chest = false
 	view.receive_transcript(word)
 	return word
 

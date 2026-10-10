@@ -100,8 +100,8 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 		return
 	stop()
 	_round_id = round_id
-	_chest_count = maxi(1, chest_count)
-	_chest_tier = maxi(0, chest_tier)
+	_chest_count = maxi(0, chest_count)
+	_chest_tier = maxi(0, chest_tier) if _chest_count > 0 else 0
 	_score = score
 	_reduced_motion = reduce
 	_automatic = automatic
@@ -110,11 +110,14 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 	_origin_frame = Engine.get_process_frames()
 	_heading.text = "Round results" if _score >= 0 else "You did it!"
 	_caption.text = "Score: %d · Chests: %d" % [_score, _chest_count] if _score >= 0 else \
+		"Every word matched!" if _chest_count == 0 else \
 		"You earned a treasure chest!" if _chest_count == 1 else "You earned %d treasure chests!" % _chest_count
 	if _chest_tier > 0:
 		_caption.text = "Score: %d · %s" % [_score, JellyRewardProgress.title_for_tier(_chest_tier)]
-	_count.text = "" if _chest_count == 1 else "x%d" % _chest_count
-	action_button.text = "Open chest" if _chest_count == 1 else "Open chests"
+	_count.text = "" if _chest_count <= 1 else "x%d" % _chest_count
+	action_button.text = "Play again" if _chest_count == 0 else "Open chest" if _chest_count == 1 else "Open chests"
+	chest.visible = _chest_count > 0
+	_glow.visible = _chest_count > 0
 	pip.set_reduced_motion(reduce)
 	pip.set_idle_paused(false)
 	apply_theme(theme_id, chest_manifest)
@@ -225,6 +228,13 @@ func _request_open() -> void:
 	open_requested.emit(_round_id)
 
 
+func retry_open(round_id: String) -> void:
+	if not _active or not _ready_to_open or _automatic or round_id != _round_id:
+		return
+	_open_emitted = false
+	_refresh_action()
+
+
 func _process(delta: float) -> void:
 	if Engine.get_process_frames() != _origin_frame:
 		advance(delta)
@@ -244,6 +254,8 @@ func advance(delta: float) -> void:
 	while _cue_index < CUE_TIMES.size() and _elapsed >= float(CUE_TIMES[_cue_index]):
 		var cue: String = CUE_NAMES[_cue_index]
 		_cue_index += 1
+		if cue == "reward" and _chest_count == 0:
+			continue
 		if delta <= 0.5:
 			_cue_log.append(cue)
 			cue_requested.emit(_round_id, cue)
@@ -321,6 +333,8 @@ func _layout() -> void:
 	var hero_height: float = minf(280.0, minf(available, w * 0.70))
 	var hero_width: float = minf(w - 12.0, hero_height * 1.82)
 	var pip_side: float = minf(hero_height, hero_width * 0.59)
+	if _chest_count == 0:
+		pip_side = hero_height
 	var chest_side: float = minf(hero_height * 0.85, hero_width * 0.46)
 	var total: float = title_h + hero_height + caption_h + action_h + gap * 3.0
 	var top: float = maxf(0.0, (h - total) * 0.42)
@@ -329,6 +343,8 @@ func _layout() -> void:
 	_place(_heading, Rect2(4.0, top, w - 8.0, title_h), scale_factor)
 	_heading.add_theme_font_size_override("font_size", ceili((28.0 if compact else 38.0) / scale_factor))
 	_pip_rect = Rect2(Vector2(left, hero_top + hero_height - pip_side) / scale_factor, Vector2.ONE * pip_side / scale_factor)
+	if _chest_count == 0:
+		_pip_rect.position.x = (w - pip_side) * 0.5 / scale_factor
 	_chest_rect = Rect2(Vector2(left + hero_width - chest_side, hero_top + hero_height - chest_side * 0.91) / scale_factor, Vector2.ONE * chest_side / scale_factor)
 	pip.custom_minimum_size = Vector2.ZERO
 	pip.position = _pip_rect.position
@@ -365,7 +381,8 @@ func snapshot() -> Dictionary:
 	return {"round_id": _round_id, "theme": _theme_id, "active": _active, "ready": _ready_to_open,
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
-		"chest_count": _chest_count, "chest_tier": _chest_tier, "cue_log": _cue_log.duplicate(),
+		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(),
+		"cue_log": _cue_log.duplicate(),
 		"title": _heading.text, "caption": _caption.text, "score": _score,
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),

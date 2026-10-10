@@ -141,6 +141,8 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 	app.choose_mode("match")
 	await settle()
 	_check_bars(app, context + " Match")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

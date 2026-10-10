@@ -184,6 +184,8 @@ func _check_treasure_themes(app) -> void:
 		return
 	var data = load("res://scripts/game_data.gd")
 	check(app.new_round(732, false, "", "match"), "The treasure-world fixture starts a real Match round")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	check(not treasure.visible and not treasure.is_visible_in_tree(), "Active play hides the treasure scene")
 	app.choose_theme("spring")
 	for card in app.model.cards:

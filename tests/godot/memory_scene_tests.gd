@@ -32,6 +32,8 @@ func _run() -> void:
 	app.choose_theme("spring")
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app.choose_mode("memory")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	await process_frame
 	await process_frame
 	var view = app._memory

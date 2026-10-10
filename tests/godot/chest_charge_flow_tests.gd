@@ -43,6 +43,8 @@ func _pieces(app) -> int:
 func _win(app, seed_value: int) -> void:
 	var surprise_count: int = app.chest.hold_effect_snapshot().surprise.play_count
 	check(app.new_round(seed_value), "The next real Match round starts")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	var surprise: Dictionary = app.chest.hold_effect_snapshot().surprise
 	check(not surprise.active and str(surprise.kind).is_empty() and surprise.play_count == surprise_count,
 		"A new round clears the decorative gift without replaying an automatically settled opening")

@@ -71,7 +71,7 @@ func load_state() -> bool:
 			themes.append(entry.theme)
 			var restored: Dictionary = {"theme": entry.theme, "opened": entry.opened}
 			if entry.has("tier"):
-				if storage_kind != "jelly" or not entry.tier is int or entry.tier < 1:
+				if not entry.tier is int or entry.tier < 1:
 					return _fail("Your treasure save contains an invalid chest level.")
 				restored["tier"] = entry.tier
 			next_entries.append(restored)
@@ -101,18 +101,18 @@ func create_batch(id: String, themes: Array[String], tiers: Array[int] = []) -> 
 		return true
 	if id.is_empty() or id.length() > 200 or themes.is_empty() or (max_chests > 0 and themes.size() > max_chests):
 		return _fail("This round has no treasure to open.")
-	if not tiers.is_empty() and (storage_kind != "jelly" or tiers.size() != themes.size()
+	if not tiers.is_empty() and (tiers.size() != themes.size()
 		or tiers.any(func(tier: int) -> bool: return tier < 0)):
 		return _fail("This round has an invalid chest level.")
-	if has_pending() and storage_kind != "jelly":
+	if has_pending() and not _keeps_pending_batches():
 		return _fail("Open your saved treasure before starting another reward batch.")
 	if _receipts.has(id):
-		if storage_kind == "jelly":
+		if _keeps_pending_batches():
 			return true
 		return _fail("The treasure from that round has already been opened.")
 	var next_entries: Array[Dictionary] = []
 	var receipts: Array[String] = _receipts.duplicate()
-	if storage_kind == "jelly":
+	if _keeps_pending_batches():
 		# Keep unopened loot across replays. Retired batch IDs remain receipts so
 		# a delayed callback cannot append the same round's treasure twice.
 		for entry in entries:
@@ -123,6 +123,9 @@ func create_batch(id: String, themes: Array[String], tiers: Array[int] = []) -> 
 			if receipts.size() > MAX_RECEIPTS:
 				receipts.pop_front()
 	var seen: Array[String] = []
+	if not allow_repeated_themes:
+		for entry in next_entries:
+			seen.append(str(entry.theme))
 	for index in range(themes.size()):
 		var theme_id: String = themes[index]
 		if not Data.THEMES.has(theme_id) or (not allow_repeated_themes and seen.has(theme_id)):
@@ -132,12 +135,19 @@ func create_batch(id: String, themes: Array[String], tiers: Array[int] = []) -> 
 		if not tiers.is_empty() and tiers[index] > 0:
 			entry["tier"] = tiers[index]
 		next_entries.append(entry)
+	if max_chests > 0 and next_entries.size() > max_chests:
+		return _fail("Your saved treasure has no room for this batch.")
 	if not _persist(id, next_entries, receipts):
 		return false
 	round_id = id
 	entries = next_entries
 	_receipts = receipts
 	return true
+
+
+func _keeps_pending_batches() -> bool:
+	# Uncapped inventories retain earned treasure when a new round is replayed.
+	return storage_kind == "jelly" or max_chests == 0
 
 
 func mark_opened(id: String, index: int) -> bool:

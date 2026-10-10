@@ -1,7 +1,7 @@
 extends SceneTree
 
-const Model = preload("res://scripts/voice_pop_model.gd")
 const PopView = preload("res://scripts/voice_pop.gd")
+const Progress = preload("res://scripts/jelly_reward_progress.gd")
 const WORDS := [{"id": "cat", "text": "cat", "image": "missing-cat.svg", "audio": "missing-cat.wav"}]
 
 var checks: int = 0
@@ -24,361 +24,185 @@ func settle() -> void:
 		await process_frame
 
 
-func event_for(game, target: Dictionary, id: String) -> Dictionary:
-	return {"event_id": id, "round_id": game.round_id, "target_uid": target.uid,
+func event_for(view, target: Dictionary, id: String) -> Dictionary:
+	return {"event_id": id, "round_id": view.game.round_id, "target_uid": target.uid,
 		"text": target.word.text, "stage": "final", "received_at_ms": 120.0}
 
 
-func next_target(game) -> Dictionary:
+func strike(view, marked: bool, id: String) -> Dictionary:
 	for step in range(100):
-		if not game.targets.is_empty():
-			return game.targets[0].duplicate(true)
-		game.advance(0.1)
-	return {}
+		if not view.game.targets.is_empty():
+			break
+		view._advance_game(0.1)
+	check(not view.game.targets.is_empty(), "The fixture reaches a live target")
+	if view.game.targets.is_empty():
+		return {}
+	view.game.targets[0].chest = marked
+	view._refresh_targets()
+	var target: Dictionary = view.game.targets[0].duplicate(true)
+	check(bool(view.snapshot().targets[0].chest) == marked, "The visible marker follows the accepted target identity")
+	var event: Dictionary = event_for(view, target, id)
+	check(view.receive_speech_event(JSON.stringify(event)), "A real recognized target is accepted")
+	return event
 
 
-func _test_model() -> void:
-	var game := Model.new()
-	game.configure(WORDS, 5)
-	check(game.chest_count == 0 and game.summary().chest_count == 0 and game.next_chest_score() == 100,
-		"Every prepared round begins with zero chests and a visible first goal")
-	check(game.chest_progress() == 0.0 and game.summary().chest_thresholds == [100, 200, 300],
-		"The reward ladder exposes its three score milestones")
-	game.start()
-	for index in range(6):
-		var target: Dictionary = next_target(game)
-		var struck: Array = game.hit_speech_event(event_for(game, target, "below-%d" % index))
-		check(struck.size() == 1 and not struck[0].chest_awarded and struck[0].chest_awards == 0,
-			"A valid hit below the threshold does not invent a chest")
-	check(game.score == 90 and game.chest_count == 0 and is_equal_approx(game.chest_progress(), 0.9),
-		"Points below 100 provide progress without a premature chest")
-	check(game.hit_transcript("dog").is_empty() and game.chest_count == 0,
-		"Unmatched speech cannot award a chest")
-	var expired: Dictionary = next_target(game)
-	game.advance(float(expired.lifetime))
-	check(game.misses > 0 and game.combo == 0 and game.chest_count == 0,
-		"A miss resets the combo without earning or removing chests")
-	var first: Dictionary = next_target(game)
-	var first_event: Dictionary = event_for(game, first, "first-chest")
-	var earned: Array = game.hit_speech_event(first_event)
-	check(game.score == 100 and game.chest_count == 1 and earned.size() == 1
-		and earned[0].chest_awarded and earned[0].chest_awards == 1 and earned[0].chest_count == 1,
-		"A valid hit at exactly 100 points earns the first chest once")
-	check(game.next_chest_score() == 200 and game.chest_progress() == 0.0,
-		"The next progress interval begins after an earned chest")
-	check(game.hit_speech_event(first_event).is_empty() and game.chest_count == 1,
-		"A repeated accepted speech event never duplicates a chest")
-	var paused: Dictionary = next_target(game)
-	var paused_event: Dictionary = event_for(game, paused, "paused-chest")
-	var previous_score: int = game.score
-	game.pause()
-	game.advance(10.0)
-	check(game.hit_speech_event(paused_event).is_empty() and game.score == previous_score and game.chest_count == 1,
-		"Pausing retains earned chests and rejects speech without consuming it")
-	game.resume()
-	check(game.hit_speech_event(paused_event).size() == 1 and game.chest_count == 1,
-		"Resuming keeps the earned chest and accepts a fresh valid hit")
-	var award_totals: Array[int] = [1]
-	for index in range(25):
-		var target: Dictionary = next_target(game)
-		var before: int = game.chest_count
-		var struck: Array = game.hit_speech_event(event_for(game, target, "more-%d" % index))
-		check(struck.size() == 1, "Additional reward points come from real accepted targets")
-		if struck.is_empty():
-			continue
-		if bool(struck[0].chest_awarded):
-			award_totals.append(int(struck[0].chest_count))
-		check(int(struck[0].chest_awards) == game.chest_count - before and game.chest_count <= Model.MAX_CHESTS,
-			"Each hit reports only newly earned chests within the cap")
-	check(award_totals == [1, 2, 3] and game.score > 400 and game.chest_count == 3,
-		"The 200 and 300 point milestones award once and higher scores stay capped at three")
-	check(game.next_chest_score() == 0 and game.chest_progress() == 1.0,
-		"The completed ladder has no fourth score goal")
-	game.advance(game.remaining + 1.0)
-	var completed: Dictionary = game.summary()
-	check(game.phase == "finished" and completed.chest_count == 3,
-		"Natural round completion carries every earned chest into results")
-	check(game.hit_speech_event(first_event).is_empty() and game.summary() == completed,
-		"Late speech cannot change a completed reward outcome")
-	game.start()
-	check(game.chest_count == 0 and game.score == 0 and game.next_chest_score() == 100,
-		"Replaying resets reward chances to zero")
-	game.configure(WORDS, 8)
-	check(game.chest_count == 0 and game.chest_progress() == 0.0,
-		"Reconfiguration cannot carry chests into another round")
+func resume_after_reward(view) -> void:
+	view.advance_reward_presentation(3.0)
+	view.set_listening(true, true, "Listening.")
+	view._listening_tick_usec = -1
 
 
 func _test_scene(dimensions: Vector2i) -> void:
 	root.size = dimensions
 	var view := PopView.new()
 	root.add_child(view)
-	view.size = Vector2(dimensions)
+	view.size = Vector2(dimensions.x - 24, dimensions.y - 140) / PopView.Style.ui_scale(view)
 	view.configure(WORDS, false, 5)
 	view.set_process(false)
-	var awards: Array[int] = []
-	var requests: Array[bool] = []
-	view.chest_earned.connect(func(count: int) -> void: awards.append(count))
-	view.chests_requested.connect(func() -> void: requests.append(true))
 	view.set_listening(true, true, "Listening.")
-	view.set_process(false)
 	await settle()
-	check(view.snapshot().chest_count == 0 and view.snapshot().hud.chests.text == "CHESTS 0 / 3",
-		"The visible round starts with zero chest chances at " + str(dimensions))
-	check(view.snapshot().hud.score.text == "0 POINTS" and view.snapshot().hud.next_chest.text == "NEXT CHEST AT 100",
-		"The HUD explains score and the next chest milestone")
-	check(view.get_global_rect().grow(1.0).encloses(view._reward_hud.get_global_rect()),
-		"The score and chest panel fits the playfield at " + str(dimensions))
-	check(view._score_label.get_global_rect().end.x <= view._chest_count_label.get_global_rect().position.x + 1.0,
-		"Points and chest totals have separate readable bounds")
-	for index in range(22):
-		if view.game.targets.is_empty():
-			view._advance_game(0.66)
-		if view.game.targets.is_empty():
-			continue
-		var target: Dictionary = view.game.targets[0].duplicate(true)
-		var before: int = view.game.chest_count
-		var event: Dictionary = event_for(view.game, target, "scene-%d" % index)
-		check(view.receive_speech_event(JSON.stringify(event)), "A real speech hit scores through the visible view")
-		if view.game.chest_count > before:
-			var snapshot: Dictionary = view.snapshot()
-			check(snapshot.chest_fx.active and snapshot.chest_fx.text == "+1 CHEST"
-				and snapshot.chest_fx.count == view.game.chest_count and snapshot.chest_fx.above_targets,
-				"Each earned chest gets a visible foreground reward badge")
-			var serial: int = snapshot.chest_fx.serial
-			check(not view.receive_speech_event(JSON.stringify(event)) and view.snapshot().chest_fx.serial == serial,
-				"Repeated speech cannot replay the chest effect")
-			view._advance_hud_feedback(0.2)
-			check(not view._chest_badge.scale.is_equal_approx(Vector2.ONE),
-				"Normal motion visibly animates the earned chest badge")
-			view.set_reduced_motion(true)
-			check(view.snapshot().chest_fx.active and view.snapshot().chest_fx.reduced_motion
-				and view._chest_badge.scale.is_equal_approx(Vector2.ONE)
-				and view._chest_badge.position.is_equal_approx(view._chest_badge_anchor),
-				"Reduced motion keeps the clear earned message without travel or scaling")
-			view.set_reduced_motion(false)
-			if view.game.chest_count == 1:
-				view.pause()
-				check(view.game.chest_count == 1 and not view.snapshot().chest_fx.active,
-					"Pausing keeps the reward and clears the transient badge")
-				view.set_listening(true, true, "Listening.")
-	check(awards == [1, 2, 3] and view.game.chest_count == 3 and view.snapshot().chest_fx.serial == 3,
-		"The scene announces exactly the three earned opportunities")
-	check(view.snapshot().hud.next_chest.text == "ALL 3 CHESTS EARNED",
-		"The completed ladder clearly communicates the maximum")
-	view._advance_hud_feedback(PopView.CHEST_FX_DURATION + 0.1)
-	check(not view.snapshot().chest_fx.active and view.game.chest_count == 3,
-		"Finishing chest feedback does not consume the chest")
+	var awards: Array[int] = []
+	var cues: Array[String] = []
+	var presentations: Array[bool] = []
+	view.chest_earned.connect(func(count: int) -> void: awards.append(count))
+	view.reward_cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	view.reward_presentation_changed.connect(func(active: bool) -> void: presentations.append(active))
+	check(view.snapshot().fragment_count == 0 and view.snapshot().hud.chests.text == "0 / 4",
+		"A new round shows the four-fragment goal")
+	check(view.snapshot().hud.next_chest.text == "CHEST FRAGMENTS" and view.snapshot().hud.score.text == "0 POINTS",
+		"Reward progress is independent of points")
+	strike(view, false, "ordinary")
+	check(view.game.score > 0 and view.game.fragment_count == 0 and cues.is_empty(), "Unmarked words score without awarding fragments")
+	for index in range(14):
+		var event: Dictionary = strike(view, true, "fragment-%d" % index)
+		var state: Dictionary = view.snapshot()
+		check(state.fragment_count == index + 1 and state.chest_fx.text == "+1 FRAGMENT", "Each marked card earns exactly one fragment")
+		var serial: int = int(state.chest_fx.serial)
+		check(not view.receive_speech_event(JSON.stringify(event)) and int(view.snapshot().chest_fx.serial) == serial,
+			"Duplicate speech cannot repeat the fragment flight")
+		if index + 1 in [4, 9, 14]:
+			var tier: int = int(Progress.reward_progress(index + 1).chest_tier)
+			check(view.reward_presentation_active() and view.game.phase == "paused" and not view.snapshot().listening,
+				"A chest milestone freezes recognition and the round clock")
+			var remaining: float = view.game.remaining
+			view._advance_game(10.0)
+			check(is_equal_approx(view.game.remaining, remaining), "The performance never spends playing time")
+			view.set_listening(false, false, "Listening stopped.")
+			check(not view.snapshot().reward_paused, "The microphone stop callback does not interrupt the performance")
+			view.advance_reward_presentation(1.4)
+			check(view.snapshot().reward_presentation.revealed and view._displayed_chest_tier == tier,
+				"The synchronized reveal updates the displayed chest tier")
+			check(bool(view.snapshot().reward_presentation.confetti) == (tier > 1), "Only upgrades play the shared full-screen confetti")
+			resume_after_reward(view)
+			check(not view.reward_presentation_active() and view.game.phase == "running", "Completion safely resumes the same round")
+		else:
+			check(not view.reward_presentation_active() and view.game.phase == "running", "Ordinary fragments leave play running")
+	check(awards == [1, 1, 1] and presentations == [true, false, true, false, true, false],
+		"Unlock and upgrades present once while keeping a single chest")
+	check(cues.count("loot") == 14 and cues.count("assemble") == 3 and cues.count("reward") == 3,
+		"Every earned fragment and every milestone has its own sound cue")
 	view._advance_game(view.game.remaining + 1.0)
 	await settle()
-	check(view.game.phase == "finished" and not view.chests_button.disabled and view.chests_button.text == "Open chests (3)",
-		"The final result exposes every earned chest")
-	check(view.controls().has(view.chests_button) and view.default_focus() == view.chests_button,
-		"The earned reward action participates in keyboard navigation")
+	var result: Dictionary = view.snapshot().results_rewards
+	check(result.earned == 1 and result.chest_tier == 3 and result.fragment_count == 14,
+		"Results show the final upgraded chest and exact fragments")
+	check(view.chests_button.text == "Open chest" and not view.chests_button.disabled, "Only one earned chest is offered")
+	var viewport: Rect2 = view._results.get_global_rect()
 	for button in [view.chests_button, view.replay_button]:
-		check(view._results.get_global_rect().grow(1.0).encloses(button.get_global_rect()),
-			"Both result actions fit without initial scrolling at " + str(dimensions))
-	var completed: Dictionary = view.game.summary()
-	view.interaction_allowed = func() -> bool: return false
-	view.chests_button.pressed.emit()
-	check(requests.is_empty(), "A covering modal blocks chest navigation")
-	view.interaction_allowed = Callable()
-	view.chests_button.pressed.emit()
-	check(requests.size() == 1 and view.game.summary() == completed,
-		"Opening the chest room emits navigation without consuming or changing earned results")
-	view.hide()
-	view.chests_button.pressed.emit()
-	check(requests.size() == 1, "A hidden result cannot request a second chest room")
-	view.show()
-	view.set_process(false)
-	await settle()
-	check(view.game.summary() == completed and view.chests_button.is_visible_in_tree(),
-		"Returning from an external chest panel retains the finished result")
+		check(viewport.grow(1.0).encloses(button.get_global_rect()), "Both actions fit without scrolling at " + str(dimensions))
 	view.configure(WORDS, true, 5)
 	view.set_process(false)
 	view.set_listening(true, true, "Listening.")
 	view._advance_game(view.game.remaining + 1.0)
 	await settle()
-	check(view.chests_button.disabled and view.chests_button.text == "Open chests (0)"
-		and not view.controls().has(view.chests_button) and view.default_focus() == view.replay_button,
-		"A zero-point result disables chest entry while preserving Play again")
-	view.chests_button.pressed.emit()
-	check(requests.size() == 1 and not view.snapshot().chest_fx.active,
-		"A zero-chest replay cannot navigate or reuse an old celebration")
+	check(view.chests_button.disabled and view.snapshot().results_rewards.earned == 0, "A zero-fragment round cannot open a new chest")
+	view.set_pending_chests(2)
+	check(not view.chests_button.disabled and view.chests_button.text == "Open chests"
+		and view.snapshot().results_rewards.earned == 0, "Older unopened chests remain accessible without inflating this round's result")
 	view.queue_free()
 	await settle()
 
 
-func _test_bonus_layout(dimensions: Vector2i, field: Vector2) -> void:
-	root.size = dimensions
+func _test_interruption() -> void:
 	var view := PopView.new()
 	root.add_child(view)
-	# The captured playfields are CSS pixels; this native fixture keeps project scaling.
-	var scale: float = PopView.Style.ui_scale(view)
-	view.size = field / scale
-	view.configure(WORDS, false, 5)
-	view.set_listening(true, true, "Listening.")
+	view.size = Vector2(640, 480)
+	view.configure(WORDS, false, 7)
 	view.set_process(false)
-	await settle()
-	for index in range(7):
-		if view.game.targets.is_empty():
-			view._advance_game(0.66)
-		if not view.game.targets.is_empty():
-			var target: Dictionary = view.game.targets[0].duplicate(true)
-			view.receive_speech_event(JSON.stringify(event_for(view.game, target, "layout-%d" % index)))
-	check(view.game.chest_count == 1 and view._hud_bonus_amount > 0,
-		"Layout feedback comes from real time and chest awards at " + str(dimensions))
-	var field_bounds := Rect2(Vector2.ZERO, view.size).grow(1.0 / scale)
-	for reduced in [false, true]:
-		view.set_reduced_motion(reduced)
-		# Awards can start on different hits, so test their independent animation ages.
-		for bonus_age in [0.0, 0.16, 0.38, 1.3, 1.55, 1.75]:
-			for chest_age in [0.0, 0.2, 0.38, 1.5, 1.85, 2.15]:
-				view._hud_bonus_age = bonus_age
-				view._chest_fx_age = chest_age
-				view._apply_hud_feedback()
-				var time_bounds: Rect2 = view._time_bonus_badge.get_transform() * Rect2(Vector2.ZERO, view._time_bonus_badge.size)
-				var chest_bounds: Rect2 = view._chest_badge.get_transform() * Rect2(Vector2.ZERO, view._chest_badge.size)
-				var context: String = "%s, reduced=%s, time=%.2f, chest=%.2f" % [dimensions, reduced, bonus_age, chest_age]
-				check(view._time_bonus_badge.visible and view._chest_badge.visible,
-					"Both earned messages remain visible: " + context)
-				check(not time_bounds.grow(3.0 / scale).intersects(chest_bounds.grow(3.0 / scale)),
-					"Time and chest messages stay separate throughout their animations: " + context)
-				check(field_bounds.encloses(time_bounds) and field_bounds.encloses(chest_bounds),
-					"Both animated messages fit the actual playfield: " + context)
-				if chest_age < 1.55:
-					check(not chest_bounds.intersects(view._reward_hud.get_rect()),
-						"The readable chest celebration leaves the score panel clear: " + context)
-	view.queue_free()
-	await settle()
-
-
-func _reward_rect(values: Array) -> Rect2:
-	return Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
-
-
-func _expected_reward_title(earned: int) -> String:
-	if earned == 0:
-		return "Your next treasure"
-	if earned == 3:
-		return "All 3 chests earned"
-	return "%d chest%s earned" % [earned, "" if earned == 1 else "s"]
-
-
-func _test_result_reward_ladder(dimensions: Vector2i, field: Vector2) -> void:
-	root.size = dimensions
-	var view := PopView.new()
-	root.add_child(view)
-	var scale: float = PopView.Style.ui_scale(view)
-	view.size = field / scale
-	view.configure(WORDS, true, 8)
 	view.set_listening(true, true, "Listening.")
-	view.set_process(false)
-	view._advance_game(view.game.remaining + 1.0)
-	await settle()
-	var actual_round: Dictionary = view.game.summary()
-	var awards: Array[int] = []
-	view.chest_earned.connect(func(count: int) -> void: awards.append(count))
-	for score in [0, 90, 100, 150, 200, 299, 300, 480]:
-		var earned: int = mini(3, floori(score / 100.0))
-		var summary: Dictionary = actual_round.duplicate(true)
-		summary.score = score
-		summary.chest_count = earned
-		view._build_results(summary)
-		view._results.scroll_vertical = 0
-		await settle()
-		var context: String = "%s, score %d" % [dimensions, score]
-		var snapshot: Dictionary = view.snapshot()
-		var rewards: Dictionary = snapshot.get("results_rewards", {})
-		check(not rewards.is_empty(), "Finished results publish the reward ladder: " + context)
-		if rewards.is_empty():
-			continue
-		check(rewards.visible and rewards.score == score and rewards.earned == earned
-			and rewards.title == _expected_reward_title(earned),
-			"The reward summary distinguishes earned chests from the next goal: " + context)
-		check(rewards.rows.size() == 3, "Results always show exactly three cumulative score milestones: " + context)
-		var rewards_rect: Rect2 = _reward_rect(rewards.rect)
-		var viewport: Rect2 = view._results.get_global_rect()
-		check(rewards_rect.size.x > 0 and rewards_rect.size.y > 0
-			and rewards_rect.position.x >= viewport.position.x - 0.5
-			and rewards_rect.end.x <= viewport.end.x + 0.5,
-			"The reward ladder has no horizontal overflow: " + context)
-		check(view._result_body.get_global_rect().grow(0.5).encloses(rewards_rect),
-			"The full reward ladder belongs to the scrollable result content: " + context)
-		var previous_row := Rect2()
-		for index in range(rewards.rows.size()):
-			var row: Dictionary = rewards.rows[index]
-			var threshold: int = (index + 1) * 100
-			var value: int = mini(score, threshold)
-			check(row.threshold == threshold and row.value == value
-				and is_equal_approx(float(row.progress), float(value) / threshold)
-				and bool(row.earned) == (score >= threshold),
-				"Each milestone uses total score, caps its numerator, and earns only at its threshold: " + context)
-			check(row.label == "%d points" % threshold and row.progress_text == "%d / %d" % [value, threshold],
-				"Every progress bar states the same earned points and goal that it displays: " + context)
-			var row_rect: Rect2 = _reward_rect(row.rect)
-			var bar_rect: Rect2 = _reward_rect(row.bar_rect)
-			var chest_rect: Rect2 = _reward_rect(row.chest_rect)
-			check(rewards_rect.grow(0.5).encloses(row_rect) and row_rect.size.y > 0,
-				"Every milestone row fits inside the reward panel: " + context)
-			check(bar_rect.size.x > 0 and bar_rect.size.y > 0 and chest_rect.size.x > 0 and chest_rect.size.y > 0
-				and row_rect.grow(0.5).encloses(bar_rect) and row_rect.grow(0.5).encloses(chest_rect)
-				and not bar_rect.grow(-0.25).intersects(chest_rect.grow(-0.25)),
-				"The chest thumbnail and progress bar fit their row without covering each other: " + context)
-			if index > 0:
-				check(previous_row.end.y <= row_rect.position.y + 0.5,
-					"Adjacent score milestones do not overlap: " + context)
-			previous_row = row_rect
-		for button: Button in [view.chests_button, view.replay_button]:
-			check(viewport.grow(0.5).encloses(button.get_global_rect()),
-				"Both result actions remain immediately visible before scrolling: " + context)
-		check(view.chests_button.disabled == (earned == 0)
-			and view.chests_button.text == "Open chests (%d)" % earned,
-			"Chest navigation agrees with the earned count in the ladder: " + context)
-		check(not rewards_rect.grow(-0.25).intersects(view._result_actions.get_global_rect().grow(-0.25)),
-			"Rewards and result actions remain separate: " + context)
-		check(view.find_child("PlayerLeaderboard", true, false) == null
-			and view.find_child("PlayerAvatar", true, false) == null
-			and view.find_child("PlayerName", true, false) == null,
-			"Single-player results have no retired identity or ranking controls: " + context)
-		if field.y > 380:
-			check(viewport.grow(0.5).encloses(rewards_rect),
-				"Portrait and desktop results reveal every chest milestone without initial scrolling: " + context)
-		else:
-			view._results.scroll_vertical = maxi(0, roundi(rewards_rect.position.y - viewport.position.y))
-			await settle()
-			var scrolled: Dictionary = view.snapshot().results_rewards
-			for row: Dictionary in scrolled.rows:
-				check(viewport.grow(0.5).encloses(_reward_rect(row.rect)),
-					"Short landscape can scroll every complete chest milestone into view: " + context)
-		check(view.game.summary() == actual_round and awards.is_empty(),
-			"Rendering result fixtures never scores or awards another chest: " + context)
+	for index in range(4):
+		strike(view, true, "pause-%d" % index)
+	view.advance_reward_presentation(0.9)
+	var elapsed: float = float(view.snapshot().reward_presentation.elapsed)
+	view.pause()
+	view.advance_reward_presentation(5.0)
+	check(view.snapshot().reward_presentation.elapsed == elapsed and not view.snapshot().reward_presentation.visible,
+		"A menu pause freezes the timeline and reveals the listening recovery gate")
+	view.set_listening(true, true, "Listening.")
+	check(not view.snapshot().reward_paused and view.game.phase == "paused" and view.snapshot().reward_presentation.visible,
+		"Resume restarts presentation before gameplay")
 	view.hide()
+	view.advance_reward_presentation(4.0)
+	check(view.snapshot().reward_paused and view.snapshot().reward_presentation.elapsed == elapsed,
+		"Hiding behind a page or collection pauses an already-paused model's performance")
+	view.show()
+	view.set_process(false)
+	view.set_listening(true, true, "Listening.")
+	view.set_reduced_motion(true)
+	view.advance_reward_presentation(0.5)
+	check(view.snapshot().reward_presentation.reduced_motion and not view.snapshot().reward_presentation.confetti,
+		"Reduced motion preserves the milestone without motion or confetti")
+	var requests: Array[bool] = []
+	view.reward_presentation_changed.connect(func(active: bool) -> void: requests.append(active))
+	view.stop()
+	view.advance_reward_presentation(4.0)
+	check(requests.is_empty() and not view.reward_presentation_active() and view._loot_flights.is_empty(),
+		"Leaving cancels presentation and flights without restarting the microphone")
+	view.configure(WORDS, false, 9)
+	view.advance_reward_presentation(4.0)
+	check(requests.is_empty() and view.game.fragment_count == 0 and view.game.phase == "ready", "Old presentation callbacks cannot affect a new round")
+	view.queue_free()
 	await settle()
-	check(not view.snapshot().results_rewards.visible, "A hidden result never reports a visible chest ladder")
+
+
+func _test_callback_reentry() -> void:
+	var view := PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	view.configure(WORDS, false, 7)
+	view.set_process(false)
+	view.set_listening(true, true, "Listening.")
+	for index in range(4):
+		strike(view, true, "settle-%d" % index)
+	var finished: Array[Dictionary] = []
+	var mic: Array[bool] = []
+	view.round_finished.connect(func(result: Dictionary) -> void: finished.append(result))
+	view.reward_presentation_changed.connect(func(active: bool) -> void: mic.append(active))
+	var finish_on_cue: Callable = func(_cue: String) -> void: view.finish_round()
+	view.reward_cue_requested.connect(finish_on_cue)
+	view.advance_reward_presentation(3.0)
+	view.finish_round()
+	check(finished.size() == 1 and finished[0].chest_tier == 1 and finished[0].chest_count == 1,
+		"Settlement inside a cue saves the accepted final tier exactly once")
+	check(mic.is_empty() and not view.reward_presentation_active(), "Settlement inside a cue never restarts recognition")
+	view.reward_cue_requested.disconnect(finish_on_cue)
+	view.configure(WORDS, false, 8)
+	view.set_process(false)
+	view.set_listening(true, true, "Listening.")
+	var configure_on_hit: Callable = func(_word: Dictionary) -> void: view.configure(WORDS, false, 9)
+	view.hit.connect(configure_on_hit)
+	strike(view, true, "replace-on-hit")
+	check(view.game.phase == "ready" and view.game.fragment_count == 0 and not view.reward_presentation_active()
+		and view._loot_flights.is_empty(), "A hit callback replacing the round leaves no old fragment visuals or milestone")
+	view.hit.disconnect(configure_on_hit)
 	view.queue_free()
 	await settle()
 
 
 func _run() -> void:
-	_test_model()
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
 		await _test_scene(dimensions)
-	for layout in [
-		[Vector2i(320, 568), Vector2(296, 428)],
-		[Vector2i(390, 844), Vector2(366, 704)],
-		[Vector2i(460, 568), Vector2(436, 428)],
-		[Vector2i(468, 568), Vector2(444, 428)],
-		[Vector2i(667, 375), Vector2(643, 287)],
-		[Vector2i(844, 390), Vector2(820, 302)],
-		[Vector2i(1366, 768), Vector2(1342, 680)],
-	]:
-		await _test_bonus_layout(layout[0], layout[1])
-	for layout in [
-		[Vector2i(320, 568), Vector2(296, 428)],
-		[Vector2i(390, 844), Vector2(366, 704)],
-		[Vector2i(844, 390), Vector2(820, 302)],
-		[Vector2i(1366, 768), Vector2(1342, 680)],
-	]:
-		await _test_result_reward_ladder(layout[0], layout[1])
-	print("Voice Pop rewards: %d checks, %d failures" % [checks, failures])
+	await _test_interruption()
+	await _test_callback_reentry()
+	print("Voice Pop fragment presentation: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

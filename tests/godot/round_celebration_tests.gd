@@ -41,6 +41,7 @@ func _run() -> void:
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
 	_check_reward_counts(view, data.chests)
+	_check_no_chest(view, data.chests)
 	_check_score_summary(view, data.chests)
 	_check_lifecycle(view, data.chests)
 	_check_theme_updates(view, data.chests)
@@ -215,6 +216,54 @@ func _check_score_summary(view, manifest: Dictionary) -> void:
 		and view.snapshot().caption == "You earned a treasure chest!"
 		and is_zero_approx(view._heading.modulate.a) and is_zero_approx(view._caption.modulate.a),
 		"The next ordinary celebration restores its default copy and reveal timing")
+	view.stop()
+
+
+func _check_no_chest(view, manifest: Dictionary) -> void:
+	var opened_before: int = _opened.size()
+	var finished_before: int = _finished.size()
+	_begin(view, manifest, "no-chest", false, false, 0)
+	view.set_narration_playing(true)
+	var initial: Dictionary = view.snapshot()
+	check(initial.chest_count == 0 and not initial.chest_visible and not view._glow.visible
+		and initial.title == "You did it!" and initial.caption == "Every word matched!"
+		and view._count.text.is_empty() and view.action_button.text == "Play again",
+		"A completed round without a chest celebrates learning without inventing a treasure")
+	check(is_equal_approx(view.pip.get_rect().get_center().x, view.size.x * 0.5),
+		"Pip is centered when no chest accompanies the celebration")
+	view.action_button.pressed.emit()
+	_step(view, 3.01)
+	check(not view.is_ready() and _opened.size() == opened_before and _finished.size() == finished_before
+		and view.snapshot().cue_log == ["step", "step-detail"],
+		"No-chest completion still waits for narration and omits the treasure reveal sound")
+	view.set_narration_playing(false)
+	check(view.is_ready() and view.controls() == [view.action_button] and view.action_button.visible
+		and _finished.size() == finished_before + 1,
+		"A play-again action appears after the same three-second and narration gates")
+	view.action_button.pressed.emit()
+	view.action_button.pressed.emit()
+	check(_opened.size() == opened_before + 1 and _opened.back() == "no-chest" and view.controls().is_empty(),
+		"The host receives one round-bound play-again request, even after repeated clicks")
+	view.retry_open("old-round")
+	check(view.controls().is_empty(), "A stale retry cannot re-enable a different round's action")
+	var completed: Dictionary = view.snapshot()
+	view.retry_open("no-chest")
+	check(view.controls() == [view.action_button] and not view.action_button.disabled
+		and view.snapshot().elapsed == completed.elapsed and view.snapshot().cue_log == completed.cue_log
+		and _finished.size() == finished_before + 1,
+		"A rejected replay can be retried without repeating the completed performance")
+	view.action_button.pressed.emit()
+	view.action_button.pressed.emit()
+	check(_opened.size() == opened_before + 2 and view.controls().is_empty(),
+		"A retried replay remains protected against duplicate clicks")
+	_begin(view, manifest, "no-chest-reduced", true, false, 0)
+	_step(view, 3.01)
+	check(view.is_ready() and not view.snapshot().chest_visible and not view._glow.visible,
+		"Reduced motion preserves zero-chest ownership and the completion action")
+	_begin(view, manifest, "after-no-chest")
+	check(view.chest.visible and view._glow.visible and view.action_button.text == "Open chest"
+		and view.snapshot().caption == "You earned a treasure chest!",
+		"A later earned chest restores its authored preview, glow, and invitation")
 	view.stop()
 
 

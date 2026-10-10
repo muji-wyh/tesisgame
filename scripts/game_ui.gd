@@ -150,6 +150,9 @@ var _pop_rewards_shown: bool = false
 var pop_reward_save_path: String = "user://pop-rewards-v1.cfg"
 var _controller_holding_pop_chest: bool = false
 var _pop_speech_active: bool = false
+var _pop_reward_saved: bool = false
+var _pop_reward_theme: String = ""
+var _pop_settling: bool = false
 var _jelly: JellyMatch
 var _jelly_rewards: PopRewardRoom
 var _jelly_rewards_shown: bool = false
@@ -471,12 +474,16 @@ func _build_controls() -> void:
 	_pop.round_finished.connect(_pop_finished)
 	_pop.chests_requested.connect(_show_pop_rewards)
 	_pop.chest_earned.connect(_pop_chest_earned)
+	_pop.reward_cue_requested.connect(_pop_reward_cue)
+	_pop.reward_presentation_changed.connect(_pop_reward_presentation_changed)
 	_pop.hear_requested.connect(_pop_hear)
 	_pop.status_changed.connect(_pop_status_changed)
 	_pop.hide()
 	column.add_child(_pop)
 	_pop_rewards = PopRewardRoom.new()
 	_pop_rewards.name = "PopRewardRoom"
+	_pop_rewards.max_chests = 0
+	_pop_rewards.allow_repeated_themes = true
 	_pop_rewards.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_pop_rewards.interaction_allowed = func() -> bool: return _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	_pop_rewards.exit_requested.connect(_hide_pop_rewards)
@@ -717,7 +724,7 @@ func _show_mode_menu() -> void:
 		return
 	# Speech ownership can outlive a denied/failed microphone. Resume only a
 	# recognizer that was listening or connecting when the menu interrupted it.
-	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
+	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting or _pop.reward_presentation_active())
 	_mode_menu.show()
 	_sync_round_celebration()
 	_on_input_canceled()
@@ -1054,6 +1061,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_jelly_round():
 		return false
+	if not _settle_pop_reward():
+		return false
 	if resume_jelly_treasure and _mode_id == "jelly" and next_mode in ["", "jelly"] and _jelly_rewards.has_pending():
 		_hide_mode_menu(false, false)
 		_stop_round_celebration()
@@ -1065,12 +1074,12 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_stop_round_celebration()
 	_settling_chest = true
 	audio.stop_chest_performance()
-	if model.phase == "won" and model.chest_state == "closed":
+	if model.phase == "won" and model.chest_earned and model.chest_state == "closed":
 		_open_chest()
 	if model.chest_state == "opening":
 		chest.finish_immediately()
 	_settling_chest = false
-	if (_save_error and not _pending_fragment.is_empty()) or (model.phase == "won" and model.chest_state != "opened"):
+	if (_save_error and not _pending_fragment.is_empty()) or (model.phase == "won" and model.chest_earned and model.chest_state != "opened"):
 		_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
 		return false
 	_stop_voice()
@@ -1100,7 +1109,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	audio.halt()
 	_stop_feedback_animations()
 	_last_phase = ""
-	if not model.reset(_learning_words(), seed_value, repeat_lesson, adventure_id, required_word_id, str(growth.level)):
+	if not model.reset(_learning_words(), seed_value, repeat_lesson, adventure_id, required_word_id, str(growth.level), _mode_id in ["match", "memory"]):
 		_rebuilding = false
 		_show_error(model.error)
 		return false
@@ -1177,11 +1186,14 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_celebration_seen_id = ""
 	_round_id = GrowthState.make_round_id()
 	_round_result.clear()
+	_pop_reward_saved = false
+	_pop_reward_theme = ""
 	var pool: Array = _learning_words().filter(func(word: Dictionary) -> bool:
 		return Data.word_age(word) <= growth.level and Data.supports_mode(word, "pop"))
 	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a._growth_priority > b._growth_priority)
 	var target_pool: Array = pool.filter(func(word: Dictionary) -> bool: return word._growth_priority > 0)
 	_pop.configure(target_pool if target_pool.size() >= 5 else pool, reduced_motion, seed_value)
+	_pop.apply_theme(Data.theme(model.theme_id), data.chests)
 	_pop.retry_button.text = "Play again"
 
 
@@ -1338,11 +1350,10 @@ func _publish_jelly_rewards(state: Dictionary) -> void:
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
+	if _mode_id != "pop" or _round_celebration_active() or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
 		return
 	if _pop.game.phase == "finished":
-		if _pop_rewards.has_pending():
-			_show_pop_rewards()
+		if not _settle_pop_reward():
 			return
 		_configure_pop()
 	audio.halt()
@@ -1413,11 +1424,38 @@ func _pop_finished(result: Dictionary) -> void:
 	if _mode_id != "pop" or not _round_result.is_empty():
 		return
 	_round_result = result.duplicate(true)
+	var tier: int = int(result.get("chest_tier", 0))
+	_pop_reward_theme = JellyRewardProgress.theme_for_tier(tier) if tier > 0 else model.theme_id
 	if int(result.get("chest_count", 0)) > 0:
-		_pop_rewards.configure(_round_id, int(result.chest_count), model.theme_id, data.chests, reduced_motion)
-	if int(result.get("chest_count", 0)) > 0:
+		_save_pop_round_reward()
+		_pop_rewards.pause()
+	if int(result.get("chest_count", 0)) > 0 and not _pop_settling:
 		_begin_round_celebration(int(result.chest_count))
-		_refresh()
+	_refresh()
+
+
+func _save_pop_round_reward() -> bool:
+	if int(_round_result.get("chest_count", 0)) <= 0 or _pop_reward_saved:
+		return true
+	_pop_reward_saved = _pop_rewards.configure(_round_id, 1, _pop_reward_theme, data.chests, reduced_motion,
+		int(_round_result.get("chest_tier", 0)))
+	return _pop_reward_saved
+
+
+func _settle_pop_reward() -> bool:
+	if _mode_id != "pop":
+		return true
+	if _pop.game.phase in ["running", "paused"]:
+		_pop_settling = true
+		_pop.finish_round()
+		_pop_settling = false
+	if not _save_pop_round_reward() or _pop_rewards._save_failed or _pop_rewards._unsaved_index >= 0:
+		_hide_mode_menu(false, false)
+		_stop_round_celebration()
+		_show_pop_rewards()
+		_announce_status("Your treasure is waiting to be saved. Choose Retry save.")
+		return false
+	return true
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
@@ -1425,11 +1463,31 @@ func _pop_status_changed(snapshot: Dictionary) -> void:
 		_host.popStatus(JSON.stringify(snapshot))
 
 
-func _pop_chest_earned(count: int) -> void:
+func _pop_chest_earned(_count: int) -> void:
 	if _mode_id != "pop" or collection_page.visible or _page_hidden:
 		return
-	audio.chest_cue(model.theme_id, "unlock")
-	_announce_status("Chest earned! %d of 3 chests." % count)
+	_announce_status("Chest level %d!" % _pop.game.chest_tier)
+
+
+func _pop_reward_cue(cue: String) -> void:
+	if _mode_id != "pop" or collection_page.visible or _page_hidden or _mode_menu_open():
+		return
+	audio.interact(model.theme_id, false)
+	audio.play_jelly_cue("fragment" if cue == "loot" else cue)
+
+
+func _pop_reward_presentation_changed(active: bool) -> void:
+	if _mode_id != "pop" or _rebuilding:
+		return
+	if active:
+		if not _stop_pop_listening():
+			_pop.pause()
+			_announce_status("Microphone could not be stopped. Close this tab to stop voice input.")
+			return
+		audio.stop_voice()
+		audio.stop_pip_reaction()
+	elif _pop.game.phase == "paused" and not _page_hidden and not collection_page.visible and not _mode_menu_open() and not _pop_rewards_shown:
+		_start_pop_listening()
 
 
 func _show_pop_rewards() -> void:
@@ -1440,7 +1498,7 @@ func _show_pop_rewards() -> void:
 	if not _stop_pop_listening():
 		return
 	if _pop.game.phase == "finished" and int(_round_result.get("chest_count", 0)) > 0:
-		_pop_rewards.configure(_round_id, int(_round_result.chest_count), model.theme_id, data.chests, reduced_motion)
+		_save_pop_round_reward()
 	else:
 		var restored: bool = _pop_rewards.configure_saved(data.chests, reduced_motion)
 		if not restored and not _pop_rewards.has_pending():
@@ -1502,22 +1560,22 @@ func _round_celebration_allowed() -> bool:
 
 
 func _begin_round_celebration(chest_count: int) -> void:
-	if chest_count <= 0 or _round_id.is_empty() or _celebration_seen_id == _round_id:
+	if (chest_count <= 0 and _mode_id not in ["match", "memory"]) or _round_id.is_empty() or _celebration_seen_id == _round_id:
 		return
 	_celebration_seen_id = _round_id
 	_celebration_suspended = false
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
-	var score: int = int(_round_result.get("score", 0)) if _mode_id == "jelly" else -1
-	var theme_id: String = _jelly_reward_theme if _mode_id == "jelly" else model.theme_id
-	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id == "jelly" else 0
+	var score: int = int(_round_result.get("score", 0)) if _mode_id in ["pop", "jelly"] else -1
+	var theme_id: String = _jelly_reward_theme if _mode_id == "jelly" else _pop_reward_theme if _mode_id == "pop" else model.theme_id
+	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id in ["pop", "jelly"] else 0
 	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score, chest_tier)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
-		_announce_status(_jelly_result_summary() if _mode_id == "jelly" else \
-			"You did it! Pip is celebrating. You earned %d treasure chest%s." % [chest_count, "" if chest_count == 1 else "s"])
+		_announce_status(_jelly_result_summary() if _mode_id in ["pop", "jelly"] else \
+			"Every word matched!" if chest_count == 0 else "You did it! Pip is celebrating. You earned a treasure chest!")
 	_sync_round_celebration()
 	_publish_round_celebration()
 
@@ -1577,7 +1635,7 @@ func _on_round_celebration_finished(round_id: String) -> void:
 		_refresh()
 		_announce_status(_jelly_result_summary() if _mode_id == "jelly" else "Round complete. View your results or open your earned chests.")
 	else:
-		_announce_status("You earned a treasure chest! Choose Open chest.")
+		_announce_status("You earned a treasure chest! Choose Open chest." if model.chest_earned else "Every word matched! Choose Play again.")
 	var target: Control = _default_focus()
 	if _valid_focus(target):
 		target.grab_focus()
@@ -1588,6 +1646,13 @@ func _accept_round_chest(round_id: String) -> void:
 	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id in ["pop", "jelly"]:
 		return
 	_play_ui_click()
+	if _mode_id in ["match", "memory"] and not model.chest_earned:
+		if new_round():
+			_default_focus().grab_focus()
+		else:
+			_round_celebration.retry_open(round_id)
+			_publish_round_celebration()
+		return
 	_stop_round_celebration()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	if _mode_id == "phrase":
@@ -1757,7 +1822,7 @@ func _refresh() -> void:
 	if _rebuilding:
 		return
 	if _mode_id in ["match", "memory"] and model.phase == "won" and model.chest_state == "closed" and not _settling_chest:
-		_begin_round_celebration(1)
+		_begin_round_celebration(1 if model.chest_earned else 0)
 	var celebrating: bool = _round_celebration_active()
 	var theme_changed: bool = str(_active_palette.get("id", "")) != model.theme_id
 	if theme_changed:
@@ -1789,6 +1854,7 @@ func _refresh() -> void:
 	if theme_changed:
 		_memory.set_palette(palette)
 		_phrase.apply_theme(palette, model.theme_id)
+		_pop.apply_theme(palette, data.chests)
 		var jelly_palette: Dictionary = palette
 		if _mode_id == "jelly" and _jelly.game.phase == "finished" and not _jelly_reward_theme.is_empty():
 			jelly_palette = Data.theme(_jelly_reward_theme)
@@ -1829,6 +1895,7 @@ func _refresh() -> void:
 	_resume_phrase()
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown and not celebrating
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
+	_pop.set_pending_chests(_pop_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
 	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
 	_jelly_rewards.visible = playing and _mode_id == "jelly" and not collection_page.visible and _jelly_rewards_shown
 	_jelly.set_pending_chests(_jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
@@ -1854,6 +1921,7 @@ func _refresh() -> void:
 	elif playing and _mode_id == "jelly":
 		_message.text = "Drag a picture onto its word. Make room for the falling jellies!"
 	var won: bool = model.phase == "won"
+	var earned_chest: bool = won and model.chest_earned
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
 		and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after)
 	_new_adventure_button.visible = won and model.chest_state == "opened" and not _save_error and not saving_reward
@@ -1861,14 +1929,14 @@ func _refresh() -> void:
 	_result_text.visible = show_result_message
 	_title.visible = show_result_message
 	_caption.visible = show_result_message
-	_treasure_backdrop.visible = won
+	_treasure_backdrop.visible = earned_chest
 	_treasure_backdrop.show_theme_name = not show_result_message
 	_treasure_backdrop.queue_redraw()
 	if won:
 		_treasure_backdrop.configure(palette)
-	chest.visible = won
-	chest_button.visible = won
-	chest_button.disabled = model.chest_state == "opened" or chest.opening_committed() or _save_error
+	chest.visible = earned_chest
+	chest_button.visible = earned_chest
+	chest_button.disabled = not earned_chest or model.chest_state == "opened" or chest.opening_committed() or _save_error
 	chest_button.tooltip_text = "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest"
 	_set_accessibility_name(chest_button, chest_button.tooltip_text)
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
@@ -2504,7 +2572,7 @@ func set_reduced_motion(value: bool) -> void:
 func _open_chest() -> void:
 	if _round_celebration_active() and not _settling_chest:
 		return
-	if model.phase != "won" or model.chest_state != "closed":
+	if model.phase != "won" or not model.chest_earned or model.chest_state != "closed":
 		return
 	if not _progress_ready:
 		_progress_ready = medal_progress.load_progress()
@@ -3334,7 +3402,7 @@ func _on_voice_state(arguments: Array) -> void:
 		_pop.set_listening(bool(arguments[0]), bool(arguments[1]), str(arguments[2]))
 		# Recognition rolls over after an utterance. Let that word's short
 		# emotion finish while the recognizer reconnects automatically.
-		if not bool(arguments[1]) and not _pop._reconnecting:
+		if not bool(arguments[1]) and not _pop._reconnecting and not _pop.reward_presentation_active():
 			audio.stop_pop_sounds()
 			audio.stop_pip_reaction()
 			duck.settle()
@@ -3464,7 +3532,7 @@ func _start_chest_hold() -> void:
 	if _round_celebration_active():
 		return
 	if _holding_chest or _page_hidden or collection_page.visible or _save_error \
-		or model.phase != "won" or model.chest_state != "closed":
+		or model.phase != "won" or not model.chest_earned or model.chest_state != "closed":
 		return
 	_holding_chest = true
 	_hold_elapsed = 0.0
@@ -3664,7 +3732,7 @@ func _show_collection() -> void:
 	# Preserve prepared and hard-error gates; only an interrupted live or pending
 	# recognizer needs paused wording. Capture this before host stop callbacks.
 	var pause_pop: bool = _mode_id == "pop" and (_pop.game.phase in ["running", "finished"] \
-		or _pop._listening or _pop._pending or _pop._reconnecting)
+		or _pop._listening or _pop._pending or _pop._reconnecting or _pop.reward_presentation_active())
 	if not _stop_pop_listening():
 		return
 	_hide_mode_menu(false, false)

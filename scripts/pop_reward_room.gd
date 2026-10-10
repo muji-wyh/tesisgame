@@ -160,7 +160,7 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 	var count: int = maxi(0, chest_count) if max_chests == 0 else clampi(chest_count, 0, max_chests)
 	_draft_themes = _choose_themes(id, count, preferred_theme, allow_repeated_themes)
 	_draft_tiers.clear()
-	if storage_kind == "jelly" and final_chest_tier > 0 and count == 1:
+	if final_chest_tier > 0 and count == 1:
 		_draft_tiers.append(final_chest_tier)
 	_save_failed = not rewards.create_batch(id, _draft_themes, _draft_tiers)
 	if not _save_failed:
@@ -177,8 +177,7 @@ func _sync_saved_batch() -> void:
 	_draft_tiers.clear()
 	for entry in rewards.entries:
 		_draft_themes.append(str(entry.theme))
-		if storage_kind == "jelly":
-			_draft_tiers.append(int(entry.get("tier", 0)))
+		_draft_tiers.append(int(entry.get("tier", 0)))
 
 
 func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
@@ -509,7 +508,7 @@ func _cue(theme_id: String, cue: String, step: int, index: int) -> void:
 
 func retry_save() -> void:
 	if _unsaved_index >= 0:
-		if storage_kind == "jelly" and rewards.load_state() and rewards.round_id != _configured_id:
+		if (storage_kind == "jelly" or max_chests == 0) and rewards.load_state() and rewards.round_id != _configured_id:
 			# Another tab appended loot and changed indexes. Reload rather than
 			# applying this old chest's callback to a different saved chest.
 			pause()
@@ -524,7 +523,7 @@ func retry_save() -> void:
 		_save_failed = not rewards.load_state()
 		if not _save_failed and not rewards.entries.is_empty():
 			configure_saved(_manifest, reduced_motion)
-	elif storage_kind != "jelly" and rewards.has_pending() and rewards.round_id != _configured_id:
+	elif storage_kind != "jelly" and max_chests > 0 and rewards.has_pending() and rewards.round_id != _configured_id:
 		# Another tab may have earned a batch while this round was in play.
 		# Keep that durable batch intact and let the player resume it.
 		_save_failed = false
@@ -635,7 +634,7 @@ func _refresh() -> void:
 		var card: Dictionary = _cards[index]
 		card.button.disabled = _paused or _save_failed or card.opened or (_active >= 0 and _active != index)
 	_retry.visible = _save_failed
-	_retry.text = "Resume saved treasure" if storage_kind != "jelly" and rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
+	_retry.text = "Resume saved treasure" if storage_kind != "jelly" and max_chests > 0 and rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
 	_retry.disabled = _opening
 	_notice.text = rewards.error if _save_failed else ""
 	_notice.visible = _save_failed

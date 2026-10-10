@@ -55,7 +55,9 @@ async function installRecognition(page) {
 async function popState(page) {
   return page.locator('#pop-status').evaluate(element => ({
     phase: element.dataset.phase, score: Number(element.dataset.score), hits: Number(element.dataset.hits),
-    chestCount: Number(element.dataset.chestCount), chestNextScore: Number(element.dataset.chestNextScore),
+    chestCount: Number(element.dataset.chestCount), chestTier: Number(element.dataset.chestTier),
+    fragments: Number(element.dataset.fragmentCount), fragmentsTowardNext: Number(element.dataset.fragmentsTowardNext),
+    fragmentsRequired: Number(element.dataset.fragmentsRequired),
     chestProgress: Number(element.dataset.chestProgress), chestFx: JSON.parse(element.dataset.chestFx || '{}'),
     resultsRewards: JSON.parse(element.dataset.resultsRewards || '{}'),
     hud: JSON.parse(element.dataset.hud || '{}'), controls: JSON.parse(element.dataset.controls || '[]')
@@ -64,7 +66,7 @@ async function popState(page) {
 
 async function visibleResultState(page) {
   // The round finishes before its shared Pip celebration reveals the results.
-  // Wait for the visible reward ladder and actions rather than elapsed time.
+  // Wait for the visible final-chest summary and actions rather than elapsed time.
   let current;
   await expect.poll(async () => {
     current = await popState(page);
@@ -73,20 +75,20 @@ async function visibleResultState(page) {
     return { phase: current.phase, visible: current.resultsRewards.visible === true,
       actions: actions.map(control => control.name).sort() };
   }, { timeout: 45000, intervals: [50, 100, 200],
-    message: 'The completed Pip celebration reveals the earned result ladder and its actions' })
+    message: 'The completed Pip celebration reveals the earned final chest and its actions' })
     .toEqual({ phase: 'finished', visible: true, actions: ['OpenChests', 'Replay'] });
   await rendered(page);
   return popState(page);
 }
 
-function expectEarnedResultLadder(current, bounds) {
+function expectEarnedResult(current, bounds) {
   const rewards = current.resultsRewards;
   expect(current.phase).toBe('finished');
-  expect(current.score).toBeGreaterThanOrEqual(300);
+  expect(current.score).toBeGreaterThan(0);
   expect(rewards).toMatchObject({ visible: true, score: current.score, earned: current.chestCount,
-    title: 'All 3 chests earned' });
-  expect(rewards.earned).toBe(3);
-  expect(rewards.rows.map(row => row.threshold)).toEqual([100, 200, 300]);
+    fragment_count: current.fragments, chest_tier: current.chestTier, title: `Chest Lv. ${current.chestTier}` });
+  expect(rewards.earned).toBe(1);
+  expect(rewards.detail).toBe(`1 chest · ${current.fragments} fragments collected`);
   const expectRect = (rect, parent, message) => {
     expect(rect, message).toHaveLength(4);
     expect(rect.every(Number.isFinite), message).toBe(true);
@@ -100,29 +102,16 @@ function expectEarnedResultLadder(current, bounds) {
   };
   const separate = (a, b) => a[0] + a[2] <= b[0] + 1 || b[0] + b[2] <= a[0] + 1 ||
     a[1] + a[3] <= b[1] + 1 || b[1] + b[3] <= a[1] + 1;
-  expectRect(rewards.rect, null, 'The completed reward ladder has finite, nonempty bounds');
-  expect(rewards.rect[0], 'Reward rows fit the canvas horizontally').toBeGreaterThanOrEqual(-1);
-  expect(rewards.rect[0] + rewards.rect[2], 'Reward rows fit the canvas horizontally').toBeLessThanOrEqual(bounds.width + 1);
-  for (const [index, row] of rewards.rows.entries()) {
-    expect(row, 'A score above 300 fills each cumulative goal without overflow').toMatchObject({
-      value: row.threshold, progress: 1, earned: true,
-      label: `${row.threshold} points`, progress_text: `${row.threshold} / ${row.threshold}`
-    });
-    expectRect(row.rect, rewards.rect, 'Each earned threshold stays inside the ladder');
-    expectRect(row.bar_rect, row.rect, 'Each full bar stays inside its row');
-    expectRect(row.chest_rect, row.rect, 'Each earned chest stays inside its row');
-    expect(separate(row.bar_rect, row.chest_rect), 'Full bars do not overlap chest artwork').toBe(true);
-    if (index) expect(rewards.rows[index - 1].rect[1] + rewards.rows[index - 1].rect[3],
-      'Earned rows remain in order without overlap').toBeLessThanOrEqual(row.rect[1] + 1);
-  }
-  // Short screens may scroll some rows below the fold; the actions retain their
-  // own space and must be visible before the existing open-chests gesture.
+  expectRect(rewards.rect, null, 'The final reward summary has finite, nonempty bounds');
+  expect(rewards.rect[0], 'Reward summary fits the canvas horizontally').toBeGreaterThanOrEqual(-1);
+  expect(rewards.rect[0] + rewards.rect[2], 'Reward summary fits the canvas horizontally').toBeLessThanOrEqual(bounds.width + 1);
+  expectRect(rewards.chest_rect, rewards.rect, 'The final chest fits within its result summary');
   const actions = current.controls.filter(control => /^(OpenChests|Replay)$/.test(control.name));
   expect(actions.map(action => action.name).sort()).toEqual(['OpenChests', 'Replay']);
   for (const action of actions) {
     const rect = [action.x, action.y, action.width, action.height];
     expectRect(rect, [0, 0, bounds.width, bounds.height], 'Earned-chest result actions are immediately reachable');
-    expect(separate(rewards.rect, rect), 'Result actions do not overlap the reward ladder').toBe(true);
+    expect(separate(rewards.rect, rect), 'Result actions do not overlap the final-chest summary').toBe(true);
   }
 }
 
@@ -140,17 +129,18 @@ async function beginScoring(page) {
       if (!effect.active || observed.has(effect.serial)) return;
       observed.add(effect.serial);
       window.__popChestMilestones.push({ at: performance.now(), score: Number(status.dataset.score),
-        count: Number(status.dataset.chestCount), next: Number(status.dataset.chestNextScore), ...effect });
+        count: Number(status.dataset.chestCount), tier: Number(status.dataset.chestTier),
+        fragments: Number(status.dataset.fragmentCount), ...effect });
     };
     window.__popChestObserver = new MutationObserver(record);
     window.__popChestObserver.observe(status, { attributes: true,
-      attributeFilter: ['data-chest-fx', 'data-chest-count'] });
+      attributeFilter: ['data-chest-fx', 'data-fragment-count', 'data-chest-tier'] });
     // Read a currently visible target and deliver a browser recognition event
     // in the same task; scoring and the real game clock remain unmodified.
-    window.__popDriveToScore = goal => {
+    window.__popDriveToFragments = goal => {
       clearInterval(window.__popTreasureDriver);
       window.__popTreasureDriver = setInterval(() => {
-        if (Number(status.dataset.score) >= goal || status.dataset.phase === 'finished') {
+        if (Number(status.dataset.fragmentCount) >= goal || status.dataset.phase === 'finished') {
           clearInterval(window.__popTreasureDriver);
           return;
         }
@@ -164,7 +154,7 @@ async function beginScoring(page) {
         recognition.emit(target.text);
       }, 80);
     };
-    window.__popDriveToScore(300);
+    window.__popDriveToFragments(9);
   });
 }
 
@@ -179,7 +169,7 @@ async function tapPopAction(page, name) {
   await tap(page, action.x + action.width / 2, action.y + action.height / 2);
 }
 
-async function expectChestRoom(page, opened, expectedTypes) {
+async function expectChestRoom(page, opened, expectedTypes, count = 1, tier = 2) {
   // Windows WebKit can block while warming the three live chest models.
   // Keep the saved-batch checks intact while allowing that first render to finish.
   await expect.poll(async () => {
@@ -188,20 +178,21 @@ async function expectChestRoom(page, opened, expectedTypes) {
       opened: current.opened_count, paused: current.paused, failed: current.save_failed };
   }, { timeout: 45000, intervals: [50, 100, 200],
     message: 'The rendered treasure room exposes the complete saved chest batch' })
-    .toEqual({ visible: true, count: 3, opened, paused: false, failed: false });
+    .toEqual({ visible: true, count, opened, paused: false, failed: false });
   await rendered(page);
   const current = await roomState(page), bounds = await metrics(page), field = contentBounds(bounds);
   await test.info().attach('treasure-room-layout.json', {
     body: JSON.stringify({ room: current, viewport: bounds, field }, null, 2),
     contentType: 'application/json'
   });
-  expect(current.chests).toHaveLength(3);
-  expect(current.heading).toBe('Your treasure');
-  expect(current.progress_text, 'The room reports opened rewards across the entire saved batch').toBe(`${opened} / 3 opened`);
+  expect(current.chests).toHaveLength(count);
+  expect(current.heading).toBe(count === 1 && tier > 0 ? `Chest Lv. ${tier}` : 'Your treasure');
+  expect(current.progress_text, 'The room reports opened rewards across the entire saved batch').toBe(`${opened} / ${count} opened`);
   const types = current.chests.map(chest => chest.type);
-  expect(new Set(types).size, 'All three displayed chests have different actual styles').toBe(3);
+  if (count === 1) expect(current.chests[0].tier).toBe(tier);
+  else expect(new Set(types).size, 'Legacy displayed chests retain different actual styles').toBe(count);
   expect(types.every(type => typeof type === 'string' && type.length > 0)).toBe(true);
-  if (expectedTypes) expect(types, 'Returning preserves the same three chest types').toEqual(expectedTypes);
+  if (expectedTypes) expect(types, 'Returning preserves the same saved chest types').toEqual(expectedTypes);
   const viewport = current.scroll_rect;
   expect([viewport.x, viewport.y, viewport.width, viewport.height,
     current.scroll_offset, current.scroll_max].every(Number.isFinite)).toBe(true);
@@ -219,9 +210,9 @@ async function expectChestRoom(page, opened, expectedTypes) {
     expect([rect.x, rect.y, rect.width, rect.height].every(Number.isFinite)).toBe(true);
     expect(rect.width).toBeGreaterThan(0);
     expect(rect.height * uiScale(bounds), 'Every chest keeps a usable hold target').toBeGreaterThanOrEqual(44 - PIXEL_TOLERANCE);
-    expect(chest.art_rect.width * uiScale(bounds), 'Chest art stays bounded within the reward layout').toBeLessThanOrEqual(361);
+    expect(chest.art_rect.width * uiScale(bounds), 'Chest art stays bounded within the reward layout').toBeLessThanOrEqual(count === 1 ? 481 : 361);
     expect(chest.art_rect.height * uiScale(bounds), 'The artwork remains readable even in short landscape').toBeGreaterThanOrEqual(128 - PIXEL_TOLERANCE);
-    expect(chest.art_rect.height * uiScale(bounds), 'A batch no longer uses oversized chest panels').toBeLessThanOrEqual(301);
+    expect(chest.art_rect.height * uiScale(bounds), 'Chest panels remain proportionate').toBeLessThanOrEqual(count === 1 ? 361 : 301);
     expect(chest.caption, 'The visible instruction follows the durable opened state').toBe(chest.opened ? 'Opened!' : 'Hold to open');
     expect(rect.x).toBeGreaterThanOrEqual(viewport.x - 1);
     expect(rect.x + rect.width).toBeLessThanOrEqual(viewport.x + viewport.width + 1);
@@ -230,21 +221,21 @@ async function expectChestRoom(page, opened, expectedTypes) {
       'Each chest stays inside the reachable scroll content').toBeLessThanOrEqual(viewport.y + viewport.height + current.scroll_max + 1);
     expect(chest.disabled, 'Only already opened chests are disabled between holds').toBe(chest.opened);
   }
-  for (let first = 0; first < 3; first++) for (let second = first + 1; second < 3; second++) {
+  for (let first = 0; first < count; first++) for (let second = first + 1; second < count; second++) {
     const a = current.chests[first].rect, b = current.chests[second].rect;
     expect(a.x + a.width <= b.x + 1 || b.x + b.width <= a.x + 1 ||
       a.y + a.height <= b.y + 1 || b.y + b.height <= a.y + 1,
     'Chest controls never overlap inside the shared list').toBe(true);
   }
   const roomWidth = field.width * uiScale(bounds);
-  if (roomWidth < 620) {
+  if (count > 1 && roomWidth < 620) {
     expect(current.scroll_max, 'Phone rewards remain scrollable without shrinking every chest').toBeGreaterThan(0);
     expect(current.chests.every(chest => Math.abs(chest.rect.x - current.chests[0].rect.x) <= 1),
       'Phone treasure uses one chest per row').toBe(true);
-  } else {
+  } else if (count > 1) {
     expect(Math.abs(current.chests[0].rect.y - current.chests[1].rect.y), 'Wide treasure layouts place rewards alongside one another').toBeLessThanOrEqual(1);
     expect(current.chests[1].rect.x).toBeGreaterThan(current.chests[0].rect.x);
-    if (roomWidth >= 960) {
+    if (count >= 3 && roomWidth >= 960) {
       expect(Math.abs(current.chests[0].rect.y - current.chests[2].rect.y), 'A desktop row can present the complete three-chest batch').toBeLessThanOrEqual(1);
       expect(current.chests[2].rect.x).toBeGreaterThan(current.chests[1].rect.x);
     }
@@ -293,8 +284,8 @@ async function setHidden(page, hidden) {
   }, hidden);
 }
 
-test('earned Voice Pop chests stay distinct, cancel safely, and survive return and reload', async ({ page }, info) => {
-  // Include the real round, live-model warmup, three openings, and two reloads.
+test('Voice Pop fragments upgrade one chest that survives cancellation and reload', async ({ page }, info) => {
+  // Include the real round, milestone performances, chest opening, and reloads.
   test.setTimeout(360000);
   const reduced = info.project.name.includes('iphone');
   await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
@@ -306,31 +297,26 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   await enterGame(page);
   await chooseMode(page, 'pop');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
-  expect(await popState(page)).toMatchObject({ chestCount: 0, chestNextScore: 100, chestProgress: 0 });
+  expect(await popState(page)).toMatchObject({ chestCount: 0, chestTier: 0, fragments: 0, fragmentsRequired: 4, chestProgress: 0 });
   await beginScoring(page);
-  await expect.poll(async () => (await popState(page)).chestCount,
-    { timeout: 45000, intervals: [50, 100, 200], message: 'Accepted spoken targets earn all three score milestones' }).toBe(3);
+  await expect.poll(async () => (await popState(page)).fragments,
+    { timeout: 65000, intervals: [50, 100, 200], message: 'Accepted marked words unlock and upgrade the same chest' }).toBe(9);
   const earned = await popState(page);
-  expect(earned.score).toBeGreaterThanOrEqual(300);
-  expect(earned).toMatchObject({ chestNextScore: 0, chestProgress: 1 });
-  expect(earned.hud.chests.text).toBe('CHESTS 3 / 3');
-  await page.screenshot({ path: info.outputPath('third-chest-earned.png') });
-  await page.evaluate(() => window.__popDriveToScore(350));
-  await expect.poll(async () => (await popState(page)).score,
-    { timeout: 10000, intervals: [50, 100, 200] }).toBeGreaterThanOrEqual(350);
-  expect((await popState(page)).chestCount, 'Additional scoring cannot create a fourth chest').toBe(3);
+  expect(earned.score).toBeGreaterThan(0);
+  expect(earned).toMatchObject({ chestCount: 1, chestTier: 2, fragmentsTowardNext: 0, fragmentsRequired: 5, chestProgress: 0 });
+  await expect.poll(async () => (await popState(page)).hud.chests.text).toBe('CHEST LV. 2');
+  await page.screenshot({ path: info.outputPath('chest-upgraded.png') });
   const milestones = await page.evaluate(() => window.__popChestMilestones);
-  expect(milestones.map(value => value.count)).toEqual([1, 2, 3]);
-  expect(milestones.map(value => value.next)).toEqual([200, 300, 0]);
-  expect(milestones.every(value => value.active && value.text === '+1 CHEST' &&
+  expect(milestones.map(value => value.fragments)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  expect(milestones.every(value => value.count <= 1)).toBe(true);
+  expect(milestones.every(value => value.active && value.text === '+1 FRAGMENT' &&
     value.above_targets && value.reduced_motion === reduced)).toBe(true);
-  for (const milestone of milestones) expect(milestone.score).toBeGreaterThanOrEqual(milestone.count * 100);
-  await info.attach('earned-chest-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
+  await info.attach('earned-fragment-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 65000 });
   const finishedRound = await visibleResultState(page);
-  expect(finishedRound.chestCount).toBe(3);
-  expectEarnedResultLadder(finishedRound, await metrics(page));
-  await info.attach('earned-chest-result-ladder.json', { body: JSON.stringify(finishedRound.resultsRewards, null, 2), contentType: 'application/json' });
+  expect(finishedRound).toMatchObject({ chestCount: 1, chestTier: 2, fragments: 9 });
+  expectEarnedResult(finishedRound, await metrics(page));
+  await info.attach('final-chest-result.json', { body: JSON.stringify(finishedRound.resultsRewards, null, 2), contentType: 'application/json' });
   await page.screenshot({ path: info.outputPath('earned-chest-results.png') });
   await tapPopAction(page, 'OpenChests');
   let room = await expectChestRoom(page, 0);
@@ -358,33 +344,28 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   await expectChestRoom(page, 0, types);
   expect(await storedRewards(page), 'Backgrounding before release cannot claim a chest').toBe(unopened);
 
-  await openChest(page, 0, 1);
-  await expectChestRoom(page, 1, types);
-  const partiallyOpened = await storedRewards(page);
-  expect(partiallyOpened).not.toBe(unopened);
   await page.locator('#canvas').press('Escape');
   await expect.poll(async () => (await roomState(page)).visible).toBe(false);
   const returnedResult = await visibleResultState(page);
-  expect(returnedResult.score, 'Returning from a partially opened batch preserves the scored round').toBe(finishedRound.score);
-  expectEarnedResultLadder(returnedResult, await metrics(page));
+  expect(returnedResult.score, 'Returning from treasure preserves the scored round').toBe(finishedRound.score);
+  expectEarnedResult(returnedResult, await metrics(page));
   await tapPopAction(page, 'OpenChests');
-  room = await expectChestRoom(page, 1, types);
+  room = await expectChestRoom(page, 0, types);
   expect(room.round_id).toBe(round);
-  expect(room.chests.map(chest => chest.opened)).toEqual([true, false, false]);
-  expect(await storedRewards(page), 'Returning to the same room never rerolls or reopens treasure').toBe(partiallyOpened);
+  expect(room.chests.map(chest => chest.opened)).toEqual([false]);
+  expect(await storedRewards(page), 'Returning to the same room never rerolls or upgrades treasure').toBe(unopened);
 
   await page.reload();
   await enterGame(page);
   await chooseMode(page, 'pop');
-  room = await expectChestRoom(page, 1, types);
+  room = await expectChestRoom(page, 0, types);
   expect(room.round_id).toBe(round);
-  expect(room.chests.map(chest => chest.opened)).toEqual([true, false, false]);
+  expect(room.chests.map(chest => chest.opened)).toEqual([false]);
   expect((await roomState(page)).visible, 'Pending treasure is restored before a fresh round').toBe(true);
-  expect(await storedRewards(page), 'Reload preserves the exact partial batch').toBe(partiallyOpened);
+  expect(await storedRewards(page), 'Reload preserves the exact earned final tier').toBe(unopened);
   await page.screenshot({ path: info.outputPath('saved-chests-restored.png') });
-  await openChest(page, 1, 2);
-  await openChest(page, 2, 3);
-  room = await expectChestRoom(page, 3, types);
+  await openChest(page, 0, 1);
+  room = await expectChestRoom(page, 1, types);
   expect(room.pending).toBe(false);
   expect(room.chests.every(chest => chest.opened && chest.mode === 'opened')).toBe(true);
   const completed = await storedRewards(page);
@@ -396,4 +377,32 @@ test('earned Voice Pop chests stay distinct, cancel safely, and survive return a
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   expect(await storedRewards(page), 'Starting a fresh round cannot duplicate the completed reward batch').toBe(completed);
   expect(errors).toEqual([]);
+});
+
+test('legacy three-chest saves preserve their partial openings after fragment rewards ship', async ({ page }) => {
+  test.setTimeout(180000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await installRecognition(page);
+  const legacy = '[treasure]\nversion=1\nround_id="legacy-pop-browser"\n' +
+    'entries=[{"theme":"spring","opened":true},{"theme":"ocean","opened":false},{"theme":"space","opened":false}]\nreceipts=[]\n';
+  await page.addInitScript(({ key, save }) => {
+    if (!localStorage.getItem(key)) localStorage.setItem(key, save);
+  }, { key: STORAGE_KEY, save: legacy });
+  await page.goto('/');
+  await enterGame(page);
+  await chooseMode(page, 'pop');
+  let room = await expectChestRoom(page, 1, undefined, 3, 0);
+  const types = room.chests.map(chest => chest.type);
+  expect(room.chests.map(chest => chest.opened)).toEqual([true, false, false]);
+  await openChest(page, 1, 2);
+  const partial = await storedRewards(page);
+  await page.reload();
+  await enterGame(page);
+  await chooseMode(page, 'pop');
+  room = await expectChestRoom(page, 2, types, 3, 0);
+  expect(room.chests.map(chest => chest.opened)).toEqual([true, true, false]);
+  expect(await storedRewards(page)).toBe(partial);
+  await openChest(page, 2, 3);
+  room = await expectChestRoom(page, 3, types, 3, 0);
+  expect(room.pending).toBe(false);
 });

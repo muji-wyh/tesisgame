@@ -1,5 +1,5 @@
 extends SceneTree
-## Render the real result screen without touching player saves or the microphone.
+## Render fragment markers, chest performances and results using isolated saves.
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 var app
@@ -45,21 +45,35 @@ func _run() -> void:
 	for frame in range(5):
 		await process_frame
 	app.choose_mode("pop")
+	app.set_reduced_motion(false)
 	Fixture.choose_pop_player(app)
 	app._pop.set_listening(true, true, "Listening.")
 	app._pop.set_process(false)
-	for attempt in range(80):
-		if app._pop.game.score >= 150:
-			break
-		if app._pop.game.targets.is_empty():
-			app._pop._advance_game(0.66)
-		if not app._pop.game.targets.is_empty():
-			app._pop._listening_tick_usec = Time.get_ticks_usec()
-			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
+	for attempt in range(9):
+		while app._pop.game.targets.is_empty():
+			app._pop._advance_game(0.15)
+		app._pop.game.targets[0].chest = true
+		app._pop.game.targets[0].age = float(app._pop.game.targets[0].lifetime) * 0.45
+		app._pop._refresh_targets()
+		if attempt == 2:
+			app._pop._advance_hud_feedback(3.0)
+			app._pop._advance_slices(3.0)
+			app._pop._loot_flights.clear()
+			for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(844, 390)]:
+				await _capture("marker", dimensions)
+		app._pop._listening_tick_usec = -1
+		app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
+		if app._pop.reward_presentation_active():
+			app._pop.advance_reward_presentation(1.53)
+			for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(844, 390)]:
+				await _capture("upgrade" if attempt == 8 else "unlock", dimensions)
+			app._pop.advance_reward_presentation(2.0)
+			app._pop.set_listening(true, true, "Listening.")
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
+	Fixture.finish_celebration(app)
 	app._pop._advance_result_feedback(2.0)
 	for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(320, 568), Vector2i(844, 390)]:
-		await _capture("partial", dimensions)
+		await _capture("final-tier", dimensions)
 	app.audio.halt()
 	app.queue_free()
 	await process_frame

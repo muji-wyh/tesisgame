@@ -64,6 +64,8 @@ func _run() -> void:
 	app.cards[wrong[0].id].pressed.emit()
 	check(app.model.phase == "matching" and app.model.selected_id == wrong[0].id,
 		"The next card resumes the same challenge without a separate Continue")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

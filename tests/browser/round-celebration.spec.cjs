@@ -138,7 +138,8 @@ async function savePerformance(page, info, mode) {
     const rewards = playbacks.filter(sound => near(sound, reward) && beforeInvitation(sound));
     expect(steps, 'The actual output starts one takeoff cue and one landing cue').toHaveLength(2);
     expect(new Set(steps.map(sound => sound.fingerprint)).size, 'The two equal-length cues contain distinct audio').toBe(2);
-    expect(rewards, 'The reward reveal cue plays once').toHaveLength(1);
+    expect(rewards, 'The reward reveal cue plays only for an earned chest')
+      .toHaveLength(observation.started.value.chest_count > 0 ? 1 : 0);
     for (const [index, sound] of [...steps, ...rewards].entries()) {
       const onset = sound.at + Math.max(0, sound.scheduledAt - sound.contextTime) * 1000 - observation.started.at;
       expect(Math.abs(onset - [250, 900, 1800][index]), 'Motion and real output share the same performance clock').toBeLessThanOrEqual(450);
@@ -213,7 +214,8 @@ async function captureReadyLayouts(page, info, ready) {
     const visible = { left: Math.max(0, bounds.x), top: Math.max(0, bounds.y),
       right: Math.min(viewport.width, bounds.x + bounds.width * bounds.scale),
       bottom: Math.min(viewport.height, bounds.y + bounds.height * bounds.scale) };
-    for (const [name, [x, y, width, height]] of Object.entries({ Pip: state.pip_rect, chest: state.chest_rect, button: state.action.rect })) {
+    const hero = { Pip: state.pip_rect, ...(state.chest_visible ? { chest: state.chest_rect } : {}) };
+    for (const [name, [x, y, width, height]] of Object.entries({ ...hero, button: state.action.rect })) {
       expect(width, `${name} has visible width`).toBeGreaterThan(0);
       expect(height, `${name} has visible height`).toBeGreaterThan(0);
       expect(bounds.x + x * bounds.scale, `${name} left edge`).toBeGreaterThanOrEqual(visible.left - 1);
@@ -222,7 +224,7 @@ async function captureReadyLayouts(page, info, ready) {
       expect(bounds.y + (y + height) * bounds.scale, `${name} bottom edge`).toBeLessThanOrEqual(visible.bottom + 1);
     }
     const [bx, by, bw, bh] = state.action.rect;
-    for (const [name, [x, y, width, height]] of Object.entries({ Pip: state.pip_rect, chest: state.chest_rect })) {
+    for (const [name, [x, y, width, height]] of Object.entries(hero)) {
       expect(bx + bw <= x || x + width <= bx || by + bh <= y || y + height <= by,
         `The invitation button does not overlap ${name}`).toBe(true);
     }
@@ -235,7 +237,7 @@ async function captureReadyLayouts(page, info, ready) {
 }
 
 for (const mode of ['match', 'memory']) {
-  test(`${mode} wins play the shared performance before a stable explicit chest invitation`, async ({ page, browserName }, info) => {
+  test(`${mode} wins celebrate the fixed chance reward before Open chest or Play again`, async ({ page, browserName }, info) => {
     const requests = watchAudioRequests(page);
     await installPerformanceCapture(page, browserName === 'chromium');
     const errors = await openGame(page, { reducedMotion: 'no-preference' });
@@ -248,8 +250,12 @@ for (const mode of ['match', 'memory']) {
     await tap(page, point.x, point.y);
     await expect.poll(async () => (await celebrationState(page)).ready, { timeout: 15000 }).toBe(true);
     const current = await celebrationState(page);
-    expect(current).toMatchObject({ active: true, automatic: false, chest_count: 1, cue_log: ['step', 'step-detail', 'reward'] });
-    expect(current.action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
+    expect([0, 1]).toContain(current.chest_count);
+    const earned = current.chest_count === 1;
+    expect(current).toMatchObject({ active: true, automatic: false, chest_visible: earned,
+      caption: earned ? 'You earned a treasure chest!' : 'Every word matched!',
+      cue_log: earned ? ['step', 'step-detail', 'reward'] : ['step', 'step-detail'] });
+    expect(current.action).toMatchObject({ text: earned ? 'Open chest' : 'Play again', visible: true, disabled: false });
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
     const observation = await savePerformance(page, info, mode);
     expect(observation.ready.at - observation.started.at, 'The full celebration lasts three seconds').toBeGreaterThanOrEqual(2850);
@@ -262,10 +268,17 @@ for (const mode of ['match', 'memory']) {
     const close = (await metrics(page)).library.controls.find(control => control.name === 'LibraryClose');
     await tap(page, close.rect[0] + close.rect[2] / 2, close.rect[1] + close.rect[3] / 2);
     await expect.poll(async () => (await celebrationState(page)).ready).toBe(true);
-    expect(await celebrationState(page)).toMatchObject({ round_id: readyId, ready: true, action: { rect } });
-    await acceptCelebration(page);
+    expect(await celebrationState(page)).toMatchObject({ round_id: readyId, ready: true,
+      chest_count: current.chest_count, chest_visible: earned, action: { rect } });
+    if (earned) await acceptCelebration(page);
+    else {
+      const [x, y, width, height] = rect;
+      await tap(page, x + width / 2, y + height / 2);
+      await expect.poll(async () => (await celebrationState(page)).active).toBe(false);
+      await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Find a pair.');
+    }
     await rendered(page);
-    await page.screenshot({ path: info.outputPath(`${mode}-unopened-chest.png`), scale: 'css' });
+    await page.screenshot({ path: info.outputPath(`${mode}-${earned ? 'unopened-chest' : 'play-again'}.png`), scale: 'css' });
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(saved);
     expect(requests, 'Celebration and narration use bundled audio without external media requests').toEqual([]);
     expect(errors).toEqual([]);
@@ -305,7 +318,7 @@ async function installSpeech(page) {
   });
 }
 
-test('Voice Pop saves three chests, celebrates, and restores its complete original result', async ({ page, browserName }, info) => {
+test('Voice Pop saves one final upgraded chest, celebrates, and restores its complete result', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
   const requests = watchAudioRequests(page);
   await installSpeech(page);
@@ -315,25 +328,28 @@ test('Voice Pop saves three chests, celebrates, and restores its complete origin
   await page.evaluate(() => {
     const status = document.getElementById('pop-status'), spoken = new Set();
     const timer = setInterval(() => {
-      if (Number(status.dataset.score) >= 300 || status.dataset.phase === 'finished') return clearInterval(timer);
+      if (Number(status.dataset.fragmentCount) >= 9 || status.dataset.phase === 'finished') return clearInterval(timer);
       const recognition = window.__celebrationSpeech.instances.at(-1);
       if (status.dataset.phase !== 'running' || !recognition?.running) return;
       const target = JSON.parse(status.dataset.targets || '[]').find(item => !spoken.has(item.uid));
       if (target) { spoken.add(target.uid); recognition.emit(target.text); }
     }, 80);
   });
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-chest-count', '3', { timeout: 45000 });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-fragment-count', '9', { timeout: 65000 });
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-chest-count', '1');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-chest-tier', '2');
   await expect.poll(() => page.evaluate(() => Boolean(window.roundCelebrationObservation?.ended)),
     { timeout: 70000, message: 'The actual round timer finishes and the three-second automatic celebration ends' }).toBe(true);
   const observation = await savePerformance(page, info, 'pop');
-  expect(observation.started.value).toMatchObject({ automatic: true, chest_count: 3 });
+  expect(observation.started.value).toMatchObject({ automatic: true, chest_count: 1, chest_tier: 2 });
   expect(observation.ended.at - observation.started.at).toBeGreaterThanOrEqual(2850);
   expect(await page.evaluate(() => window.__celebrationSpeech.instances.every(value => !value.running)),
     'Recognition stops before returning from celebration').toBe(true);
   await expect.poll(() => page.locator('#pop-status').evaluate(element => {
     const reward = JSON.parse(element.dataset.resultsRewards || '{}');
     const controls = JSON.parse(element.dataset.controls || '[]');
-    return Boolean(reward.visible && reward.earned === 3 && controls.some(control => control.name === 'OpenChests' && !control.disabled));
+    return Boolean(reward.visible && reward.earned === 1 && reward.chest_tier === 2 && reward.fragment_count === 9 &&
+      controls.some(control => control.name === 'OpenChests' && !control.disabled));
   })).toBe(true);
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.popRewards'))).toBeTruthy();
   await page.screenshot({ path: info.outputPath('pop-result-after-celebration.png'), scale: 'css' });
@@ -342,8 +358,8 @@ test('Voice Pop saves three chests, celebrates, and restores its complete origin
   await tap(page, action.x + action.width / 2, action.y + action.height / 2);
   await expect.poll(() => page.locator('#pop-reward-status').evaluate(element => {
     const value = JSON.parse(element.dataset.snapshot || '{}');
-    return { visible: value.visible, count: value.chest_count, opened: value.opened_count };
-  }), { timeout: 45000 }).toEqual({ visible: true, count: 3, opened: 0 });
+    return { visible: value.visible, count: value.chest_count, opened: value.opened_count, tier: value.chests[0]?.tier };
+  }), { timeout: 45000 }).toEqual({ visible: true, count: 1, opened: 0, tier: 2 });
   expect(requests, 'Voice Pop celebration uses bundled audio without external media requests').toEqual([]);
   expect(errors).toEqual([]);
 });

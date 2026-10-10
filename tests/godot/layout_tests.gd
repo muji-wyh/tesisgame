@@ -148,6 +148,8 @@ func _run() -> void:
 		check(app.get_global_rect().grow(1).encloses(control.get_global_rect()), "A saving problem does not push game controls off the screen")
 	app._progress_ready = true
 	app._save_error = false
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

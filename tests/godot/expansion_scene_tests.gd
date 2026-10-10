@@ -55,6 +55,8 @@ func _run() -> void:
 	app._hide_collection()
 	app._controller_mode = true
 	app.choose_mode("match")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	var pairs: Array[String] = []
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():

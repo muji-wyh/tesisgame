@@ -26,6 +26,7 @@ func _run() -> void:
 	_test_required_words(words)
 	_test_rejected_requests(words)
 	_test_priority_and_repeat(words)
+	_test_round_chest_chance(words)
 	print("Word adventures: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -130,9 +131,51 @@ func _round_snapshot(model) -> Dictionary:
 	var snapshot: Dictionary = {}
 	for property in ["cards", "lesson_words", "matched_ids", "feedback_ids", "hint_ids", "hints_remaining",
 		"selected_id", "mistakes", "phase", "theme_id", "adventure_id", "adventure_name",
-		"chest_state", "reward_theme", "reward_id", "last_correct"]:
+		"chest_state", "chest_earned", "reward_theme", "reward_id", "last_correct"]:
 		snapshot[property] = model.get(property)
 	return snapshot.duplicate(true)
+
+
+func _test_round_chest_chance(words: Array) -> void:
+	var lesson: Array = words.filter(func(word: Dictionary) -> bool: return word.id in ["cat", "dog", "fish", "duck", "apple"])
+	var earned: int = 0
+	var model = Model.new()
+	var twin = Model.new()
+	for seed_value in range(128):
+		check(model.reset(lesson, seed_value, false, "", "", "3", true)
+			and twin.reset(lesson, seed_value, false, "", "", "3", true), "A chance-reward round starts with a stable seed")
+		var outcome: bool = model.chest_earned
+		earned += 1 if outcome else 0
+		check(twin.chest_earned == outcome, "The same round seed reproduces its chest outcome")
+		check(not model.begin_open(), "A possible reward cannot be opened before a completed round")
+		model.request_hint()
+		model.set_theme("ocean")
+		for word in model.lesson_words:
+			model.match_spoken_word(str(word.id))
+			model.resolve_feedback()
+		check(model.phase == "won" and model.chest_earned == outcome,
+			"Completing every pair preserves the single predetermined reward outcome")
+		model.resolve_feedback()
+		model.match_spoken_word(str(model.lesson_words[0].id))
+		check(model.chest_earned == outcome and model.begin_open() == outcome,
+			"Duplicate completion does not reroll or open an unearned chest")
+		if outcome:
+			check(not model.begin_open() and model.finish_open() and not model.finish_open() and not model.begin_open(),
+				"The one earned chest can be claimed exactly once")
+		else:
+			check(model.chest_state == "closed" and model.reward_id.is_empty() and not model.finish_open(),
+				"A no-chest round never creates an opening or reward ID")
+		var before: Dictionary = _round_snapshot(model)
+		check(not model.reset(lesson, seed_value + 1, false, "", "", "missing-level", true)
+			and _round_snapshot(model) == before, "Rejected resets preserve reward ownership")
+	check(earned >= 40 and earned <= 88,
+		"The deterministic round sample includes both outcomes at the configured fifty-percent chance")
+	check(model.reset(lesson, 19) and model.chest_earned,
+		"Hosts that do not request a chance reward keep their guaranteed reward behavior")
+	check(model.reset(lesson, 19, true, "", "", "3", true)
+		and twin.reset(lesson, 19, true, "", "", "3", true)
+		and model.chest_earned == twin.chest_earned,
+		"Starting a new replay replaces the reward outcome once without carrying over a prior claim")
 
 
 func _check_safe_lesson(model) -> void:

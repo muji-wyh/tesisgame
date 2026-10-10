@@ -40,6 +40,8 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	for season in ["spring", "summer", "autumn", "winter"]:
 		app.new_round(105)
+		# This fixture exercises an earned chest; chance outcomes have separate coverage.
+		app.model.chest_earned = true
 		for word in app.model.cards:
 			if word.kind != "word":
 				continue

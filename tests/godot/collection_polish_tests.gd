@@ -41,6 +41,8 @@ func _run() -> void:
 		"Match starts selected with a ready board, three hints, and no microphone")
 	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop", "Mode_phrase"],
 		"The actual mode choices preserve their requested order inside the popover")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

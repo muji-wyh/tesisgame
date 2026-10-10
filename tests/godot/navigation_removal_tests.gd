@@ -37,6 +37,8 @@ func _run() -> void:
 	check(not app.has_method("_replay")
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "replay_button"),
 		"The Repeat lesson handler and control are removed")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

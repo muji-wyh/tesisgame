@@ -4,13 +4,13 @@ signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 
 const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
 const MIN_LATE_LIFETIME: float = 3.0
 const BURST_WARMUP: float = 8.0
-const CHEST_SCORE_THRESHOLDS := [100, 200, 300]
-const MAX_CHESTS: int = 3
+const CHEST_MARKER_CHANCE: float = 0.35
 const EPSILON: float = 0.000001
 const RECOGNITION_MESSAGES: Dictionary = {
 	"unclear_speech": "Say the word again, loud and clear.",
@@ -28,6 +28,8 @@ var misses: int = 0
 var combo: int = 0
 var best_combo: int = 0
 var score: int = 0
+var fragment_count: int = 0
+var chest_tier: int = 0
 var chest_count: int = 0
 var hit_words: Array[Dictionary] = []
 var missed_words: Array[Dictionary] = []
@@ -223,12 +225,16 @@ func _hit_target(target: Dictionary) -> Dictionary:
 	var hit: Dictionary = target.duplicate(true)
 	hit.points = points
 	hit.combo = combo
-	var previous_chests: int = chest_count
-	while chest_count < MAX_CHESTS and score >= int(CHEST_SCORE_THRESHOLDS[chest_count]):
-		chest_count += 1
-	hit.chest_awards = chest_count - previous_chests
+	var previous_tier: int = chest_tier
+	hit.fragment_awards = 1 if bool(target.get("chest", false)) else 0
+	fragment_count += int(hit.fragment_awards)
+	var progress: Dictionary = RewardProgress.reward_progress(fragment_count)
+	chest_tier = int(progress.chest_tier)
+	chest_count = int(progress.chest_count)
+	hit.merge(progress, true)
+	hit.previous_chest_tier = previous_tier
+	hit.chest_awards = 1 if previous_tier == 0 and chest_tier > 0 else 0
 	hit.chest_awarded = hit.chest_awards > 0
-	hit.chest_count = chest_count
 	hit.time_bonus = 3 if combo == 2 else 5 if combo == 3 else 0
 	bonus_time += float(hit.time_bonus)
 	remaining = maxf(0.0, DURATION + bonus_time - elapsed)
@@ -256,24 +262,19 @@ func clear_recognition_feedback() -> void:
 
 
 func summary() -> Dictionary:
-	return {
+	var result: Dictionary = {
 		"hits": hits, "misses": misses, "score": score, "best_combo": best_combo,
-		"chest_count": chest_count, "chest_thresholds": CHEST_SCORE_THRESHOLDS.duplicate(),
 		"hit_words": hit_words.duplicate(true),
 		"missed_words": missed_words.duplicate(true), "base_duration": DURATION,
 		"bonus_time": bonus_time, "duration": DURATION + bonus_time, "elapsed": elapsed
 	}
-
-
-func next_chest_score() -> int:
-	return int(CHEST_SCORE_THRESHOLDS[chest_count]) if chest_count < MAX_CHESTS else 0
+	result.merge(RewardProgress.reward_progress(fragment_count))
+	return result
 
 
 func chest_progress() -> float:
-	if chest_count >= MAX_CHESTS:
-		return 1.0
-	var previous_threshold: int = int(CHEST_SCORE_THRESHOLDS[chest_count - 1]) if chest_count > 0 else 0
-	return clampf(float(score - previous_threshold) / float(next_chest_score() - previous_threshold), 0.0, 1.0)
+	var progress: Dictionary = RewardProgress.reward_progress(fragment_count)
+	return float(progress.fragments_toward_next) / float(progress.fragments_required)
 
 
 func _reset_round(new_round: bool = true) -> void:
@@ -293,6 +294,8 @@ func _reset_round(new_round: bool = true) -> void:
 	combo = 0
 	best_combo = 0
 	score = 0
+	fragment_count = 0
+	chest_tier = 0
 	chest_count = 0
 	hit_words.clear()
 	missed_words.clear()
@@ -359,7 +362,7 @@ func _spawn_target(lifetime: float) -> bool:
 	var center: float = 0.23 + lane * 0.27
 	targets.append({
 		"uid": _next_uid, "word": word.duplicate(true), "age": 0.0, "lifetime": lifetime,
-		"volley": false,
+		"volley": false, "chest": _rng.randf() < CHEST_MARKER_CHANCE,
 		"forms": _aliases[word.id].duplicate(),
 		"lane": lane, "x_start": center + _rng.randf_range(-0.02, 0.02),
 		"x_end": center + _rng.randf_range(-0.025, 0.025),

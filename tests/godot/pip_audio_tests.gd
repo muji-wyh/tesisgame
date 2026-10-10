@@ -104,6 +104,8 @@ func _check_click_routes() -> void:
 
 
 func _show_result_companion(app) -> void:
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	if app._mode_id == "memory":
 		app._memory.memory.phase = "won"

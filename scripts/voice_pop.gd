@@ -8,6 +8,8 @@ signal missed(count: int)
 signal round_finished(summary: Dictionary)
 signal chests_requested
 signal chest_earned(count: int)
+signal reward_cue_requested(cue: String)
+signal reward_presentation_changed(active: bool)
 signal hear_requested(word: Dictionary)
 signal status_changed(snapshot: Dictionary)
 
@@ -20,6 +22,9 @@ const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const ResultRewards = preload("res://scripts/voice_pop_result_rewards.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const ChestArt = preload("res://scripts/voice_pop_chest_art.gd")
 const NAVY := Color("#102a2a")
 const SURFACE := Color("#203f3e")
 const CYAN := Color("#a7e4cf")
@@ -107,6 +112,12 @@ var _chest_badge_anchor := Vector2.ZERO
 var _chest_fx_age: float = CHEST_FX_DURATION
 var _chest_fx_serial: int = 0
 var _chest_fx_amount: int = 0
+var _loot_flights: Array[Dictionary] = []
+var _reward_presentation: ChestCelebration
+var _reward_paused: bool = false
+var _displayed_chest_tier: int = 0
+var _chest_art: ChestArt
+var _reward_icon: TextureRect
 var _last_launch_uid: int = 0
 var _transcript: String = ""
 var _transcript_final: bool = false
@@ -143,11 +154,64 @@ var _result_actions: HBoxContainer
 var _result_rewards: ResultRewards
 var _review_grids: Array[GridContainer] = []
 var _review_buttons: Array[Button] = []
+var _pending_chests: int = 0
 
 
 func _ready() -> void:
 	_build()
 	_layout()
+
+
+func apply_theme(_theme: Dictionary, chests: Dictionary) -> void:
+	_build()
+	_chest_art.configure(chests)
+	_update_hud()
+
+
+func reward_presentation_active() -> bool:
+	return _reward_presentation != null and _reward_presentation.is_active()
+
+
+func _reward_cue(cue: String) -> void:
+	if _stopped or _reward_paused or not is_visible_in_tree():
+		return
+	if cue == "reward":
+		var round: String = game.round_id
+		_displayed_chest_tier = int(_reward_presentation.snapshot().tier)
+		_chest_art.texture(_displayed_chest_tier + 1)
+		_update_hud()
+		chest_earned.emit(game.chest_count)
+		if round != game.round_id or _stopped or not reward_presentation_active():
+			return
+	reward_cue_requested.emit(cue)
+
+
+func advance_reward_presentation(delta: float) -> void:
+	if not reward_presentation_active() or _reward_paused or _stopped or not is_visible_in_tree():
+		return
+	if interaction_allowed.is_valid() and not interaction_allowed.call():
+		return
+	var round: String = game.round_id
+	_reward_presentation.advance(delta)
+	if round != game.round_id or _stopped or _finished_sent:
+		return
+	if not reward_presentation_active():
+		_displayed_chest_tier = game.chest_tier
+		clip_contents = true
+		_update_hud()
+		_publish(true)
+		reward_presentation_changed.emit(false)
+
+
+func set_pending_chests(count: int) -> void:
+	_pending_chests = maxi(0, count)
+	if is_instance_valid(chests_button):
+		var total: int = maxi(_pending_chests, game.chest_count)
+		chests_button.text = "Open chests" if total > 1 else "Open chest"
+		chests_button.disabled = total == 0
+		chests_button.tooltip_text = "Open your saved treasure." if _pending_chests > 0 else "Collect 4 chest fragments to unlock a chest."
+		_layout()
+		_publish(true)
 
 
 func _build() -> void:
@@ -226,13 +290,19 @@ func _build() -> void:
 	_reward_hud.name = "ChestProgress"
 	_reward_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_chest_overlay.add_child(_reward_hud)
+	_reward_icon = TextureRect.new()
+	_reward_icon.name = "ChestIcon"
+	_reward_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_reward_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_reward_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reward_hud.add_child(_reward_icon)
 	_score_label = _label("0 POINTS", 13, WHITE)
 	_score_label.name = "Score"
 	_score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_chest_count_label = _label("CHESTS 0 / 3", 13, CHEST_COLOR)
+	_chest_count_label = _label("0 / 4", 13, CHEST_COLOR)
 	_chest_count_label.name = "ChestCount"
 	_chest_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_chest_progress_label = _label("NEXT CHEST AT 100", 10, SOFT)
+	_chest_progress_label = _label("CHEST FRAGMENTS", 10, SOFT)
 	_chest_progress_label.name = "NextChest"
 	for item in [_score_label, _chest_count_label, _chest_progress_label]:
 		item.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -249,6 +319,12 @@ func _build() -> void:
 		item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_chest_badge.add_child(item)
 	_chest_overlay.hide()
+	_chest_art = ChestArt.new()
+	add_child(_chest_art)
+	_reward_presentation = ChestCelebration.new()
+	_reward_presentation.name = "PopChestCelebration"
+	_reward_presentation.cue_requested.connect(_reward_cue)
+	add_child(_reward_presentation)
 	_gate = ResultScroll.new()
 	_gate.name = "MicrophoneGate"
 	_gate.interaction_allowed = func() -> bool: return not interaction_allowed.is_valid() or interaction_allowed.call()
@@ -329,6 +405,11 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_hud_hit_serial = 0
 	_hud_bonus_serial = 0
 	_chest_fx_serial = 0
+	_reward_presentation.clear()
+	_reward_paused = false
+	_displayed_chest_tier = 0
+	_loot_flights.clear()
+	clip_contents = true
 	_last_launch_uid = 0
 	_clear_transcript()
 	_settle_result_feedback()
@@ -337,7 +418,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
 	_gate_title.text = "Ready to pop?"
 	_gate_copy.text = _message
-	_gate_note.text = "Earn a chest at 100, 200, and 300 points. Your %d seconds start when Pip can hear you." % int(PopModel.DURATION)
+	_gate_note.text = "Pop chest-marked words to collect fragments. 4 unlock a chest; every 5 more upgrade it. Your %d seconds start when Pip can hear you." % int(PopModel.DURATION)
 	retry_button.text = "Start listening"
 	retry_button.disabled = _words.is_empty()
 	_gate.show()
@@ -353,6 +434,19 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 
 func set_listening(enabled: bool, listening: bool, message: String) -> void:
 	_build()
+	# stopSpeech callbacks belong to the reward performance, not a microphone error.
+	if _reward_presentation.is_active():
+		_enabled = enabled
+		_listening = false
+		_listening_tick_usec = -1
+		if listening and _reward_paused:
+			_reward_paused = false
+			clip_contents = false
+			_reward_presentation.visible = float(_reward_presentation.snapshot().elapsed) >= ChestCelebration.ARRIVAL_SECONDS
+			_gate.hide()
+			_hud.show()
+			reward_presentation_changed.emit(true)
+		return
 	var was_running: bool = _listening and game.phase == "running"
 	if was_running and not listening:
 		_sync_game_clock()
@@ -474,12 +568,17 @@ func receive_speech_event(json: String) -> bool:
 
 
 func _present_hits(struck: Array) -> void:
+	var round: String = game.round_id
 	if struck.is_empty() and not game.recognition_feedback.is_empty():
 		_last_hit_left = 0.0
 	var time_awards: Array[int] = []
-	var chest_awards: int = 0
+	var fragment_awards: int = 0
+	var milestones: Array[Dictionary] = []
 	for target in struck:
-		chest_awards += int(target.get("chest_awards", 0))
+		var fragments: int = int(target.get("fragment_awards", 0))
+		fragment_awards += fragments
+		if int(target.get("chest_tier", 0)) > int(target.get("previous_chest_tier", 0)):
+			milestones.append(target)
 		var time_bonus: int = int(target.get("time_bonus", 0))
 		if time_bonus > 0:
 			time_awards.append(time_bonus)
@@ -488,6 +587,8 @@ func _present_hits(struck: Array) -> void:
 			if int(item.uid) == int(target.uid):
 				visual = item
 		if not visual.is_empty():
+			if fragments > 0 and not reduced_motion:
+				_loot_flights.append({"from": visual.center, "elapsed": 0.0})
 			if _bursts.size() >= Slice.MAX_EFFECTS:
 				_bursts.pop_front()
 			var burst: Dictionary = Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
@@ -498,13 +599,17 @@ func _present_hits(struck: Array) -> void:
 			_bursts.append(burst)
 		_last_hit_left = 1.15
 		hit.emit(target.word)
+		if round != game.round_id or _stopped or _finished_sent:
+			return
 	if not time_awards.is_empty():
 		_present_time_bonus(time_awards)
-	if chest_awards > 0:
+	if fragment_awards > 0:
 		_chest_fx_age = 0.0
 		_chest_fx_serial += 1
-		_chest_fx_amount = chest_awards
-		chest_earned.emit(game.chest_count)
+		_chest_fx_amount = fragment_awards
+		reward_cue_requested.emit("loot")
+		if round != game.round_id or _stopped or _finished_sent:
+			return
 	if not struck.is_empty():
 		_hud_hit_age = 0.0
 		_hud_hit_serial += 1
@@ -520,6 +625,19 @@ func _present_hits(struck: Array) -> void:
 		_hud_hit_forms.assign(Array(forms))
 		_hud_hit_pattern.compile("(?<![\\p{L}\\p{N}_'’])(?:%s)(?![\\p{L}\\p{N}_'’])" % "|".join(forms))
 		_refresh_transcript_hit()
+	for milestone: Dictionary in milestones:
+		_reward_presentation.enqueue(int(milestone.previous_chest_tier), int(milestone.chest_tier),
+			_chest_art.texture(int(milestone.previous_chest_tier)), _chest_art.texture(int(milestone.chest_tier)))
+	if not milestones.is_empty():
+		game.pause()
+		_listening = false
+		_listening_tick_usec = -1
+		_reward_paused = false
+		clip_contents = false
+		# Stop recognition before the first assembly cue can reach the microphone.
+		reward_presentation_changed.emit(true)
+		if round != game.round_id or _stopped or _finished_sent:
+			return
 	_refresh_targets()
 	_update_hud()
 	_publish(true)
@@ -541,6 +659,10 @@ func _present_time_bonus(awards: Array[int]) -> void:
 
 
 func pause() -> void:
+	_reward_paused = true
+	if reward_presentation_active():
+		_reward_presentation.hide()
+		clip_contents = true
 	cancel_result_input()
 	_clear_slices()
 	if _finished_sent:
@@ -581,6 +703,10 @@ func stop() -> void:
 	_stopped = true
 	_pending = false
 	_reconnecting = false
+	_reward_presentation.clear()
+	_reward_paused = false
+	_loot_flights.clear()
+	clip_contents = true
 	_message = ""
 	game.stop()
 	_clear_slices()
@@ -591,8 +717,23 @@ func stop() -> void:
 	queue_redraw()
 
 
+func finish_round() -> void:
+	if _stopped or _finished_sent or game.phase not in ["running", "paused"]:
+		return
+	_reward_presentation.clear()
+	_reward_paused = false
+	_loot_flights.clear()
+	clip_contents = true
+	game.stop()
+	_finish()
+
+
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	if _reward_presentation != null:
+		_reward_presentation.reduced_motion = value
+	if value:
+		_loot_flights.clear()
 	if value:
 		_clear_slices()
 	if value:
@@ -605,6 +746,8 @@ func set_reduced_motion(value: bool) -> void:
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
 	if not is_visible_in_tree():
+		return result
+	if _reward_presentation.is_active() and not _reward_paused:
 		return result
 	if _gate != null and _gate.visible:
 		if not retry_button.disabled:
@@ -620,6 +763,8 @@ func controls() -> Array[Control]:
 
 
 func default_focus() -> Control:
+	if _reward_presentation.is_active() and not _reward_paused:
+		return null
 	if _results != null and _results.visible:
 		if is_instance_valid(chests_button) and not chests_button.disabled:
 			return chests_button
@@ -637,7 +782,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		var rect: Rect2 = _global_target_rect(target)
 		targets.append({"uid": target.uid, "text": str(target.word.get("text", "")), "forms": target.get("forms", []),
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
-			"age": target.age, "spawned_at": target.spawned_at})
+			"age": target.age, "spawned_at": target.spawned_at, "chest": bool(target.get("chest", false))})
 	var actions: Array[Dictionary] = []
 	var candidates: Array[Control] = controls()
 	if _gate != null and _gate.visible and retry_button.disabled:
@@ -658,6 +803,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		actions.append({"name": str(control.name), "text": visible_text,
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
+	var reward: Dictionary = RewardProgress.reward_progress(game.fragment_count)
 	return {"phase": "idle" if _stopped else str(game.phase), "round_id": game.round_id,
 		"remaining": float(game.remaining), "hits": int(game.hits),
 		"base_duration": PopModel.DURATION, "bonus_time": float(game.bonus_time), "combo": int(game.combo),
@@ -665,8 +811,11 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		"vocabulary": game.vocabulary(),
 		"recognition_feedback": game.recognition_feedback, "recognition_message": game.recognition_message,
 		"score": int(game.score), "best_combo": int(game.best_combo), "targets": targets,
-		"chest_count": int(game.chest_count), "chest_next_score": game.next_chest_score(),
-		"chest_progress": game.chest_progress(), "chest_thresholds": PopModel.CHEST_SCORE_THRESHOLDS.duplicate(),
+		"chest_count": int(game.chest_count), "chest_tier": int(game.chest_tier),
+		"fragment_count": int(game.fragment_count), "chest_progress": game.chest_progress(),
+		"fragments_toward_next": int(reward.fragments_toward_next), "fragments_required": int(reward.fragments_required),
+		"reward_presentation": _reward_presentation.snapshot(), "reward_paused": _reward_paused,
+		"loot_flights": _loot_flights.size(),
 		"chest_fx": _chest_fx_snapshot(),
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
 		"transcript": _transcript, "transcript_final": _transcript_final,
@@ -741,6 +890,15 @@ func _process(delta: float) -> void:
 		_pending_left = maxf(0.0, _pending_left - delta)
 		if _pending_left <= 0.0:
 			set_listening(_enabled, false, "Still waiting for the microphone. Check the browser prompt, or retry.")
+	var round: String = game.round_id
+	advance_reward_presentation(delta)
+	if round != game.round_id or _stopped:
+		return
+	if _reward_paused and reward_presentation_active():
+		return
+	for flight: Dictionary in _loot_flights:
+		flight.elapsed += delta
+	_loot_flights = _loot_flights.filter(func(flight: Dictionary) -> bool: return float(flight.elapsed) < ChestCelebration.ARRIVAL_SECONDS)
 	_sync_game_clock(false)
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
 	var feedback_expired: bool = _advance_hud_feedback(delta, false)
@@ -811,7 +969,7 @@ func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		_clear_slices()
 		_settle_result_feedback()
-		if game.phase == "running":
+		if game.phase == "running" or reward_presentation_active():
 			pause()
 		_listening_tick_usec = -1
 		set_process(false)
@@ -826,8 +984,12 @@ func _update_hud() -> void:
 	time_label.text = "%02d" % ceili(maxf(0.0, game.remaining))
 	hits_label.text = str(game.hits)
 	_score_label.text = "%d POINTS" % game.score
-	_chest_count_label.text = "CHESTS %d / %d" % [game.chest_count, PopModel.MAX_CHESTS]
-	_chest_progress_label.text = "ALL 3 CHESTS EARNED" if game.chest_count >= PopModel.MAX_CHESTS else "NEXT CHEST AT %d" % game.next_chest_score()
+	var progress: Dictionary = RewardProgress.reward_progress(game.fragment_count)
+	var tier: int = _displayed_chest_tier if reward_presentation_active() else game.chest_tier
+	_chest_count_label.text = "CHEST LV. %d" % tier if tier > 0 else "%d / 4" % mini(4, game.fragment_count)
+	_chest_progress_label.text = "%d / 5 FRAGMENTS TO UPGRADE" % (5 if tier < game.chest_tier else int(progress.fragments_toward_next)) if tier > 0 else "CHEST FRAGMENTS"
+	_reward_icon.texture = _chest_art.texture(tier)
+	_reward_icon.modulate.a = 1.0 if tier > 0 else 0.6
 	var celebrating: bool = _hud_hit_age < HUD_HIT_DURATION
 	var visible_text: String = _transcript if not _transcript.is_empty() else " · ".join(_hud_hit_words) if celebrating else ""
 	if transcript_label.text != visible_text:
@@ -942,8 +1104,8 @@ func _apply_chest_feedback() -> void:
 	_chest_overlay.visible = _hud.visible and not _stopped
 	var active: bool = _chest_fx_age < CHEST_FX_DURATION and _chest_overlay.visible
 	_chest_badge.visible = active
-	_chest_award_label.text = "+%d CHEST%s" % [_chest_fx_amount, "S" if _chest_fx_amount != 1 else ""] if active else ""
-	_chest_award_caption.text = "%d OF %d EARNED" % [game.chest_count, PopModel.MAX_CHESTS]
+	_chest_award_label.text = "+%d FRAGMENT%s" % [_chest_fx_amount, "S" if _chest_fx_amount != 1 else ""] if active else ""
+	_chest_award_caption.text = "%d COLLECTED" % game.fragment_count
 	_chest_badge.pivot_offset = _chest_badge.size * 0.5
 	_chest_badge.position = _chest_badge_anchor
 	_chest_badge.scale = Vector2.ONE
@@ -975,6 +1137,14 @@ func _draw_chest_feedback() -> void:
 		var filled: Rect2 = meter
 		filled.size.x *= game.chest_progress()
 		_chest_fx.draw_style_box(_chest_fill_style, filled)
+	for flight: Dictionary in _loot_flights:
+		var p: float = smoothstep(0.0, ChestCelebration.ARRIVAL_SECONDS, float(flight.elapsed))
+		var destination: Vector2 = _reward_hud.position + _reward_icon.position + _reward_icon.size * 0.5
+		var center: Vector2 = Vector2(flight.from).lerp(destination, p)
+		center.y -= sin(p * PI) * 90.0 / scale
+		var edge: float = lerpf(58.0 / scale, _reward_icon.size.x, p)
+		var texture: Texture2D = _chest_art.texture(1)
+		_chest_fx.draw_texture_rect(texture, Rect2(center - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false)
 	if not _chest_badge.visible:
 		return
 	var alpha: float = _chest_badge.modulate.a
@@ -1106,15 +1276,19 @@ func _layout() -> void:
 	_bonus_overlay.size = size
 	_chest_overlay.position = Vector2.ZERO
 	_chest_overlay.size = size
+	_reward_presentation.position = Vector2.ZERO
+	_reward_presentation.size = size
 	var reward_width: float = minf(width, 340.0 / scale)
 	_reward_hud.position = Vector2((size.x - reward_width) * 0.5, maxf(0.0, size.y - 64.0 / scale))
 	_reward_hud.size = Vector2(reward_width, 52.0 / scale)
 	var reward_font: int = 12 if reward_width * scale < 280.0 else 13
-	_place_label(_score_label, Rect2(12.0 / scale, 5.0 / scale, reward_width * 0.48 - 12.0 / scale, 19.0 / scale), reward_font)
-	_place_label(_chest_count_label, Rect2(reward_width * 0.48, 5.0 / scale, reward_width * 0.52 - 12.0 / scale, 19.0 / scale), reward_font)
-	_place_label(_chest_progress_label, Rect2(12.0 / scale, 25.0 / scale, reward_width - 24.0 / scale, 14.0 / scale), 10)
+	_reward_icon.position = Vector2(8, 5) / scale
+	_reward_icon.size = Vector2(38, 32) / scale
+	_place_label(_score_label, Rect2(51.0 / scale, 5.0 / scale, reward_width * 0.48 - 43.0 / scale, 19.0 / scale), reward_font)
+	_place_label(_chest_count_label, Rect2(reward_width * 0.48 + 10.0 / scale, 5.0 / scale, reward_width * 0.52 - 22.0 / scale, 19.0 / scale), reward_font)
+	_place_label(_chest_progress_label, Rect2(51.0 / scale, 25.0 / scale, reward_width - 63.0 / scale, 14.0 / scale), 10)
 	_chest_badge.size = Vector2(minf(width, 190.0 / scale), 74.0 / scale)
-	_place_label(_chest_award_label, Rect2(6.0 / scale, 9.0 / scale, _chest_badge.size.x - 12.0 / scale, 35.0 / scale), 26)
+	_place_label(_chest_award_label, Rect2(6.0 / scale, 9.0 / scale, _chest_badge.size.x - 12.0 / scale, 35.0 / scale), 22)
 	_place_label(_chest_award_caption, Rect2(6.0 / scale, 46.0 / scale, _chest_badge.size.x - 12.0 / scale, 19.0 / scale), 10)
 	var side: float = minf(72.0 / scale, width * 0.22)
 	_place_label(time_label, Rect2(edge, 13 / scale, side, 46 / scale), 30)
@@ -1243,6 +1417,7 @@ func _refresh_targets() -> void:
 				if age < 0.14 and center.distance_to(burst.center) < 150.0 / scale:
 					center += Vector2(sin(age * 100.0), cos(age * 85.0)) * (1.0 - age / 0.14) * 3.0 / scale
 		_draw_targets.append({"uid": int(target.uid), "word": target.word, "forms": target.get("forms", []), "center": center,
+			"chest": bool(target.get("chest", false)),
 			"size": capsule_size, "rotation": tilt, "progress": progress, "lane": lane,
 			"age": float(target.age), "spawned_at": float(target.get("spawned_at", game.elapsed - float(target.age)))})
 
@@ -1263,7 +1438,8 @@ func _draw() -> void:
 	var scale: float = Style.ui_scale(self)
 	_ensure_draw_styles(scale)
 	draw_style_box(_backdrop_style, Rect2(Vector2.ZERO, size))
-	_draw_atmosphere(scale)
+	if not reward_presentation_active():
+		_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
 		var side: float = time_label.size.x
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
@@ -1354,6 +1530,10 @@ func _draw_capsule(target: Dictionary, scale: float) -> void:
 	var fitted: Dictionary = _fit_word(word, capsule_size, scale)
 	var baseline: float = rect.end.y - 11.0 / scale
 	_target_canvas.draw_string(font, Vector2(-float(fitted.width) * 0.5, baseline), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(fitted.font_size), Color("#263e38"))
+	if bool(target.get("chest", false)):
+		var edge: float = minf(40.0 / scale, capsule_size.y * 0.31)
+		var marker := Rect2(Vector2(rect.end.x - edge - 6.0 / scale, rect.position.y + 5.0 / scale), Vector2.ONE * edge)
+		_target_canvas.draw_texture_rect(_chest_art.texture(1), marker, false)
 	_target_canvas.draw_set_transform(Vector2.ZERO)
 
 
@@ -1576,19 +1756,21 @@ func _build_results(summary: Dictionary) -> void:
 	_result_hero.resized.connect(_layout_result_hits)
 	_result_rewards = ResultRewards.new()
 	_result_body.add_child(_result_rewards)
-	_result_rewards.configure(int(summary.get("score", 0)), int(summary.get("chest_count", 0)))
+	var tier: int = int(summary.get("chest_tier", 0))
+	_result_rewards.configure(int(summary.get("score", 0)), int(summary.get("fragment_count", 0)), tier, _chest_art.texture(tier))
 	_result_actions = HBoxContainer.new()
 	_result_body.add_child(_result_actions)
-	var earned_chests: int = clampi(int(summary.get("chest_count", 0)), 0, PopModel.MAX_CHESTS)
-	chests_button = _action("Open chests (%d)" % earned_chests, earned_chests > 0)
+	var earned_chests: int = clampi(int(summary.get("chest_count", 0)), 0, 1)
+	var available: int = maxi(_pending_chests, earned_chests)
+	chests_button = _action("Open chests" if available > 1 else "Open chest", available > 0)
 	chests_button.name = "OpenChests"
-	chests_button.disabled = earned_chests == 0
-	chests_button.tooltip_text = "Earn a chest every 100 points, up to 3 per round." if earned_chests == 0 else "Open every chest you earned this round."
+	chests_button.disabled = available == 0
+	chests_button.tooltip_text = "Collect 4 chest fragments to unlock a chest." if available == 0 else "Open your final upgraded chest."
 	chests_button.pressed.connect(_open_chests)
 	chests_button.mouse_filter = Control.MOUSE_FILTER_PASS
 	chests_button.focus_entered.connect(func() -> void: _ensure_result_control(chests_button))
 	_result_actions.add_child(chests_button)
-	replay_button = _action("Play again", earned_chests == 0)
+	replay_button = _action("Play again", available == 0)
 	replay_button.name = "Replay"
 	replay_button.pressed.connect(_replay)
 	replay_button.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -1784,11 +1966,15 @@ func _ensure_scroll_control(scroll: ResultScroll, body: Control, control: Contro
 
 
 func _replay() -> void:
+	if _stopped or not is_visible_in_tree() or game.phase != "finished" or not _results.visible:
+		return
+	if interaction_allowed.is_valid() and not interaction_allowed.call():
+		return
 	request_listening.emit()
 
 
 func _open_chests() -> void:
-	if _stopped or game.phase != "finished" or game.chest_count <= 0 or not is_visible_in_tree():
+	if _stopped or game.phase != "finished" or maxi(_pending_chests, game.chest_count) <= 0 or not is_visible_in_tree():
 		return
 	if not is_instance_valid(chests_button) or chests_button.disabled:
 		return

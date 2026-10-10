@@ -59,6 +59,7 @@ func _run() -> void:
 	_state_checks()
 	_jelly_state_checks()
 	_jelly_tier_checks()
+	_pop_fragment_state_checks()
 	await _room_checks()
 	await _single_chest_layout_checks()
 	await _retained_rewards_checks()
@@ -203,13 +204,89 @@ func _jelly_tier_checks() -> void:
 		and not restored.create_batch("bad-tier", ["spring"], [-1]) and storage.jelly_writes == writes,
 		"Invalid tier metadata cannot replace valid saved treasure")
 	var pop := State.new("user://unused-pop-tier.cfg", storage)
-	check(not pop.create_batch("pop-tier", ["spring"], [1]) and storage.text == null,
-		"Jelly upgrade metadata cannot alter Voice Pop's reward contract")
+	check(pop.create_batch("pop-tier", ["spring"], [1]) and pop.entries[0].tier == 1,
+		"Voice Pop supports the same final chest tier metadata as Jelly")
 	var malformed := ConfigFile.new()
 	malformed.parse(storage.jelly_text)
 	malformed.set_value("treasure", "entries", [{"theme": "spring", "opened": false, "tier": -1}])
 	storage.jelly_text = malformed.encode_to_text()
 	check(not restored.load_state(), "Corrupt persisted tiers fail safely instead of silently losing a chest")
+
+
+func _pop_fragment_state_checks() -> void:
+	var storage := Storage.new()
+	var legacy := State.new("user://unused-pop-fragments.cfg", storage)
+	check(legacy.create_batch("legacy-pop", ["spring", "summer", "autumn"]),
+		"Prepare an existing three-chest Voice Pop save without upgrade metadata")
+	check(legacy.mark_opened("legacy-pop", 1), "An old Voice Pop chest may already be opened")
+	var state := State.new("user://unused-pop-fragments.cfg", storage)
+	state.max_chests = 0
+	state.allow_repeated_themes = true
+	var legacy_text: String = storage.text
+	check(state.load_state() and state.entries.size() == 3 and storage.text == legacy_text
+		and not state.entries[0].has("tier") and state.entries[1].opened,
+		"The fragment inventory restores legacy chest styles and opened flags without rewriting them")
+	check(state.create_batch("fragment-round", ["autumn"], [2]) and state.entries.size() == 3
+		and state.entries[0].theme == "spring" and state.entries[1].theme == "autumn"
+		and not state.entries[0].has("tier") and not state.entries[1].has("tier")
+		and state.entries[2].theme == "autumn" and state.entries[2].tier == 2
+		and state.entries.all(func(entry: Dictionary) -> bool: return not entry.opened),
+		"A completed fragment round appends only its final chest while preserving all old unopened rewards")
+	var writes: int = storage.writes
+	check(state.create_batch("fragment-round", ["winter"], [90]) and state.entries.size() == 3
+		and state.entries[2].tier == 2 and storage.writes == writes,
+		"Repeated round completion cannot append or reroll the final chest")
+	check(state.create_batch("legacy-pop", ["space"], [3]) and storage.writes == writes
+		and state.round_id == "fragment-round", "A retired legacy round receipt cannot restore consumed or carried treasure twice")
+	check(not state.mark_opened("legacy-pop", 0) and storage.writes == writes,
+		"An old chest callback cannot consume an index after pending treasure is carried forward")
+	var before: String = storage.text
+	storage.writable = false
+	check(not state.create_batch("failed-round", ["jungle"], [1]) and storage.text == before
+		and state.round_id == "fragment-round" and state.entries.size() == 3,
+		"A failed Voice Pop append preserves all previous treasure and its current batch identity")
+	storage.writable = true
+	check(state.create_batch("failed-round", ["jungle"], [1]) and state.entries.size() == 4
+		and state.entries[3].tier == 1,
+		"A retried new round safely exceeds the old three-chest inventory limit")
+	var reloaded := State.new("user://unused-pop-fragments.cfg", storage)
+	reloaded.max_chests = 0
+	reloaded.allow_repeated_themes = true
+	check(reloaded.load_state() and reloaded.entries == state.entries,
+		"Reload preserves pending legacy and upgraded Voice Pop treasure together")
+	for index in range(reloaded.entries.size()):
+		check(reloaded.mark_opened("failed-round", index), "Every carried Voice Pop chest opens at its actual saved index")
+	writes = storage.writes
+	check(reloaded.mark_opened("failed-round", 3) and reloaded.last_open_was_duplicate
+		and storage.writes == writes, "Repeated opening cannot save or award the final chest twice")
+	check(reloaded.create_batch("later-round", ["winter"], [300]) and reloaded.entries.size() == 1
+		and reloaded.entries[0].tier == 300, "Uncapped numeric tiers persist after previous treasure is fully opened")
+	writes = storage.writes
+	check(reloaded.create_batch("fragment-round", ["autumn"], [2]) and storage.writes == writes
+		and reloaded.entries.size() == 1 and reloaded.entries[0].tier == 300,
+		"An old completion callback acknowledges its receipt without recreating an intermediate reward")
+	check(not reloaded.create_batch("bad-tiers", ["jungle"], [1, 2])
+		and not reloaded.create_batch("negative-tier", ["jungle"], [-1]) and storage.writes == writes,
+		"Invalid Voice Pop tier metadata cannot overwrite saved treasure")
+	var malformed := ConfigFile.new()
+	malformed.parse(storage.text)
+	malformed.set_value("treasure", "entries", [{"theme": "jungle", "opened": false, "tier": 0}])
+	storage.text = malformed.encode_to_text()
+	check(not reloaded.load_state(), "An invalid persisted Voice Pop tier is rejected without silently replacing rewards")
+	check(storage.jelly_text == null and storage.jelly_writes == 0,
+		"Voice Pop fragment inventory never reads or overwrites Jelly treasure storage")
+	var strict_storage := Storage.new()
+	var strict := State.new("user://unused-pop-strict.cfg", strict_storage)
+	strict.max_chests = 0
+	check(strict.create_batch("strict-first", ["spring"], [1]), "Prepare an uncapped inventory with distinct style validation")
+	var strict_before: String = strict_storage.text
+	check(not strict.create_batch("strict-duplicate", ["spring"], [2]) and strict_storage.text == strict_before
+		and strict.load_state(), "An unsupported repeated style cannot create a save that fails its own validation")
+	var capped = _jelly_state(Storage.new())
+	capped.max_chests = 1
+	check(capped.create_batch("capped-first", ["spring"], [1])
+		and not capped.create_batch("capped-second", ["autumn"], [2]) and capped.load_state(),
+		"Accumulating inventories validate the combined total before writing a capped save")
 
 
 func _jelly_tier_room_checks() -> void:

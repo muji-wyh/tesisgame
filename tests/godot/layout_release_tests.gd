@@ -49,7 +49,10 @@ func _run() -> void:
 			if control.is_visible_in_tree():
 				check(viewport.encloses(control.get_global_rect()), "Storage failure keeps header control on screen at %s: %s" % [dimensions, control.name])
 		for phase in ["won"]:
+			# This fixture exercises an earned chest; chance outcomes have separate coverage.
+			app.model.chest_earned = true
 			app.model.phase = phase
+			app.model.chest_state = "opened"
 			app._refresh()
 			await settle()
 			check(viewport.encloses(app._result_retry_button.get_global_rect()), "Result saving retry stays visible at %s: %s" % [dimensions, phase])

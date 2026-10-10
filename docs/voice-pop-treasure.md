@@ -1,49 +1,44 @@
 # Voice Pop treasure
 
-Every round starts with zero chest opportunities. Accepted spoken hits keep the
-existing point and combo rules; crossing 100, 200, and 300 points awards one
-chest each, capped at three. The HUD shows points, the chest total, and the next
-milestone. Each award produces a gold badge, rays, and particles. Reduced motion
-keeps a readable stationary award message.
+Voice Pop starts with zero fragments. Each spawned word card has a 35% chance
+of carrying a chest marker, fixed to that card identity. Successfully slicing a
+marked card earns one fragment; unmarked cards keep their usual score and
+learning credit. Missing a card gives no fragment. Repeated speech callbacks
+cannot credit the same card twice.
 
-The result screen shows the round's points and three gold progress bars for
-100, 200, and 300 points. Each row shows cumulative points toward its goal
-(150 points gives 100/100, 150/200, and 150/300), an earned or remaining label,
-and a chest icon. The reward summary does not create or consume rewards, and
-scores above 300 keep all three bars full. Zero-score results retain the goals
-without claiming a chest. The compact layout keeps the actions visible on small
-phones; short landscape screens put them before the scrollable reward rows.
+Four fragments unlock one chest. Every five additional fragments upgrade that
+same chest. Jelly Match and Voice Pop share the progression calculation and
+artwork sequence: Jungle, Autumn, Ocean, Space, Spring, Winter. Levels above six
+continue using Winter artwork. The round saves only its final upgraded chest.
+Scores, combos, time bonuses, and word mastery retain their existing rules.
 
-The icons reuse the integrated Royal closed pose from **Modern 2D Animated
-Chests Pack FREE Demo 1.0.2**, by **Bobardo**, Unity Asset Store product **360538**,
-under the **Standard Unity Asset Store EULA**. The original source mapping and
-hash are in `assets/chests/SOURCE.txt` and `assets/chests/manifest.json`; the
-acquired artwork is already a production asset. A cropped atlas removes its
-transparent margins without changing the source image. These static icons
-represent earned opportunities, not the randomly selected reward-room designs
-or their opened state; the existing rig still handles actual chest animation.
+The gameplay HUD shows the current chest level and fragments toward the next
+milestone. A marked card's reward flies toward the HUD. Synthesis and upgrades
+reuse Jelly Match's chest performance, production glow and Toon FX confetti;
+upgrades celebrate across the full screen. The microphone and round timer pause
+during the performance and resume afterward. Menus, backgrounding, reduced
+motion, and leaving the mode follow the same cancellation boundaries as gameplay.
+The result shows the actual score, fragment count and final chest level, with an
+Open chest action only when treasure exists. A round below four fragments does
+not create a chest or show a chest celebration.
 
-The result screen offers **Open chests (N)** alongside Play again. The treasure
-page keeps every earned chest in one scrollable list, with distinct styles
-selected once for the round. Portrait phones show one large chest per row;
-wide desktop and short landscape layouts use two columns. Artwork fills each
-card without a title, name, or instruction label. Accessible names still explain
-how to open each chest. The Back action stays below the scrolling area.
-
-Touch dragging and mouse-wheel input scroll with momentum and no visible
-scrollbars. A swipe cancels an unfinished hold; touching a moving list first
-stops it. Keyboard and controller focus reveal offscreen chests. Each chest
-uses the shared Match hold, cancellation, physical release, light, audio, and
-surprise sequence. Only one chest can open at a time. A released chest stays
-open, and its surprise remains visible when scrolled away and back, while the
-remaining chests retain their own controls.
+The integrated marker and chest artwork comes from the existing licensed chest
+catalog below. Effects and audio reuse [Jelly's fragment asset record](assets/jelly-fragments.md).
+No new source artwork is acquired for this change.
 
 The batch and opened flags are saved on this device under
-`wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Returning
-to the results, changing modes, or reloading keeps unopened rewards. Entering
-Voice Pop again resumes pending treasure before another round can start. A
-storage failure keeps the same selected designs and offers a retry. Pop chest
-surprises do not modify shared medal or toy progress.
+`wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Older
+saves with up to three tierless chests remain readable. Play again starts a fresh
+round while retaining unopened treasure; the result action also exposes pending
+chests from earlier rounds. Returning to the mode resumes saved treasure.
+Storage failures retain the earned final level and offer Retry save. Round
+receipts prevent duplicate batches. Pop surprises do not modify medal progress.
+
+Match and Memory independently roll a 50% chance of one chest per completed
+round. The outcome is fixed when the round starts and cannot be rerolled by
+reopening menus, resuming, or clicking again. A round without treasure still
+celebrates all matched words and offers Play again. Phrase Builder retains its
+existing guaranteed chest.
 
 ## Shared chest catalog
 

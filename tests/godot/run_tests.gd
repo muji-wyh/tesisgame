@@ -67,6 +67,8 @@ func wrong_pair_for(model) -> Array:
 
 
 func win_round(app) -> void:
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
@@ -1042,6 +1044,8 @@ func _test_scene() -> void:
 	await process_frame
 	check(not app.collection_page.visible and app.model.cards == cards_before_controller,
 		"Controller B closes My Rewards and preserves the active round")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	var first_pair: Array = pairs_for(app.model)[0]
 	app.cards[first_pair[1]].grab_focus()
 	app.cards[first_pair[0]].pressed.emit()

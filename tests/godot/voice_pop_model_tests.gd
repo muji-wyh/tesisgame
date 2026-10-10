@@ -34,6 +34,8 @@ func _run() -> void:
 	_test_spawn_fairness()
 	_test_simultaneous_throws()
 	_test_late_throws()
+	_test_fragment_rewards()
+	_test_fragment_marker_identity()
 	_test_complete_catalog()
 	print("Voice Pop model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -46,6 +48,130 @@ func words(ids: Array) -> Array:
 func speech_event(game, target: Dictionary, id: String, text: String = "") -> Dictionary:
 	return {"event_id": id, "round_id": game.round_id, "target_uid": target.uid,
 		"text": target.word.text if text.is_empty() else text, "stage": "interim", "received_at_ms": 120.0}
+
+
+func _fragment_target(game, marked: bool) -> Dictionary:
+	for _step in range(100):
+		if not game.targets.is_empty():
+			game.targets[0].chest = marked
+			return game.targets[0].duplicate(true)
+		game.advance(0.1)
+	return {}
+
+
+func _test_fragment_rewards() -> void:
+	var game := Model.new()
+	game.configure(words(["cat"]), 5)
+	check(game.fragment_count == 0 and game.chest_tier == 0 and game.chest_count == 0
+		and game.summary().fragments_required == 4 and game.chest_progress() == 0.0,
+		"Prepared Voice Pop rounds begin with an empty four-fragment chest recipe")
+	game.start()
+	for index in range(22):
+		var target: Dictionary = _fragment_target(game, false)
+		var hits: Array = game.hit_speech_event(speech_event(game, target, "unmarked-%d" % index))
+		check(hits.size() == 1 and hits[0].fragment_awards == 0 and hits[0].chest_awards == 0,
+			"Successful unmarked targets score without inventing chest fragments")
+	check(game.score > 300 and game.fragment_count == 0 and game.chest_count == 0,
+		"The retired score thresholds cannot unlock treasure")
+	game.configure(words(["cat"]), 5)
+	game.start()
+	var unlocked: int = 0
+	for count in range(1, 15):
+		var target: Dictionary = _fragment_target(game, true)
+		var event: Dictionary = speech_event(game, target, "fragment-%d" % count)
+		var hits: Array = game.hit_speech_event(event)
+		check(hits.size() == 1, "A marked live target accepts its matching word once")
+		if hits.is_empty():
+			continue
+		var expected: Dictionary = Model.RewardProgress.reward_progress(count)
+		check(game.fragment_count == count and hits[0].fragment_awards == 1
+			and hits[0].fragment_count == count and game.chest_tier == expected.chest_tier
+			and game.chest_count == expected.chest_count,
+			"Each accepted chest-marked target contributes exactly one fragment")
+		var previous: Dictionary = Model.RewardProgress.reward_progress(count - 1)
+		check(hits[0].previous_chest_tier == previous.chest_tier
+			and hits[0].chest_tier == expected.chest_tier,
+			"The accepted hit carries exact before and after tiers for milestone animation")
+		unlocked += int(hits[0].chest_awards)
+		check(bool(hits[0].chest_awarded) == (count == 4) and unlocked == game.chest_count,
+			"Upgrades improve the same chest rather than generating additional chest rewards")
+		var summary: Dictionary = game.summary()
+		for key in expected:
+			check(summary[key] == expected[key], "Results publish the complete fragment progress: " + key)
+		check(is_equal_approx(game.chest_progress(), float(expected.fragments_toward_next) / expected.fragments_required),
+			"Fragment progress resets against five new fragments after each unlocked tier")
+		var score: int = game.score
+		event.stage = "final"
+		check(game.hit_speech_event(event).is_empty() and game.fragment_count == count and game.score == score,
+			"An interim result followed by the same final event cannot duplicate a fragment")
+	check(game.chest_count == 1 and game.chest_tier == 3 and unlocked == 1,
+		"Four fragments unlock one chest and ten further fragments raise it to tier three")
+	var live: Dictionary = _fragment_target(game, true)
+	var retained: Dictionary = game.summary()
+	game.pause()
+	game.advance(8.0)
+	check(game.hit_speech_event(speech_event(game, live, "paused-fragment")).is_empty()
+		and game.summary() == retained, "Pause neither consumes nor awards marked targets")
+	game.resume()
+	var wrong: Dictionary = speech_event(game, live, "wrong-fragment", "dog")
+	wrong.stage = "final"
+	check(game.hit_speech_event(wrong).is_empty() and game.fragment_count == 14,
+		"An incorrect bound answer cannot earn the visible chest fragment")
+	game.advance(float(live.lifetime))
+	check(game.misses > 0 and game.fragment_count == 14 and game.chest_tier == 3,
+		"Missing a chest-marked target neither earns nor removes prior fragments")
+	game.advance(game.remaining + 1.0)
+	var finished: Dictionary = game.summary()
+	check(game.phase == "finished" and finished.chest_count == 1 and finished.chest_tier == 3,
+		"Only the final upgraded chest is carried into round results")
+	check(game.hit_speech_event(speech_event(game, live, "late-fragment")).is_empty()
+		and game.summary() == finished, "Late speech cannot change a completed fragment reward")
+	var old_round: String = game.round_id
+	game.start()
+	check(game.round_id != old_round and game.fragment_count == 0 and game.chest_tier == 0
+		and game.chest_count == 0 and game.chest_progress() == 0.0,
+		"Replay begins a new fragment recipe and never inherits a previous round's tier")
+	var stale: Dictionary = speech_event(game, game.targets[0], "old-round")
+	stale.round_id = old_round
+	check(game.hit_speech_event(stale).is_empty() and game.fragment_count == 0,
+		"A delayed prior-round speech event cannot credit a newly reused target ID")
+	game.stop()
+	check(game.hit_transcript("cat").is_empty() and game.fragment_count == 0,
+		"Leaving the round cannot redeem unfinished marked targets")
+	for count in [-10, 0, 1, 3, 4, 8, 9, 13, 14, 1499]:
+		var progress: Dictionary = Model.RewardProgress.reward_progress(count)
+		var sanitized: int = maxi(0, count)
+		var expected_tier: int = 0 if sanitized < 4 else 1 + floori((sanitized - 4) / 5.0)
+		check(progress.chest_tier == expected_tier and progress.chest_count == (1 if expected_tier > 0 else 0)
+			and progress.fragment_count == sanitized,
+			"The shared recipe keeps one chest and an uncapped tier at fragment count %d" % count)
+
+
+func _test_fragment_marker_identity() -> void:
+	var marked: int = 0
+	var unmarked: int = 0
+	for seed_value in range(24):
+		var first := Model.new()
+		var second := Model.new()
+		first.configure(catalog, seed_value)
+		second.configure(catalog, seed_value)
+		first.start()
+		second.start()
+		var markers: Dictionary = {}
+		for _frame in range(100):
+			check(first.targets == second.targets, "Seeded target markers are reproducible with their flight identities")
+			for target in first.targets:
+				check(target.has("chest") and target.chest is bool, "Every target declares its chest marker before it is hit")
+				if markers.has(target.uid):
+					check(markers[target.uid] == target.chest, "The same visible target never rerolls its chest marker")
+				else:
+					markers[target.uid] = target.chest
+					marked += 1 if target.chest else 0
+					unmarked += 0 if target.chest else 1
+			first.advance(0.5)
+			second.advance(0.5)
+	check(marked > 0 and unmarked > marked,
+		"The seeded population contains occasional visible chest targets alongside ordinary targets")
 
 
 func _test_compounds() -> void:
@@ -659,6 +785,9 @@ func _test_late_throws() -> void:
 func _test_complete_catalog() -> void:
 	for word in catalog:
 		var game := Model.new()
+		if not Data.supports_mode(word, "pop"):
+			check(not game.configure([word], 1), "Phrase-only words without pictures remain outside the Pop pool: " + word.id)
+			continue
 		check(game.configure([word], 1) and game.start(), "Each illustrated lesson word is eligible: " + word.id)
 		check(game.hit_transcript(word.text).size() == 1, "Each displayed label is recognized exactly: " + word.text)
 	for max_level in [1, 2, 3]:

@@ -55,6 +55,8 @@ func _run() -> void:
 	app._new_adventure_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "An invisible result action cannot replace the current lesson")
 	app.choose_theme("space")
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()

@@ -16,6 +16,8 @@ func check(condition: bool, message: String) -> void:
 
 
 func win(app) -> void:
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
 			app.cards[card.id].pressed.emit()
@@ -111,9 +113,9 @@ func _run() -> void:
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.completed_count("spring") == 1, "The third piece completes one medal")
-	check(app.chest.mode == "opened" and app._title.text == "A gift for Pip!"
+	check(app.chest.mode == "opened" and app._title.text == "Chest opened!"
 		and not app._title.is_visible_in_tree() and app._new_adventure_button.visible,
-		"Completing saved progress announces the unlocked toy without adding another result panel")
+		"Completing saved progress acknowledges the opened chest without adding another result panel")
 	check_no_collectible_presentation(app, "A toy unlock")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 3, "A repeated completion cannot add progress")

@@ -112,6 +112,8 @@ func _run() -> void:
 		"Header Pip opens the game-mode menu without advancing its companion trick cycle")
 	app._hide_mode_menu()
 	var playing_phase: String = app.model.phase
+	# This fixture exercises an earned chest; chance outcomes have separate coverage.
+	app.model.chest_earned = true
 	app.model.phase = "won"
 	app._refresh()
 	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)

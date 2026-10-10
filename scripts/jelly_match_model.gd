@@ -11,6 +11,7 @@ signal chest_milestone(previous_tier: int, new_tier: int)
 signal finished(result: Dictionary)
 
 const Motion = preload("res://scripts/jelly_motion.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
@@ -26,8 +27,8 @@ const SPEEDUP_PER_PAIR: float = 0.05
 const FUSION_SECONDS: float = 1.05
 const POP_SECONDS: float = 0.7
 const FULL_SECONDS: float = 8.0
-const CHEST_UNLOCK_FRAGMENTS: int = 4
-const CHEST_UPGRADE_FRAGMENTS: int = 5
+const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
+const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 
 var cells: Array[Dictionary] = []
@@ -277,19 +278,7 @@ func score() -> int:
 
 
 static func reward_progress(total: int) -> Dictionary:
-	var fragments: int = maxi(0, total)
-	var tier: int = 0
-	var progress: int = fragments
-	var required: int = CHEST_UNLOCK_FRAGMENTS
-	if fragments >= CHEST_UNLOCK_FRAGMENTS:
-		tier = 1 + int((fragments - CHEST_UNLOCK_FRAGMENTS) / float(CHEST_UPGRADE_FRAGMENTS))
-		progress = (fragments - CHEST_UNLOCK_FRAGMENTS) % CHEST_UPGRADE_FRAGMENTS
-		required = CHEST_UPGRADE_FRAGMENTS
-	return {
-		"fragment_count": fragments, "chest_tier": tier,
-		"chest_count": 1 if tier > 0 else 0,
-		"fragments_toward_next": progress, "fragments_required": required
-	}
+	return RewardProgress.reward_progress(total)
 
 
 func snapshot() -> Dictionary:

@@ -1191,7 +1191,7 @@ test('Pop status projects actual target and control geometry without introducing
   assert.equal(f.popStatus.attributes['data-combo'], '2');
   assert.equal(f.popStatus.attributes['data-base-duration'], '50');
   assert.equal(f.popStatus.attributes['data-bonus-time'], '8');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']), [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, age: 1.2, spawned_at: 29.5 }]);
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']), [{ uid: 7, text: 'cat', x: 31, y: 118, width: 103, height: 77, age: 1.2, spawned_at: 29.5, chest: false }]);
   assert.deepEqual(JSON.parse(f.popStatus.attributes['data-controls']), [{ name: 'EndPop', text: 'Finish', x: 300, y: 15, width: 52, height: 44, disabled: false }]);
   assert.match(readable, /Nice pop!.*4 hits.*Score 90.*Words: cat/);
   f.host.popStatus(JSON.stringify(payload));
@@ -1262,7 +1262,7 @@ test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus po
   assert.equal(f.popStatus.attributes['data-bonus-time'], '0');
   assert.equal(f.popStatus.attributes['data-combo'], '0');
   assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']),
-    [{ uid: '', text: 'cat', x: 0, y: 0, width: 0, height: 0, age: 0, spawned_at: 0 }]);
+    [{ uid: '', text: 'cat', x: 0, y: 0, width: 0, height: 0, age: 0, spawned_at: 0, chest: false }]);
   const hud = JSON.parse(f.popStatus.attributes['data-hud']);
   assert.deepEqual(hud.time_bonus, { text: '+8s', x: 10, y: 22, width: 70, height: 30 });
   assert.deepEqual(hud.time_bonus_caption, { text: 'TIME BONUS', x: 10, y: 56, width: 140, height: 18 });
@@ -1839,4 +1839,29 @@ test('practice keeps the ordinary browser baseline and bounds each diagnostic al
   f.latest.result([['a'.repeat(10000), true]]);
   assert.equal(records.find(record => record.type === 'result').alternatives[0].text.length, 2000);
   f.host.endSpeechPractice();
+});
+
+
+test('Pop publishes fragment identities and one final-tier result independently of points', () => {
+  const f = fixture();
+  f.host.popStatus(JSON.stringify({ phase: 'running', score: 999, chest_count: 0,
+    fragment_count: 3, chest_tier: 0, fragments_toward_next: 3, fragments_required: 4,
+    targets: [{ uid: 1, text: 'cat', chest: true }, { uid: 2, text: 'dog', chest: 'true' }] }));
+  assert.equal(f.popStatus.attributes['data-chest-count'], '0');
+  assert.equal(f.popStatus.attributes['data-fragment-count'], '3');
+  assert.equal(f.popStatus.attributes['data-fragments-required'], '4');
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']).map(target => target.chest), [true, false]);
+  assert.equal(f.popStatus.attributes['data-chest-next-score'], undefined);
+  f.host.popStatus(JSON.stringify({ phase: 'finished', chest_count: 1, chest_tier: 2, fragment_count: 9,
+    results_rewards: { visible: true, score: 40, earned: 1, fragment_count: 9, chest_tier: 2,
+      title: 'Chest Lv. 2', detail: '1 chest · 9 fragments collected', rect: [1, 2, 3, 4],
+      chest_rect: [5, 6, 7, 8], private: 'discard', rows: [{ threshold: 100 }] } }));
+  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-rewards']), {
+    visible: true, score: 40, earned: 1, fragment_count: 9, chest_tier: 2,
+    title: 'Chest Lv. 2', detail: '1 chest · 9 fragments collected', rect: [1, 2, 3, 4], chest_rect: [5, 6, 7, 8]
+  });
+  f.host.popStatus(JSON.stringify({ phase: 'ready' }));
+  assert.equal(f.popStatus.attributes['data-fragment-count'], '0');
+  assert.equal(f.popStatus.attributes['data-chest-tier'], '0');
+  assert.equal(f.popStatus.attributes['data-results-rewards'], '{}');
 });

@@ -8,6 +8,7 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MAX_HINTS: int = 3
 const MATCH_PAIR_COUNT: int = 5
+const ROUND_CHEST_CHANCE: float = 0.5
 
 var cards: Array[Dictionary] = []
 var lesson_words: Array = []
@@ -24,6 +25,7 @@ var adventure_id: String = ""
 var adventure_name: String = "Word explorers"
 var age_band_id: String = "3"
 var chest_state: String = "closed"
+var chest_earned: bool = true
 var reward_theme: String = ""
 var reward_id: String = ""
 var error: String = ""
@@ -31,7 +33,7 @@ var last_correct: bool = false
 var _attempt_sequence: int = 0
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "3") -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "3", random_chest_reward: bool = false) -> bool:
 	var band: Dictionary = Data.age_band(requested_age_band_id)
 	if band.is_empty():
 		error = "Please choose an available age level."
@@ -106,6 +108,9 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	mistakes = 0
 	phase = "waiting"
 	chest_state = "closed"
+	# The outcome belongs to this round. Repeated completion, theme changes and
+	# reopening a result must never draw another chance or create another chest.
+	chest_earned = rng.randf() < ROUND_CHEST_CHANCE if random_chest_reward else true
 	reward_theme = ""
 	reward_id = ""
 	error = ""
@@ -285,7 +290,7 @@ func set_theme(id: String) -> bool:
 
 func begin_open(id: Variant = null) -> bool:
 	var selected_id: String = theme_id + "-1" if id == null else str(id)
-	if phase != "won" or chest_state != "closed" or selected_id.is_empty():
+	if phase != "won" or not chest_earned or chest_state != "closed" or selected_id.is_empty():
 		return false
 	chest_state = "opening"
 	reward_theme = theme_id

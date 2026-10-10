@@ -2,6 +2,8 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const MatchModel = preload("res://scripts/game_model.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 
 class StopFailureApp:
 	extends "res://scripts/game_ui.gd"
@@ -57,11 +59,13 @@ func _run() -> void:
 	app.set_reduced_motion(false)
 	for mode in ["match", "memory", "phrase"]:
 		await check_manual_mode(app, mode)
+	for mode in ["match", "memory"]:
+		await check_no_chest_mode(app, mode)
 	await check_voice_gate(app)
 	await check_interruption_and_replacement(app)
 	await check_exit_settlement(app)
-	for chest_count in range(4):
-		await check_pop_result(app, chest_count)
+	for fragments in [0, 3, 4, 9, 14]:
+		await check_pop_result(app, fragments)
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -72,8 +76,20 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
-func start_manual(app, mode: String) -> void:
-	check(app.new_round(713, false, "", mode), "A fresh " + mode + " round starts")
+func reward_seed(app, earned: bool) -> int:
+	var probe := MatchModel.new()
+	for seed_value in range(128):
+		if probe.reset(app._learning_words(), seed_value, false, "", "", str(app.growth.level), true) \
+			and probe.chest_earned == earned:
+			return seed_value
+	check(false, "The deterministic reward fixtures include both chance outcomes")
+	return 0
+
+
+func start_manual(app, mode: String, earned: bool = true) -> void:
+	var seed_value: int = reward_seed(app, earned) if mode in ["match", "memory"] else 713
+	check(app.new_round(seed_value, false, "", mode), "A fresh " + mode + " round starts")
+	check(app.model.chest_earned == earned, mode + " retains its seeded chest outcome at round creation")
 	await settle()
 	if mode == "match":
 		var words: Array = app.model.lesson_words.duplicate(true)
@@ -144,6 +160,11 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " controller refresh targets the ready invitation instead of the hidden chest")
 	check(view.snapshot().round_id == identity and pieces(app) == before,
 		mode + " finishing the performance retains the same unclaimed round")
+	await cover(app, "menu", true)
+	await cover(app, "menu", false)
+	view.set_process(false)
+	check(view.snapshot().ready and view.snapshot().round_id == identity and app.model.chest_earned
+		and pieces(app) == before, mode + " keeps its earned reward through a menu visit without rerolling")
 	view.advance(5.0)
 	check(view.snapshot().ready and not app.chest_button.is_visible_in_tree(),
 		mode + " waits indefinitely for the learner's explicit invitation click")
@@ -166,6 +187,53 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " ignores duplicate performance, invitation, and chest completion callbacks")
 	app.set_reduced_motion(false)
 	app._controller_mode = prior_controller_mode
+
+
+func check_no_chest_mode(app, mode: String) -> void:
+	var before: int = pieces(app)
+	await start_manual(app, mode, false)
+	var view = app._round_celebration
+	var identity: String = view.snapshot().round_id
+	check(app.model.phase == "won" and not app.model.chest_earned and view.snapshot().chest_count == 0
+		and not view.snapshot().chest_visible and view.snapshot().caption == "Every word matched!",
+		mode + " celebrates its real completed round without claiming an unearned chest")
+	check(not app.chest_button.is_visible_in_tree() and not view.action_button.visible,
+		mode + " shows neither an unearned chest nor an early replay action")
+	app._open_chest()
+	app.chest_button.button_down.emit()
+	app._accept_round_chest(identity)
+	check(pieces(app) == before and not app._holding_chest and app.model.chest_state == "closed",
+		mode + " rejects direct and hidden chest actions when no reward was earned")
+	for kind in ["menu", "background"]:
+		await cover(app, kind, true)
+		await cover(app, kind, false)
+		view.set_process(false)
+		check(not app.model.chest_earned and view.snapshot().round_id == identity and pieces(app) == before,
+			mode + " preserves its no-chest result through " + kind)
+	view.set_narration_playing(true)
+	view.advance(3.1)
+	view.action_button.pressed.emit()
+	check(not view.is_ready() and app._round_id == identity and pieces(app) == before,
+		mode + " waits for final pronunciation before offering another round")
+	view.set_narration_playing(false)
+	check(view.is_ready() and view.action_button.text == "Play again" and view.controls() == [view.action_button],
+		mode + " offers Play again once the celebration and final word both finish")
+	app.growth.ready = false
+	view.action_button.pressed.emit()
+	check(app._round_id == identity and view.is_ready() and not view.action_button.disabled
+		and view.controls() == [view.action_button] and not view.snapshot().open_emitted and pieces(app) == before,
+		mode + " keeps Play again usable when unavailable growth storage rejects the new round")
+	app.growth.ready = true
+	app._growth_save_failed = false
+	view.action_button.pressed.emit()
+	await settle()
+	var next_identity: String = app._round_id
+	view.open_requested.emit(identity)
+	view.performance_finished.emit(identity)
+	app.chest.opened.emit()
+	check(next_identity != identity and app._round_id == next_identity and app._mode_id == mode
+		and app.model.phase == "waiting" and not view.is_active() and pieces(app) == before,
+		mode + " starts a fresh game directly and rejects old actions without manufacturing a reward")
 
 
 func check_voice_gate(app) -> void:
@@ -238,44 +306,55 @@ func check_interruption_and_replacement(app) -> void:
 
 func check_exit_settlement(app) -> void:
 	for mode in ["match", "memory"]:
-		var before: int = pieces(app)
-		await start_manual(app, mode)
-		check(app.new_round(412, false, "", "phrase"), "Leaving an already won " + mode + " round starts the requested game")
-		check(pieces(app) == before + 1 and not app._round_celebration.snapshot().active,
-			"Leaving " + mode + " preserves existing win settlement exactly once")
+		for earned in [false, true]:
+			var before: int = pieces(app)
+			await start_manual(app, mode, earned)
+			check(app.new_round(412, false, "", "phrase"), "Leaving an already won " + mode + " round starts the requested game")
+			check(pieces(app) == before + (1 if earned else 0) and not app._round_celebration.snapshot().active,
+				"Leaving " + mode + " settles only the chest that round actually earned")
 
 
-func check_pop_result(app, chest_count: int) -> void:
-	check(app.new_round(820 + chest_count, false, "", "pop"), "A Pop score fixture starts cleanly")
+func check_pop_result(app, fragments: int) -> void:
+	var expected: Dictionary = RewardProgress.reward_progress(fragments)
+	var chest_count: int = int(expected.chest_count)
+	var chest_tier: int = int(expected.chest_tier)
+	check(app.new_round(820 + fragments, false, "", "pop"), "A Pop fragment fixture starts cleanly")
 	app._start_pop_listening()
 	app._pop.set_listening(true, true, "Listening.")
 	app._pop.set_process(false)
 	var iterations: int = 0
-	while app._pop.game.chest_count < chest_count and iterations < 60:
+	while app._pop.game.fragment_count < fragments and iterations < 180 and app._pop.game.phase != "finished":
 		iterations += 1
 		if app._pop.game.targets.is_empty():
 			app._pop._advance_game(0.66)
 		if not app._pop.game.targets.is_empty():
 			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
-	check(app._pop.game.chest_count == chest_count, "Real recognized targets produce exactly %d Pop chests" % chest_count)
+		if app._pop.reward_presentation_active():
+			app._pop.advance_reward_presentation(3.0)
+			app._pop.set_listening(true, true, "Listening.")
+	check(app._pop.game.fragment_count == fragments and app._pop.game.chest_count == chest_count
+		and app._pop.game.chest_tier == chest_tier,
+		"Real recognized marked targets produce exactly %d fragments and final chest tier %d" % [fragments, chest_tier])
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	app._round_celebration.set_process(false)
 	var summary: Dictionary = app._pop.game.summary().duplicate(true)
 	check(app.find_child("PlayerAvatar", true, false) == null and app.find_child("PlayerName", true, false) == null,
 		"Voice Pop results are available without identity or profile controls")
 	var saved_result: Dictionary = app._round_result.duplicate(true)
-	check(app._pop.game.phase == "finished" and int(saved_result.chest_count) == chest_count,
-		"Pop finishes and retains its actual %d-chest result before celebration" % chest_count)
+	check(app._pop.game.phase == "finished" and int(saved_result.chest_count) == chest_count
+		and int(saved_result.chest_tier) == chest_tier and int(saved_result.fragment_count) == fragments,
+		"Pop retains its actual fragments and one final chest tier before celebration")
 	if chest_count == 0:
 		check(not app._round_celebration.snapshot().active and app._pop.is_visible_in_tree(),
 			"A zero-chest Pop result skips celebration and immediately presents the complete result")
 		return
 	var view = app._round_celebration
-	check(view.snapshot().active and view.snapshot().automatic and view.snapshot().chest_count == chest_count
+	check(view.snapshot().active and view.snapshot().automatic and view.snapshot().chest_count == 1
+		and view.snapshot().chest_tier == chest_tier
 		and not app._pop.is_visible_in_tree() and app._pop_rewards.has_pending(),
-		"A %d-chest Pop performance covers the saved result and accurately identifies the reward" % chest_count)
+		"The Pop performance presents one final tier-%d chest over the saved result" % chest_tier)
 	var identity: String = view.snapshot().round_id
-	if chest_count == 1:
+	if chest_tier == 1:
 		app.refuse_microphone_stop = true
 		check(not app.new_round(995, false, "", "match") and view.is_active() and view.is_visible_in_tree()
 			and view.current_round_id() == identity and app._mode_id == "pop" and app._pop.game.summary() == summary,
@@ -309,8 +388,9 @@ func check_pop_result(app, chest_count: int) -> void:
 	check(app._pop.is_visible_in_tree() and not app._pop_rewards_shown and app._round_result == saved_result,
 		"Late automatic-performance events cannot bypass the original Pop result action")
 	app._pop.chests_button.pressed.emit()
-	check(app._pop_rewards_shown and app._pop_rewards.snapshot().chest_count == chest_count,
-		"The original Pop result action still opens exactly %d saved chests" % chest_count)
+	check(app._pop_rewards_shown and app._pop_rewards.snapshot().chest_count == 1
+		and app._pop_rewards._cards.size() == 1 and int(app._pop_rewards._cards[0].tier) == chest_tier,
+		"The original Pop result action opens only the saved final-tier chest")
 	app.set_reduced_motion(true)
 	for entry in app._pop_rewards._cards:
 		app._pop_rewards.begin_hold(entry.button)

@@ -73,6 +73,8 @@ func _run() -> void:
 		root.size = dimensions
 		app.size = dimensions
 		app.new_round(21, true)
+		# This fixture exercises an earned chest; chance outcomes have separate coverage.
+		app.model.chest_earned = true
 		await settle()
 		# Internal resets bypass the public New adventure focus handoff.
 		app._default_focus().grab_focus()
