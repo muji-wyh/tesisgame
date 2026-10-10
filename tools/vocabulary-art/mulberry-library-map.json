@@ -1,0 +1,1958 @@
+{
+  "schema": 1,
+  "provider": "Mulberry Symbols",
+  "creator": "Steve Lee; original symbol design project by Garry Paxton",
+  "source": "https://github.com/mulberrysymbols/mulberry-symbols",
+  "revision": "9cbab9f400c5de44e2bc58839cca07294aadb086",
+  "license": "CC-BY-SA-4.0",
+  "status": "Acquired source illustrations reviewed; curation input, not an integration manifest",
+  "sourceDirectory": "EN",
+  "review": "Reviewed at 136-pixel size in six direct-source sheets, two editorial-source sheets, and an alternatives sheet. Rejected misleading exact filenames for plane, pants and pot. Contextual source details retained.",
+  "entries": [
+    {
+      "id": "acorn",
+      "source": "acorn.svg",
+      "intendedSense": "acorn (food)",
+      "sourceSha256": "439f2e0f56d3ecd698d0f404fb1b65ef0d642fee1867f63c6126985f81f8ee40",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "ambulance",
+      "source": "ambulance.svg",
+      "intendedSense": "ambulance (vehicle)",
+      "sourceSha256": "20856340f8192b170d71fb6818e81cee1411f099109278f79910ccca1274c7ba",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "ankle",
+      "source": "ankle.svg",
+      "intendedSense": "ankle (body)",
+      "sourceSha256": "bf6acf2f207369220abe08f6701bc36b3a243f4135939fe8d8e1318c0a9c4fd4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "ant",
+      "source": "ant.svg",
+      "intendedSense": "ant (animal)",
+      "sourceSha256": "38e49d2d659a74c6d09b0384a9cab0e8016c0a50d9bd1c3c156c16938d3b7d00",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "apron",
+      "source": "apron.svg",
+      "intendedSense": "apron (clothing)",
+      "sourceSha256": "06cd0c5cf1f5e47bd676200e11fb4189a4984ee40bdb826cf506334fed395651",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "arm",
+      "source": "arm.svg",
+      "intendedSense": "arm (body)",
+      "sourceSha256": "0725394133f289b1f6da4059be7abf00e84515a3a672f270e4e430478ca18a24",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "artichoke",
+      "source": "artichoke.svg",
+      "intendedSense": "artichoke (food)",
+      "sourceSha256": "6d9b4faaea9904ebb8b3d4469f3c021d6ebc05e98281e2595ea1554082390eab",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "asparagus",
+      "source": "asparagus.svg",
+      "intendedSense": "asparagus (food)",
+      "sourceSha256": "b28a8e50cb20b857cb9fab21b2094cdb970363cd3e0c2dfa394fc4eb1efbb0e7",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "avocado",
+      "source": "avocado.svg",
+      "intendedSense": "avocado (food)",
+      "sourceSha256": "1782f4c2c90b9774ff97ed2ac75fa5f0a7d29eb16fc139a9a3962d3ac96cb0e0",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "backpack",
+      "source": "school_bag.svg",
+      "intendedSense": "backpack (clothing)",
+      "sourceSha256": "ac82b61d64011ea12d76e1e95724836804336d8ae610d0e4f66747468f418210",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "balloon",
+      "source": "balloon.svg",
+      "intendedSense": "balloon (concrete object)",
+      "sourceSha256": "e9cbead9a7a1171eb474bcae67d44dfd351004dcf62ebfcbf214946141057a51",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bat",
+      "source": "bat.svg",
+      "intendedSense": "bat (animal)",
+      "sourceSha256": "550fdf8e099936f69879fadd64478c2a0fe2980a533db2600ae80200bcd767f5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "beach",
+      "source": "beach.svg",
+      "intendedSense": "beach (nature)",
+      "sourceSha256": "4a36d01ff7a93238b4b0d1f1130a32decbaf080e6451d9e5fd101e8cd3805b45",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bear",
+      "source": "bear.svg",
+      "intendedSense": "bear (animal)",
+      "sourceSha256": "eb03b2310c583527185681b33d26436b355e0664a749ed927d15f4b8d5cc6140",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bee",
+      "source": "bee_honey.svg",
+      "intendedSense": "bee (animal)",
+      "sourceSha256": "eacec5279ec82f43708e0a7388a001f2a406af578c464ed35bb3940f6c74fe88",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "beetle",
+      "source": "beetle.svg",
+      "intendedSense": "beetle (animal)",
+      "sourceSha256": "484781188051453eda89a787108540711abb75c81c31e6921886256e96c52123",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bell",
+      "source": "bell.svg",
+      "intendedSense": "bell (instrument)",
+      "sourceSha256": "9943fd49c5ef9cedcb0957bb653b9d3d1477afa3c600d77f2a9566eb93a5b3fa",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "belt",
+      "source": "belt.svg",
+      "intendedSense": "belt (clothing)",
+      "sourceSha256": "4878f50d160a77bb49284928266a05624b2aa6b7de7933f6ae44c0858a4f90b2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "berry",
+      "source": "berry.svg",
+      "intendedSense": "A small fleshy fruit",
+      "sourceSha256": "56e42f9c0b8b7969b24fcf648b21de75214f3e0d1058373ff637ee975d3abcb6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bike",
+      "source": "bicycle.svg",
+      "intendedSense": "bike (vehicle)",
+      "sourceSha256": "957d81220fff8d40a1593078c6765d185ad4051987fb24284030dcfc8358fd0d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "blanket",
+      "source": "blanket.svg",
+      "intendedSense": "blanket (concrete object)",
+      "sourceSha256": "716d872eae5e4f79798d70f0d662d4a0bbdd631f57dbbdd53e9e1cacc97b6f2a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "boat",
+      "source": "rowing_boat.svg",
+      "intendedSense": "A small rowing boat",
+      "sourceSha256": "78784f0c9db5d1563b55dbab1209d084819a03edb09eae83a1b54a0d8d525768",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "boot",
+      "source": "boots.svg",
+      "intendedSense": "boot (clothing)",
+      "sourceSha256": "19e3864a0aac2401dc6dbf34731995f7c9cd3aa7372eaa45d2dca30dd9294bca",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bowl",
+      "source": "bowl.svg",
+      "intendedSense": "bowl (concrete object)",
+      "sourceSha256": "e5aad92f5c137827cea16b072289e7a4fdb10ae6a01b826fa1599226c87e778b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bracelet",
+      "source": "bracelet_1.svg",
+      "intendedSense": "bracelet (clothing)",
+      "sourceSha256": "80dda0ae02a6a7978f91dbeec8a3595cf31e89e2cbe95445afe3e7b8a9ddf66a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "broccoli",
+      "source": "broccoli.svg",
+      "intendedSense": "broccoli (food)",
+      "sourceSha256": "032dfc8348091f8e0fed3d8c46224a7c9ba13011a562ffe38b0ae05520b3652d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "broom",
+      "source": "broom.svg",
+      "intendedSense": "broom (concrete object)",
+      "sourceSha256": "3babe39f355c4c6f972663ffbabb9e30dc482d663b8da130869997960f9232fa",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "brush",
+      "source": "scrubbing_brush.svg",
+      "intendedSense": "A hand brush with bristles used for cleaning",
+      "sourceSha256": "9858a10d5ed5a3116109293b497064eb74f587fb7aceefb737e761bc5ed98c97",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "bucket",
+      "source": "bucket.svg",
+      "intendedSense": "bucket (concrete object)",
+      "sourceSha256": "f560e97d585997abfc681c39ef99a36857a22d102d666eeca8e5a5b9a4939ad5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "butterfly",
+      "source": "butterfly.svg",
+      "intendedSense": "butterfly (animal)",
+      "sourceSha256": "beb32753f44007c4b2de5f8b6096b08d5abe64027dc981cab27abf2406159c0d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cactus",
+      "source": "cactus.svg",
+      "intendedSense": "cactus (nature)",
+      "sourceSha256": "77d95e2c691628e55f5c6c76bddb8f6e455596a661063e463236b3e382974534",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cake",
+      "source": "cake.svg",
+      "intendedSense": "cake (food)",
+      "sourceSha256": "1323db3a71c24f055a8d448018c568adc370abb813ee5ef2aecb654284277708",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "camel",
+      "source": "camel.svg",
+      "intendedSense": "camel (animal)",
+      "sourceSha256": "869837ae03d72d3b2d6ea7b52f39892195d63b2e67a04b449c004f37543d7faa",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "candy",
+      "source": "sweet.svg",
+      "intendedSense": "candy (food)",
+      "sourceSha256": "2322bfdc42c369b3c4d586fab458b2d86a68b6cd9dc35fa8e7332a78e2087be5",
+      "review": "Original source illustration visually inspected in contact sheet",
+      "alreadyUsedBy": [
+        "sweet"
+      ],
+      "reviewNote": "Source also illustrates the adjective sweet. Prefer the curated Fluent candy replacement."
+    },
+    {
+      "id": "canoe",
+      "source": "canoe.svg",
+      "intendedSense": "canoe (vehicle)",
+      "sourceSha256": "de2334d4b4f6f0c698da635a7836e29bbdde1a2576690951a4aaaa308b8bf897",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "carrot",
+      "source": "carrot.svg",
+      "intendedSense": "carrot (food)",
+      "sourceSha256": "d7616b859b133792eb97537dd9f30c4a61df0de453c1fe3d3d3c36c297c39162",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "centipede",
+      "source": "centipede.svg",
+      "intendedSense": "centipede (animal)",
+      "sourceSha256": "1723503743eb74cf226fbd00a823a75db185993f60972323d11fcf38c7397c20",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "chameleon",
+      "source": "chameleon.svg",
+      "intendedSense": "chameleon (animal)",
+      "sourceSha256": "50d470714917af504bc7d7ed091c694c2578ba5434abcdeca30abc684e80ba4d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cheese",
+      "source": "cheese.svg",
+      "intendedSense": "cheese (food)",
+      "sourceSha256": "77f97dcf6b21e33f75b7615fa7a4b2ca2f6f0134975319403b7a2f578d65ca6f",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cherry",
+      "source": "cherry.svg",
+      "intendedSense": "cherry (food)",
+      "sourceSha256": "b04a3d116cce4e25fb3d0dbb309ef257326537dbcb464a9bf518fa225348685d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "chick",
+      "source": "chick.svg",
+      "intendedSense": "chick (animal)",
+      "sourceSha256": "8cb0fe528cbaae5933f67382c9cffd27db03f84fc2d43ee0b5f83a290b3aeec6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "clock",
+      "source": "clock.svg",
+      "intendedSense": "clock (concrete object)",
+      "sourceSha256": "d48fe0e7527409b4f3be5a389b46d4be5e52736516748919f476d26a08328c06",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "coat",
+      "source": "coat.svg",
+      "intendedSense": "coat (clothing)",
+      "sourceSha256": "cc78f21eaa924203ea5f3fa76311f42dbc4a38be3cf93fb130b79afc21b67dca",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "coconut",
+      "source": "coconut.svg",
+      "intendedSense": "coconut (food)",
+      "sourceSha256": "e35951f534de014ab4ffc651f1672a7db26d664194ec415f0e3fe820a1a0b81b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "comb",
+      "source": "comb.svg",
+      "intendedSense": "comb (concrete object)",
+      "sourceSha256": "52cc27d20b08a8bf082e7c788a7e6719ceaad756c6d50da67505dbe59f43bffc",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "comet",
+      "source": "comet.svg",
+      "intendedSense": "comet (nature)",
+      "sourceSha256": "ff1c508fad816046e2edd59bf49a7cc5430468264ea8f740a4e0fb29ea7059e0",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cookie",
+      "source": "biscuit_chocolate_chip.svg",
+      "intendedSense": "cookie (food)",
+      "sourceSha256": "dca7c28201c074a95f7b1237f2a976feb872ce42f16717ad512552d691429859",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "corn",
+      "source": "sweetcorn.svg",
+      "intendedSense": "corn (food)",
+      "sourceSha256": "65d7af187313d84281bf211a372fcab4cf6daf01eac6e733cf1621ef82edaa4e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "crab",
+      "source": "crab.svg",
+      "intendedSense": "crab (animal)",
+      "sourceSha256": "f13bcd19f87f5283febc3072714b68309a528944ae82095b449b441ebe046f48",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "crayons",
+      "source": "crayon.svg",
+      "intendedSense": "Wax crayons for drawing",
+      "sourceSha256": "9fe0ec39e61cf6062c2c0f21342ede75ae0f92e8ea87d49c5e053089c735aa4f",
+      "review": "Original source illustration visually inspected in contact sheet",
+      "reviewNote": "Source depicts one crayon. Use a group of at least three source instances for the plural teaching word."
+    },
+    {
+      "id": "crocodile",
+      "source": "crocodile.svg",
+      "intendedSense": "crocodile (animal)",
+      "sourceSha256": "1a436f8bb80a3952ed5ac58e845efbfc70c759ea17b57d11b155c6cd15089e83",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "crown",
+      "source": "crown.svg",
+      "intendedSense": "Headwear worn by a king or queen",
+      "sourceSha256": "190d794f9ddbd6f3848076c4403c101e216ad2e0c9d4c29a4f10323478164062",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cucumber",
+      "source": "cucumber.svg",
+      "intendedSense": "cucumber (food)",
+      "sourceSha256": "f3d85f50ed89542839e8f5b44e8adcae6e9a3e3e32ce4a8267f72259de067606",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "cymbal",
+      "source": "cymbals_hand.svg",
+      "intendedSense": "cymbal (instrument)",
+      "sourceSha256": "fd72536fdd4eb5a4a64cd79d51f6ecd024a61b79f60a7a3ab15e511abda4a9f3",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "daisy",
+      "source": "daisy.svg",
+      "intendedSense": "daisy (nature)",
+      "sourceSha256": "64d4d174f15a718179c17971a4ff8c4c07fbcf0ee0329f6e941c5959a07512d4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "deer",
+      "source": "deer.svg",
+      "intendedSense": "deer (animal)",
+      "sourceSha256": "f728c75c2f96f96077f0b7b04517b439104b849e2c71f47fa5617fb439471632",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "dolphin",
+      "source": "dolphin.svg",
+      "intendedSense": "dolphin (animal)",
+      "sourceSha256": "53c370ec2a85710774d890414b63f5fb384458723e32973dd11fc9743995cc5e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "donkey",
+      "source": "donkey.svg",
+      "intendedSense": "donkey (animal)",
+      "sourceSha256": "bbd22766de205ebc98cb320d05838d0b0aacba8c3f18bf1b3ac4b58924eb151c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "door",
+      "source": "door.svg",
+      "intendedSense": "door (concrete object)",
+      "sourceSha256": "76333585d58e41b0ba86439f106851a8cca5358ff3b5f5abbd4f770b5c87611a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "dragonfly",
+      "source": "dragonfly.svg",
+      "intendedSense": "dragonfly (animal)",
+      "sourceSha256": "9c0da2b073b1330a80cc695ad8190dfe3ae23349473c60375b61107a1ce95d3a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "dress",
+      "source": "dress.svg",
+      "intendedSense": "dress (clothing)",
+      "sourceSha256": "5598c63a0b676d9df2bc3f376032d5b6e10b3ed62041ae2f2b10a38200489a13",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "drum",
+      "source": "drum.svg",
+      "intendedSense": "drum (instrument)",
+      "sourceSha256": "a61126999ff46d61fc489649d91a81ed9a10a16972caa0cd41dbaac107110ee4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "earmuffs",
+      "source": "ear_muffs.svg",
+      "intendedSense": "earmuffs (clothing)",
+      "sourceSha256": "f9f7af1c5c770563c394c7c2760e5372cba7a0b4ef18958c8d927f57cf8981b2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "earth",
+      "source": "Earth.svg",
+      "intendedSense": "The planet Earth",
+      "sourceSha256": "e073a70a4145a00dd62bd5e14fa7fb23319265be5ecb259c5bee98ee5e6f4547",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "eggplant",
+      "source": "aubergine.svg",
+      "intendedSense": "eggplant (food)",
+      "sourceSha256": "4deae21ce44f23dc703f31719335c7a3f9a50f7938a7b4c2ee159c39e494b1f8",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "elbow",
+      "source": "elbow.svg",
+      "intendedSense": "elbow (body)",
+      "sourceSha256": "fa6bd10885a95b598a3a8d0e789f20f443890a6c7119696fe7f378583ad017d5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "elephant",
+      "source": "elephant.svg",
+      "intendedSense": "elephant (animal)",
+      "sourceSha256": "76f813ceed5f912c08d9d212baf203482ff63e54e99ade082fe43c317cf6aefa",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "ferry",
+      "source": "ferry.svg",
+      "intendedSense": "ferry (vehicle)",
+      "sourceSha256": "0cfa5f7ce62f975d3ddb60722a41653aa7e05e18076854b945bf413725b28ae5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "finger",
+      "source": "finger.svg",
+      "intendedSense": "finger (body)",
+      "sourceSha256": "03bf6eeba12fc9af68cc02987933bc8250ab84913a4e239ca4f1312b8f08cdd1",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "flamingo",
+      "source": "flamingo.svg",
+      "intendedSense": "flamingo (animal)",
+      "sourceSha256": "3b6ba567a7c4bf7f4937df8c879eb93bb3650980434d4007bd5625eae394fff6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "flower",
+      "source": "flower.svg",
+      "intendedSense": "flower (nature)",
+      "sourceSha256": "2fd8ff21f145ef3354c3310d52b15a56cb7f29ac270522315c0a2d005a6b17a7",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "flute",
+      "source": "flute.svg",
+      "intendedSense": "flute (instrument)",
+      "sourceSha256": "ba82eba11a870834fffdd35ae4090badd62d0d4f5c6c1c0c893665b80d723a75",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "fork",
+      "source": "fork.svg",
+      "intendedSense": "An eating utensil",
+      "sourceSha256": "eb4a94dea80d5d60af7414f4b5772acd9703ab622355bfef8e32e8d8ea694604",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "fox",
+      "source": "fox.svg",
+      "intendedSense": "fox (animal)",
+      "sourceSha256": "3d619d46ce76ddb12696e24d82a30ca7f251117d4abf30157948fca64b0a27a9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "frog",
+      "source": "frog.svg",
+      "intendedSense": "frog (animal)",
+      "sourceSha256": "96bb6dd2c63984ca04d0818493c32c5a0a6e9e846d38441acaef3e3c6c5cb96c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "giraffe",
+      "source": "giraffe.svg",
+      "intendedSense": "giraffe (animal)",
+      "sourceSha256": "28b1cbfe26c92cccc318e10de1e954c5793b409fc2d62f783da1dd5762504c55",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "glove",
+      "source": "gloves.svg",
+      "intendedSense": "glove (clothing)",
+      "sourceSha256": "e4b2af0e1bc5f3684e2b117d15a9d6d2367ca09b0d35e80c85042cc5404b7bf4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "grape",
+      "source": "grapes.svg",
+      "intendedSense": "The grape fruit shown in a bunch",
+      "sourceSha256": "fbe0327cb108a7ae6aab1415c027f869b47b1815126a2c0dbfcf6b2533a363de",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "grapefruit",
+      "source": "grapefruit.svg",
+      "intendedSense": "grapefruit (food)",
+      "sourceSha256": "aeac98d0bf7c42a9ff21190d264f12ea0a152848a80f0b98f8af5b206f148253",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "grass",
+      "source": "grass.svg",
+      "intendedSense": "grass (nature)",
+      "sourceSha256": "38e5bd05c9566a23efa5a585399d42340b459822e8ca8ec51436f717f58f15fb",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "guitar",
+      "source": "guitar.svg",
+      "intendedSense": "guitar (instrument)",
+      "sourceSha256": "af95538a4c9c965c3bf6cd52214798574d8eb6ca320e57bf8dcd5e3d26fc484a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "hazelnut",
+      "source": "hazelnut.svg",
+      "intendedSense": "hazelnut (food)",
+      "sourceSha256": "8bf8b7e114b500fe2b9754a84914ded8c972b2e2a42ed2e1d2fe307a403feaec",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "head",
+      "source": "head.svg",
+      "intendedSense": "The human head",
+      "sourceSha256": "30578ec5450dd36263b8f6d3d36bf71338e7f5f2ea15918639cd849672586bc2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "hedgehog",
+      "source": "hedgehog.svg",
+      "intendedSense": "hedgehog (animal)",
+      "sourceSha256": "397a15a959d0796b1eb706a4a45889e4583b6998b9f3e86f7a72596222674ef5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "helicopter",
+      "source": "helicopter.svg",
+      "intendedSense": "helicopter (vehicle)",
+      "sourceSha256": "34adc48191a9425f784a91e40d4da7b40be183d26476acecbd232e1a3714636e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "helmet",
+      "source": "helmet.svg",
+      "intendedSense": "Protective headgear for cycling",
+      "sourceSha256": "687a12457d1e90510ec9f3e2f9d92b0e0391bc3e06f300ff2d3a0c69e72e92e4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "hen",
+      "source": "chicken_live.svg",
+      "intendedSense": "hen (animal)",
+      "sourceSha256": "4e2792c3a03ce644c88be23a633d7346faa5b548028525364d8ac7ce0059fd0a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "honey",
+      "source": "honey.svg",
+      "intendedSense": "honey (food)",
+      "sourceSha256": "8a7ec494271d42e9f1e5f7480ddd3c737ae6e1e8cd54a69814fbdfd3a6347888",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "horse",
+      "source": "horse.svg",
+      "intendedSense": "horse (animal)",
+      "sourceSha256": "0c128095157a5927686145d46a6c4b1c0cb3844d307e4cb8a1aca3095e24e235",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "jacket",
+      "source": "jacket.svg",
+      "intendedSense": "jacket (clothing)",
+      "sourceSha256": "dd5137d9494746ef42f418300ea4f5e37a786985d154dcb261cc6aa034906ebc",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "jam",
+      "source": "jam.svg",
+      "intendedSense": "jam (food)",
+      "sourceSha256": "f7bdb2a5b816cfc1aa5b03a04a6e038ccea59465bd93a86ce0f50794cf862282",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "jellyfish",
+      "source": "jellyfish.svg",
+      "intendedSense": "jellyfish (animal)",
+      "sourceSha256": "9991de3b7f511c2be357d2d92d5abce515cda7ff4bb6f8324701f343b4633e84",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "jug",
+      "source": "measuring_jug.svg",
+      "intendedSense": "jug (concrete object)",
+      "sourceSha256": "be8013bba93d669d5a4c69e28bc56840ca8efa07ac1c6d7767955eab323369ff",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "juice",
+      "source": "orange_juice.svg",
+      "intendedSense": "Fruit juice in a drinking glass",
+      "sourceSha256": "25653ff56dd9139679110a24925761ed856fbd3d075af59222c20c5e8477c844",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "kangaroo",
+      "source": "kangaroo.svg",
+      "intendedSense": "kangaroo (animal)",
+      "sourceSha256": "a036d4ddc32ee02b5479e97b920f2d24090f46e425080b3fb73d03d2f16b43a2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "kettle",
+      "source": "kettle.svg",
+      "intendedSense": "kettle (concrete object)",
+      "sourceSha256": "fa14dc8c1a44bc807b2912a38a3c7099ecad353ae137f62730f0cabb2ab0cddb",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "key",
+      "source": "key_1.svg",
+      "intendedSense": "key (concrete object)",
+      "sourceSha256": "ee9ce1318407b09b781311710510ccbd9e876342e4aadee923794bd21e156cde",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "kite",
+      "source": "kite.svg",
+      "intendedSense": "kite (concrete object)",
+      "sourceSha256": "128afa78e9e94638d30844751204f1cfaf927ee223756c2c5dd41092351d0ac7",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "knee",
+      "source": "knee.svg",
+      "intendedSense": "knee (body)",
+      "sourceSha256": "1171e4d31888398f4bac56bc93c2a82dfb55ee02885c4f68a46571df18095749",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "koala",
+      "source": "koala.svg",
+      "intendedSense": "koala (animal)",
+      "sourceSha256": "9a147e7f324c479ec578c5d35b5e3d740a288c7880aff13cb506f61ccf03e873",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "lamp",
+      "source": "lamp.svg",
+      "intendedSense": "lamp (concrete object)",
+      "sourceSha256": "9f76f65389efcaa605f99063dead86560680cbc50a971ec5329a7de8e3d83dd9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "leaf",
+      "source": "leaf.svg",
+      "intendedSense": "leaf (food)",
+      "sourceSha256": "582e3175f832edebbc735aea284338ae0c8e19260a2a37836e5ff378fd86acf2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "leg",
+      "source": "leg.svg",
+      "intendedSense": "leg (body)",
+      "sourceSha256": "a21828208fb060896f7ab6f0dbadf79c4365f8d84e910bc6e60d40c3621e7978",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "lemon",
+      "source": "lemon.svg",
+      "intendedSense": "lemon (food)",
+      "sourceSha256": "a0f80f46aafb039cdc5f5c48578b36dbf65c7567e52453015f952961de1e8ec3",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "lettuce",
+      "source": "lettuce.svg",
+      "intendedSense": "lettuce (food)",
+      "sourceSha256": "2a79aa342203f0653c50a38367075dc79590ccd13bf1edfab7ff4498bf3654a9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "lion",
+      "source": "lion.svg",
+      "intendedSense": "lion (animal)",
+      "sourceSha256": "cef27daee4d47b4ac2d5b0b65daf360015e4079a44684160dffaf64c603c3702",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mango",
+      "source": "mango.svg",
+      "intendedSense": "mango (food)",
+      "sourceSha256": "906b605d05d49df81a4e4c927ef344b36b18b775b198f4983a72a1ec6a0f2cd0",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "marble",
+      "source": "marbles.svg",
+      "intendedSense": "marble (concrete object)",
+      "sourceSha256": "86ed2ef16384c3de7c44e09f930e8be47a28768271501b802a6b8402b77dfbf8",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "melon",
+      "source": "melon.svg",
+      "intendedSense": "melon (food)",
+      "sourceSha256": "bceae0b791bf90cca5efe6a458f595efdabcaa725d7467dfb54d9d73cd40d87a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "microphone",
+      "source": "microphone.svg",
+      "intendedSense": "microphone (instrument)",
+      "sourceSha256": "37fd57e58ddca0b4386f3fccbe19ad33caf9149965f6f737cad822f61cfb55cf",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "microscope",
+      "source": "microscope.svg",
+      "intendedSense": "microscope (concrete object)",
+      "sourceSha256": "426d74ec341064a609d0e5d46e73999536574f231a285cd35bc413d20cba8127",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mirror",
+      "source": "mirror.svg",
+      "intendedSense": "mirror (concrete object)",
+      "sourceSha256": "5e1b6791177ae85f64dffcc04a6d65205bb314455a10d15ee80f478071e1937f",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mitten",
+      "source": "mittens.svg",
+      "intendedSense": "mitten (clothing)",
+      "sourceSha256": "798b8b28b821200130d57ab76482fb55680d168e3425b35246280a7dd4eee056",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "moon",
+      "source": "Moon.svg",
+      "intendedSense": "The Moon",
+      "sourceSha256": "425d1761862d6a94244e004ede094643bb98965b9a59198c796753dbeb5dc93c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mop",
+      "source": "mop.svg",
+      "intendedSense": "mop (concrete object)",
+      "sourceSha256": "88d0bb91dd55ee345962248ee70e609ed7f968e5cb0ba3f3a80c00eb3af9bfad",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mountain",
+      "source": "mountains.svg",
+      "intendedSense": "mountain (nature)",
+      "sourceSha256": "7895fa271cb7ef50280e2243074561efb59c195b3feb482a48d0969b21c2683c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mouse",
+      "source": "mouse.svg",
+      "intendedSense": "mouse (animal)",
+      "sourceSha256": "cb7ff098374e4c6676670ca8879e8095ed32786e9632079fdd138d8fa1e7248b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "mushroom",
+      "source": "mushroom.svg",
+      "intendedSense": "mushroom (food)",
+      "sourceSha256": "97defe600c3eee38e15b93257b007c9c237ac8ae2b8b867ef13047ad1ae81199",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "neck",
+      "source": "neck.svg",
+      "intendedSense": "neck (body)",
+      "sourceSha256": "a827b1b53729e55cd887dd7be06150d47b3aed8a8d3394aa10ac50a201e65d03",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "necklace",
+      "source": "necklace.svg",
+      "intendedSense": "necklace (clothing)",
+      "sourceSha256": "7142df4281550ca5a1fd9f65831c20890bceb91ad8d9739a2992f9c76ffe4c88",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "nut",
+      "source": "nuts.svg",
+      "intendedSense": "Edible nuts in and out of their shells",
+      "sourceSha256": "bba9ce6855b1c6c9f05d493e1878ac27eded854bf017a107adb43e1ab83a93e9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "onion",
+      "source": "onion.svg",
+      "intendedSense": "onion (food)",
+      "sourceSha256": "d6a5434e91a1a3c59537473071da29a737e5bd914200d6e23771a72dd3157f4a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "orange",
+      "source": "orange.svg",
+      "intendedSense": "orange (food)",
+      "sourceSha256": "6c800b08b66a9ca51cf0d05110f3da9ac9e757d5645f40c7c29824fe7edbb70a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "owl",
+      "source": "owl.svg",
+      "intendedSense": "owl (animal)",
+      "sourceSha256": "98d61069cbcf1acc305169c48b630435402f04c7ee565d7b1550053a487d9785",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pan",
+      "source": "frying_pan.svg",
+      "intendedSense": "pan (concrete object)",
+      "sourceSha256": "6da0a80a500f1c4b914fb771971c5ee7fa24385b32f53536cf79ad22917047b6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pancake",
+      "source": "pancakes.svg",
+      "intendedSense": "A round pancake served as food",
+      "sourceSha256": "b7061139441792a554e026d50616c921427f0a1e75d8f87668b35f6ea4424eea",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "panda",
+      "source": "panda.svg",
+      "intendedSense": "panda (animal)",
+      "sourceSha256": "422d76900647f1befa3d040a3fbb346ae0b8dfb7821ad44d6f7a0d374dfa9aa5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pants",
+      "source": "trousers.svg",
+      "intendedSense": "Long trousers covering both legs, not underwear",
+      "sourceSha256": "3c4a28f606263a7594b01be9433e961cb2379e919038780186c5174b242d270c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "parrot",
+      "source": "parrot.svg",
+      "intendedSense": "parrot (animal)",
+      "sourceSha256": "d2d7a95e9855ec5fdf669954e229cffb4e55e16db53199febe746dd5d4ba8319",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pasta",
+      "source": "pasta.svg",
+      "intendedSense": "pasta (food)",
+      "sourceSha256": "ed4acb655068995babe0eee9e8047e7aa5e963903db43a85c87c8c0d640e3340",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "peach",
+      "source": "peach.svg",
+      "intendedSense": "peach (food)",
+      "sourceSha256": "d36d0955a222acbb6d5cb49e6e74a1e086892ecdc9f15fcc0e380fa97d396548",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "peacock",
+      "source": "peacock.svg",
+      "intendedSense": "peacock (animal)",
+      "sourceSha256": "821bef8dc962ac16462e7d38806751bcdf00756cdbe3f79d83e10ae55a483dc9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pear",
+      "source": "pear.svg",
+      "intendedSense": "pear (food)",
+      "sourceSha256": "2f9afa3532f16e4d35a452f825ae4f3000e3577809197b3aff92204cd27452a3",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "peas",
+      "source": "peas.svg",
+      "intendedSense": "peas (food)",
+      "sourceSha256": "2dd80013f92f7e53215f04454e812d3fb019a9a49cdc6eb4eec2f058187ec960",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pebble",
+      "source": "stone.svg",
+      "intendedSense": "A small stone",
+      "sourceSha256": "bb76b980700cb1d6984f2aaef9304bbc4612574a736019dbf58f5ff46dc16d40",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pelican",
+      "source": "pelican.svg",
+      "intendedSense": "pelican (animal)",
+      "sourceSha256": "b5b9ab9619cc7c97f8b3ec0890cb11f2984fcf009e7710420e6f2fd5d4e258b4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pen",
+      "source": "pen.svg",
+      "intendedSense": "pen (concrete object)",
+      "sourceSha256": "abea206e4653e7a9f3a1a687f6b12c40a1b857a854d1abcd3fc9cfd5a8f3903b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pencil",
+      "source": "pencil.svg",
+      "intendedSense": "pencil (concrete object)",
+      "sourceSha256": "0bc6f6003ddf22aee6633e7a4fe8ca01f0a81bd05dfa5e76b68db280de25fb79",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "penguin",
+      "source": "penguin.svg",
+      "intendedSense": "penguin (animal)",
+      "sourceSha256": "e585c9e7d7027d90e9707d1c0fc75248edc0f10cb2c823546d211153cfa58b21",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "phone",
+      "source": "telephone_handset.svg",
+      "intendedSense": "phone (concrete object)",
+      "sourceSha256": "746a5b5eb16c23c7a6f8cfae1adfec8ad0e2a0d449509eb2ae3d538532fea89b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "piano",
+      "source": "piano.svg",
+      "intendedSense": "An upright acoustic piano",
+      "sourceSha256": "7fe50ab7d6cbda8f53a14dba09048423eac881cdc56cd07b3f51b315094351fe",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pineapple",
+      "source": "pineapple.svg",
+      "intendedSense": "pineapple (food)",
+      "sourceSha256": "e63d6d880e3cba5adfdfb2883619606641502314938ffe1b5d6065c4c6c038c5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pinecone",
+      "source": "pine_cone.svg",
+      "intendedSense": "pinecone (nature)",
+      "sourceSha256": "cf194b28dac33089a9eaf15ab25d457c414292808ba36fa2e35014d176474d2c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pistachio",
+      "source": "pistachios.svg",
+      "intendedSense": "pistachio (food)",
+      "sourceSha256": "325dd45be1302e8540123814381b086b7033649437e44df298de2c67427d2877",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "plane",
+      "source": "aeroplane.svg",
+      "intendedSense": "An aircraft that flies, not a woodworking tool",
+      "sourceSha256": "a1084212e94e79a64f7344b1206af669ed87b2528af78d3657b4982e3110a7a1",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "planet",
+      "source": "Saturn.svg",
+      "intendedSense": "planet (nature)",
+      "sourceSha256": "0a1757b708157152822074d15a6a06752cc59f0778b0c7db26fd4c84ea2943ea",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "plate",
+      "source": "plate.svg",
+      "intendedSense": "plate (concrete object)",
+      "sourceSha256": "8a30d88c040c6a16488e99b741c8263dc6780324c6ed051e7c4802d7ff79f4ee",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "plum",
+      "source": "plum.svg",
+      "intendedSense": "plum (food)",
+      "sourceSha256": "7619aea342d2414e095f3ac813b73b4d365ba764c003f8e385ff8eff6a7cbc12",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pond",
+      "source": "pond.svg",
+      "intendedSense": "pond (nature)",
+      "sourceSha256": "5e8fcd6bcc0a62221c3c8e8113a8263b3b06a61211f5d06cc9ac93e2ab3d08a7",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "porcupine",
+      "source": "porcupine.svg",
+      "intendedSense": "porcupine (animal)",
+      "sourceSha256": "5dca0c78d51a898780d6c79fa4db1963178cd299cf6c5aacf024853923ce3c19",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pot",
+      "source": "saucepan.svg",
+      "intendedSense": "A deep cooking vessel",
+      "sourceSha256": "2b05b642a0782670c40d7bfb2d0363e0aea305d31d6fcfb9b5c8a08a12dde4f0",
+      "review": "Original source illustration visually inspected in contact sheet",
+      "alreadyUsedBy": [
+        "saucepan"
+      ],
+      "reviewNote": "Source also illustrates saucepan. Prefer the acquired Kenney cooking-pot mesh to preserve distinct pictures."
+    },
+    {
+      "id": "potato",
+      "source": "potato.svg",
+      "intendedSense": "potato (food)",
+      "sourceSha256": "c52db04d81de9058f8392f26e0daa62c7a20846b80951e7a638832828347020c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pretzel",
+      "source": "pretzel.svg",
+      "intendedSense": "pretzel (food)",
+      "sourceSha256": "9ba3a3019581abefed914979ceb8a90e20ce04a4e0b2048c76b11dd9bf83b458",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "pumpkin",
+      "source": "pumpkin.svg",
+      "intendedSense": "pumpkin (food)",
+      "sourceSha256": "a393264763915467889a9a74bfdd7fd28c22ade68536601add7952f076089c8b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "puzzle",
+      "source": "jigsaw_puzzle.svg",
+      "intendedSense": "puzzle (concrete object)",
+      "sourceSha256": "6cd995927ba7361725e4099e83320678e9c8c583128f7cbd24b5f934c8c05230",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rabbit",
+      "source": "rabbit.svg",
+      "intendedSense": "rabbit (animal)",
+      "sourceSha256": "da26d87a2aacb4a2105aeb859bdd785434f3f5e5144da1135cd437e6d543a709",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "radish",
+      "source": "radish.svg",
+      "intendedSense": "radish (food)",
+      "sourceSha256": "575e48da45cf539e066d27ebec98c3e701fdc15d57ab2ba5074577e055dc7da0",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rain",
+      "source": "rain.svg",
+      "intendedSense": "rain (nature)",
+      "sourceSha256": "7a9d872f398a50fafd5a067e4aa2c78dc81e904921dc2c6aa45b6208006729f8",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rainbow",
+      "source": "rainbow.svg",
+      "intendedSense": "rainbow (nature)",
+      "sourceSha256": "c78b4ddf844d17f59a9b0ef373aa1e00fc0f8407d97641c868de79c71c99a59a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rhinoceros",
+      "source": "rhinoceros.svg",
+      "intendedSense": "rhinoceros (animal)",
+      "sourceSha256": "a4714d7e3b7808704e9399997476b273ad734628588e2e0be9121ed37c61a7ad",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rice",
+      "source": "rice.svg",
+      "intendedSense": "rice (food)",
+      "sourceSha256": "85634d0d14bebd21325fcf7cc2c39af82577943dca21be50eaa93a051dc3b744",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "ring",
+      "source": "ring.svg",
+      "intendedSense": "Jewelry worn on a finger",
+      "sourceSha256": "16d954b150a119b433f99cbd5ce6305aa7529fd9427dad72f1cee044233158f4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rocket",
+      "source": "rocket.svg",
+      "intendedSense": "A vehicle launched into space",
+      "sourceSha256": "cc45f41525fda623f544f4c608822268a4d18aeb92305c8bf02aad3a08f62736",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "root",
+      "source": "roots.svg",
+      "intendedSense": "The underground roots of a plant",
+      "sourceSha256": "cb021dfc00fd38e14512206da2b6554d22027bfb4e64693db636f125a0266609",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rose",
+      "source": "rose.svg",
+      "intendedSense": "rose (nature)",
+      "sourceSha256": "04ddacd5090202493968a91269990ab56646ba5e3fbd3d83df4bfe4cc4949c63",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "rug",
+      "source": "rug.svg",
+      "intendedSense": "rug (concrete object)",
+      "sourceSha256": "ca99abeabd13a6e3c6308280304be635e0bfc95852abe3bf99a2694041f9f9fb",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sailboat",
+      "source": "boat.svg",
+      "intendedSense": "A boat propelled by a sail",
+      "sourceSha256": "86cee56d97ed112a7e107a4a6ce2e571ed9547a7757e7c3ea5af1040959edf36",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sandwich",
+      "source": "sandwich.svg",
+      "intendedSense": "sandwich (food)",
+      "sourceSha256": "f4abdbcaf757994cfc37e4eabd8afaeda7be5d7c458e749735bd8475f49c9b14",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "satellite",
+      "source": "satellite.svg",
+      "intendedSense": "satellite (concrete object)",
+      "sourceSha256": "733401eacb197a864716f3536023fda1b8bebebc9bfa85f1e1852aaf1c61eeb1",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "scarf",
+      "source": "scarf.svg",
+      "intendedSense": "scarf (clothing)",
+      "sourceSha256": "f5f040678f79d9d155cac48cee354a4eb28b4cab60b8bab9d60c2d93be21f694",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "seahorse",
+      "source": "seahorse.svg",
+      "intendedSense": "seahorse (animal)",
+      "sourceSha256": "3a82d8e82cfe78ea7ddd8d3750ade7f680dc4cab77b177644440eb85f42489f4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "seal",
+      "source": "seal.svg",
+      "intendedSense": "seal (animal)",
+      "sourceSha256": "bec5c9246c46033d1a0e297b94052fbe23a1f9bd22d4e9a76d758bf83419e1ba",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "seed",
+      "source": "seeds.svg",
+      "intendedSense": "Plant seeds ready for growing",
+      "sourceSha256": "05cb18c4bb89938a9a0536552b9c216b9d1a80cd6e7ac8988079c6d87a12acfd",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "seesaw",
+      "source": "see_saw.svg",
+      "intendedSense": "seesaw (concrete object)",
+      "sourceSha256": "6aebade0249a88f32ed196315a0aff6a284fa9de5230957f7a3c10e8b4f789b2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sheep",
+      "source": "sheep.svg",
+      "intendedSense": "sheep (animal)",
+      "sourceSha256": "7b01c0961058e522b6d3b8b1d0be918ddbdcace2a76770f7fae1b31f321c8545",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "shell",
+      "source": "shells.svg",
+      "intendedSense": "An animal shell found by the sea",
+      "sourceSha256": "9d442c7bc86a3492d8a1c1f47ad7b527562c84d7ca1bc4896b61e19424be434e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "shorts",
+      "source": "shorts.svg",
+      "intendedSense": "shorts (clothing)",
+      "sourceSha256": "8c64537de54fdbbb686c27d33f96288fb498d27c29dd48715b17af76075ee10b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "skateboard",
+      "source": "skateboard.svg",
+      "intendedSense": "skateboard (vehicle)",
+      "sourceSha256": "b063042047a0d7568d1ac4b28f9cc0bc66cd4f19fe25556b437860e434a9ad5d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "skirt",
+      "source": "skirt.svg",
+      "intendedSense": "skirt (clothing)",
+      "sourceSha256": "71483518946d72a22de784dd19688ef70b835d564362edb427d22e82aa0686a7",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sled",
+      "source": "sledge.svg",
+      "intendedSense": "sled (vehicle)",
+      "sourceSha256": "1712217bdba7f2f50e3efc5d20080a4480db739e3c4f687d25e20e7626084abe",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "slide",
+      "source": "slide.svg",
+      "intendedSense": "slide (concrete object)",
+      "sourceSha256": "f316093da4f01e0339a5305b22a734536451add1064c8180e6751e8e6e6730e9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "slippers",
+      "source": "slippers.svg",
+      "intendedSense": "slippers (clothing)",
+      "sourceSha256": "a8b8f537461017327e42f2e5b5656177448bbb301442a71cb3defc78ce1a041c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "snail",
+      "source": "snail.svg",
+      "intendedSense": "snail (animal)",
+      "sourceSha256": "47b3a8fa18b428f02a88afd7abbba7cfcd4dd9728dbf7a826c64b64aa3b73650",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "snake",
+      "source": "snake.svg",
+      "intendedSense": "snake (animal)",
+      "sourceSha256": "f072d6b1df8b77c2726de6865ae10b51cfa9d07d281e127067dc7e9a38338ab9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "snow",
+      "source": "snow.svg",
+      "intendedSense": "snow (nature)",
+      "sourceSha256": "2b2fd62df67911a73c24d968ffd080948edbf9d7257cda6b1da09e676749853e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "soap",
+      "source": "soap.svg",
+      "intendedSense": "soap (concrete object)",
+      "sourceSha256": "f8b52eca86e395a658c39c789f849681c341f0697c712ee4120df45ff56ba459",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sock",
+      "source": "socks.svg",
+      "intendedSense": "sock (clothing)",
+      "sourceSha256": "f59d69813a294e1d8719f45593bc68b43a8c9ca0d280454af9cea8ab04d87cc5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sofa",
+      "source": "settee_1.svg",
+      "intendedSense": "sofa (concrete object)",
+      "sourceSha256": "fcd0a0ecca95c9c3b3cb51d7336e7ba5de88c851d5e87b1fdc1b651f7a6425f9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "soup",
+      "source": "soup.svg",
+      "intendedSense": "soup (food)",
+      "sourceSha256": "46c6bd0b65f6f3dbfe3fe1f78402c9a8af0963edc2f8b7532b89cde32a06e90b",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "spaceship",
+      "source": "spaceship.svg",
+      "intendedSense": "spaceship (vehicle)",
+      "sourceSha256": "b8355de288bf0f7b8c025ba14f23798dc9f7b5752732422444f7c0a3464dba8d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "spider",
+      "source": "spider.svg",
+      "intendedSense": "spider (animal)",
+      "sourceSha256": "b10f5b681cd79a6318648a15637054f6a51c424f5ea45f306c749cc89a37b071",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "squirrel",
+      "source": "squirrel_1a.svg",
+      "intendedSense": "squirrel (animal)",
+      "sourceSha256": "b7c4f2481aa50ceacaf848ce895bf31e15235aa7a8b5e3c57c3e98070f295535",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "star",
+      "source": "star.svg",
+      "intendedSense": "A star in the sky",
+      "sourceSha256": "d558c089e270a2d0140f2c0a147349dd13b6be04bf29704e5a1220705c63fab4",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "starfish",
+      "source": "starfish.svg",
+      "intendedSense": "starfish (animal)",
+      "sourceSha256": "f9c9ef6b820e01fb2afbde93c469db7314c5227ca42bba0a27858118056d21c2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "strawberry",
+      "source": "strawberry.svg",
+      "intendedSense": "strawberry (food)",
+      "sourceSha256": "7bc53c5fd4d61ca8eee89b0f1f43ce0fd61da1782dc09db1373ed871f28375ec",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sunglasses",
+      "source": "sunglasses.svg",
+      "intendedSense": "sunglasses (clothing)",
+      "sourceSha256": "3d63d3b8ac8d902f53b0556a2a15a43264546e2fa608793d51ee135af0c83887",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "sweater",
+      "source": "jumper.svg",
+      "intendedSense": "sweater (clothing)",
+      "sourceSha256": "3e57bd8de83d03436449a28e2bf0f8414dc6762b54a25b27e4e30e2be88c8674",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "swing",
+      "source": "swing.svg",
+      "intendedSense": "swing (concrete object)",
+      "sourceSha256": "a7ecf396d3bbc0172d17a251b8340d2e3e971b1271acfd0f229d0bb08d26aa51",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "table",
+      "source": "table.svg",
+      "intendedSense": "table (concrete object)",
+      "sourceSha256": "6160e186796b11c42c5548b57793495ccb2330a031ae6c708bf007cef3ec430d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "taxi",
+      "source": "taxi.svg",
+      "intendedSense": "taxi (vehicle)",
+      "sourceSha256": "39733e5d2bdbdb874f506b9b3fb23d1297d96a0ed5091355000d13d488323d23",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "teapot",
+      "source": "teapot.svg",
+      "intendedSense": "teapot (concrete object)",
+      "sourceSha256": "1c063bdae95c76b529a7abacd7663660a710e924a0178a8dc37963479ed29849",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "thumb",
+      "source": "thumb.svg",
+      "intendedSense": "thumb (body)",
+      "sourceSha256": "6468b77ad6de1240314deb9b6f60b482802ce50d0af5a64401721b6a61fb746f",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tie",
+      "source": "tie.svg",
+      "intendedSense": "tie (clothing)",
+      "sourceSha256": "e5c22c1511769d6a293da9197b39dfc3f6486e77a87c376ff6552aca4e246f1e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tiger",
+      "source": "tiger.svg",
+      "intendedSense": "tiger (animal)",
+      "sourceSha256": "1e6c094b21749de42a10d91f6f56ba3797fdb76adcc3ff9ae0cfd6689e67a997",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "toaster",
+      "source": "toaster.svg",
+      "intendedSense": "toaster (concrete object)",
+      "sourceSha256": "a0d3b02c4f71ffcc36474aaecd3683d9ff85c7bea3ab76148eca1da0f60654a6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tomato",
+      "source": "tomato.svg",
+      "intendedSense": "tomato (food)",
+      "sourceSha256": "71145e175ee45ba5cb937555f3b0b6a0bc2fbdbacc8df01cf7377b96cd5dde34",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tooth",
+      "source": "tooth.svg",
+      "intendedSense": "tooth (body)",
+      "sourceSha256": "be80656955b26be65702083a61a1999ac740a4e0f770a0f4e108b4080530826a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "towel",
+      "source": "towel.svg",
+      "intendedSense": "towel (concrete object)",
+      "sourceSha256": "dba37b6c4513844f0f8adc2b1e2050165961df441446932c3398e59b749e94a5",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tractor",
+      "source": "tractor.svg",
+      "intendedSense": "tractor (vehicle)",
+      "sourceSha256": "88ec232dee2dc7b727c0cc037ba7c3d9a01cabd79b83e5fb07d304fd0c73093d",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "train",
+      "source": "train.svg",
+      "intendedSense": "train (vehicle)",
+      "sourceSha256": "b6bc59a72e06e1e57fd70512d821194a3a1fa2cf28c08a647d65faf44477f218",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "truck",
+      "source": "lorry.svg",
+      "intendedSense": "truck (vehicle)",
+      "sourceSha256": "7de20665d275e6eecc687356d2fbaf5a4d11b5b0a2f15e8712c2dc9194127a6c",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "tulip",
+      "source": "tulip.svg",
+      "intendedSense": "tulip (nature)",
+      "sourceSha256": "dde0f427e20c25ae73d249ce236925255512de9bb0b6e8dabf96efd7566ca252",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "turtle",
+      "source": "turtle.svg",
+      "intendedSense": "turtle (animal)",
+      "sourceSha256": "faad1a6f76d3a18e21de59590fdb5b5ada651c6568af6088c11b3627d6e0534e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "van",
+      "source": "van.svg",
+      "intendedSense": "van (vehicle)",
+      "sourceSha256": "f3e41aa7def04be196c3299f2f3ca0ecdfe40dd55804fb5f9687bb33df4189c6",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "vest",
+      "source": "vest.svg",
+      "intendedSense": "A sleeveless undershirt",
+      "sourceSha256": "d2b7d7b014514e0696a473814bbe5fc8c9168df5ec0dbd6a66cfb17a682f5c0a",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "watch",
+      "source": "watch.svg",
+      "intendedSense": "watch (clothing)",
+      "sourceSha256": "b781b557cc0bd7b6cb8dc088de5344e88bde4c13e3866da2839153ca2b93e4b2",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "watermelon",
+      "source": "watermelon.svg",
+      "intendedSense": "watermelon (food)",
+      "sourceSha256": "73ba6164f15833f237315a402c92e84202e0d671f91accf77fdc0aeacbb88b2e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "window",
+      "source": "window.svg",
+      "intendedSense": "window (concrete object)",
+      "sourceSha256": "7deaae127ec178a3bf50d72b4fcba972d7796608d2c35934938066b9fe905c1e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "worm",
+      "source": "earthworm.svg",
+      "intendedSense": "worm (animal)",
+      "sourceSha256": "ead2d5790e04fa09e5c41dea0caa871c1fab21b4996d88f296b40806af3745bc",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "xylophone",
+      "source": "xylophone.svg",
+      "intendedSense": "xylophone (instrument)",
+      "sourceSha256": "646e00dece198e631c3744ad7984be66712664ac1deadbc7fb57c4c49fa7688e",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "yoyo",
+      "source": "yo-yo.svg",
+      "intendedSense": "yoyo (concrete object)",
+      "sourceSha256": "4dbf6074df7022fc9f78f6e424de3b65d9eca163440a0346da15b6050b59fe71",
+      "review": "Original source illustration visually inspected in contact sheet"
+    },
+    {
+      "id": "zebra",
+      "source": "zebra.svg",
+      "intendedSense": "zebra (animal)",
+      "sourceSha256": "540b68ac65a57a60691abeec5dee5fb13ce8411c4934caa7a216185f909af3e9",
+      "review": "Original source illustration visually inspected in contact sheet"
+    }
+  ],
+  "missing": [
+    {
+      "id": "goat",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "monkey",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "cloud",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "block",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "whale",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "shark",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "coral",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "squid",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "clam",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "meteor",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "alien",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "rover",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "galaxy",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "violin",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "harp",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "horn",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "tuba",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "river",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "lake",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "waterfall",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "scooter",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "submarine",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "robot",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "pillow",
+      "reason": "The available cushion illustration points to an armchair seat; it does not depict a bed pillow."
+    },
+    {
+      "id": "octopus",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "astronaut",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "telescope",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "asteroid",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "bamboo",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "sunflower",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "trumpet",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "saxophone",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "rock",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "hill",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "sand",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "mud",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "ice",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "wind",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "bag",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "cape",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "wheel",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "dice",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "tent",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "box",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "fan",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "toe",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "otter",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "ladybug",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "waffle",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "desert",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "forest",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "island",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "volcano",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "cave",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "valley",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "glider",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "unicycle",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "domino",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "frisbee",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "ladder",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "fern",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "armadillo",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "woodpecker",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "cinnamon",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "raspberry",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "blueberry",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "glacier",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "peninsula",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "canyon",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "geyser",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "avalanche",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "stalactite",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "crystal",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "fossil",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "nebula",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "supernova",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "eclipse",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "universe",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "capsule",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "spacesuit",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "accordion",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "clarinet",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "trombone",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "tambourine",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "metronome",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "harmonica",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "anemone",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "nautilus",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "plankton",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "stingray",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "swordfish",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "compass",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "hourglass",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "binoculars",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    },
+    {
+      "id": "abacus",
+      "reason": "No exact-sense source found in the pinned Mulberry set."
+    }
+  ]
+}

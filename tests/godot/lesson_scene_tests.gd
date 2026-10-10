@@ -1,5 +1,7 @@
 extends SceneTree
 
+const WordArt = preload("res://scripts/word_art.gd")
+
 var checks := 0
 var failures := 0
 
@@ -100,7 +102,7 @@ func _run() -> void:
 		and audio_statuses.any(func(message: String) -> bool: return message.contains("could not load")),
 		"Actual pronunciation failure stops playback and reports the missing audio")
 	check(app.model.selected_id == current.id + ":word" and current_card.word_label.text == current.text
-		and picture_card.picture.texture.resource_path == "res://" + current.image,
+		and WordArt.source_path(picture_card.picture.texture) == "res://" + current.image,
 		"Failed playback preserves the same readable picture-word association")
 	app.audio.status_changed.emit("")
 	check(not app.audio.voice.playing, "A later optional music success cannot restart a failed word")

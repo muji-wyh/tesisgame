@@ -1,0 +1,52 @@
+{
+  "files": [
+    {
+      "id": "pillow",
+      "local": "build/word-art-review/library-source/kenney/pillow.png",
+      "source": {
+        "provider": "kenney-blender",
+        "creator": "Kenney; Grow with Pip (studio adaptation)",
+        "license": "CC0-1.0",
+        "url": "https://kenney.nl/assets/furniture-kit",
+        "sha256": "a1c737307d0e9a892da14a72080ad4403caa1fdc12810cd0ec13a8e3452b3a13",
+        "model": "pillow.glb",
+        "modelSha256": "6fae7c190d0b676ef3efd35e5178cef21dffb5c80e1257d8b537ad424da0e5f6",
+        "meaning": "A soft pillow for resting the head",
+        "record": "docs/assets/lv3-vocabulary.json",
+        "transformation": "Acquired production mesh with softened surface normals, studio lighting and an isolated teaching composition rendered in Blender."
+      }
+    },
+    {
+      "id": "fan",
+      "local": "build/word-art-review/library-source/kenney/fan.png",
+      "source": {
+        "provider": "kenney-blender",
+        "creator": "Kenney; Grow with Pip (studio adaptation)",
+        "license": "CC0-1.0",
+        "url": "https://kenney.nl/assets/furniture-kit",
+        "sha256": "b83ff9097ce671acbb95314f3cc1064b4fa6f64122ff4d543737bd36ea50aaa2",
+        "model": "ceilingFan.glb",
+        "modelSha256": "5fdf7b3c4328875462c9887c6b1f2fad08126ea42e758cf86534639b9ea72044",
+        "meaning": "An electric fan with turning blades",
+        "record": "docs/assets/lv3-vocabulary.json",
+        "transformation": "Acquired production mesh with softened surface normals, studio lighting and an isolated teaching composition rendered in Blender."
+      }
+    },
+    {
+      "id": "pot",
+      "local": "build/word-art-review/library-source/kenney/pot.png",
+      "source": {
+        "provider": "kenney-blender",
+        "creator": "Kenney; Grow with Pip (studio adaptation)",
+        "license": "CC0-1.0",
+        "url": "https://kenney.nl/assets/food-kit",
+        "sha256": "084618072500bd585af45fb1ff6816dc18ea19925380000062992578212e6fd2",
+        "model": "pot.glb",
+        "modelSha256": "ba84c5ebd769849b7cb0365adf1f6044680e024ba29e0bc1bec93d54100f72b3",
+        "meaning": "A deep cooking pot with two handles",
+        "record": "docs/assets/lv3-vocabulary.json",
+        "transformation": "Acquired production mesh with softened surface normals, studio lighting and an isolated teaching composition rendered in Blender."
+      }
+    }
+  ]
+}

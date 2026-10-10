@@ -1,0 +1,10 @@
+{
+  "pink": {
+    "palette": { "#ee947d": "#e97fad", "#ed1d31": "#e97fad" },
+    "reason": "Shift the acquired paint swatch from salmon toward rose pink so the color word is unambiguous."
+  },
+  "sausage": {
+    "palette": { "#f6cc4b": "#bc7155" },
+    "reason": "Give the acquired sausage shapes a browned meat color so they do not resemble bananas."
+  }
+}

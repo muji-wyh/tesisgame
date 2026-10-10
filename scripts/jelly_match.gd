@@ -316,10 +316,15 @@ func stop() -> void:
 	_ghosts.clear()
 	for preview: Tile in _preview_tiles:
 		preview.hide()
+		preview._picture.texture = null
+		preview.tile_id = -1
 	for tile in _tiles.values():
 		tile.hide()
 		tile.queue_free()
 	_tiles.clear()
+	# WordArt keeps weak references; this round cache must not retain every
+	# previously encountered word's poster after leaving or restarting.
+	_pictures.clear()
 	_refresh_controls()
 	_refresh_hud()
 	_publish()

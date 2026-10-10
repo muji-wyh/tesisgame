@@ -17,7 +17,8 @@ const groups = {
     ],
     node: [
       'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
-      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'performance-benchmark', 'ui-click-assets', 'interface-click-host'
+      'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'web-server', 'performance-benchmark', 'ui-click-assets', 'interface-click-host',
+      'vocabulary-library-preparation', 'word-library-motion'
     ]
   },
   flow: {

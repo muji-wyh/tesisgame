@@ -4,6 +4,10 @@ The Grow with Pip curriculum adds 300 words. Thirty-five use additional acquired
 Mulberry illustrations. The remaining 265 describe grammatical or abstract
 concepts that are taught in Phrase Builder without substitute pictures.
 
+This is the source record for the original growth batch. Current pictured-word
+stills and animations are documented in the
+[complete vocabulary artwork library](word-library.md).
+
 ## Source and license
 
 - Original source: [Mulberry Symbols](https://github.com/mulberrysymbols/mulberry-symbols).
@@ -16,8 +20,9 @@ concepts that are taught in Phrase Builder without substitute pictures.
 - Acquisition status: the pinned source checkout was already downloaded.
   Candidate source contact sheets were visually inspected before selection and
   conversion. All 35 selected files are now integrated assets, not remote previews.
-- Animations: none. These are static educational illustrations; existing card
-  interactions supply their motion.
+- Source animations: none. This original acquisition supplied static educational
+  illustrations. The current library adds locally authored illustration motion
+  while preserving teaching cues and the source license.
 - Transformation: original SVG geometry, colors, CSS and text are preserved while
   rasterizing to transparent 192 by 192 PNGs. No artwork was drawn as a substitute.
 

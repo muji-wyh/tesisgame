@@ -83,6 +83,7 @@ func _run() -> void:
 	_check_reduced_motion_and_cache(view)
 	_check_publication_budget(view)
 	_check_signal_reentry(view)
+	await _check_picture_disposal(view)
 	view.free()
 	await process_frame
 	print("Jelly Match view: %d assertions, %d failures" % [checks, failures])
@@ -1775,6 +1776,40 @@ func _check_publication_budget(view) -> void:
 		view._process(1.0 / 60.0)
 	check(publications.size() >= 8 and publications.size() <= 11,
 		"Animated snapshots are published around ten times a second, not every render frame")
+
+
+func _picture_references(view) -> Array[WeakRef]:
+	var references: Array[WeakRef] = []
+	for picture: Texture2D in view._pictures.values():
+		references.append(weakref(picture))
+	return references
+
+
+func _check_picture_disposal(view) -> void:
+	_reset(view)
+	# Release nodes queued by the earlier presentation fixtures before taking
+	# ownership measurements of this round's shared motion wrappers.
+	await process_frame
+	var previous_paths: Array = view._pictures.keys()
+	var previous: Array[WeakRef] = _picture_references(view)
+	check(not previous.is_empty(), "The disposal fixture has cached board and supply artwork")
+	var next_words: Array = data.words.filter(func(word: Dictionary) -> bool:
+		return not str(word.get("image", "")).is_empty() and not previous_paths.has(str(word.image))).slice(0, 12)
+	check(view.configure(next_words, 3, Data.theme("spring"), data.chests, false, 81),
+		"The next round can use a disjoint set of vocabulary pictures")
+	view.set_process(false)
+	await process_frame
+	check(previous.all(func(reference: WeakRef) -> bool: return reference.get_ref() == null),
+		"Restarting releases the previous round's word wrappers instead of retaining their posters")
+	var current: Array[WeakRef] = _picture_references(view)
+	check(not current.is_empty(), "The restarted round has live artwork before stopping")
+	view.stop()
+	check(view._pictures.is_empty() and view._preview_tiles.all(func(tile) -> bool:
+		return tile._picture.texture == null and tile.tile_id == -1),
+		"Stopping clears the round cache and the reusable supply controls' picture references")
+	await process_frame
+	check(current.all(func(reference: WeakRef) -> bool: return reference.get_ref() == null),
+		"Stopping releases cached board and supply word wrappers after queued tiles are freed")
 
 
 func _check_close_drop_contact(view) -> void:

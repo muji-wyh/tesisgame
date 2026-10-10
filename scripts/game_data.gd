@@ -311,8 +311,10 @@ static func validate_words(value: Variant) -> String:
 				return "Confusable vocabulary must list valid word IDs."
 		if ids.has(entry.id) or texts.has(entry.text.to_lower()) or (not entry.image.is_empty() and images.has(entry.image)):
 			return "Word IDs, words and pictures must be unique."
-		if not entry.image.is_empty() and not _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"]):
-			return "Keep word pictures together in assets/images/words."
+		var source_picture: bool = _local_path(entry.image, "assets/images/words/", ["svg", "png", "webp"])
+		var library_picture: bool = entry.image == "assets/images/word-library/%s.webp" % entry.id
+		if not entry.image.is_empty() and not (source_picture or library_picture):
+			return "Use a source word picture or the matching word-library image."
 		if not _local_path(entry.audio, "assets/audio/voice/", ["wav", "ogg"]):
 			return "Keep word recordings in assets/audio/voice."
 		ids[entry.id] = true
@@ -349,6 +351,12 @@ func load_all() -> bool:
 		return false
 	words = value
 	for word in words:
+		if not word.image.is_empty():
+			var library_image: String = "assets/images/word-library/%s.webp" % word.id
+			if ResourceLoader.exists("res://" + library_image):
+				word.image = library_image
+				word.art_key = "library/" + str(word.id)
+				continue
 		if not word.image.is_empty() and not ResourceLoader.exists("res://" + word.image):
 			error = "Could not load the picture for " + word.text + ". Please rebuild the game."
 			return false

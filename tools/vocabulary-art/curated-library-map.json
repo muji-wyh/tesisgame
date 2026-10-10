@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "status": "Acquired and visually reviewed",
+  "purpose": "Targeted meaning refinements using inspected production geometry.",
+  "files": [
+    {
+      "id": "grain",
+      "local": "build/word-art-review/library-source/curated/grain.png",
+      "source": {
+        "provider": "mulberry",
+        "creator": "Steve Lee; original symbol design project by Garry Paxton; Grow with Pip (composition adaptation)",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/grains.svg",
+        "path": "grains.svg",
+        "revision": "9cbab9f400c5de44e2bc58839cca07294aadb086",
+        "sha256": "e9ea11c489bb1a56c06a644b0394b5099172d9d4ef5f6582f74099ee119c33c1",
+        "originalSha256": "606b2f7764149bc14fc6b19dc0a4e203b7ad95a7ed9dfe000693788d570f9d52",
+        "inputs": [
+          {
+            "path": "grains.svg",
+            "sha256": "606b2f7764149bc14fc6b19dc0a4e203b7ad95a7ed9dfe000693788d570f9d52",
+            "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/grains.svg"
+          }
+        ],
+        "meaning": "A small hard seed grown for food",
+        "transformation": "Retain the acquired wheat stalk, remove bread and pasta, and enlarge three copies of the source top grain silhouette to distinguish the seed from processed foods. Preserve source geometry; apply the shared shaded material.",
+        "acquisitionStatus": "Acquired source paths recomposed and visually reviewed at card size.",
+        "availableAnimations": []
+      },
+      "review": "Original source and derived picture inspected at 80 px and 256 px for the intended sense."
+    },
+    {
+      "id": "fuzzy",
+      "local": "build/word-art-review/library-source/curated/fuzzy.png",
+      "source": {
+        "provider": "mulberry",
+        "creator": "Steve Lee; original symbol design project by Garry Paxton; Grow with Pip (composition adaptation)",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/picture.svg",
+        "path": "picture.svg",
+        "revision": "9cbab9f400c5de44e2bc58839cca07294aadb086",
+        "sha256": "58b44be86cbfa1e9bbd74645fbcf3b8ccb809f5d21188991dbeba73097369e6b",
+        "originalSha256": "cb9829286b0a6963ecd99ed76a9ff2fc6368f7a39cdedb52830fbe368589de02",
+        "inputs": [
+          {
+            "path": "picture.svg",
+            "sha256": "cb9829286b0a6963ecd99ed76a9ff2fc6368f7a39cdedb52830fbe368589de02",
+            "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/picture.svg"
+          },
+          {
+            "path": "next.svg",
+            "sha256": "083cb0fcc58d14f8b872d0db6941fbf1dd4d90383bd826b76dbaa91e64302568",
+            "url": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/9cbab9f400c5de44e2bc58839cca07294aadb086/EN/next.svg"
+          }
+        ],
+        "meaning": "Unclear or difficult to see sharply",
+        "transformation": "Compare a sharp thumbnail with a larger optically defocused copy of the same acquired landscape. Remove the hanging wire, keep the frame sharp, blur only the picture, and retain the curved direction arrow from the acquired next symbol. No written answer added.",
+        "acquisitionStatus": "Acquired source paths recomposed and visually reviewed at card size.",
+        "availableAnimations": []
+      },
+      "review": "Original source and derived picture inspected at 80 px and 256 px for the intended sense."
+    }
+  ]
+}

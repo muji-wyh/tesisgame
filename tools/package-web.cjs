@@ -215,25 +215,30 @@ function packageWebExport(directory) {
   for (const file of engine) digest.update(file.suffix).update(file.bytes);
   const executable = `engine-${digest.digest('hex').slice(0, 16)}`;
   const pack = fs.readFileSync(path.join(directory, 'index.pck'));
-  const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck`;
+  const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck.br`;
   const files = [
     ...engine.map(file => ({ name: `${executable}.${file.suffix}`, bytes: file.bytes })),
-    { name: mainPack, bytes: pack }
+    { name: mainPack, bytes: pack, compressedOnly: true }
   ];
   const retained = new Set();
   const cachedSidecars = fs.readdirSync(directory)
     .filter(name => /^(?:engine|game)-[a-f0-9]{16}\..+\.br$/.test(name));
   let downloadBytes = 0;
-  // Azure negotiates .br sidecars; the browser handles decompression and caching.
+  // Engine files retain negotiated sidecars. The pack uses an explicit Brotli URL
+  // so production storage does not contain a second, uncompressed copy of all art.
   for (const file of files) {
-    const suffix = file.name.slice(file.name.indexOf('.'));
-    const candidates = cachedSidecars.filter(name => name.endsWith(`${suffix}.br`))
-      .sort((first, second) => Number(second === `${file.name}.br`) - Number(first === `${file.name}.br`))
+    const compressedName = file.compressedOnly ? file.name : `${file.name}.br`;
+    const suffix = compressedName.slice(compressedName.indexOf('.'));
+    const candidates = cachedSidecars.filter(name => name.endsWith(suffix))
+      .sort((first, second) => Number(second === compressedName) - Number(first === compressedName))
       .map(name => path.join(directory, name));
     const compressed = compressWebAsset(file.bytes, candidates);
-    fs.writeFileSync(path.join(directory, file.name), file.bytes);
-    fs.writeFileSync(path.join(directory, `${file.name}.br`), compressed);
-    retained.add(file.name).add(`${file.name}.br`);
+    if (!file.compressedOnly) {
+      fs.writeFileSync(path.join(directory, file.name), file.bytes);
+      retained.add(file.name);
+    }
+    fs.writeFileSync(path.join(directory, compressedName), compressed);
+    retained.add(compressedName);
     downloadBytes += compressed.length;
   }
   config.executable = executable;
@@ -241,6 +246,7 @@ function packageWebExport(directory) {
   delete config.audioAssets;
   config.fileSizes = {
     [`${executable}.wasm`]: engine.find(file => file.suffix === 'wasm').bytes.length,
+    // Fetch decodes Content-Encoding before handing pack bytes to Godot.
     [mainPack]: pack.length
   };
   fs.writeFileSync(page, html

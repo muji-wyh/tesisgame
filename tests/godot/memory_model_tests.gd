@@ -29,6 +29,7 @@ func _run() -> void:
 	_test_matched_visibility(model)
 	_test_study_and_stop(model)
 	_test_rejected_resets(model)
+	_test_runtime_library(model)
 	print("Memory model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -221,48 +222,98 @@ func _test_rejected_resets(model) -> void:
 	model.reset(_words(), 42)
 	_pair(model, "cat")
 	var before: Dictionary = _snapshot(model)
-	var invalid: Array = [[], _words().slice(0, 4), _words() + _words(["apple"])]
+	var invalid: Array = [
+		{"label": "empty lesson", "words": []},
+		{"label": "four words", "words": _words().slice(0, 4)},
+		{"label": "six words", "words": _words() + _words(["apple"])}
+	]
 	for replacement in [null, "cat", 3, {}, {"id": "cat"}]:
 		var candidate: Array = _words()
 		candidate[0] = replacement
-		invalid.append(candidate)
+		invalid.append({"label": "incomplete entry: " + JSON.stringify(replacement), "words": candidate})
 	for field in ["id", "text", "image", "audio"]:
 		var missing: Array = _words()
 		missing[0].erase(field)
-		invalid.append(missing)
+		invalid.append({"label": "missing " + field, "words": missing})
 		for value in [null, 17, ""]:
 			var wrong_type: Array = _words()
 			wrong_type[0][field] = value
-			invalid.append(wrong_type)
+			invalid.append({"label": "invalid %s: %s" % [field, JSON.stringify(value)], "words": wrong_type})
 	for field in ["id", "text", "image"]:
 		var duplicate: Array = _words()
 		duplicate[1][field] = duplicate[0][field]
-		invalid.append(duplicate)
-	for changes in [{"id": "../cat"}, {"text": "Cat"},
+		invalid.append({"label": "duplicate " + field, "words": duplicate})
+	for changes in [{"id": "../cat"}, {"text": "cat!"},
 		{"image": "https://example.com/cat.png"}, {"image": "assets/images/words/../cat.png"},
 		{"image": "assets/imported-unity/dog.png"}, {"audio": "assets/audio/voice/../secret.wav"}]:
 		var unsafe: Array = _words()
 		unsafe[0].merge(changes, true)
-		invalid.append(unsafe)
+		invalid.append({"label": "unsafe content: " + JSON.stringify(changes), "words": unsafe})
 	for pair in [["earth", "planet"], ["acorn", "seed"], ["boot", "shoe"],
 		["shell", "clam"], ["flower", "rose"], ["comet", "meteor"]]:
-		invalid.append(_words(pair + ["cat", "dog", "ball"]))
+		invalid.append({"label": "confusable pair: " + "/".join(pair),
+			"words": _words(pair + ["cat", "dog", "ball"])})
 	var same_art: Array = _words()
 	same_art[0].art_key = "mulberry/shared-picture.svg"
 	same_art[1].art_key = same_art[0].art_key
-	invalid.append(same_art)
+	invalid.append({"label": "shared artwork key", "words": same_art})
 	var same_meaning: Array = _words()
 	same_meaning[0].confusable = [same_meaning[1].id]
-	invalid.append(same_meaning)
+	invalid.append({"label": "explicit confusable meaning", "words": same_meaning})
 	var aliases: Array = _words(["earth", "planet", "cat", "dog", "ball"])
 	aliases[0].id = "our-earth"
 	aliases[1].id = "our-planet"
-	invalid.append(aliases)
-	for candidate in invalid:
-		check(not model.reset(candidate, 99) and not model.error.is_empty(), "Malformed or confusable lessons are rejected")
-		check(_snapshot(model) == before, "Rejected resets preserve the live board, score and feedback atomically")
+	invalid.append({"label": "confusable meaning under aliased IDs", "words": aliases})
+	for index in range(invalid.size()):
+		var fixture: Dictionary = invalid[index]
+		var label: String = "Reset fixture %d (%s)" % [index + 1, fixture.label]
+		check(not model.reset(fixture.words, 99) and not model.error.is_empty(),
+			label + ": malformed or confusable lesson is rejected")
+		check(_snapshot(model) == before,
+			label + ": rejection preserves the live board, score and feedback atomically")
+	var capitalized: Array = _words()
+	capitalized[0].text = "Cat"
+	check(model.reset(capitalized, 42) and model.error.is_empty(), "English word capitalization remains valid")
+	check(model.cards[_index(model, "cat", "word")].word.text == "Cat",
+		"Validation preserves the lesson's display capitalization")
 	var imported: Array = _words()
 	imported[0].image = "assets/imported-unity/cat.png"
 	check(model.reset(imported, 42) and model.error.is_empty(), "Known runtime word-art overrides remain valid")
 	check(model.cards[_index(model, "cat", "image")].word.image == imported[0].image,
 		"Validation preserves the actual imported picture path for rendering")
+
+
+func _test_runtime_library(model) -> void:
+	var data = load("res://scripts/game_data.gd").new()
+	var loaded: bool = data.load_all()
+	check(loaded, "Memory regression uses the actual loaded production vocabulary: " + data.error)
+	if not loaded:
+		return
+	var lesson: Array = data.words.filter(func(word: Dictionary) -> bool:
+		return word.id in ["cat", "dog", "sun", "ball", "walk"])
+	check(lesson.size() == 5 and lesson.all(func(word: Dictionary) -> bool:
+		return word.image == "assets/images/word-library/%s.webp" % word.id),
+		"The real Memory lesson includes illustration and character animation sources")
+	var started: bool = model.reset(lesson, 73)
+	check(started, "Memory accepts the production library paths: " + model.error)
+	if not started:
+		return
+	check(model.cards.size() == 10 and model.cards.all(func(card: Dictionary) -> bool:
+		return card.word.image == "assets/images/word-library/%s.webp" % card.word.id),
+		"Both Memory card kinds preserve each word's exact runtime library path")
+	var before: Dictionary = _snapshot(model)
+	var word_id: String = str(lesson[0].id)
+	for invalid_path in [
+		"assets/images/word-library/hello.webp",
+		"assets/images/word-library/../%s.webp" % word_id,
+		"assets/images/word-library/nested/%s.webp" % word_id,
+		"assets/images/word-library/%s.png" % word_id,
+		"res://assets/images/word-library/%s.webp" % word_id,
+		"assets/images/word-library\\%s.webp" % word_id
+	]:
+		var invalid: Array = lesson.duplicate(true)
+		invalid[0].image = invalid_path
+		check(not data.validate_words(invalid).is_empty(),
+			"Library validation rejects mismatched IDs and noncanonical paths: " + invalid_path)
+		check(not model.reset(invalid, 73) and _snapshot(model) == before,
+			"An invalid library path cannot replace a live Memory round: " + invalid_path)

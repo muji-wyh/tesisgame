@@ -1,5 +1,11 @@
 # Lv3 vocabulary artwork
 
+This records the first Lv3 artwork release. The current complete picture library
+and active runtime paths are documented in [word-library.md](word-library.md).
+The 69 reviewed compositions are retained in that library. All pictured words
+now have animation: eight actions use the [articulated teaching clips](lv3-motion-studies.md),
+and the other pictures use subject-appropriate illustration motion.
+
 The 69 pictured words in the age-three cohort now use larger, dimensional
 illustrations. The eleven context-only words retain their existing treatment.
 No vocabulary, level progression, pronunciation or answer rule changes.
@@ -16,7 +22,7 @@ No vocabulary, level progression, pronunciation or answer rule changes.
   Acquired meshes are smoothed, posed, composed and lit in Blender 5.2.2 LTS.
   The plain clothing, selected hair extension, contained liquid and comparison
   pointers are local adaptations. The character source includes idle, jump and
-  run animations; only static pictures ship.
+  run animations; this initial selection used static pictures.
 
 Exact source URLs, archive hashes, per-picture hashes, changes and licenses are
 recorded in [the manifest](lv3-vocabulary.json) and [license folder](licenses/).
@@ -31,11 +37,12 @@ hinged source door, with the hand positioned against the leaf. Counting pictures
 contain exactly one, two or three apples. Comparison pointers identify the intended
 size. Pictured words contain no written answer.
 
-All deliverables are transparent 256-pixel PNGs with a consistent safe margin.
+This original release used transparent 256-pixel PNGs with a consistent safe margin.
+The current complete library uses WebP stills and animation atlases.
 Jelly allocates more space to the picture and moves its treasure marker away from
 the central subject. The same images are used by Match, Memory, Phrase Builder,
 Voice Pop and the vocabulary catalogue through `GameData.load_all`.
-Original illustrations remain as historical source/fallback material, preserving
+Original illustrations remain as historical source material, preserving
 the existing licensed import and curriculum provenance checks.
 
 ## Local review and reproduction
@@ -58,6 +65,7 @@ pixels on each side. The Fluent doll crop is recorded in its manifest entry and
 applies before trimming. Final PNG hashes are recorded after this normalization.
 
 The importer verifies all 69 final images with `node tools/lv3-vocabulary-art.cjs`.
-The Web builder also runs that check, and the exported-pack check requires every
-replacement at its original 256-pixel size. Existing higher-level source importers
+The Web builder also runs that historical provenance check. The exported-pack
+check now verifies the current complete library at its original 256-pixel size.
+Existing higher-level source importers
 continue to validate the historical illustrations and curriculum independently.

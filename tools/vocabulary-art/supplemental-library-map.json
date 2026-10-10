@@ -1,0 +1,1405 @@
+{
+  "schema": 1,
+  "status": "acquired and reviewed",
+  "reviewedOn": "2026-10-10",
+  "purpose": "Precisely pictured vocabulary not covered by the acquired Fluent, Mulberry and Kenney libraries.",
+  "cropConvention": "Top-level crop coordinates are integer pixels of the untouched local source. source.sha256 always hashes the untouched downloaded file.",
+  "reviewSheets": [
+    "build/word-art-review/library-source/supplemental/final-review-1.png",
+    "build/word-art-review/library-source/supplemental/final-review-2.png"
+  ],
+  "files": [
+    {
+      "id": "anemone",
+      "local": "build/word-art-review/library-source/supplemental/anemone-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Diego Delso",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Tomate_de_mar_%28Actinia_equina%29%2C_Set%C3%BAbal%2C_Portugal%2C_2020-08-01%2C_DD_11.jpg/960px-Tomate_de_mar_%28Actinia_equina%29%2C_Set%C3%BAbal%2C_Portugal%2C_2020-08-01%2C_DD_11.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Tomate_de_mar_(Actinia_equina),_Set%C3%BAbal,_Portugal,_2020-08-01,_DD_11.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/31/Tomate_de_mar_%28Actinia_equina%29%2C_Set%C3%BAbal%2C_Portugal%2C_2020-08-01%2C_DD_11.jpg",
+        "title": "File:Tomate de mar (Actinia equina), Setúbal, Portugal, 2020-08-01, DD 11.jpg",
+        "meaning": "a sea anemone with its ring of tentacles",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "08f0e61eff573e156635d23a6f1266efb470c10a669d9cc3a0fe96931bb2488e",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 960
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "armadillo",
+      "local": "build/word-art-review/library-source/supplemental/armadillo-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "BirdPhotos.com",
+        "license": "CC-BY-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Nine-banded_Armadillo.jpg/960px-Nine-banded_Armadillo.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Nine-banded_Armadillo.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Nine-banded_Armadillo.jpg",
+        "title": "File:Nine-banded Armadillo.jpg",
+        "meaning": "an armored nine-banded armadillo",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "6a47c3920c11e9d1651d830cc4a10a4356cdb64c7465c3413cb4c1e9da1f5dcd",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 579
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "asteroid",
+      "local": "build/word-art-review/library-source/supplemental/asteroid-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA/JPL; crop by Chzz",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:243_ida_crop.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/89/243_ida_crop.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:243_ida_crop.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/89/243_ida_crop.jpg",
+        "title": "File:243 ida crop.jpg",
+        "meaning": "a rocky asteroid in space",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "b7a589683ad960f4989858e2899b27f7ac05c0717fc7a21e6f2fd493d5f94f74",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 618,
+        "height": 399
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "avalanche",
+      "local": "build/word-art-review/library-source/supplemental/avalanche-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Chagai at English Wikipedia",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Avalanche_on_Everest.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Avalanche_on_Everest.jpg/960px-Avalanche_on_Everest.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Avalanche_on_Everest.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Avalanche_on_Everest.jpg",
+        "title": "File:Avalanche on Everest.jpg",
+        "meaning": "a large mass of snow falling down a mountain",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "050acfbe57d4c225741160dafa486b677b81012b9e29d1b56a16263384cb7bbe",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "bamboo",
+      "local": "build/word-art-review/library-source/supplemental/bamboo-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Kamakura",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Bamboo_forest.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Bamboo_forest.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Bamboo_forest.jpg",
+        "title": "File:Bamboo forest.jpg",
+        "meaning": "bamboo stems growing in a grove",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "666434a9875877cabff63a69880a15e72e4e413709f7f57ea5e332d75d24dfdb",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 720,
+        "height": 960
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "binoculars",
+      "local": "build/word-art-review/library-source/supplemental/binoculars-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Andreas Klehr",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Binocular_with_8x_magnification_and_42_mm_lens_diameter.jpg/960px-Binocular_with_8x_magnification_and_42_mm_lens_diameter.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Binocular_with_8x_magnification_and_42_mm_lens_diameter.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/90/Binocular_with_8x_magnification_and_42_mm_lens_diameter.jpg",
+        "title": "File:Binocular with 8x magnification and 42 mm lens diameter.jpg",
+        "meaning": "a pair of binoculars",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "5064ed835188e178f9bc9ee486d7fde78c2df3574bd4adc1b2faf0d26d33a6a3",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 658
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "block",
+      "local": "build/word-art-review/library-source/supplemental/block-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Polylerus",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Toyblocks.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/22/Toyblocks.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Toyblocks.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/22/Toyblocks.JPG",
+        "title": "File:Toyblocks.JPG",
+        "meaning": "colored wooden building blocks for play",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "fb0652f5b356919b9653c7203b89169e8e5603ec33ee8b230caa349b0ebf3e73",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 357,
+        "height": 247
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "canyon",
+      "local": "build/word-art-review/library-source/supplemental/canyon-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Workman",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Aerial_view_of_canyons.jpg/960px-Aerial_view_of_canyons.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_canyons.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/26/Aerial_view_of_canyons.jpg",
+        "title": "File:Aerial view of canyons.jpg",
+        "meaning": "a deep canyon cut through rock",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "f23d1c0449a96db8298e7a02b76f3e3b0aeea80577854c67e6f2452d150b1a63",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1280
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "cape",
+      "local": "build/word-art-review/library-source/supplemental/cape5-final-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "The Metropolitan Museum of Art, New York; garment maker unknown",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Cape_MET_1983.111_F2.jpg/960px-Cape_MET_1983.111_F2.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Cape_MET_1983.111_F2.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/85/Cape_MET_1983.111_F2.jpg",
+        "title": "File:Cape MET 1983.111 F2.jpg",
+        "meaning": "a sleeveless cape worn over the shoulders",
+        "transformation": "Trim the unused backdrop while retaining the complete garment silhouette. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "7e8be222803ec0f805cd16e79390fcd7854214c5f67de4e710fc98f59838248d",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1056
+      },
+      "crop": {
+        "left": 110,
+        "top": 15,
+        "width": 740,
+        "height": 1030
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "capsule",
+      "local": "build/word-art-review/library-source/supplemental/capsule-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Crew_Dragon_at_the_ISS_for_Demo_Mission_1_(cropped).jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Crew_Dragon_at_the_ISS_for_Demo_Mission_1_%28cropped%29.jpg/960px-Crew_Dragon_at_the_ISS_for_Demo_Mission_1_%28cropped%29.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Crew_Dragon_at_the_ISS_for_Demo_Mission_1_(cropped).jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Crew_Dragon_at_the_ISS_for_Demo_Mission_1_%28cropped%29.jpg",
+        "title": "File:Crew Dragon at the ISS for Demo Mission 1 (cropped).jpg",
+        "meaning": "a crew space capsule in orbit",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "fd03be5a34cecbb72c6f99c75713ecafdabf59a75ac2a73463ad9fa05f114b3f",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "cave",
+      "local": "build/word-art-review/library-source/supplemental/cave-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Dave Bunnell / Under Earth Images",
+        "license": "CC-BY-SA-2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Lechuguilla_Cave_Pearlsian_Gulf.jpg/960px-Lechuguilla_Cave_Pearlsian_Gulf.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Lechuguilla_Cave_Pearlsian_Gulf.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/02/Lechuguilla_Cave_Pearlsian_Gulf.jpg",
+        "title": "File:Lechuguilla Cave Pearlsian Gulf.jpg",
+        "meaning": "the interior of a natural limestone cave",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "0b21aaac4801b83a107aa858a946e9345974f3744832dfb5ff9c0035020f215c",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1418
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "cinnamon",
+      "local": "build/word-art-review/library-source/supplemental/cinnamon-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Simon A. Eugster",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Cinnamomum_verum_spices.jpg/960px-Cinnamomum_verum_spices.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Cinnamomum_verum_spices.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Cinnamomum_verum_spices.jpg",
+        "title": "File:Cinnamomum verum spices.jpg",
+        "meaning": "cinnamon sticks and ground cinnamon spice",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "56c3e2cafa1767627c43ce60f4d53124a6cfbd6e36f53d6e7d068deb1f556b3d",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 550
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "clam",
+      "local": "build/word-art-review/library-source/supplemental/clam2-final-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Ken Hammond",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:LittleNeck_clams_USDA96c1862.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/LittleNeck_clams_USDA96c1862.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:LittleNeck_clams_USDA96c1862.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/LittleNeck_clams_USDA96c1862.jpg",
+        "title": "File:LittleNeck clams USDA96c1862.jpg",
+        "meaning": "hard-shell clams held in two hands",
+        "transformation": "Crop around the clam shells while preserving hands as a scale cue. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "4d91852f05e47d8d48ce98bc2962dac3a555f94ed2df0f08a2c3c41dfb7b951a",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 640,
+        "height": 432
+      },
+      "crop": {
+        "left": 70,
+        "top": 70,
+        "width": 500,
+        "height": 350
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "clarinet",
+      "local": "build/word-art-review/library-source/supplemental/clarinet-candidate.png",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Leitner & Kraus GmbH, Neustadt/Aisch; edited by Gisbert K",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Leitner%2BKraus_410_320.png/960px-Leitner%2BKraus_410_320.png",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Leitner%2BKraus_410_320.png",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Leitner%2BKraus_410_320.png",
+        "title": "File:Leitner+Kraus 410 320.png",
+        "meaning": "clarinets with mouthpieces, keys and flared bells",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "f989d5c6392d4af5998d062af405f38ff9b7116890021a7b5d0865d268983d4f",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1846
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "crystal",
+      "local": "build/word-art-review/library-source/supplemental/crystal-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Géry PARENT",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Quartz_28.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Quartz_28.jpg/960px-Quartz_28.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Quartz_28.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Quartz_28.jpg",
+        "title": "File:Quartz 28.jpg",
+        "meaning": "a naturally faceted amethyst quartz crystal",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "eedee0552d64b42d2b14fbd091309174a96060858ab0b1bba8aefe9d2c472f36",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 638
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "domino",
+      "local": "build/word-art-review/library-source/supplemental/domino-final-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Peng",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Dominospiel.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Dominospiel.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Dominospiel.JPG",
+        "title": "File:Dominospiel.JPG",
+        "meaning": "domino game tiles with numbered dots",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "bf43e83811d7b941bc43c81febc02629c996435f2022fcd903007aa995ce8b88",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 640,
+        "height": 480
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "eclipse",
+      "local": "build/word-art-review/library-source/supplemental/eclipse-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Luc Viatour",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Solar_eclipse_1999_4.jpg/960px-Solar_eclipse_1999_4.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Solar_eclipse_1999_4.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Solar_eclipse_1999_4.jpg",
+        "title": "File:Solar eclipse 1999 4.jpg",
+        "meaning": "a total solar eclipse with the Sun hidden by the Moon",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "a3fd8e411d6fe7c25ddd12e3445586796dc761ade63e58609cb0831a74665e0b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 945
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "fern",
+      "local": "build/word-art-review/library-source/supplemental/fern-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Pratt, Anne; Pratt, Anne; Society for Promoting Christian Knowledge (Great Britain)",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:The_ferns_of_Great_Britain,_and_their_allies_the_club-mosses,_pepperworts,_and_horsetails_(Pl._2)_(8515393495).jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/The_ferns_of_Great_Britain%2C_and_their_allies_the_club-mosses%2C_pepperworts%2C_and_horsetails_%28Pl._2%29_%288515393495%29.jpg/960px-The_ferns_of_Great_Britain%2C_and_their_allies_the_club-mosses%2C_pepperworts%2C_and_horsetails_%28Pl._2%29_%288515393495%29.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:The_ferns_of_Great_Britain,_and_their_allies_the_club-mosses,_pepperworts,_and_horsetails_(Pl._2)_(8515393495).jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/The_ferns_of_Great_Britain%2C_and_their_allies_the_club-mosses%2C_pepperworts%2C_and_horsetails_%28Pl._2%29_%288515393495%29.jpg",
+        "title": "File:The ferns of Great Britain, and their allies the club-mosses, pepperworts, and horsetails (Pl. 2) (8515393495).jpg",
+        "meaning": "a fern with divided green fronds and coiled young shoots",
+        "transformation": "Remove the printed botanical caption below the plant. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "6b6d4d5c0b053391b7c9402714122c978d39596d3a3e2356ac6fac415428f1a2",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1587
+      },
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 960,
+        "height": 1450
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "forest",
+      "local": "build/word-art-review/library-source/supplemental/forest-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "lubasi",
+        "license": "CC-BY-SA-2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Aerial_view_of_the_Amazon_Rainforest.jpg/960px-Aerial_view_of_the_Amazon_Rainforest.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_Amazon_Rainforest.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Aerial_view_of_the_Amazon_Rainforest.jpg",
+        "title": "File:Aerial view of the Amazon Rainforest.jpg",
+        "meaning": "a large continuous forest canopy",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "c2f8f8c8975f9d5c41e3d56074ceef797fb1e5c293851a283ccaa975b7e40475",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 589
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "fossil",
+      "local": "build/word-art-review/library-source/supplemental/fossil-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "H. Zell (Llez)",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Pleuroceras_solare%2C_Little_Switzerland%2C_Bavaria%2C_Germany.jpg/960px-Pleuroceras_solare%2C_Little_Switzerland%2C_Bavaria%2C_Germany.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Pleuroceras_solare,_Little_Switzerland,_Bavaria,_Germany.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/Pleuroceras_solare%2C_Little_Switzerland%2C_Bavaria%2C_Germany.jpg",
+        "title": "File:Pleuroceras solare, Little Switzerland, Bavaria, Germany.jpg",
+        "meaning": "an ammonite fossil preserved in rock",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "271643da239cc6ccf3df053547fae464689e62614127fd188a0e1b45189c9540",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1026
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "galaxy",
+      "local": "build/word-art-review/library-source/supplemental/galaxy-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "The Hubble Heritage Team (AURA/STScI/NASA) NASA Headquarters - Greatest Images of NASA (NASA-HQ-GRIN)",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:NGC_4414_(NASA-med).jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/NGC_4414_%28NASA-med%29.jpg/960px-NGC_4414_%28NASA-med%29.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:NGC_4414_(NASA-med).jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c3/NGC_4414_%28NASA-med%29.jpg",
+        "title": "File:NGC 4414 (NASA-med).jpg",
+        "meaning": "a spiral galaxy of stars",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "1aeaac5ea81cf6ec558bc0185a292617f8ea8095a7824dddcfd941558dcf5c30",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 792
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "geyser",
+      "local": "build/word-art-review/library-source/supplemental/geyser-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Dietmar Rabich",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Yellowstone_National_Park_%28WY%2C_USA%29%2C_Old_Faithful_Geyser_--_2022_--_2599.jpg/960px-Yellowstone_National_Park_%28WY%2C_USA%29%2C_Old_Faithful_Geyser_--_2022_--_2599.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Yellowstone_National_Park_(WY,_USA),_Old_Faithful_Geyser_--_2022_--_2599.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/51/Yellowstone_National_Park_%28WY%2C_USA%29%2C_Old_Faithful_Geyser_--_2022_--_2599.jpg",
+        "title": "File:Yellowstone National Park (WY, USA), Old Faithful Geyser -- 2022 -- 2599.jpg",
+        "meaning": "a geyser erupting hot water and steam",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "77cf654f2e2a402941065d06f219f9740aa060d5b2fdf4c33761ad397642a939",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 640
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "glacier",
+      "local": "build/word-art-review/library-source/supplemental/glacier-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA / Christy Hansen",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Geikie_Plateau_Glacier.JPG",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Geikie_Plateau_Glacier.JPG/960px-Geikie_Plateau_Glacier.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Geikie_Plateau_Glacier.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Geikie_Plateau_Glacier.JPG",
+        "title": "File:Geikie Plateau Glacier.JPG",
+        "meaning": "a large glacier of compacted ice",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "48b3d3115162c2a9150d22f4bab1907e9478e690f3e97000f1037c03b901fcea",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "glider",
+      "local": "build/word-art-review/library-source/supplemental/glider-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Michael Zwilling",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:ASW19_Boden.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/ASW19_Boden.jpg/960px-ASW19_Boden.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:ASW19_Boden.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/ASW19_Boden.jpg",
+        "title": "File:ASW19 Boden.jpg",
+        "meaning": "an unpowered sailplane with long wings",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "6a80f3fbbce560e7e4ebc4b68ed898310b4d89ff9bc1baecef3178742feab0b3",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "harmonica",
+      "local": "build/word-art-review/library-source/supplemental/harmonica-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "George Leung",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/16-hole_chrom_10-hole_diatonic.jpg/960px-16-hole_chrom_10-hole_diatonic.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:16-hole_chrom_10-hole_diatonic.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/16-hole_chrom_10-hole_diatonic.jpg",
+        "title": "File:16-hole chrom 10-hole diatonic.jpg",
+        "meaning": "a harmonica, showing two common sizes",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "a64afaa14f11db657c5cdf2505903a7a1c30be7a9fe011718aa6fccc0c6d018e",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 724
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "harp",
+      "local": "build/word-art-review/library-source/supplemental/harp-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Eacquahdennis",
+        "license": "CC-BY-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/A_musical_instrument._A_harp.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:A_musical_instrument._A_harp.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4f/A_musical_instrument._A_harp.jpg",
+        "title": "File:A musical instrument. A harp.jpg",
+        "meaning": "a large stringed concert harp",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "3ef728bf601120cc0504a3eb93e06ff0af57cb81c9d6d9ca2e0eb64ff57ff8e3",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 657,
+        "height": 1080
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "hill",
+      "local": "build/word-art-review/library-source/supplemental/hill-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Rics1299",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Uliveti_monte_cinto.JPG/960px-Uliveti_monte_cinto.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Uliveti_monte_cinto.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Uliveti_monte_cinto.JPG",
+        "title": "File:Uliveti monte cinto.JPG",
+        "meaning": "a rounded hill above the surrounding land",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "a2d5a94b1d8fc7f4ecd877c79505be9b7af2c1f5910c1b3d514a20732c7dccd9",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "horn",
+      "local": "build/word-art-review/library-source/supplemental/horn-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Yamaha Corporation",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Yamaha_Horn_YHR-667V.tif/lossy-page1-960px-Yamaha_Horn_YHR-667V.tif.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Yamaha_Horn_YHR-667V.tif",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Yamaha_Horn_YHR-667V.tif",
+        "title": "File:Yamaha Horn YHR-667V.tif",
+        "meaning": "a coiled brass French horn",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "f22a193b8b21ee27dc2726dfb82d4fedf15c3e333aa94a60688c82781aae5f1f",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 616
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "lake",
+      "local": "build/word-art-review/library-source/supplemental/lake-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Marius (Marius~commonswiki)",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/04/Lake_Idro_Italy_2005-08-16.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Lake_Idro_Italy_2005-08-16.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Lake_Idro_Italy_2005-08-16.jpg",
+        "title": "File:Lake Idro Italy 2005-08-16.jpg",
+        "meaning": "an inland lake enclosed by land",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "47f8cdd67454e899190bc1b6d763d980e6714d0c83170f52de7adc31d16e6f78",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 512,
+        "height": 384
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "meteor",
+      "local": "build/word-art-review/library-source/supplemental/meteor-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "ESO/C. Malin",
+        "license": "CC-BY-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Cosmic_Fireball_Falling_Over_ALMA.jpg/960px-Cosmic_Fireball_Falling_Over_ALMA.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Cosmic_Fireball_Falling_Over_ALMA.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Cosmic_Fireball_Falling_Over_ALMA.jpg",
+        "title": "File:Cosmic Fireball Falling Over ALMA.jpg",
+        "meaning": "a bright meteor streak across the night sky",
+        "transformation": "Focus on the bright meteor trail and a small amount of the telescope horizon. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "8014e28723c09aefc202ce1a5d142cc0ce9efa783c4e94edf8c700e96b58ae10",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 640
+      },
+      "crop": {
+        "left": 70,
+        "top": 280,
+        "width": 365,
+        "height": 245
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "metronome",
+      "local": "build/word-art-review/library-source/supplemental/metronome2-final-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Mutatis mutandis",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Metronome_M%C3%A4lzel_1.jpg/960px-Metronome_M%C3%A4lzel_1.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Metronome_M%C3%A4lzel_1.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Metronome_M%C3%A4lzel_1.jpg",
+        "title": "File:Metronome Mälzel 1.jpg",
+        "meaning": "a mechanical metronome with a weighted pendulum",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "de86619126208e9645201a6ce1a8c5b8d06c4bb02dd9c1fc83141913597326a7",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1580
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "mud",
+      "local": "build/word-art-review/library-source/supplemental/mud-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Ildar Sagdejev ( Specious )",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/2003-11-27_Northerner_boots_in_mud.jpg/960px-2003-11-27_Northerner_boots_in_mud.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:2003-11-27_Northerner_boots_in_mud.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ea/2003-11-27_Northerner_boots_in_mud.jpg",
+        "title": "File:2003-11-27 Northerner boots in mud.jpg",
+        "meaning": "wet soft mud around a pair of boots",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "0b546ee8953abbc82c32c048d064e2fbc92375a15ac357288093316a5bbe8b57",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "nautilus",
+      "local": "build/word-art-review/library-source/supplemental/nautilus-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Manuae",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Nautilus_belauensis_from_Palau.jpg/960px-Nautilus_belauensis_from_Palau.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Nautilus_belauensis_from_Palau.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Nautilus_belauensis_from_Palau.jpg",
+        "title": "File:Nautilus belauensis from Palau.jpg",
+        "meaning": "a chambered nautilus with a spiral shell and tentacles",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "fd2a4e888488912eb58be94e767f606d30bcf56ab1b4a242e18f8f67070d2d56",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "nebula",
+      "local": "build/word-art-review/library-source/supplemental/nebula-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "David (Deddy) Dayag",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Trifid_Nebula_by_Deddy_Dayag.jpg/960px-Trifid_Nebula_by_Deddy_Dayag.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Trifid_Nebula_by_Deddy_Dayag.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Trifid_Nebula_by_Deddy_Dayag.jpg",
+        "title": "File:Trifid Nebula by Deddy Dayag.jpg",
+        "meaning": "a glowing cloud of gas and dust in space",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "b47360b417b391a7d97e7d74e8a26940d9cbaf99331e0d096fe2cd0c14f565aa",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 691
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "peninsula",
+      "local": "build/word-art-review/library-source/supplemental/peninsula-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Mertbiol",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Aerial_photograph_of_Monterey_Peninsula_2.jpg/960px-Aerial_photograph_of_Monterey_Peninsula_2.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_Monterey_Peninsula_2.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Aerial_photograph_of_Monterey_Peninsula_2.jpg",
+        "title": "File:Aerial photograph of Monterey Peninsula 2.jpg",
+        "meaning": "land extending into water on three sides",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "b4123bad6d4c8538ae1e38f6982dddbecbbd2cf5419b1d0ba75c2457b37628d8",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 455
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "plankton",
+      "local": "build/word-art-review/library-source/supplemental/plankton-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Jay Nadeau, Chris Lindensmith, Jody W. Deming, Vicente I. Fernandez, and Roman Stocker. Image courtesy of David Liittschwager.",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Marine_microplankton.jpg/960px-Marine_microplankton.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Marine_microplankton.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Marine_microplankton.jpg",
+        "title": "File:Marine microplankton.jpg",
+        "meaning": "microscopic plankton organisms in a water sample",
+        "transformation": "Remove the panel letter and scale annotation; preserve several recognizable microscopic organisms. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "8ae0bb3d59602bb372f8204688e84adc2f60463d7a674403e2afa15121ed9222",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 671
+      },
+      "crop": {
+        "left": 50,
+        "top": 50,
+        "width": 910,
+        "height": 520
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "raspberry",
+      "local": "build/word-art-review/library-source/supplemental/raspberry-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Ivar Leidus",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Raspberry_-_halved_%28Rubus_idaeus%29.jpg/960px-Raspberry_-_halved_%28Rubus_idaeus%29.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Raspberry_-_halved_(Rubus_idaeus).jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Raspberry_-_halved_%28Rubus_idaeus%29.jpg",
+        "title": "File:Raspberry - halved (Rubus idaeus).jpg",
+        "meaning": "a raspberry showing the hollow center and clustered drupelets",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "a4c6a2ca6ebd0c5a83054d8a5cb4886c93caa8cb44f29e31f887c6c684ddc6f2",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1200
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "river",
+      "local": "build/word-art-review/library-source/supplemental/river-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Basile Morin",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Pirogue_running_on_the_Mekong_at_golden_hour_between_Don_Det_and_Don_Khon_Laos.jpg/960px-Pirogue_running_on_the_Mekong_at_golden_hour_between_Don_Det_and_Don_Khon_Laos.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Pirogue_running_on_the_Mekong_at_golden_hour_between_Don_Det_and_Don_Khon_Laos.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Pirogue_running_on_the_Mekong_at_golden_hour_between_Don_Det_and_Don_Khon_Laos.jpg",
+        "title": "File:Pirogue running on the Mekong at golden hour between Don Det and Don Khon Laos.jpg",
+        "meaning": "a flowing river between two banks",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "deb433559ec3b72bc6635195d18985510145bacdc47e3f2cafc12a2260ec229b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 640
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "rover",
+      "local": "build/word-art-review/library-source/supplemental/rover-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg/960px-Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg",
+        "title": "File:Curiosity Self-Portrait at 'Big Sky' Drilling Site.jpg",
+        "meaning": "the Curiosity robotic Mars rover",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "c90e61e6016e04028cd6cd4df1ae75bd4f8db2eb29ece6583ea9634c6a6a2792",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1323
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "sand",
+      "local": "build/word-art-review/library-source/supplemental/sand-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Luca Galuzzi ( Lucag )",
+        "license": "CC-BY-SA-2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg/960px-Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg",
+        "title": "File:Libya 4608 Idehan Ubari Dunes Luca Galuzzi 2007.jpg",
+        "meaning": "loose sand forming desert dunes",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "21a75e0ce3afee4d39fbb7c605f1f4239f4e15462306f46494315c01945f837a",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 640
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "spacesuit",
+      "local": "build/word-art-review/library-source/supplemental/spacesuit-final-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA; crop by Scott MacDonald",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11_cropped.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Aldrin_Apollo_11_cropped.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11_cropped.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Aldrin_Apollo_11_cropped.jpg",
+        "title": "File:Aldrin Apollo 11 cropped.jpg",
+        "meaning": "a protective spacesuit with helmet, gloves and boots",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "bc4ec657d34cc00334e897f14491e1c05aa17728180f6a4bacd594b78441740b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 874,
+        "height": 1400
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "stalactite",
+      "local": "build/word-art-review/library-source/supplemental/stalactite2-final-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "David Monniaux",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Choranche_caves_stalactites.jpg/960px-Choranche_caves_stalactites.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Choranche_caves_stalactites.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Choranche_caves_stalactites.jpg",
+        "title": "File:Choranche caves stalactites.jpg",
+        "meaning": "mineral formations hanging down from a cave ceiling",
+        "transformation": "Focus on the downward mineral formations attached to the cave ceiling; exclude the pool and upward formations. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "bc051809893d9833e06032c66db5d2e94029c6296afc61dc12998260a8b20a4f",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 720
+      },
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 520,
+        "height": 330
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "stingray",
+      "local": "build/word-art-review/library-source/supplemental/stingray-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Wrtiii3644 at English Wikipedia",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:SStringray.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/SStringray.jpg/960px-SStringray.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:SStringray.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a0/SStringray.jpg",
+        "title": "File:SStringray.jpg",
+        "meaning": "a flat-bodied stingray with a long tail",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "7ae6d157fb4d9c47a33c5ae92e3535b4955972977b7455c2948028ba0c763716",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 731
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "submarine",
+      "local": "build/word-art-review/library-source/supplemental/submarine-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "U.S. Navy photo by General Dynamics Electric Boat",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:US_Navy_040730-N-1234E-002_PCU_Virginia_(SSN_774)_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/US_Navy_040730-N-1234E-002_PCU_Virginia_%28SSN_774%29_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg/960px-US_Navy_040730-N-1234E-002_PCU_Virginia_%28SSN_774%29_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:US_Navy_040730-N-1234E-002_PCU_Virginia_(SSN_774)_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/US_Navy_040730-N-1234E-002_PCU_Virginia_%28SSN_774%29_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg",
+        "title": "File:US Navy 040730-N-1234E-002 PCU Virginia (SSN 774) returns to the General Dynamics Electric Boat shipyard.jpg",
+        "meaning": "a submarine surfaced on the ocean",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "75834b056edcd84f81b7b385240350db4855eecfb95bc20050b0c80c26ae3002",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 768
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "supernova",
+      "local": "build/word-art-review/library-source/supplemental/PIA13478.jpg",
+      "source": {
+        "provider": "NASA Photojournal",
+        "creator": "NASA/JPL-Caltech",
+        "license": "NASA/JPL image use",
+        "licenseUrl": "https://www.jpl.nasa.gov/jpl-image-use-policy/",
+        "url": "https://images-assets.nasa.gov/image/PIA13478/PIA13478~orig.jpg",
+        "sourcePage": "https://science.nasa.gov/photojournal/giant-star-goes-supernova-smothered-by-its-own-dust-artists-concept/",
+        "title": "Giant Star Goes Supernova, Smothered by its own Dust (Artist's Concept)",
+        "meaning": "a giant supernova explosion obscured by its expanding gas and dust shell; artist concept",
+        "rightsEvidence": "Official PIA13478 caption credits only NASA/JPL-Caltech. JPL image-use policy permits reuse with credit unless a caption states another owner. No person, insignia or third-party owner appears in this asset.",
+        "transformation": "Focus on the central explosion and surrounding dust shell while retaining the space setting. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "95b265ac1225f3208bac482c674f1dde187a08bdc147d01e0e41addd799b0f2e",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 3872,
+        "height": 2592
+      },
+      "crop": {
+        "left": 300,
+        "top": 100,
+        "width": 3000,
+        "height": 2450
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "swordfish",
+      "local": "build/word-art-review/library-source/supplemental/swordfish-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Naturalis Biodiversity Center",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Xiphias_gladius_Linnaeus%2C_1758_2599925021.jpg/960px-Xiphias_gladius_Linnaeus%2C_1758_2599925021.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Xiphias_gladius_Linnaeus,_1758_2599925021.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Xiphias_gladius_Linnaeus%2C_1758_2599925021.jpg",
+        "title": "File:Xiphias gladius Linnaeus, 1758 2599925021.jpg",
+        "meaning": "a swordfish with a long sword-like bill",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "6d2e9d29ed76fa9461fa8ee1bd63c6d38ad113e8aed1dc694c7f4e0453f20476",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 640
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "tambourine",
+      "local": "build/word-art-review/library-source/supplemental/tambourine-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Frenciscobcn",
+        "license": "CC-BY-SA-1.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/1.0",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Pandeiro_new_30-09-07.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Pandeiro_new_30-09-07.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Pandeiro_new_30-09-07.jpg",
+        "title": "File:Pandeiro new 30-09-07.jpg",
+        "meaning": "a tambourine with a drum skin and metal jingles",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "745a32f342d5edc0f7a5fcaa987464cd5ffab0e1313c9a14bb55cc7e167f6ffb",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 305,
+        "height": 243
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "toe",
+      "local": "build/word-art-review/library-source/supplemental/toe-candidate.png",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Stoneisland24",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Toes.png",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Toes.png",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Toes.png",
+        "title": "File:Toes.png",
+        "meaning": "the digits at the end of a human foot, shown in close-up",
+        "transformation": "Crop out the ankle and most of the foot to focus on the toes. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "92f45ec704c541754576a63f5ee62bbf496e7d785457785f619c14e3ba79f7bd",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 810,
+        "height": 1066
+      },
+      "crop": {
+        "left": 35,
+        "top": 490,
+        "width": 710,
+        "height": 560
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "trombone",
+      "local": "build/word-art-review/library-source/supplemental/trombone-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Yamaha Corporation",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_Tenor_trombone_YSL-891Z_%28re-crop%29.jpg/960px-Yamaha_Tenor_trombone_YSL-891Z_%28re-crop%29.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Yamaha_Tenor_trombone_YSL-891Z_(re-crop).jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Yamaha_Tenor_trombone_YSL-891Z_%28re-crop%29.jpg",
+        "title": "File:Yamaha Tenor trombone YSL-891Z (re-crop).jpg",
+        "meaning": "a brass trombone with a long telescopic slide",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "8bda264cc6a00b4f7b630753b49ff925aa87c6555dc66a74072483cebf00ed5e",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 334
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "tuba",
+      "local": "build/word-art-review/library-source/supplemental/tuba-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Yamaha Corporation",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Yamaha_Bass_tuba_YFB-822.tif/lossy-page1-500px-Yamaha_Bass_tuba_YFB-822.tif.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Yamaha_Bass_tuba_YFB-822.tif",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Yamaha_Bass_tuba_YFB-822.tif",
+        "title": "File:Yamaha Bass tuba YFB-822.tif",
+        "meaning": "a large coiled brass tuba",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "f892c2cf782fb04352de58c08b14a896e98fbc4d138f9aa4338ebf2c88c3296f",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 500,
+        "height": 812
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "unicycle",
+      "local": "build/word-art-review/library-source/supplemental/unicycle-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "BuckyB89",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Jamesunicycle.jpg/960px-Jamesunicycle.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Jamesunicycle.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Jamesunicycle.jpg",
+        "title": "File:Jamesunicycle.jpg",
+        "meaning": "a person riding a one-wheeled unicycle",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "b7f4f96f5b8fd52e5e8a9a5d306b027b855ec7b023dcfa442272219206a3dc8b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1372
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "universe",
+      "local": "build/word-art-review/library-source/supplemental/universe-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "NASA and the European Space Agency. Edited by Noodle snacks",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field_high_rez_edit1.jpg",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Hubble_ultra_deep_field_high_rez_edit1.jpg/960px-Hubble_ultra_deep_field_high_rez_edit1.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field_high_rez_edit1.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Hubble_ultra_deep_field_high_rez_edit1.jpg",
+        "title": "File:Hubble ultra deep field high rez edit1.jpg",
+        "meaning": "many distant galaxies in a deep view of the observable universe",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "d06a0597d5716b98ba8474d7a854243d9d2abf17cc0857cc94b26a6cb513ab6e",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 960
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "valley",
+      "local": "build/word-art-review/library-source/supplemental/valley-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Mariano Cecowski (Marianocecowski)",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Salta-VallesCalchaquies-P3140151.JPG/960px-Salta-VallesCalchaquies-P3140151.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Salta-VallesCalchaquies-P3140151.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/50/Salta-VallesCalchaquies-P3140151.JPG",
+        "title": "File:Salta-VallesCalchaquies-P3140151.JPG",
+        "meaning": "a low valley between mountains",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "10de465318d652d4a3ca43c6b8c688d0337dc68e282fcc27bcb9cc63df7470d5",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 580
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "waterfall",
+      "local": "build/word-art-review/library-source/supplemental/waterfall-candidate.JPG",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Diego Delso",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Cascada_Dynjandi%2C_Vestfir%C3%B0ir%2C_Islandia%2C_2014-08-14%2C_DD_136-138_HDR.JPG/960px-Cascada_Dynjandi%2C_Vestfir%C3%B0ir%2C_Islandia%2C_2014-08-14%2C_DD_136-138_HDR.JPG",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Cascada_Dynjandi,_Vestfir%C3%B0ir,_Islandia,_2014-08-14,_DD_136-138_HDR.JPG",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Cascada_Dynjandi%2C_Vestfir%C3%B0ir%2C_Islandia%2C_2014-08-14%2C_DD_136-138_HDR.JPG",
+        "title": "File:Cascada Dynjandi, Vestfirðir, Islandia, 2014-08-14, DD 136-138 HDR.JPG",
+        "meaning": "water falling over a steep rock ledge",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "e97dee0db46c5c06210052e49a69379dff4df4efd6976fc94a9d17b66746ab1b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1477
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "wind",
+      "local": "build/word-art-review/library-source/supplemental/wind-alternative.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Albert Bridge",
+        "license": "CC-BY-SA-2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Windsock_and_flag%2C_Portrush_-_geograph.org.uk_-_486001.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Windsock_and_flag,_Portrush_-_geograph.org.uk_-_486001.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Windsock_and_flag%2C_Portrush_-_geograph.org.uk_-_486001.jpg",
+        "title": "File:Windsock and flag, Portrush - geograph.org.uk - 486001.jpg",
+        "meaning": "moving air inflating a windsock and blowing a flag",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "55ef155462f4da7ec12259b63d8152594b37805b055825d9add943e917de236b",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 640,
+        "height": 427
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    },
+    {
+      "id": "woodpecker",
+      "local": "build/word-art-review/library-source/supplemental/woodpecker-candidate.jpg",
+      "source": {
+        "provider": "Wikimedia Commons",
+        "creator": "Joshlaymon",
+        "license": "CC-BY-SA-3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/PileatedWoodpeckerFeedingonTree%2C_crop.jpg/960px-PileatedWoodpeckerFeedingonTree%2C_crop.jpg",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:PileatedWoodpeckerFeedingonTree,_crop.jpg",
+        "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/PileatedWoodpeckerFeedingonTree%2C_crop.jpg",
+        "title": "File:PileatedWoodpeckerFeedingonTree, crop.jpg",
+        "meaning": "a woodpecker clinging to and pecking a tree trunk",
+        "transformation": "Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.",
+        "sha256": "b58daeeafe30a2df780e6933a23c34660a719dfd8dae4d4e103a58da278fd7bd",
+        "acquisitionStatus": "acquired and visually reviewed; production conversion is a separate build step",
+        "availableAnimations": []
+      },
+      "dimensions": {
+        "width": 960,
+        "height": 1064
+      },
+      "review": "Source and final crop inspected at 128 px card size for the intended vocabulary sense."
+    }
+  ]
+}

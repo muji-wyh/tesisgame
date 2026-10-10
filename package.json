@@ -27,7 +27,7 @@
     "deploy": "powershell -NoProfile -ExecutionPolicy Bypass -File tools\\deploy-web.ps1",
     "prestart": "npm run build:web",
     "start": "npm run serve:web",
-    "serve:web": "http-server build/web -a 127.0.0.1 -p 41773 --brotli -c-1",
+    "serve:web": "node tools/serve-web.cjs",
     "preview:pip": "http-server web/preview/pip-growth -a 127.0.0.1 -p 41774 -c-1",
     "pretest:browser": "npm run build:web",
     "test:browser": "playwright test",

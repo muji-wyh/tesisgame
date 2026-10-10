@@ -1418,7 +1418,7 @@ test('the game pack starts while the first WASM response is still pending', asyn
   let packs = 0;
   let wasm = 0;
   page.on('request', request => {
-    if (request.url().endsWith('.pck')) packs++;
+    if (request.url().endsWith('.pck.br')) packs++;
   });
   await page.route('**/*.wasm', async route => {
     wasm++;
@@ -1444,7 +1444,7 @@ test('wiggling the loading toy stays bounded and reduced motion stops all effect
   await useMaintainedShell(page);
   let release;
   const held = new Promise(resolve => { release = resolve; });
-  await page.route('**/*.pck', async route => {
+  await page.route('**/*.pck.br', async route => {
     await held;
     await route.abort();
   });

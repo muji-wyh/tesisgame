@@ -120,7 +120,7 @@ test('loads the real engine, WebAssembly and game pack without scrolling', async
   await page.goto('/');
   await ready(page);
   expect(loaded.some((response) => response.url().includes('.wasm') && response.ok())).toBe(true);
-  expect(loaded.some((response) => response.url().includes('.pck') && response.ok())).toBe(true);
+  expect(loaded.some((response) => response.url().endsWith('.pck.br') && response.ok())).toBe(true);
   await expect(page.locator('.card')).toHaveCount(0);
   await assertFits(page);
   expect(errors).toEqual([]);
@@ -1103,14 +1103,14 @@ test('a corrupt WebAssembly response does not leave the loader pending', async (
 });
 
 test('a failed game pack download shows an English startup error', async ({ page }) => {
-  await page.route('**/*.pck', (route) => route.abort());
+  await page.route('**/*.pck.br', (route) => route.abort());
   await page.goto('/');
   await expect(page.locator('#message')).toContainText('The game could not start.', { timeout: 15000 });
   await expect(page.locator('#retry')).toBeVisible();
 });
 
 test('invalid game pack contents report the native startup exit', async ({ page }) => {
-  await page.route('**/*.pck', (route) => route.fulfill({
+  await page.route('**/*.pck.br', (route) => route.fulfill({
     contentType: 'application/octet-stream', body: 'not a Godot game pack'
   }));
   await page.goto('/');

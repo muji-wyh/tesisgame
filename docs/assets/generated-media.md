@@ -14,17 +14,22 @@ rename preserves existing native and browser saves.
 |---|---|
 | `id` | Unique stable lowercase identifier. |
 | `text` | Unique lowercase English token, 1-24 letters; optional `display_text` handles printed capitalization. |
-| `image` | Unique sourced local picture under `assets/images/words/`, or empty for contextual phrase words. |
+| `image` | Stable source picture path, or empty for contextual phrase words. `GameData.load_all` resolves pictured words to their active `assets/images/word-library/<id>.webp` image. |
 | `audio` | Local pronunciation under `assets/audio/voice/`. |
 | `level` | `basic`, `growing`, or `advanced`; explicitly authored for every catalogue entry. Older four-field callers default to `basic`; invalid supplied levels are rejected. |
 | `min_age` | Current curriculum cohort, integer 3-12. |
 | `practice_modes` | Eligible modes; image-less words participate through Phrase Builder. |
 | `part_of_speech`, `topic`, `meaning` | Intended sense, lesson grouping and short explanatory meaning. |
 
-The 1,285 word pictures live together in `assets\images\words`: 350 legacy SVGs and
-935 sourced Mulberry PNGs. Another 265 contextual words use text without invented
-illustrations. The [source manifest and import guide](mulberry-vocabulary.md)
-describe their distinct origins and licenses. Prerecorded speech uses the approved
+All 1,285 pictured words use the [complete vocabulary artwork library](word-library.md):
+256-pixel stills under `assets/images/word-library/` and animated atlases under
+`assets/images/word-motion/`. Eight clips use articulated Blender characters;
+the remaining 1,277 use illustration motion suited to the subject. Another 265
+contextual words retain text-in-context practice. The 350 legacy SVGs and 935
+original Mulberry PNGs under `assets/images/words/` remain historical source
+records and are excluded from the production pack. Current per-word provenance,
+licenses and animation adaptations are linked from the complete-library guide.
+Prerecorded speech uses the approved
 **Microsoft Ava Neural (en-US)** voice with rate `-15%`, pitch `+8Hz`, and unchanged
 volume. Microsoft Edge online TTS generates these source recordings; playback and
 ordinary builds need no speech service or credentials. Optional microphone recognition
@@ -62,9 +67,11 @@ The 350 legacy entries retain their twelve picture-word topics:
 | Garden | 16 |
 | Music | 19 |
 
-Original word-art definitions are maintained in `tools\generate-images.cjs` and the small
-topic modules under `tools\word-art`. The generated SVGs use simple shapes without fonts,
-external images or text labels.
+Historical word-art definitions remain in `tools\generate-images.cjs` and the
+small topic modules under `tools\word-art`. Their SVGs are retained for provenance
+and import checks; regenerating them does not update the active vocabulary art.
+Use the [complete-library reproduction workflow](word-library.md#reproduction-and-local-review)
+to update current stills and animations.
 
 ```powershell
 node tools\generate-images.cjs

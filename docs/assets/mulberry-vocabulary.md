@@ -8,6 +8,8 @@ The subsequent [growth curriculum](../vocabulary/growth-curriculum.md) reorganiz
 all entries into ten tiers and adds 300 more words. This document and its manifest
 remain the source record for the original 900-picture batch; the additional 35
 pictures have a [separate source record](growth-vocabulary.md).
+Current stills and animated adaptations are documented in the
+[complete vocabulary artwork library](word-library.md).
 
 ## Sources and license
 
@@ -26,8 +28,9 @@ pictures have a [separate source record](growth-vocabulary.md).
 - Conversion: selected original SVGs are rasterized to transparent 192-pixel PNGs
   to preserve their colors, geometry, and CSS consistently in Godot. No substitute
   artwork or generated geometric placeholders were created.
-- Animations: none. These are static educational illustrations. Existing card
-  feedback supplies the game's motion.
+- Source animations: none. This original batch acquired static educational
+  illustrations. Current locally authored illustration motion is recorded in
+  the complete-library manifest and retains the source license.
 
 The [machine-readable manifest](mulberry-vocabulary.json) records every original
 file URL, original hash, integrated path, output hash, and renderer version.

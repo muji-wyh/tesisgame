@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
+const { brotliCompressSync } = require('node:zlib');
 const { snapshotInputs, invalidateBuildReceipt, writeBuildReceipt, verifyBuildReceipt } = require('../tools/web-build-receipt.cjs');
 
 function fixture(t) {
@@ -18,15 +20,18 @@ function fixture(t) {
   write('scripts/game.gd', 'extends Node');
   write('assets/chests/models/private.glb', 'private model bytes');
   write('web/shell.html', 'source shell');
-  const config = { executable: 'engine-0123456789abcdef', mainPack: 'game-0123456789abcdef.pck' };
+  const pack = Buffer.from('A complete native game pack with bundled art and audio');
+  const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck.br`;
+  const config = { executable: 'engine-0123456789abcdef', mainPack, fileSizes: { [mainPack]: pack.length } };
   write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
   write('build/web/staticwebapp.config.json', '{}');
-  for (const file of [...['js', 'wasm', 'audio.worklet.js', 'audio.position.worklet.js']
-    .map(suffix => `${config.executable}.${suffix}`), config.mainPack]) {
+  for (const file of ['js', 'wasm', 'audio.worklet.js', 'audio.position.worklet.js']
+    .map(suffix => `${config.executable}.${suffix}`)) {
     write(`build/web/${file}`, `compiled ${file}`);
     write(`build/web/${file}.br`, `compressed ${file}`);
   }
-  return { root, write, receipt: path.join(root, 'build/web-build.json'),
+  write(`build/web/${mainPack}`, brotliCompressSync(pack));
+  return { root, write, config, pack, receipt: path.join(root, 'build/web-build.json'),
     record: () => writeBuildReceipt(root, snapshotInputs(root)) };
 }
 
@@ -98,6 +103,18 @@ test('changing the shared chest audio contract or validator rejects an older exp
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*chest-reference-audio\.cjs/);
 });
 
+test('changing the vocabulary motion manifest, source map or validator invalidates an older export', t => {
+  const { root, write, record } = fixture(t);
+  const sources = ['data/word-motion.json', 'docs/assets/word-library-motion.json',
+    'tools/vocabulary-art/library-motion-map.json', 'tools/word-library-motion.cjs'];
+  for (const source of sources) write(source, 'original motion contract');
+  for (const source of sources) {
+    record();
+    write(source, 'revised motion contract');
+    assert.throws(() => verifyBuildReceipt(root), error => error.message.includes('Stale Web build') && error.message.includes(source));
+  }
+});
+
 test('editing or deleting the phrase catalog rejects an older export', t => {
   const { root, write, record } = fixture(t);
   write('phrases.json', '[{"id":"red-apple","text":"red apple"}]');
@@ -112,7 +129,7 @@ test('editing or deleting the phrase catalog rejects an older export', t => {
 });
 
 test('changed or missing deployed files fail verification even when source inputs are unchanged', t => {
-  const { root, write, record } = fixture(t);
+  const { root, write, config, record } = fixture(t);
   record();
   write('build/web/index.html', fs.readFileSync(path.join(root, 'build/web/index.html'), 'utf8') + '<!-- changed -->');
   assert.throws(() => verifyBuildReceipt(root), /export changed.*index\.html/);
@@ -120,8 +137,52 @@ test('changed or missing deployed files fail verification even when source input
   write('build/web/unexpected.js', 'unexpected upload');
   assert.throws(() => verifyBuildReceipt(root), /export changed.*unexpected\.js/);
   record();
-  fs.unlinkSync(path.join(root, 'build/web/game-0123456789abcdef.pck.br'));
+  fs.unlinkSync(path.join(root, `build/web/${config.mainPack}`));
   assert.throws(() => verifyBuildReceipt(root), /Missing Web export file/);
+});
+
+test('the explicit compressed pack is validated against its decoded byte length and hash', t => {
+  const { root, write, config, pack, record } = fixture(t);
+  const packPath = `build/web/${config.mainPack}`;
+  write(packPath, brotliCompressSync(Buffer.alloc(pack.length, 1)));
+  assert.throws(record, /decoded size and content hash/);
+  write(packPath, Buffer.from([0xff, 0x22]));
+  assert.throws(record, /complete Brotli stream/);
+  write(packPath, brotliCompressSync(pack));
+  config.fileSizes[config.mainPack] = pack.length - 1;
+  write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  assert.throws(record, /decoded size and content hash/);
+  config.fileSizes[config.mainPack] = pack.length + 1;
+  write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  assert.throws(record, /decoded size and content hash/);
+  delete config.fileSizes;
+  write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  assert.throws(() => writeBuildReceipt(root, snapshotInputs(root)), /decoded byte length/);
+});
+
+test('a compressed pack cannot conceal trailing data or redundant native pack copies', t => {
+  const { root, write, config, pack, record } = fixture(t);
+  const compressed = brotliCompressSync(pack);
+  for (const tail of [Buffer.from('extra bytes'), brotliCompressSync(Buffer.from('another stream'))]) {
+    write(`build/web/${config.mainPack}`, Buffer.concat([compressed, tail]));
+    assert.throws(record, /decoded size and content hash/);
+  }
+  write(`build/web/${config.mainPack}`, compressed);
+  for (const name of [config.mainPack.slice(0, -3), 'index.pck', 'index.pck.br', 'game-0123456789abcdef.pck.br']) {
+    const filename = write(`build/web/${name}`, pack);
+    assert.throws(record, /duplicate Web game packs/);
+    fs.unlinkSync(filename);
+  }
+  const receipt = record();
+  assert.deepEqual(verifyBuildReceipt(root), receipt);
+});
+
+test('changes to the local delivery server invalidate the build verified with it', t => {
+  const { root, write, record } = fixture(t);
+  write('tools/serve-web.cjs', 'original compressed pack server');
+  record();
+  write('tools/serve-web.cjs', 'updated compressed pack server');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*serve-web\.cjs/);
 });
 
 test('failed and interrupted builds cannot leave a prior successful receipt deployable', t => {

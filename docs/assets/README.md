@@ -14,8 +14,10 @@ what ships. Private source packs remain subject to their own licenses.
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
 | [Ava speech](ava-voice.md) | Approved voice profile, all 1,888 word, phrase and prompt recordings, generation, and source hashes |
 | [Pip growth](pip-growth.md) | Ten appearances, cumulative actions and ten character voice recordings |
+| [Complete animated vocabulary library](word-library.md) | All 1,285 pictured words: eight articulated Blender clips, 1,277 illustration motions, source rights, reproduction and local review; 265 words remain context-only |
+| [Articulated teaching clips](lv3-motion-studies.md) | Eight cheerful action performances, Blender authoring, frame checks and the local comparison gallery |
 | [Growth vocabulary artwork](growth-vocabulary.md) | 35 new sourced pictures and contextual vocabulary without invented images |
-| [Lv3 vocabulary refresh](lv3-vocabulary.md) | 69 shared dimensional illustrations, Blender scenes, source rights, and local comparison gallery |
+| [Lv3 vocabulary refresh](lv3-vocabulary.md) | Original 69-picture source record, retained compositions, Blender scenes and source rights |
 | [Expanded vocabulary artwork](mulberry-vocabulary.md) | 900 sourced Mulberry illustrations, license, curriculum manifests, and reproducible import |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, procedural sound bank, motion, and previews |

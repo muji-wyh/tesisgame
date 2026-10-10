@@ -1,5 +1,7 @@
 extends SceneTree
 
+const WordArt = preload("res://scripts/word_art.gd")
+
 var checks := 0
 var failures := 0
 
@@ -43,7 +45,7 @@ func check_feedback(app, ids: Array, correct: bool) -> void:
 		var data: Dictionary = app.model.card_by_id(id)
 		check(card.get_theme_stylebox("normal").border_color == (card.match_mark.tint if correct else app.Style.WRONG),
 			"The board card itself marks the correct or incorrect answer: " + id)
-		check(card.picture.texture.resource_path == "res://" + data.word.image and card.word_label.text == data.word.text,
+		check(WordArt.source_path(card.picture.texture) == "res://" + data.word.image and card.word_label.text == data.word.text,
 			"Feedback preserves the card's original word and picture")
 		if correct:
 			check(card.match_mark.visible and not card.disabled

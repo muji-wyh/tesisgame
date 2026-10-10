@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
+const { brotliDecompressSync } = require('node:zlib');
 
 const INPUTS = [
   'assets', 'scenes', 'scripts', 'web', 'project.godot', 'export_presets.cfg',
@@ -9,8 +10,10 @@ const INPUTS = [
   'docs/assets/ui-click-audio.json', 'docs/assets/chest-reference-audio.json',
   'docs/assets/lv3-vocabulary.json', 'tools/lv3-vocabulary-art.cjs',
   'docs/assets/lv3-word-motion.json',
+  'docs/assets/word-library.json', 'tools/word-library-art.cjs',
+  'docs/assets/word-library-motion.json', 'tools/word-library-motion.cjs', 'tools/vocabulary-art/library-motion-map.json',
   'tests/godot/verify_web_pack.gd',
-  ...['build-web', 'package-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'web-build-receipt']
+  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'web-build-receipt']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');
@@ -59,17 +62,36 @@ function exportInventory(root) {
   const html = fs.readFileSync(path.join(directory, 'index.html'), 'utf8');
   const config = JSON.parse(html.match(/const config = (\{[^\r\n]*\});/)?.[1] || 'null');
   if (!config || !/^engine-[a-f0-9]{16}$/.test(config.executable) ||
-      !/^game-[a-f0-9]{16}\.pck$/.test(config.mainPack)) {
+      !/^game-[a-f0-9]{16}\.pck\.br$/.test(config.mainPack)) {
     throw new Error('The Web export has not been packaged with versioned engine and game files.');
   }
-  const required = [...['js', 'wasm', 'audio.worklet.js', 'audio.position.worklet.js']
-    .map(suffix => `${config.executable}.${suffix}`), config.mainPack];
+  const required = ['js', 'wasm', 'audio.worklet.js', 'audio.position.worklet.js']
+    .map(suffix => `${config.executable}.${suffix}`);
   for (const name of required) {
     for (const filename of [name, `${name}.br`]) {
       if (!fs.existsSync(path.join(directory, filename)) || !fs.statSync(path.join(directory, filename)).size) {
         throw new Error(`Missing Web export file: ${filename}`);
       }
     }
+  }
+  const packPath = path.join(directory, config.mainPack);
+  if (!fs.existsSync(packPath) || !fs.statSync(packPath).size) {
+    throw new Error(`Missing Web export file: ${config.mainPack}`);
+  }
+  const redundantPacks = fs.readdirSync(directory).filter(name =>
+    /^(?:game-[a-f0-9]{16}|index)\.pck(?:\.br)?$/.test(name) && name !== config.mainPack);
+  if (redundantPacks.length) throw new Error(`Unexpected duplicate Web game packs: ${redundantPacks.join(', ')}`);
+  const expectedSize = config.fileSizes?.[config.mainPack];
+  if (!Number.isSafeInteger(expectedSize) || expectedSize <= 0) {
+    throw new Error('The Web game pack must declare its decoded byte length.');
+  }
+  const compressed = fs.readFileSync(packPath);
+  let decoded;
+  try { decoded = brotliDecompressSync(compressed, { maxOutputLength: expectedSize + 1, info: true }); }
+  catch { throw new Error('The Web game pack is not a complete Brotli stream of the declared size.'); }
+  if (decoded.buffer.length !== expectedSize || decoded.engine.bytesWritten !== compressed.length ||
+      `game-${digest(decoded.buffer).slice(0, 16)}.pck.br` !== config.mainPack) {
+    throw new Error('The Web game pack does not match its decoded size and content hash.');
   }
   return inventory(directory, fs.readdirSync(directory));
 }

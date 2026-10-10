@@ -2,6 +2,17 @@
   "creator": "Kenney (source meshes); Grow with Pip (skeletal motion and renders)",
   "license": "CC0-1.0",
   "sourceRecord": "docs/assets/lv3-vocabulary.json",
+  "adaptations": "Cheerful smile, timed blinks, head and torso counter-motion, action-specific anticipation and recovery; clip durations unchanged.",
+  "skins": [
+    {
+      "path": "tools/vocabulary-art/skins/child-cheerful.png",
+      "sha256": "e73a25fa8d1290ce42139c7f322c9d2f097642da54a8dc5f679c9e79f7dff24f"
+    },
+    {
+      "path": "tools/vocabulary-art/skins/child-cheerful-blink.png",
+      "sha256": "d06788bc00dc934be5d4dbe1a672f30314e44b4e5afecfbbcd755a4b8492e8e2"
+    }
+  ],
   "status": "Integrated in all word-picture consumers",
   "files": [
     {
@@ -12,8 +23,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 19,
-      "bytes": 147512,
-      "sha256": "be44ae7cd9ed792da9b7282645dda5e5feadc447c980e304ce49870b1b07a3b4"
+      "bytes": 151452,
+      "sha256": "530d63e35b29608a89e29cd47ba9e77a3e573da06cef70ec9f3d6020a454d450"
     },
     {
       "id": "run",
@@ -23,8 +34,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 9,
-      "bytes": 78576,
-      "sha256": "1932ed43c96fe0b587a772bf36d0b255dfb60aa96473fdf60b53b26dc4a36090"
+      "bytes": 78030,
+      "sha256": "a82353b24e1eb285814ff592eec76e725288b936ee37138588ccb6931d03f7aa"
     },
     {
       "id": "jump",
@@ -34,8 +45,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 30,
-      "bytes": 197704,
-      "sha256": "a13b6b4b884562c82f5a3a0d4264ad79d86e7a55470908638a6f34f4828f1f41"
+      "bytes": 195176,
+      "sha256": "1fb41265a66ec64f4a532f2ee1885d762302381df7b008ddf584aa7f44dfc5d4"
     },
     {
       "id": "open",
@@ -45,8 +56,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 62,
-      "bytes": 233502,
-      "sha256": "0ff542a3ecb44fc79ac409d854c8a78fbde8b17fa7b03c042ffb21e4c143a5ef"
+      "bytes": 275314,
+      "sha256": "726e171e198a03751a5d8c51710e5b30d47b923ad718e5fb1883130d4753e4b1"
     },
     {
       "id": "close",
@@ -56,8 +67,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 62,
-      "bytes": 223948,
-      "sha256": "5b0053140654e90b11048cd4322fe52f986b38e85bc012b85cf326a322573726"
+      "bytes": 218056,
+      "sha256": "ba139beac34849719b530635e186c765148bfa49d1ec1ae52c4739ba2a09c2d7"
     },
     {
       "id": "drink",
@@ -67,8 +78,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 38,
-      "bytes": 220616,
-      "sha256": "a529ae1206dd8aa9b800a3bbba19c5a74689d4d496504cae6a834a180b35adae"
+      "bytes": 239122,
+      "sha256": "9f92d5ae78fd458c9459e44f9a335650a19f15500f35220b6004690cb94d0c0b"
     },
     {
       "id": "eat",
@@ -78,8 +89,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 38,
-      "bytes": 219760,
-      "sha256": "72aa793117c190a08236bb79570949c97e5155372cfdd393ec7c2184bd83fd2f"
+      "bytes": 221366,
+      "sha256": "375bee665bfe256a5741696685612f84710e21f9c5781821281c43d0249d108f"
     },
     {
       "id": "hello",
@@ -89,8 +100,8 @@
       "frameSide": 128,
       "columns": 8,
       "posterFrame": 34,
-      "bytes": 227116,
-      "sha256": "2034f0be94a1a18faf7ec7f97d90d02f0154755bff090f3952994e947479b524"
+      "bytes": 252516,
+      "sha256": "0a2aafdd3e88e6ba2ad6a67b15424cb6ad65a054af14016d15d12c80a2136a8c"
     }
   ]
 }

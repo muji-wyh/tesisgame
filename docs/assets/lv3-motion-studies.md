@@ -1,14 +1,18 @@
 # Lv3 motion studies
 
-Eight vocabulary animations replace their static pictures in the live game:
-walk, run, jump, open, close, drink, eat and hello. Match, Memory, Phrase Builder,
-Voice Pop, Jelly Match and the age-word catalogue share the same playback.
-The comparison gallery and editable Blender sources remain local only.
+This guide covers the eight articulated Blender clips in the
+[complete animated vocabulary library](word-library.md): walk, run, jump, open,
+close, drink, eat and hello. The full release animates all 1,285 pictured words;
+the other 1,277 use illustration motion, and 265 context-only words retain text.
+Match, Memory, Phrase Builder, Voice Pop, Jelly Match and the age-word catalogue
+share the same picture playback. The comparison gallery and editable Blender
+sources remain local only.
 
 ## Acquired source and authorship
 
 The character is the acquired **Kenney Animated Characters Protagonists 1.1**
-`characterMedium.fbx`, with the retained child skin adaptation. The door is from
+`characterMedium.fbx`, with a locally adapted smile and timed eyelid textures.
+The door is from
 **Kenney Furniture Kit 2.0**, and the glass and loaf are from **Kenney Food Kit 2.0**.
 These production models are CC0. Source URLs, acquired archive hashes, individual
 model hashes and retained license files are recorded in
@@ -21,17 +25,19 @@ generation service, paid asset or external API is used.
 
 ## Motion and review
 
-- Walk uses a slow alternating gait; run has a faster cadence, bent elbows,
+- Walk uses a relaxed alternating gait and head/torso counter-motion; run has a faster cadence, bent elbows,
   higher knees and short unsupported phases.
-- Jump contains anticipation, flight, a two-foot landing and settling.
+- Jump contains eager anticipation, an open-arm leap, a two-foot landing and settling.
 - Open and close rotate the actual door leaf around its hinge, with the hand
-  following the handle. They hold the final state before the next replay.
+  following the handle. A small glance toward the learner follows the completed
+  door movement. They hold the final state before the next replay.
 - Drink raises and tips a held glass; eat raises a held loaf and adds a chewing
-  nod. Hello raises a hand, waves three times and returns to a relaxed stance.
+  nod and a pleased reaction. Hello tilts the head, waves an open hand three
+  times and returns to a relaxed stance. The complete cycle remains readable.
 - Cameras are fitted to the full motion envelope and remain fixed. No frame is
   individually trimmed. The contact shadow comes from the rendered scene.
 
-The local page compares each animation with its current static picture at 48,
+The local page compares each animation with its previous character pose at 48,
 80, 120 and 192 pixels. It provides global and individual playback, replay and
 frame scrubbing. Offscreen and background playback stops; reduced-motion
 preferences start the preview paused. The door animations restart after their
@@ -40,7 +46,9 @@ hold instead of reversing and demonstrating the opposite word.
 ## Local output and reproduction
 
 The acquired source packs remain in `build/word-art-review/model-source/`.
-Run Blender 5.2.2 LTS with:
+The cheerful skin textures are tracked in `tools/vocabulary-art/skins/`. To
+regenerate them, run `python tools/vocabulary-art/make-cheerful-skin.py` with
+Pillow installed. Run Blender 5.2.2 LTS from the repository root with:
 
 ```text
 blender --background --factory-startup --python-exit-code 1 --python tools/vocabulary-art/render-animations.py -- walk run jump open close drink eat hello
@@ -61,44 +69,41 @@ Serve `build/word-art-review/` on loopback port 41775. The review route is
 atlases, animated WebP loops and pages remain in the ignored build directory.
 `tools/vocabulary-art/.gdignore` excludes authoring tools from Godot import.
 
-`node tools/vocabulary-art/package-runtime-motion.cjs` packages only the eight
-card-sized atlases into `assets/images/word-motion/`. Each frame is 128 pixels,
-with eight columns and no per-frame cropping. The 516 frames total 1,548,734
-source bytes and approximately 33 MiB decoded, shared across repeated cards.
-The runtime delivery hashes are in [lv3-word-motion.json](lv3-word-motion.json).
+`node tools/vocabulary-art/package-runtime-motion.cjs` packages this eight-clip
+subset into `assets/images/word-motion/`. Each frame is 128 pixels,
+with eight columns and no per-frame cropping. The 516 frames occupy approximately
+33 MiB decoded, shared across repeated cards; encoded sizes are in the manifest.
+The subset's delivery hashes are in [lv3-word-motion.json](lv3-word-motion.json).
+This step does not regenerate the full runtime descriptor. Complete the
+[full-library workflow](word-library.md#reproduction-and-local-review), ending
+with `python tools/vocabulary-art/render-library-motion.py --integrate`, to
+publish all 1,285 animation records and their combined provenance manifest.
 
-`scripts/word_art.gd` advances shared AtlasTextures at 24 fps while visible.
+`scripts/word_art.gd` advances these shared AtlasTextures at 24 fps while visible;
+the other illustration loops retain their own 12 fps timing.
 Offscreen and hidden art, menus and background pages pause playback. Reduced
 motion selects the reviewed teaching pose. Hidden Memory faces remain hidden;
 Phrase candidates, dragged cards and answers retain the same illustration.
 Voice Pop freezes the impact pose for its two sliced halves. Existing static
-pictures remain available as fallbacks. Curriculum IDs, pronunciation and
+pictures in the complete word library remain available as fallbacks. Curriculum IDs, pronunciation and
 mastery rules are unchanged. Preview routes and source scenes are excluded
 from the production export.
 
 ## Review checks
 
-All eight studies were rendered and packaged: 516 frames in total, each 256 by
-256 pixels at 24 fps. Frame validation found no missing files or clipped opaque
-subjects; minimum subject margins range from 20 to 27 pixels. The baked door
-handle/hand contact error stays below 0.000001 scene units. Sprite atlases total
-approximately 2.93 MB. Individual animated WebP loops are also retained locally.
+The cheerful revision contains 516 full frames at 256 by 256 pixels and 24 fps.
+`verify-motion-frames.py` checks every frame for a visible subject, a safe opaque
+margin and distinct movement, and exports a five-pose contact sheet for each
+word. Door hand/handle contact is measured while authoring the joint motion.
+The local `animated/verification.json` records the current frame measurements;
+encoded runtime sizes and hashes are recorded in `lv3-word-motion.json`.
 
-The browser review loaded all eight canvases without failed images or console
-errors. Playback, pause, individual replay, frame scrubbing, reduced-motion
-initial pause and a 390-pixel phone viewport were checked. Key poses and full
-frame bounds were inspected; the local page is the normal-speed visual review
-deliverable. This is not a physical-device gameplay integration test. The local
-`verification.json` and `delivery.json` retain frame checks and output hashes.
+The full vocabulary runtime now uses visibility-driven sheet loading and idle
+release. Its focused tests cover both frame rates, bounded memory, recycled
+controls, hidden Memory cards, Phrase editing, Jelly pictures and frozen Voice
+Pop slices. The production pack verifier checks all motion descriptors and
+atlas dimensions while excluding preview pages and authoring files.
 
-Runtime verification adds 604 focused assertions for all atlas frames, playback,
-shared ownership, recycled controls, hidden Memory cards, Phrase editing, Jelly
-fusion pictures and frozen Voice Pop slices. Existing Phrase, catalogue, Memory,
-Jelly view, Voice Pop scene and slice suites also pass. The export verifier checks
-all eight runtime atlases and excludes local galleries and authoring files.
-
-Browser pixel comparisons confirm motion for all eight words on desktop Chromium
-and an emulated iPhone in WebKit. Reduced motion stays on its teaching pose in
-both engines. The combined desktop navigation run reached its timeout after all
-eight motion comparisons; the remaining static-pose check passed as a separate
-focused run. These are browser emulations, not physical-device measurements.
+Normal-speed preview and browser frame comparisons supplement pose review.
+Browser emulation does not establish physical-device performance. The complete
+local page remains available for the user's motion and expression review.

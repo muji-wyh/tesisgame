@@ -15,6 +15,10 @@
     h2 { margin-top: 32px; font-size: 20px; }
     a { color: #365b49; text-underline-offset: 3px; }
     a:focus-visible { outline: 3px solid #365b49; outline-offset: 4px; }
+    .artwork-list { padding-left: 24px; }
+    .artwork-list li { margin: 0 0 24px; overflow-wrap: anywhere; }
+    .artwork-list p { margin: 6px 0; }
+    summary { cursor: pointer; }
   </style>
 </head>
 <body>
@@ -52,11 +56,33 @@
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         SOFTWARE.</p>
     </details>
-    <h2>Lv3 vocabulary illustrations</h2>
-    <p>The first learning level includes 46 adapted <a href="https://github.com/microsoft/fluentui-emoji">Microsoft Fluent Emoji</a>
-      illustrations by Microsoft Corporation under MIT, and 23 static Blender renders of
-      <a href="https://kenney.nl/assets">Kenney</a> models under CC0. We adapted framing, materials,
-      clothing and poses to make words easier to recognise.</p>
+    <h2>Vocabulary picture library</h2>
+    <p>Vocabulary cards combine <a href="https://github.com/microsoft/fluentui-emoji/tree/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc">Microsoft Fluent Emoji</a>
+      illustrations by Microsoft Corporation under the MIT License, Blender renders of
+      <a href="https://kenney.nl/assets">Kenney</a> models under
+      <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>, adapted Mulberry Symbols,
+      and the individually credited photographs and educational illustrations below.</p>
+    <p>We normalize the framing of Fluent illustrations and preserve their authored lighting.
+      Kenney model adaptations include materials, clothing, poses, studio lighting and character animation.
+      The models come from Kenney's <a href="https://kenney.nl/assets/animated-characters-protagonists">Animated Characters: Protagonists</a>,
+      <a href="https://kenney.nl/assets/food-kit">Food Kit</a>,
+      <a href="https://kenney.nl/assets/furniture-kit">Furniture Kit</a> and
+      <a href="https://kenney.nl/assets/toy-car-kit">Toy Car Kit</a> collections.
+      Eight action pictures use joint-based Blender animation of these acquired models.</p>
+    <p>All 1,285 vocabulary pictures have an animated version. Alongside the eight articulated
+      Blender clips, the remaining 1,277 illustrations use restrained
+      motion suited to the pictured subject: gentle breathing, swaying, rigid movement, optical
+      camera drift or moving surface light. Teaching arrows, comparisons and fixed supports retain
+      their meaning. Photographs remain flat images; these adaptations do not add articulated limbs.
+      Reduced-motion settings use the corresponding still picture. The 265 context-only words
+      retain text-in-context practice without invented pictures.</p>
+    <p>The <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/word-library.json">complete picture manifest</a>
+      records each word's creator, source, license, transformation and adapted output.
+      The <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/word-library-motion.json">complete animation manifest</a>
+      records every animated output and its source credit, license and motion adaptation.
+      The <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/lv3-vocabulary.json">character and model source record</a>
+      and <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/lv3-motion-studies.md">action animation record</a>
+      describe the corresponding adaptations.</p>
     <details><summary>Microsoft Fluent Emoji MIT License</summary><pre style="white-space:pre-wrap;font:inherit">    MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -79,14 +105,368 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 </pre></details>
-    <h2>Earlier vocabulary illustrations</h2>
-    <p>935 learning illustrations use <a href="https://mulberrysymbols.org/">Mulberry Symbols</a>
-      by Steve Lee, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
-      The symbol project originated with Garry Paxton. We converted the SVGs to PNGs for game cards;
-      the original artwork and colors are retained. The growth curriculum adds 35 sourced illustrations and uses text in context for words without a suitable picture. These adapted illustrations remain under CC BY-SA 4.0.</p>
+    <h2>Adapted teaching symbols</h2>
+    <p><a href="https://mulberrysymbols.org/">Mulberry Symbols</a> are by Steve Lee,
+      from the symbol design project originated by Garry Paxton, under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+      We retain the educational shapes and comparison cues, soften outlines, moderate the palette,
+      add gentle shading and adjust framing. Some compositions select or repeat source elements to
+      clarify a word's meaning. Animated versions add subject-appropriate motion or local light
+      emphasis while preserving teaching cues. These adapted still and animated illustrations
+      remain under CC BY-SA 4.0.</p>
     <p><a href="https://github.com/mulberrysymbols/mulberry-symbols/tree/9cbab9f400c5de44e2bc58839cca07294aadb086/EN">Original symbols</a>
-      &middot; <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/mulberry-vocabulary.json">Original mapping and adapted files</a>
-      &middot; <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/growth-vocabulary.json">Growth illustration mapping</a></p>
+      &middot; <a href="https://github.com/muji-wyh/tesisgame/blob/main/docs/assets/word-library.json">Source mapping and adapted files</a>
+      &middot; <a href="https://github.com/muji-wyh/tesisgame/blob/main/tools/vocabulary-art/curated-library-map.json">Composition adaptations</a></p>
+    <h2>Photographs and specialist illustrations</h2>
+    <p>The following sources illustrate natural-world, geography, science and other vocabulary.
+      Images are resized and encoded for game cards; individual crop changes are stated below.
+      Animated adaptations use optical camera drift, rigid movement or restrained light variation,
+      as recorded for each word in the complete animation manifest above.
+      Adapted CC BY-SA pictures remain under their respective source licenses.
+      Public-domain and CC0 source status is preserved.</p>
+    <details>
+      <summary>Individual artwork credits</summary>
+      <ol class="artwork-list">
+        <li id="word-art-anemone">
+          <strong>anemone</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Tomate_de_mar_(Actinia_equina),_Set%C3%BAbal,_Portugal,_2020-08-01,_DD_11.jpg">Tomate de mar (Actinia equina), Setúbal, Portugal, 2020-08-01, DD 11.jpg</a>
+          <p>Creator: Diego Delso. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/anemone.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-armadillo">
+          <strong>armadillo</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Nine-banded_Armadillo.jpg">Nine-banded Armadillo.jpg</a>
+          <p>Creator: BirdPhotos.com. License: <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/armadillo.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-asteroid">
+          <strong>asteroid</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:243_ida_crop.jpg">243 ida crop.jpg</a>
+          <p>Creator: NASA/JPL; crop by Chzz. License: <a href="https://commons.wikimedia.org/wiki/File:243_ida_crop.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/asteroid.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-avalanche">
+          <strong>avalanche</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Avalanche_on_Everest.jpg">Avalanche on Everest.jpg</a>
+          <p>Creator: Chagai at English Wikipedia. License: <a href="https://commons.wikimedia.org/wiki/File:Avalanche_on_Everest.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/avalanche.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-bamboo">
+          <strong>bamboo</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Bamboo_forest.jpg">Bamboo forest.jpg</a>
+          <p>Creator: Kamakura. License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/bamboo.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-binoculars">
+          <strong>binoculars</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Binocular_with_8x_magnification_and_42_mm_lens_diameter.jpg">Binocular with 8x magnification and 42 mm lens diameter.jpg</a>
+          <p>Creator: Andreas Klehr. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/binoculars.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-block">
+          <strong>block</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Toyblocks.JPG">Toyblocks.JPG</a>
+          <p>Creator: Polylerus. License: <a href="https://commons.wikimedia.org/wiki/File:Toyblocks.JPG">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/block.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-canyon">
+          <strong>canyon</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Aerial_view_of_canyons.jpg">Aerial view of canyons.jpg</a>
+          <p>Creator: Workman. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/canyon.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-cape">
+          <strong>cape</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Cape_MET_1983.111_F2.jpg">Cape MET 1983.111 F2.jpg</a>
+          <p>Creator: The Metropolitan Museum of Art, New York; garment maker unknown. License: <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0 1.0</a>.</p>
+          <p>Adaptation: Trim the unused backdrop while retaining the complete garment silhouette. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/cape.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-capsule">
+          <strong>capsule</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Crew_Dragon_at_the_ISS_for_Demo_Mission_1_(cropped).jpg">Crew Dragon at the ISS for Demo Mission 1 (cropped).jpg</a>
+          <p>Creator: NASA. License: <a href="https://commons.wikimedia.org/wiki/File:Crew_Dragon_at_the_ISS_for_Demo_Mission_1_(cropped).jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/capsule.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-cave">
+          <strong>cave</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Lechuguilla_Cave_Pearlsian_Gulf.jpg">Lechuguilla Cave Pearlsian Gulf.jpg</a>
+          <p>Creator: Dave Bunnell / Under Earth Images. License: <a href="https://creativecommons.org/licenses/by-sa/2.5">CC BY-SA 2.5</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/cave.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-cinnamon">
+          <strong>cinnamon</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Cinnamomum_verum_spices.jpg">Cinnamomum verum spices.jpg</a>
+          <p>Creator: Simon A. Eugster. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/cinnamon.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-clam">
+          <strong>clam</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:LittleNeck_clams_USDA96c1862.jpg">LittleNeck clams USDA96c1862.jpg</a>
+          <p>Creator: Ken Hammond. License: <a href="https://commons.wikimedia.org/wiki/File:LittleNeck_clams_USDA96c1862.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Crop around the clam shells while preserving hands as a scale cue. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/clam.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-clarinet">
+          <strong>clarinet</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Leitner%2BKraus_410_320.png">Leitner+Kraus 410 320.png</a>
+          <p>Creator: Leitner &amp; Kraus GmbH, Neustadt/Aisch; edited by Gisbert K. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/clarinet.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-crystal">
+          <strong>crystal</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Quartz_28.jpg">Quartz 28.jpg</a>
+          <p>Creator: Géry PARENT. License: <a href="https://commons.wikimedia.org/wiki/File:Quartz_28.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/crystal.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-domino">
+          <strong>domino</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Dominospiel.JPG">Dominospiel.JPG</a>
+          <p>Creator: Peng. License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/domino.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-eclipse">
+          <strong>eclipse</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Solar_eclipse_1999_4.jpg">Solar eclipse 1999 4.jpg</a>
+          <p>Creator: Luc Viatour. License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/eclipse.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-fern">
+          <strong>fern</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:The_ferns_of_Great_Britain,_and_their_allies_the_club-mosses,_pepperworts,_and_horsetails_(Pl._2)_(8515393495).jpg">The ferns of Great Britain, and their allies the club-mosses, pepperworts, and horsetails (Pl. 2) (8515393495).jpg</a>
+          <p>Creator: Pratt, Anne; Pratt, Anne; Society for Promoting Christian Knowledge (Great Britain). License: <a href="https://commons.wikimedia.org/wiki/File:The_ferns_of_Great_Britain,_and_their_allies_the_club-mosses,_pepperworts,_and_horsetails_(Pl._2)_(8515393495).jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Remove the printed botanical caption below the plant. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/fern.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-forest">
+          <strong>forest</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_Amazon_Rainforest.jpg">Aerial view of the Amazon Rainforest.jpg</a>
+          <p>Creator: lubasi. License: <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/forest.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-fossil">
+          <strong>fossil</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Pleuroceras_solare,_Little_Switzerland,_Bavaria,_Germany.jpg">Pleuroceras solare, Little Switzerland, Bavaria, Germany.jpg</a>
+          <p>Creator: H. Zell (Llez). License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/fossil.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-galaxy">
+          <strong>galaxy</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:NGC_4414_(NASA-med).jpg">NGC 4414 (NASA-med).jpg</a>
+          <p>Creator: The Hubble Heritage Team (AURA/STScI/NASA) NASA Headquarters - Greatest Images of NASA (NASA-HQ-GRIN). License: <a href="https://commons.wikimedia.org/wiki/File:NGC_4414_(NASA-med).jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/galaxy.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-geyser">
+          <strong>geyser</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Yellowstone_National_Park_(WY,_USA),_Old_Faithful_Geyser_--_2022_--_2599.jpg">Yellowstone National Park (WY, USA), Old Faithful Geyser -- 2022 -- 2599.jpg</a>
+          <p>Creator: Dietmar Rabich. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/geyser.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-glacier">
+          <strong>glacier</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Geikie_Plateau_Glacier.JPG">Geikie Plateau Glacier.JPG</a>
+          <p>Creator: NASA / Christy Hansen. License: <a href="https://commons.wikimedia.org/wiki/File:Geikie_Plateau_Glacier.JPG">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/glacier.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-glider">
+          <strong>glider</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:ASW19_Boden.jpg">ASW19 Boden.jpg</a>
+          <p>Creator: Michael Zwilling. License: <a href="https://commons.wikimedia.org/wiki/File:ASW19_Boden.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/glider.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-harmonica">
+          <strong>harmonica</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:16-hole_chrom_10-hole_diatonic.jpg">16-hole chrom 10-hole diatonic.jpg</a>
+          <p>Creator: George Leung. License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/harmonica.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-harp">
+          <strong>harp</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:A_musical_instrument._A_harp.jpg">A musical instrument. A harp.jpg</a>
+          <p>Creator: Eacquahdennis. License: <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/harp.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-hill">
+          <strong>hill</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Uliveti_monte_cinto.JPG">Uliveti monte cinto.JPG</a>
+          <p>Creator: Rics1299. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/hill.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-horn">
+          <strong>horn</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Yamaha_Horn_YHR-667V.tif">Yamaha Horn YHR-667V.tif</a>
+          <p>Creator: Yamaha Corporation. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/horn.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-lake">
+          <strong>lake</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Lake_Idro_Italy_2005-08-16.jpg">Lake Idro Italy 2005-08-16.jpg</a>
+          <p>Creator: Marius (Marius~commonswiki). License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/lake.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-meteor">
+          <strong>meteor</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Cosmic_Fireball_Falling_Over_ALMA.jpg">Cosmic Fireball Falling Over ALMA.jpg</a>
+          <p>Creator: ESO/C. Malin. License: <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>.</p>
+          <p>Adaptation: Focus on the bright meteor trail and a small amount of the telescope horizon. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/meteor.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-metronome">
+          <strong>metronome</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Metronome_M%C3%A4lzel_1.jpg">Metronome Mälzel 1.jpg</a>
+          <p>Creator: Mutatis mutandis. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/metronome.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-mud">
+          <strong>mud</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:2003-11-27_Northerner_boots_in_mud.jpg">2003-11-27 Northerner boots in mud.jpg</a>
+          <p>Creator: Ildar Sagdejev ( Specious ). License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/mud.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-nautilus">
+          <strong>nautilus</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Nautilus_belauensis_from_Palau.jpg">Nautilus belauensis from Palau.jpg</a>
+          <p>Creator: Manuae. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/nautilus.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-nebula">
+          <strong>nebula</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Trifid_Nebula_by_Deddy_Dayag.jpg">Trifid Nebula by Deddy Dayag.jpg</a>
+          <p>Creator: David (Deddy) Dayag. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/nebula.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-peninsula">
+          <strong>peninsula</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_Monterey_Peninsula_2.jpg">Aerial photograph of Monterey Peninsula 2.jpg</a>
+          <p>Creator: Mertbiol. License: <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0 1.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/peninsula.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-plankton">
+          <strong>plankton</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Marine_microplankton.jpg">Marine microplankton.jpg</a>
+          <p>Creator: Jay Nadeau, Chris Lindensmith, Jody W. Deming, Vicente I. Fernandez, and Roman Stocker. Image courtesy of David Liittschwager.. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Remove the panel letter and scale annotation; preserve several recognizable microscopic organisms. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/plankton.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-raspberry">
+          <strong>raspberry</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Raspberry_-_halved_(Rubus_idaeus).jpg">Raspberry - halved (Rubus idaeus).jpg</a>
+          <p>Creator: Ivar Leidus. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/raspberry.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-river">
+          <strong>river</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Pirogue_running_on_the_Mekong_at_golden_hour_between_Don_Det_and_Don_Khon_Laos.jpg">Pirogue running on the Mekong at golden hour between Don Det and Don Khon Laos.jpg</a>
+          <p>Creator: Basile Morin. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/river.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-rover">
+          <strong>rover</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg">Curiosity Self-Portrait at &#39;Big Sky&#39; Drilling Site.jpg</a>
+          <p>Creator: NASA. License: <a href="https://commons.wikimedia.org/wiki/File:Curiosity_Self-Portrait_at_%27Big_Sky%27_Drilling_Site.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/rover.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-sand">
+          <strong>sand</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg">Libya 4608 Idehan Ubari Dunes Luca Galuzzi 2007.jpg</a>
+          <p>Creator: Luca Galuzzi ( Lucag ). License: <a href="https://creativecommons.org/licenses/by-sa/2.5">CC BY-SA 2.5</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/sand.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-spacesuit">
+          <strong>spacesuit</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11_cropped.jpg">Aldrin Apollo 11 cropped.jpg</a>
+          <p>Creator: NASA; crop by Scott MacDonald. License: <a href="https://commons.wikimedia.org/wiki/File:Aldrin_Apollo_11_cropped.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/spacesuit.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-stalactite">
+          <strong>stalactite</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Choranche_caves_stalactites.jpg">Choranche caves stalactites.jpg</a>
+          <p>Creator: David Monniaux. License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Focus on the downward mineral formations attached to the cave ceiling; exclude the pool and upward formations. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/stalactite.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-stingray">
+          <strong>stingray</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:SStringray.jpg">SStringray.jpg</a>
+          <p>Creator: Wrtiii3644 at English Wikipedia. License: <a href="https://commons.wikimedia.org/wiki/File:SStringray.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/stingray.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-submarine">
+          <strong>submarine</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:US_Navy_040730-N-1234E-002_PCU_Virginia_(SSN_774)_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg">US Navy 040730-N-1234E-002 PCU Virginia (SSN 774) returns to the General Dynamics Electric Boat shipyard.jpg</a>
+          <p>Creator: U.S. Navy photo by General Dynamics Electric Boat. License: <a href="https://commons.wikimedia.org/wiki/File:US_Navy_040730-N-1234E-002_PCU_Virginia_(SSN_774)_returns_to_the_General_Dynamics_Electric_Boat_shipyard.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/submarine.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-supernova">
+          <strong>supernova</strong> &mdash; <a href="https://science.nasa.gov/photojournal/giant-star-goes-supernova-smothered-by-its-own-dust-artists-concept/">Giant Star Goes Supernova, Smothered by its own Dust (Artist&#39;s Concept)</a>
+          <p>Creator: NASA/JPL-Caltech. License: <a href="https://www.jpl.nasa.gov/jpl-image-use-policy/">NASA/JPL image use</a>.</p>
+          <p>Adaptation: Focus on the central explosion and surrounding dust shell while retaining the space setting. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/supernova.webp">Adapted game picture</a>.</p>
+          <p>Credit: Courtesy NASA/JPL-Caltech. The source caption credits NASA/JPL-Caltech.
+            Reused under the official JPL image-use terms; this use does not imply endorsement by NASA, JPL or Caltech.</p>
+        </li>
+        <li id="word-art-swordfish">
+          <strong>swordfish</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Xiphias_gladius_Linnaeus,_1758_2599925021.jpg">Xiphias gladius Linnaeus, 1758 2599925021.jpg</a>
+          <p>Creator: Naturalis Biodiversity Center. License: <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0 1.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/swordfish.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-tambourine">
+          <strong>tambourine</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Pandeiro_new_30-09-07.jpg">Pandeiro new 30-09-07.jpg</a>
+          <p>Creator: Frenciscobcn. License: <a href="https://creativecommons.org/licenses/by-sa/1.0">CC BY-SA 1.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/tambourine.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-toe">
+          <strong>toe</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Toes.png">Toes.png</a>
+          <p>Creator: Stoneisland24. License: <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0 1.0</a>.</p>
+          <p>Adaptation: Crop out the ankle and most of the foot to focus on the toes. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/toe.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-trombone">
+          <strong>trombone</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Yamaha_Tenor_trombone_YSL-891Z_(re-crop).jpg">Yamaha Tenor trombone YSL-891Z (re-crop).jpg</a>
+          <p>Creator: Yamaha Corporation. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/trombone.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-tuba">
+          <strong>tuba</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Yamaha_Bass_tuba_YFB-822.tif">Yamaha Bass tuba YFB-822.tif</a>
+          <p>Creator: Yamaha Corporation. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/tuba.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-unicycle">
+          <strong>unicycle</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Jamesunicycle.jpg">Jamesunicycle.jpg</a>
+          <p>Creator: BuckyB89. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/unicycle.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-universe">
+          <strong>universe</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field_high_rez_edit1.jpg">Hubble ultra deep field high rez edit1.jpg</a>
+          <p>Creator: NASA and the European Space Agency. Edited by Noodle snacks. License: <a href="https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field_high_rez_edit1.jpg">Public domain (source statement)</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/universe.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-valley">
+          <strong>valley</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Salta-VallesCalchaquies-P3140151.JPG">Salta-VallesCalchaquies-P3140151.JPG</a>
+          <p>Creator: Mariano Cecowski (Marianocecowski). License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/valley.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-waterfall">
+          <strong>waterfall</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Cascada_Dynjandi,_Vestfir%C3%B0ir,_Islandia,_2014-08-14,_DD_136-138_HDR.JPG">Cascada Dynjandi, Vestfirðir, Islandia, 2014-08-14, DD 136-138 HDR.JPG</a>
+          <p>Creator: Diego Delso. License: <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/waterfall.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-wind">
+          <strong>wind</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:Windsock_and_flag,_Portrush_-_geograph.org.uk_-_486001.jpg">Windsock and flag, Portrush - geograph.org.uk - 486001.jpg</a>
+          <p>Creator: Albert Bridge. License: <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/wind.webp">Adapted game picture</a>.</p>
+        </li>
+        <li id="word-art-woodpecker">
+          <strong>woodpecker</strong> &mdash; <a href="https://commons.wikimedia.org/wiki/File:PileatedWoodpeckerFeedingonTree,_crop.jpg">PileatedWoodpeckerFeedingonTree, crop.jpg</a>
+          <p>Creator: Joshlaymon. License: <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+          <p>Adaptation: Preserve the complete source composition. Resize with contained framing and encode as WebP for the vocabulary card.
+            <a href="https://github.com/muji-wyh/tesisgame/blob/main/assets/images/word-library/woodpecker.webp">Adapted game picture</a>.</p>
+        </li>
+      </ol>
+    </details>
   </main>
 </body>
 </html>

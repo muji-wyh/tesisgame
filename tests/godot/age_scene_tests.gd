@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 var checks := 0
 var failures := 0
 
@@ -45,7 +46,7 @@ func check_catalog(app, age_id: String) -> void:
 		if word.image.is_empty():
 			check(picture.texture == null and not picture.visible, "Context words use readable text without a misleading picture")
 		else:
-			check(picture.texture == load("res://" + word.image), "Pictured words retain their real source illustration")
+			check(WordArt.source_path(picture.texture) == "res://" + word.image, "Pictured words retain their real source illustration")
 		var mastery: Label = button.get_meta("mastery_label")
 		var streak: int = app.growth.streak(word.id)
 		check(mastery.text == ("Mastered" if streak == 6 else "%d / 6" % streak), "Every word shows its saved mastery state")

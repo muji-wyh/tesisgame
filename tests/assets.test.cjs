@@ -118,7 +118,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  assert.equal(textureImports.length, 1577); // 1,500 existing textures, 69 Lv3 pictures and eight motion atlases.
+  assert.equal(textureImports.length, 4139); // 2,862 preserved imports and 1,277 additional vocabulary motion atlases.
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);
@@ -391,8 +391,109 @@ test('the image directories contain exactly the 1426 vocabulary, replacement and
 test('the eight teaching animations retain their reviewed frames and source rights', () => {
   const { checkWordMotion } = require('../tools/lv3-vocabulary-art.cjs');
   assert.deepEqual(checkWordMotion(root), { clips: 8, frames: 516 });
+});
+
+test('all pictured words have reviewed runtime motion while the eight authored actions retain their timing', () => {
+  const { checkWordLibraryMotion } = require('../tools/word-library-motion.cjs');
+  const result = checkWordLibraryMotion(root);
+  assert.equal(result.clips, 1285);
+  assert.equal(result.authored, 8);
+  assert.equal(result.frames, 41380);
+  assert.ok(result.bytes > 0);
   assert.deepEqual(assetFiles(path.join(root, 'assets/images/word-motion')),
-    ['close', 'drink', 'eat', 'hello', 'jump', 'open', 'run', 'walk'].map(id => `${id}.webp`));
+    words.filter(word => word.image).map(word => `${word.id}.webp`).sort());
+});
+
+function webpCanvas(bytes, label) {
+  assert.equal(bytes.toString('ascii', 0, 4), 'RIFF', label);
+  assert.equal(bytes.toString('ascii', 8, 12), 'WEBP', label);
+  assert.equal(bytes.readUInt32LE(4) + 8, bytes.length, `${label} has a complete WebP container`);
+  let canvas;
+  let imagePayload = false;
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const chunk = bytes.toString('ascii', offset, offset + 4);
+    const size = bytes.readUInt32LE(offset + 4);
+    const start = offset + 8;
+    assert.ok(start + size <= bytes.length, `${label} contains a complete ${chunk} chunk`);
+    if (chunk === 'VP8X') {
+      assert.ok(size >= 10, `${label} has complete canvas metadata`);
+      assert.equal(bytes[start] & 0x02, 0, `${label} is a static fallback; teaching motion uses the shared atlas`);
+      canvas = {width: 1 + bytes.readUIntLE(start + 4, 3), height: 1 + bytes.readUIntLE(start + 7, 3),
+        alpha: Boolean(bytes[start] & 0x10)};
+    }
+    if (chunk === 'VP8 ' || chunk === 'VP8L') imagePayload = size > 0;
+    offset = start + size + (size % 2);
+  }
+  assert.ok(canvas && imagePayload, `${label} contains an alpha-capable canvas and image payload`);
+  return canvas;
+}
+
+test('the reviewed library covers all 1285 pictured words with distinct 256-pixel transparent WebP assets', () => {
+  const { checkWordLibrary } = require('../tools/word-library-art.cjs');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/word-library.json')));
+  const result = checkWordLibrary(root);
+  assert.equal(result.pictures, 1285);
+  assert.equal(result.contextOnly, 265);
+  assert.ok(result.bytes > 0);
+  const hashes = new Set();
+  const sourceWords = new Map(words.map(word => [word.id, word]));
+  for (const file of manifest.files) {
+    assert.ok(sourceWords.get(file.id).image, `${file.id} already has a pictured curriculum meaning`);
+    assert.equal(file.age, sourceWords.get(file.id).min_age, `${file.id} preserves its curriculum age`);
+    const bytes = fs.readFileSync(path.join(root, file.path));
+    assert.deepEqual(webpCanvas(bytes, file.id), {width: 256, height: 256, alpha: true}, file.id);
+    assert.equal(sha256(bytes), file.sha256, `${file.id} matches the reviewed output`);
+    hashes.add(file.sha256);
+  }
+  assert.equal(hashes.size, 1285, 'Different teaching words must not silently receive identical pictures');
+  assert.deepEqual(assetFiles(path.join(root, 'assets/images/word-library')),
+    words.filter(word => word.image).map(word => `${word.id}.webp`).sort());
+  for (const word of words.filter(word => !word.image)) {
+    assert.ok(!manifest.files.some(file => file.id === word.id), `${word.id} retains contextual practice`);
+  }
+});
+
+test('the library release check rejects incomplete coverage, duplicate word records, missing rights and stale hashes', t => {
+  const { checkWordLibrary } = require('../tools/word-library-art.cjs');
+  const manifestPath = path.join(root, 'docs/assets/word-library.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath));
+  const originalRead = fs.readFileSync;
+  const cases = [
+    [copy => { copy.files.pop(); }, /cover every pictured curriculum word/],
+    [copy => { copy.files[1] = structuredClone(copy.files[0]); }, /cover every pictured curriculum word/],
+    [copy => { copy.contextOnly--; }, /cover every pictured curriculum word/],
+    [copy => { copy.files[0].source.license = 'Unknown'; }, /Missing library source/],
+    [copy => { copy.files[0].width = 192; }, /invalid metadata/],
+    [copy => { copy.files[0].sha256 = '0'.repeat(64); }, /unreviewed vocabulary picture/]
+  ];
+  for (const [mutate, message] of cases) {
+    const copy = structuredClone(manifest);
+    mutate(copy);
+    const mock = t.mock.method(fs, 'readFileSync', (filename, ...options) =>
+      path.resolve(String(filename)) === manifestPath ? Buffer.from(JSON.stringify(copy)) : originalRead(filename, ...options));
+    assert.throws(() => checkWordLibrary(root), message);
+    mock.mock.restore();
+  }
+});
+
+test('the library release check rejects a changed image and an untracked extra picture', t => {
+  const { checkWordLibrary } = require('../tools/word-library-art.cjs');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/word-library.json')));
+  const imagePath = path.join(root, manifest.files[0].path);
+  const changed = Buffer.from(fs.readFileSync(imagePath));
+  changed[changed.length - 1] ^= 1;
+  const originalRead = fs.readFileSync;
+  const readMock = t.mock.method(fs, 'readFileSync', (filename, ...options) =>
+    path.resolve(String(filename)) === imagePath ? changed : originalRead(filename, ...options));
+  assert.throws(() => checkWordLibrary(root), /unreviewed vocabulary picture/);
+  readMock.mock.restore();
+  const originalList = fs.readdirSync;
+  const listMock = t.mock.method(fs, 'readdirSync', (directory, ...options) => {
+    const entries = originalList(directory, ...options);
+    return path.resolve(String(directory)) === path.join(root, 'assets/images/word-library') ? [...entries, 'orphan.webp'] : entries;
+  });
+  assert.throws(() => checkWordLibrary(root), /Orphan images/);
+  listMock.mock.restore();
 });
 
 test('voice prompts contain exactly eight world greetings', () => {

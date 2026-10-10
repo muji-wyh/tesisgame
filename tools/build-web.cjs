@@ -10,6 +10,8 @@ invalidateBuildReceipt(root);
 prepare();
 require('./lv3-vocabulary-art.cjs').checkLv3Art(root);
 require('./lv3-vocabulary-art.cjs').checkWordMotion(root);
+require('./word-library-art.cjs').checkWordLibrary(root);
+require('./word-library-motion.cjs').checkWordLibraryMotion(root);
 runGodot(['--headless', '--path', root, '--import']);
 const audio = collectRequiredAudio(root);
 const inputs = snapshotInputs(root);
@@ -26,6 +28,7 @@ fs.writeFileSync(htmlPath, inlineMascot(fs.readFileSync(htmlPath, 'utf8')));
 // The expanded phrase bank exceeds Windows' command-line limit as path pairs.
 const audioManifest = path.join(root, 'build', 'required-web-audio.json');
 fs.writeFileSync(audioManifest, JSON.stringify(audio.flatMap(file => [file.source, file.imported])));
+// Native pack verification must finish before packaging removes the raw PCK.
 const verification = runGodot([
   '--headless', '--path', output, '--main-pack', path.join(output, 'index.pck'),
   '--script', path.join(root, 'tests', 'godot', 'verify_web_pack.gd'), '--',

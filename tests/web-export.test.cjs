@@ -35,6 +35,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/manifest\.json/);
   assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('phrases.json'),
     'The raw phrase catalog must be available to the exported native game');
+  assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('data/word-motion.json'),
+    'The animation catalogue must be available to the exported native game');
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
@@ -42,10 +44,13 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'The removed profile editor no longer requires the native keyboard bridge');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
   for (const word of JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))) {
-    for (const source of [word.image, word.audio]) {
+    const pictures = word.image ? [`assets/images/word-library/${word.id}.webp`, `assets/images/word-motion/${word.id}.webp`] : [];
+    for (const source of [...pictures, word.audio]) {
       assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
         `Every vocabulary picture and recording must survive export: ${source}`);
     }
+    if (word.image) assert.ok(excluded.some(pattern => path.matchesGlob(word.image, pattern)),
+      `Historical source pictures remain authoring inputs: ${word.image}`);
   }
   for (const source of [
     'assets/audio/bgm/spring.wav',
@@ -412,10 +417,13 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     .match(/const config = (\{[^\r\n]*\});/)[1]);
   writeExport();
   fs.writeFileSync(path.join(directory, 'keep.txt'), 'unrelated file');
+  fs.writeFileSync(path.join(directory, 'game-0123456789abcdef.pck'), 'obsolete raw game pack');
   const initialBytes = packageWebExport(directory);
   const first = readConfig();
   assert.match(first.executable, /^engine-[a-f0-9]{16}$/);
-  assert.match(first.mainPack, /^game-[a-f0-9]{16}\.pck$/);
+  assert.match(first.mainPack, /^game-[a-f0-9]{16}\.pck\.br$/);
+  assert.equal(first.mainPack, `game-${require('node:crypto').createHash('sha256')
+    .update(files['index.pck']).digest('hex').slice(0, 16)}.pck.br`, 'Pack identity hashes the decoded native bytes');
   const digest = require('node:crypto').createHash('sha256');
   for (const [name, bytes] of Object.entries(files).filter(([name]) => !name.endsWith('.pck'))) {
     digest.update(name.slice('index.'.length)).update(name === 'index.js'
@@ -426,10 +434,13 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     const target = name.endsWith('.pck') ? first.mainPack : name.replace('index', first.executable);
     const expected = name === 'index.js'
       ? Buffer.from(require('../tools/patch-web-engine.cjs').patchWebEngine(bytes.toString())) : bytes;
-    assert.deepEqual(fs.readFileSync(path.join(directory, target)), expected);
-    assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, `${target}.br`))), expected);
+    if (!name.endsWith('.pck')) assert.deepEqual(fs.readFileSync(path.join(directory, target)), expected);
+    const compressedTarget = name.endsWith('.pck') ? target : `${target}.br`;
+    assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, compressedTarget))), expected);
     assert.equal(fs.existsSync(path.join(directory, name)), false, 'Unversioned engine/data files must not be shipped');
   }
+  assert.equal(fs.readdirSync(directory).some(name => name.endsWith('.pck')), false,
+    'Only the compressed pack is shipped; stale raw and unversioned packs must be removed');
   assert.equal(first.fileSizes[`${first.executable}.wasm`], files['index.wasm'].length);
   assert.equal(first.fileSizes[first.mainPack], files['index.pck'].length);
   assert.ok(fs.readFileSync(path.join(directory, 'index.html'), 'utf8').includes(`src="${first.executable}.js"`));
@@ -465,6 +476,13 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
     assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
       'public, max-age=31536000, immutable');
   }
+  const packRoute = config.routes.find(entry => entry.route === '/game-*');
+  assert.equal(packRoute.headers['Content-Encoding'], 'br', 'The explicit pack URL must be decoded by Fetch');
+  assert.equal(packRoute.headers['Content-Type'], 'application/octet-stream');
+  assert.equal(packRoute.headers['Cache-Control'], 'public, max-age=31536000, immutable');
+  assert.deepEqual(config.routes.filter(entry => entry.headers['Content-Encoding']).map(entry => entry.route), ['/game-*'],
+    'Only the compressed game-pack prefix receives a fixed encoding; engine URLs still negotiate sidecars');
+  assert.equal(config.globalHeaders['Content-Encoding'], undefined, 'Other output files must not be labeled as Brotli');
 });
 
 test('Pip growth preview stays local and is removed from an older Web export without touching neighboring files', t => {

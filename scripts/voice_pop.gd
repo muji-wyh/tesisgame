@@ -315,6 +315,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	cancel_result_input()
 	_words = words.duplicate(true)
 	_word_fits.clear()
+	_textures.clear()
 	game.configure(_words, seed_value)
 	_enabled = false
 	_listening = false
@@ -1743,6 +1744,7 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		art.texture = _textures.get(str(word.get("id", word.get("text", ""))), null)
+		WordArt.bind(art.texture, art)
 		row.add_child(art)
 		var text: Label = _label(str(word.get("text", "")), 16, Style.INK)
 		text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -1806,6 +1808,15 @@ func _cache_texture(word: Dictionary) -> void:
 		return
 	var image_path: String = str(word.get("image", ""))
 	_textures[key] = WordArt.texture(image_path, self)
+
+
+func is_word_art_visible(id: String) -> bool:
+	# The custom canvas owns only its current targets. Result rows register
+	# their own clipped TextureRects, so an old cache entry cannot stay active.
+	if _stopped or _hud == null or not _hud.is_visible_in_tree():
+		return false
+	return _draw_targets.any(func(target: Dictionary) -> bool:
+		return str(target.word.get("id", "")) == id)
 
 
 func _pending_message(message: String) -> bool:
