@@ -8,7 +8,7 @@ function createWebServer(directory) {
     root, cache: -1, brotli: true, showDir: 'false',
     before: [(request, response) => {
       const pathname = new URL(request.url, 'http://localhost').pathname;
-      if (!/^\/game-[a-f0-9]{16}\.pck\.br$/.test(pathname) ||
+      if (!/^\/(?:game-[a-f0-9]{16}|vocabulary-(?:shared-)?(?:[3-9]|1[0-2])(?:-(?:[3-9]|1[0-2]))*-[a-f0-9]{16})\.pck\.br$/.test(pathname) ||
           !['GET', 'HEAD'].includes(request.method)) return response.emit('next');
       const filename = path.join(root, pathname.slice(1));
       fs.stat(filename, (error, stat) => {

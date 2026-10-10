@@ -12,8 +12,8 @@ const INPUTS = [
   'docs/assets/lv3-word-motion.json',
   'docs/assets/word-library.json', 'tools/word-library-art.cjs',
   'docs/assets/word-library-motion.json', 'tools/word-library-motion.cjs', 'tools/vocabulary-art/library-motion-map.json',
-  'tests/godot/verify_web_pack.gd',
-  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'prepare-jelly-reward-art', 'prepare-coin-art', 'web-build-receipt']
+  'tests/godot/verify_web_pack.gd', 'tools/pack-vocabulary.gd',
+  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'prepare-jelly-reward-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');
@@ -93,6 +93,63 @@ function exportInventory(root) {
       `game-${digest(decoded.buffer).slice(0, 16)}.pck.br` !== config.mainPack) {
     throw new Error('The Web game pack does not match its decoded size and content hash.');
   }
+  const vocabulary = config.vocabularyPacks;
+  if (!vocabulary || typeof vocabulary !== 'object' || Array.isArray(vocabulary) ||
+      Object.keys(vocabulary).sort((a, b) => Number(a) - Number(b)).join(',') !== '3,4,5,6,7,8,9,10,11,12') {
+    throw new Error('The Web export must declare all ten on-demand vocabulary packs.');
+  }
+  const vocabularyFiles = new Map();
+  const sharedConsumers = new Map();
+  function verifyVocabularyFile(file, id) {
+    if (!file || !Number.isSafeInteger(file.bytes) || file.bytes <= 0 ||
+        !/^[a-f0-9]{64}$/.test(file.sha256) || file.file !== `vocabulary-${id}-${file.sha256.slice(0, 16)}.pck.br`) {
+      throw new Error(`Invalid vocabulary pack declaration for ${id}.`);
+    }
+    if (vocabularyFiles.has(file.file)) {
+      const previous = vocabularyFiles.get(file.file);
+      if (previous.bytes !== file.bytes || previous.sha256 !== file.sha256) {
+        throw new Error(`Conflicting shared vocabulary declarations: ${file.file}`);
+      }
+      return;
+    }
+    vocabularyFiles.set(file.file, file);
+    const filename = path.join(directory, file.file);
+    if (!fs.existsSync(filename)) throw new Error(`Missing Web vocabulary pack: ${file.file}`);
+    const compressed = fs.readFileSync(filename);
+    let decoded;
+    try { decoded = brotliDecompressSync(compressed, { maxOutputLength: file.bytes + 1, info: true }); }
+    catch { throw new Error(`Incomplete Brotli vocabulary pack: ${file.file}`); }
+    if (decoded.buffer.length !== file.bytes || decoded.engine.bytesWritten !== compressed.length ||
+        digest(decoded.buffer) !== file.sha256) {
+      throw new Error(`Vocabulary pack does not match its decoded size and content hash: ${file.file}`);
+    }
+  }
+  for (const [age, file] of Object.entries(vocabulary)) {
+    verifyVocabularyFile(file, age);
+    if (!Array.isArray(file.dependencies) || new Set(file.dependencies.map(item => item?.file)).size !== file.dependencies.length) {
+      throw new Error(`Invalid vocabulary dependencies for age ${age}.`);
+    }
+    for (const dependency of file.dependencies) {
+      const group = dependency?.file?.match(/^vocabulary-(shared-([0-9-]+))-[a-f0-9]{16}\.pck\.br$/);
+      const consumers = group?.[2].split('-') || [];
+      if (consumers.length < 2 || !consumers.includes(age) || consumers.some(value => !vocabulary[value]) ||
+          new Set(consumers).size !== consumers.length ||
+          consumers.join('-') !== [...consumers].sort((a, b) => Number(a) - Number(b)).join('-')) {
+        throw new Error(`Invalid shared vocabulary consumers for age ${age}.`);
+      }
+      verifyVocabularyFile(dependency, group[1]);
+      if (!sharedConsumers.has(dependency.file)) sharedConsumers.set(dependency.file, { expected: consumers, actual: [] });
+      sharedConsumers.get(dependency.file).actual.push(age);
+    }
+  }
+  for (const [file, consumers] of sharedConsumers) {
+    if (consumers.expected.join(',') !== consumers.actual.sort((a, b) => Number(a) - Number(b)).join(',')) {
+      throw new Error(`Shared vocabulary must be referenced by exactly its consumer ages: ${file}`);
+    }
+  }
+  const redundantVocabulary = fs.readdirSync(directory).filter(name =>
+    /^vocabulary-(?:shared-)?[0-9-]+-[a-f0-9]{16}\.pck(?:\.br)?$/.test(name) && !vocabularyFiles.has(name));
+  if (redundantVocabulary.length) throw new Error(`Unexpected duplicate Web vocabulary packs: ${redundantVocabulary.join(', ')}`);
   return inventory(directory, fs.readdirSync(directory));
 }
 

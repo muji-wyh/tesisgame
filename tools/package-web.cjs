@@ -197,7 +197,7 @@ function removeLocalPipPreview(directory) {
   if (fs.readdirSync(previewRoot).length === 0) fs.rmdirSync(previewRoot);
 }
 
-function packageWebExport(directory) {
+function packageWebExport(directory, vocabularyPacks = {}) {
   const page = path.join(directory, 'index.html');
   const html = fs.readFileSync(page, 'utf8');
   const match = html.match(/const config = (\{[^\r\n]*\});/);
@@ -220,16 +220,51 @@ function packageWebExport(directory) {
     ...engine.map(file => ({ name: `${executable}.${file.suffix}`, bytes: file.bytes })),
     { name: mainPack, bytes: pack, compressedOnly: true }
   ];
+  const vocabulary = {};
+  const keys = Object.keys(vocabularyPacks);
+  const ages = keys.filter(id => !id.startsWith('shared-')).sort((a, b) => Number(a) - Number(b));
+  if (keys.length && ages.join(',') !== '3,4,5,6,7,8,9,10,11,12') {
+    throw new Error('Web vocabulary must contain all ten age packs.');
+  }
+  const declarations = {};
+  for (const id of keys.sort()) {
+    const consumers = id.startsWith('shared-') ? id.slice(7).split('-') : [id];
+    if (consumers.some(age => !ages.includes(age)) || new Set(consumers).size !== consumers.length ||
+        consumers.join('-') !== [...consumers].sort((a, b) => Number(a) - Number(b)).join('-') ||
+        (id.startsWith('shared-') && consumers.length < 2)) {
+      throw new Error(`Invalid vocabulary bundle consumers: ${id}.`);
+    }
+    if (id.startsWith('shared-') && ages.filter(age => (vocabularyPacks[age].dependencies || []).includes(id)).join('-') !== consumers.join('-')) {
+      throw new Error(`Vocabulary bundle must be referenced by exactly its consumer ages: ${id}.`);
+    }
+    const bytes = fs.readFileSync(vocabularyPacks[id].file);
+    if (bytes.length < 4 || bytes.subarray(0, 4).toString('ascii') !== 'GDPC') {
+      throw new Error(`Invalid native vocabulary pack ${id}.`);
+    }
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const name = `vocabulary-${id}-${sha256.slice(0, 16)}.pck.br`;
+    declarations[id] = { file: name, bytes: bytes.length, sha256 };
+    files.push({ name, bytes, compressedOnly: true, deferred: true, bundle: id });
+  }
+  for (const age of ages) {
+    const dependencies = vocabularyPacks[age].dependencies || [];
+    if (new Set(dependencies).size !== dependencies.length || dependencies.some(id =>
+      !id.startsWith('shared-') || !declarations[id] || !id.slice(7).split('-').includes(age))) {
+      throw new Error(`Invalid vocabulary dependencies for age ${age}.`);
+    }
+    vocabulary[age] = { ...declarations[age], dependencies: dependencies.map(id => declarations[id]) };
+  }
   const retained = new Set();
   const cachedSidecars = fs.readdirSync(directory)
-    .filter(name => /^(?:engine|game)-[a-f0-9]{16}\..+\.br$/.test(name));
+    .filter(name => /^(?:(?:engine|game)-[a-f0-9]{16}\..+|vocabulary-(?:shared-)?[0-9-]+-[a-f0-9]{16}\.pck)\.br$/.test(name));
   let downloadBytes = 0;
   // Engine files retain negotiated sidecars. The pack uses an explicit Brotli URL
   // so production storage does not contain a second, uncompressed copy of all art.
   for (const file of files) {
     const compressedName = file.compressedOnly ? file.name : `${file.name}.br`;
     const suffix = compressedName.slice(compressedName.indexOf('.'));
-    const candidates = cachedSidecars.filter(name => name.endsWith(suffix))
+    const candidates = cachedSidecars.filter(name => name.endsWith(suffix) &&
+      (file.deferred ? name.startsWith(`vocabulary-${file.bundle}-`) : !name.startsWith('vocabulary-')))
       .sort((first, second) => Number(second === compressedName) - Number(first === compressedName))
       .map(name => path.join(directory, name));
     const compressed = compressWebAsset(file.bytes, candidates);
@@ -239,10 +274,11 @@ function packageWebExport(directory) {
     }
     fs.writeFileSync(path.join(directory, compressedName), compressed);
     retained.add(compressedName);
-    downloadBytes += compressed.length;
+    if (!file.deferred) downloadBytes += compressed.length;
   }
   config.executable = executable;
   config.mainPack = mainPack;
+  config.vocabularyPacks = vocabulary;
   delete config.audioAssets;
   config.fileSizes = {
     [`${executable}.wasm`]: engine.find(file => file.suffix === 'wasm').bytes.length,
@@ -256,7 +292,7 @@ function packageWebExport(directory) {
   const originals = new Set([...suffixes, 'pck'].flatMap(suffix => [`index.${suffix}`, `index.${suffix}.br`]));
   for (const file of fs.readdirSync(directory, { withFileTypes: true })) {
     if (file.isFile() && (originals.has(file.name) ||
-        (/^(engine|game|audio)-[a-f0-9]{16}\./.test(file.name) && !retained.has(file.name)))) {
+        (/^(?:(?:engine|game|audio)-[a-f0-9]{16}\.|vocabulary-(?:shared-)?[0-9-]+-[a-f0-9]{16}\.pck)/.test(file.name) && !retained.has(file.name)))) {
       fs.unlinkSync(path.join(directory, file.name));
     }
   }

@@ -68,6 +68,25 @@ test('missing packs return an ordinary error without a misleading encoding heade
   assert.equal(await response.text(), 'Game pack not found.');
 });
 
+test('deferred age packs use the same explicit Brotli transport with no duplicate raw download', async t => {
+  const { root, bytes, compressed, url } = await fixture(t);
+  for (const group of ['4', 'shared-3-5-12']) {
+    const filename = `vocabulary-${group}-${createHash('sha256').update(bytes).digest('hex').slice(0, 16)}.pck.br`;
+    fs.writeFileSync(path.join(root, filename), compressed);
+    const response = await fetch(`${url}/${filename}`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-encoding'), 'br');
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), bytes);
+    const raw = await rawRequest(`${url}/${filename}`, { method: 'HEAD' });
+    assert.equal(raw.status, 200);
+    assert.equal(raw.bytes.length, 0);
+    assert.equal(Number(raw.headers['content-length']), compressed.length);
+  }
+  const missing = await fetch(`${url}/vocabulary-12-0000000000000000.pck.br`);
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get('content-encoding'), null);
+});
+
 test('the pack handler preserves HTML and negotiated engine asset delivery', async t => {
   const { url } = await fixture(t);
   const html = await fetch(`${url}/`);

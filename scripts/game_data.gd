@@ -351,6 +351,13 @@ func load_all() -> bool:
 		return false
 	words = value
 	for word in words:
+		# Age packs are mounted after saved progress identifies the learning age.
+		# Keep every curriculum ID available for save validation without treating
+		# an intentionally unmounted image as a broken installation.
+		if OS.has_feature("web") and not word.image.is_empty():
+			word.image = "assets/images/word-library/%s.webp" % word.id
+			word.art_key = "library/" + str(word.id)
+			continue
 		if not word.image.is_empty():
 			var library_image: String = "assets/images/word-library/%s.webp" % word.id
 			if ResourceLoader.exists("res://" + library_image):

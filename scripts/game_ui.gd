@@ -3,6 +3,7 @@ extends Control
 const Model = preload("res://scripts/game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const WordArt = preload("res://scripts/word_art.gd")
+const VocabularyLoader = preload("res://scripts/vocabulary_loader.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Card = preload("res://scripts/word_card.gd")
@@ -89,6 +90,17 @@ class RewardSparkle:
 
 var model := Model.new()
 var data := Data.new()
+var vocabulary_loader = VocabularyLoader.new()
+var _vocabulary_initialized: bool = false
+var _vocabulary_booting: bool = true
+var _vocabulary_catalog: Dictionary = {}
+var _pending_vocabulary_round: Array = []
+var _vocabulary_prompt: Panel
+var _vocabulary_label: Label
+var _vocabulary_progress: ProgressBar
+var _vocabulary_retry: Button
+var _vocabulary_back: Button
+var _vocabulary_previous_pause: bool = false
 var medal_progress := MedalProgress.new()
 var coin_wallet := CoinWallet.new()
 var _coin_counter: CoinCounter
@@ -290,6 +302,7 @@ func _ready() -> void:
 	theme.default_font_size = 24
 	theme.default_font = Style.BODY_FONT
 	_build_controls()
+	_build_vocabulary_prompt()
 	if OS.has_feature("web"):
 		await get_tree().process_frame
 	if not data.load_all():
@@ -324,13 +337,186 @@ func _ready() -> void:
 		var loading_theme: Variant = _host.loadingTheme()
 		if loading_theme is String and Model.THEMES.has(loading_theme):
 			_preferred_theme = loading_theme
-	new_round()
+	process_mode = initial_process_mode
+	_vocabulary_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary-packs.json"))
+	add_child(vocabulary_loader)
+	vocabulary_loader.configure(_host)
+	vocabulary_loader.age_ready.connect(_on_vocabulary_ready)
+	vocabulary_loader.age_failed.connect(_on_vocabulary_failed)
+	vocabulary_loader.progress_changed.connect(_on_vocabulary_progress)
+	_vocabulary_initialized = true
+	if new_round() or _pending_vocabulary_round.is_empty():
+		_finish_vocabulary_boot()
+
+
+func _finish_vocabulary_boot() -> void:
+	if not _vocabulary_booting:
+		return
+	_vocabulary_booting = false
 	if _host != null:
 		get_tree().paused = true
-	process_mode = initial_process_mode
-	if _host != null:
 		_loading_finished_callback = JavaScriptBridge.create_callback(_on_loading_finished)
 		_host.ready(_loading_finished_callback)
+	_prefetch_vocabulary()
+
+
+func _build_vocabulary_prompt() -> void:
+	_vocabulary_prompt = Panel.new()
+	_vocabulary_prompt.name = "VocabularyLoading"
+	_vocabulary_prompt.process_mode = Node.PROCESS_MODE_ALWAYS
+	_vocabulary_prompt.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_vocabulary_prompt.add_theme_stylebox_override("panel", Style.box(Color("f4f6f1"), Color.TRANSPARENT, 0, 0))
+	add_child(_vocabulary_prompt)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_vocabulary_prompt.add_child(center)
+	var column := VBoxContainer.new()
+	column.custom_minimum_size.x = 270
+	column.add_theme_constant_override("separation", 18)
+	center.add_child(column)
+	_vocabulary_label = Style.label("Loading words…", 20)
+	_vocabulary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_vocabulary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(_vocabulary_label)
+	_vocabulary_progress = ProgressBar.new()
+	_vocabulary_progress.custom_minimum_size.y = 12
+	_vocabulary_progress.show_percentage = false
+	column.add_child(_vocabulary_progress)
+	_vocabulary_retry = Button.new()
+	_vocabulary_retry.name = "VocabularyRetry"
+	_vocabulary_retry.text = "Try again"
+	Style.action_button(_vocabulary_retry, Style.GOOD, true)
+	UiClick.bind_button(_vocabulary_retry)
+	_vocabulary_retry.pressed.connect(_retry_vocabulary)
+	column.add_child(_vocabulary_retry)
+	_vocabulary_back = Button.new()
+	_vocabulary_back.name = "VocabularyBack"
+	_vocabulary_back.text = "Back"
+	Style.quiet_button(_vocabulary_back, Style.GOOD)
+	UiClick.bind_button(_vocabulary_back)
+	_vocabulary_back.pressed.connect(_cancel_vocabulary_round)
+	column.add_child(_vocabulary_back)
+	_vocabulary_prompt.hide()
+
+
+func _wait_for_vocabulary(arguments: Array) -> void:
+	if not _stop_pop_listening():
+		return
+	_pending_vocabulary_round = arguments
+	if not _vocabulary_prompt.visible:
+		_vocabulary_previous_pause = get_tree().paused
+		_stop_controller_actions()
+		audio.halt()
+		_vocabulary_prompt.show()
+		_vocabulary_prompt.move_to_front()
+		_sync_reward_confetti()
+		get_tree().paused = true
+	_update_vocabulary_prompt()
+	if str(vocabulary_loader.status(growth.learning_age()).state) == "idle":
+		vocabulary_loader.request_age(growth.learning_age())
+
+
+func _update_vocabulary_prompt() -> void:
+	var state: Dictionary = vocabulary_loader.status(growth.learning_age())
+	_vocabulary_label.text = "Words could not be loaded.\nPlease try again." if state.state == "failed" else "Loading Age %s words…" % ("12+" if growth.learning_age() == 12 else str(growth.learning_age()))
+	_vocabulary_progress.value = float(state.progress) * 100.0
+	_vocabulary_retry.visible = state.state == "failed"
+	_vocabulary_back.visible = not _vocabulary_booting and not _round_id.is_empty()
+	if _vocabulary_retry.visible:
+		_vocabulary_retry.grab_focus()
+	elif _vocabulary_back.visible:
+		_vocabulary_back.grab_focus()
+	_publish_growth_view()
+
+
+func _retry_vocabulary() -> void:
+	if not _pending_vocabulary_round.is_empty():
+		vocabulary_loader.request_age(growth.learning_age())
+
+
+func _close_vocabulary_prompt() -> void:
+	if not _vocabulary_prompt.visible:
+		return
+	_vocabulary_prompt.hide()
+	get_tree().paused = _vocabulary_previous_pause
+	_sync_reward_confetti()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+
+
+func _cancel_vocabulary_round() -> void:
+	if _vocabulary_booting or _round_id.is_empty():
+		return
+	_pending_vocabulary_round.clear()
+	_close_vocabulary_prompt()
+	_refresh()
+	_default_focus().grab_focus()
+	_restore_mode_music()
+	_publish_growth_view()
+
+
+func _on_vocabulary_ready(age: int) -> void:
+	if collection_page.visible and age == _catalog_age:
+		_show_age_catalog()
+	if age == growth.learning_age() and not _pending_vocabulary_round.is_empty():
+		_resume_vocabulary_round.call_deferred()
+	_prefetch_vocabulary()
+	_publish_growth_view()
+
+
+func _resume_vocabulary_round() -> void:
+	if _pending_vocabulary_round.is_empty() or _page_hidden or not vocabulary_loader.is_ready(growth.learning_age()):
+		return
+	var arguments: Array = _pending_vocabulary_round.duplicate()
+	_pending_vocabulary_round.clear()
+	_close_vocabulary_prompt()
+	if not new_round.callv(arguments):
+		return
+	var was_booting: bool = _vocabulary_booting
+	_finish_vocabulary_boot()
+	if not was_booting:
+		_default_focus().grab_focus()
+		audio.interact(model.theme_id, _mode_id != "pop")
+		if _mode_id == "phrase":
+			_start_phrase_prompt()
+		# Voice Pop retains its explicit microphone button after a download;
+		# the completed network request is not a browser permission gesture.
+
+
+func _on_vocabulary_failed(age: int, message: String) -> void:
+	if _host != null and _vocabulary_booting:
+		_host.vocabularyLoadingHint(age, "failed", vocabulary_loader.status(age).progress, message)
+	_on_vocabulary_progress(age, 0.0)
+
+
+func _on_vocabulary_progress(age: int, _progress: float) -> void:
+	if _vocabulary_prompt.visible and age == growth.learning_age():
+		_update_vocabulary_prompt()
+	if collection_page.visible and age == _catalog_age:
+		_show_age_catalog()
+	_publish_growth_view()
+
+
+func _prefetch_vocabulary() -> void:
+	if not _vocabulary_initialized or _vocabulary_booting or not growth.ready:
+		return
+	var age: int = growth.learning_age()
+	if str(vocabulary_loader.status(age).state) == "idle":
+		vocabulary_loader.request_age(age)
+	var state: Dictionary = growth.snapshot()
+	if age < 12 and float(state.progress) >= 0.9 and str(vocabulary_loader.status(age + 1).state) == "idle":
+		vocabulary_loader.request_age(age + 1)
+
+
+func _vocabulary_snapshot() -> Dictionary:
+	var age: int = growth.learning_age()
+	var state: Dictionary = vocabulary_loader.status(age)
+	var states: Dictionary = {}
+	for value in range(3, 13):
+		states[str(value)] = vocabulary_loader.status(value)
+	return {"age": age, "status": state.state, "progress": state.progress,
+		"ready": vocabulary_loader.is_ready(age), "pending_age": age if not _pending_vocabulary_round.is_empty() else 0,
+		"pending_action": "round" if not _pending_vocabulary_round.is_empty() else "",
+		"states": states}
 
 
 func _on_loading_finished(args: Array) -> void:
@@ -929,6 +1115,9 @@ func _build_collection_shell() -> void:
 	_age_catalog = AgeWordCatalog.new()
 	_age_catalog.interaction_allowed = _can_browse_collection
 	_age_catalog.hear_requested.connect(_hear_catalog_word)
+	_age_catalog.retry_requested.connect(func() -> void:
+		if _can_browse_collection():
+			vocabulary_loader.request_age(_catalog_age))
 	_collection_column.add_child(_age_catalog)
 	_build_world_choices()
 	collection_page.hide()
@@ -972,11 +1161,19 @@ func _can_browse_collection() -> bool:
 
 
 func _show_age_catalog() -> void:
+	if not collection_page.visible or not _vocabulary_initialized:
+		return
 	audio.stop_voice()
 	var band: Dictionary = Data.age_band(str(_catalog_age))
 	if _catalog_age > growth.learning_age():
 		band.name += " · Preview"
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == _catalog_age)
+	if not vocabulary_loader.is_ready(_catalog_age):
+		_age_catalog.show_loading(band, words.size(), vocabulary_loader.status(_catalog_age), Data.theme(model.theme_id))
+		_age_catalog.show()
+		if str(vocabulary_loader.status(_catalog_age).state) == "idle":
+			vocabulary_loader.request_age(_catalog_age)
+		return
 	_age_catalog.configure(words, band, Data.theme(model.theme_id), growth.snapshot())
 	_age_catalog.show()
 
@@ -1099,12 +1296,15 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_jelly_treasure: bool = true) -> bool:
-	_coin_flight.sync(coin_wallet.balance)
 	if not growth.ready:
 		_growth_save_failed = true
 		_refresh()
 		_layout()
 		return false
+	if not vocabulary_loader.is_ready(growth.learning_age()):
+		_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_jelly_treasure])
+		return false
+	_coin_flight.sync(coin_wallet.balance)
 	if not _settle_pair_reward():
 		_refresh()
 		return false
@@ -1199,7 +1399,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _mode_id == "phrase":
 		_phrase.set_reduced_motion(reduced_motion)
 		_phrase.set_muted(audio.muted or not audio.available)
-		if not _phrase.configure(_learning_words(), str(growth.learning_age()), model.theme_id, seed_value):
+		if not _phrase.configure(_learning_words(true), str(growth.learning_age()), model.theme_id, seed_value):
 			_rebuilding = false
 			_show_error(_phrase.game.error)
 			return false
@@ -1430,9 +1630,8 @@ func _start_pop_listening() -> void:
 	if _mode_id != "pop" or _round_celebration_active() or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
 		return
 	if _pop.game.phase == "finished":
-		if not _settle_pop_reward():
+		if not new_round(-1, false, "", "pop"):
 			return
-		_configure_pop()
 	audio.halt()
 	duck.settle()
 	if not _stop_pop_listening():
@@ -1615,7 +1814,8 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 
 func _reward_confetti_allowed() -> bool:
 	return is_visible_in_tree() and not _page_hidden and not _rebuilding and not _speech_debug_active \
-		and is_instance_valid(collection_page) and not collection_page.visible and not _mode_menu_open()
+		and is_instance_valid(collection_page) and not collection_page.visible and not _mode_menu_open() \
+		and not (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible)
 
 
 func _sync_reward_confetti() -> void:
@@ -2933,6 +3133,8 @@ func on_page_hidden() -> void:
 
 
 func on_page_visible() -> void:
+	if not _pending_vocabulary_round.is_empty():
+		_resume_vocabulary_round.call_deferred()
 	if _speech_debug_active:
 		_page_hidden = false
 		_sync_reward_confetti()
@@ -2955,7 +3157,7 @@ func on_page_visible() -> void:
 
 
 func _restore_mode_music() -> void:
-	if _page_hidden or _voice_mode or _pop_speech_active:
+	if _page_hidden or _voice_mode or _pop_speech_active or (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible):
 		return
 	if _mode_id == "pop" and not collection_page.visible:
 		return
@@ -3295,6 +3497,8 @@ func _valid_focus(control: Control) -> bool:
 	if not is_instance_valid(control) or not control.is_visible_in_tree() or control.focus_mode == Control.FOCUS_NONE \
 		or (control is Button and (control as Button).disabled):
 		return false
+	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
+		return _vocabulary_prompt.is_ancestor_of(control)
 	if _mode_menu_open():
 		return _mode_panel.is_ancestor_of(control)
 	if collection_page.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
@@ -3305,6 +3509,8 @@ func _valid_focus(control: Control) -> bool:
 
 
 func _default_focus() -> Control:
+	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
+		return _vocabulary_retry if _vocabulary_retry.visible else _vocabulary_back
 	if _mode_menu_open():
 		return _mode_buttons[MODES.keys().find(_mode_id)]
 	if collection_page.visible:
@@ -3497,7 +3703,7 @@ func _on_speech_debug(arguments: Array) -> bool:
 func _open_speech_debug() -> bool:
 	if _speech_debug_active:
 		return not _page_hidden
-	if _page_hidden or (OS.has_feature("web") and not _loading_revealed) \
+	if _page_hidden or not _pending_vocabulary_round.is_empty() or (OS.has_feature("web") and not _loading_revealed) \
 		or _holding_chest or model.chest_state == "opening" or _save_error or not _pending_fragment.is_empty():
 		return false
 	# Stop the old recognizer before freezing the scene. A failed microphone
@@ -4140,8 +4346,11 @@ func _play_duck() -> void:
 	_announce_status("Pip says hello! " + caption)
 
 
-func _learning_words() -> Array:
-	var words: Array = data.words.duplicate(true)
+func _learning_words(for_phrase: bool = false) -> Array:
+	var age: int = growth.learning_age()
+	var dependencies: Array = _vocabulary_catalog.get("ages", {}).get(str(age), {}).get("word_ids", [])
+	var words: Array = data.words.filter(func(word: Dictionary) -> bool:
+		return dependencies.has(str(word.id)) if for_phrase else Data.word_age(word) == age).duplicate(true)
 	for word: Dictionary in words:
 		word["_growth_priority"] = (2 if Data.word_age(word) == growth.learning_age() else 1) if not growth.is_mastered(str(word.id)) else 0
 	return words
@@ -4286,6 +4495,7 @@ func _sync_growth_load_notice() -> void:
 
 
 func _refresh_growth() -> void:
+	_prefetch_vocabulary()
 	if not is_instance_valid(_growth_button):
 		return
 	var state: Dictionary = growth.snapshot()
@@ -4315,6 +4525,10 @@ func _publish_growth_view() -> void:
 		return
 	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar)]
 	var state := {"visible": collection_page.visible, "controls": controls}
+	state["vocabulary"] = _vocabulary_snapshot()
+	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
+		controls.append(_growth_control(_vocabulary_retry))
+		controls.append(_growth_control(_vocabulary_back))
 	if collection_page.visible:
 		state["catalog"] = _age_catalog.snapshot()
 		state.catalog["viewport_rect"] = _growth_control(_age_catalog.scroll).rect

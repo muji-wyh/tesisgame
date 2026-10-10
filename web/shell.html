@@ -514,6 +514,7 @@
     <span class="pop-aura-edge pop-aura-edge--left"><span class="pop-aura-flow"></span></span>
   </div>
   <script>
+    $VOCABULARY_LOADER_JS
     (() => {
       'use strict';
       const canvas = document.getElementById('canvas');
@@ -719,6 +720,24 @@
       let entered = false;
       let revealGame = null;
       let engine = null;
+      let vocabularyLoader = null;
+      function vocabularyLoadingHint(age, state, loaded, error) {
+        if (readyReceived || failed) return;
+        const label = age === 12 ? 'Age 12+' : `Age ${age}`;
+        if (state === 'loading') {
+          message.textContent = `Loading ${label} words...`;
+          downloadStatus.textContent = `${label} words: ${Math.floor(Math.max(0, Math.min(1, loaded)) * 100)}%`;
+          loadingNote.hidden = true;
+        } else if (state === 'failed') {
+          message.textContent = `${label} words are not ready yet.`;
+          loadingNote.textContent = error || 'The words could not be loaded. Please try again.';
+          loadingNote.hidden = false;
+          retry.hidden = false;
+        } else if (state === 'ready') {
+          message.textContent = 'Getting your words ready...';
+          loadingNote.hidden = true;
+        }
+      }
       function createGameAudioRecovery() {
         let context = null;
         let inGame = false;
@@ -2911,6 +2930,18 @@
       // Host lifecycle and controller state, never gameplay mutations.
       window.wordBuddiesHost = Object.freeze({
         ...speechHost,
+        requestVocabulary(age, callback) {
+          if (typeof callback !== 'function') return;
+          if (!vocabularyLoader) vocabularyLoader = window.createVocabularyLoader({
+            packs: () => config.vocabularyPacks, engine: () => engine
+          });
+          void vocabularyLoader.request(age, text => {
+            const state = JSON.parse(text);
+            vocabularyLoadingHint(state.age, state.state, state.progress, state.error);
+            callback(text);
+          });
+        },
+        vocabularyLoadingHint,
         observeSpeechDebug(callback) {
           onSpeechDebug = typeof callback === 'function' ? callback : null;
           speechDebug.setAvailable(entered && onSpeechDebug !== null);

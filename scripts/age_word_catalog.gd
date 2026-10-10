@@ -3,6 +3,7 @@ const WordArt = preload("res://scripts/word_art.gd")
 ## Browse the supplied age-eligible vocabulary without changing lesson progress.
 
 signal hear_requested(word: Dictionary)
+signal retry_requested
 
 const Style = preload("res://scripts/ui_style.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
@@ -18,6 +19,7 @@ var meaning_label: Label
 var previous_button: Button
 var next_button: Button
 var page_label: Label
+var retry_button: Button
 var interaction_allowed: Callable
 
 var _heading: HBoxContainer
@@ -33,6 +35,11 @@ var _page_index: int = 0
 var _growth: Dictionary = {}
 var _styled_scale: float = -1.0
 var _styled_accent: Color = Color.TRANSPARENT
+var _loading_state: Dictionary = {}
+var _loading_word_count: int = 0
+var _loading_box: VBoxContainer
+var _loading_label: Label
+var _loading_progress: ProgressBar
 
 
 func _init() -> void:
@@ -92,6 +99,36 @@ func _build() -> void:
 	_content.add_child(grid)
 	grid.resized.connect(_reveal_focused_word)
 	scroll.resized.connect(_layout)
+	_loading_box = VBoxContainer.new()
+	_loading_box.name = "AgeVocabularyLoading"
+	_loading_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	_loading_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_loading_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_loading_box.hide()
+	add_child(_loading_box)
+	_loading_label = Style.label("", 16)
+	_loading_label.name = "AgeVocabularyStatus"
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_loading_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_loading_box.add_child(_loading_label)
+	_loading_progress = ProgressBar.new()
+	_loading_progress.name = "AgeVocabularyProgress"
+	_loading_progress.max_value = 1.0
+	_loading_progress.step = 0.001
+	_loading_progress.show_percentage = true
+	_loading_progress.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_loading_progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_loading_box.add_child(_loading_progress)
+	retry_button = Button.new()
+	retry_button.name = "AgeVocabularyRetry"
+	retry_button.text = "Try again"
+	retry_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	UiClick.bind_button(retry_button)
+	retry_button.pressed.connect(func() -> void:
+		if _can_interact() and _loading_state.get("state", "") == "failed":
+			retry_requested.emit())
+	_loading_box.add_child(retry_button)
 	_navigation = HBoxContainer.new()
 	_navigation.name = "AgeWordPages"
 	_navigation.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -118,6 +155,10 @@ func _build() -> void:
 
 func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Dictionary = {}) -> void:
 	_build()
+	_loading_state.clear()
+	_loading_box.hide()
+	scroll.show()
+	_navigation.show()
 	var ordered: Array = words.duplicate(true)
 	ordered.sort_custom(func(first: Dictionary, second: Dictionary) -> bool:
 		var first_text: String = str(first.get("text", "")).to_lower()
@@ -147,14 +188,49 @@ func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Di
 	_layout(false)
 
 
-func _rebuild_words() -> void:
+func show_loading(band: Dictionary, word_count: int, state: Dictionary, palette: Dictionary = {}) -> void:
+	_build()
+	cancel_input()
+	_band = band.duplicate(true)
+	_palette = palette.duplicate(true)
+	_loading_state = state.duplicate(true)
+	_loading_word_count = maxi(0, word_count)
+	_words.clear()
+	_word_indices.clear()
+	_growth.clear()
+	_page_index = 0
+	_clear_word_buttons()
+	title_label.text = str(_band.get("name", "All words"))
+	count_label.text = "%d %s" % [_loading_word_count, "word" if _loading_word_count == 1 else "words"]
+	meaning_label.text = "Pictures and voices will be ready together."
+	var failed: bool = _loading_state.get("state", "") == "failed"
+	_loading_label.text = str(_loading_state.get("error", "These words could not be loaded. Please try again.")) if failed else "Getting these words ready..."
+	if _loading_label.text.is_empty():
+		_loading_label.text = "These words could not be loaded. Please try again." if failed else "Getting these words ready..."
+	_loading_progress.value = clampf(float(_loading_state.get("progress", 0.0)), 0.0, 1.0)
+	_loading_progress.visible = not failed
+	retry_button.visible = failed
+	retry_button.disabled = not failed
+	previous_button.disabled = true
+	next_button.disabled = true
+	scroll.hide()
+	_navigation.hide()
+	_loading_box.show()
+	_layout(false)
+
+
+func _clear_word_buttons() -> void:
 	for button: Button in word_buttons:
 		grid.remove_child(button)
 		button.queue_free()
 	word_buttons.clear()
 	_by_id.clear()
-	# Keep only the current page's image resources alive.
 	_textures.clear()
+
+
+func _rebuild_words() -> void:
+	# Keep only the current page's image resources alive.
+	_clear_word_buttons()
 	for word: Dictionary in _words.slice(_page_index * PAGE_SIZE, (_page_index + 1) * PAGE_SIZE):
 		var button := Button.new()
 		var id: String = str(word.get("id", word.get("text", "")))
@@ -216,7 +292,7 @@ func _rebuild_words() -> void:
 
 
 func word_count() -> int:
-	return _words.size()
+	return _words.size() if _loading_state.is_empty() else _loading_word_count
 
 
 func _page_count() -> int:
@@ -346,6 +422,16 @@ func _layout(reveal_focus: bool = true) -> void:
 	grid.add_theme_constant_override("v_separation", gap)
 	var accent: Color = _palette.get("accent", Style.GOOD)
 	var restyle: bool = not is_equal_approx(_styled_scale, scale) or _styled_accent != accent
+	_loading_box.add_theme_constant_override("separation", ceili(16.0 / scale))
+	_loading_label.add_theme_font_size_override("font_size", ceili(16.0 / scale))
+	_loading_progress.custom_minimum_size = Vector2(minf(280.0 / scale, available), 26.0 / scale)
+	_loading_progress.add_theme_stylebox_override("background", Style.box(Style.EDGE, Color.TRANSPARENT, ceili(8.0 / scale), 0))
+	_loading_progress.add_theme_stylebox_override("fill", Style.box(accent, Color.TRANSPARENT, ceili(8.0 / scale), 0))
+	_loading_progress.add_theme_font_size_override("font_size", ceili(12.0 / scale))
+	if restyle:
+		Style.action_button(retry_button, accent)
+	retry_button.custom_minimum_size = Vector2(128.0, 48.0) / scale
+	retry_button.add_theme_font_size_override("font_size", ceili(14.0 / scale))
 	for button: Button in [previous_button, next_button]:
 		if restyle:
 			var previous_focus: int = button.focus_mode
@@ -386,9 +472,11 @@ func snapshot() -> Dictionary:
 	var visible_ids: Array[String] = []
 	for button: Button in word_buttons:
 		visible_ids.append(str(button.get_meta("word_id")))
-	return {"growth": _growth, "visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
+	return {"growth": _growth, "loading": _loading_state.duplicate(true),
+		"loading_state": str(_loading_state.get("state", "ready")), "loading_progress": float(_loading_state.get("progress", 1.0)),
+		"visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
 		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids,
-		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text,
+		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text if meaning_label != null else "",
 		"columns": grid.columns if grid != null else 0,
 		"scroll_offset": scroll.scroll_vertical if scroll != null else 0,
 		"scroll_max": maxf(0.0, scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page) if scroll != null else 0.0}

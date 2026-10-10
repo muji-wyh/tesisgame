@@ -4,6 +4,7 @@ const { runGodot } = require('./run-godot.cjs');
 const { prepare, inlineMascot } = require('./prepare-godot.cjs');
 const { packageWebExport, collectRequiredAudio } = require('./package-web.cjs');
 const { snapshotInputs, invalidateBuildReceipt, writeBuildReceipt } = require('./web-build-receipt.cjs');
+const { writeVocabularyPlan } = require('./vocabulary-packs.cjs');
 
 const root = path.resolve(__dirname, '..');
 invalidateBuildReceipt(root);
@@ -16,6 +17,9 @@ require('./prepare-jelly-reward-art.cjs').checkJellyRewardArt(root);
 require('./prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
 require('./prepare-coin-art.cjs').checkCoinArt(root);
 runGodot(['--headless', '--path', root, '--import']);
+const vocabulary = writeVocabularyPlan(root);
+process.stdout.write(runGodot(['--headless', '--path', root, '--script',
+  'res://tools/pack-vocabulary.gd', '--', vocabulary.manifest]).stdout);
 const audio = collectRequiredAudio(root);
 const inputs = snapshotInputs(root);
 runGodot(['--headless', '--path', root, '--export-release', 'Web', path.join(root, 'build', 'web', 'index.html')]);
@@ -38,12 +42,13 @@ const verification = runGodot([
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slice.wav')) ? ['--require-pop-slice'] : []),
   ...(fs.existsSync(path.join(root, 'assets/imported-audio/pop-slices')) ? ['--require-pop-slices'] : []),
   ...(audio.some(file => file.source.startsWith('res://assets/imported-audio/pop-reference/')) ? ['--require-pop-reference'] : []),
-  '--audio-manifest', audioManifest
+  '--audio-manifest', audioManifest,
+  '--vocabulary-manifest', vocabulary.manifest
 ]);
 process.stdout.write(verification.stdout);
-const downloadBytes = packageWebExport(output);
+const downloadBytes = packageWebExport(output, vocabulary.packs);
 fs.copyFileSync(path.join(root, 'web', 'staticwebapp.config.json'), path.join(output, 'staticwebapp.config.json'));
 fs.copyFileSync(path.join(root, 'web', 'map-credits.html'), path.join(output, 'map-credits.html'));
 fs.copyFileSync(path.join(root, 'assets', 'fonts', 'OFL.txt'), path.join(output, 'nunito-license.txt'));
 writeBuildReceipt(root, inputs);
-console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB startup; ${audio.length} music, prompt, chest and optional slice assets verified inside the game pack).`);
+console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB core startup plus the selected age pack; ten on-demand vocabulary packs and ${audio.length} audio resources verified).`);

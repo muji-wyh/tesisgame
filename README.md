@@ -27,8 +27,11 @@ The `?speechLocal=1` experiment exposes optional browser-managed on-device
 English preparation. It remains off by default and does not bundle a WASM
 speech model. Automated speech tests do not establish acoustic accuracy.
 
-All game audio ships in the initial game pack. Browsers still require a trusted
-interaction to enable playback. Pip ignores another manual tap until the
+Startup downloads the current learning age's pictures, animations and recorded
+words. The next age preloads at 90% mastery of the current age; browsing another
+age in the vocabulary page downloads that age on demand. Shared music and game
+effects remain in the core pack. Browsers still require a trusted interaction
+to enable playback. Pip ignores another manual tap until the
 current gesture finishes. Reduced motion keeps readable state and simpler
 feedback. Touch, keyboard, and Xbox controller input share the game controls.
 
@@ -65,7 +68,7 @@ npm run serve:web
 ```
 
 The complete `build/web` directory is the deliverable. Deploy all engine,
-game-pack, worklet, configuration, and Brotli files together to a static HTTPS
+core and vocabulary packs, worklet, configuration, and Brotli files together to a static HTTPS
 host; do not open the export with `file://`. Hashed assets support immutable
 caching, while HTML revalidates. The single-threaded Compatibility export needs
 WebGL 2, without SharedArrayBuffer or cross-origin isolation.

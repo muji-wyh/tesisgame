@@ -13,6 +13,10 @@ function prepare() {
 }
 
 function inlineMascot(html) {
+  if (html.includes('$VOCABULARY_LOADER_JS')) {
+    const loader = fs.readFileSync(path.join(root, 'web', 'vocabulary-loader.js'), 'utf8');
+    html = html.replaceAll('$VOCABULARY_LOADER_JS', () => loader.replaceAll('</script', '<\\/script'));
+  }
   if (!html.includes('$PIP_MASCOT_URI')) throw new Error('The web shell is missing the Pip mascot placeholder.');
   const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'mascots', 'pip.svg'));
   html = html.replaceAll('$PIP_MASCOT_URI', `data:image/svg+xml;base64,${svg.toString('base64')}`);

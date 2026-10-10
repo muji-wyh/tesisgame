@@ -37,6 +37,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'The raw phrase catalog must be available to the exported native game');
   assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('data/word-motion.json'),
     'The animation catalogue must be available to the exported native game');
+  assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('data/vocabulary-packs.json'),
+    'The lightweight age dependency catalogue must be available before media is downloaded');
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
@@ -46,8 +48,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const word of JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))) {
     const pictures = word.image ? [`assets/images/word-library/${word.id}.webp`, `assets/images/word-motion/${word.id}.webp`] : [];
     for (const source of [...pictures, word.audio]) {
-      assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
-        `Every vocabulary picture and recording must survive export: ${source}`);
+      assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), true,
+        `Vocabulary media belongs in its deferred age pack: ${source}`);
     }
     if (word.image) assert.ok(excluded.some(pattern => path.matchesGlob(word.image, pattern)),
       `Historical source pictures remain authoring inputs: ${word.image}`);
@@ -57,11 +59,14 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'assets/audio/chests/spring-settle.wav', 'assets/audio/voice/spring-theme.wav',
     ...['step', 'step-detail', 'step-roll', 'release', 'reward'].map(cue => `assets/imported-audio/chest-reference/${cue}.wav`),
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
-    'assets/imported-audio/ui-click/select.wav',
-    ...JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8')).map(phrase => phrase.audio)
+    'assets/imported-audio/ui-click/select.wav'
   ]) {
     assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
       `Active audio must be included in the game pack: ${source}`);
+  }
+  for (const phrase of JSON.parse(fs.readFileSync(path.join(root, 'phrases.json'), 'utf8'))) {
+    assert.ok(excluded.some(pattern => path.matchesGlob(phrase.audio, pattern)),
+      `Whole-phrase pronunciation belongs in its deferred age pack: ${phrase.audio}`);
   }
   for (const source of ['assets/audio/voice/ocean-arrive.wav', 'assets/audio/voice/ocean-open.wav']) {
     assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Retired audio stays excluded: ${source}`);
@@ -472,7 +477,7 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   const config = JSON.parse(fs.readFileSync(path.join(root, 'web', 'staticwebapp.config.json'), 'utf8'));
   assert.equal(config.globalHeaders['Cache-Control'], 'no-cache', 'HTML must discover updated asset names');
   assert.equal(config.globalHeaders.Vary, 'Accept-Encoding', 'Caches must distinguish compressed and identity responses');
-  for (const route of ['/engine-*', '/game-*']) {
+  for (const route of ['/engine-*', '/game-*', '/vocabulary-*']) {
     assert.equal(config.routes.find(entry => entry.route === route).headers['Cache-Control'],
       'public, max-age=31536000, immutable');
   }
@@ -480,9 +485,83 @@ test('Web delivery compresses and fingerprints assets without mixing cached game
   assert.equal(packRoute.headers['Content-Encoding'], 'br', 'The explicit pack URL must be decoded by Fetch');
   assert.equal(packRoute.headers['Content-Type'], 'application/octet-stream');
   assert.equal(packRoute.headers['Cache-Control'], 'public, max-age=31536000, immutable');
-  assert.deepEqual(config.routes.filter(entry => entry.headers['Content-Encoding']).map(entry => entry.route), ['/game-*'],
-    'Only the compressed game-pack prefix receives a fixed encoding; engine URLs still negotiate sidecars');
+  assert.deepEqual(config.routes.filter(entry => entry.headers['Content-Encoding']).map(entry => entry.route).sort(), ['/game-*', '/vocabulary-*'],
+    'Only compressed pack prefixes receive fixed encoding; engine URLs still negotiate sidecars');
   assert.equal(config.globalHeaders['Content-Encoding'], undefined, 'Other output files must not be labeled as Brotli');
+});
+
+test('age packs are fingerprinted independently and excluded from the mandatory startup download', t => {
+  const { packageWebExport } = require('../tools/package-web.cjs');
+  const { brotliDecompressSync } = require('node:zlib');
+  const fixture = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'vocabulary-web-export-'));
+  t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
+  const directory = path.join(fixture, 'web');
+  fs.mkdirSync(directory);
+  const writeExport = () => {
+    fs.writeFileSync(path.join(directory, 'index.html'), '<script src="index.js"></script><script>const config = {};</script>');
+    for (const suffix of ['js', 'wasm', 'pck', 'audio.worklet.js', 'audio.position.worklet.js']) {
+      fs.writeFileSync(path.join(directory, `index.${suffix}`), suffix === 'js' ? startupFixture : suffix);
+    }
+  };
+  const packs = {};
+  for (let age = 3; age <= 12; age++) {
+    packs[age] = { file: path.join(fixture, `age-${age}.pck`), dependencies: [] };
+    fs.writeFileSync(packs[age].file, `GDPC vocabulary for age ${age}`);
+  }
+  const sharedId = 'shared-3-5-12';
+  packs[sharedId] = { file: path.join(fixture, `${sharedId}.pck`) };
+  fs.writeFileSync(packs[sharedId].file, 'GDPC shared vocabulary without media duplication');
+  for (const age of ['3', '5', '12']) packs[age].dependencies.push(sharedId);
+  const readConfig = () => JSON.parse(fs.readFileSync(path.join(directory, 'index.html'), 'utf8')
+    .match(/const config = (\{[^\r\n]*\});/)[1]);
+  writeExport();
+  const startup = packageWebExport(directory, packs);
+  const first = readConfig();
+  assert.deepEqual(Object.keys(first.vocabularyPacks), ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
+  for (const [age, pack] of Object.entries(first.vocabularyPacks)) {
+    const bytes = fs.readFileSync(packs[age].file);
+    assert.equal(pack.bytes, bytes.length);
+    assert.equal(pack.sha256, require('node:crypto').createHash('sha256').update(bytes).digest('hex'));
+    assert.equal(pack.file, `vocabulary-${age}-${pack.sha256.slice(0, 16)}.pck.br`);
+    assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, pack.file))), bytes);
+    assert.equal(first.fileSizes[pack.file], undefined, 'Deferred packs are not mandatory engine preload downloads');
+    assert.equal(fs.existsSync(path.join(directory, pack.file.slice(0, -3))), false);
+    assert.equal(pack.dependencies.length, ['3', '5', '12'].includes(age) ? 1 : 0);
+  }
+  const shared = first.vocabularyPacks['3'].dependencies[0];
+  assert.deepEqual(first.vocabularyPacks['5'].dependencies[0], shared);
+  assert.deepEqual(first.vocabularyPacks['12'].dependencies[0], shared);
+  assert.deepEqual(brotliDecompressSync(fs.readFileSync(path.join(directory, shared.file))), fs.readFileSync(packs[sharedId].file));
+  assert.equal(fs.readdirSync(directory).filter(name => name.startsWith('vocabulary-shared-')).length, 1);
+  assert.equal(startup, fs.readdirSync(directory).filter(name => name.endsWith('.br') && !name.startsWith('vocabulary-'))
+    .reduce((sum, name) => sum + fs.statSync(path.join(directory, name)).size, 0));
+  fs.writeFileSync(packs['4'].file, 'GDPC revised age four vocabulary');
+  writeExport();
+  assert.equal(packageWebExport(directory, packs), startup);
+  const second = readConfig();
+  assert.equal(second.mainPack, first.mainPack);
+  assert.equal(second.vocabularyPacks['3'].file, first.vocabularyPacks['3'].file);
+  assert.notEqual(second.vocabularyPacks['4'].file, first.vocabularyPacks['4'].file);
+  assert.equal(fs.existsSync(path.join(directory, first.vocabularyPacks['4'].file)), false);
+  assert.deepEqual(second.vocabularyPacks['3'].dependencies[0], shared, 'Unchanged shared media retains its cache URL');
+  fs.writeFileSync(packs[sharedId].file, 'GDPC revised shared vocabulary');
+  fs.writeFileSync(path.join(directory, shared.file.slice(0, -3)), 'stale raw shared copy');
+  writeExport();
+  packageWebExport(directory, packs);
+  const third = readConfig();
+  assert.equal(third.vocabularyPacks['3'].file, second.vocabularyPacks['3'].file);
+  assert.notEqual(third.vocabularyPacks['3'].dependencies[0].file, shared.file);
+  assert.equal(fs.existsSync(path.join(directory, shared.file)), false);
+  assert.equal(fs.existsSync(path.join(directory, shared.file.slice(0, -3))), false);
+  packs['4'].dependencies = [sharedId];
+  writeExport();
+  assert.throws(() => packageWebExport(directory, packs), /exactly its consumer ages/);
+  packs['4'].dependencies = [];
+  packs['3'].dependencies.push('shared-3-6');
+  assert.throws(() => packageWebExport(directory, packs), /Invalid vocabulary dependencies/);
+  packs['3'].dependencies.pop();
+  writeExport();
+  assert.throws(() => packageWebExport(directory, { 3: packs['3'] }), /all ten age packs/);
 });
 
 test('Pip growth preview stays local and is removed from an older Web export without touching neighboring files', t => {

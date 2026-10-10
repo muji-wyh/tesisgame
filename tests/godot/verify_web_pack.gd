@@ -7,6 +7,25 @@ func _initialize() -> void:
 
 func _verify() -> void:
 	var failures := 0
+	var required := OS.get_cmdline_user_args()
+	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	if not words is Array or words.size() < 5:
+		printerr("The startup pack must contain a playable vocabulary index.")
+		quit(1)
+		return
+	failures += _verify_excluded_content_absent()
+	if not required.has("--vocabulary-manifest") or required.find("--vocabulary-manifest") + 1 >= required.size():
+		printerr("Pass the vocabulary pack manifest to verify deferred resources.")
+		quit(1)
+		return
+	var vocabulary_index: int = required.find("--vocabulary-manifest")
+	if _verify_vocabulary_packs(required[vocabulary_index + 1], words):
+		quit(1)
+		return
+	required.remove_at(vocabulary_index + 1)
+	required.remove_at(vocabulary_index)
+	# Native verification preserves GameData's strict local asset checks. The
+	# deferred resources have been proved absent and mounted before this load.
 	var catalog = load("res://scripts/game_data.gd").new()
 	if not catalog.load_all():
 		printerr("The startup pack must contain every gameplay catalog: " + catalog.error)
@@ -48,27 +67,20 @@ func _verify() -> void:
 		if coin == null or coin.get_size() != expected_size:
 			printerr("The reviewed coin artwork is missing or incorrectly sized in the startup pack: " + coin_path)
 			failures += 1
-	failures += _verify_excluded_content_absent()
 	for name in ["body", "heading"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
 		if font == null or font.get_string_size("Grow with Pip").x <= 0.0:
 			printerr("An active interface font is missing from the startup pack: " + name)
 			failures += 1
-	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	if not words is Array or words.size() < 5:
-		printerr("The startup pack must contain a playable vocabulary.")
-		quit(1)
-		return
 	failures += _verify_word_library(catalog.words)
 	for word in words:
 		var stream: AudioStream = load("res://" + word.audio)
 		if stream == null or stream.get_length() <= 0.0:
-			printerr("Word pronunciation is missing from the startup pack: " + word.audio)
+			printerr("Word pronunciation is missing from the mounted vocabulary packs: " + word.audio)
 			failures += 1
 	failures += _verify_phrases(words)
 	failures += _verify_growth()
 	failures += _verify_word_motion(catalog.words)
-	var required := OS.get_cmdline_user_args()
 	if required.has("--audio-manifest"):
 		var manifest_index: int = required.find("--audio-manifest")
 		if manifest_index + 1 >= required.size():
@@ -202,8 +214,95 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired collectible effect is still bundled: " + path)
 			failures += 1
-	print("Startup pack: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
+	print("Web packs: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
 	quit(1 if failures else 0)
+
+
+func _verify_vocabulary_packs(path: String, words: Array) -> int:
+	var supplied: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary-packs.json"))
+	if not supplied is Dictionary or supplied.get("schema") != 2 or not supplied.get("packs") is Dictionary \
+		or not catalog is Dictionary or catalog.get("schema") != 1 or not catalog.get("ages") is Dictionary:
+		printerr("Deferred vocabulary manifests must be complete.")
+		return 1
+	var failures := 0
+	var deferred: Dictionary = {}
+	var phrases: Array = JSON.parse_string(FileAccess.get_file_as_string("res://phrases.json"))
+	for age in range(3, 13):
+		var id := str(age)
+		if not supplied.packs.has(id) or not catalog.ages.has(id):
+			printerr("Every curriculum age needs a vocabulary pack: " + id)
+			return 1
+		var cohort: Dictionary = catalog.ages[id]
+		var expected_words: Dictionary = {}
+		var expected_phrases: Array[String] = []
+		var expected_sources: Dictionary = {}
+		for word: Dictionary in words:
+			if int(word.min_age) == age:
+				expected_words[str(word.id)] = true
+		for phrase: Dictionary in phrases:
+			if int(phrase.min_age) <= age:
+				expected_phrases.append(str(phrase.id))
+				expected_sources["res://" + str(phrase.audio)] = true
+				for word_id: String in phrase.words:
+					expected_words[word_id] = true
+		var word_ids: Array = expected_words.keys()
+		word_ids.sort()
+		expected_phrases.sort()
+		if cohort.get("word_ids") != word_ids or cohort.get("phrase_ids") != expected_phrases:
+			printerr("An age pack must contain its exact cohort and complete phrase dependencies: " + id)
+			failures += 1
+		for word: Dictionary in words:
+			if expected_words.has(str(word.id)):
+				expected_sources["res://" + str(word.audio)] = true
+				if not str(word.image).is_empty():
+					expected_sources["res://assets/images/word-library/%s.webp" % word.id] = true
+					expected_sources["res://assets/images/word-motion/%s.webp" % word.id] = true
+		var actual_sources: Dictionary = {}
+		var bundles: Array = supplied.packs[id].get("dependencies", []).duplicate()
+		bundles.append(id)
+		for bundle: String in bundles:
+			if not supplied.packs.has(bundle) or not supplied.packs[bundle].ages.has(id):
+				printerr("An age references an unrelated vocabulary bundle: %s / %s" % [id, bundle])
+				return 1
+			for source: String in supplied.packs[bundle].sources:
+				actual_sources[source] = true
+		var expected_paths: Array = expected_sources.keys()
+		var actual_paths: Array = actual_sources.keys()
+		expected_paths.sort()
+		actual_paths.sort()
+		if expected_paths != actual_paths:
+			printerr("An age must load precisely its cohort and phrase media: " + id)
+			failures += 1
+	for bundle: String in supplied.packs:
+		for source: String in supplied.packs[bundle].sources:
+			if deferred.has(source):
+				printerr("Vocabulary media must be packaged only once: " + source)
+				failures += 1
+			deferred[source] = true
+		for entry: Dictionary in supplied.packs[bundle].entries:
+			if deferred.has(str(entry.path)):
+				printerr("Vocabulary import must be packaged only once: " + str(entry.path))
+				failures += 1
+			deferred[str(entry.path)] = true
+	for source: String in deferred:
+		if FileAccess.file_exists(source) or ResourceLoader.exists(source):
+			printerr("Deferred vocabulary unexpectedly remains in the startup pack: " + source)
+			failures += 1
+	if failures:
+		return failures
+	for bundle: String in supplied.packs:
+		var pack: Dictionary = supplied.packs[bundle]
+		if not ProjectSettings.load_resource_pack(str(pack.file), false):
+			printerr("Could not mount the deferred vocabulary pack " + bundle)
+			failures += 1
+			continue
+		for source: String in pack.sources:
+			if not ResourceLoader.exists(source):
+				printerr("A vocabulary pack is missing its imported resource: " + source)
+				failures += 1
+	print("Deferred vocabulary: %d unique bundles for ten ages mounted after confirming %d paths are absent from startup." % [supplied.packs.size(), deferred.size()])
+	return failures
 
 
 func _verify_word_motion(words: Array) -> int:

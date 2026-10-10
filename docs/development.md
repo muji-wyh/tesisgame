@@ -32,7 +32,7 @@ To build without starting a server:
 npm run build:web
 ```
 
-The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, PCK, audio-worklet, icon and `.br` files together. All music, speech and sound effects are inside the PCK. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
+The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, core and vocabulary PCKs, audio-worklet, icon and `.br` files together. Shared music and effects are in the core PCK; word and phrase media are in age packs. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
 
 Default speech recognition needs no model preparation or additional game download.
 The opt-in `?speechLocal=1` experiment can prepare a browser-managed English
@@ -44,9 +44,11 @@ copy an in-memory report; see the same speech guide for the test procedure.
 Rebuilding an older export removes its generated local speech models and retired
 multiplayer and voice-profile scripts while preserving unrelated output files.
 
-The build fingerprints engine files and the game pack independently, then generates Brotli
-sidecars with Node's built-in compressor. Azure serves the compressed variants automatically;
-uncompressed files remain available for other clients. Hashed assets can be cached for a year
+The build fingerprints engine files, the core pack and each vocabulary bundle independently, then
+compresses them with Node's built-in Brotli compressor. Engine files retain negotiated
+sidecars. Core and vocabulary packs ship only as explicit `.pck.br` URLs with
+`Content-Encoding: br`; Fetch delivers the decoded native PCK bytes to the game.
+Hashed assets can be cached for a year
 without mixing old and new game versions, and game-only changes reuse the same engine URL.
 HTML revalidates so returning players discover updates. Each build removes obsolete generated
 asset names without deleting unrelated files in the output directory.
@@ -91,13 +93,60 @@ staged animation. A separate Game data line shows the real loaded byte counts.
 Reduced motion uses milestone steps, hiding the page pauses pacing, and failed
 downloads stop progress and show an English error with a retry button.
 
-All audio is bundled in the startup **PCK alongside WASM**: word pronunciations,
-game effects, Pip sounds, eight background tracks, eight world greetings, 330 whole-phrase
-recordings, the two reference pair-feedback clips, and 88 themed
-chest cues. Retired Voice Pop reports and Match correction/loss recordings are excluded.
-Once startup finishes, playback needs no further audio downloads. The build opens the actual exported
-PCK and loads the required audio resources to verify that they are present and
-playable. Retired arrival and opening voice prompts remain excluded.
+Shared game effects, Pip sounds, eight background tracks, world greetings,
+reference pair feedback and themed chest cues remain in the startup PCK.
+Word pronunciations and whole-phrase recordings arrive with their age's vocabulary
+pack and are ready before that word set can be played or browsed. The build first
+opens the core PCK and proves deferred media is absent, then mounts the generated
+age packs and loads every required audio and image resource. Retired Voice Pop
+reports, Match correction/loss recordings and arrival/opening guide prompts remain
+excluded.
+
+### Vocabulary loading
+
+The complete lightweight word, phrase, curriculum and animation indexes stay in
+the core pack. They identify saved mastery and available ages without downloading
+every picture or recording. The active download follows `growth.learning_age()`:
+Baby Pip learns age 3, and completing an age begins the next cohort. Experience
+level increases alone do not download another age.
+
+Startup requests only the current age pack. At 90% mastery of that cohort, the
+next pack begins downloading in the background without changing the active round.
+Opening another age in the vocabulary page requests its pack on demand. Duplicate
+requests share one download, already loaded packs are reused, and errors expose
+an explicit retry. Starting a round waits for its required pack; optional
+prefetching does not interrupt gameplay or award progress.
+
+`tools/vocabulary-packs.cjs` generates the reproducible
+`data/vocabulary-packs.json` index and a local pack plan. Each age loads its exact
+cohort plus the constituent words and recordings required by all eligible Phrase
+Builder phrases. This preserves complete phrases without fetching every earlier
+age. Picture modes use their current cohort; Phrase Builder uses the age's
+declared dependencies for answer words and distractors.
+
+Every source is stored exactly once. Resources used by only one age go into its
+base bundle; resources used by several ages go into a shared bundle for that
+exact consumer set. For example, a `shared-3-5-12` bundle is requested only by
+ages 3, 5 and 12. This reduces deployment storage without downloading unrelated
+ages. Shared downloads and mounted packs are reused across requests.
+
+After resource import, `tools/pack-vocabulary.gd` packages `.import` remaps and
+their imported textures/audio at their existing `res://` paths. The Web exporter
+excludes these resources from the core PCK. Each published
+`vocabulary-AGE-HASH.pck.br` base has a full SHA-256 and decoded length in the
+HTML's `config.vocabularyPacks`, plus a `dependencies` array describing its shared
+bundles. Shared filenames contain their sorted consumer ages. The base can be an
+empty native pack when all media is shared. `web/vocabulary-loader.js` verifies
+each unique download before copying it into the engine filesystem;
+`scripts/vocabulary_loader.gd` mounts all required bundles without replacing
+existing resources before exposing the age as ready. Native editor runs use
+already local resources and need no downloads.
+
+The local server and Azure configuration both serve explicit vocabulary Brotli
+URLs correctly. Build receipts reject absent, changed, truncated or extra packs.
+Keep all ten base packs and every shared dependency when deploying, even if a
+fresh player initially requests only age 3. Browser caching is content based;
+a changed bundle receives a new URL.
 
 The Web preset uses Compatibility rendering, WebGL 2 and single-threaded export. It does not require SharedArrayBuffer, COOP/COEP headers, a service worker or cross-origin isolation. When updating a deployment, replace the complete export; do not rename hashed files or omit their `.br` sidecars.
 

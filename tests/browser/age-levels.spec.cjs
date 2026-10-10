@@ -9,6 +9,7 @@ async function age(page, id) {
   const rect = await ageControl(page, id);
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
   await expect.poll(async () => String((await growthView(page)).catalog?.age_band)).toBe(String(id));
+  await expect.poll(async () => (await growthView(page)).catalog?.loading_state, { timeout: 30000 }).toBe('ready');
 }
 
 async function saved(page) {

@@ -23,6 +23,14 @@ function fixture(t) {
   const pack = Buffer.from('A complete native game pack with bundled art and audio');
   const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck.br`;
   const config = { executable: 'engine-0123456789abcdef', mainPack, fileSizes: { [mainPack]: pack.length } };
+  config.vocabularyPacks = {};
+  for (let age = 3; age <= 12; age++) {
+    const bytes = Buffer.from(`GDPC vocabulary age ${age}`);
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const file = `vocabulary-${age}-${sha256.slice(0, 16)}.pck.br`;
+    config.vocabularyPacks[age] = { file, bytes: bytes.length, sha256, dependencies: [] };
+    write(`build/web/${file}`, brotliCompressSync(bytes));
+  }
   write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
   write('build/web/staticwebapp.config.json', '{}');
   for (const file of ['js', 'wasm', 'audio.worklet.js', 'audio.position.worklet.js']
@@ -183,6 +191,76 @@ test('changes to the local delivery server invalidate the build verified with it
   record();
   write('tools/serve-web.cjs', 'updated compressed pack server');
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*serve-web\.cjs/);
+});
+
+test('every deferred vocabulary pack must match its declared decoded size, full hash and complete Brotli stream', t => {
+  const { root, write, config, record } = fixture(t);
+  record();
+  const file = config.vocabularyPacks['4'];
+  const filename = path.join(root, 'build/web', file.file);
+  const original = fs.readFileSync(filename);
+  fs.unlinkSync(filename);
+  assert.throws(record, /Missing Web vocabulary pack/);
+  write(`build/web/${file.file}`, Buffer.concat([original, Buffer.from('trailing garbage')]));
+  assert.throws(record, /Vocabulary pack.*decoded size and content hash/);
+  write(`build/web/${file.file}`, brotliCompressSync(Buffer.from('changed age vocabulary')));
+  assert.throws(record, /Vocabulary pack.*decoded size and content hash|Incomplete Brotli vocabulary pack/);
+  write(`build/web/${file.file}`, original);
+  const bytes = file.bytes;
+  file.bytes++;
+  write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  assert.throws(record, /Vocabulary pack.*decoded size and content hash/);
+  file.bytes = bytes;
+  delete config.vocabularyPacks['12'];
+  write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  assert.throws(record, /all ten on-demand vocabulary packs/);
+});
+
+test('obsolete vocabulary hashes and raw duplicate packs cannot be deployed', t => {
+  const { root, write, config, record } = fixture(t);
+  for (const name of ['vocabulary-4-0123456789abcdef.pck.br', 'vocabulary-shared-3-5-12-0123456789abcdef.pck.br',
+    'vocabulary-shared-3-5-12-0123456789abcdef.pck', config.vocabularyPacks['4'].file.slice(0, -3)]) {
+    const filename = write(`build/web/${name}`, 'obsolete vocabulary');
+    assert.throws(record, /duplicate Web vocabulary packs/);
+    fs.unlinkSync(filename);
+  }
+  const receipt = record();
+  assert.deepEqual(verifyBuildReceipt(root), receipt);
+});
+
+test('shared vocabulary bundles validate once and must have exactly their declared consumer ages', t => {
+  const { root, write, config, record } = fixture(t);
+  const bytes = Buffer.from('GDPC shared media for three, five and twelve');
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  const file = `vocabulary-shared-3-5-12-${sha256.slice(0, 16)}.pck.br`;
+  const shared = { file, bytes: bytes.length, sha256 };
+  const publish = () => write('build/web/index.html', `<script>const config = ${JSON.stringify(config)};</script>`);
+  write(`build/web/${file}`, brotliCompressSync(bytes));
+  for (const age of ['3', '5', '12']) config.vocabularyPacks[age].dependencies = [{ ...shared }];
+  publish();
+  const receipt = record();
+  assert.deepEqual(verifyBuildReceipt(root), receipt);
+  config.vocabularyPacks['5'].dependencies = [];
+  publish();
+  assert.throws(record, /exactly its consumer ages/);
+  config.vocabularyPacks['5'].dependencies = [{ ...shared }];
+  config.vocabularyPacks['4'].dependencies = [{ ...shared }];
+  publish();
+  assert.throws(record, /Invalid shared vocabulary consumers/);
+  config.vocabularyPacks['4'].dependencies = [];
+  config.vocabularyPacks['12'].dependencies[0].bytes += 1;
+  publish();
+  assert.throws(record, /Conflicting shared vocabulary declarations/);
+  config.vocabularyPacks['12'].dependencies[0].bytes -= 1;
+  config.vocabularyPacks['3'].dependencies.push({ ...shared });
+  publish();
+  assert.throws(record, /Invalid vocabulary dependencies/);
+  config.vocabularyPacks['3'].dependencies.pop();
+  publish();
+  write(`build/web/${file}`, brotliCompressSync(Buffer.from('damaged shared pack')));
+  assert.throws(record, /Vocabulary pack.*decoded size and content hash|Incomplete Brotli vocabulary pack/);
+  fs.unlinkSync(path.join(root, 'build/web', file));
+  assert.throws(record, /Missing Web vocabulary pack/);
 });
 
 test('failed and interrupted builds cannot leave a prior successful receipt deployable', t => {
