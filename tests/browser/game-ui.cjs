@@ -83,6 +83,7 @@ async function growthView(page) {
 }
 
 async function seedGrowth(page, level, { unmastered = null } = {}) {
+  // Keep this old six-answer record to exercise saved-learner migration on real browser flows.
   const words = require('../../words.json');
   const streaks = Object.fromEntries(words.filter(word => word.min_age <= level &&
     (unmastered ? !unmastered.includes(word.id) : word.min_age < level)).map(word => [word.id, 6]));

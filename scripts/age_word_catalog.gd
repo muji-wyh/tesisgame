@@ -8,6 +8,7 @@ signal retry_requested
 const Style = preload("res://scripts/ui_style.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
+const GrowthState = preload("res://scripts/growth_state.gd")
 const PAGE_SIZE: int = 60
 
 var scroll: ResultScroll
@@ -273,8 +274,8 @@ func _rebuild_words() -> void:
 		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		column.add_child(caption)
 		var streak: int = int(_growth.get("streaks", {}).get(id, 0))
-		var mastered: bool = streak >= 6
-		var progress_label := Style.label("Mastered" if mastered else "%d / 6" % streak, 12)
+		var mastered: bool = streak >= GrowthState.MASTERY_STREAK
+		var progress_label := Style.label("Mastered" if mastered else "%d / %d" % [streak, GrowthState.MASTERY_STREAK], 12)
 		progress_label.name = "WordMastery"
 		progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		progress_label.add_theme_color_override("font_color", Style.GOOD if mastered else Style.MUTED)

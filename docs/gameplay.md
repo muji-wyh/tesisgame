@@ -6,21 +6,23 @@ accounts, usernames, identity avatars, leaderboards or Pip's room.
 
 ## Growing together
 
-Every device starts at **Lv3**. The age-labelled stages are 3, 4, 5, 6, 7, 8, 9,
-10, 11 and 12+. These form an editorial English-as-a-second-language learning
-sequence, not developmental standards or a native-English vocabulary checklist.
+Every device starts at **Lv0** with **Baby Pip**. The age-labelled vocabulary
+cohorts are 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. These form an editorial
+English-as-a-second-language learning sequence, not developmental standards or a
+native-English vocabulary checklist. Experience levels and Pip's age are independent.
 
 A correct completed activity adds one to each unique involved word. A wrong
-answer resets its involved words. Six consecutive correct answers mark a word
-**Mastered**. Mastering the complete current cohort unlocks the next level.
-Previously earned levels never decrease, even when a mastered word needs practice
-again. Hints, pronunciation, peek, cancelled selections and idle time give no credit.
+answer resets its involved words. Three consecutive correct answers mark a word
+**Mastered**. First-time mastery adds permanent experience toward Lv99. Mastering
+the complete current cohort grows Pip to that age and unlocks the next cohort.
+Previously earned levels and ages never decrease, even when a mastered word needs
+practice again. Hints, pronunciation, peek, cancelled selections and idle time give no credit.
 
-The persistent level button and progress bar show mastered words in the current
-cohort. The button or **More** opens the learning notebook. It includes all words
-in each cohort, their 0-6 streaks or Mastered labels, pronunciation and short
-meanings. Future cohorts are clearly previews: browsing them cannot change the
-game's earned level.
+The persistent level display and progress bar show new words mastered toward the
+next experience level. The display or **More** opens the learning notebook. It
+includes all words in each cohort, their 0-2 practice streaks or Mastered labels,
+pronunciation and short meanings. Future cohorts are clearly previews: browsing
+them cannot change the game's earned level or age.
 
 The notebook also offers eight worlds. On short screens a header icon cycles
 worlds; on larger screens an illustrated horizontal strip offers direct choices.
@@ -90,7 +92,7 @@ are described in [Voice Pop treasure](voice-pop-treasure.md).
 
 Pip's earned appearance progresses through ten stages. Each adds a motion to the
 previous repertoire. Basic expressions, answer feedback and the full round
-celebration are available from Lv3. World selection does not replace the earned
+celebration are available from Baby Pip. World selection does not replace the earned
 appearance. The loader retains its established themed wardrobe.
 
 The [preview](../web/preview/pip-growth/index.html) lets reviewers select every
@@ -128,6 +130,6 @@ Screen-reader status communicates current progress, selection and outcomes.
 Learning progress saves separately from existing medal and Voice Pop chest
 records. Failed writes expose **Retry saving** rather than publishing progress
 that was not stored. Clearing browser storage removes local progress. Legacy
-names, avatars, scores and age choices cannot grant mastery or skip Lv3; old
+names, avatars, scores and age choices cannot grant mastery or skip Baby Pip; old
 reward records are retained for compatibility. See [development](development.md)
 for running and deploying the game.

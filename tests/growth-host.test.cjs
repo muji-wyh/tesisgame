@@ -26,7 +26,7 @@ test('learning saves are verified synchronously and leave existing rewards and s
   ]);
   const storage = { getItem: name => records.get(name) ?? null, setItem: (name, value) => records.set(name, value) };
   assert.equal(host(storage).growthState(), null);
-  const value = '[growth]\nversion=2\nlevel=1\nage=0\nstreaks={"apple":6}\nmastered_words=["apple"]\nreceipts=["round-1:match-1"]\n';
+  const value = '[growth]\nversion=3\nlevel=1\nage=0\nstreaks={"apple":3}\nmastered_words=["apple"]\nreceipts=["round-1:match-1"]\n';
   assert.equal(host(storage).saveGrowthState(value, null), true);
   assert.equal(host(storage).growthState(), value);
   assert.equal(records.get('wordBuddies.medalProgress'), 'medals');

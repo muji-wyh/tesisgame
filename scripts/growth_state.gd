@@ -1,12 +1,13 @@
 extends RefCounted
 ## Durable word mastery, earned experience levels and independent Pip ages.
 
-const VERSION: int = 2
+const VERSION: int = 3
 const FIRST_LEVEL: int = 0
 const LAST_LEVEL: int = 99
 const FIRST_AGE: int = 3
 const LAST_AGE: int = 12
-const MASTERY_STREAK: int = 6
+const MASTERY_STREAK: int = 3
+const LEGACY_MASTERY_STREAK: int = 6
 const MAX_RECEIPTS: int = 4096
 const MAX_EVENT_LENGTH: int = 256
 const MAX_SAVE_ATTEMPTS: int = 3
@@ -152,6 +153,8 @@ func _read_state() -> Dictionary:
 	if not _whole_number(version, 1, VERSION):
 		return _invalid_save("This learning progress save needs a supported version.")
 	var legacy: bool = int(version) == 1
+	var saved_threshold: int = LEGACY_MASTERY_STREAK if int(version) < VERSION else MASTERY_STREAK
+	next.migrated = int(version) < VERSION
 	var saved_level: Variant = config.get_value("growth", "level")
 	var saved_streaks: Variant = config.get_value("growth", "streaks")
 	var saved_receipts: Variant = config.get_value("growth", "receipts")
@@ -160,7 +163,6 @@ func _read_state() -> Dictionary:
 		return _invalid_save("Your learning progress could not be understood.")
 	if legacy:
 		next.age = 0 if int(saved_level) == FIRST_AGE else int(saved_level) - 1
-		next.migrated = true
 	else:
 		for key in ["age", "mastered_words"]:
 			if not config.has_section_key("growth", key):
@@ -172,7 +174,7 @@ func _read_state() -> Dictionary:
 	var eligible_age: int = _learning_age_for(next.age)
 	for id in saved_streaks:
 		if not id is String or not _word_ages.has(id) \
-			or not _whole_number(saved_streaks[id], 0, MASTERY_STREAK) \
+			or not _whole_number(saved_streaks[id], 0, saved_threshold) \
 			or (int(_word_ages[id]) > eligible_age and int(saved_streaks[id]) > 0):
 			return _invalid_save("Your learning progress contains an invalid word streak.")
 		if int(saved_streaks[id]) > 0:
@@ -181,9 +183,8 @@ func _read_state() -> Dictionary:
 		# Old levels marked the cohort being learned, so preceding cohorts were
 		# earned even if a later mistake has already reset one of their streaks.
 		for id in _word_ages:
-			if int(_word_ages[id]) < int(saved_level) or int(next.streaks.get(id, 0)) == MASTERY_STREAK:
+			if int(_word_ages[id]) < int(saved_level) or int(next.streaks.get(id, 0)) == saved_threshold:
 				next.mastered_words[id] = true
-		next.age = _advance_age(next.age, next.streaks)
 	else:
 		var saved_mastered: Variant = config.get_value("growth", "mastered_words")
 		if not saved_mastered is Array or saved_mastered.size() > _word_ages.size():
@@ -193,11 +194,20 @@ func _read_state() -> Dictionary:
 				return _invalid_save("Your learning progress contains an invalid mastery history.")
 			next.mastered_words[id] = true
 		for id in next.streaks:
-			if int(next.streaks[id]) == MASTERY_STREAK and not next.mastered_words.has(id):
+			if int(next.streaks[id]) == saved_threshold and not next.mastered_words.has(id):
 				return _invalid_save("Your learning progress is missing a mastered word.")
 	next.level = level_for_mastered(next.mastered_words.size())
 	if not legacy and int(saved_level) != int(next.level):
 		return _invalid_save("Your learning level does not match its saved mastery history.")
+	if next.migrated:
+		# Validate the original history before applying the easier mastery rule.
+		# Existing streaks of three or more now qualify without another answer.
+		for id in next.streaks:
+			next.streaks[id] = mini(MASTERY_STREAK, int(next.streaks[id]))
+			if int(next.streaks[id]) == MASTERY_STREAK:
+				next.mastered_words[id] = true
+		next.age = _advance_age(next.age, next.streaks)
+		next.level = level_for_mastered(next.mastered_words.size())
 	var receipt_ids: Dictionary = {}
 	for receipt in saved_receipts:
 		if not _valid_event_id(receipt) or receipt_ids.has(receipt):

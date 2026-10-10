@@ -58,6 +58,7 @@ func _run() -> void:
 	_test_levels()
 	_test_level_curve()
 	_test_migration()
+	_test_three_answer_migration()
 	_test_max_level()
 	_test_history_concurrency()
 	_test_pending_order()
@@ -113,17 +114,19 @@ func _test_streaks_and_receipts() -> void:
 	var state = fixture.state
 	check(state.level == 0 and state.age == 0 and state.learning_age() == 3 and state.streak("apple") == 0 and not state.completed, "Every fresh learner starts at Lv0 and Baby, learning age-three words")
 	check(fixture.storage.writes == 0, "Reading default progress does not write an empty save")
-	for index in range(5):
+	for index in range(2):
 		state.record_attempt("correct-%d" % index, ["apple", "apple"], true)
-	check(state.streak("apple") == 5 and not state.is_mastered("apple"), "Five answers are practice; repeated tokens count once")
-	var duplicate: Dictionary = state.record_attempt("correct-4", ["apple"], false)
-	check(duplicate.duplicate and state.streak("apple") == 5, "A receipt cannot replay with a changed outcome")
+	check(state.streak("apple") == 2 and not state.is_mastered("apple"), "Two answers are practice; repeated tokens count once")
+	var duplicate: Dictionary = state.record_attempt("correct-1", ["apple"], false)
+	check(duplicate.duplicate and state.streak("apple") == 2, "A receipt cannot replay with a changed outcome")
+	state.record_attempt("correct-2", ["apple"], true)
+	check(state.streak("apple") == 3 and state.is_mastered("apple"), "The third consecutive correct answer masters the word")
 	state.record_attempt("wrong", ["apple", "ball"], false)
-	check(state.streak("apple") == 0, "A wrong answer resets a five-answer streak")
+	check(state.streak("apple") == 0, "A wrong answer resets a mastered three-answer streak")
 	_practice(state, "apple")
 	check(state.is_mastered("apple") and state.level == 1 and state.age == 0, "The first mastered word earns Lv1 while Pip is still a baby")
 	state.record_attempt("extra", ["apple"], true)
-	check(state.streak("apple") == 6, "Mastery saturates at six")
+	check(state.streak("apple") == 3, "Mastery saturates at three")
 	state.record_attempt("mastered-wrong", ["apple"], false)
 	check(not state.is_mastered("apple") and state.streak("apple") == 0 and state.level == 1
 		and state.snapshot().lifetime_mastered == 1, "A later mistake removes current mastery but preserves earned experience")
@@ -137,7 +140,7 @@ func _test_streaks_and_receipts() -> void:
 		"Durable receipts prevent an old correct event from undoing a later mistake")
 	check(state.snapshot().total == 2 and state.snapshot().total_words == 11, "Snapshot separates current cohort and total curriculum")
 	var snapshot: Dictionary = state.snapshot()
-	snapshot.streaks["ball"] = 6
+	snapshot.streaks["ball"] = 3
 	check(state.streak("ball") == 0, "Snapshots cannot mutate saved progress")
 
 
@@ -149,7 +152,7 @@ func _test_levels() -> void:
 	_practice(state, "apple")
 	check(state.level == 1 and state.age == 0 and state.snapshot().level_required == 2,
 		"One mastered word earns Lv1; two additional words are required for Lv2")
-	for index in range(5):
+	for index in range(State.MASTERY_STREAK - 1):
 		state.record_attempt("ball-%d" % index, ["ball"], true)
 	var upgrade: Dictionary = state.record_attempt("ball-final", ["ball"], true)
 	check(upgrade.aged_up and upgrade.previous_age == 0 and upgrade.age == 3 and not upgrade.leveled_up,
@@ -208,8 +211,13 @@ func _test_level_curve() -> void:
 
 func _saved_v2(saved_level: Variant = 0, saved_age: Variant = 0, values: Variant = {},
 	mastered: Variant = [], receipts: Variant = []) -> String:
+	return _saved_current(saved_level, saved_age, values, mastered, receipts, 2)
+
+
+func _saved_current(saved_level: Variant = 0, saved_age: Variant = 0, values: Variant = {},
+	mastered: Variant = [], receipts: Variant = [], version: int = State.VERSION) -> String:
 	var config := ConfigFile.new()
-	config.set_value("growth", "version", 2)
+	config.set_value("growth", "version", version)
 	config.set_value("growth", "level", saved_level)
 	config.set_value("growth", "age", saved_age)
 	config.set_value("growth", "streaks", values)
@@ -234,14 +242,14 @@ func _test_migration() -> void:
 			"Migration preserves actual resets and existing duplicate receipts")
 		var saved := ConfigFile.new()
 		saved.parse(storage.text)
-		check(saved.get_value("growth", "version") == 2 and storage.writes == 1,
+		check(saved.get_value("growth", "version") == State.VERSION and storage.writes == 1,
 			"Legacy state is durably upgraded once before it is made ready")
 		check(state.load_state() and storage.writes == 1, "Reloading migrated state performs no additional writes")
 	var storage := Storage.new()
-	storage.text = _saved(3, {"apple": 6, "ball": 5})
+	storage.text = _saved(3, {"apple": 6, "ball": 2})
 	var state := State.new("user://unused-growth-test.cfg", storage)
 	state.configure(_words())
-	check(state.load_state() and state.age == 0 and state.level == 1 and state.streak("ball") == 5,
+	check(state.load_state() and state.age == 0 and state.level == 1 and state.streak("ball") == 2,
 		"A legacy learner with one mastered word becomes Lv1 Baby and retains partial practice")
 	storage.text = _saved(3, {"apple": 6, "ball": 6})
 	check(state.load_state() and state.age == 3 and state.snapshot().lifetime_mastered == 2,
@@ -269,6 +277,54 @@ func _test_migration() -> void:
 		"Migration rebases on a legacy promotion arriving during the comparison write")
 
 
+func _test_three_answer_migration() -> void:
+	for version in [1, 2]:
+		for count in range(7):
+			var storage := Storage.new()
+			storage.text = _saved(3, {"apple": count}, ["old-answer"]) if version == 1 else \
+				_saved_v2(1 if count == 6 else 0, 0, {"apple": count}, ["apple"] if count == 6 else [], ["old-answer"])
+			var state := State.new("user://unused-growth-test.cfg", storage)
+			state.configure(_words())
+			check(state.load_state() and state.streak("apple") == mini(count, 3),
+				"Each valid legacy streak keeps partial practice or normalizes to three")
+			check(state.is_mastered("apple") == (count >= 3) and state.level == (1 if count >= 3 else 0)
+				and state.snapshot().lifetime_mastered == (1 if count >= 3 else 0),
+				"Existing three-to-six answer streaks grant unique mastery immediately")
+			check(state.record_attempt("old-answer", ["apple"], false).duplicate and state.streak("apple") == mini(count, 3),
+				"Migration retains old receipts without replaying their outcome")
+			check(storage.writes == 1 and state.load_state() and storage.writes == 1,
+				"Threshold migration is persisted exactly once")
+	var storage := Storage.new()
+	storage.text = _saved_v2(0, 0, {"apple": 3, "ball": 5})
+	var original: String = storage.text
+	storage.writable = false
+	var state := State.new("user://unused-growth-test.cfg", storage)
+	state.configure(_words())
+	check(not state.load_state() and not state.ready and state.age == 0 and state.level == 0
+		and storage.text == original, "A failed threshold migration keeps the original save and publishes no awards")
+	storage.writable = true
+	check(state.load_state() and state.age == 3 and state.level == 1 and state.snapshot().lifetime_mastered == 2,
+		"Retry grants the age now earned by a fully mastered legacy cohort")
+	storage.text = _saved_v2(1, 3, {"age-4": 4}, ["apple", "ball"], ["older-reset"])
+	check(state.load_state() and state.age == 4 and state.level == 2 and state.snapshot().lifetime_mastered == 3
+		and state.streak("apple") == 0 and state.streak("ball") == 0,
+		"Threshold migration preserves historical resets and credits new mastery toward both age and level")
+	check(state.record_attempt("older-reset", ["apple"], true).duplicate,
+		"A reset word's old receipt remains protected after migration")
+	storage.text = _saved_v2(1, 3, {"apple": 1, "ball": 2}, ["apple", "ball"])
+	check(state.load_state() and state.age == 3 and state.level == 1 and state.snapshot().lifetime_mastered == 2,
+		"Reduced current mastery never rolls back earned ages or lifetime experience")
+	storage = Storage.new()
+	storage.text = _saved_v2(0, 0, {"apple": 3})
+	state = State.new("user://unused-growth-test.cfg", storage)
+	state.configure(_words())
+	storage.before_write = func() -> void:
+		storage.text = _saved_v2(0, 0, {"apple": 0, "ball": 4}, [], ["concurrent-reset"])
+	check(state.load_state() and state.streak("apple") == 0 and state.is_mastered("ball") and state.age == 0
+		and state.snapshot().lifetime_mastered == 1,
+		"Threshold migration rebases on a concurrent reset instead of reviving stale mastery")
+
+
 func _test_max_level() -> void:
 	var words: Array = []
 	var values: Dictionary = {}
@@ -276,11 +332,11 @@ func _test_max_level() -> void:
 	for index in range(1550):
 		var id: String = "word-%d" % index
 		words.append({"id": id, "min_age": 3})
-		values[id] = 6 if index < 1549 else 5
+		values[id] = State.MASTERY_STREAK if index < 1549 else State.MASTERY_STREAK - 1
 		if index < 1549:
 			history.append(id)
 	var storage := Storage.new()
-	storage.text = _saved_v2(98, 0, values, history)
+	storage.text = _saved_current(98, 0, values, history)
 	var state := State.new("user://unused-growth-test.cfg", storage)
 	check(state.configure(words) and state.load_state(), "Load a learner one word below the maximum level")
 	var before: Dictionary = state.snapshot()
@@ -301,7 +357,7 @@ func _test_max_level() -> void:
 
 
 func _test_history_concurrency() -> void:
-	var tabs: Dictionary = _two_tabs(_saved_v2(1, 0, {"apple": 6, "ball": 5}, ["apple"]))
+	var tabs: Dictionary = _two_tabs(_saved_current(1, 0, {"apple": 3, "ball": 2}, ["apple"]))
 	tabs.first.record_attempt("shared-reset", ["apple"], false)
 	check(tabs.second.record_attempt("shared-new-word", ["ball"], true).save_ok
 		and tabs.second.snapshot().lifetime_mastered == 2 and tabs.second.streak("apple") == 0 and tabs.second.age == 0,
@@ -313,10 +369,10 @@ func _test_history_concurrency() -> void:
 		"Only restoring current mastery completes the age cohort; experience stays unique")
 	check(tabs.second.retry_pending().save_ok and tabs.second.age == 3 and tabs.second.level == 1,
 		"Other tabs observe an age promotion without inventing a level promotion")
-	tabs = _two_tabs(_saved_v2(1, 0, {}, ["apple"]))
-	tabs.shared.text = _saved_v2(1, 0, {"ball": 6}, ["ball"])
+	tabs = _two_tabs(_saved_current(1, 0, {}, ["apple"]))
+	tabs.shared.text = _saved_current(1, 0, {"ball": 3}, ["ball"])
 	check(tabs.first.retry_pending().save_ok and tabs.first.snapshot().lifetime_mastered == 2
-		and tabs.first.streak("apple") == 0 and tabs.first.streak("ball") == 6,
+		and tabs.first.streak("apple") == 0 and tabs.first.streak("ball") == 3,
 		"An older overlapping writer cannot remove this tab's durable unique history or revive a reset")
 	check(tabs.second.retry_pending().save_ok and tabs.second.snapshot().lifetime_mastered == 2,
 		"The united history is itself persisted for every tab")
@@ -344,7 +400,7 @@ func _test_pending_order() -> void:
 	check(state.record_attempt("pending-wrong", ["apple"], false).duplicate and state.streak("apple") == 1,
 		"Retry saves the outcome and all receipts together")
 	_practice(state, "apple", "finish-apple")
-	for index in range(5):
+	for index in range(State.MASTERY_STREAK - 1):
 		state.record_attempt("pending-upgrade-%d" % index, ["ball"], true)
 	fixture.storage.writable = false
 	state.record_attempt("upgrade-final", ["ball"], true)
@@ -362,12 +418,12 @@ func _test_pending_order() -> void:
 	check(state.streak("age-4") == 2 and state.snapshot().pending_count == 0, "A successful later attempt also saves earlier pending answers")
 	fixture = _fixture()
 	state = fixture.state
-	for index in range(5):
+	for index in range(State.MASTERY_STREAK - 1):
 		state.record_attempt("before-first-level-%d" % index, ["apple"], true)
 	fixture.storage.writable = false
 	state.record_attempt("first-level-pending", ["apple"], true)
 	state.record_attempt("first-level-then-wrong", ["apple"], false)
-	check(state.level == 0 and state.snapshot().lifetime_mastered == 0 and state.streak("apple") == 5,
+	check(state.level == 0 and state.snapshot().lifetime_mastered == 0 and state.streak("apple") == State.MASTERY_STREAK - 1,
 		"Failed writes publish neither a new lifetime word nor its later reset")
 	fixture.storage.writable = true
 	var first_level: Dictionary = state.retry_pending()
@@ -417,7 +473,7 @@ func _test_concurrent_hosts() -> void:
 		and tabs.second.streak("apple") == 0,
 		"A newly accepted wrong answer resets the current shared streak")
 
-	tabs = _two_tabs(_saved(3, {"apple": 6, "ball": 5}))
+	tabs = _two_tabs(_saved_current(1, 0, {"apple": 3, "ball": 2}, ["apple"]))
 	check(tabs.first.record_attempt("promote", ["ball"], true).aged_up and tabs.first.age == 3,
 		"One tab durably earns the next age")
 	var premature: Dictionary = tabs.second.record_attempt("old-tab-future", ["age-4"], true)
@@ -507,7 +563,10 @@ func _test_invalid_saves() -> void:
 		_saved_v2(0, 13), _saved_v2(0, 3.5), _saved_v2(0, 0, {"age-4": 1}), _saved_v2(0, 0, {}, {}),
 		_saved_v2(1, 0, {}, ["ghost"]), _saved_v2(1, 0, {}, ["apple", "apple"]),
 		_saved_v2(1, 0, {}, ["age-4"]), _saved_v2(0, 0, {"apple": 6}),
-		_saved_v2(0, 0, {}, ["apple"]), _saved_v2(1, 0), _saved(0, {}, [], 2)]:
+		_saved_v2(0, 0, {}, ["apple"]), _saved_v2(1, 0), _saved(0, {}, [], 2),
+		_saved_current(1, 0, {"apple": 4}, ["apple"]), _saved_current(0, 0, {"apple": 3}),
+		_saved_v2(0, 0, {"apple": 7}), _saved_v2(0, 0, {"apple": 3.5}),
+		_saved_v2(1, 0, {"apple": 3}), _saved_current(0, 0, {"apple": 6})]:
 		var storage := Storage.new()
 		storage.text = invalid
 		var state := State.new("user://unused-growth-test.cfg", storage)
@@ -543,7 +602,7 @@ func _test_native_recovery() -> void:
 	check(migrated.load_state() and migrated.age == 3 and migrated.level == 1 and migrated.streak("apple") == 2,
 		"Native migration keeps old earned cohorts and current partial practice")
 	var migrated_file := ConfigFile.new()
-	check(migrated_file.load(legacy_path) == OK and migrated_file.get_value("growth", "version") == 2
+	check(migrated_file.load(legacy_path) == OK and migrated_file.get_value("growth", "version") == State.VERSION
 		and not FileAccess.file_exists(legacy_path + ".pending") and not FileAccess.file_exists(legacy_path + ".previous"),
 		"Native migration atomically replaces the old schema without leaving staged files")
 	var unavailable := State.new(_root.path_join("missing-folder").path_join("save.cfg"))

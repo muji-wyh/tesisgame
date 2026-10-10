@@ -29,7 +29,7 @@ test('all ten age catalogues preserve the current lesson and cannot unlock later
     await age(page, id);
     const view = await growthView(page);
     expect(view.catalog.word_count).toBe(words.filter(word => word.min_age === id).length);
-    expect(view.notice).toContain(id === 3 ? 'Six correct answers' : 'Preview only');
+    expect(view.notice).toContain(id === 3 ? '3 correct answers' : 'Preview only');
     expect((await growthState(page)).level).toBe(0);
     expect((await growthState(page)).age).toBe(0);
     expect((await growthState(page)).learning_age).toBe(3);

@@ -4,6 +4,9 @@ const { openGame, enterGame, metrics, tap, rendered, chooseMode, discoverMatchCa
   boardPoint, memoryPoint, peekPoint, pipHeaderRect } = require('./game-ui.cjs');
 
 const KEY = 'growWithPip.growth.v1';
+const MASTERY_STREAK = 3;
+// The 0..100 ProgressBar snaps to its default 0.01 step before its value is published.
+const GROWTH_BAR_RATIO_TOLERANCE = 0.01 / 100 / 2 + 1e-12;
 const cohort = words.filter(word => word.min_age === 3);
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const view = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.view || '{}'));
@@ -24,7 +27,7 @@ async function seedLegacyCohort(page, learningAge, streaks) {
 }
 
 async function seedCurrentState(page, { level = 0, age = 0, streaks = {}, masteredWords = [] }) {
-  await seedRecord(page, `[growth]\nversion=2\nlevel=${level}\nage=${age}\nstreaks=${JSON.stringify(streaks)}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=[]\n`);
+  await seedRecord(page, `[growth]\nversion=3\nlevel=${level}\nage=${age}\nstreaks=${JSON.stringify(streaks)}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=[]\n`);
 }
 
 async function press(page, control) {
@@ -68,8 +71,8 @@ async function expectHeaderBadge(page) {
   const state = await growth(page);
   await expect.poll(async () => {
     const bar = (await view(page)).controls?.find(control => control.name === 'GrowthProgressBar');
-    return bar ? bar.value / bar.max_value : -1;
-  }, { message: 'The visible growth bar follows the next Lv goal independently of the age cohort' }).toBeCloseTo(state.level_progress, 6);
+    return bar ? Math.abs(bar.value / bar.max_value - state.level_progress) : Infinity;
+  }, { message: 'The visible growth bar follows the next Lv goal independently of the age cohort' }).toBeLessThanOrEqual(GROWTH_BAR_RATIO_TOLERANCE);
   const layout = await view(page), bounds = await metrics(page);
   const badge = layout.controls.find(control => control.name === 'GrowthProgressButton');
   const bar = layout.controls.find(control => control.name === 'GrowthProgressBar');
@@ -251,7 +254,7 @@ test('Phrase Builder credits all target words after correction and keeps unused 
 });
 
 test('the first mastered word earns Lv1 and two more earn Lv2 while Pip remains a baby', async ({ page }) => {
-  await seedCurrentState(page, { streaks: Object.fromEntries(cohort.map(word => [word.id, 5])) });
+  await seedCurrentState(page, { streaks: Object.fromEntries(cohort.map(word => [word.id, MASTERY_STREAK - 1])) });
   const errors = await openGame(page);
   const cards = await discoverMatchCards(page);
   const targets = [...new Set(cards.map(card => card.word))].slice(0, 3);
@@ -263,7 +266,7 @@ test('the first mastered word earns Lv1 and two more earn Lv2 while Pip remains 
     expect(current.level).toBe(index === 2 ? 2 : 1);
     expect(current.age).toBe(0);
     expect(current.learning_age).toBe(3);
-    expect(current.streaks[word]).toBe(6);
+    expect(current.streaks[word]).toBe(MASTERY_STREAK);
     await expectHeaderBadge(page);
   }
   await page.reload();
@@ -274,28 +277,55 @@ test('the first mastered word earns Lv1 and two more earn Lv2 while Pip remains 
   expect(errors).toEqual([]);
 });
 
+test('existing six-answer saves adopt three-answer mastery without losing earned words or receipts', async ({ page }) => {
+  const ids = cohort.slice(0, 6).map(word => word.id);
+  const streaks = Object.fromEntries(ids.map((id, index) => [id, [3, 4, 5, 6, 2, 0][index]]));
+  const masteredWords = [ids[3], ids[5]], receipt = 'previous-round:accepted-answer';
+  await seedRecord(page, `[growth]\nversion=2\nlevel=1\nage=0\nstreaks=${JSON.stringify(streaks)}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=["${receipt}"]\n`);
+  const errors = await openGame(page);
+  const current = await growth(page);
+  expect(ids.slice(0, 4).map(id => current.streaks[id])).toEqual([3, 3, 3, 3]);
+  expect(current.streaks[ids[4]]).toBe(2);
+  expect(current.streaks[ids[5]] || 0).toBe(0);
+  expect(current.mastered).toBe(4);
+  expect(current.lifetime_mastered).toBe(5);
+  expect(current.level).toBe(3);
+  expect(current.age).toBe(0);
+  const saved = await page.evaluate(key => localStorage.getItem(key), KEY);
+  expect(saved).toMatch(/version=3/);
+  expect(saved).toContain(receipt);
+  await page.reload();
+  await enterGame(page);
+  const restored = await growth(page);
+  expect(restored.streaks).toEqual(current.streaks);
+  expect(restored.lifetime_mastered).toBe(5);
+  expect(restored.level).toBe(3);
+  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toBe(saved);
+  expect(errors).toEqual([]);
+});
+
 test('mastering the complete age 3 cohort grows Pip while independent Lv progress survives a reload', async ({ page }, info) => {
-  const streaks = Object.fromEntries(cohort.map(word => [word.id, word.id === 'apple' ? 5 : 6]));
+  const streaks = Object.fromEntries(cohort.map(word => [word.id, word.id === 'apple' ? MASTERY_STREAK - 1 : 6]));
   await seedLegacyCohort(page, 3, streaks);
   const errors = await openGame(page);
   const before = await expectHeaderBadge(page);
   expect(before.state.mastered).toBe(cohort.length - 1);
   expect(before.state.level).toBe(19);
   expect(before.state.age).toBe(0);
-  expect(before.bar.value / before.bar.max_value).toBeCloseTo(1 / 7, 6);
-  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=2/);
+  expect(Math.abs(before.bar.value / before.bar.max_value - 1 / 7)).toBeLessThanOrEqual(GROWTH_BAR_RATIO_TOLERANCE);
+  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=3/);
   const cards = await discoverMatchCards(page);
   expect(cards.filter(card => card.word === 'apple')).toHaveLength(2);
   for (const card of cards.filter(card => card.word === 'apple')) await matchTap(page, card);
   await expect.poll(async () => (await growth(page)).age).toBe(3);
-  expect((await growth(page)).streaks.apple).toBe(6);
+  expect((await growth(page)).streaks.apple).toBe(MASTERY_STREAK);
   const promoted = await expectHeaderBadge(page);
   expect(promoted.state.level).toBe(19);
   expect(promoted.state.learning_age).toBe(4);
   expect(promoted.state.lifetime_mastered).toBe(80);
   expect(promoted.state.total).toBe(words.filter(word => word.min_age === 4).length);
   expect(promoted.state.mastered).toBe(0);
-  expect(promoted.bar.value / promoted.bar.max_value).toBeCloseTo(2 / 7, 6);
+  expect(Math.abs(promoted.bar.value / promoted.bar.max_value - 2 / 7)).toBeLessThanOrEqual(GROWTH_BAR_RATIO_TOLERANCE);
   await pressNamed(page, 'GrowthProgressButton');
   await expect.poll(async () => (await view(page)).catalog?.age_band).toBe('4');
   await page.screenshot({ path: info.outputPath('age-three-level-nineteen.png'), scale: 'css' });

@@ -4,6 +4,7 @@ const { openGame, openModeMenu, metrics, tap, rendered, celebrationState, visibl
 
 const JELLY_REWARDS = 'growWithPip.jellyRewards.v1';
 const POP_REWARDS = 'wordBuddies.popRewards';
+const MASTERY_STREAK = 3;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const treasure = page => page.locator('#jelly-reward-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
@@ -696,7 +697,7 @@ test('consecutive taps never judge matching or mismatching tiles; a drag still c
   if (info.project.use.browserName === 'chromium') await touchDragPair(page, tiles);
   else await dragPair(page, tiles);
   await expectClear(page, before.cleared_pairs + 1, tiles);
-  await expect.poll(async () => (await growth(page)).streaks[tiles[0].word.id]).toBe(previousStreak + 1);
+  await expect.poll(async () => (await growth(page)).streaks[tiles[0].word.id]).toBe(Math.min(MASTERY_STREAK, previousStreak + 1));
   expect(errors).toEqual([]);
 });
 
@@ -728,7 +729,7 @@ test.describe('concurrent jelly gestures', () => {
       const expectedLearning = new Map();
       for (const tiles of [first, second]) {
         const id = tiles[0].word.id;
-        expectedLearning.set(id, (expectedLearning.get(id) ?? (learning.streaks[id] || 0)) + 1);
+        expectedLearning.set(id, Math.min(MASTERY_STREAK, (expectedLearning.get(id) ?? (learning.streaks[id] || 0)) + 1));
       }
       await page.evaluate(() => {
         const status = document.getElementById('game-status');
@@ -880,7 +881,7 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   const firstBefore = (await growth(page)).streaks[first[0].word.id] || 0;
   await dragPair(page, first);
   await expectClear(page, 1, first);
-  await expect.poll(async () => (await growth(page)).streaks[first[0].word.id]).toBe(firstBefore + 1);
+  await expect.poll(async () => (await growth(page)).streaks[first[0].word.id]).toBe(Math.min(MASTERY_STREAK, firstBefore + 1));
   const timeline = await page.evaluate(() => window.jellyObservedTimeline);
   expect(timeline.some(state => state.fusion && state.cleared === 0), 'Fusion visibly precedes success credit').toBe(true);
   expect(timeline.some(state => state.effect?.visible && ['hold', 'compress'].includes(state.effect.stage)),
@@ -897,7 +898,7 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   expect(completed.chest_count).toBe(0);
   expect(completed.loot.fragments).toBe(1);
   expect(completed.loot.count).toBe(0);
-  await expect.poll(async () => (await growth(page)).streaks[marked[0].word.id]).toBe(markedBefore + 1);
+  await expect.poll(async () => (await growth(page)).streaks[marked[0].word.id]).toBe(Math.min(MASTERY_STREAK, markedBefore + 1));
   const unlocked = await earnFragments(page, 4);
   expect(unlocked.chest_count).toBe(1);
   expect(unlocked.chest_tier).toBe(1);
@@ -1102,7 +1103,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(rescued.full_elapsed, 'A completed rescue cancels the entire previous countdown').toBe(-1);
   expect(rescued.danger).toEqual({ active: false, strength: 0 });
   expect(rescued.chest_count).toBe(0);
-  await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
+  await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(Math.min(MASTERY_STREAK, streak + 1));
   const rescueFrame = await page.evaluate(() => window.jellyObservedTimeline.length);
   await page.screenshot({ path: info.outputPath('jelly-full-board-rescue.png'), scale: 'css' });
   await expect.poll(async () => (await jelly(page)).cells.length,
@@ -1131,7 +1132,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect((await treasure(page)).pending).not.toBe(true);
   await page.waitForTimeout(400);
   expect((await jelly(page)).round_id).toBe(ended.round_id);
-  expect((await growth(page)).streaks[rescue[0].word.id]).toBe(streak + 1);
+  expect((await growth(page)).streaks[rescue[0].word.id]).toBe(Math.min(MASTERY_STREAK, streak + 1));
   await info.attach('jelly-spawn-cadence', { body: JSON.stringify({ arrivals, intervals }, null, 2), contentType: 'application/json' });
   expect(arrivals.length, 'Natural batch arrivals establish the real ten-second cadence').toBeGreaterThanOrEqual(3);
   for (let index = 1; index < arrivals.length; index++) {

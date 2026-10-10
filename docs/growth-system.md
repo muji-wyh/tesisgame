@@ -4,7 +4,7 @@ The ten age-labelled stages form an editorial English-as-a-second-language curri
 
 ## Mastery, experience and age
 
-Every device starts at **Lv0** with **Baby Pip**. A successful activity adds one to each unique involved word's consecutive-correct streak, capped at six. A wrong activity resets the involved words to zero, including words previously mastered. A word at six is currently mastered.
+Every device starts at **Lv0** with **Baby Pip**. A successful activity adds one to each unique involved word's consecutive-correct streak, capped at three. A wrong activity resets the involved words to zero, including words previously mastered. A word at three is currently mastered.
 
 Experience levels and Pip's age are independent:
 
@@ -30,7 +30,7 @@ Experience levels and Pip's age are independent:
 | Lv90 | 1,292 |
 | Lv99 | 1,550 |
 
-The six-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across all five modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or select a higher gameplay cohort.
+The three-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across all five modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or select a higher gameplay cohort.
 
 The gameplay header contains one growth button with the earned Lv and a recessed green progress track. The count inside the track shows new unique words earned toward the next experience level; Age appears below it on wide screens and in the tooltip on every screen. Narrow and short screens retain a 44-pixel-tall token with an 8-pixel track. The whole control opens the notebook for the next age cohort to complete. The notebook title separates earned Lv and Pip age; its summary explains the next Lv target and current cohort completion.
 
@@ -48,9 +48,9 @@ Match and Memory share the pictured word selection. It shuffles within mastery p
 
 ## Durable state
 
-`GrowthState` schema version 2 stores experience level, earned age, current word streaks, unique lifetime mastered-word IDs and bounded answer receipts. It keeps the existing native `user://growth-v1.cfg` path and browser `growWithPip.growth.v1` key so progress migrates in place. Each attempt combines a unique round ID with its mode-local attempt ID. Repeated callbacks are ignored. The native save uses an atomic replacement and recovery copy; the browser uses a verified comparison write. A failed write queues accepted answers in order, publishes no false mastery, level-up or age change, and exposes Retry saving. Future-word eligibility is captured when an answer arrives, before queued answers might unlock another age cohort.
+`GrowthState` schema version 3 stores experience level, earned age, current word streaks, unique lifetime mastered-word IDs and bounded answer receipts. It keeps the existing native `user://growth-v1.cfg` path and browser `growWithPip.growth.v1` key so progress migrates in place. Each attempt combines a unique round ID with its mode-local attempt ID. Repeated callbacks are ignored. The native save uses an atomic replacement and recovery copy; the browser uses a verified comparison write. A failed write queues accepted answers in order, publishes no false mastery, level-up or age change, and exposes Retry saving. Future-word eligibility is captured when an answer arrives, before queued answers might unlock another age cohort.
 
-Version 1 migration interprets the old level as the cohort currently being learned: old Lv3 becomes Baby, old Lv4 becomes Age 3, and so on. Previously completed cohorts provide inferred lifetime experience even if a later mistake reset a word. Current six-answer streaks also provide lifetime experience. An already fully mastered current cohort grants its corresponding age, including Age 12+. Current streaks and answer receipts are retained unchanged. Migration must be saved successfully before gameplay treats the new state as ready; failed writes leave the old save intact for retry.
+Version 1 migration interprets the old level as the cohort currently being learned: old Lv3 becomes Baby, old Lv4 becomes Age 3, and so on. Previously completed cohorts provide inferred lifetime experience even if a later mistake reset a word. Version 2 retains its independently earned ages and lifetime mastered-word history. Both versions accept legacy streaks from zero to six, then cap them at three under the current rule. Existing streaks of at least three now grant mastery and first-time experience; an already fully mastered current cohort grants its corresponding age, including Age 12+. Earned progress and answer receipts are preserved. Migration must be saved successfully before gameplay treats the new state as ready; failed writes leave the old save intact for retry.
 
 If the initial growth save cannot be read, scored play waits until Retry saving
 successfully loads it. The game explains this gate and then starts a playable

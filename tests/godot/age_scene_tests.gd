@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const WordArt = preload("res://scripts/word_art.gd")
+const Growth = preload("res://scripts/growth_state.gd")
 var checks := 0
 var failures := 0
 
@@ -49,7 +50,7 @@ func check_catalog(app, age_id: String) -> void:
 			check(WordArt.source_path(picture.texture) == "res://" + word.image, "Pictured words retain their real source illustration")
 		var mastery: Label = button.get_meta("mastery_label")
 		var streak: int = app.growth.streak(word.id)
-		check(mastery.text == ("Mastered" if streak == 6 else "%d / 6" % streak), "Every word shows its saved mastery state")
+		check(mastery.text == ("Mastered" if streak == Growth.MASTERY_STREAK else "%d / %d" % [streak, Growth.MASTERY_STREAK]), "Every word shows its saved mastery state")
 
 
 func check_stretched_catalog_resize(app) -> void:
@@ -107,7 +108,7 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app._mode_id == "match" and app.model.age_band_id == "3" and app.growth.level == 0 and app.growth.age == 0, "Every new learner begins with a playable age-3 Match round with Baby Pip")
-	for number in range(6):
+	for number in range(Growth.MASTERY_STREAK):
 		check(app.growth.record_attempt("notebook-seed-%d" % number, ["cat"], true).save_ok, "Isolated fixture records each correct practice event")
 	app._refresh_growth()
 	app._request_hint()

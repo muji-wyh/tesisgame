@@ -97,7 +97,7 @@ func _age_milestones(directory: String) -> void:
 	app.audio.set_muted(true)
 	var words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 3)
 	var ids: Array = words.map(func(word: Dictionary) -> String: return str(word.id))
-	for index in range(6):
+	for index in range(Growth.MASTERY_STREAK):
 		app._record_growth("age-three-%d" % index, ids, true)
 	check(app.growth.age == 3 and app.growth.level == 19 and app.growth.learning_age() == 4,
 		"Completing the real 80-word age-three set earns Age 3 independently of Lv19")
@@ -300,11 +300,11 @@ func _memory(app) -> void:
 	view.card_buttons[pair[0]].pressed.emit()
 	check(app.growth.streak(word.id) == before, "First Memory reveal is neutral")
 	view.card_buttons[pair[1]].pressed.emit()
-	check(app.growth.streak(word.id) == mini(6, before + 1), "Memory pair credits one unique word")
+	check(app.growth.streak(word.id) == mini(Growth.MASTERY_STREAK, before + 1), "Memory pair credits one unique word")
 	view.continue_feedback()
 	var next_word: Dictionary = view.memory.cards.filter(func(card: Dictionary) -> bool: return card.word.id != word.id)[0].word
 	var next_before: int = app.growth.streak(next_word.id)
-	for index in range(next_before, 5):
+	for index in range(next_before, Growth.MASTERY_STREAK - 1):
 		app.growth.record_attempt("seed-memory-mastery-%d" % index, [next_word.id], true)
 	app._refresh_growth()
 	next_before = app.growth.streak(next_word.id)
@@ -320,7 +320,7 @@ func _memory(app) -> void:
 		"A failed write holds the Memory answer without publishing false mastery")
 	check(app._storage_retry_button.is_visible_in_tree(), "Memory immediately exposes the shared Retry saving action")
 	check(app._growth_bar.value == progress_before,
-		"A failed sixth-answer save does not advertise mastery before it is committed")
+		"A failed mastery-answer save does not advertise mastery before it is committed")
 	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(844, 390)]:
 		root.size = viewport_size
 		await settle()
@@ -331,7 +331,7 @@ func _memory(app) -> void:
 	await settle()
 	app.growth._host = null
 	app._storage_retry_button.pressed.emit()
-	check(app.growth.streak(next_word.id) == mini(6, next_before + 1) and app.growth.snapshot().pending_count == 0,
+	check(app.growth.streak(next_word.id) == mini(Growth.MASTERY_STREAK, next_before + 1) and app.growth.snapshot().pending_count == 0,
 		"Retry saves the queued Memory answer exactly once")
 	check(app.growth.level == 1 and app._growth_button.level_label.text == "Lv1" and app.growth.age == 0 and app.duck.growth_age == 0 and is_equal_approx(app._growth_bar.value, 0.0),
 		"The first mastered word earns Lv1 while Baby Pip and the age cohort remain unchanged")
@@ -352,7 +352,7 @@ func _phrase(app) -> void:
 	check(app.growth.snapshot().streaks == before, "Placing and hearing phrase words is neutral")
 	view.action_button.pressed.emit()
 	for id in ids:
-		check(app.growth.streak(id) == mini(6, int(before.get(id, 0)) + 1), "A correct phrase credits " + id + " once")
+		check(app.growth.streak(id) == mini(Growth.MASTERY_STREAK, int(before.get(id, 0)) + 1), "A correct phrase credits " + id + " once")
 	var after: Dictionary = app.growth.snapshot().streaks.duplicate()
 	view.action_button.pressed.emit()
 	check(app.growth.snapshot().streaks == after, "Repeated phrase confirmation cannot duplicate evidence")
@@ -367,10 +367,10 @@ func _pop(app) -> void:
 	var event := {"event_id": "growth-pop", "round_id": game.round_id, "target_uid": target.uid,
 		"text": target.word.text, "stage": "interim", "received_at_ms": 1}
 	game.hit_speech_event(event)
-	check(app.growth.streak(target.word.id) == mini(6, before + 1), "Voice Pop credits the successfully spoken target")
+	check(app.growth.streak(target.word.id) == mini(Growth.MASTERY_STREAK, before + 1), "Voice Pop credits the successfully spoken target")
 	event.stage = "final"
 	game.hit_speech_event(event)
-	check(app.growth.streak(target.word.id) == mini(6, before + 1), "Speech interim/final pair earns one credit")
+	check(app.growth.streak(target.word.id) == mini(Growth.MASTERY_STREAK, before + 1), "Speech interim/final pair earns one credit")
 	var after: Dictionary = app.growth.snapshot().streaks.duplicate()
 	game.advance(60)
 	check(app.growth.snapshot().streaks == after, "Voice Pop expiry and silence never reset mastery")

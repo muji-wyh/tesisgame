@@ -3,6 +3,7 @@ extends SceneTree
 const Data = preload("res://scripts/game_data.gd")
 const Catalog = preload("res://scripts/age_word_catalog.gd")
 const WordArt = preload("res://scripts/word_art.gd")
+const Growth = preload("res://scripts/growth_state.gd")
 
 var checks := 0
 var failures := 0
@@ -102,7 +103,7 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 			return int(word.min_age) == int(band.id))
 		var expected: Array = eligible.map(func(word: Dictionary) -> String: return word.id)
 		eligible.reverse()
-		var progress := {"level": int(band.id), "streaks": {eligible[0].id: 6, eligible[1].id: 3}}
+		var progress := {"level": int(band.id), "streaks": {eligible[0].id: Growth.MASTERY_STREAK, eligible[1].id: Growth.MASTERY_STREAK - 1}}
 		catalog.configure(eligible, band, Data.theme("spring"), progress)
 		await settle()
 		check(catalog.snapshot().word_count == counts[band.id]
@@ -137,7 +138,7 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 					check(picture.texture != null and WordArt.source_path(picture.texture) == "res://" + word.image, "The catalogue retains its production illustration: " + word.id)
 				var mastery: Label = button.get_meta("mastery_label")
 				var streak: int = int(progress.streaks.get(word.id, 0))
-				check(mastery.text == ("Mastered" if streak == 6 else "%d / 6" % streak), "Mastered and learning words expose their exact streak: " + word.id)
+				check(mastery.text == ("Mastered" if streak == Growth.MASTERY_STREAK else "%d / %d" % [streak, Growth.MASTERY_STREAK]), "Mastered and learning words expose their exact streak: " + word.id)
 		check(catalog.next_button.disabled, "The final page cannot advance past the catalog")
 		check(seen.size() == expected.size() and expected.all(func(id: String) -> bool: return seen.has(id)),
 			"Age " + band.id + " contains its exact curriculum tier")

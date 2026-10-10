@@ -20,7 +20,7 @@ certification. A child's exposure and interests matter more than a birthday.
 - [Cambridge English's 2025 young learner wordlists](https://www.cambridgeenglish.org/images/506166-starters-movers-flyers-word-list-2025.pdf)
   provide reference themes and a broad range of parts of speech for Pre A1, A1 and
   A2. The publication describes qualifications for learners aged 6–12, organized by
-  proficiency rather than one required list for each age. We did not equate Lv6
+  proficiency rather than one required list for each age. We did not equate Age 6
   with a Cambridge qualification or reproduce the lists wholesale.
 - [England's English curriculum](https://www.gov.uk/government/publications/national-curriculum-in-england-english-programmes-of-study/national-curriculum-in-england-english-programmes-of-study)
   and the Common Core's [Kindergarten](https://www.thecorestandards.org/ELA-Literacy/L/K/)
@@ -80,7 +80,7 @@ of misleading object pictures. Every required word therefore has a reachable
 practice route. Vocabulary membership and this reachability are validated by
 `node tools/import-growth-vocabulary.cjs --check`.
 
-The six-correct streak is the user's game progression rule, not a claim that six
+The three-correct streak is the user's game progression rule, not a claim that three
 game answers establish comprehensive language mastery. A wrong answer resets
 that word's streak; promotion itself is permanent. This catalog does not define
 mode-specific scoring or save ownership.

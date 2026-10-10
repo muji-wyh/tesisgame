@@ -1195,7 +1195,7 @@ func _refresh_age_choices() -> void:
 	for id in _age_buttons:
 		_age_buttons[id].set_pressed_no_signal(int(id) == _catalog_age)
 		_age_buttons[id].tooltip_text = "Preview: complete the previous age's words to unlock" if int(id) > growth.learning_age() else "Review this age's words"
-	_age_notice.text = "Preview only. Complete your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "Six correct answers in a row master a word. A mistake resets that word; earned Lv and age stay."
+	_age_notice.text = "Preview only. Complete your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "%d correct answers in a row master a word. A mistake resets that word; earned Lv and age stay." % GrowthState.MASTERY_STREAK
 	if _growth_save_failed:
 		_age_notice.text = "Learning progress could not be saved. Return to the game and choose Retry saving."
 	_refresh_growth()
@@ -4538,7 +4538,7 @@ func _publish_growth_view() -> void:
 		for control in _focus_candidates():
 			controls.append(_growth_control(control))
 	else:
-		state["board"] = _growth_control(_match_playfield)
+		state["board"] = _growth_control(_memory._board if _mode_id == "memory" else _match_playfield)
 	var serialized := JSON.stringify(state)
 	if serialized != _growth_view_published:
 		_growth_view_published = serialized

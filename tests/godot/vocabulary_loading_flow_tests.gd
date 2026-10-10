@@ -3,6 +3,7 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Loader = preload("res://scripts/vocabulary_loader.gd")
 const Progress = preload("res://scripts/medal_progress.gd")
+const Growth = preload("res://scripts/growth_state.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -66,7 +67,7 @@ func make_app(earned_age_three: bool = false):
 		check(app.data.load_all() and app.growth.configure(app.data.words) and app.growth.load_state(),
 			"A returning learner fixture loads the real curriculum and durable progress")
 		var ids: Array = cohort(app, 3)
-		for index in range(6):
+		for index in range(Growth.MASTERY_STREAK):
 			var result: Dictionary = app.growth.record_attempt("saved-age-three-%d" % index, ids, true)
 			check(result.save_ok, "The earned age fixture persists its word evidence")
 	root.add_child(app)
@@ -87,7 +88,7 @@ func cohort(app, age: int) -> Array:
 
 
 func master(app, ids: Array, prefix: String) -> void:
-	for index in range(6):
+	for index in range(Growth.MASTERY_STREAK):
 		app._record_growth("%s-%d" % [prefix, index], ids, true)
 
 
