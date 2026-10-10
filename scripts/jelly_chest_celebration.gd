@@ -74,7 +74,7 @@ func clear() -> void:
 	queue_redraw()
 
 
-func advance(delta: float) -> float:
+func advance(delta: float, pickup_ready: bool = true) -> float:
 	if not is_finite(delta) or delta <= 0.0:
 		return 0.0
 	var generation: int = _serial
@@ -85,6 +85,9 @@ func advance(delta: float) -> float:
 		_elapsed += consume
 		remaining -= consume
 		if not _started and _elapsed >= ARRIVAL_SECONDS:
+			if not pickup_ready:
+				_sync()
+				return 0.0
 			_started = true
 			cue_requested.emit("assemble")
 			if generation != _serial or not is_active():
@@ -104,7 +107,7 @@ func advance(delta: float) -> float:
 
 
 func _sync() -> void:
-	visible = is_active() and _elapsed >= ARRIVAL_SECONDS
+	visible = is_active() and _started
 	_sync_confetti()
 	if is_active():
 		var event: Dictionary = _events[0]
@@ -147,7 +150,7 @@ func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
 
 
 func _draw() -> void:
-	if not is_active() or _elapsed < ARRIVAL_SECONDS:
+	if not is_active() or not _started:
 		return
 	var event: Dictionary = _events[0]
 	var age: float = _elapsed - ARRIVAL_SECONDS

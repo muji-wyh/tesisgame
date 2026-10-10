@@ -22,6 +22,7 @@ const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const LootMeter = preload("res://scripts/jelly_loot_meter.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const LOOT_FLIGHT_SECONDS: float = ChestCelebration.ARRIVAL_SECONDS
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
 const MOUSE_POINTER: int = -1
@@ -831,8 +832,12 @@ func _process(delta: float) -> void:
 		if float(_rejection.elapsed) >= 0.34:
 			_rejection.clear()
 	var remaining: float = delta
+	# Advance only flights that existed before this frame's simulation. A clear
+	# inside game.step() starts a new flight, not one already aged by the frame.
+	var loot_ready: bool = _loot_flights.is_empty() and not _loot_meter.is_filling()
+	_advance_loot_feedback(delta)
 	if _reward_presentation.is_active() and game.fusions.is_empty():
-		remaining = advance_reward_presentation(delta)
+		remaining = advance_reward_presentation(delta, loot_ready)
 	if generation != _generation or not _allowed():
 		return
 	if game.phase == "playing" and (not _reward_presentation.is_active() or not game.fusions.is_empty()):
@@ -843,15 +848,11 @@ func _process(delta: float) -> void:
 		_snapbacks[id].elapsed += delta
 		if float(_snapbacks[id].elapsed) >= 0.24:
 			_snapbacks.erase(id)
-	for flight: Dictionary in _loot_flights:
-		flight.elapsed += delta
-	_loot_flights = _loot_flights.filter(func(item: Dictionary) -> bool: return float(item.elapsed) < 0.65)
 	if _result_visible:
 		_result_elapsed += delta
 	_sync_tiles()
 	_refresh_fusion()
 	_refresh_hud()
-	_loot_meter.advance(delta)
 	_animate_result()
 	queue_redraw()
 	_publish_elapsed += delta
@@ -865,6 +866,26 @@ func _process(delta: float) -> void:
 				_landing_cooldown = 0.12
 				audio_requested.emit("land")
 				break
+
+func _advance_loot_feedback(delta: float) -> void:
+	var remaining: float = delta
+	while remaining > 0.0:
+		var consumed: float = remaining
+		for flight: Dictionary in _loot_flights:
+			consumed = minf(consumed, maxf(0.0, LOOT_FLIGHT_SECONDS - float(flight.elapsed)))
+		# Split at each arrival: a new segment receives only time after its pickup
+		# reaches the chest, including when several flights finish in one frame.
+		_loot_meter.advance(consumed)
+		for flight: Dictionary in _loot_flights:
+			flight.elapsed += consumed
+		var before: int = _loot_flights.size()
+		_loot_flights = _loot_flights.filter(func(item: Dictionary) -> bool:
+			return float(item.elapsed) < LOOT_FLIGHT_SECONDS)
+		if _loot_flights.size() != before:
+			_refresh_hud()
+		remaining -= consumed
+		if consumed <= 0.0 and _loot_flights.size() == before:
+			break
 
 func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	var id: String = str(fusion.attempt_id)
@@ -1019,11 +1040,11 @@ func _chest_milestone(previous_tier: int, tier: int) -> void:
 	_refresh_controls()
 	_publish()
 
-func advance_reward_presentation(delta: float) -> float:
+func advance_reward_presentation(delta: float, pickup_ready: bool = true) -> float:
 	if not _allowed() or not game.fusions.is_empty():
 		return 0.0
 	var generation: int = _generation
-	var remaining: float = _reward_presentation.advance(delta)
+	var remaining: float = _reward_presentation.advance(delta, pickup_ready)
 	if generation != _generation or not _allowed():
 		return 0.0
 	game.set_paused(_paused or _reward_presentation.is_active())
@@ -1358,7 +1379,7 @@ func _draw() -> void:
 		draw_style_box(Style.box(Color.TRANSPARENT, edge, 18, width), _board.grow(2.0))
 	if _chest_texture != null:
 		for flight: Dictionary in _loot_flights:
-			var p: float = clampf(float(flight.elapsed) / 0.65, 0.0, 1.0)
+			var p: float = clampf(float(flight.elapsed) / LOOT_FLIGHT_SECONDS, 0.0, 1.0)
 			var destination: Vector2 = _loot_icon.position + _loot_icon.size * 0.5
 			var center: Vector2 = Vector2(flight.from).lerp(destination, smoothstep(0.0, 1.0, p))
 			center.y -= sin(p * PI) * 44.0 / Style.ui_scale(self)

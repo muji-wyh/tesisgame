@@ -284,6 +284,9 @@ func _check_pending_fusion_pause(view, words: Array, manifest: Dictionary) -> vo
 		and view._reward_presentation.is_active() and not view._can_play() and view.finish_button.disabled,
 		"Only the actual chest presentation gates gameplay after the final sibling finishes")
 	_advance_owner(view, 0.7)
+	check(not view._reward_presentation.visible,
+		"Synthesis waits for the arriving fragment's visible progress fill")
+	_advance_owner(view, 0.4)
 	check(view._reward_presentation.visible and view.game.fragment_count == 4 and view.game.chest_count == 1,
 		"Synthesis then starts once with the previously committed single chest")
 	view.stop()

@@ -34,8 +34,12 @@ func _run() -> void:
 	view.size = Vector2(1000, 720)
 	view.set_process(false)
 	_check_fragment_arrival(view)
+	_check_owner_frame_timing(view)
+	_check_staggered_arrivals(view)
+	_check_double_fragment_arrival(view)
 	_check_threshold(view, 3, 4)
 	_check_threshold(view, 8, 5)
+	_check_flight_pause(view)
 	_check_owner_lifecycle(view)
 	_check_reduced_motion(view)
 	_check_layout(view)
@@ -136,6 +140,25 @@ func _advance(view, duration: float) -> void:
 		remaining -= delta
 
 
+func _start_marked_pair(view, amount: int = 1) -> bool:
+	for a: Dictionary in view.game.cells:
+		if view.game.is_fusing(int(a.id)) or not view.game.is_settled(a):
+			continue
+		for b: Dictionary in view.game.cells:
+			if a.id == b.id or a.word.id != b.word.id or a.kind == b.kind \
+				or view.game.is_fusing(int(b.id)) or not view.game.is_settled(b):
+				continue
+			# Change only the reward markers; matching, fusion completion, and
+			# fragment credit still pass through the production model.
+			a.chest = true
+			b.chest = amount == 2
+			var accepted: bool = view.game.try_merge(int(a.id), int(b.id)) == "correct"
+			check(accepted, "A production pair accepts the controlled fragment markers")
+			return accepted
+	check(false, "The production board contains an available matching pair")
+	return false
+
+
 func _progress(view) -> Dictionary:
 	return view.snapshot().loot.progress
 
@@ -149,8 +172,9 @@ func _check_fragment_arrival(view) -> void:
 	check(view.game.fragment_count == 1 and view._loot_flights.size() == 1 and _progress(view).filled == 0,
 		"A committed fragment keeps flying without filling its destination early")
 	_advance(view, 0.64)
-	check(_progress(view).filled == 0 and view._loot_flights.size() == 1,
-		"The treasure ring waits through the fragment flight")
+	check(_progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
+		and is_zero_approx(float(_progress(view).pulse)) and view._loot_flights.size() == 1,
+		"The treasure ring keeps its fill and pickup pulse still throughout the flight")
 	_advance(view, 0.02)
 	check(_progress(view).filled == 1 and view._loot_flights.is_empty(),
 		"Reaching the chest advances exactly one segment")
@@ -162,6 +186,102 @@ func _check_fragment_arrival(view) -> void:
 		"The pickup accent ends without changing the earned fragment")
 
 
+func _check_owner_frame_timing(view) -> void:
+	_reset(view)
+	if not _start_marked_pair(view):
+		return
+	view.game.step(view.game.FUSION_SECONDS - 0.04)
+	check(view.game.fragment_count == 0 and view._loot_flights.is_empty(),
+		"A nearly complete fusion has no fragment flight or reward yet")
+	view._process(0.2)
+	check(view.game.fragment_count == 1 and view._loot_flights.size() == 1,
+		"The owner frame completes the fusion and launches its earned fragment")
+	if view._loot_flights.size() != 1:
+		return
+	check(is_zero_approx(float(view._loot_flights[0].elapsed))
+		and _progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
+		and is_zero_approx(float(_progress(view).pulse)),
+		"A newly launched fragment cannot inherit time from its creation frame")
+	view._process(0.5)
+	view._process(0.1)
+	check(view._loot_flights.size() == 1 and _progress(view).filled == 0
+		and is_zero_approx(float(_progress(view).displayed)) and is_zero_approx(float(_progress(view).pulse)),
+		"Even large owner frames cannot begin progress before the fragment arrives")
+	view._process(0.2)
+	var residual: float = 0.15
+	check(view._loot_flights.is_empty() and _progress(view).filled == 1,
+		"Crossing the arrival boundary credits the fragment once")
+	check(is_equal_approx(float(_progress(view).displayed), smoothstep(0.0, Meter.FILL_SECONDS, residual))
+		and is_equal_approx(float(_progress(view).pulse), sin(residual / Meter.PULSE_SECONDS * PI)),
+		"Progress fill and pulse receive only the frame time after arrival")
+	_advance(view, 0.5)
+	check(is_equal_approx(float(_progress(view).displayed), 1.0) and is_zero_approx(float(_progress(view).pulse)),
+		"The corrected owner timeline still finishes one complete pickup animation")
+
+
+func _check_staggered_arrivals(view) -> void:
+	_reset(view)
+	if not _start_marked_pair(view):
+		return
+	_advance(view, 0.2)
+	if not _start_marked_pair(view):
+		return
+	_advance(view, 0.85)
+	check(view.game.fragment_count == 1 and view._loot_flights.size() == 1,
+		"The first concurrent fusion creates its own flight")
+	view._process(0.2)
+	check(view.game.fragment_count == 2 and view._loot_flights.size() == 2,
+		"A later concurrent fusion creates an independently timed flight")
+	if view._loot_flights.size() != 2:
+		return
+	check(is_equal_approx(float(view._loot_flights[0].elapsed), 0.2)
+		and is_zero_approx(float(view._loot_flights[1].elapsed)),
+		"Sibling fragments keep their staggered launch times")
+	view._process(0.44)
+	check(_progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
+		and is_zero_approx(float(_progress(view).pulse)),
+		"Two airborne rewards still leave the destination unchanged")
+	view._process(0.02)
+	check(view._loot_flights.size() == 1 and _progress(view).filled == 1,
+		"The first arrival credits only its own fragment")
+	view._process(0.18)
+	check(view._loot_flights.size() == 1 and _progress(view).filled == 1,
+		"A pending sibling cannot borrow the first fragment's arrival")
+	view._process(0.02)
+	check(view._loot_flights.is_empty() and _progress(view).filled == 2
+		and float(_progress(view).displayed) < 2.0,
+		"The second arrival starts its own addition without snapping the meter full")
+	_advance(view, 0.6)
+	check(is_equal_approx(float(_progress(view).displayed), 2.0) and is_zero_approx(float(_progress(view).pulse))
+		and view.game.fragment_count == 2,
+		"Overlapping pickup effects settle with no missing or duplicate fragments")
+
+
+func _check_double_fragment_arrival(view) -> void:
+	_reset(view)
+	if not _start_marked_pair(view, 2):
+		return
+	_advance(view, view.game.FUSION_SECONDS)
+	check(view.game.fragment_count == 2 and view._loot_flights.size() == 1,
+		"A pair with two chest markers launches one flight carrying both fragments")
+	if view._loot_flights.size() != 1:
+		return
+	check(int(view._loot_flights[0].amount) == 2 and _progress(view).filled == 0,
+		"The complete double reward remains pending during its flight")
+	_advance(view, 0.64)
+	check(_progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
+		and is_zero_approx(float(_progress(view).pulse)),
+		"Neither half of a double reward appears in the meter before arrival")
+	_advance(view, 0.02)
+	check(view._loot_flights.is_empty() and _progress(view).filled == 2
+		and float(_progress(view).displayed) > 0.0 and float(_progress(view).displayed) < 2.0,
+		"Both earned fragments begin filling only after their shared flight arrives")
+	_advance(view, 0.6)
+	check(is_equal_approx(float(_progress(view).displayed), 2.0) and is_zero_approx(float(_progress(view).pulse))
+		and view.game.fragment_count == 2,
+		"A double pickup finishes once while preserving the exact earned amount")
+
+
 func _check_threshold(view, previous_fragments: int, required: int) -> void:
 	_reset(view, previous_fragments)
 	check(_progress(view).filled == required - 1 and _progress(view).required == required,
@@ -171,13 +291,18 @@ func _check_threshold(view, previous_fragments: int, required: int) -> void:
 	check(_progress(view).filled == required - 1 and view._reward_presentation.is_active(),
 		"A milestone queues its celebration while the final fragment is still flying")
 	_advance(view, 0.66)
-	check(_progress(view).filled == required and _progress(view).required == required,
-		"The last arriving fragment fills the current ring before the chest reveal")
-	_advance(view, 0.4)
+	check(_progress(view).filled == required and _progress(view).required == required
+		and not view._reward_presentation.visible,
+		"The last arriving fragment starts filling its ring before the reward overlay")
+	_advance(view, 0.2)
+	check(float(_progress(view).displayed) > float(required - 1)
+		and float(_progress(view).displayed) < float(required) and not view._reward_presentation.visible,
+		"Unlocks and upgrades leave the meter visible while its final segment fills")
+	_advance(view, 0.3)
 	check(is_equal_approx(float(_progress(view).displayed), float(required))
-		and not view._reward_presentation.snapshot().revealed,
-		"The completed ring remains full throughout the chest assembly")
-	_advance(view, 0.32)
+		and view._reward_presentation.visible and not view._reward_presentation.snapshot().revealed,
+		"Chest assembly begins only after the completed ring has been shown")
+	_advance(view, 0.8)
 	check(view._reward_presentation.snapshot().revealed and _progress(view).filled == 0
 		and _progress(view).required == 5 and is_zero_approx(float(_progress(view).displayed)),
 		"Only the actual reward reveal resets the ring for the next upgrade")
@@ -186,6 +311,37 @@ func _check_threshold(view, previous_fragments: int, required: int) -> void:
 	check(not view._reward_presentation.is_active() and _progress(view).filled == 0
 		and view.game.fragment_count == previous_fragments + 1 and view.game.chest_count == 1,
 		"Finishing the performance neither replays progress nor creates another chest")
+
+
+func _check_flight_pause(view) -> void:
+	for action: String in ["pause", "hidden", "host_gate"]:
+		_reset(view)
+		if not _merge_marked(view):
+			continue
+		_advance(view, 0.3)
+		var before: Array = view._loot_flights.duplicate(true)
+		if action == "pause":
+			view.pause(true)
+		elif action == "hidden":
+			view.hide()
+		else:
+			view.interaction_allowed = func() -> bool: return false
+		_advance(view, 1.0)
+		check(view._loot_flights == before and _progress(view).filled == 0
+			and is_zero_approx(float(_progress(view).displayed)) and is_zero_approx(float(_progress(view).pulse)),
+			"The %s gate freezes the flight without leaking progress or pickup effects" % action)
+		if action == "pause":
+			view.pause(false)
+		elif action == "hidden":
+			view.show()
+		else:
+			view.interaction_allowed = Callable()
+		_advance(view, 0.34)
+		check(view._loot_flights.size() == 1 and _progress(view).filled == 0,
+			"Resuming from %s preserves the fragment's remaining journey" % action)
+		_advance(view, 0.02)
+		check(view._loot_flights.is_empty() and _progress(view).filled == 1,
+			"The resumed %s flight credits its fragment only when it reaches the chest" % action)
 
 
 func _check_owner_lifecycle(view) -> void:

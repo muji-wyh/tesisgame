@@ -58,6 +58,10 @@ func advance(delta: float) -> void:
 	queue_redraw()
 
 
+func is_filling() -> bool:
+	return not _reduced and _elapsed < FILL_SECONDS
+
+
 func _pulse() -> float:
 	return sin(clampf(_elapsed / PULSE_SECONDS, 0.0, 1.0) * PI) if not _reduced and _elapsed < PULSE_SECONDS else 0.0
 

@@ -30,7 +30,8 @@ callbacks. Motion, sound and the chest-change accent share one performance
 clock. The gameplay model owns fragment credit and tier changes; the visual
 timeline does not grant rewards.
 
-After the pickup reaches the HUD, the milestone performance lasts 2.15 seconds.
+After the pickup reaches the HUD and its progress segment fills, the milestone
+performance lasts 2.15 seconds.
 Its preparation and convergence lead to the chest reveal at 0.72 seconds; the
 sound accent, upgraded art and confetti emission use this same reveal event.
 The chest settles while the paper spreads across the viewport and falls away.
@@ -45,7 +46,12 @@ art instead of a numeric fragment counter. Four segments fill to unlock the
 first chest; five segments fill for each subsequent upgrade. A segment charges
 over 0.32 seconds when its pickup flight arrives, with one 0.55-second local
 accent using the existing `portal_glow.png` texture documented below. The ring
-holds full until the milestone reveals its chest, then begins the next upgrade.
+advances only for time after each actual arrival, even on a slow frame or with
+overlapping pickups. Newly launched fragments receive their full flight. A
+milestone waits until that visible segment fill completes before covering the
+HUD with the chest synthesis or upgrade performance. The reward total remains
+committed when the jelly clears; this arrival gate controls presentation only.
+The ring holds full until the milestone reveals its chest, then begins the next upgrade.
 It has no idle movement and disappears on the result page. Its clock follows
 the gameplay owner, including pause and interruption; reduced motion updates
 the segments immediately. Exact totals remain available to accessibility tools.
