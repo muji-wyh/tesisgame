@@ -171,6 +171,10 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
   await openModeMenu(page);
   const startup = await playbackIndex(page);
   await libraryControl(page, 'Mode_jelly');
+  const opening = await settledBoard(page);
+  const [x, y, width, height] = opening.preview.rect;
+  await tap(page, x + width / 2, y + height / 2);
+  await expect.poll(async () => (await jelly(page)).generated_tiles).toBe(opening.generated_tiles + 4);
   await settledBoard(page);
   evidence.land = await audibleRecording(page, startup, CLIPS.land);
 

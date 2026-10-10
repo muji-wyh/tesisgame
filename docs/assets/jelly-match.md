@@ -84,7 +84,9 @@ Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
 
 Supply dispatches four tiles together. Six settled tiles provide the initial
-matching layout, followed by the first four arrivals. Four committed upcoming
+matching layout. The first automatic batch waits for the full seven-second
+interval; the upcoming area can still release it immediately on request.
+New rounds and replays receive the same opening interval. Four committed upcoming
 tiles appear outside the well: a compact two-by-two group on wide screens and
 a horizontal strip above it on phones. There is no visible heading or countdown
 bar. Their picture/word kind, artwork and chest markers come from the actual

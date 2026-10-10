@@ -114,7 +114,6 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_fill_upcoming()
 	for index in range(INITIAL_SETTLED_TILES):
 		_spawn_tile(false)
-	_spawn_drop()
 	changed.emit()
 	return true
 

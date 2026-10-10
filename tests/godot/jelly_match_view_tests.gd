@@ -40,6 +40,7 @@ func _run() -> void:
 		attempts.append({"id": id, "words": ids, "correct": correct}))
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	view.round_finished.connect(func(result: Dictionary) -> void: finishes.append(result))
+	_check_opening(view)
 	_reset(view)
 	_check_layout(view)
 	_check_pictures(view)
@@ -91,6 +92,8 @@ func _run() -> void:
 func _reset(view, reduced: bool = false, settled: bool = true) -> void:
 	check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "Jelly Match configures with the current curriculum")
 	view.set_process(false)
+	# These presentation fixtures observe a batch released by the player.
+	view.game.drop_now()
 	if settled:
 		view.game.step(view.game.SETTLE_SECONDS)
 	view._sync_tiles()
@@ -100,6 +103,28 @@ func _reset(view, reduced: bool = false, settled: bool = true) -> void:
 	attempts.clear()
 	cues.clear()
 	finishes.clear()
+
+
+func _check_opening(view) -> void:
+	for reduced in [false, true]:
+		check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "A new round configures without a forced opening drop")
+		view.set_process(false)
+		check(view.game.cells.size() == 6 and _arrivals(view).is_empty() and view._ghosts.is_empty(),
+			"The opening shows only settled starters without falling bodies or landing projections")
+		check(view.snapshot().preview.slots.size() == 4 and not view.drop_button.disabled,
+			"All four upcoming tiles remain available for an optional immediate release")
+		_advance(view, 2.0)
+		view.pause(true)
+		_advance(view, 10.0)
+		check(view.game.cells.size() == 6 and is_equal_approx(view.game.spawn_elapsed, 2.0),
+			"Pausing the opening preserves the remaining reading time")
+		view.pause(false)
+		_advance(view, 4.99)
+		check(view.game.cells.size() == 6 and _arrivals(view).is_empty(),
+			"The opening has no automatic arrivals before the complete seven seconds")
+		_advance(view, 0.02)
+		check(_arrivals(view).size() == 4 and view.game.cells.size() == 10,
+			"The first automatic batch uses the normal visible four-tile descent")
 
 
 func _pair(view, chest_only: bool = false) -> Array[int]:

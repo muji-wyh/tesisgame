@@ -78,10 +78,10 @@ func _run() -> void:
 		and app._jelly_backdrop.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"The woodland covers the Jelly screen behind controls without capturing touch input")
 	var game = app._jelly.game
-	check(game.cells.size() == game.INITIAL_SETTLED_TILES + 4 and game.upcoming.size() == 4
+	check(game.cells.size() == game.INITIAL_SETTLED_TILES and game.upcoming.size() == 4
+		and game.cells.all(func(cell: Dictionary) -> bool: return game.is_settled(cell) and not cell.arrival)
 		and app._jelly.snapshot().preview.slots.size() == 4,
-		"The real game starts with four arriving tiles and a complete four-tile supply preview")
-	game.step(game.SETTLE_SECONDS)
+		"The real game starts with settled tiles and a complete preview without dropping a batch")
 	var chosen := pair(game, true)
 	check(chosen.size() == 2, "The initial board contains a reachable marked pair")
 	if chosen.size() != 2:

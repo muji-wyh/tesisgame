@@ -2,7 +2,7 @@ extends SceneTree
 
 const Model = preload("res://scripts/jelly_match_model.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
-const INITIAL_COUNT: int = Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT
+const INITIAL_COUNT: int = Model.INITIAL_SETTLED_TILES
 
 var checks: int = 0
 var failures: int = 0
@@ -155,7 +155,7 @@ func _test_configuration() -> void:
 	words.append(words[4].duplicate(true))
 	check(model.configure(words, 3, 19), "A pictured eligible curriculum starts Jelly Match")
 	check(model.phase == "playing" and model.cells.size() == INITIAL_COUNT,
-		"The initial board has six settled tiles and four simultaneous arrivals")
+		"The initial board has only six settled tiles and no automatic arrivals")
 	check(model.generated_tiles == INITIAL_COUNT and model.spawn_interval == 7.0,
 		"Each four-tile drop leaves seven seconds to read and match")
 	var initial_ids: Array[String] = []
@@ -164,14 +164,10 @@ func _test_configuration() -> void:
 		if not initial_ids.has(str(cell.word.id)):
 			initial_ids.append(str(cell.word.id))
 		check(cell.word.min_age <= 3 and not str(cell.word.image).is_empty(), "Only pictured age-appropriate words enter the board")
-		if bool(cell.arrival):
-			check(cell.age == 0.0 and cell.arrival and int(cell.falling_rows) == int(cell.row) + 1,
-				"Each initial arrival descends from above its own column")
-		else:
-			check(model.is_settled(cell) and not cell.arrival and cell.falling_rows == 0,
-				"The six starting tiles are ready without simultaneous falling")
+		check(model.is_settled(cell) and not cell.arrival and cell.falling_rows == 0,
+			"The six starting tiles are ready without simultaneous falling")
 		initial_chests += 1 if cell.chest and not cell.arrival else 0
-	check(initial_ids.size() == 6 and model.cells.slice(0, 6).all(func(cell: Dictionary) -> bool:
+	check(initial_ids.size() == 3 and model.cells.all(func(cell: Dictionary) -> bool:
 		return str(cell.word.id) in ["word-0", "word-1", "word-2", "word-3"]),
 		"The opening complete bag practises current unmastered words first")
 	check(initial_chests == 1, "The third initial pair contains exactly one chest")
@@ -221,9 +217,9 @@ func _test_supply_and_gravity() -> void:
 		model.step(6.999)
 		check(model.cells.size() == INITIAL_COUNT, "The next drop does not arrive before seven seconds")
 		model.step(0.001)
-		check(model.cells.size() == 14 and model.generated_tiles == 14,
+		check(model.cells.size() == INITIAL_COUNT + Model.DROP_COUNT and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT,
 			"The seven-second boundary supplies exactly four tiles")
-		for drop_index in range(3):
+		for drop_index in range(4):
 			model.step(model.spawn_interval)
 			_assert_board(model, "Seed %d, drop %d" % [seed_value, drop_index + 2])
 		check(model.cells.size() == 24 and model.full_elapsed == -1.0,
@@ -346,9 +342,10 @@ func _test_manual_drop() -> void:
 func _test_manual_drop_guards() -> void:
 	var model = Model.new()
 	model.configure(_vocabulary(), 3, 73)
+	check(model.can_drop_now() and model.drop_now(), "The opening preview can release a batch before the first automatic interval")
 	var blocked: Dictionary = model.snapshot()
 	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
-		"Initial airborne tiles block manual release without changing the board")
+		"Manually released airborne tiles block another release without changing the board")
 	model.step(Model.SETTLE_SECONDS)
 	model.set_paused(true)
 	blocked = model.snapshot()
@@ -394,7 +391,7 @@ func _test_manual_drop_partial_batch() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 73)
-	model.step(3.0 * Model.INITIAL_SPAWN_INTERVAL + Model.SETTLE_SECONDS)
+	model.step(4.0 * Model.INITIAL_SPAWN_INTERVAL + Model.SETTLE_SECONDS)
 	check(model.cells.size() == Model.CAPACITY - 2 and model.can_drop_now(),
 		"Two remaining board slots still allow a manual preview release")
 	var existing: Array = model.cells.duplicate(true)
@@ -603,6 +600,8 @@ func _test_fusion_timeline() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 8)
+	model.drop_now()
+	var count_before: int = model.cells.size()
 	var pair: Array[int] = _pair(model, false, true)
 	check(model.try_merge(int(model.cells.back().id), pair[0]) == "ignored", "An incoming tile cannot start a fusion")
 	model.step(0.25)
@@ -613,18 +612,18 @@ func _test_fusion_timeline() -> void:
 	check(events.fusions.size() == 1 and events.cues == ["merge"], "Fusion emits its payload and merge cue once")
 	check(events.fusions[0].a.id == pair[0] and events.fusions[0].b.id == pair[1],
 		"Fusion payload preserves both source tiles for presentation")
-	check(model.cells.size() == INITIAL_COUNT and events.attempts.is_empty(), "Starting fusion keeps tiles and delays learning credit")
+	check(model.cells.size() == count_before and events.attempts.is_empty(), "Starting fusion keeps tiles and delays learning credit")
 	check(model.try_merge(pair[1], pair[0]) == "ignored", "Repeated input during fusion cannot double-credit")
 	model.step(0.69)
 	check(events.cues == ["merge"], "The pop cue waits for the fusion pop point")
 	model.step(0.01)
 	check(events.cues == ["merge", "pop"], "The pop cue occurs at 0.7 seconds")
 	model.step(0.349)
-	check(model.cells.size() == INITIAL_COUNT and events.attempts.is_empty(), "A nearly finished fusion does not credit early")
+	check(model.cells.size() == count_before and events.attempts.is_empty(), "A nearly finished fusion does not credit early")
 	check(is_equal_approx(float(model.tile_by_id(incoming_id).age), saved_age),
 		"An incoming tile freezes in the air throughout fusion")
 	model.step(0.001)
-	check(model.cells.size() == INITIAL_COUNT - 2 and model.fusion.is_empty() and model.cleared_pairs == 1,
+	check(model.cells.size() == count_before - 2 and model.fusion.is_empty() and model.cleared_pairs == 1,
 		"The 1.05 second fusion clears exactly two tiles")
 	check(is_equal_approx(model.spawn_elapsed, saved_spawn), "Spawning remains frozen throughout fusion")
 	check(events.attempts.size() == 1 and events.attempts[0].correct
@@ -865,6 +864,7 @@ func _test_concurrent_fusion_reentry() -> void:
 func _test_fusion_freezes_arrival() -> void:
 	var model = Model.new()
 	model.configure(_vocabulary(), 3, 31)
+	model.drop_now()
 	model.step(0.25)
 	var incoming: Dictionary = model.cells.back().duplicate(true)
 	var pair: Array[int] = []

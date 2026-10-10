@@ -37,11 +37,64 @@ async function startJelly(page, options = {}) {
   await libraryControl(page, 'Mode_jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles?.length >= 10 &&
+    return state.visible && state.phase === 'playing' && state.tiles?.length >= 6 &&
       state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Jelly board starts with settled word and picture tiles' }).toBe(true);
   return errors;
 }
+
+test('opening and replay wait for the first batch while manual release stays available', async ({ page }, info) => {
+  const errors = await startJelly(page, { reducedMotion: 'no-preference' });
+  const opening = await jelly(page);
+  expect(opening.generated_tiles).toBe(6);
+  expect(opening.tiles).toHaveLength(6);
+  expect(opening.tiles.every(tile => tile.settled)).toBe(true);
+  expect(opening.upcoming).toHaveLength(4);
+  expect(opening.preview.enabled).toBe(true);
+  expect(opening.spawn_elapsed).toBeLessThan(opening.spawn_interval);
+  const advertised = opening.upcoming.map(tile => tile.id);
+  await page.screenshot({ path: info.outputPath('jelly-opening-wait.png'), scale: 'css' });
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.jellyOpeningFrames = [];
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly);
+      window.jellyOpeningFrames.push({ generated: state.generated_tiles, elapsed: state.spawn_elapsed });
+    };
+    window.jellyOpeningObserver = new MutationObserver(record);
+    window.jellyOpeningObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  });
+  await expect.poll(async () => (await jelly(page)).generated_tiles,
+    { timeout: 10000, intervals: [50], message: 'The opening batch waits for its ordinary seven-second interval' }).toBe(10);
+  const frames = await page.evaluate(() => {
+    window.jellyOpeningObserver.disconnect();
+    return window.jellyOpeningFrames;
+  });
+  const waiting = frames.filter(frame => frame.generated === 6);
+  expect(waiting.length).toBeGreaterThan(3);
+  expect(Math.max(...waiting.map(frame => frame.elapsed)), 'The six starters remain until the end of the opening interval')
+    .toBeGreaterThan(6.5);
+  const arrived = await jelly(page);
+  expect(arrived.tiles.slice(6).map(tile => tile.id)).toEqual(advertised);
+  await pressControl(page, arrived.finish);
+  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  const result = await jelly(page);
+  await pressControl(page, result.result.replay);
+  await expect.poll(async () => (await jelly(page)).round_id).not.toBe(opening.round_id);
+  const replay = await jelly(page);
+  expect(replay.generated_tiles, 'Replay also starts without an automatic batch').toBe(6);
+  expect(replay.tiles.every(tile => tile.settled)).toBe(true);
+  expect(replay.spawn_elapsed).toBeLessThan(2);
+  expect(replay.preview.enabled).toBe(true);
+  const manual = replay.upcoming.map(tile => tile.id);
+  await pressRect(page, replay.preview.rect);
+  await expect.poll(async () => (await jelly(page)).generated_tiles).toBe(10);
+  const released = await jelly(page);
+  expect(released.tiles.slice(6).map(tile => tile.id)).toEqual(manual);
+  expect(released.spawn_elapsed, 'An early manual release starts a fresh supply interval').toBeLessThan(2);
+  expect(errors).toEqual([]);
+});
 
 function pair(state, { chest = null } = {}) {
   for (const first of state.tiles || []) {
@@ -850,7 +903,7 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.round_id !== firstResult.round_id && state.visible && state.phase === 'playing' &&
-      state.tiles.length >= 10 && !state.result.visible;
+      state.tiles.length === 6 && state.tiles.every(tile => tile.settled) && !state.result.visible;
   }, { timeout: 10000, message: 'Play again immediately creates a playable fresh board' }).toBe(true);
   const replay = await jelly(page);
   expect((await treasure(page)).visible, 'Unopened rewards do not interrupt replay').toBe(false);
