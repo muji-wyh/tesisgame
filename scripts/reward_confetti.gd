@@ -4,7 +4,7 @@ extends CanvasLayer
 const PAPER = preload("res://assets/images/jelly-match/confetti.png")
 const Style = preload("res://scripts/ui_style.gd")
 const DURATION: float = 6.4
-const PAPER_COUNT: int = 108
+const PAPER_COUNT: int = 162
 const COLORS: Array[Color] = [Color("#ffcf63"), Color("#ff8396"), Color("#67dbbe"), Color("#83bdff"), Color("#cf9af1")]
 
 class PaperSurface extends Control:
@@ -85,8 +85,9 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float) -> Diction
 	var t: float = age - delay
 	var extent: Vector2 = screen.size
 	var paper_edge: float = lerpf(18.0, 28.0, seed_value) * unit
+	var paper_size := Vector2(paper_edge * 1.5, paper_edge * 0.65)
 	var sway: float = lerpf(10.0, 22.0, vertical_seed) * unit
-	var margin: float = paper_edge * 0.65 + sway
+	var margin: float = paper_size.length() * 0.5 + sway
 	var launch_x: float = extent.x * (0.015 + horizontal_seed * 0.08)
 	if index % 2 != 0:
 		launch_x = extent.x - launch_x
@@ -109,7 +110,7 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float) -> Diction
 		var drift: float = (fall - 0.12 * (1.0 - exp(-fall / 0.12))) / (1.0 - 0.12 * (1.0 - exp(-1.0 / 0.12)))
 		y = lerpf(apex, extent.y + paper_edge, drift)
 	var flutter: float = cos(t * (2.1 + seed_value * 1.2) + index)
-	var dimensions := Vector2(paper_edge * maxf(0.16, absf(flutter)), paper_edge * 0.65)
+	var dimensions := Vector2(paper_size.x * maxf(0.16, absf(flutter)), paper_size.y)
 	var color: Color = COLORS[index % COLORS.size()].darkened(0.20 if flutter < 0.0 else 0.0)
 	return {"position": screen.position + Vector2(x, y), "size": dimensions,
 		"rotation": index + t * (0.55 + seed_value * 0.85), "color": color}

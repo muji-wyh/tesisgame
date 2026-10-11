@@ -38,7 +38,7 @@ After the pickup reaches the HUD and its progress segment fills, the milestone
 performance lasts 2.15 seconds.
 A 0.18-second anticipation leads into the lift and turn, the new chest appears
 at 0.72 seconds, and the body lands at 1.26 seconds before returning to its
-static HUD size. Upgrades peak at 2.5 times the resting icon size; first-chest
+static HUD size. Upgrades peak at 3.2 times the resting icon size; first-chest
 synthesis retains its 1.48-times peak. The turned silhouette stays inside all
 four gameplay edges, including the lower Voice Pop HUD, then returns to its
 original anchor. Local light accents grow with the chest without adding a modal. The
@@ -54,7 +54,9 @@ The shared `reward_confetti.gd` renderer accompanies earned-chest reveals in
 Match, Memory, Phrase Builder, Voice Pop and Jelly Match. GameUI owns its
 dedicated viewport CanvasLayer, so arena clipping, layout bounds and the game
 header cannot cut off the paper. A reveal starts one independent 6.4-second
-burst, keyed to the current round, mode and chest tier. The chest and Pip retain
+burst of 162 paper pieces, keyed to the current round, mode and chest tier.
+Each paper strip is 1.5 times its base edge in length and 0.65 times in width,
+with its full rotated footprint kept inside the viewport sides. The chest and Pip retain
 their original completion gates while the paper continues over the current
 game or result screen. A 0.55-0.8-second launch spreads across the full width;
 the descent then takes more than four seconds, with gentle sideways drift,

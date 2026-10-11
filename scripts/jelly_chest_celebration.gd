@@ -148,7 +148,7 @@ func _motion(age: float) -> Dictionary:
 	var lift: float = sin(clampf((age - 0.18) / 1.08, 0.0, 1.0) * PI) * 0.30
 	var anticipation: float = sin(clampf(age / 0.18, 0.0, 1.0) * PI)
 	var settle: float = sin(clampf((age - 1.26) / 0.26, 0.0, 1.0) * PI) * 0.035
-	var growth: float = 1.50 if is_active() and int(_events[0].previous_tier) > 0 else 0.48
+	var growth: float = 2.20 if is_active() and int(_events[0].previous_tier) > 0 else 0.48
 	return {"yaw": turn * TAU, "lift": lift + settle - anticipation * 0.025,
 		"scale": 1.0 + smoothstep(0.10, 0.48, age) * (1.0 - smoothstep(1.0, 1.72, age)) * growth,
 		"roll": -anticipation * 0.10 + sin(turn * TAU) * 0.055}
