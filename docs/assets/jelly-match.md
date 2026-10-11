@@ -177,8 +177,9 @@ keeps small finger motion from turning an ordinary tap into a match attempt.
 
 Contact now gives reciprocal skin pressure and separates the two learning faces
 slightly so an overlapping dragged body does not hide its partner. A mint contour
-and `Match!` label identify an opposite-kind pair with the same word ID; a coral
-contour, `Try another` label and opposed recoil identify an incompatible pair.
+and inward skin pressure identify an opposite-kind pair with the same word ID;
+a coral contour and opposed recoil identify an incompatible pair. These visual
+states communicate directly on the jelly skins without floating text labels.
 These previews do not submit learning attempts. Only a committed wrong drop
 resets learning, and only a completed fusion grants success and treasure.
 

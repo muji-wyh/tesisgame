@@ -67,8 +67,6 @@ var _snapbacks: Dictionary = {}
 var _fusion_visuals: Dictionary = {}
 var _contact_elapsed: float = 0.0
 var _rejection: Dictionary = {}
-var _contact_label: Label
-var _contact_label_kind: String = ""
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_meter: LootMeter
@@ -100,12 +98,6 @@ func _init() -> void:
 	_falling_layer.clip_contents = true
 	_falling_layer.z_index = 2
 	add_child(_falling_layer)
-	_contact_label = _label(self, "", 14)
-	_contact_label.name = "JellyContactFeedback"
-	_contact_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_contact_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_contact_label.z_index = 50
-	_contact_label.hide()
 	_loot_meter = LootMeter.new()
 	add_child(_loot_meter)
 	_loot_icon = _image(self)
@@ -399,7 +391,7 @@ func _visibility_changed() -> void:
 	_publish()
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _contact_label != null:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _configured:
 		cancel_input()
 
 func _allowed() -> bool:
@@ -789,22 +781,6 @@ func _refresh_contact() -> void:
 		var involved: bool = int(id) == int(state.source) or int(id) == int(state.target)
 		var direction: Vector2 = Vector2(state.direction) * (1.0 if int(id) == int(state.source) else -1.0)
 		_tiles[id].set_contact(str(state.kind) if involved else "none", direction, float(state.strength) if involved else 0.0, reduced_motion)
-	_contact_label.visible = state.kind != "none"
-	if not _contact_label.visible:
-		return
-	var good: bool = state.kind == "match"
-	var s: float = Style.ui_scale(self)
-	_contact_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
-	if _contact_label_kind != str(state.kind):
-		_contact_label_kind = str(state.kind)
-		_contact_label.text = "Match!" if good else "Try another"
-		_contact_label.add_theme_color_override("font_color", Color("#17604a") if good else Color("#923e43"))
-		_contact_label.add_theme_stylebox_override("normal", Style.box(Color("#edfff3") if good else Color("#fff0ea"), Color("#76bb97") if good else Color("#d99288"), 9, 1))
-	_contact_label.size = Vector2(72.0 if good else 104.0, 25.0) / s
-	var destination: Vector2 = _tile_rect(_cell(int(state.target))).get_center()
-	_contact_label.position = destination - Vector2(_contact_label.size.x * 0.5, _pitch * 0.57 + _contact_label.size.y)
-	_contact_label.position.x = clampf(_contact_label.position.x, _board.position.x, _board.end.x - _contact_label.size.x)
-	_contact_label.position.y = maxf(_board.position.y, _contact_label.position.y)
 
 func _process(delta: float) -> void:
 	for id in _chest_cache:
