@@ -27,6 +27,7 @@ const LOOT_FLIGHT_SECONDS: float = ChestCelebration.ARRIVAL_SECONDS
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
 const MOUSE_POINTER: int = -1
+const DRAG_STRETCH := Vector2(0.985, 1.06)
 
 var game = JellyMatchModel.new()
 var interaction_allowed: Callable
@@ -504,11 +505,6 @@ func _move(global_point: Vector2) -> void:
 		return
 	_tiles[_source].position = point - _drag_offset
 	_tiles[_source].z_index = 40
-	var target: int = _tile_at(point, _source)
-	if target != _target:
-		_contact_elapsed = 0.0
-	_target = target
-	_refresh_marks()
 	_sync_positions()
 	_refresh_fusion()
 	_publish()
@@ -530,7 +526,12 @@ func _release(global_point: Vector2) -> void:
 	var generation: int = _generation
 	var source: int = _source
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
-	var target: int = _tile_at(point, source) if _dragging else -1
+	if _dragging and _tiles.has(source):
+		# Pointer-up may carry a newer position than the last motion event.
+		_drag_point = point
+		_tiles[source].position = point - _drag_offset
+		_sync_positions()
+	var target: int = _target if _dragging else -1
 	var from: Vector2 = _tiles[source].position if _tiles.has(source) else Vector2.ZERO
 	var dragged: bool = _dragging
 	var held: Dictionary = _contact_state()
@@ -629,6 +630,29 @@ func _tile_at(point: Vector2, except_id: int = -1) -> int:
 			return int(cell.id)
 	return -1
 
+func _drag_target() -> int:
+	if not _tiles.has(_source):
+		return -1
+	var source: Tile = _tiles[_source]
+	var outline: PackedVector2Array = source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH)
+	var nearest: int = -1
+	var nearest_distance: float = INF
+	for cell: Dictionary in game.cells:
+		var id: int = int(cell.id)
+		if id == _source or not _settled(cell) or not _tiles.has(id):
+			continue
+		var target: Tile = _tiles[id]
+		# Several neighbors can touch at once. Choose the closest physical body,
+		# regardless of the answer, while preserving the current target on a tie.
+		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
+		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
+			continue
+		if Geometry2D.intersect_polygons(outline, target.contact_outline()).is_empty():
+			continue
+		nearest = id
+		nearest_distance = distance
+	return nearest
+
 func _picture(word: Dictionary) -> Texture2D:
 	var path: String = str(word.get("image", ""))
 	if path.is_empty():
@@ -695,7 +719,7 @@ func _sync_positions() -> void:
 			elif not reduced_motion:
 				position_in_view.y -= float(pose.lift_rows) * _pitch
 			tile.position = position_in_view - (_falling_layer.position if airborne else Vector2.ZERO)
-		var stretch: Vector2 = Vector2.ONE if reduced_motion else Vector2(0.985, 1.06) if dragging else Vector2(pose.stretch)
+		var stretch: Vector2 = Vector2.ONE if reduced_motion else DRAG_STRETCH if dragging else Vector2(pose.stretch)
 		tile.deform(0.0 if reduced_motion or dragging else float(pose.bend), float(pose.beat), stretch)
 		var lift: float = 6.0 / Style.ui_scale(self) if dragging else maxf(0.0, rect.position.y - position_in_view.y)
 		tile.set_support(lift, 0.0 if reduced_motion or dragging else float(pose.compression))
@@ -725,7 +749,7 @@ func _sync_positions() -> void:
 			_ghosts.erase(id)
 	if _dragging:
 		# A completed pair can move a destination without another pointer event.
-		var target: int = _tile_at(_drag_point, _source)
+		var target: int = _drag_target()
 		if target != _target:
 			_target = target
 			_contact_elapsed = 0.0
@@ -775,8 +799,12 @@ func _contact_state() -> Dictionary:
 	var direction: Vector2 = (_tile_rect(b).get_center() - (_tiles[_source].position + _tiles[_source].size * 0.5)).normalized()
 	if direction.length_squared() < 0.1:
 		direction = (_tile_rect(b).get_center() - _tile_rect(a).get_center()).normalized()
+	# The old deep-overlap response separates the reading faces. Fade it out at
+	# edge contact so a newly touching pair does not visibly jump apart.
+	var separation: float = _tiles[_source].get_rect().get_center().distance_to(_tiles[_target].get_rect().get_center()) / (_pitch - _gap)
+	var pressure: float = 1.0 - smoothstep(0.4, 0.7, separation)
 	state.merge({"kind": "match" if matching else "mismatch", "source": _source, "target": _target,
-		"strength": lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
+		"strength": pressure * lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
 	return state
 
 func _refresh_contact() -> void:

@@ -63,6 +63,15 @@ gel. Reserve transparent margins for motion; a shader or mesh may use the textur
 own alpha silhouette for a smooth merge. Reduced motion can retain the same
 acquired surface while omitting elastic deformation.
 
+Drag contact traces the painted body at alpha 128/255, with a maximum contour
+simplification error of half a source pixel. The cached outline follows the held
+body's stretch, foot pivot, selection lift and pointer anchor. Slight silhouette
+overlap previews a partner; release confirms the pair. Transparent corners and
+the separate shadow do not collide. If multiple bodies touch, the nearest body
+wins regardless of word correctness. Feedback deformation stays outside this
+test so its own squash cannot toggle contact, and the deep-overlap separation
+effect fades out at the edges to keep barely touching bodies together.
+
 The settled foot lies at `y=285/320` of the padded texture. Squash and recovery
 should pivot there so the underside keeps contact. The separately acquired shadow
 is not baked into the gel; its support position can remain fixed while the body

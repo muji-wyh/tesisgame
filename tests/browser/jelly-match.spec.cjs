@@ -203,6 +203,56 @@ async function expectClear(page, count, tiles) {
   return state;
 }
 
+for (const reducedMotion of ['reduce', 'no-preference']) {
+  test(`slight jelly edge contact selects and merges before the pointer enters its partner (${reducedMotion})`, async ({ page }, info) => {
+    const errors = await startJelly(page, { reducedMotion });
+    const state = await jelly(page);
+    const target = state.tiles.filter(tile => tile.visible && tile.settled).sort((a, b) => a.rect[1] - b.rect[1])[0];
+    const source = state.tiles.find(tile => tile.id !== target.id && tile.word.id === target.word.id && tile.kind !== target.kind);
+    expect(source, 'The opening supply includes the uppermost jelly\'s partner').toBeTruthy();
+    const bounds = await metrics(page), from = center(source.rect, bounds), to = center(target.rect, bounds);
+    const height = target.rect[3] * bounds.scale;
+    const gap = { x: to.x, y: to.y - height * 0.87 };
+    // A held skin rises slightly in ordinary motion. Both final points leave
+    // only a thin overlap of the painted bodies, with the pointer above the cell.
+    const touch = { x: to.x, y: to.y - height * (reducedMotion === 'reduce' ? 0.76 : 0.73) };
+    expect(touch.y).toBeLessThan(bounds.y + target.rect[1] * bounds.scale);
+    const session = info.project.use.browserName === 'chromium' && reducedMotion === 'no-preference'
+      ? await page.context().newCDPSession(page) : null;
+    const points = point => [{ x: point.x, y: point.y, id: 0, radiusX: 5, radiusY: 5, force: 1 }];
+    const move = async point => {
+      if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(point) });
+      else await page.mouse.move(point.x, point.y);
+    };
+    try {
+      if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(from) });
+      else {
+        await page.mouse.move(from.x, from.y);
+        await page.mouse.down();
+      }
+      await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
+      await move(gap);
+      await expect.poll(async () => (await jelly(page)).drag).toMatchObject({ active: true, target: -1 });
+      await page.screenshot({ path: info.outputPath('jelly-separated-edges.png'), scale: 'css' });
+      await move(touch);
+      await expect.poll(async () => (await jelly(page)).contact).toMatchObject({ kind: 'match', source: source.id, target: target.id });
+      await rendered(page);
+      await page.screenshot({ path: info.outputPath('jelly-slight-edge-contact.png'), scale: 'css' });
+      const held = await jelly(page);
+      expect(held.drag.target, 'Contact remains stable while its feedback animates').toBe(target.id);
+      expect(held.cleared_pairs).toBe(state.cleared_pairs);
+      expect(held.fusions).toHaveLength(0);
+    } finally {
+      if (session) {
+        await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await session.detach();
+      } else await page.mouse.up();
+    }
+    await expectClear(page, state.cleared_pairs + 1, [source, target]);
+    expect(errors).toEqual([]);
+  });
+}
+
 async function earnFragments(page, total) {
   for (let attempt = 0; attempt < 100; attempt++) {
     await expect.poll(async () => {

@@ -61,6 +61,8 @@ func _run() -> void:
 	_check_pointer_feedback(view)
 	_check_drag_after_tap(view)
 	_check_contact_validity(view)
+	_check_edge_contact(view)
+	_check_contact_target_choice(view)
 	_check_same_kind_contact(view)
 	_check_contact_lifecycle(view)
 	_check_rejection_lifecycle(view)
@@ -1103,6 +1105,115 @@ func _check_contact_validity(view) -> void:
 	check(view._contact_state().kind == "none" and view._tiles[pair[0]]._contact_kind == "none"
 		and view._tiles[wrong]._contact_kind == "none", "Leaving all partners immediately removes reciprocal contact feedback")
 	view.cancel_input()
+
+
+func _contact_pair(view, reduced: bool) -> Array[int]:
+	_reset(view, reduced)
+	var pair: Array[int] = _pair(view)
+	var source: Dictionary = view._cell(pair[0]).duplicate(true)
+	var target: Dictionary = view._cell(pair[1]).duplicate(true)
+	source.column = 1
+	source.row = 5
+	target.column = 1
+	target.row = 2
+	view.game.cells.assign([source, target])
+	view._sync_tiles()
+	view._layout()
+	return pair
+
+
+func _check_edge_contact(view) -> void:
+	# Independent measurements of the production PNG's alpha >= 128 pixels.
+	# Distances are in 320 px artwork coordinates, with the held skin stretched
+	# around its painted foot in ordinary motion. The diagonal entries also
+	# distinguish a rounded silhouette from its larger rectangular bounds.
+	var edges: Array = [
+		[Vector2.RIGHT, 295.0, 293.0], [Vector2.LEFT, 295.0, 293.0],
+		[Vector2.DOWN, 250.0, 265.0], [Vector2.UP, 250.0, 250.0],
+		[Vector2(1, 1), 198.0, 206.0], [Vector2(-1, 1), 198.0, 206.0],
+		[Vector2(1, -1), 198.0, 196.0], [Vector2(-1, -1), 198.0, 196.0]
+	]
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700), Vector2(568, 260)]:
+		view.size = dimensions
+		for reduced: bool in [false, true]:
+			for edge: Array in edges:
+				var pair: Array[int] = _contact_pair(view, reduced)
+				var source = view._tiles[pair[0]]
+				var target = view._tiles[pair[1]]
+				var pointer: int = -1 if edge[0].x >= 0 else 4
+				view._press(pointer, _center(view, pair[0]))
+				if source._lift != null:
+					source._lift.kill()
+				source._visual.position = Vector2.ZERO
+				var boundary: float = edge[1] if reduced else edge[2]
+				var direction: Vector2 = edge[0]
+				var center: Vector2 = target.get_rect().get_center()
+				var gap: Vector2 = view.get_global_transform() * (center + direction * (boundary + 3.0) / 320.0 * source.size)
+				var touch: Vector2 = view.get_global_transform() * (center + direction * (boundary - 1.0) / 320.0 * source.size)
+				view._move(gap)
+				check(view._target == -1 and view._contact_state().kind == "none",
+					"A visible alpha-edge gap stays empty at %s, direction %s, reduced %s" % [dimensions, direction, reduced])
+				view._move(touch)
+				check(not target.get_global_rect().has_point(touch) and view._target == pair[1]
+					and view._contact_state().kind == "match",
+					"A slight body overlap selects the partner before the pointer enters it at %s, direction %s, reduced %s" % [dimensions, direction, reduced])
+				for frame in range(8):
+					view._process(0.025)
+				check(view._target == pair[1] and is_equal_approx(view._contact_elapsed, 0.2)
+					and source._surface.position.is_zero_approx() and target._surface.position.is_zero_approx(),
+					"Edge feedback stays connected without moving the barely touching bodies apart")
+				check(view.game.fusions.is_empty() and attempts.is_empty(), "Contact waits for release before judging an answer")
+				view._release(touch)
+				check(view.game.fusions.size() == 1 and int(view.game.fusion.b_id) == pair[1],
+					"Releasing slight contact starts the matching fusion")
+				_advance(view, view.game.FUSION_SECONDS)
+				check(view.game.score() == 1 and attempts.size() == 1 and attempts[0].correct,
+					"The edge drop awards exactly one completed learning attempt")
+	view.size = Vector2(1000, 720)
+	# Real pointer anchors, including a release newer than the last move event.
+	for anchor: Vector2 in [Vector2(0.25, 0.65), Vector2(0.75, 0.45)]:
+		var pair: Array[int] = _contact_pair(view, true)
+		var source = view._tiles[pair[0]]
+		var target = view._tiles[pair[1]]
+		view._press(4, view.get_global_transform() * (source.position + source.size * anchor))
+		var touch: Vector2 = target.position + Vector2(294.0 / 320.0 * source.size.x, 0.0) + source.size * anchor
+		var gap: Vector2 = touch + Vector2(source.size.x * 0.025, 0.0)
+		view._move(view.get_global_transform() * gap)
+		check(view._target == -1, "An off-center hold does not extend the body through a visible gap")
+		view._release(view.get_global_transform() * touch)
+		check(view.game.fusions.size() == 1, "A fast off-center release uses its final body position even without a final motion event")
+		pair = _contact_pair(view, true)
+		source = view._tiles[pair[0]]
+		view._press(-1, view.get_global_transform() * (source.position + source.size * anchor))
+		view._move(view.get_global_transform() * touch)
+		view._release(view.get_global_transform() * gap)
+		check(view.game.fusions.is_empty() and attempts.is_empty() and cues.has("release"),
+			"A final release beyond contact does not submit the previous hover target")
+	_reset(view)
+
+
+func _check_contact_target_choice(view) -> void:
+	var pair: Array[int] = _contact_pair(view, true)
+	var distractor: Dictionary = view._cell(pair[1]).duplicate(true)
+	distractor.id = 1000
+	distractor.column = 2
+	distractor.word = words.filter(func(word: Dictionary) -> bool: return word.id != distractor.word.id)[0]
+	view.game.cells.append(distractor)
+	view._sync_tiles()
+	var first: Vector2 = _center(view, pair[1])
+	var second: Vector2 = _center(view, 1000)
+	view._press(4, _center(view, pair[0]))
+	view._move(first.lerp(second, 0.48))
+	check(view._target == pair[1], "Two touching neighbors resolve to the physically closer body")
+	view._move(first.lerp(second, 0.52))
+	check(view._target == 1000 and view._contact_state().kind == "mismatch",
+		"The closer incorrect word wins over a farther correct answer")
+	view._move(first.lerp(second, 0.5))
+	check(view._target == 1000, "An equal-distance tie retains the current contact instead of flickering")
+	view._release(first.lerp(second, 0.52))
+	check(attempts.size() == 1 and not attempts[0].correct and view.game.fusions.is_empty(),
+		"Expanded body contact preserves one incorrect attempt for a wrong drop")
+	_reset(view)
 
 
 func _check_same_kind_contact(view) -> void:

@@ -7,6 +7,8 @@ const Surface = preload("res://scripts/jelly_surface.gdshader")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const CONTACT_SHADOW = preload("res://assets/images/jelly-match/contact-shadow.png")
 
+static var _contact_outlines: Dictionary = {}
+
 var tile_id: int = -1
 var word: Dictionary = {}
 var kind: String = "word"
@@ -29,6 +31,7 @@ var _projection: bool = false
 var _contact_kind: String = "none"
 var _base_stretch := Vector2.ONE
 var _content_offset := Vector2.ZERO
+var _contact_outline := PackedVector2Array()
 
 func _init() -> void:
 	text = ""
@@ -80,6 +83,16 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	kind = str(cell.kind)
 	combined = show_both
 	_surface.texture = surface
+	if not _contact_outlines.has(surface):
+		# Trace the acquired skin once, excluding its transparent padding and shadow.
+		var mask := BitMap.new()
+		mask.create_from_image_alpha(surface.get_image(), 0.5)
+		var outlines: Array[PackedVector2Array] = mask.opaque_to_polygons(Rect2i(Vector2i.ZERO, mask.get_size()), 0.5)
+		var outline: PackedVector2Array = outlines[0]
+		for index in range(outline.size()):
+			outline[index] /= Vector2(mask.get_size())
+		_contact_outlines[surface] = outline
+	_contact_outline = _contact_outlines[surface]
 	_picture.texture = picture
 	WordArt.bind(picture, _picture)
 	_badge.texture = chest
@@ -122,6 +135,15 @@ func _refresh_feedback(reset_motion: bool = false) -> void:
 
 func set_chest_texture(texture: Texture2D) -> void:
 	_badge.texture = texture
+
+func contact_outline(stretch: Vector2 = Vector2.ONE) -> PackedVector2Array:
+	var outline := PackedVector2Array()
+	var foot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
+	for point: Vector2 in _contact_outline:
+		outline.append(position + _visual.position + foot + (point * size - foot) * stretch)
+	# Contact squash and pull are feedback, so they cannot change their own hit
+	# test and repeatedly disconnect/reconnect a pair at the same pointer position.
+	return outline
 
 func set_projection(value: bool) -> void:
 	_projection = value
