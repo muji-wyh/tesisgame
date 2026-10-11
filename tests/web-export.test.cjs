@@ -220,7 +220,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'phrases.json'), JSON.stringify(phrases));
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
-  for (const cue of ['merge', 'clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
+  for (const cue of ['clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
+  for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
   const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
@@ -231,8 +232,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 403);
-  assert.equal(required.filter(asset => asset.source.includes('/jelly-match/')).length, 4,
+  assert.equal(required.length, 404);
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction)\//.test(asset.source)).length, 5,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),

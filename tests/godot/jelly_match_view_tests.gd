@@ -1090,7 +1090,7 @@ func _check_contact_validity(view) -> void:
 		view._move(_center(view, pair[1]))
 	check(is_equal_approx(view._contact_elapsed, settled_clock), "Repeated motion events do not restart or advance contact animation")
 	check(attempts.is_empty() and view.game.fusion.is_empty() and view.game.score() == 0 and view.game.chest_count == 0
-		and cues == ["pick"], "Matching hover neither submits an answer nor stacks sounds or rewards")
+		and cues == ["pick", "contact"], "Matching hover plays one contact cue without submitting an answer or stacking sounds")
 	view._move(_center(view, wrong))
 	check(is_zero_approx(view._contact_elapsed), "Changing partners starts a fresh contact response")
 	view._process(0.08)
@@ -1099,13 +1099,17 @@ func _check_contact_validity(view) -> void:
 		"A different word is rejected visually even when the two tile kinds are complementary")
 	check(view._tiles[pair[0]]._contact_kind == "mismatch" and view._tiles[wrong]._contact_kind == "mismatch"
 		and view._tiles[pair[1]]._contact_kind == "none", "Retargeting updates both new participants and releases the previous partner")
-	check(attempts.is_empty() and view.game.fusion.is_empty() and cues == ["pick"],
+	check(attempts.is_empty() and view.game.fusion.is_empty() and cues == ["pick", "contact", "contact"],
 		"An incorrect preview does not reset learning or play the committed rejection sound")
 	var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
 	view._move(empty)
 	check(view._contact_state().kind == "none" and view._tiles[pair[0]]._contact_kind == "none"
 		and view._tiles[wrong]._contact_kind == "none", "Leaving all partners immediately removes reciprocal contact feedback")
+	view._move(_center(view, pair[1]))
+	check(cues.count("contact") == 3, "Separating and touching again plays one new contact cue")
 	view.cancel_input()
+	view._process(0.2)
+	check(cues.count("contact") == 3, "Canceling a held contact cannot replay it later")
 
 
 func _contact_pair(view, reduced: bool) -> Array[int]:
@@ -1154,7 +1158,9 @@ func _check_edge_contact(view) -> void:
 				view._move(gap)
 				check(view._target == -1 and view._contact_state().kind == "none",
 					"A visible alpha-edge gap stays empty at %s, direction %s, reduced %s" % [dimensions, direction, reduced])
+				check(not cues.has("contact"), "A visible gap cannot play the contact recording")
 				view._move(touch)
+				check(cues.count("contact") == 1, "First body contact plays the selected cue once")
 				check(not target.get_global_rect().has_point(touch) and view._target == pair[1]
 					and view._contact_state().kind == "match",
 					"A slight body overlap selects the partner before the pointer enters it at %s, direction %s, reduced %s" % [dimensions, direction, reduced])
@@ -1164,7 +1170,10 @@ func _check_edge_contact(view) -> void:
 					and source._surface.position.is_zero_approx() and target._surface.position.is_zero_approx(),
 					"Edge feedback stays connected without moving the barely touching bodies apart")
 				check(view.game.fusions.is_empty() and attempts.is_empty(), "Contact waits for release before judging an answer")
+				check(cues.count("contact") == 1, "Holding contact across animation frames does not repeat its sound")
 				view._release(touch)
+				check(cues.count("contact") == 1 and cues.count("merge") == 1
+					and cues.find("contact") < cues.find("merge"), "Release starts the separate merge cue without repeating contact")
 				check(view.game.fusions.size() == 1 and int(view.game.fusion.b_id) == pair[1],
 					"Releasing slight contact starts the matching fusion")
 				_advance(view, view.game.FUSION_SECONDS)
@@ -1183,6 +1192,8 @@ func _check_edge_contact(view) -> void:
 		check(view._target == -1, "An off-center hold does not extend the body through a visible gap")
 		view._release(view.get_global_transform() * touch)
 		check(view.game.fusions.size() == 1, "A fast off-center release uses its final body position even without a final motion event")
+		check(cues.count("contact") == 1 and cues.count("merge") == 1,
+			"Contact first detected at pointer-up still plays before the merge")
 		pair = _contact_pair(view, true)
 		source = view._tiles[pair[0]]
 		view._press(-1, view.get_global_transform() * (source.position + source.size * anchor))
@@ -2134,6 +2145,17 @@ func _check_off_center_drop_continuity(view) -> void:
 
 
 func _check_signal_reentry(view) -> void:
+	var contact_pair: Array[int] = _contact_pair(view, true)
+	var interrupt_contact: Callable = func(cue: String) -> void:
+		if cue == "contact":
+			view.game.finish_round()
+	view.audio_requested.connect(interrupt_contact)
+	view._press(4, _center(view, contact_pair[0]))
+	view._move(_center(view, contact_pair[1]) + Vector2(0, -view._pitch * 1.5))
+	view._release(_center(view, contact_pair[1]))
+	check(view.game.phase == "finished" and view.game.fusions.is_empty() and attempts.is_empty()
+		and not cues.has("merge"), "A contact callback at pointer-up can cancel before any merge or credit")
+	view.audio_requested.disconnect(interrupt_contact)
 	_reset(view)
 	var interrupt: Callable = func(cue: String) -> void:
 		if cue == "merge":

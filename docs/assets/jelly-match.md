@@ -13,6 +13,7 @@ The playfield now sits in a sourced [woodland environment](jelly-environment.md)
 | --- | --- | --- | --- |
 | Finish flag icon | Paweł Kuna, [Tabler Icons v3.35.0](https://github.com/tabler/tabler-icons/blob/v3.35.0/icons/outline/flag-check.svg) | MIT. Downloaded, visually inspected and integrated as `assets/images/ui/finish-flag.svg`. [Attribution and adaptation](../../assets/images/ui/ATTRIBUTION.md) and original license retained. | Static vector artwork; button states use the existing native input lifecycle and click cue. |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
+| Selected contact and merge cues | greenlinker, [Slime stretching and squeezing](https://freesound.org/people/greenlinker/sounds/794270/), and rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx); locally adapted and selected by the user | CC0 1.0. The greenlinker HQ MP3 preview and rubberduck original OGG pack were acquired; the greenlinker original WAV was not acquired. The two selected WAVs are copied unchanged into `assets/imported-audio/jelly-interaction/`. [Exact selections, hashes and processing history](jelly-interaction-audio.json). | One-shot audio only. Contact lasts 0.135 seconds; the selected v3 merge lasts 0.440 seconds. No animation is included. |
 | Merge motion reference | User-supplied `jelly_merging.mp4`; original creator not supplied | Inspected locally as a motion reference. License not supplied; none of its artwork or soundtrack is integrated. SHA-256: `383f1ce4218e2502368416abb402c3fe1c9b89351be14535ce08163da65b521f`. | 2.93-second, 30 fps recording. The useful passage shows two soft bodies forming a narrow bridge, widening the shared waist and relaxing into one body. |
 | Contact shadow | Same acquired Jelly Squash pack, `png/separate/Shadow.png` | Same CC0 1.0 license. Inspected and copied byte-for-byte to `assets/images/jelly-match/contact-shadow.png`; source and output hashes are identical. | Static 334 × 150 RGBA texture, maximum alpha 26/255. Runtime placement, tint and opacity establish contact independently of the moving gel. The pack's `WithShadow` bodies include faces and are not used. |
 | Gel contact and fusion recordings | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0. Original archive acquired; `slime_09.ogg` and `slime_16.ogg` selected for the landing, merge and clear derivatives. The creator's source page records the license and describes some slime recordings as made from real slime; it does not identify which individual files use that technique. | One-shot recordings; no loops. The delivered cues layer, shape and time the acquired recordings. |
@@ -247,19 +248,24 @@ the summary uses `Round results` rather than a level-completion message. See
 | Event | Runtime path | Original source | Duration | Peak |
 | --- | --- | --- | ---: | ---: |
 | Falling gel makes contact | `assets/audio/jelly-match/land.wav` | rubberduck `slime_16.ogg` | 220 ms | −16.0 dBFS |
-| Two gel bodies commit to a merge | `assets/audio/jelly-match/merge.wav` | rubberduck `slime_09.ogg`, with a quieter `slime_16.ogg` contact layer | 620 ms | −9.0 dBFS |
+| Two jelly surfaces first touch | `assets/imported-audio/jelly-interaction/contact.wav` | User-selected Wet & Springy / Contact; greenlinker and rubberduck | 135 ms | −14.143 dBFS |
+| Two gel bodies commit to a merge | `assets/imported-audio/jelly-interaction/merge-together-v3.wav` | User-selected Jelly Merge Together v3; greenlinker and rubberduck | 440 ms | −14.473 dBFS |
 | Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | rubberduck `slime_16.ogg` with Aeva `boing.flac` | 340 ms | −7.5 dBFS |
 | Each full-board countdown beat | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
 
-These are measurements of the final PCM files. The merge and clear RMS levels
-are −22.824 and −23.186 dBFS; onset above −40 dBFS is 5.35 and 0.70 ms respectively.
-The merge combines a short contact with a longer pressure envelope to support
-the visible union. The clear combines a gel-skin release with a compressed,
-pitched spring layer to support the upward rebound. These replace the former
-Kenney drop and pluck cues. The attention source remains a question cue rather
-than an error buzzer. Wetness, elasticity and comfort are intended qualities;
-they require listening in the game mix, and cannot be established from file
-names, source descriptions or waveform inspection.
+These are measurements of the final PCM files. The selected contact and v3 merge
+retain their approved samples, duration and pitch; their RMS levels are −31.615
+and −30.613 dBFS. Both use runtime gain 1.0 with the existing pronunciation duck.
+The former 620 ms merge remains in the historical material asset record but is
+no longer assigned to gameplay. The clear retains its original WAV checksum,
+runtime gain 0.90 and 0.70-second trigger. Its gel-skin release and spring layer
+are unchanged.
+
+Contact plays once when a dragged jelly first touches another body's outline,
+including a new contact first detected at pointer-up. Holding the same contact
+does not replay it. Separating or moving to a different partner allows a new
+contact cue. Contact never submits a learning answer and uses an idle channel
+so it cannot replace active clear, warning or reward sounds.
 
 The landing derivative uses a single `slime_16.ogg` layer with an 85 Hz high-pass
 and 1,100 Hz low-pass filter. Compression uses threshold 0.07, ratio 4, a 2 ms
@@ -271,14 +277,16 @@ The softer attack and reduced high-frequency energy replace the former shared
 chest step cue. That original recording remains unchanged for chest interaction
 and Pip's celebration.
 
-Conversion uses FFmpeg floating-point decode, stereo-to-mono mix and 44.1 kHz
-PCM16 output. The new material cues use edited envelopes, layered recordings and
-pitch/time adaptation; their original duration and pitch are not retained.
+The historical material conversion uses FFmpeg floating-point decode,
+stereo-to-mono mix and 44.1 kHz PCM16 output. Those material cues use edited
+envelopes, layered recordings and pitch/time adaptation.
 The importer and manifest record the source files and exact processing recipe.
 Gain must be applied before PCM conversion: some source Vorbis recordings exceed
 0 dBFS when decoded to floating point. Attack and tail fades keep the delivered
 file edges at zero, with headroom for the existing game mix. The countdown cue
-retains its previous conversion and measured output.
+retains its previous conversion and measured output. The two selected interaction
+WAVs instead remain byte-for-byte 48 kHz stereo PCM24 copies. Godot imports them
+as uncompressed PCM16 with no normalization, trimming or playback-rate change.
 
 Drive each cue from the same committed event as its visible contact or release.
 The merge starts at fusion time 0; the clear starts at the existing 0.70-second
@@ -354,8 +362,9 @@ python tools/import-jelly-match-assets.py --check
 
 The importer verifies the original archive and recording hashes, extracts only
 into its source directory, and reproduces four adapted gel PNGs, the unchanged
-source shadow PNG, four WAVs and the manifest. Full imports reproduce the new
-material cues. `--images-only` retains existing audio files and their complete
+source shadow PNG, four historical material WAVs and the manifest. The separate
+selected interaction WAVs are not regenerated by this importer.
+`--images-only` retains existing audio files and their complete
 provenance, including the rubberduck and Aeva sources, while regenerating artwork.
 The check mode only reads files and verifies hashes, texture format, PCM format,
 zero edges and headroom; it also verifies the shadow matches its original source
@@ -368,7 +377,7 @@ audio input is unsupported, so no subjective audition or listening approval is
 claimed. The earlier `kenney-audition.wav` in the ignored source directory is a
 review of the former cues, not evidence for the new mixture.
 
-At the merge and clear integration, those replacement files passed source/hash,
+At the earlier 620 ms merge and clear integration, those replacement files passed source/hash,
 PCM, edge and headroom checks. An image-only import preserved their complete
 manifest. The 74 native audio checks and desktop Chromium WebAudio regression
 passed with the rebuilt game:

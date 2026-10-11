@@ -48,13 +48,24 @@ func _exercise() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
 	audio.interact("spring")
-	for cue in ["pick", "release", "land", "merge", "pop", "danger", "reward"]:
+	for cue in ["pick", "release", "land", "contact", "merge", "pop", "danger", "reward"]:
 		audio.play_jelly_cue(cue)
 		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
 		check(player.stream != null and player.stream.resource_path == Audio.JELLY_PATHS[cue], "The %s cue uses its production recording" % cue)
 		check(player.playing, "The %s recording starts on its timeline event" % cue)
 		audio.stop_jelly_sounds()
 	check(audio._jelly_players.size() == 3, "Frequent effects reuse a bounded voice pool")
+	var selected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/assets/jelly-interaction-audio.json"))
+	for recording: Dictionary in selected.files:
+		check(FileAccess.get_sha256("res://" + recording.path) == recording.source_sha256,
+			"The selected %s WAV remains byte-for-byte identical to the approved source" % recording.cue)
+		var stream: AudioStream = load(Audio.JELLY_PATHS[recording.cue])
+		check(is_equal_approx(stream.get_length(), float(recording.seconds)),
+			"The %s cue retains its selected duration without a scheduling delay" % recording.cue)
+		check(stream is AudioStreamWAV and stream.format == AudioStreamWAV.FORMAT_16_BITS,
+			"The approved %s recording imports as PCM without lossy compression" % recording.cue)
+	check(FileAccess.get_sha256(Audio.JELLY_PATHS.pop) == selected.preserved_disappearance.sha256
+		and is_equal_approx(Audio.JELLY_GAINS.pop, 0.90), "The disappearance recording and gain remain unchanged")
 	_check_interaction_audio(audio)
 	_check_warning_cancellation(audio)
 	_check_landing_audio(audio)
@@ -96,7 +107,7 @@ func _check_interaction_audio(audio) -> void:
 	audio.stop_jelly_sounds()
 	audio.say("res://assets/audio/voice/word-cat.wav")
 	var word_stream: AudioStream = audio.voice.stream
-	for cue: String in ["pick", "release"]:
+	for cue: String in ["pick", "release", "contact"]:
 		audio.play_jelly_cue(cue)
 		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
 		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS[cue]
@@ -114,7 +125,7 @@ func _check_interaction_audio(audio) -> void:
 	for cue: String in ["danger", "pop", "reward"]:
 		audio.play_jelly_cue(cue)
 	var occupied: Dictionary = audio._jelly_cues.duplicate()
-	for cue: String in ["pick", "release"]:
+	for cue: String in ["pick", "release", "contact"]:
 		audio.play_jelly_cue(cue)
 		check(audio._jelly_cues == occupied,
 			"Rapid %s input cannot replace warning, clear or reward audio" % cue)
@@ -122,7 +133,7 @@ func _check_interaction_audio(audio) -> void:
 		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS[occupied[player]],
 			"Foreground audio survives input when all three channels are occupied")
 	audio.halt()
-	for cue: String in ["pick", "release", "land"]:
+	for cue: String in ["pick", "release", "land", "contact"]:
 		audio.play_jelly_cue(cue)
 		check(audio._jelly_cues.is_empty(), "Inactive gameplay cannot start a %s cue" % cue)
 	audio.interact("spring", false)

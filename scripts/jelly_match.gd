@@ -69,6 +69,7 @@ var _dragging: bool = false
 var _snapbacks: Dictionary = {}
 var _fusion_visuals: Dictionary = {}
 var _contact_elapsed: float = 0.0
+var _contact_cue_target: int = -1
 var _rejection: Dictionary = {}
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
@@ -361,6 +362,7 @@ func stop() -> void:
 	_publish()
 
 func cancel_input() -> void:
+	_contact_cue_target = -1
 	_pointer = NO_POINTER
 	_preview_first_id = -1
 	_preview_canceled = false
@@ -467,6 +469,7 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_gesture_serial += 1
 	_source = id
 	_target = -1
+	_contact_cue_target = -1
 	_contact_elapsed = 0.0
 	_rejection.clear()
 	_press_point = point
@@ -508,6 +511,7 @@ func _move(global_point: Vector2) -> void:
 	_sync_positions()
 	_refresh_fusion()
 	_publish()
+	_sound_contact()
 
 func _release(global_point: Vector2) -> void:
 	if _preview_first_id >= 0:
@@ -525,12 +529,16 @@ func _release(global_point: Vector2) -> void:
 		return
 	var generation: int = _generation
 	var source: int = _source
+	var serial: int = _gesture_serial
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _dragging and _tiles.has(source):
 		# Pointer-up may carry a newer position than the last motion event.
 		_drag_point = point
 		_tiles[source].position = point - _drag_offset
 		_sync_positions()
+		_sound_contact()
+		if generation != _generation or serial != _gesture_serial or not _can_play():
+			return
 	var target: int = _target if _dragging else -1
 	var from: Vector2 = _tiles[source].position if _tiles.has(source) else Vector2.ZERO
 	var dragged: bool = _dragging
@@ -545,6 +553,7 @@ func _release(global_point: Vector2) -> void:
 	_pointer = NO_POINTER
 	_source = -1
 	_target = -1
+	_contact_cue_target = -1
 	_dragging = false
 	_gesture_serial += 1
 	if dragged:
@@ -816,6 +825,16 @@ func _contact_state() -> Dictionary:
 		"strength": pressure * lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
 	return state
 
+func _sound_contact() -> void:
+	# A held contact is one event, including when the final pointer-up position
+	# is the first touching frame. Separating and touching again starts a new one.
+	var target: int = _target if _dragging and _can_play() else -1
+	if target == _contact_cue_target:
+		return
+	_contact_cue_target = target
+	if target >= 0:
+		audio_requested.emit("contact")
+
 func _refresh_contact() -> void:
 	var state: Dictionary = _contact_state()
 	for id in _tiles:
@@ -882,6 +901,8 @@ func _process(delta: float) -> void:
 				_landing_cooldown = 0.12
 				audio_requested.emit("land")
 				break
+	if generation == _generation:
+		_sound_contact()
 
 func _reward_pickup_ready() -> bool:
 	if _loot_meter.is_filling():

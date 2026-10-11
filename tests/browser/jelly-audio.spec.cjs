@@ -6,7 +6,8 @@ const CLIPS = {
   pick: 'assets/imported-audio/ui-click/select.wav',
   release: 'assets/imported-audio/chest-reference/step.wav',
   land: 'assets/audio/jelly-match/land.wav',
-  merge: 'assets/audio/jelly-match/merge.wav',
+  contact: 'assets/imported-audio/jelly-interaction/contact.wav',
+  merge: 'assets/imported-audio/jelly-interaction/merge-together-v3.wav',
   clear: 'assets/audio/jelly-match/clear.wav'
 };
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -220,12 +221,20 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     const clearedBeforeMerge = (await jelly(page)).cleared_pairs;
     await beginDrag(page, tiles[0]);
     await hoverTile(page, tiles[1]);
+    evidence.contact = await audibleRecording(page, beforeMerge, CLIPS.contact);
+    // The drag can cross other jelly bodies before reaching this partner.
+    // Only measure repeats after the pointer has stopped on the held contact.
+    const heldContacts = matching(await playbacksSince(page, beforeMerge), evidence.contact).length;
+    await page.waitForTimeout(250);
+    expect(matching(await playbacksSince(page, beforeMerge), evidence.contact),
+      'Continuing to hold the same contact does not replay its sound').toHaveLength(heldContacts);
     await page.mouse.up();
     evidence.merge = await audibleRecording(page, beforeMerge, CLIPS.merge);
     evidence.clear = await audibleRecording(page, beforeMerge, CLIPS.clear);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(clearedBeforeMerge + 1);
     expect(evidence.clear.at).toBeGreaterThan(evidence.merge.at);
-    expect(new Set(['pick', 'release', 'land', 'merge', 'clear'].map(cue => evidence[cue].fingerprint)).size).toBe(5);
+    expect(evidence.merge.at).toBeGreaterThan(evidence.contact.at);
+    expect(new Set(['pick', 'release', 'land', 'contact', 'merge', 'clear'].map(cue => evidence[cue].fingerprint)).size).toBe(6);
     const mergeSounds = await playbacksSince(page, beforeMerge);
     expect(matching(mergeSounds, evidence.merge)).toHaveLength(1);
     expect(matching(mergeSounds, evidence.clear)).toHaveLength(1);
@@ -247,7 +256,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     expect(afterTaps.drag).toMatchObject({ active: false, source: -1, target: -1, selected: -1 });
     expect(afterTaps.fusion).toEqual({});
     expect(afterTaps.cleared_pairs).toBe(0);
-    for (const cue of ['merge', 'clear', 'release']) {
+    for (const cue of ['contact', 'merge', 'clear', 'release']) {
       expect(matching(tapSounds, evidence[cue]), `Consecutive taps pronounce words without the ${cue} cue`).toEqual([]);
     }
     expect(await page.evaluate(() => localStorage.getItem('growWithPip.growth.v1')),
@@ -273,7 +282,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     await hoverTile(page, mutedPair[1]);
     await page.mouse.up();
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(mutedScore + 1);
-    expect(await playbacksSince(page, mutedFrom), 'Mute silences pick, speech, merge, clear, and landing').toEqual([]);
+    expect(await playbacksSince(page, mutedFrom), 'Mute silences pick, speech, contact, merge, clear, and landing').toEqual([]);
 
     await muteInMenu(page, false);
     evidence.rounds.pauseResume = await freshRound(page);
@@ -308,7 +317,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     const afterLeave = await playbackIndex(page);
     await page.waitForTimeout(1200);
     evidence.afterLeave = await playbacksSince(page, afterLeave);
-    for (const cue of ['release', 'land', 'merge', 'clear']) {
+    for (const cue of ['release', 'land', 'contact', 'merge', 'clear']) {
       expect(matching(evidence.afterLeave, evidence[cue]), `${cue} does not leak into the next game`).toEqual([]);
     }
   } finally {

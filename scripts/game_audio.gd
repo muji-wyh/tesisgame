@@ -22,7 +22,8 @@ const JELLY_PATHS := {
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
-	"merge": "res://assets/audio/jelly-match/merge.wav",
+	"contact": "res://assets/imported-audio/jelly-interaction/contact.wav",
+	"merge": "res://assets/imported-audio/jelly-interaction/merge-together-v3.wav",
 	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
@@ -30,11 +31,11 @@ const JELLY_PATHS := {
 	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
 }
 const JELLY_GAINS := {
-	"pick": 0.64, "release": 0.38, "land": 0.35,
+	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"fragment": 0.30, "assemble": 0.28,
 }
-const JELLY_SECONDARY_CUES := ["pick", "release", "land"]
+const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
 const JELLY_SPEECH_DB: float = -6.0
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",

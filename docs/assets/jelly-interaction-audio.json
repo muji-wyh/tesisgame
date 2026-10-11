@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "integrated_on": "2026-10-12",
+  "files": [
+    {
+      "cue": "contact",
+      "path": "assets/imported-audio/jelly-interaction/contact.wav",
+      "selected_file": "jelly-contact.wav",
+      "sha256": "571fca9d1ad8a6f46d8b4e7d96a8d26be870c57755e6fe63fea67137bb0262df",
+      "source_sha256": "571fca9d1ad8a6f46d8b4e7d96a8d26be870c57755e6fe63fea67137bb0262df",
+      "selected_on": "2026-10-11",
+      "status": "User-selected WAV copied byte-for-byte and integrated into gameplay",
+      "trigger": "Play once when the two jelly surfaces first touch. The 0.167-second offset belongs to the reference animation timeline, not the audio file.",
+      "seconds": 0.135,
+      "sample_rate": 48000,
+      "channels": 2,
+      "pcm_bits": 24,
+      "peak_dbfs": -14.143,
+      "rms_dbfs": -31.615,
+      "creator": "greenlinker and rubberduck; edited locally for Jelly Match",
+      "license": "CC0-1.0",
+      "recordings": [
+        {
+          "creator": "greenlinker",
+          "title": "Slime stretching and squeezing",
+          "sourceUrl": "https://freesound.org/people/greenlinker/sounds/794270/",
+          "license": "CC0-1.0",
+          "status": "Acquired HQ MP3 preview; original WAV not acquired.",
+          "use": "Leading contact partition of a continuous recorded gesture built from the 99.730-100.640 second source excerpt."
+        },
+        {
+          "creator": "rubberduck",
+          "title": "40 CC0 water / splash / slime SFX",
+          "sourceUrl": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+          "license": "CC0-1.0",
+          "status": "Original OGG pack acquired and extracted.",
+          "use": "Quiet surface-contact layer from the 0.000-0.210 second source excerpt."
+        }
+      ],
+      "selected_revision_processing": {
+        "method": "Byte-for-byte copy",
+        "sourceGenerator": "tools/prepare-jelly-foley.py",
+        "sourcePreset": "elastic",
+        "sourceStage": "contact",
+        "additionalProcessing": false
+      },
+      "integration_processing": "No WAV processing. Godot imports to uncompressed PCM16; no normalization, trimming, pitch change or added fades. Runtime gain 1.0, with the existing -6 dB pronunciation duck."
+    },
+    {
+      "cue": "merge",
+      "path": "assets/imported-audio/jelly-interaction/merge-together-v3.wav",
+      "selected_file": "jelly-merge-together-v3.wav",
+      "sha256": "bef7152184802caa1dbc5523f916be319cdf37edf661957d33a5de04d7ca7451",
+      "source_sha256": "bef7152184802caa1dbc5523f916be319cdf37edf661957d33a5de04d7ca7451",
+      "selected_on": "2026-10-11",
+      "status": "User-selected WAV copied byte-for-byte and integrated into gameplay",
+      "trigger": "Play once when the two jelly surfaces begin fusing; let the 0.440-second cue accompany the merge motion.",
+      "seconds": 0.44,
+      "sample_rate": 48000,
+      "channels": 2,
+      "pcm_bits": 24,
+      "peak_dbfs": -14.473,
+      "rms_dbfs": -30.613,
+      "creator": "greenlinker and rubberduck; merge cue adaptation prepared locally for Jelly Match",
+      "license": "CC0-1.0",
+      "recordings": [
+        {
+          "creator": "greenlinker",
+          "title": "Slime stretching and squeezing",
+          "sourceUrl": "https://freesound.org/people/greenlinker/sounds/794270/",
+          "status": "Acquired HQ MP3 preview; original WAV not acquired.",
+          "license": "CC0-1.0"
+        },
+        {
+          "creator": "rubberduck",
+          "title": "40 CC0 water / splash / slime SFX",
+          "sourceUrl": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+          "status": "Original OGG acquired from the CC0 pack; used for the original stem rebound.",
+          "license": "CC0-1.0"
+        }
+      ],
+      "selected_revision_processing": {
+        "sourceStartSeconds": 0,
+        "durationSeconds": 0.44,
+        "playbackRate": 1.0,
+        "highPassHz": 30,
+        "lowPassHz": 7200,
+        "presenceDipHz": 1450,
+        "presenceDipDb": -0.6,
+        "presenceWidthOctaves": 0.7,
+        "highShelfHz": 3000,
+        "highShelfDb": -1.2,
+        "bodyHz": 350,
+        "bodyDb": 0.3,
+        "peakThreshold": 0.07,
+        "compressionRatio": 1.55,
+        "lookaheadMs": 1,
+        "attackMs": 0.8,
+        "releaseMs": 15,
+        "fadeInMs": 3,
+        "fadeOutMs": 45,
+        "declickWindowSamples": 7,
+        "declickResidualFloor": 0.009,
+        "declickRelativeThreshold": 0.38,
+        "declickStrength": 0.8,
+        "tailFadeStartSeconds": 0.27,
+        "tailFadeEndSeconds": 0.39,
+        "relativeActiveRms": 1.0,
+        "peakCeiling": 0.25,
+        "pitchChangeSemitones": 0.0,
+        "finalGain": 1.2167597561928942,
+        "outlierSamplesDetected": 17
+      },
+      "integration_processing": "No WAV processing. Godot imports to uncompressed PCM16; no normalization, trimming, pitch change or added fades. Runtime gain 1.0, with the existing -6 dB pronunciation duck."
+    }
+  ],
+  "preserved_disappearance": {
+    "path": "assets/audio/jelly-match/clear.wav",
+    "sha256": "d53876591d14e97ff0db6a769525af180eb8a700c7727ccdc1349141421acc5f",
+    "runtime_gain": 0.9,
+    "event_seconds": 0.7
+  },
+  "animation": "Audio only; the recordings contain no animation. The existing 1.05-second fusion timeline is unchanged."
+}
