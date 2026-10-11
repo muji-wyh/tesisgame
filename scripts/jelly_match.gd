@@ -22,6 +22,7 @@ const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const LootMeter = preload("res://scripts/jelly_loot_meter.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
 const LOOT_FLIGHT_SECONDS: float = ChestCelebration.ARRIVAL_SECONDS
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
@@ -44,6 +45,7 @@ var _surfaces: Array[Texture2D] = []
 var _pictures: Dictionary = {}
 var _tiles: Dictionary = {}
 var _falling_layer: Control
+var _danger_frame: DangerFrame
 var _ghosts: Dictionary = {}
 var _preview_tiles: Array[Tile] = []
 var _preview_origins: Array[Vector2] = []
@@ -98,6 +100,8 @@ func _init() -> void:
 	_falling_layer.clip_contents = true
 	_falling_layer.z_index = 2
 	add_child(_falling_layer)
+	_danger_frame = DangerFrame.new()
+	add_child(_danger_frame)
 	_loot_meter = LootMeter.new()
 	add_child(_loot_meter)
 	_loot_icon = _image(self)
@@ -792,6 +796,7 @@ func _process(delta: float) -> void:
 				cache.art.set_idle_paused(true)
 				cache.viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	if not _allowed() or delta > 0.5:
+		_refresh_danger()
 		if _pointer != NO_POINTER:
 			cancel_input()
 		return
@@ -985,6 +990,8 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	merged.visible = reduced_motion or union > 0.0
 
 func _cue(cue: String) -> void:
+	if cue in ["danger", "danger_end"]:
+		_refresh_danger()
 	if _allowed():
 		audio_requested.emit(cue)
 
@@ -1082,6 +1089,7 @@ func _replay() -> void:
 	_publish()
 
 func _refresh_hud() -> void:
+	_refresh_danger()
 	var progress: Dictionary = game.reward_progress(game.fragment_count)
 	var displayed_tier: int = _displayed_chest_tier
 	var arrived: int = game.fragment_count
@@ -1115,6 +1123,7 @@ func set_pending_chests(count: int) -> void:
 	_publish()
 
 func _refresh_controls() -> void:
+	_refresh_danger()
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
 			_tiles[int(cell.id)].disabled = not _can_play() or not _settled(cell)
@@ -1222,6 +1231,7 @@ func _layout() -> void:
 	var available_width: float = size.x - edge * 2.0 - side_space * 2.0
 	var board_height: float = maxf(60.0, minf(minf(available_height, available_width * 1.5), 684.0 / scale_factor))
 	_board = Rect2(Vector2((size.x - board_height * 2.0 / 3.0) * 0.5, edge if wide else 88.0 / scale_factor), Vector2(board_height * 2.0 / 3.0, board_height))
+	_danger_frame.layout_frame(_board.grow(2.0), scale_factor, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
 	_pitch = board_height / 6.0
@@ -1334,11 +1344,12 @@ func danger_feedback() -> Dictionary:
 	var active: bool = _can_play() and float(game.full_elapsed) >= 0.0
 	var strength: float = 0.0
 	if active:
-		# The model emits a warning at this same second boundary. Keep a quiet
-		# interval between bright frames, without flashing the learning content.
-		var beat: float = fposmod(float(game.full_elapsed), 1.0)
-		strength = 1.0 if reduced_motion else 1.0 - smoothstep(0.18, 0.55, beat)
+		strength = DangerFrame.primary_pulse(float(game.full_elapsed), reduced_motion)
 	return {"active": active, "strength": strength}
+
+func _refresh_danger() -> void:
+	_danger_frame.set_warning(_can_play() and float(game.full_elapsed) >= 0.0,
+		float(game.full_elapsed), JellyMatchModel.FULL_SECONDS, reduced_motion)
 
 func _draw() -> void:
 	if not _configured or _result_visible:
@@ -1348,11 +1359,6 @@ func _draw() -> void:
 	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
 	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
 	draw_style_box(well, _board.grow(2.0))
-	var warning: Dictionary = danger_feedback()
-	if float(warning.strength) > 0.0:
-		var edge := Color(Color("#c65c35"), float(warning.strength))
-		var width: int = maxi(2, ceili(4.0 / Style.ui_scale(self)))
-		draw_style_box(Style.box(Color.TRANSPARENT, edge, 18, width), _board.grow(2.0))
 	if _chest_texture != null:
 		for flight: Dictionary in _loot_flights:
 			var p: float = clampf(float(flight.elapsed) / LOOT_FLIGHT_SECONDS, 0.0, 1.0)

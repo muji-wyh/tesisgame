@@ -67,6 +67,7 @@ func _run() -> void:
 	_check_keyboard_feedback(view)
 	_check_feedback_lifecycle(view)
 	_check_danger_clock(view)
+	_check_danger_escalation(view)
 	_check_danger_lifecycle(view)
 	_check_danger_reduced_motion_and_end(view)
 	_check_wrong_drop(view)
@@ -1309,6 +1310,7 @@ func _fill_board(view) -> void:
 		view._process(minf(0.25, maxf(0.000001, remaining)))
 	check(view.game.cells.size() == view.game.CAPACITY and is_zero_approx(float(view.game.full_elapsed)),
 		"Batch supply fills the board and starts its warning only when every final arrival is ready")
+	check(view._danger_frame.visible, "A settled full board displays its rim light")
 
 
 func _check_danger_hidden(view, reason: String) -> void:
@@ -1316,6 +1318,62 @@ func _check_danger_hidden(view, reason: String) -> void:
 	check(not bool(danger.active) and is_zero_approx(float(danger.strength)),
 		"%s immediately suppresses the countdown warning" % reason)
 	check(view.snapshot().danger == danger, "%s publishes the same warning state" % reason)
+	check(not view._danger_frame.visible and view._danger_frame.state.is_empty(),
+		"%s also removes the rendered rim light" % reason)
+
+
+func _check_danger_escalation(view) -> void:
+	_reset(view)
+	_fill_board(view)
+	var board: Rect2 = view._board
+	var early: Dictionary = view._danger_frame.state.duplicate()
+	check(view._danger_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and view._danger_frame.focus_mode == Control.FOCUS_NONE,
+		"The light cannot capture drag input or keyboard focus")
+	view._process(0.5)
+	view._process(0.08)
+	check(is_zero_approx(float(view._danger_frame.state.pulse)),
+		"The opening warning leaves a quiet interval after its single beat")
+	var last_urgency: float = float(early.urgency)
+	var last_echo: float = 0.0
+	for moment: float in [2.58, 4.58, 6.58]:
+		while float(view.game.full_elapsed) < moment - 0.000001:
+			view._process(minf(0.25, moment - float(view.game.full_elapsed)))
+		var state: Dictionary = view._danger_frame.state
+		check(float(state.urgency) > last_urgency, "Rim color and halo intensity build throughout the rescue window")
+		check(float(state.pulse) >= last_echo, "The secondary beat becomes more pronounced toward expiry")
+		check(is_equal_approx(float(view._danger_frame.material.get_shader_parameter("urgency")), float(state.urgency)),
+			"The rendered material receives the current urgency")
+		last_urgency = float(state.urgency)
+		last_echo = float(state.pulse)
+	check(last_echo > 0.7, "The final seconds have a distinct second light beat")
+	var before: Dictionary = view._danger_frame.state.duplicate()
+	var elapsed: float = view.game.full_elapsed
+	view.pause()
+	_check_danger_hidden(view, "Pausing the late warning")
+	view._process(0.4)
+	view.pause(false)
+	check(view._danger_frame.state == before and is_equal_approx(view.game.full_elapsed, elapsed),
+		"Resume restores the exact traveling light and secondary beat without advancing time")
+	view.set_reduced_motion(true)
+	var steady: Dictionary = view._danger_frame.state.duplicate()
+	view._process(0.25)
+	check(not bool(steady.moving) and not bool(view._danger_frame.state.moving)
+		and steady.pulse == view._danger_frame.state.pulse and steady.travel == view._danger_frame.state.travel,
+		"Reduced motion disables both traveling highlights and repeated flashes")
+	check(float(view._danger_frame.state.urgency) > float(steady.urgency),
+		"Reduced motion still communicates increasing urgency through gradual light changes")
+	check(view._board == board, "Escalation and reduced motion preserve the board and its hit geometry")
+	view.interaction_allowed = func() -> bool: return false
+	view._process(0.1)
+	_check_danger_hidden(view, "The host interaction gate")
+	view.interaction_allowed = Callable()
+	view._process(0.01)
+	check(view._danger_frame.visible, "Restoring the host gate restores the current warning")
+	view.stop()
+	_check_danger_hidden(view, "Stopping an escalating warning")
+	_reset(view)
+	_check_danger_hidden(view, "A new round after an escalating warning")
 
 
 func _check_danger_clock(view) -> void:

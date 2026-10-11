@@ -269,10 +269,43 @@ pop node. Both end within the unchanged 1.05-second fusion timeline. Audio does
 not move the success-credit boundary or change matching, difficulty or rewards.
 Do not play merge or clear for every animation frame or every affected card.
 The full-board clock triggers one danger recording at each remaining second,
-including entry. The border uses that same clock: bright for 180 ms, fading to
-its normal outline by 550 ms, then resting until the next second. Reduced motion
-uses a steady warning outline. A matching contact immediately stops warning
-audio and removes the border flash; pause, exit and expiry stop the warning too.
+including entry. The board's rim light uses that same eight-second clock. Its
+primary beat holds for 180 ms and fades by 550 ms; a weaker second beat gradually
+enters during the latter half of the countdown. Amber light progresses to coral
+red, the exterior halo broadens, and two bright highlights travel faster around
+the rounded rim. Quiet intervals separate the flashes. Light fades within eight
+screen pixels of the edge, leaving the learning faces clear; the board and its
+input geometry do not move. No full-screen flash or additional warning label is
+introduced. Reduced motion removes traveling highlights and repeated flashes,
+retaining a stationary glow with gradual color and intensity changes.
+
+The rim reuses the acquired `portal_glow.png` from Bobardo's Modern 2D Animated
+Chests Pack_FREE Demo 1.0.2, under the existing Standard Unity Asset Store EULA
+record in [treasure assets](../voice-pop-treasure.md). Its local source mapping
+remains in `assets/chests/SOURCE.txt`. The elongated highlights reuse
+`assets/chests/milestone/sparkle.png` from Kenneth Foldal Moe / Archanor VFX's
+acquired Toon FX 1.52, under the same EULA; original source, license, acquisition
+status and byte-identical hash remain in [the fragment record](jelly-fragments.md#extra-motion-textures).
+Both integrated files are static 512 x 512 textures, inspected over a dark
+background before reuse. Their rim motion is authored by the game, with no
+independent timer or shader `TIME` and no new audio asset.
+
+A completed rescue immediately stops warning audio and removes the light once
+the fusion actually makes space. Starting a match keeps the countdown running.
+Pause, hidden page, blocked interaction, stop, new round and expiry suppress the
+light; resume restores its saved phase without restarting a beat.
+
+The rim was compared on the same seeded board at 1280 x 720, 390 x 844,
+320 x 568 and 568 x 320. Local rendered frames cover the opening beat, quiet
+interval, late secondary beat, pause and reduced motion. A silent eight-second
+comparison at 30 fps is retained in the ignored local review output. Native
+regressions verify progressive intensity, interruption, exact phase restoration,
+completed rescue and the unchanged eight-second deadline. These are rendered
+and automated checks, not physical phone or subjective audio approval.
+The rebuilt Web export also passed real preview-drop, pause/resume, drag-rescue
+and expiry checks in Chromium and fixed-viewport iPhone WebKit, including narrow
+portrait and short landscape rendering.
+
 Tap pronunciation remains the primary learning sound. While a word plays,
 duck Jelly Match effects by 6 dB and use a small bounded voice pool. The original
 12 dB duck made the short merge/clear transients too attenuated under frequent
