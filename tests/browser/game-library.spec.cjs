@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { openGame, openModeMenu, chooseMode, metrics, tap, enterGame, rendered, visibleColorCount } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, metrics, tap, enterGame, rendered, visibleColorCount, uiScale } = require('./game-ui.cjs');
 
 async function activate(page, name) {
   const state = (await metrics(page)).library;
@@ -18,6 +18,12 @@ test('the illustrated library fits, preserves play, and switches every game', as
   for (const size of [{ width: 390, height: 844 }, { width: 390, height: 420 }, { width: 390, height: 600 },
     { width: 390, height: 640 }, { width: 320, height: 320 }, { width: 844, height: 390 }, { width: 1280, height: 800 }]) {
     await page.setViewportSize(size);
+    await expect.poll(async () => {
+      const bounds = await metrics(page), scale = uiScale(bounds);
+      const wallet = bounds.growth.controls.find(item => item.name === 'CoinBalance');
+      const inset = Math.max(Math.ceil(12 / scale), Math.round((bounds.width - 1040 / scale) / 2));
+      return Math.abs(wallet.rect[0] + wallet.rect[2] - bounds.width + inset);
+    }, { message: 'The native header finishes resizing before its menu target is tapped' }).toBeLessThanOrEqual(1);
     await openModeMenu(page);
     expect((await metrics(page)).library.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
       'The library exposes all five supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop', 'Mode_phrase', 'Mode_jelly']);
@@ -52,19 +58,21 @@ test('the illustrated library fits, preserves play, and switches every game', as
 
 test('sound and explicit motion choices persist while system motion remains the default', async ({ page }) => {
   const errors = await openGame(page);
+  const preferredTheme = await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme);
   await openModeMenu(page);
   await activate(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, preferred_theme: 'spring' });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, preferred_theme: preferredTheme });
   await activate(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: false, preferred_theme: 'spring' });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: false, preferred_theme: preferredTheme });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
   await page.reload();
   await enterGame(page);
+  const reloadedTheme = await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme);
   await openModeMenu(page);
   await activate(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: true, preferred_theme: 'spring' });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: true, preferred_theme: reloadedTheme });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'true');
   await activate(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, reduced_motion: true, preferred_theme: 'spring' });
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, reduced_motion: true, preferred_theme: reloadedTheme });
   expect(errors).toEqual([]);
 });

@@ -116,23 +116,30 @@ async function expectHeaderBadge(page) {
   expect(ageY).toBeGreaterThanOrEqual(0);
   expect(ageX + ageWidth).toBeLessThanOrEqual(bounds.width + 0.5);
   expect(ageY + ageHeight).toBeLessThanOrEqual(bounds.height + 0.5);
-  expect(ageX + ageWidth, 'Age belongs to Pip at the left of the Lv display').toBeLessThan(x);
+  expect(ageX, 'Age belongs to the companion progress entry').toBeGreaterThanOrEqual(x);
+  expect(ageX + ageWidth).toBeLessThanOrEqual(x + width);
   expect(pip.width * bounds.scale, 'Pip remains a reachable menu target').toBeGreaterThanOrEqual(43.5);
   expect(pip.height * bounds.scale).toBeGreaterThanOrEqual(43.5);
-  const beside = ageX >= pip.x + pip.width - 0.5;
-  if (beside) {
-    expect((ageX - pip.x - pip.width) * bounds.scale, 'The age caption sits beside Pip').toBeLessThanOrEqual(6);
-    // Godot rounds font metrics in logical pixels before scaling the canvas to CSS pixels.
-    expect(Math.abs(ageY + ageHeight / 2 - pip.y - pip.height / 2) * bounds.scale).toBeLessThanOrEqual(2);
-  } else {
-    expect(ageY).toBeGreaterThanOrEqual(pip.y + pip.height - 0.5);
-    expect((ageY - pip.y - pip.height) * bounds.scale, 'The narrow caption stays directly below Pip').toBeLessThanOrEqual(2);
-    expect(Math.abs(ageX + ageWidth / 2 - pip.x - pip.width / 2) * bounds.scale).toBeLessThanOrEqual(1);
-  }
-  const clusterTop = Math.min(pip.y, ageY), clusterBottom = Math.max(pip.y + pip.height, ageY + ageHeight);
-  expect(Math.abs(y + height / 2 - (clusterTop + clusterBottom) / 2) * bounds.scale,
-    'Pip and age share the same header row as the Lv display').toBeLessThanOrEqual(2);
+  expect((ageX - pip.x - pip.width) * bounds.scale, 'The age caption sits directly beside Pip').toBeLessThanOrEqual(9);
+  expect(ageY + ageHeight, 'The age caption leaves room for the mastery track').toBeLessThanOrEqual(barY);
+  expect(Math.abs(y + height / 2 - pip.y - pip.height / 2) * bounds.scale,
+    'Pip and growth share one centered companion cluster').toBeLessThanOrEqual(2);
   expect(pip.x + pip.width).toBeLessThan(x);
+  const targets = [layout.pip, ...layout.controls.filter(item => item.visible &&
+    ['GrowthProgressButton', 'ChooseGame', 'Voice', 'Hint', 'StudyGarden'].includes(item.name))];
+  const wallet = layout.controls.find(item => item.name === 'CoinBalance');
+  const overlaps = (a, b) => a[0] < b[0] + b[2] - 0.5 && a[0] + a[2] > b[0] + 0.5 &&
+    a[1] < b[1] + b[3] - 0.5 && a[1] + a[3] > b[1] + 0.5;
+  expect(wallet.visible).toBe(true);
+  expect(wallet.rect[0]).toBeGreaterThan(x + width);
+  expect(layout.controls.find(item => item.name === 'ChooseGame').visible, 'Mode selection stays visible on narrow screens').toBe(true);
+  for (const [index, target] of targets.entries()) {
+    expect(target.rect[2] * bounds.scale).toBeGreaterThanOrEqual(43.5);
+    expect(target.rect[3] * bounds.scale).toBeGreaterThanOrEqual(43.5);
+    expect(overlaps(target.rect, wallet.rect), `${target.name} leaves the wallet clear`).toBe(false);
+    for (const other of targets.slice(index + 1)) expect(overlaps(target.rect, other.rect),
+      `${target.name} and ${other.name} have separate hit targets`).toBe(false);
+  }
   return { state, layout, badge, bar, age, bounds };
 }
 
@@ -152,7 +159,9 @@ test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete no
   const headerBottom = Math.max(badge.rect[1] + badge.rect[3], age.rect[1] + age.rect[3],
     layout.pip.rect[1] + layout.pip.rect[3]);
   const rewardStripHeight = bounds.height * bounds.scale <= 440 ? 34 : 46;
-  expect((layout.board.rect[1] - headerBottom) * bounds.scale - rewardStripHeight,
+  const actionsBottom = Math.max(headerBottom, ...layout.controls.filter(item => item.visible &&
+    ['ChooseGame', 'Voice', 'Hint', 'StudyGarden'].includes(item.name)).map(item => item.rect[1] + item.rect[3]));
+  expect((layout.board.rect[1] - actionsBottom) * bounds.scale - rewardStripHeight,
     'The board follows the header and chest feedback strip without an extra growth row').toBeLessThanOrEqual(20);
   await page.screenshot({ path: info.outputPath('growth-board.png'), scale: 'css' });
   await pressNamed(page, 'GrowthProgressButton');

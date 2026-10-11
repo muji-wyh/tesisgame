@@ -50,6 +50,8 @@ func _run() -> void:
 			var view: Control = app._match_playfield if mode == "match" else app._memory if mode == "memory" else app._phrase
 			var css_scale: float = app.Style.ui_scale(app)
 			var play_top: int = 130 if mode in ["match", "memory"] else 76
+			if dimensions.x < 600:
+				play_top += 32
 			check(absf(view.get_global_rect().position.y * css_scale - play_top) <= 2,
 				"%s %s: the responsive header leaves play at %d CSS pixels: %s" % [dimensions, mode, play_top, view.get_global_rect()])
 			check(app._header_duck_slot.get_global_rect().end.x <= app._toolbar.global_position.x,
@@ -58,9 +60,9 @@ func _run() -> void:
 			check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()), "World choices stay out of active play")
 			check(not app.collection_page.is_visible_in_tree(), "The room does not take space above the game")
 			check(app.duck.is_visible_in_tree(), "Pip remains a visible guide")
-			check(is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / css_scale))
+			check(app._header_duck_slot.get_global_rect().encloses(app._growth_button.get_global_rect())
 				and app._header_duck_slot.get_theme_stylebox("panel") is StyleBoxEmpty,
-				"Every mode keeps Pip in a compact transparent header slot")
+				"Every mode groups Pip and growth in a transparent companion slot")
 			check(app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
 				"Changing game modes cannot recreate the removed Memory counters")
 			for control in [app.collection_button, app.hint_button, app._voice_button, app._memory.study_button] + app._mode_buttons:
@@ -73,10 +75,10 @@ func _run() -> void:
 					check(control.text.is_empty() and is_equal_approx(control.size.x, control.size.y)
 						and control.get_parent() == app._toolbar and is_equal_approx(control.size.y, ceilf(44 / css_scale)),
 						"Header actions share one aligned row of 44 CSS-pixel square icons")
-			check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
+			check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._header_duck_slot
 				and app._growth_button.level_label.text == app.growth.snapshot().label
 				and app._growth_button.get_global_rect().grow(0.5).encloses(app._growth_bar.get_global_rect())
-				and is_equal_approx(app._growth_button.get_global_rect().get_center().y, app._toolbar.get_global_rect().get_center().y),
+				and is_equal_approx(app._growth_button.get_global_rect().get_center().y, app.duck.get_global_rect().get_center().y),
 				"The level badge opens learning progress with its track contained in the aligned header target")
 			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 				"Closed mode choices leave more space for gameplay at %s %s" % [dimensions, mode])

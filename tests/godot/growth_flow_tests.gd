@@ -225,13 +225,13 @@ func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
 	var age_rect: Rect2 = age.get_global_rect()
 	var pip_rect: Rect2 = app.duck.get_global_rect()
 	check(age.is_visible_in_tree() and age.text == app.growth.snapshot().age_label
-		and age.get_parent() == app._header_duck_slot and not badge.is_ancestor_of(age),
-		"%s attaches the earned age to Pip instead of the Lv display" % context)
+		and app._header_duck_slot.is_ancestor_of(age) and age.get_parent() == badge,
+		"%s groups the earned age and mastery beside Pip" % context)
 	check(age.mouse_filter == Control.MOUSE_FILTER_IGNORE and age.focus_mode == Control.FOCUS_NONE,
 		"%s keeps the age caption passive without intercepting gameplay or creating a second action" % context)
 	check(Rect2(Vector2.ZERO, Vector2(viewport_size)).encloses(age_rect)
 		and app._header_duck_slot.get_global_rect().grow(0.5).encloses(age_rect)
-		and not age_rect.intersects(rect) and not age_rect.intersects(pip_rect),
+		and rect.encloses(age_rect) and not age_rect.intersects(badge.level_label.get_global_rect()) and not age_rect.intersects(pip_rect),
 		"%s keeps the complete age caption with Pip without clipping or covering Lv" % context)
 	var font: Font = age.get_theme_font("font")
 	check(font.get_string_size(age.text, HORIZONTAL_ALIGNMENT_LEFT, -1, age.get_theme_font_size("font_size")).x <= age.size.x + 0.5,
@@ -239,18 +239,32 @@ func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
 	check(pip_rect.size.x >= 43.5 and pip_rect.size.y >= 43.5
 		and app.duck.tooltip_text.contains(age.text) and app.duck.tooltip_text.contains("Change game mode"),
 		"%s preserves Pip's reachable menu action and announces age with the character" % context)
+	var targets: Array = [app.duck, badge, app._mode_heading_button, app._voice_button, app.hint_button, app._memory.study_button, app._storage_retry_button]
+	for index in range(targets.size()):
+		var target: Control = targets[index]
+		if not target.is_visible_in_tree():
+			continue
+		var bounds: Rect2 = target.get_global_rect()
+		check(bounds.size.x >= 43.5 and bounds.size.y >= 43.5 and app._header.get_global_rect().grow(0.5).encloses(bounds),
+			"%s keeps %s reachable within the header" % [context, target.name])
+		check(not bounds.intersects(app._coin_counter.get_global_rect()), "%s separates the wallet from %s" % [context, target.name])
+		for other in targets.slice(index + 1):
+			if other.is_visible_in_tree():
+				check(not bounds.intersects(other.get_global_rect()), "%s separates %s from %s" % [context, target.name, other.name])
+	check(app._mode_heading_button.visible and app._mode_heading.get_minimum_size().x <= app._mode_heading_button.size.x,
+		"%s keeps the complete mode selector visible" % context)
 
 
 func _responsive_badge(app) -> void:
-	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._toolbar
+	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._header_duck_slot
 		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
-		"The notebook entry and mastery bar share one toolbar button without a separate full-width row")
+		"The notebook entry and mastery bar share Pip's compact companion cluster")
 	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app._pip_age_label.text == "Baby"
 		and app._growth_bar.value == 0.0,
 		"A new device presents the first one-word level target independently of Baby age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
 		check(app.new_round(720, false, "", mode), "%s starts for growth HUD layout coverage" % mode)
-		for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1366, 768)]:
+		for viewport_size: Vector2i in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(390, 844), Vector2i(568, 320), Vector2i(844, 390), Vector2i(1366, 768)]:
 			root.size = viewport_size
 			await settle()
 			_badge_geometry(app, viewport_size, mode)
@@ -353,7 +367,7 @@ func _memory(app) -> void:
 	check(app._storage_retry_button.is_visible_in_tree(), "Memory immediately exposes the shared Retry saving action")
 	check(app._growth_bar.value == progress_before,
 		"A failed mastery-answer save does not advertise mastery before it is committed")
-	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(844, 390)]:
+	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(568, 320), Vector2i(844, 390)]:
 		root.size = viewport_size
 		await settle()
 		_badge_geometry(app, viewport_size, "Pending save")

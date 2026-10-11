@@ -64,7 +64,8 @@ function contentBounds(bounds) {
   const shortHeader = (mode === 'jelly' && height <= 440) || (['match', 'memory'].includes(mode) && height <= 360);
   const padding = Math.ceil((shortHeader ? 4 : 12) / scale);
   const gap = Math.ceil((shortHeader || bounds.width * scale < 360 ? 4 : 8) / scale);
-  const header = Math.ceil((shortHeader ? 44 : bounds.width * scale < 480 ? 60 : 56) / scale), board = bounds.growth?.board;
+  const stackedHeader = bounds.width * scale < 520 || (bounds.width * scale < 600 && !shortHeader);
+  const header = Math.ceil((stackedHeader ? 88 : shortHeader ? 44 : 56) / scale), board = bounds.growth?.board;
   const inset = Math.max(Math.ceil(12 / scale), Math.round((bounds.width - 1040 / scale) / 2));
   const x = board?.visible ? board.rect[0] : inset;
   const width = board?.visible ? board.rect[2] : bounds.width - inset * 2;
@@ -178,22 +179,22 @@ async function worldControl(page, index) {
 }
 
 function headerIconRect(bounds, key = 'rewards') {
-  const badge = growthRect(bounds, 'GrowthProgressButton');
-  if (key === 'rewards') return badge;
-  const { gap } = contentBounds(bounds);
-  const index = { rewards: 0, hint: 1, voice: 2, eye: 1 }[key];
-  if (index === undefined) throw new Error(`Unknown header icon: ${key}`);
-  const side = Math.ceil(44 / uiScale(bounds));
-  return { x: badge.x - index * (side + gap), y: badge.y + (badge.height - side) / 2, width: side, height: side };
+  const name = { rewards: 'GrowthProgressButton', hint: 'Hint', voice: 'Voice', eye: 'StudyGarden', mode: 'ChooseGame' }[key];
+  if (!name) throw new Error(`Unknown header icon: ${key}`);
+  return growthRect(bounds, name);
 }
 
 function headerPoint(bounds, key = 'rewards') {
-  const content = contentBounds(bounds), scale = uiScale(bounds);
   if (key === 'pip') {
     const pip = pipHeaderRect(bounds);
     return { x: pip.x + pip.width / 2, y: pip.y + pip.height / 2 };
   }
-  if (key === 'retry') return { x: content.x + 48 / scale, y: content.padding + content.header / 2 };
+  if (key === 'retry') {
+    const item = bounds.growth.controls.find(control => control.visible && control.text.startsWith('Retry'));
+    if (!item) throw new Error('The storage retry control is not visible.');
+    const [x, y, width, height] = item.rect;
+    return { x: x + width / 2, y: y + height / 2 };
+  }
   const rect = headerIconRect(bounds, key);
   return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }

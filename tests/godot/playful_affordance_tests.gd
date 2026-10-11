@@ -52,12 +52,7 @@ func _run() -> void:
 		"Reduced motion retains a still card without decorative particles")
 	card.queue_free()
 	await process_frame
-	var probe = load("res://scripts/game_ui.gd").new()
-	var ready: bool = probe.has_method("_style_voice_button")
-	check(ready, "The microphone has a dedicated prominent style")
-	probe.free()
-	if ready:
-		await _test_voice_style()
+	await _test_voice_style()
 	print("Playful affordances: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -78,9 +73,9 @@ func _test_voice_style() -> void:
 		var button: Button = app._voice_button
 		button.disabled = false
 		app._style_voice_button()
-		check(button.get_theme_stylebox("normal").bg_color == Data.theme(theme_id).accent
-			and button.get_theme_color("font_color") == Color.WHITE,
-			"Available voice input has a filled theme surface and a contrasting white icon")
+		check(button.get_theme_stylebox("normal").bg_color == Data.theme(theme_id).accent.lightened(0.94)
+			and button.get_theme_color("font_color") == app.Style.INK,
+			"Available voice input shares the quiet action surface with a readable dark icon")
 		var surface: StyleBox = button.get_theme_stylebox("normal")
 		app._style_voice_button()
 		check(button.get_theme_stylebox("normal") == surface, "Unchanged voice styling does not recreate its theme resources")

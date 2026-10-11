@@ -119,7 +119,7 @@ var duck: Mascot
 var _header_duck_slot: Panel
 var _header_duck_art_slot: Control
 var _pip_age_label: Label
-var _header: HBoxContainer
+var _header: Control
 var _header_spacer: Control
 var _toolbar: HBoxContainer
 var _main_column: VBoxContainer
@@ -554,9 +554,9 @@ func _build_controls() -> void:
 	_main_column = column
 	column.add_theme_constant_override("separation", 8)
 	margins.add_child(column)
-	var header := HBoxContainer.new()
+	var header := Control.new()
 	_header = header
-	header.add_theme_constant_override("separation", 8)
+	header.resized.connect(_layout_game_heading)
 	column.add_child(header)
 	_header_duck_slot = Panel.new()
 	_header_duck_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -588,6 +588,7 @@ func _build_controls() -> void:
 	_toolbar.alignment = BoxContainer.ALIGNMENT_END
 	_toolbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	header.add_child(_toolbar)
+	_toolbar.resized.connect(_layout_game_heading)
 	_voice_button = Icons.new()
 	_voice_button.name = "Voice"
 	_voice_button.symbol = Icons.Symbol.VOICE
@@ -605,9 +606,9 @@ func _build_controls() -> void:
 	_growth_button = GrowthBadge.new()
 	UiClick.bind_button(_growth_button)
 	_growth_button.pressed.connect(_show_collection)
-	_toolbar.add_child(_growth_button)
-	_growth_button.add_child(_coin_counter)
-	_growth_button.resized.connect(_layout_coin_counter)
+	_header_duck_slot.add_child(_growth_button)
+	_pip_age_label.reparent(_growth_button)
+	header.add_child(_coin_counter)
 	collection_button = _growth_button
 	_growth_bar = _growth_button.bar
 	_build_mode_menu()
@@ -2520,6 +2521,11 @@ func _short_game_header() -> bool:
 	return (_mode_id == "jelly" and height <= 440) or (_mode_id in ["match", "memory"] and height <= 360)
 
 
+func _stacked_game_header() -> bool:
+	var width: float = size.x * Style.ui_scale(self)
+	return width < 520 or (width < 600 and not _short_game_header())
+
+
 func _fit_content() -> void:
 	# Containers grow to transient child minima, but do not shrink back with anchors alone.
 	if _content_margins != null:
@@ -2576,20 +2582,14 @@ func _fit_mode_buttons() -> void:
 	_pair_reward_row.custom_minimum_size.y = (34.0 if size.y * css_scale <= 440 else 46.0) / css_scale
 	_layout_pair_reward()
 	var short_header: bool = _short_game_header()
-	var age_below_pip: bool = size.x * css_scale < 480 and not short_header
 	_header_spacer.show()
 	var gap: int = ceili((4 if short_header or size.x * css_scale < 360 else 8) / css_scale)
 	_main_column.add_theme_constant_override("separation", gap)
-	_header.add_theme_constant_override("separation", gap)
-	_header.custom_minimum_size.y = ceilf((44 if short_header else 60 if age_below_pip else 56) / css_scale)
+	_header.custom_minimum_size.y = ceilf((88 if _stacked_game_header() else 44 if short_header else 56) / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	_header_duck_slot.custom_minimum_size = Vector2(52 if age_below_pip else 98 if short_header else 108, 44 if short_header else 60 if age_below_pip else 56) / css_scale
-	_header_duck_art_slot.position = Vector2(4 if age_below_pip else 0, 0 if short_header or age_below_pip else 2) / css_scale
-	_header_duck_art_slot.size = Vector2.ONE * ((44 if short_header or age_below_pip else 52) / css_scale)
-	_pip_age_label.add_theme_font_size_override("font_size", ceili((11 if age_below_pip else 12 if short_header else 13) / css_scale))
-	_pip_age_label.position = Vector2(0, 44) / css_scale if age_below_pip else Vector2(48 if short_header else 56, 12 if short_header else 18) / css_scale
-	_pip_age_label.size = Vector2(52, 16) / css_scale if age_below_pip else Vector2(50 if short_header else 52, 20) / css_scale
+	_pip_age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_pip_age_label.add_theme_font_size_override("font_size", ceili(12 / css_scale))
 	_header_duck_slot.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
 	var heading_focus: int = _mode_heading_button.focus_mode
@@ -2598,47 +2598,72 @@ func _fit_mode_buttons() -> void:
 	_mode_heading_button.custom_minimum_size = Vector2.ZERO
 	_mode_heading_button.set("accessibility_name", str(MODES[_mode_id]) + ". Choose a game")
 	_mode_heading.text = str(MODES[_mode_id]) + "  ›"
-	_mode_heading.add_theme_font_size_override("font_size", ceili((22 if size.x * css_scale >= 680 else 15) / css_scale))
+	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_layout_game_heading()
 	_mode_panel.configure(_mode_id, audio.muted if audio != null else false, reduced_motion)
 	_layout_mode_menu()
 	_layout_mode_menu.call_deferred()
 	for button in [hint_button, _memory.study_button]:
-		Style.square_icon_button(button, accent)
+		_style_header_action(button, accent)
 	_style_voice_button()
-	var compact_retry: bool = size.x * css_scale < 480
+	var compact_retry: bool = size.x * css_scale < 680
 	_storage_retry_button.text = "Retry" if compact_retry else "Retry rewards" if _save_error else "Retry saving"
 	_set_accessibility_name(_storage_retry_button, "Retry rewards" if _save_error else "Retry saving")
-	_storage_retry_button.custom_minimum_size = Vector2(72 if compact_retry else 96, 44) / css_scale
+	_storage_retry_button.custom_minimum_size = Vector2(52 if compact_retry else 96, 44) / css_scale
 	_storage_retry_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_storage_retry_button.add_theme_font_size_override("font_size", ceili(14 / css_scale))
 	_voice_space.custom_minimum_size.y = ceilf(112 / css_scale)
 	_style_growth_progress()
+	_layout_game_heading()
 	# Retry text and the Pip cluster can shrink after the header first expands.
 	_content_margins.queue_sort.call_deferred()
 
 
 func _layout_game_heading() -> void:
-	if _mode_heading_button == null:
+	if _growth_button == null or _storage_retry_button == null:
 		return
 	var scale: float = Style.ui_scale(self)
-	var available: float = _header_spacer.size.x
-	var center: float = _header.global_position.x + _header.size.x * 0.5 - _header_spacer.global_position.x
-	var centered_width: float = maxf(0.0, 2.0 * minf(center, available - center))
-	var title_width: float = _mode_heading.get_minimum_size().x
-	var width: float = minf(available, 360 / scale)
-	if centered_width >= title_width:
-		width = minf(width, centered_width)
+	var stacked: bool = _stacked_game_header()
+	var short_header: bool = _short_game_header()
+	var row: float = (44.0 if stacked or short_header else 56.0) / scale
+	var gap: float = (8.0 if size.x * scale < 680 else 16.0) / scale
+	var pip_side: float = (44.0 if stacked or short_header else 52.0) / scale
+	var profile_width: float = (144.0 if short_header else 168.0) / scale
+	_header_duck_slot.position = Vector2.ZERO
+	_header_duck_slot.size = Vector2(profile_width, row)
+	_header_duck_art_slot.position = Vector2(0, (row - pip_side) * 0.5)
+	_header_duck_art_slot.size = Vector2.ONE * pip_side
+	_growth_button.position = Vector2(pip_side + 6.0 / scale, (row - 44.0 / scale) * 0.5)
+	_growth_button.size = Vector2(profile_width - _growth_button.position.x, 44.0 / scale)
+	_pip_age_label.position = Vector2(2, 2) / scale
+	_pip_age_label.size = Vector2(_growth_button.size.x - 40.0 / scale, 22.0 / scale)
+	_layout_coin_counter()
+	_toolbar.reset_size()
+	_toolbar.position = Vector2(_header.size.x - _toolbar.size.x, 44.0 / scale) if stacked else Vector2(_coin_counter.position.x - gap - _toolbar.size.x, (row - _toolbar.size.y) * 0.5)
+	var right: float = _toolbar.position.x - gap if _toolbar.get_minimum_size().x > 0.0 else _header.size.x if stacked else _coin_counter.position.x - gap
+	if _storage_retry_button.visible:
+		_storage_retry_button.reset_size()
+		_storage_retry_button.position = Vector2(right - _storage_retry_button.size.x, (44.0 if stacked else 0.0) / scale + (row - _storage_retry_button.size.y) * 0.5)
+		right = _storage_retry_button.position.x - gap
+	var left: float = 0.0 if stacked else profile_width + gap
+	_header_spacer.position = Vector2(left, 44.0 / scale if stacked else 0.0)
+	_header_spacer.size = Vector2(maxf(0.0, right - left), row)
+	var width: float = minf(_header_spacer.size.x, maxf(72.0 / scale, _mode_heading.get_minimum_size().x + 24.0 / scale))
+	var centered: float = _header.size.x * 0.5 - left - width * 0.5
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	_mode_heading_button.size = Vector2(width, _header_spacer.size.y)
-	_mode_heading_button.position = Vector2(clampf(center - width * 0.5, 0.0, maxf(0.0, available - width)), 0)
-	_mode_heading_button.visible = available >= maxf(64 / scale, title_width) and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
+	_mode_heading_button.size = Vector2(width, 44.0 / scale)
+	_mode_heading_button.position = Vector2(0.0 if stacked else clampf(centered, 0.0, maxf(0.0, _header_spacer.size.x - width)), (row - 44.0 / scale) * 0.5)
+	_mode_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if stacked else HORIZONTAL_ALIGNMENT_CENTER
+	_mode_heading.offset_left = 8.0 / scale if stacked else 0.0
+	_mode_heading_button.visible = width >= 44.0 / scale and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
 	_mode_heading.offset_bottom = 0.0
 
 
 func _layout_coin_counter() -> void:
-	_coin_counter.position = Vector2(maxf(0.0, _growth_button.size.x - _coin_counter.size.x), 0.0)
+	var scale: float = Style.ui_scale(self)
+	var row: float = (44.0 if _stacked_game_header() or _short_game_header() else 56.0) / scale
+	_coin_counter.position = Vector2(maxf(0.0, _header.size.x - _coin_counter.size.x), (row - _coin_counter.size.y) * 0.5)
 	_coin_counter.queue_redraw()
 
 
@@ -2668,22 +2693,21 @@ func _style_voice_button() -> void:
 		return
 	_voice_style_accent = accent
 	_voice_style_scale = scale
-	Style.square_icon_button(_voice_button, accent)
+	_style_header_action(_voice_button, accent)
 	var radius: int = ceili(10 / scale)
-	var normal := Style.box(accent, accent, radius, 0)
-	normal.shadow_color = Color(accent, 0.18)
-	normal.shadow_size = ceili(2 / scale)
-	normal.shadow_offset = Vector2(0, 1 / scale)
-	_voice_button.add_theme_stylebox_override("normal", normal)
-	_voice_button.add_theme_stylebox_override("hover", Style.box(accent.darkened(0.06), accent, radius, 0))
 	_voice_button.add_theme_stylebox_override("pressed", Style.box(accent.darkened(0.18), accent, radius, 0))
 	_voice_button.add_theme_stylebox_override("hover_pressed", Style.box(accent.darkened(0.12), accent, radius, 0))
-	_voice_button.add_theme_stylebox_override("disabled", Style.box(Color("#e9eef2"), Color("#c7d1dc"), radius, 1))
-	_voice_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, radius, maxi(2, roundi(2 / scale))))
-	for state in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+	for state in ["font_pressed_color", "font_hover_pressed_color"]:
 		_voice_button.add_theme_color_override(state, Color.WHITE)
-	_voice_button.add_theme_color_override("font_disabled_color", Style.MUTED)
 	_voice_button.queue_redraw()
+
+
+func _style_header_action(button: Button, accent: Color) -> void:
+	Style.square_icon_button(button, accent)
+	var scale: float = Style.ui_scale(self)
+	var radius: int = ceili(12 / scale)
+	button.add_theme_stylebox_override("normal", Style.box(accent.lightened(0.94), Color.TRANSPARENT, radius, 0))
+	button.add_theme_stylebox_override("disabled", Style.box(Color("#edf0eb"), Color.TRANSPARENT, radius, 0))
 
 
 func _layout_collection() -> void:
@@ -4450,13 +4474,16 @@ func _pair_reward_revealing() -> bool:
 func _sync_pair_presentation() -> void:
 	if not is_instance_valid(_pair_reward):
 		return
-	var allowed: bool = _mode_id in ["match", "memory"] and not _page_hidden and not _rebuilding \
-		and not collection_page.visible and not _mode_menu_open() and not _speech_debug_active \
+	var on_board: bool = _mode_id in ["match", "memory"] and not _page_hidden and not _rebuilding \
+		and not collection_page.visible and not _speech_debug_active \
 		and not _round_celebration_active() and (model.phase != "won" or _pair_reward_revealing() or _pair_save_failed)
-	if not allowed and _pair_reward_row.visible:
+	var allowed: bool = on_board and not _mode_menu_open()
+	if not allowed and _pair_reward.visible:
 		audio.stop_jelly_sounds()
 	_pair_reward.set_paused(not allowed)
-	_pair_reward_row.visible = allowed
+	_pair_reward.visible = allowed
+	# Opening the header menu must not move the board behind its overlay.
+	_pair_reward_row.visible = on_board
 
 
 func _layout_pair_reward() -> void:
@@ -4527,12 +4554,10 @@ func _refresh_growth() -> void:
 func _style_growth_progress() -> void:
 	var scale: float = Style.ui_scale(self)
 	var width: float = size.x * scale
-	var short_screen: bool = size.y * scale <= 440
-	var coin_width: float = 76.0 if width < 360 else 90.0 if width < 480 or coin_wallet.balance < 1000000 else 124.0
-	var coin_height: float = 20.0 if _short_game_header() else 24.0
+	var coin_width: float = 84.0 if width < 680 else 100.0 if coin_wallet.balance < 1000000 else 124.0
+	var coin_height: float = 28.0
 	_coin_counter.size = Vector2(coin_width, coin_height) / scale
-	_growth_button.fit(scale, width < 680 or short_screen, width < 360, coin_height + 2.0)
-	_growth_button.custom_minimum_size.x = maxf(_growth_button.custom_minimum_size.x, coin_width / scale)
+	_growth_button.fit_companion(scale)
 	_layout_coin_counter()
 
 
@@ -4540,6 +4565,8 @@ func _publish_growth_view() -> void:
 	if _host == null or not is_instance_valid(_growth_button):
 		return
 	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar), _growth_control(_pip_age_label)]
+	for control: Control in [_mode_heading_button, _voice_button, hint_button, _memory.study_button, _coin_counter, _storage_retry_button]:
+		controls.append(_growth_control(control))
 	var state := {"visible": collection_page.visible, "controls": controls}
 	state["pip"] = _growth_control(duck)
 	state["vocabulary"] = _vocabulary_snapshot()

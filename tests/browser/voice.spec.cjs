@@ -198,7 +198,7 @@ async function listen(page) {
   await rendered(page);
 }
 
-test('Voice is a prominent primary action without automatic recording', async ({ page }, testInfo) => {
+test('Voice gains emphasis only after activation without automatic recording', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = await openGame(page);
@@ -220,7 +220,7 @@ test('Voice is a prominent primary action without automatic recording', async ({
     }
     return filled / (pixels.length / 4);
   }, available.toString('base64'));
-  expect(fraction, 'The microphone has a filled theme surface, not a faint outline-only icon.').toBeGreaterThan(0.5);
+  expect(fraction, 'An inactive microphone keeps the quiet shared action surface.').toBeLessThan(0.2);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await page.evaluate(() => { window.speechFixture.automatic = false; });
   await toggleVoice(page);

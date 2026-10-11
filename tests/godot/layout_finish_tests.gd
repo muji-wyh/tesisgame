@@ -37,7 +37,7 @@ func _run() -> void:
 	await settle()
 	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y, 40),
 		"The header centers its actions in a 56px row")
-	check(is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / app.Style.ui_scale(app)))
+	check(app._header_duck_slot.get_global_rect().encloses(app._growth_button.get_global_rect())
 		and app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
 		"Pip's compact header has no retained Memory counters")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
@@ -75,6 +75,7 @@ func _run() -> void:
 	check(app._age_catalog.is_visible_in_tree() and app.find_child("PipRoom", true, false) == null,
 		"The central area contains the vocabulary catalog without a playground")
 	app._hide_collection()
+	await settle()
 	check(is_equal_approx(app.grid.global_position.y * app.Style.ui_scale(app), game_top),
 		"Adding the More strip does not move the game's header or playfield")
 	app.choose_mode("memory")
@@ -89,12 +90,13 @@ func _run() -> void:
 	app.choose_mode("match")
 	root.size = Vector2i(768, 1024)
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 80,
+	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 132,
 		"A wide viewport uses one compact header row")
 	root.size = Vector2i(390, 844)
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 80,
-		"Narrow phones also use one compact header with modes inside Pip's popover")
+	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 164
+		and app._mode_heading_button.is_visible_in_tree(),
+		"Narrow phones separate companion status and game actions while preserving the mode entry")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

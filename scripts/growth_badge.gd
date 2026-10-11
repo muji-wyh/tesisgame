@@ -9,6 +9,7 @@ var compact: bool = false
 var _scale: float = 1.0
 var _tiny: bool = false
 var _balance_space: float = 0.0
+var _companion: bool = false
 var _state: Dictionary = {}
 
 
@@ -57,6 +58,8 @@ func configure(state: Dictionary) -> void:
 
 
 func fit(css_scale: float, use_compact: bool, tiny: bool = false, balance_space: float = 0.0) -> void:
+	_companion = false
+	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_scale = css_scale
 	compact = use_compact
 	_tiny = tiny
@@ -91,6 +94,14 @@ func fit(css_scale: float, use_compact: bool, tiny: bool = false, balance_space:
 	_layout()
 
 
+func fit_companion(css_scale: float) -> void:
+	fit(css_scale, true)
+	_companion = true
+	custom_minimum_size = Vector2(88, 44) / _scale
+	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_layout()
+
+
 func _style_type() -> void:
 	var long_level: bool = level_label.text.length() > 3
 	level_label.add_theme_font_size_override("font_size", ceili((13 if long_level else 16 if _tiny else 18) / _scale))
@@ -115,3 +126,9 @@ func _layout() -> void:
 		bar.size.x = maxf(1.0, size.x - bar.position.x - 2 / _scale)
 	count_label.position = bar.position + Vector2(2, 0) / _scale
 	count_label.size = Vector2(bar.size.x - 4 / _scale, bar.size.y)
+	if _companion:
+		level_label.position = Vector2(size.x - 36.0 / _scale, 2.0 / _scale)
+		level_label.size = Vector2(34, 22) / _scale
+		level_label.add_theme_font_size_override("font_size", ceili(13 / _scale))
+		bar.position = Vector2(2, 29) / _scale
+		bar.size = Vector2(size.x - 4.0 / _scale, 8.0 / _scale)
