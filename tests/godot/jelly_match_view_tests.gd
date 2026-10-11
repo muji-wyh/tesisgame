@@ -74,6 +74,7 @@ func _run() -> void:
 	_check_danger_reduced_motion_and_end(view)
 	_check_wrong_drop(view)
 	_check_fusion(view)
+	_check_progressive_union(view)
 	_check_concurrent_fusions(view)
 	_check_finish_during_fusion(view)
 	_check_preview_during_fusion(view)
@@ -1648,6 +1649,63 @@ func _check_fusion(view) -> void:
 	check(view._loot_flights.size() == 1, "A completed treasure fusion flies toward the visible chest total")
 	view._release(source_center)
 	check(attempts.size() == 1, "A stale release cannot repeat a completed merge")
+
+
+func _union_body(view, key: String) -> Rect2:
+	var art = _effect(view).art
+	var body: Vector4 = art._gel.get_shader_parameter(key)
+	return Rect2(art.position + Vector2(body.x, body.y) - Vector2(body.z, body.w) * 0.5, Vector2(body.z, body.w))
+
+
+func _check_progressive_union(view) -> void:
+	for offset: Vector2 in [Vector2(-0.91, 0.0), Vector2(0.0, -0.73), Vector2(-0.60, -0.60)]:
+		var pair: Array[int] = _contact_pair(view, false)
+		var source = view._tiles[pair[0]]
+		var target = view._tiles[pair[1]]
+		var unit: float = source.size.x
+		var drop: Vector2 = _center(view, pair[1]) + offset * source.size
+		view._press(4, _center(view, pair[0]))
+		view._move(drop)
+		if source._lift != null:
+			source._lift.custom_step(0.3)
+		view._process(0.20)
+		check(view._target == pair[1], "The progressive union begins from real edge contact")
+		var held_a: Rect2 = source._surface.get_global_rect()
+		var held_b: Rect2 = target._surface.get_global_rect()
+		view._release(drop)
+		check(_union_body(view, "body_a").is_equal_approx(held_a)
+			and _union_body(view, "body_b").is_equal_approx(held_b),
+			"The first shared-skin frame preserves both painted centers and their different held stretches")
+		view._process(0.14)
+		var contact_distance: float = _union_body(view, "body_a").get_center().distance_to(_union_body(view, "body_b").get_center())
+		var first_neck: float = float(_effect(view).art._gel.get_shader_parameter("neck"))
+		check(contact_distance > unit * 0.65 and _effect(view).art.stage == "union",
+			"The neck forms while both separate body lobes are still readable")
+		check(source.visible and target.visible and not _effect(view).merged.visible,
+			"Each original learning face remains on its body during the initial bridge")
+		view._process(0.16)
+		var flow_distance: float = _union_body(view, "body_a").get_center().distance_to(_union_body(view, "body_b").get_center())
+		check(flow_distance > unit * 0.4 and flow_distance < contact_distance
+			and float(_effect(view).art._gel.get_shader_parameter("neck")) > first_neck,
+			"The bridge visibly widens as two distinct lobes move together instead of immediately becoming one body")
+		view._process(0.12)
+		check(not source.visible and not target.visible and _effect(view).merged.visible
+			and is_equal_approx(_effect(view).merged.modulate.a, 1.0),
+			"The final picture and word appear without overlapping duplicate learning faces")
+		view._process(0.14)
+		check(_union_body(view, "body_a").get_center().is_equal_approx(_union_body(view, "body_b").get_center())
+			and _effect(view).art.stage == "hold"
+			and float(_effect(view).art._gel.get_shader_parameter("mixing")) > 0.99,
+			"Both lobes finish as one centered painted body before the release anticipation")
+		check(attempts.is_empty() and view.game.score() == 0 and not cues.has("pop"),
+			"The longer visible union does not move sound or reward ownership ahead of the model")
+		view._process(0.14)
+		check(cues.count("pop") == 1 and _effect(view).art.stage == "release" and attempts.is_empty(),
+			"The unchanged pop boundary starts the release only after the body has united")
+		view._process(0.35)
+		check(view.game.score() == 1 and attempts.size() == 1 and view._fusion_visuals.is_empty(),
+			"One complete progressive fusion clears once at the original completion boundary")
+	_reset(view)
 
 
 func _check_concurrent_fusions(view) -> void:

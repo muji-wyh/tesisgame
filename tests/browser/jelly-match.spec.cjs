@@ -206,6 +206,7 @@ async function expectClear(page, count, tiles) {
 for (const reducedMotion of ['reduce', 'no-preference']) {
   test(`slight jelly edge contact selects and merges before the pointer enters its partner (${reducedMotion})`, async ({ page }, info) => {
     const errors = await startJelly(page, { reducedMotion });
+    await observeTimeline(page, { captureUnion: reducedMotion === 'no-preference' });
     const state = await jelly(page);
     const target = state.tiles.filter(tile => tile.visible && tile.settled).sort((a, b) => a.rect[1] - b.rect[1])[0];
     const source = state.tiles.find(tile => tile.id !== target.id && tile.word.id === target.word.id && tile.kind !== target.kind);
@@ -249,6 +250,20 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       } else await page.mouse.up();
     }
     await expectClear(page, state.cleared_pairs + 1, [source, target]);
+    if (reducedMotion === 'no-preference') {
+      const timeline = await page.evaluate(() => window.jellyObservedTimeline);
+      const bridging = timeline.filter(frame => frame.elapsed >= 0.20 && frame.elapsed <= 0.32);
+      expect(bridging.length, 'The browser presents the intermediate bridge before the bodies unite').toBeGreaterThan(0);
+      expect(bridging.some(frame => frame.bodies.length === 2 && frame.bodies.every(body => body.visible) &&
+        Math.hypot(frame.bodies[0].rect[0] - frame.bodies[1].rect[0],
+          frame.bodies[0].rect[1] - frame.bodies[1].rect[1]) > source.rect[2] * 0.4),
+      'Two visible lobes survive the early union instead of instantly stacking at one center').toBe(true);
+      expect(timeline.some(frame => ['hold', 'compress'].includes(frame.effect?.stage) && frame.cleared === state.cleared_pairs)).toBe(true);
+      expect(timeline.some(frame => frame.effect?.stage === 'release' && frame.cleared === state.cleared_pairs)).toBe(true);
+      const bridge = await page.evaluate(() => window.jellyUnionFrame);
+      expect(bridge, 'The rendered intermediate union was captured').toBeTruthy();
+      fs.writeFileSync(info.outputPath('jelly-progressive-union.png'), Buffer.from(bridge, 'base64'));
+    }
     expect(errors).toEqual([]);
   });
 }
@@ -273,23 +288,31 @@ async function earnFragments(page, total) {
   throw new Error(`Real Jelly clears did not reach ${total} fragments.`);
 }
 
-async function observeTimeline(page) {
-  await page.evaluate(() => {
+async function observeTimeline(page, { captureUnion = false } = {}) {
+  await page.evaluate(captureUnion => {
     const status = document.getElementById('game-status');
     window.jellyObservedTimeline = [];
+    window.jellyUnionFrame = null;
     const record = () => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       window.jellyObservedTimeline.push({ at: performance.now(), phase: state.phase,
         cleared: state.cleared_pairs, fragments: state.fragment_count, chests: state.chest_count, tier: state.chest_tier,
         generated: state.generated_tiles, spawnInterval: state.spawn_interval,
         fusion: Boolean(state.fusion && Object.keys(state.fusion).length),
+        elapsed: state.fusion?.elapsed,
+        bodies: (state.tiles || []).filter(tile => [state.fusion?.a_id, state.fusion?.b_id].includes(tile.id))
+          .map(tile => ({ rect: tile.rect, visible: tile.visible })),
         effect: state.fusion_effect,
+        finishDisabled: state.finish?.disabled,
         fullElapsed: state.full_elapsed, danger: state.danger, resultVisible: state.result?.visible });
+      if (captureUnion && !window.jellyUnionFrame && state.fusion?.elapsed >= 0.20 && state.fusion.elapsed <= 0.32 && state.fusion_effect?.visible) {
+        window.jellyUnionFrame = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+      }
     };
     const observer = new MutationObserver(record);
     observer.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
     record();
-  });
+  }, captureUnion);
 }
 
 function expectInCanvas(rect, bounds, description) {
@@ -762,6 +785,9 @@ test.describe('concurrent jelly gestures', () => {
       test.skip(pointer === 'touch' && info.project.use.browserName !== 'chromium',
         'Native multi-event touch injection uses the Chromium protocol; mouse coverage also runs in WebKit.');
       test.setTimeout(90000);
+      // Keep desktop geometry while leaving software rendering enough frames
+      // to deliver sequential native events inside the real overlap window.
+      if (info.project.name === 'desktop-chromium') await page.setViewportSize({ width: 960, height: 600 });
       const errors = await startJelly(page, { reducedMotion: 'no-preference' });
       // Compile the production gel material through an ordinary completed clear
       // before measuring overlapping gestures on software-rendered Chromium.
@@ -816,7 +842,7 @@ test.describe('concurrent jelly gestures', () => {
         }
         down = true;
         if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: touchPoint(to) });
-        else await page.mouse.move(to.x, to.y, { steps: 2 });
+        else await page.mouse.move(to.x, to.y);
         await page.waitForFunction(source => {
           const state = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
           return state.drag.active && state.drag.source === source && state.fusions?.length === 1 &&
@@ -895,16 +921,18 @@ test('Finish remains available during fusion and settles only completed pairs', 
   const before = await jelly(page), savedGrowth = await growthSave(page), bounds = await metrics(page);
   await observeTimeline(page);
   const from = center(pendingPair[0].rect, bounds), to = center(pendingPair[1].rect, bounds);
+  const finish = center(before.finish.rect, bounds);
   await page.mouse.move(from.x, from.y);
   await page.mouse.down();
   await page.mouse.move(to.x, to.y, { steps: 2 });
   await page.mouse.up();
-  await expect.poll(async () => (await jelly(page)).fusions.length,
-    { intervals: [25], timeout: 2000, message: 'A real matching drag begins its independent animation' }).toBe(1);
-  const merging = await jelly(page);
-  expect(merging.finish.disabled, 'The completed gesture leaves Finish usable before the pair disappears').toBe(false);
-  await pressControl(page, merging.finish);
+  // Press immediately, then inspect the recorded state. Reading status and
+  // geometry between gestures can outlast the real animation under tracing.
+  await page.mouse.click(finish.x, finish.y);
   await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  const timeline = await page.evaluate(() => window.jellyObservedTimeline);
+  expect(timeline.some(frame => frame.fusion && !frame.finishDisabled && frame.cleared === before.cleared_pairs),
+    'The accepted drop leaves Finish usable while its independent animation is pending').toBe(true);
   const ended = await jelly(page);
   expect(ended.phase).toBe('finished');
   expect(ended.fusions).toEqual([]);

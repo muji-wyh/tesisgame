@@ -10,6 +10,7 @@ uniform vec4 body_a = vec4(70.0, 100.0, 100.0, 100.0);
 uniform vec4 body_b = vec4(130.0, 100.0, 100.0, 100.0);
 uniform float neck = 10.0;
 uniform float flow = 0.0;
+uniform float mixing = 0.0;
 uniform float charge = 0.0;
 uniform float opacity = 1.0;
 
@@ -44,7 +45,9 @@ void fragment() {
 	}
 	vec3 a = texture(material_a, clamp(body_uv(point, body_a), vec2(0.0), vec2(1.0))).rgb;
 	vec3 b = texture(material_b, clamp(body_uv(point, body_b), vec2(0.0), vec2(1.0))).rgb;
-	vec3 paint = mix(b, a, field.y);
+	// Paint flows across the connected neck and settles into the destination
+	// skin, so the finished body does not retain a hard two-color seam.
+	vec3 paint = mix(b, a, field.y * (1.0 - mixing));
 	float unit = min(body_b.z, body_b.w);
 	float epsilon = max(0.8, unit * 0.012);
 	vec2 normal = vec2(

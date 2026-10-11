@@ -13,6 +13,7 @@ The playfield now sits in a sourced [woodland environment](jelly-environment.md)
 | --- | --- | --- | --- |
 | Finish flag icon | Paweł Kuna, [Tabler Icons v3.35.0](https://github.com/tabler/tabler-icons/blob/v3.35.0/icons/outline/flag-check.svg) | MIT. Downloaded, visually inspected and integrated as `assets/images/ui/finish-flag.svg`. [Attribution and adaptation](../../assets/images/ui/ATTRIBUTION.md) and original license retained. | Static vector artwork; button states use the existing native input lifecycle and click cue. |
 | Gel tile surface | Zuhria Alfitra, also known as pzUH, [Jelly Squash Free Sprites](https://www.gameart2d.com/jelly-squash-free-sprites.html), GameArt2D | CC0 1.0 under the creator's [Free Assets License](https://www.gameart2d.com/license.html). Downloaded from the original site on October 9, 2026; all six blank bodies inspected, then the smooth third body adapted and integrated. | The source supplies static bodies, separate faces and vector originals. It does not include baked animation clips. Squash, merge, settling and clear motion are authored by the game. |
+| Merge motion reference | User-supplied `jelly_merging.mp4`; original creator not supplied | Inspected locally as a motion reference. License not supplied; none of its artwork or soundtrack is integrated. SHA-256: `383f1ce4218e2502368416abb402c3fe1c9b89351be14535ce08163da65b521f`. | 2.93-second, 30 fps recording. The useful passage shows two soft bodies forming a narrow bridge, widening the shared waist and relaxing into one body. |
 | Contact shadow | Same acquired Jelly Squash pack, `png/separate/Shadow.png` | Same CC0 1.0 license. Inspected and copied byte-for-byte to `assets/images/jelly-match/contact-shadow.png`; source and output hashes are identical. | Static 334 × 150 RGBA texture, maximum alpha 26/255. Runtime placement, tint and opacity establish contact independently of the moving gel. The pack's `WithShadow` bodies include faces and are not used. |
 | Gel contact and fusion recordings | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0. Original archive acquired; `slime_09.ogg` and `slime_16.ogg` selected for the landing, merge and clear derivatives. The creator's source page records the license and describes some slime recordings as made from real slime; it does not identify which individual files use that technique. | One-shot recordings; no loops. The delivered cues layer, shape and time the acquired recordings. |
 | Elastic release layer | Aeva, [BOING!](https://opengameart.org/content/boing) | CC0 1.0. Original `boing.flac` acquired from the creator's OpenGameArt upload and selected for the clear derivative. The source page records the license. | One authored spring sound made with an Arturia MicroFreak. This is a synthesized source recording, not rubber foley. The delivered layer is pitched and shaped to fit the release. |
@@ -200,9 +201,16 @@ continuous contour. Moving meniscus light, lower-edge attenuation and a restrain
 highlight add thickness without warping the separate picture or word. These are
 runtime material effects, not additional sourced animation clips.
 
-The 1.05-second committed timeline remains unchanged: two contact lobes unite by
-0.40 seconds, briefly hold the combined picture and word, compress from 0.57 to
-0.70 seconds, then spring upward and retract. The existing pop cue at 0.70 seconds
+The 1.05-second committed timeline remains unchanged. The shared skin inherits
+both actual held centers and stretches at release. A thin bridge forms while the
+two lobes remain distinct for approximately the first 0.17 seconds. The neck then
+widens as both sides gather around their common center, completing the union at
+0.55 seconds. Paint gradually flows into the destination color. The original
+learning faces fade before the combined picture and word appear, avoiding double
+text during the transition. One gentle recovery leads into compression from
+0.60 to 0.70 seconds, then the body springs upward and retracts. Deep-overlap
+drops briefly express two pressure lobes from their actual held pose; edge drops
+retain their existing separation. The existing pop cue at 0.70 seconds
 starts that release. Five small pieces reuse the acquired gel illustration; a
 brief supporting bloom reuses `assets/chests/particles/portal_glow.png`, from
 Bobardo's already acquired Modern 2D Animated Chests Pack_FREE Demo 1.0.2 under

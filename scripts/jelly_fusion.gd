@@ -42,17 +42,21 @@ func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
 	for bead: TextureRect in _beads:
 		bead.texture = surface
 
-func pose(a: Vector2, b: Vector2, destination: Vector2, extent: Vector2, unit: float,
-		progress: float, union: float, compression: float, release: float, opacity: float) -> void:
-	stage = "release" if progress >= 2.0 / 3.0 else "compress" if progress >= 0.54 else "hold" if progress >= 0.38 else "union" if progress >= 0.20 else "contact"
+func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, extent_b: Vector2, unit: float,
+		progress: float, compression: float, release: float, opacity: float) -> void:
+	stage = "release" if progress >= 2.0 / 3.0 else "compress" if progress >= 0.57 else "hold" if progress >= 0.52 else "union" if progress >= 0.12 else "contact"
 	var bounds := Rect2(a, Vector2.ZERO).expand(b).grow(unit * 1.35)
 	position = bounds.position
 	size = bounds.size
 	_paint.size = size
 	_gel.set_shader_parameter("canvas_size", size)
-	_gel.set_shader_parameter("body_a", Vector4(a.x - position.x, a.y - position.y, extent.x, extent.y))
-	_gel.set_shader_parameter("body_b", Vector4(b.x - position.x, b.y - position.y, extent.x, extent.y))
-	_gel.set_shader_parameter("neck", unit * lerpf(0.04, 0.17, sin(union * PI)))
+	_gel.set_shader_parameter("body_a", Vector4(a.x - position.x, a.y - position.y, extent_a.x, extent_a.y))
+	_gel.set_shader_parameter("body_b", Vector4(b.x - position.x, b.y - position.y, extent_b.x, extent_b.y))
+	# The thin liquid bridge widens while both lobes remain readable, then the
+	# waist relaxes into the final painted body instead of snapping to a sprite.
+	var bridge: float = smoothstep(0.0, 0.24, progress) * (1.0 - smoothstep(0.30, 0.52, progress))
+	_gel.set_shader_parameter("neck", unit * (0.012 + bridge * 0.26))
+	_gel.set_shader_parameter("mixing", smoothstep(0.20, 0.54, progress))
 	_gel.set_shader_parameter("flow", progress)
 	_gel.set_shader_parameter("charge", compression)
 	_gel.set_shader_parameter("opacity", opacity)

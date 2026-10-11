@@ -535,6 +535,13 @@ func _release(global_point: Vector2) -> void:
 	var from: Vector2 = _tiles[source].position if _tiles.has(source) else Vector2.ZERO
 	var dragged: bool = _dragging
 	var held: Dictionary = _contact_state()
+	if dragged and target >= 0:
+		# Continue from the painted skins, including the held lift and pressure.
+		var inverse: Transform2D = get_global_transform().affine_inverse()
+		held["origin_a"] = inverse * _tiles[source]._surface.get_global_rect().get_center()
+		held["origin_b"] = inverse * _tiles[target]._surface.get_global_rect().get_center()
+		held["stretch_a"] = _tiles[source]._surface.scale
+		held["stretch_b"] = _tiles[target]._surface.scale
 	_pointer = NO_POINTER
 	_source = -1
 	_target = -1
@@ -591,7 +598,9 @@ func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_
 				visual.start = from + _tile_rect(fusion.a).size * 0.5
 				if held.get("kind", "none") == "match" and not Vector2(held.direction).is_zero_approx():
 					visual.direction = Vector2(held.direction)
-				visual.contact_strength = lerpf(0.35, 1.0, smoothstep(0.0, 0.14, _contact_elapsed))
+				for key: String in ["origin_a", "origin_b", "stretch_a", "stretch_b"]:
+					if held.has(key):
+						visual[key] = held[key]
 				break
 		_snapbacks.erase(first)
 		_snapbacks.erase(second)
@@ -925,7 +934,8 @@ func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 		_fusion_visuals[id] = {"art": art, "merged": merged,
 			"start": _tile_rect(fusion.a).get_center(),
 			"direction": (_tile_rect(fusion.b).get_center() - _tile_rect(fusion.a).get_center()).normalized(),
-			"contact_strength": 0.0}
+			"origin_a": _tile_rect(fusion.a).get_center(), "origin_b": _tile_rect(fusion.b).get_center(),
+			"stretch_a": Vector2.ONE, "stretch_b": Vector2.ONE}
 	return _fusion_visuals[id]
 
 func _remove_fusion_visual(id: String) -> void:
@@ -963,37 +973,42 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	var unit: float = _pitch - _gap
 	var size_factor: float = 1.28
 	var stretch := Vector2.ONE
-	var contact: float = smoothstep(0.0, 0.30, p)
-	var union: float = smoothstep(0.24, 0.38, p)
-	var close_drop: bool = Vector2(visual.start).distance_to(destination) < _pitch * 0.4
-	var contact_lobe: float = sin(clampf(p / 0.27, 0.0, 1.0) * PI) if close_drop else 0.0
-	var held_separation: float = float(visual.contact_strength) * unit * 0.25 * (1.0 - smoothstep(0.0, 0.27, p)) if close_drop else 0.0
-	var first_center: Vector2 = Vector2(visual.start).lerp(destination, contact)
-	var second_center: Vector2 = destination
-	if close_drop:
-		first_center -= Vector2(visual.direction) * (contact_lobe * _pitch * 0.17 + held_separation)
-		second_center += Vector2(visual.direction) * (contact_lobe * _pitch * 0.12 + held_separation)
+	# Give the neck time to form before the two lobes flow into their common
+	# center. Both bodies contribute; one does not slide underneath the other.
+	var gather: float = smoothstep(0.16, 0.52, p)
+	var union: float = smoothstep(0.32, 0.40, p)
+	var separate_faces: float = 1.0 - smoothstep(0.24, 0.32, p)
+	var origin_a: Vector2 = visual.origin_a
+	var origin_b: Vector2 = visual.origin_b
+	var center: Vector2 = ((origin_a + origin_b) * 0.5).lerp(destination, smoothstep(0.14, 0.52, p))
+	var half_separation: Vector2 = (origin_b - origin_a) * 0.5
+	# Deep drops start in their actual held pose, then express the two soft
+	# lobes briefly before joining. Edge drops already have that separation.
+	var opening: float = maxf(0.0, unit * 0.72 - half_separation.length() * 2.0) * smoothstep(0.0, 0.10, p)
+	half_separation = (half_separation + Vector2(visual.direction) * opening * 0.5) * (1.0 - gather)
+	var first_center: Vector2 = center - half_separation
+	var second_center: Vector2 = center + half_separation
 	for cell: Dictionary in [a, b]:
 		if not _tiles.has(int(cell.id)):
 			continue
 		var droplet: Tile = _tiles[int(cell.id)]
 		droplet.set_support(0.0, 0.0, false)
-		droplet.visible = not reduced_motion and p < 0.38
+		droplet.visible = not reduced_motion and separate_faces > 0.0
 		droplet._surface.hide()
-		droplet.modulate.a = 1.0 - union
+		droplet.modulate.a = separate_faces
 		droplet.z_index = 28 if int(cell.id) == int(a.id) else 27
-		var center: Vector2 = first_center if int(cell.id) == int(a.id) else second_center
-		droplet.position = center - droplet.size * 0.5
+		var face_center: Vector2 = first_center if int(cell.id) == int(a.id) else second_center
+		droplet.position = face_center - droplet.size * 0.5
 		droplet.deform(0.0, 0.0)
-	var compression: float = smoothstep(0.54, 2.0 / 3.0, p)
+	var compression: float = smoothstep(0.57, 2.0 / 3.0, p)
 	var release: float = clampf((p - 2.0 / 3.0) * 3.0, 0.0, 1.0)
 	var body_opacity: float = 1.0
 	var content_opacity: float = 1.0
 	var rise: float = 0.0
 	if not reduced_motion:
-		size_factor = lerpf(1.0, 1.28, union)
+		size_factor = lerpf(1.0, 1.28, smoothstep(0.16, 0.50, p))
 		content_opacity = union
-		var settle: float = sin(clampf((p - 0.30) / 0.24, 0.0, 1.0) * TAU) * (1.0 - smoothstep(0.30, 0.54, p)) * 0.10
+		var settle: float = sin(clampf((p - 0.48) / 0.15, 0.0, 1.0) * TAU) * (1.0 - smoothstep(0.48, 0.63, p)) * 0.06
 		stretch = Vector2(1.0 + settle + compression * 0.20, 1.0 - settle - compression * 0.22)
 		if release > 0.0:
 			var snap: float = smoothstep(0.0, 0.24, release)
@@ -1003,14 +1018,17 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 			body_opacity = 1.0 - smoothstep(0.66, 0.92, release)
 			content_opacity *= 1.0 - smoothstep(0.04, 0.44, release)
 		var extent: Vector2 = Vector2.ONE * unit * size_factor * stretch
+		var recovery: float = smoothstep(0.0, 0.24, p)
+		var extent_a: Vector2 = extent * Vector2(visual.stretch_a).lerp(Vector2.ONE, recovery)
+		var extent_b: Vector2 = extent * Vector2(visual.stretch_b).lerp(Vector2.ONE, recovery)
 		# The same two painted lobes become one surface; no sprite crossfade at the seam.
 		art.pose(first_center - Vector2(0, rise), second_center - Vector2(0, rise), destination,
-			extent, unit, p, union, compression * (1.0 - release), release, body_opacity)
+			extent_a, extent_b, unit, p, compression * (1.0 - release), release, body_opacity)
 	else:
 		art.hide()
 	merged._surface.visible = reduced_motion
 	merged.size = Vector2.ONE * unit * size_factor
-	merged.position = destination - merged.size * 0.5 - Vector2(0, rise * 0.65)
+	merged.position = (destination if reduced_motion else center) - merged.size * 0.5 - Vector2(0, rise * 0.65)
 	merged.modulate.a = content_opacity
 	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
 	merged.set_support(0.0, maxf(0.0, 1.0 - stretch.y))
