@@ -10,7 +10,7 @@ const directory = __dirname;
 const output = path.join(directory, 'review-output');
 const posesOnly = process.argv.includes('--poses-only');
 fs.mkdirSync(output, { recursive: true });
-const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.ttf': 'font/ttf' };
+const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.mp3': 'audio/mpeg', '.ttf': 'font/ttf' };
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
   const filename = path.resolve(directory, '.' + (pathname === '/' ? '/index.html' : pathname));

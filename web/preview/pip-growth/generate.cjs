@@ -1,260 +1,170 @@
 'use strict';
 
-// Compose age silhouettes from the shipped Pip illustration and wardrobe layers.
+// Catalog the sculpted Blender age models while preserving the approved voice repertoire.
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const ROOT = path.resolve(__dirname, '../../..');
-const { readSources, buildOutfits, buildExpressionSheet } = require(path.join(ROOT, 'tools/generate-pip-outfits.cjs'));
-const sources = readSources(ROOT);
 const PROFILE = { voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%' };
 const STAGES = [
-  [3, 'sprout', 'Sprout', null, 'summer',
-    'A round, top-heavy toddler in a mint play shirt, with short wings and close-set feet.',
-    'wave', 'Hello wave', "Hello! I'm Pip.", '#3c8771', '#eaf3e7',
-    { '#67C7D5': '#87BC9E', '#F6A98C': '#F3D49D' }],
-  [4, 'little-helper', 'Little Helper', null, 'spring',
-    'A little taller in roomy leaf-green overalls, with small helping wings and an uncovered tuft.',
-    'look', 'Curious look', "Let's grow together.", '#4d7954', '#ecf2db', {}],
-  [5, 'curious-scout', 'Curious Scout', 'summer', 'spring',
-    'A jaunty honey cap, sturdy overalls, and a wider stance for a playful first explorer.',
-    'high-five', 'High five', 'I wonder what we will find.', '#9c6c2d', '#fbefcb',
-    { '#F58D76': '#D4A94F', '#FFC3A9': '#F5DA8D', '#FFB27E': '#E7C16E', '#CC7660': '#A37D38' }],
-  [6, 'story-finder', 'Story Finder', 'autumn', 'spring',
-    'A raspberry school beret, cream shirt, and a cross-body book satchel on a newly upright silhouette.',
-    'peekaboo', 'Peekaboo', 'Every word can tell a story.', '#a55867', '#f9e6e5',
-    { '#C28350': '#BE7183', '#8D6746': '#875061', '#E3AB42': '#E9C275', '#51977A': '#487F7B', '#37755F': '#35645F', '#A7D7AC': '#B8DCD0' }],
-  [7, 'trail-buddy', 'Trail Buddy', 'jungle', 'jungle',
-    'A sage trail hat, practical pocket vest, and longer body for an increasingly independent explorer.',
-    'stretch', 'Wing stretch', 'A little practice goes a long way.', '#657e44', '#edf1dc',
-    { '#C6B178': '#91AE7C', '#C9B27B': '#A6BC8B', '#A68D59': '#708E62', '#AB915D': '#79976B', '#F6DE94': '#F2E2AF', '#E1C990': '#D9D6A2', '#7E9364': '#577C59' }],
-  [8, 'wayfinder', 'Wayfinder', 'winter', 'winter',
-    'A teal knit cap, amber scarf, and longer jacket make a warm, capable walking companion.',
-    'hop', 'Happy hop', 'We can find a new way together.', '#36857e', '#e2f1ed',
-    { '#78ABC6': '#70A9A0', '#467C9B': '#427C76', '#D86176': '#D9AB50', '#E77786': '#E6BB66', '#DDF2EE': '#F4E9C4', '#83B9D3': '#70A9A0', '#C5E5EC': '#ACD0BC', '#DCEFEA': '#D5E7D5', '#98C5CF': '#77AFA1' }],
-  [9, 'word-maker', 'Word Maker', 'autumn', 'candy',
-    'A tilted cornflower beret and a long maker\'s apron, with a slimmer face and room to create.',
-    'dance-sway', 'Gentle sway', "Let's make something with our words.", '#627d9b', '#e8edf6',
-    { '#C28350': '#839EB8', '#8D6746': '#5B728D', '#E3AB42': '#EBC171', '#9ED3C4': '#D7E6DA', '#ED9BB5': '#79A4A0', '#FFE4E6': '#EFE5CD', '#E68DA9': '#8BB4AE', '#C58DB6': '#B9935C', '#976A76': '#786950' }],
-  [10, 'sky-explorer', 'Sky Explorer', 'summer', 'space',
-    'A teal flight cap with goggles, pearl explorer suit, and open shoulders for bigger discoveries.',
-    'flutter', 'Wing flutter', 'There is a whole world to explore.', '#8e7946', '#f3ecd8',
-    { '#F58D76': '#719C95', '#FFC3A9': '#AACFC2', '#FFB27E': '#91B7A7', '#CC7660': '#527F79', '#E4EEF0': '#F1EDD9', '#95B5C9': '#C9BA85', '#9EC9D4': '#B8CDAE', '#708DA7': '#9A895B', '#67778A': '#7D7258' }],
-  [11, 'bright-navigator', 'Bright Navigator', 'ocean', 'space',
-    'A cream navigator cap and blue field suit on a tall, balanced and confident silhouette.',
-    'dance-wave', 'Two-step wave', 'We are learning more, one word at a time.', '#4e7897', '#e6eff5',
-    { '#E4EEF0': '#A0C0D0', '#95B5C9': '#5F8BA4', '#9EC9D4': '#DEE7DA', '#708DA7': '#557487', '#DF8576': '#D5A562' }],
-  [12, 'kind-guide', 'Kind Guide', 'autumn', 'ocean',
-    'An uncovered swept tuft, cream collar, and deep teal guide jacket; tall and composed, still playful.',
-    'dance-hop', 'Celebration dance', 'Look how far we have come. Keep being curious!', '#456f65', '#e5eee2',
-    { '#C28350': '#D1A65E', '#8D6746': '#94733E', '#E3AB42': '#E9CF8A', '#4E809E': '#42756D', '#5D92B0': '#70968A', '#DF8576': '#D7AE59', '#F2F5E8': '#F5E9BF' }]
+  [
+    3,
+    "sprout",
+    "Sprout",
+    "wave",
+    "Hello wave",
+    "Hello! I'm Pip.",
+    "#3c8771",
+    "#eaf3e7"
+  ],
+  [
+    4,
+    "little-helper",
+    "Little Helper",
+    "look",
+    "Curious look",
+    "Let's grow together.",
+    "#4d7954",
+    "#ecf2db"
+  ],
+  [
+    5,
+    "curious-scout",
+    "Curious Scout",
+    "high-five",
+    "High five",
+    "I wonder what we will find.",
+    "#9c6c2d",
+    "#fbefcb"
+  ],
+  [
+    6,
+    "story-finder",
+    "Story Finder",
+    "peekaboo",
+    "Peekaboo",
+    "Every word can tell a story.",
+    "#a55867",
+    "#f9e6e5"
+  ],
+  [
+    7,
+    "trail-buddy",
+    "Trail Buddy",
+    "stretch",
+    "Wing stretch",
+    "A little practice goes a long way.",
+    "#657e44",
+    "#edf1dc"
+  ],
+  [
+    8,
+    "wayfinder",
+    "Wayfinder",
+    "hop",
+    "Happy hop",
+    "We can find a new way together.",
+    "#36857e",
+    "#e2f1ed"
+  ],
+  [
+    9,
+    "word-maker",
+    "Word Maker",
+    "dance-sway",
+    "Gentle sway",
+    "Let's make something with our words.",
+    "#627d9b",
+    "#e8edf6"
+  ],
+  [
+    10,
+    "sky-explorer",
+    "Sky Explorer",
+    "flutter",
+    "Wing flutter",
+    "There is a whole world to explore.",
+    "#8e7946",
+    "#f3ecd8"
+  ],
+  [
+    11,
+    "bright-navigator",
+    "Bright Navigator",
+    "dance-wave",
+    "Two-step wave",
+    "We are learning more, one word at a time.",
+    "#4e7897",
+    "#e6eff5"
+  ],
+  [
+    12,
+    "kind-guide",
+    "Kind Guide",
+    "dance-hop",
+    "Celebration dance",
+    "Look how far we have come. Keep being curious!",
+    "#456f65",
+    "#e5eee2"
+  ]
 ];
 
-function sourceLayer(name) {
-  if (!name) return '';
-  const start = sources.wardrobe.indexOf(`<g id="${name}"`);
-  if (start < 0) throw new Error(`Missing source wardrobe layer ${name}`);
-  const tags = /<\/?g\b[^>]*>/g;
-  tags.lastIndex = start;
-  let depth = 0;
-  for (let match; (match = tags.exec(sources.wardrobe));) {
-    depth += match[0].startsWith('</') ? -1 : 1;
-    if (!depth) return sources.wardrobe.slice(start, tags.lastIndex);
-  }
-  throw new Error(`Unbalanced source wardrobe layer ${name}`);
-}
-
-function recolor(layer, colors) {
-  return layer.replace(/#[A-Fa-f0-9]{6}/g, color => colors[color.toUpperCase()] || color);
-}
-
-// Preserve the expressive source illustration across the complete growth range.
-const BABY_PALETTE = { '#F6D36E': '#F7DB91', '#FFE68E': '#FFF0B9', '#FFDE7F': '#FFE4A1', '#F3AE65': '#F0BB81', '#F3B39B': '#F4B9AA' };
-const YOUNG_PALETTE = { '#F6D36E': '#F5D582', '#FFE68E': '#FFEAA3' };
-const PREEN_INSET = 'translate(61 112) scale(.90) translate(-61 -112)';
-function svgTree(source) {
-  const root = { tag: '#document', attributes: {}, children: [] };
-  const stack = [root];
-  for (const token of source.match(/<!--[\s\S]*?-->|<(?:[^>"']|"[^"]*"|'[^']*')*>|[^<]+/g) || []) {
-    if (token.startsWith('<!--') || token.startsWith('<?')) continue;
-    if (token.startsWith('</')) {
-      if (stack.length < 2 || stack.pop().tag !== token.slice(2, -1).trim()) throw new Error('Unbalanced Pip source');
-    } else if (token.startsWith('<')) {
-      const match = /^<([\w:-]+)([\s\S]*?)(\/?)>$/.exec(token);
-      if (!match) throw new Error('Unsupported Pip source element');
-      const node = { tag: match[1], attributes: {}, children: [] };
-      for (const [, key, value] of match[2].matchAll(/([\w:-]+)\s*=\s*("[^"]*"|'[^']*')/g)) node.attributes[key] = value.slice(1, -1);
-      stack.at(-1).children.push(node);
-      if (!match[3]) stack.push(node);
-    } else if (token.trim()) stack.at(-1).children.push(token.trim());
-  }
-  if (stack.length !== 1 || root.children.length !== 1) throw new Error('Incomplete Pip source');
-  return root.children[0];
-}
-function svgText(node, depth = 0) {
-  const indent = '  '.repeat(depth);
-  if (typeof node === 'string') return indent + node;
-  const attributes = Object.entries(node.attributes).map(([key, value]) => ` ${key}="${value}"`).join('');
-  if (!node.children.length) return `${indent}<${node.tag}${attributes} />`;
-  if (node.children.every(child => typeof child === 'string')) return `${indent}<${node.tag}${attributes}>${node.children.join('')}</${node.tag}>`;
-  return `${indent}<${node.tag}${attributes}>\n${node.children.map(child => svgText(child, depth + 1)).join('\n')}\n${indent}</${node.tag}>`;
-}
-// Head/body balance is the primary age cue. Clothing provides a second cue at
-// thumbnail scale. All transforms use the same source coordinates in every atlas.
-const GROWTH_PROPORTIONS = {
-  0: [.72, .64, 1.045, 8, .64, .69, 9, .68],
-  3: [.78, .76, 1.00, 5, .72, .78, 6, .75],
-  4: [.83, .85, .97, 2, .80, .86, 4, .81],
-  5: [.88, .93, .94, 0, .87, .92, 2, .87],
-  6: [.89, 1.01, .90, -3, .90, .97, 0, .91],
-  7: [.92, 1.07, .87, -5, .93, 1.00, -1, .94],
-  8: [.93, 1.12, .84, -7, .95, 1.01, -2, .96],
-  9: [.94, 1.16, .81, -9, .96, 1.02, -3, .98],
-  10: [.94, 1.20, .79, -10, .97, 1.03, -4, 1.0],
-  11: [.95, 1.23, .77, -11, .98, 1.04, -5, 1.0],
-  12: [.96, 1.26, .75, -12, .99, 1.05, -6, 1.0]
+const DESIGNS = {
+  0: 'A cream duckling sitting in a broken eggshell, with a huge round face, downy curl and tiny feet.',
+  3: 'A wobbly toddler with a turquoise bib, soft play shorts, a double curl and close-set feet.',
+  4: 'A preschool helper in blue overalls and a broad sun visor, with short helping wings.',
+  5: 'A playful kindergartener in a golden rain hood, roomy coat and tall green rain boots.',
+  6: 'A first-school companion with an oversized turquoise backpack and coral cardigan, standing newly upright.',
+  7: 'An active schoolchild in a green sports shirt, white headband and sneakers, with longer wings.',
+  8: 'An independent schoolchild in a roomy violet hoodie, with a broad hood and kangaroo pocket.',
+  9: 'A curious maker with round blue glasses, denim overalls and a swept feather crest.',
+  10: 'An adventurous older child in a backward blue cap, an open overshirt and canvas sneakers.',
+  11: 'A confident preteen in a warm varsity jacket, headphones around the neck and a taller stance.',
+  12: 'A composed young guide with a small swept-feather head, long teal jacket, messenger bag and longer legs.'
 };
-function proportions(age) {
-  const [bx, by, h, hy, wx, wy, wingY, feet] = GROWTH_PROPORTIONS[age];
-  return {
-    body: `translate(61 104) scale(${bx} ${by}) translate(-61 -104)`,
-    head: `translate(61 ${72 + hy}) scale(${h}) translate(-61 -72)`,
-    wings: `translate(61 ${80 + wingY}) scale(${wx} ${wy}) translate(-61 -80)`,
-    feet: `translate(61 106) scale(${feet}) translate(-61 -105)`
-  };
-}
-function motionPivots(age) {
-  const [, by, , hy, wx, wy, wingY, feet] = GROWTH_PROPORTIONS[age];
-  return [[61, 104 - 6 * by], [61, 72 + hy],
-    [61 - 28 * wx, 80 + wingY - 2 * wy], [61 + 27 * wx, 80 + wingY - 2 * wy],
-    [61 - 21 * feet, 106 - 2 * feet], [61 + 19 * feet, 106 - 2 * feet]];
-}
-function buildAge(age, wardrobe) {
-  const result = {};
-  const transforms = proportions(age);
-  const wrap = (children, kind) => ({ tag: 'g', attributes: { transform: transforms[kind], 'data-growth-part': kind }, children });
-  const composed = age === 0 ? null : buildOutfits({ ...sources, wardrobe });
-  const original = { ...sources, expressions: buildExpressionSheet(sources) };
-  for (const [kind, suffix] of [['regular', ''], ['idle', '-idle'], ['parts', '-parts'], ['expressions', '-expressions'], ['expressionHeads', '-expression-heads']]) {
-    const sheet = svgTree(composed ? composed[`pip-spring${suffix}.svg`] : original[kind]);
-    sheet.children = sheet.children.filter(child => child.tag !== 'title');
-    sheet.children.unshift({ tag: 'title', attributes: {}, children: [`Pip age ${age} ${kind}; original Pip illustration with authored age proportions and wardrobe adaptations`] });
-    const frames = sheet.children.find(child => child.tag === 'g').children;
-    frames.forEach((frame, index) => {
-      if (kind === 'parts' || kind === 'expressionHeads') {
-        const part = kind === 'expressionHeads' ? 'head' : ['body', 'head', 'wings', 'wings', 'feet', 'feet'][index];
-        frame.children = [wrap(frame.children, part)];
-        return;
-      }
-      const head = [];
-      const body = [];
-      const wings = [];
-      const feet = [];
-      const shadow = [];
-      let afterBody = false;
-      for (const child of frame.children) {
-        const attributes = child.attributes || {};
-        if (attributes.fill === '#65708A') {
-          if (attributes.rx) attributes.rx = String(39 * GROWTH_PROPORTIONS[age][0]);
-          shadow.push(child);
-        } else if (attributes.fill === '#F3AE65') feet.push(child);
-        else if (attributes.fill === '#F6D36E' || attributes.stroke === '#FFEDA9') { body.push(child); afterBody = attributes.fill === '#F6D36E'; }
-        else if (composed && afterBody && child.tag === 'g') { body.push(child); afterBody = false; }
-        else if (attributes.fill === '#FFDE7F' || attributes.stroke === '#D4AE58') wings.push(child);
-        else head.push(child);
-      }
-      frame.children = [...shadow, wrap(feet, 'feet'), wrap(body, 'body'), wrap(wings, 'wings'), wrap(head, 'head')];
-      if (kind === 'idle' && index === 3) {
-        frame.children = [{ tag: 'g', attributes: { transform: PREEN_INSET }, children: frame.children }];
-      }
-    });
-    result[`pip-spring${suffix}.svg`] = (age <= 4 ? recolor(svgText(sheet), age === 0 ? BABY_PALETTE : YOUNG_PALETTE) : svgText(sheet)) + '\n';
-  }
-  return result;
-}
-
 const art = path.join(__dirname, 'art');
 const runtimeArt = path.join(ROOT, 'assets/images/mascots/growth');
 const runtimeAudio = path.join(ROOT, 'assets/audio/pip-growth');
-fs.mkdirSync(art, { recursive: true });
-fs.mkdirSync(runtimeArt, { recursive: true });
-fs.mkdirSync(runtimeAudio, { recursive: true });
-fs.mkdirSync(path.join(__dirname, 'audio'), { recursive: true });
-fs.mkdirSync(path.join(ROOT, 'data'), { recursive: true });
-const actions = [];
-const voiceIds = [];
-const BABY_STAGE = [0, 'baby', 'Baby Pip', null, null, 'A downy little duckling with a round face, tiny wings, and a gentle first hello.', 'wave', 'Hello wave', "Hello! I'm Pip.", '#b7824e', '#fbefdc', BABY_PALETTE];
-const stages = [BABY_STAGE, ...STAGES].map(([age, id, name, head, body, description, action, actionLabel, text, accent, background, palette]) => {
+const actions = [], voiceIds = [];
+const BABY_STAGE = [0, 'baby', 'Baby Pip', 'wave', 'Hello wave', "Hello! I'm Pip.", '#b7824e', '#fbefdc'];
+const stages = [BABY_STAGE, ...STAGES].map(([age, id, name, action, actionLabel, text, accent, background]) => {
   if (!actions.includes(action)) actions.push(action);
   const voiceId = `pip-growth-${age === 0 ? 'sprout' : id}`;
   if (!voiceIds.includes(voiceId)) voiceIds.push(voiceId);
-  const adaptation = fs.readFileSync(path.join(ROOT, 'assets/images/mascots/growth/age-details.svg'), 'utf8');
-  const detail = id => {
-    const node = svgTree(adaptation).children.find(item => item.tag === 'defs').children.find(item => item.attributes.id === id);
-    if (!node) throw new Error(`Missing age detail ${id}`);
-    return svgText(node);
-  };
-  let selectedBody = body ? recolor(sourceLayer(`${body}-body`), palette).replace(`id="${body}-body"`, 'id="spring-body"') : '<g id="spring-body" />';
-  let selectedHead = head ? recolor(sourceLayer(`${head}-head`), palette).replace(`id="${head}-head"`, 'id="spring-head"') : '<g id="spring-head" />';
-  if (age === 6) selectedBody = `<g id="spring-body">${detail('school-satchel')}</g>`;
-  if (age === 10) selectedHead = selectedHead.replace(/<\/g>$/, `${detail('flight-goggles')}</g>`);
-  if (age === 12) {
-    selectedHead = '<g id="spring-head" />';
-    selectedBody = `<g id="spring-body">${detail('guide-jacket')}</g>`;
-  }
-  const wardrobe = sources.wardrobe.replace(sourceLayer('spring-body'), selectedBody).replace(sourceLayer('spring-head'), selectedHead);
-  const sheets = buildAge(age, wardrobe);
-  // Retain the established file names for ages 3+; identity is age-only metadata.
+  const model = JSON.parse(fs.readFileSync(path.join(ROOT, `build/pip-models/${age}/model.json`), 'utf8'));
   const stem = age === 0 ? 'pip-baby' : `pip-lv${age}`;
-  const sheetPaths = {};
-  const previewPaths = {};
+  const sheetPaths = {}, previewPaths = {};
   for (const [kind, suffix] of [['regular', ''], ['idle', '-idle'], ['parts', '-parts'], ['expressions', '-expressions'], ['expressionHeads', '-expression-heads']]) {
-    const filename = `${stem}${suffix}.svg`;
-    const svg = sheets[`pip-spring${suffix}.svg`].replace(/Pip spring wardrobe[^<]*;/, `Pip age ${age} ${name} ${kind};`);
-    fs.writeFileSync(path.join(art, filename), svg);
-    fs.writeFileSync(path.join(runtimeArt, filename), svg);
+    const filename = `${stem}${suffix}.png`;
+    const bytes = fs.readFileSync(path.join(runtimeArt, filename));
+    fs.writeFileSync(path.join(art, filename), bytes);
     const sourcePath = `res://assets/images/mascots/growth/${filename}`;
     const imported = `res://.godot/imported/${filename}-${crypto.createHash('md5').update(sourcePath).digest('hex')}.ctex`;
-    const importFile = path.join(runtimeArt, filename + '.import');
-    if (!fs.existsSync(importFile)) {
-      const sourceImport = fs.readFileSync(path.join(ROOT, 'assets/images/mascots/outfits/pip-spring.svg.import'), 'utf8');
-      const settings = sourceImport.replace(/^uid=.*\r?\n/m, '')
-        .replaceAll('res://assets/images/mascots/outfits/pip-spring.svg', sourcePath)
-        .replaceAll('res://.godot/imported/pip-spring.svg-636dd9e9ac4652158402e147298adcb3.ctex', imported);
-      fs.writeFileSync(importFile, settings);
-    }
+    if (!fs.existsSync(path.join(runtimeArt, filename + '.import'))) fs.writeFileSync(path.join(runtimeArt, filename + '.import'), `[remap]\n\nimporter="texture"\ntype="CompressedTexture2D"\npath="${imported}"\nmetadata={\n"vram_texture": false\n}\n\n[deps]\n\nsource_file="${sourcePath}"\ndest_files=["${imported}"]\n\n[params]\n\ncompress/mode=0\ncompress/high_quality=false\ncompress/lossy_quality=0.7\ncompress/hdr_compression=1\ncompress/normal_map=0\ncompress/channel_pack=0\nmipmaps/generate=false\nmipmaps/limit=-1\nroughness/mode=0\nroughness/src_normal=""\nprocess/fix_alpha_border=true\nprocess/premult_alpha=false\nprocess/normal_map_invert_y=false\nprocess/hdr_as_srgb=false\nprocess/hdr_clamp_exposure=false\nprocess/size_limit=0\ndetect_3d/compress_to=1\n`);
     sheetPaths[kind] = `assets/images/mascots/growth/${filename}`;
     previewPaths[kind] = `art/${filename}`;
   }
   return {
-    age, label: age === 0 ? 'Baby' : age === 12 ? 'Age 12+' : `Age ${age}`, id, name, description,
-    accent, background, compositionStatus: 'integrated-age-silhouette',
-    source: { head: age === 12 ? null : head ? `${head}-head` : null, body: age === 6 ? 'school-satchel' : age === 12 ? 'guide-jacket' : body ? `${body}-body` : null,
-      palette: { ...palette, ...(age === 3 || age === 4 ? YOUNG_PALETTE : {}) },
-      proportions: proportions(age), poseInsets: { idlePreen: PREEN_INSET },
-      details: age === 6 ? ['school-satchel'] : age === 10 ? ['flight-goggles'] : age === 12 ? ['guide-jacket'] : [] },
+    age, label: age === 0 ? 'Baby' : age === 12 ? 'Age 12+' : `Age ${age}`, id, name, description: DESIGNS[age],
+    accent, background, compositionStatus: 'integrated-sculpted-age-model',
+    source: { model: 'tools/pip-growth/render.py', assembly: 'tools/pip-growth/assemble.py', form: model.form, frameOffsetY: 3, render: 'Blender 5.2 Cycles; transparent orthographic layers; 360 px cells' },
     art: sheetPaths, previewArt: previewPaths,
-    motionPivots: motionPivots(age), shadowRadius: 39 * GROWTH_PROPORTIONS[age][0],
+    motionPivots: model.motionPivots.map(([x, y]) => [x, y + 3]), shadowRadius: model.shadowRadius,
     actions: [...actions], newAction: { id: action, label: actionLabel },
     voices: [...voiceIds], newVoice: { id: voiceId, text, path: `assets/audio/pip-growth/${age === 0 ? 'sprout' : id}.mp3`, previewPath: `audio/${age === 0 ? 'sprout' : id}.mp3` }
   };
 });
 const catalog = {
-  schemaVersion: 2, title: 'Grow with Pip', status: 'Integrated age silhouettes with a local interactive review',
-  description: 'Baby Pip and ten age silhouettes derived from integrated production artwork. Head-to-body balance, stance and clothing express the learning journey. Pip appearance follows completed curriculum ages, independently of word-mastery levels. These stages are not a developmental diagnosis.',
-  artSource: 'assets/images/mascots/pip-dance-parts.svg',
-  wardrobeSource: 'assets/images/mascots/outfits/wardrobe.svg',
-  ageDetailsSource: 'assets/images/mascots/growth/age-details.svg',
-  expressionsSource: 'assets/images/mascots/pip-expression-heads.svg',
+  schemaVersion: 3, title: 'Grow with Pip', status: 'Integrated sculpted age models with a local interactive review',
+  description: 'Eleven authored Blender duck models express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.',
+  artSource: 'tools/pip-growth/render.py',
+  designReference: 'assets/images/mascots/pip-dance-parts.svg',
   expressions: ['neutral', 'listening', 'thinking', 'delighted', 'proud', 'encourage', 'surprised', 'sleepy', 'wink', 'blink'],
   voice: { provider: 'Microsoft Edge TTS', clientVersion: '7.2.8', profile: PROFILE, postprocessing: 'none', autoplay: false, scope: 'Explicit preview playback or age-growth recognition; never gameplay guidance.' },
   stages
 };
 fs.writeFileSync(path.join(ROOT, 'data/pip-growth-stages.json'), JSON.stringify(catalog, null, 2) + '\n');
 fs.writeFileSync(path.join(__dirname, 'stages.json'), JSON.stringify(catalog, null, 2) + '\n');
-for (const weight of [600, 800]) fs.copyFileSync(path.join(ROOT, `assets/fonts/Nunito-${weight}.ttf`), path.join(__dirname, `Nunito-${weight}.ttf`));
-if (fs.existsSync(path.join(__dirname, 'Nunito.ttf'))) fs.unlinkSync(path.join(__dirname, 'Nunito.ttf'));
-fs.copyFileSync(path.join(ROOT, 'assets/fonts/OFL.txt'), path.join(__dirname, 'FONT-LICENSE.txt'));
 
 // Cache is inside the owned preview tree; ignored temporary files are not shipped.
 const cache = path.join(__dirname, '.voice-cache');
@@ -267,7 +177,7 @@ const requests = voicedStages.map(stage => ({
 }));
 const batch = { edgeTtsVersion: '7.2.8', profile: PROFILE, cacheDirectory: cache, requests };
 fs.writeFileSync(path.join(cache, 'batch.json'), JSON.stringify(batch, null, 2) + '\n');
-console.log(`Composed ${stages.length} Pip growth stages and ${stages.length * 5} production-format SVG sheets.`);
+console.log(`Composed ${stages.length} Pip growth stages and ${stages.length * 5} production-format PNG sheets.`);
 
 if (process.argv.includes('--install-voices')) {
   const files = requests.map((request, index) => {

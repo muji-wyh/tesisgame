@@ -44,7 +44,7 @@ func _run() -> void:
 		check(duck.growth_age == age, "Pip selects the requested growth age %d" % age)
 		check(duck.growth_actions() == ACTIONS.slice(0, maxi(1, age - 2)), "Age %d retains every previously learned gesture" % age)
 		var art: Texture2D = duck._outfit_sheet
-		check(art != null and art.resource_path == ("res://assets/images/mascots/growth/pip-baby.svg" if age == 0 else "res://assets/images/mascots/growth/pip-lv%d.svg" % age),
+		check(art != null and art.resource_path == ("res://assets/images/mascots/growth/pip-baby.png" if age == 0 else "res://assets/images/mascots/growth/pip-lv%d.png" % age),
 			"Age %d loads its own ordinary production atlas" % age)
 		if art == null:
 			continue

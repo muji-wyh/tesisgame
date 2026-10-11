@@ -1,183 +1,127 @@
-# Pip growth stages
+# Pip growth models
 
-The growth journey keeps the original Pip silhouette, cream eyes, orange bill,
-warm outlines, and expressive six-part body. Every age remains friendly and
-recognizable. The stages describe a learning journey, not a developmental
-diagnosis. Head-to-body balance, wing size, stance, and wardrobe change together.
+Pip uses eleven authored Blender models: Baby and ages 3 through 12+. The design
+keeps the original duck identity: golden down, a broad orange bill, cream eyes,
+small friendly wings and an expressive feather crown. The October 11 sculpted
+revision replaces the earlier wardrobe SVG variants, whose faces and silhouettes
+were too similar at header size.
 
-These are **integrated age silhouettes**, adapted from the existing production
-illustration. The October 11 revision adds a school satchel, flight goggles,
-and guide jacket to the original wardrobe vocabulary. The interactive review is a localhost-only asset
-tool, served directly from `web/preview/pip-growth/`. Run `npm run preview:pip`
-and open `http://127.0.0.1:41774/`. It is excluded from the production export
-and has no in-game entry.
+Age changes the head and cheek shape, eye proportions, feather crown, torso,
+wing length, leg length and clothing silhouette together. Everyday childhood
+clothing provides an additional recognition cue. These are playful learning
+characters, not claims about a child's development or prescribed interests.
 
 ## Visual progression
 
-Age is separate from Lv0–Lv99 mastery progression. Pip begins as Baby (`age: 0`).
-Completing an entire curriculum cohort grants its age appearance. A mastery-level
-change alone never changes Pip's artwork or available actions.
-
-Baby recomposes the original uncovered duck illustration with a large head,
-shorter cream-colored body, small wings and close-set feet. Original contours,
-speaking mouth and all ten expression heads remain intact. Each later stage
-gradually reduces head size relative to the body, opens the stance, and lengthens
-the torso. Every stage records its exact transforms and adjusted animation joints.
-The gameplay header presents age through Pip; Lv and its mastery track remain
-beside the character. The age remains available in Pip's accessible description
-and the vocabulary catalog's functional age selectors.
-
-| Age | Companion | Composition | Newly available action |
-| --- | --- | --- | --- |
-| Baby | Baby Pip | Cream down, oversized round face, tiny body, short wings and close-set feet | Hello wave |
-| Age 3 | Sprout | Top-heavy toddler proportions and a mint striped play shirt | Hello wave |
-| Age 4 | Little Helper | Slightly taller body, roomy leaf-green overalls and uncovered tuft | Curious look |
-| Age 5 | Curious Scout | Wider playful stance, honey cap and sturdy overalls | High five |
-| Age 6 | Story Finder | Upright school-age silhouette, raspberry beret, cream shirt and book satchel | Peekaboo |
-| Age 7 | Trail Buddy | Longer torso, sage field hat and practical pocket vest | Wing stretch |
-| Age 8 | Wayfinder | Teal knit cap, longer jacket and amber scarf | Happy hop |
-| Age 9 | Word Maker | Smaller face, cornflower beret and long maker's apron | Gentle sway |
-| Age 10 | Sky Explorer | Open shoulders, teal flight cap with goggles and pearl field suit | Wing flutter |
-| Age 11 | Bright Navigator | Tall balanced stance, cream navigator cap and blue field suit | Two-step wave |
-| Age 12+ | Kind Guide | Small uncovered head, full-length teal guide jacket, cream collar and leaf pin | Celebration dance |
-
-All earlier moves and voice lines remain in the preview repertoire. Breathing,
-blinking, and ten emotional expressions are available at every age; basic
-emotional support is never withheld as an unlock. More experience adds variety,
-not continuous activity or louder feedback. Preview actions play once, settle,
-and return to quiet breathing. Switching stages or hiding the page stops current
-action and speech. Reduced motion shows an authored happy expression without
-jumps, sway, or idle movement. Preview speech requires an explicit click.
-
-## Source, rights, and status
-
-| Material | Original source and creator | License / acquisition | Integration and available animation |
-| --- | --- | --- | --- |
-| Pip body, head, wings, and feet | `assets/images/mascots/pip-dance-parts.svg`, `pip.svg`, and `pip-idle-actions.svg`; existing original game art. No individual illustrator is identified in the existing repository record. | Already integrated project material. Repository package declares ISC; no separate artist license is recorded. No additional third-party license is claimed. | Original shapes retained. Six separate articulated parts, four ordinary poses, and four idle poses. These are illustration layers, not baked animation clips. |
-| Clothing | `assets/images/mascots/outfits/wardrobe.svg`; existing original project wardrobe art. | Already integrated under the same recorded project rights. | Head and body layers are recombined, recolored, and proportioned with the body. Source combinations and exact palette mappings are recorded in the stage catalog. |
-| Age wardrobe details | `assets/images/mascots/growth/age-details.svg`; Codex-authored vector adaptations, October 11, from the original summer shirt, ocean collar, and autumn leaf contours. | Authored locally for this project; same repository ISC declaration, with no new third-party acquisition or additional source rights claimed. | Integrated school satchel, flight goggles, and guide jacket in all five matching atlases. Details follow the torso or head joint in every expression and action. |
-| Faces | `assets/images/mascots/pip-expression-heads.svg`; authored project adaptations described in `docs/assets/pip-expressions.md`. | Already integrated derivative art under the existing source rights. | Ten expressions retained, including complete headwear. Full-body and head-only atlases share the existing source coordinates. |
-| Motion | `scripts/duck_mascot.gd` articulated joint conventions and existing gestures. Growth timing is authored in `preview.js` and the corresponding native growth-pose function. | Original project code and animation composition. | Head, body, wings, and feet move independently around existing joints. The browser and native growth gestures use the same beat curves. These are authored animations, not a claim that source illustration includes baked clips. |
-| Preview and age-growth voice | Microsoft Edge online TTS, `speech.platform.bing.com/consumer/speech/synthesize/readaloud`; Microsoft Ava Neural. English scripts authored for this game. | Generated and acquired locally with `edge-tts` 7.2.8. Microsoft service terms apply; see the [Microsoft Services Agreement](https://www.microsoft.com/servicesagreement). The LGPLv3 client license does not grant extra rights to the voice service. | Ten original response MP3 recordings acquired and integrated. Click-only in the review page; available for explicit age-growth recognition in the game. No gameplay guide narration or duck calls are added by this asset set. |
-| Typography | Nunito Project Authors; acquired Google Fonts material already in `assets/fonts/`. | SIL Open Font License 1.1; copied unchanged to `FONT-LICENSE.txt`. | Existing static 600/800 font instances are reused to avoid the variable-font weight issue previously observed in Windows WebKit. |
-
-## Voice profile and exact recordings
-
-The approved `ava-sweet` profile is used without substitution:
-
-| Setting | Value |
+| Age | Main silhouette and recognition cues |
 | --- | --- |
-| Voice | `en-US-AvaNeural` |
-| Rate | `-15%` |
-| Pitch | `+8Hz` |
-| Volume | `+0%` |
-| Postprocessing | None; original MP3 response bytes |
-| Generation client | `edge-tts` 7.2.8 |
+| Baby | A round cream duckling seated in a broken eggshell, one downy curl and tiny feet |
+| 3 | Top-heavy toddler, double curl, turquoise bib and soft play shorts |
+| 4 | Short preschool proportions, broad open sun visor and blue overalls |
+| 5 | Golden rain hood around the cheeks, roomy raincoat and tall green boots |
+| 6 | First-school backpack outside both shoulders, coral cardigan and newly upright stance |
+| 7 | Longer wings, green athletic shirt, white headband and canvas sneakers |
+| 8 | Violet hood framing the face, roomy sweatshirt and large kangaroo pocket |
+| 9 | Swept feather crest, round blue glasses and denim maker overalls |
+| 10 | Side-projecting backward cap, blue open overshirt and longer legs |
+| 11 | Tall varsity silhouette, neck headphones and a warm jacket with striped hem |
+| 12+ | Smaller face, side-swept feathers, long teal jacket and crossbody messenger bag |
 
-`web/preview/pip-growth/audio/manifest.json` records each exact script, runtime
-path, byte length, and SHA-256. The recordings also exist at
-`assets/audio/pip-growth/` for native use. The preview copies have identical
-bytes. Baby shares the existing Sprout greeting. Ages 4–12+ each add one line, progressing from a short greeting to a
-longer, encouraging sentence. Earlier lines remain available in the preview's
-voice selector. These are authored character lines, not vocabulary assessments.
+The gameplay header presents age through Pip's image. Age remains available in
+accessibility descriptions and functional vocabulary-age selectors. Mastery
+Lv0-Lv99 is separate: completing a curriculum cohort grants its age appearance;
+a level change or world-theme switch cannot change it.
 
-## Runtime and preview contract
+## Source, rights and acquisition status
 
-`data/pip-growth-stages.json` is the runtime source catalog;
-`web/preview/pip-growth/stages.json` is its exact preview copy. Each stage has:
+| Material | Source and creator | License / acquisition | Integration and animation |
+| --- | --- | --- | --- |
+| Original Pip design reference | Existing `assets/images/mascots/pip.svg` and `pip-dance-parts.svg`; original project artwork, individual illustrator not recorded | Already integrated project material. Repository declares ISC; no separate illustrator license or additional third-party rights are claimed. | Inspected as the identity reference. Original vectors remain available for the existing non-growth uses. |
+| Sculpted growth models | `tools/pip-growth/render.py`; authored locally by Codex for this project on October 11, 2026, at the user's request | Original project-authored mesh, curve, material and clothing work; repository ISC declaration. No purchased or generated-image assets. | Integrated as 55 PNG atlases. Custom cross-section meshes define head/body/bill forms; tapered meshes define wings/crowns; modeled clothing has bound edges, folds, seams and pockets. Six separable roots; ten expression heads plus a speaking head. |
+| Kenney Cube Pets 2.0 | User-provided `Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Cube Pets/`; Kenney, www.kenney.nl | Local collection present. `License.txt` inspected: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/ | Pack preview and chick OBJ structure inspected. Preview-only selection: the cube silhouette does not fit Pip's growth anatomy. No mesh, texture or animation from this pack is copied or shipped. |
+| Kenney Mini Characters 1.0 | User-provided collection, `3D assets/Mini Characters/`; Kenney | Local collection present. `License.txt` inspected: CC0, same URL above | Pack preview inspected. Human silhouettes do not match Pip. No assets acquired into the repository or integrated; no animation claim. |
+| Motion | Existing `scripts/duck_mascot.gd` and `web/preview/pip-growth/preview.js` | Original project code | Existing authored gestures drive the six rendered layers with model-specific pivots. No claim of baked Blender animation clips. |
+| Age-growth voice | Microsoft Edge online TTS, Microsoft Ava Neural; existing recordings and English scripts | Previously acquired with edge-tts 7.2.8. Microsoft service terms apply: https://www.microsoft.com/servicesagreement | Ten unchanged MP3 recordings. Baby shares the Sprout greeting. No new synthesis or processing in this revision. |
+| Preview typography | Nunito Project Authors; existing Google Fonts acquisition | SIL Open Font License 1.1, `web/preview/pip-growth/FONT-LICENSE.txt` | Existing static 600/800 font instances reused. |
 
-- `age`, `label`, `id`, `name`, and a short visual `description`.
-- `source` with wardrobe/detail layer IDs, palette substitutions, and proportion transforms.
-- `motionPivots` with six resized joint positions and `shadowRadius` for ground contact.
-- `art` with repository-relative runtime sheet paths, and `previewArt` with
-  corresponding paths relative to the review page.
-- `actions` and `voices` as cumulative ordered repertoires.
-- `newAction` and `newVoice` with the new or retained item at that age.
-- `newVoice.path` for runtime and `newVoice.previewPath` for the review page.
+## Rendering and runtime contract
 
-The 55 runtime SVG atlases are in `assets/images/mascots/growth/`. Their preview
-copies live under `web/preview/pip-growth/art/` and have identical bytes. No
-preview rendering code needs to be bundled into Godot.
+`tools/pip-growth/render.py` builds the source models and renders transparent
+layers with Blender 5.2 Cycles. The front orthographic camera has a fixed 3.6-unit
+frame, soft studio lights and a restrained coat response. All stages share the
+same camera and ground plane. `--save-models` saves editable neutral `.blend`
+files under `build/pip-models/<age>/`; these local review sources are excluded
+from the game export and can be recreated from the checked-in authoring script.
 
-| Sheet | Source size | Cells |
+`tools/pip-growth/assemble.py` composes the rendered layers into the existing
+mascot atlas contract. Every cell is 360 x 360 pixels and retains the existing
+120-unit pose coordinate system. A three-unit vertical inset places the webbed
+feet on the existing ground shadow; the catalog applies the same inset to every
+joint. Runtime imports are lossless with transparent
+edge correction. Catalog paths are Texture2D inputs; no runtime 3D renderer,
+Blender dependency or procedural character drawing is introduced.
+
+| Sheet | Cells | Content |
 | --- | --- | --- |
-| Ordinary | 480 × 120 | idle, speaking, blink, wave |
-| Idle | 480 × 120 | existing four idle-action poses |
-| Parts | 720 × 120 | body, head, left wing, right wing, left foot, right foot |
-| Expressions | 1200 × 120 | the documented ten complete expression poses |
-| Expression heads | 1200 × 120 | the same ten faces and their headwear |
+| Ordinary | 4 | Neutral, speaking, blink, wave |
+| Idle | 4 | Curious look, small stretch, wink, tucked sleepy pose |
+| Parts | 6 | Body, head, left/right wing, left/right foot |
+| Expressions | 10 | Complete neutral, listening, thinking, delighted, proud, encourage, surprised, sleepy, wink, blink poses |
+| Expression heads | 10 | Matching heads, including all headwear and face accessories |
 
-The public mascot API is `growth_age` and `set_growth_age(age)`. Age 0 selects
-Baby, ages 3–12 select the earned curriculum appearance, and invalid low ages
-normalize to Baby. The original `pip-lv3` through `pip-lv12` filenames are retained
-for compatibility with existing imports; their catalog identity is age-only.
+`data/pip-growth-stages.json` (schema 3) is the runtime catalog. Its identical
+preview copy is `web/preview/pip-growth/stages.json`. Each stage records model
+form measurements, exact six-joint projected pivots, ground-shadow radius, five
+runtime/preview atlas paths, and cumulative action/voice repertoires. Existing
+stage IDs and `pip-lv3` through `pip-lv12` filename stems remain stable for voice
+and catalog compatibility; appearance selection is exclusively age-based.
 
-All cells retain their 120-unit coordinate system and transparent margins.
-Runtime SVG imports use the existing 3× scale. The six articulation pivots are
-`(61,98)`, `(61,72)`, `(33,78)`, `(88,78)`, `(40,103)`, and `(80,103)`.
-Each stage maps these source joints through its proportion transforms. Native
-growth gestures, answer feedback, and celebrations retarget rotations and squash
-around the resized roots while preserving their authored translations and timing.
-Paint order remains feet, body, head, then wings. The preview uses a larger
-view box for motion headroom; it does not stretch the artwork to fit a screen.
+Native growth gestures, answer feedback and shared celebrations retarget their
+existing motion around these projected joints. Paint order remains feet, body,
+head, wings. Normal actions settle after one play; repeated input, speech
+priority, hidden-page cancellation and reduced-motion behavior are unchanged.
+The browser review embeds cropped raster cells into the same SVG articulation
+wrappers, preserving the model's full 120-unit frame.
 
-## Regeneration and checks
+## Regeneration
+
+From the repository root:
 
 ```powershell
+blender --background --python tools/pip-growth/render.py -- --preview --save-models
+python tools/pip-growth/assemble.py --preview
+blender --background --python tools/pip-growth/render.py -- --save-models
+python tools/pip-growth/assemble.py
 node web/preview/pip-growth/generate.cjs
-python tools/edge-voice-batch.py --manifest web/preview/pip-growth/.voice-cache/batch.json
-node web/preview/pip-growth/generate.cjs --install-voices
 node web/preview/pip-growth/verify.cjs
 ```
 
-The generator uses the existing wardrobe generator and original source layers;
-it does not modify those sources or the general vocabulary voice pipeline.
-Its local voice cache is ignored and is not part of the shipped preview.
-Rebuilding the art does not require a voice request; the final install step uses
-already acquired cache bytes. Re-synthesis can change output bytes when the
-service changes, so update and inspect the resulting recording manifest.
+The first two commands provide the large and 44/56-pixel direction comparison.
+The next commands render and assemble the actual articulated production layers.
+Assembly rejects cells that touch atlas boundaries and writes the bounds report
+to `build/pip-model-bounds.json`. `generate.cjs` catalogs the rendered models and
+preserves the existing voice metadata. It does not request new voice synthesis.
 
-The asset check verifies the Baby and ten ages, cumulative repertoires, distinct
-compositions, atlas sizes, 3× imports, runtime/preview byte parity, copied fonts,
-and every recording hash. Browser layout, motion extremes, actual playback, and
-native integration need separate visual and functional verification; these
-checks alone do not establish listening quality or physical-device behavior.
+The approved `ava-sweet` settings remain `en-US-AvaNeural`, rate `-15%`, pitch
+`+8Hz`, volume `+0%`, no postprocessing. Exact scripts, byte lengths and SHA-256
+hashes are in `web/preview/pip-growth/audio/manifest.json`; native and preview
+recordings are byte-identical.
 
-The October 9 browser review passed all ten stages on desktop Chromium, an
-iPhone 13 WebKit profile, and a short 844 × 390 Chromium viewport. Captures show
-the complete ten-stage comparison and each selected stage. The review exercises
-all ten gestures, their return to rest, reduced-motion acknowledgement,
-click-triggered audio, and cancellation when changing stages. A second capture
-checked the final high-five and stretch wing angles after moving the hands away
-from the face. Actual source captures are kept locally under
-`web/preview/pip-growth/review-output/` and are excluded from shipped content.
-This is browser-emulated device coverage, not testing on physical phones.
+For interactive review, run `npm run preview:pip` and open
+http://127.0.0.1:41774/. Review material stays local and is excluded from production.
+The verifier checks eleven unique compositions, 55 matching PNG atlases with
+360-pixel cells, all pivots, cumulative actions and unchanged recordings.
+`tests/godot/pip_growth_tests.gd` covers actual textures, age/theme independence,
+pose retargeting, speech, reactions, reduced motion and lifecycle interruption.
+Rendered expression/motion sheets and real header captures provide separate
+visual evidence; passing logic tests alone does not establish visual quality.
 
-FFprobe decoded all ten voice files as 24 kHz mono MP3, with durations from
-1.87 to 3.84 seconds. Browser playback starts and stage switching stops it.
-These checks establish file/playback integrity; subjective listening approval
-remains part of the interactive user review.
-
-`tests/godot/pip_growth_tests.gd` covers age artwork, theme independence,
-cumulative action access, manual timing without proactive movement, repeated
-input, lifecycle interruptions, reduced motion, word-speech priority, contact
-timing, stable input bounds, and retained basic feedback/shared celebration.
-
-## Age separation review
-
-The new Baby composition and Age 3 comparison were rasterized directly from the
-production expression atlases at phone-readable size. The Baby retains the
-original expressive face and contours with a visibly smaller body and wings.
-The asset verifier checks 11 distinct compositions, 55 identical runtime/preview
-atlases, age-only metadata, cumulative action access, and unchanged recording
-hashes. Native lifecycle, rendered motion and local preview interaction are
-covered separately by their focused suites. No new voice audio was generated.
-
-The October 11 revision makes every age a distinct head/body composition and
-removes the visible header age caption. The review includes 44- and 52-pixel
-miniatures, native rest/speech/gesture/answer/celebration contact sheets, and
-phone portrait/short landscape headers. The tucked preening pose uses a 0.90
-inset around `(61,112)` so its tilted head and cap retain transparent padding.
-The six animation roots are retargeted for all eleven appearances; a native
-contract checks their fixed-point behavior under rotation and body squash.
-The source drawings and approved voice recordings remain available unchanged.
+The sculpted revision passed 374 atlas-cell boundary checks, 846 native growth
+assertions, 1,013 growth-flow checks and 2,401 expression checks. Native captures
+cover all eleven ages at rest, speaking, waving, performing their new move,
+answering correctly and celebrating. Header captures cover all five modes at
+1280 x 720, 390 x 844, 320 x 568, 568 x 320 and 320 x 320, including Age 12/Lv99.
+The browser review covers desktop Chromium, an iPhone 13 WebKit profile and a
+short landscape viewport. A final pose review checks the inset wing roots after
+removing the visible shoulder gap. This is emulated-device evidence, not a
+physical-device test. No new audio was generated or subjectively approved.

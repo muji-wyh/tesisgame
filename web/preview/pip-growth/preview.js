@@ -40,6 +40,27 @@ function cleanClone(source) {
 }
 
 async function readSheet(url) {
+  if (url.endsWith('.png')) {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    const count = image.naturalWidth / image.naturalHeight;
+    if (image.naturalHeight !== 360 || !Number.isInteger(count)) throw new Error(`Invalid raster atlas: ${url}`);
+    const outer = svgNode('g');
+    // Materialize each cell so global SVG overflow rules cannot reveal neighbors.
+    const canvas = window.document.createElement('canvas');
+    canvas.width = canvas.height = 360;
+    const context = canvas.getContext('2d');
+    const frames = Array.from({ length: count }, (_, index) => {
+      const frame = svgNode('g');
+      context.clearRect(0, 0, 360, 360);
+      context.drawImage(image, index * 360, 0, 360, 360, 0, 0, 360, 360);
+      frame.append(svgNode('image', { href: canvas.toDataURL('image/png'), width: 120, height: 120, 'pointer-events': 'none' }));
+      outer.append(frame);
+      return frame;
+    });
+    return { outer, frames };
+  }
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Unable to load artwork: ${url}`);
   const document = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
@@ -58,7 +79,7 @@ function stageArt(stage) {
 }
 
 function renderMiniature(art, expression = 'proud') {
-  const svg = svgNode('svg', { viewBox: '-9 -9 138 134', 'aria-hidden': 'true' });
+  const svg = svgNode('svg', { viewBox: '-9 -9 138 134', 'aria-hidden': 'true', 'pointer-events': 'none' });
   const outer = cleanClone(art.expressions.outer);
   outer.replaceChildren(cleanClone(art.expressions.frames[EXPRESSIONS.indexOf(expression)]));
   svg.append(outer);
@@ -66,7 +87,7 @@ function renderMiniature(art, expression = 'proud') {
 }
 
 function createRig(art) {
-  const svg = svgNode('svg', { viewBox: '-18 -31 156 156', 'aria-hidden': 'true' });
+  const svg = svgNode('svg', { viewBox: '-18 -31 156 156', 'aria-hidden': 'true', 'pointer-events': 'none' });
   const shadow = svgNode('ellipse', { cx: 61, cy: 112, rx: 39, ry: 5, fill: '#65708A', opacity: '.14' });
   svg.append(shadow);
   const outer = cleanClone(art.parts.outer);

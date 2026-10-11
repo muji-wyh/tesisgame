@@ -1,12 +1,10 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "title": "Grow with Pip",
-  "status": "Integrated age silhouettes with a local interactive review",
-  "description": "Baby Pip and ten age silhouettes derived from integrated production artwork. Head-to-body balance, stance and clothing express the learning journey. Pip appearance follows completed curriculum ages, independently of word-mastery levels. These stages are not a developmental diagnosis.",
-  "artSource": "assets/images/mascots/pip-dance-parts.svg",
-  "wardrobeSource": "assets/images/mascots/outfits/wardrobe.svg",
-  "ageDetailsSource": "assets/images/mascots/growth/age-details.svg",
-  "expressionsSource": "assets/images/mascots/pip-expression-heads.svg",
+  "status": "Integrated sculpted age models with a local interactive review",
+  "description": "Eleven authored Blender duck models express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.",
+  "artSource": "tools/pip-growth/render.py",
+  "designReference": "assets/images/mascots/pip-dance-parts.svg",
   "expressions": [
     "neutral",
     "listening",
@@ -38,72 +36,65 @@
       "label": "Baby",
       "id": "baby",
       "name": "Baby Pip",
-      "description": "A downy little duckling with a round face, tiny wings, and a gentle first hello.",
+      "description": "A cream duckling sitting in a broken eggshell, with a huge round face, downy curl and tiny feet.",
       "accent": "#b7824e",
       "background": "#fbefdc",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": null,
-        "body": null,
-        "palette": {
-          "#F6D36E": "#F7DB91",
-          "#FFE68E": "#FFF0B9",
-          "#FFDE7F": "#FFE4A1",
-          "#F3AE65": "#F0BB81",
-          "#F3B39B": "#F4B9AA"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.32,
+          "cheekWidth": 0.71,
+          "headHeight": 1.3,
+          "shoulder": 1.22,
+          "hem": 0.23,
+          "torsoWidth": 0.52
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.72 0.64) translate(-61 -104)",
-          "head": "translate(61 80) scale(1.045) translate(-61 -72)",
-          "wings": "translate(61 89) scale(0.64 0.69) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.68) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-baby.svg",
-        "idle": "assets/images/mascots/growth/pip-baby-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-baby-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-baby-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-baby-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-baby.png",
+        "idle": "assets/images/mascots/growth/pip-baby-idle.png",
+        "parts": "assets/images/mascots/growth/pip-baby-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-baby-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-baby-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-baby.svg",
-        "idle": "art/pip-baby-idle.svg",
-        "parts": "art/pip-baby-parts.svg",
-        "expressions": "art/pip-baby-expressions.svg",
-        "expressionHeads": "art/pip-baby-expression-heads.svg"
+        "regular": "art/pip-baby.png",
+        "idle": "art/pip-baby-idle.png",
+        "parts": "art/pip-baby-parts.png",
+        "expressions": "art/pip-baby-expressions.png",
+        "expressionHeads": "art/pip-baby-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          100.16
+          60,
+          101.66666666666666
         ],
         [
-          61,
-          80
+          60,
+          77
         ],
         [
-          43.08,
-          87.62
+          47.52,
+          79.66666666666666
         ],
         [
-          78.28,
-          87.62
+          72.48,
+          79.66666666666666
         ],
         [
-          46.72,
-          104.64
+          52.666666666666664,
+          106
         ],
         [
-          73.92,
-          104.64
+          67.33333333333333,
+          106
         ]
       ],
-      "shadowRadius": 28.08,
+      "shadowRadius": 25.8,
       "actions": [
         "wave"
       ],
@@ -126,71 +117,65 @@
       "label": "Age 3",
       "id": "sprout",
       "name": "Sprout",
-      "description": "A round, top-heavy toddler in a mint play shirt, with short wings and close-set feet.",
+      "description": "A wobbly toddler with a turquoise bib, soft play shorts, a double curl and close-set feet.",
       "accent": "#3c8771",
       "background": "#eaf3e7",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": null,
-        "body": "summer-body",
-        "palette": {
-          "#67C7D5": "#87BC9E",
-          "#F6A98C": "#F3D49D",
-          "#F6D36E": "#F5D582",
-          "#FFE68E": "#FFEAA3"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.4,
+          "cheekWidth": 0.68,
+          "headHeight": 1.24,
+          "shoulder": 1.31,
+          "hem": 0.26,
+          "torsoWidth": 0.52
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.78 0.76) translate(-61 -104)",
-          "head": "translate(61 77) scale(1) translate(-61 -72)",
-          "wings": "translate(61 86) scale(0.72 0.78) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.75) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv3.svg",
-        "idle": "assets/images/mascots/growth/pip-lv3-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv3-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv3-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv3-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv3.png",
+        "idle": "assets/images/mascots/growth/pip-lv3-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv3-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv3-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv3-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv3.svg",
-        "idle": "art/pip-lv3-idle.svg",
-        "parts": "art/pip-lv3-parts.svg",
-        "expressions": "art/pip-lv3-expressions.svg",
-        "expressionHeads": "art/pip-lv3-expression-heads.svg"
+        "regular": "art/pip-lv3.png",
+        "idle": "art/pip-lv3-idle.png",
+        "parts": "art/pip-lv3-parts.png",
+        "expressions": "art/pip-lv3-expressions.png",
+        "expressionHeads": "art/pip-lv3-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          99.44
+          60,
+          100.66666666666667
         ],
         [
-          61,
-          77
+          60,
+          72.33333333333334
         ],
         [
-          40.84,
-          84.44
+          47.52,
+          76.66666666666666
         ],
         [
-          80.44,
-          84.44
+          72.48,
+          76.66666666666666
         ],
         [
-          45.25,
-          104.5
+          52.666666666666664,
+          105
         ],
         [
-          75.25,
-          104.5
+          67.33333333333333,
+          105
         ]
       ],
-      "shadowRadius": 30.42,
+      "shadowRadius": 25.8,
       "actions": [
         "wave"
       ],
@@ -213,69 +198,65 @@
       "label": "Age 4",
       "id": "little-helper",
       "name": "Little Helper",
-      "description": "A little taller in roomy leaf-green overalls, with small helping wings and an uncovered tuft.",
+      "description": "A preschool helper in blue overalls and a broad sun visor, with short helping wings.",
       "accent": "#4d7954",
       "background": "#ecf2db",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": null,
-        "body": "spring-body",
-        "palette": {
-          "#F6D36E": "#F5D582",
-          "#FFE68E": "#FFEAA3"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.47,
+          "cheekWidth": 0.65,
+          "headHeight": 1.18,
+          "shoulder": 1.4,
+          "hem": 0.28,
+          "torsoWidth": 0.51
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.83 0.85) translate(-61 -104)",
-          "head": "translate(61 74) scale(0.97) translate(-61 -72)",
-          "wings": "translate(61 84) scale(0.8 0.86) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.81) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv4.svg",
-        "idle": "assets/images/mascots/growth/pip-lv4-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv4-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv4-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv4-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv4.png",
+        "idle": "assets/images/mascots/growth/pip-lv4-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv4-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv4-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv4-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv4.svg",
-        "idle": "art/pip-lv4-idle.svg",
-        "parts": "art/pip-lv4-parts.svg",
-        "expressions": "art/pip-lv4-expressions.svg",
-        "expressionHeads": "art/pip-lv4-expression-heads.svg"
+        "regular": "art/pip-lv4.png",
+        "idle": "art/pip-lv4-idle.png",
+        "parts": "art/pip-lv4-parts.png",
+        "expressions": "art/pip-lv4-expressions.png",
+        "expressionHeads": "art/pip-lv4-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          98.9
+          60,
+          100
         ],
         [
-          61,
-          74
+          60,
+          68
         ],
         [
-          38.599999999999994,
-          82.28
+          47.760000000000005,
+          73.66666666666667
         ],
         [
-          82.6,
-          82.28
+          72.24,
+          73.66666666666667
         ],
         [
-          43.989999999999995,
-          104.38
+          51.666666666666664,
+          104.33333333333333
         ],
         [
-          76.39,
-          104.38
+          68.33333333333333,
+          104.33333333333333
         ]
       ],
-      "shadowRadius": 32.37,
+      "shadowRadius": 25.4,
       "actions": [
         "wave",
         "look"
@@ -300,71 +281,65 @@
       "label": "Age 5",
       "id": "curious-scout",
       "name": "Curious Scout",
-      "description": "A jaunty honey cap, sturdy overalls, and a wider stance for a playful first explorer.",
+      "description": "A playful kindergartener in a golden rain hood, roomy coat and tall green rain boots.",
       "accent": "#9c6c2d",
       "background": "#fbefcb",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "summer-head",
-        "body": "spring-body",
-        "palette": {
-          "#F58D76": "#D4A94F",
-          "#FFC3A9": "#F5DA8D",
-          "#FFB27E": "#E7C16E",
-          "#CC7660": "#A37D38"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.54,
+          "cheekWidth": 0.62,
+          "headHeight": 1.13,
+          "shoulder": 1.5,
+          "hem": 0.3,
+          "torsoWidth": 0.51
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.88 0.93) translate(-61 -104)",
-          "head": "translate(61 72) scale(0.94) translate(-61 -72)",
-          "wings": "translate(61 82) scale(0.87 0.92) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.87) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv5.svg",
-        "idle": "assets/images/mascots/growth/pip-lv5-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv5-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv5-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv5-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv5.png",
+        "idle": "assets/images/mascots/growth/pip-lv5-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv5-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv5-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv5-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv5.svg",
-        "idle": "art/pip-lv5-idle.svg",
-        "parts": "art/pip-lv5-parts.svg",
-        "expressions": "art/pip-lv5-expressions.svg",
-        "expressionHeads": "art/pip-lv5-expression-heads.svg"
+        "regular": "art/pip-lv5.png",
+        "idle": "art/pip-lv5-idle.png",
+        "parts": "art/pip-lv5-parts.png",
+        "expressions": "art/pip-lv5-expressions.png",
+        "expressionHeads": "art/pip-lv5-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          98.42
+          60,
+          99.33333333333334
         ],
         [
-          61,
-          72
+          60,
+          64
         ],
         [
-          36.64,
-          80.16
+          47.760000000000005,
+          70.33333333333333
         ],
         [
-          84.49,
-          80.16
+          72.24,
+          70.33333333333333
         ],
         [
-          42.730000000000004,
-          104.26
+          51.666666666666664,
+          103.66666666666667
         ],
         [
-          77.53,
-          104.26
+          68.33333333333333,
+          103.66666666666667
         ]
       ],
-      "shadowRadius": 34.32,
+      "shadowRadius": 25.4,
       "actions": [
         "wave",
         "look",
@@ -391,75 +366,65 @@
       "label": "Age 6",
       "id": "story-finder",
       "name": "Story Finder",
-      "description": "A raspberry school beret, cream shirt, and a cross-body book satchel on a newly upright silhouette.",
+      "description": "A first-school companion with an oversized turquoise backpack and coral cardigan, standing newly upright.",
       "accent": "#a55867",
       "background": "#f9e6e5",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "autumn-head",
-        "body": "school-satchel",
-        "palette": {
-          "#C28350": "#BE7183",
-          "#8D6746": "#875061",
-          "#E3AB42": "#E9C275",
-          "#51977A": "#487F7B",
-          "#37755F": "#35645F",
-          "#A7D7AC": "#B8DCD0"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.64,
+          "cheekWidth": 0.59,
+          "headHeight": 1.06,
+          "shoulder": 1.66,
+          "hem": 0.34,
+          "torsoWidth": 0.5
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.89 1.01) translate(-61 -104)",
-          "head": "translate(61 69) scale(0.9) translate(-61 -72)",
-          "wings": "translate(61 80) scale(0.9 0.97) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.91) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": [
-          "school-satchel"
-        ]
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv6.svg",
-        "idle": "assets/images/mascots/growth/pip-lv6-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv6-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv6-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv6-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv6.png",
+        "idle": "assets/images/mascots/growth/pip-lv6-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv6-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv6-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv6-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv6.svg",
-        "idle": "art/pip-lv6-idle.svg",
-        "parts": "art/pip-lv6-parts.svg",
-        "expressions": "art/pip-lv6-expressions.svg",
-        "expressionHeads": "art/pip-lv6-expression-heads.svg"
+        "regular": "art/pip-lv6.png",
+        "idle": "art/pip-lv6-idle.png",
+        "parts": "art/pip-lv6-parts.png",
+        "expressions": "art/pip-lv6-expressions.png",
+        "expressionHeads": "art/pip-lv6-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          97.94
+          60,
+          98
         ],
         [
-          61,
-          69
+          60,
+          58.33333333333333
         ],
         [
-          35.8,
-          78.06
+          48,
+          65
         ],
         [
-          85.3,
-          78.06
+          72,
+          65
         ],
         [
-          41.89,
-          104.18
+          51.666666666666664,
+          102.33333333333333
         ],
         [
-          78.28999999999999,
-          104.18
+          68.33333333333333,
+          102.33333333333333
         ]
       ],
-      "shadowRadius": 34.71,
+      "shadowRadius": 25,
       "actions": [
         "wave",
         "look",
@@ -488,74 +453,65 @@
       "label": "Age 7",
       "id": "trail-buddy",
       "name": "Trail Buddy",
-      "description": "A sage trail hat, practical pocket vest, and longer body for an increasingly independent explorer.",
+      "description": "An active schoolchild in a green sports shirt, white headband and sneakers, with longer wings.",
       "accent": "#657e44",
       "background": "#edf1dc",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "jungle-head",
-        "body": "jungle-body",
-        "palette": {
-          "#C6B178": "#91AE7C",
-          "#C9B27B": "#A6BC8B",
-          "#A68D59": "#708E62",
-          "#AB915D": "#79976B",
-          "#F6DE94": "#F2E2AF",
-          "#E1C990": "#D9D6A2",
-          "#7E9364": "#577C59"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.69,
+          "cheekWidth": 0.575,
+          "headHeight": 1.025,
+          "shoulder": 1.73,
+          "hem": 0.37,
+          "torsoWidth": 0.5
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.92 1.07) translate(-61 -104)",
-          "head": "translate(61 67) scale(0.87) translate(-61 -72)",
-          "wings": "translate(61 79) scale(0.93 1) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.94) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv7.svg",
-        "idle": "assets/images/mascots/growth/pip-lv7-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv7-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv7-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv7-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv7.png",
+        "idle": "assets/images/mascots/growth/pip-lv7-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv7-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv7-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv7-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv7.svg",
-        "idle": "art/pip-lv7-idle.svg",
-        "parts": "art/pip-lv7-parts.svg",
-        "expressions": "art/pip-lv7-expressions.svg",
-        "expressionHeads": "art/pip-lv7-expression-heads.svg"
+        "regular": "art/pip-lv7.png",
+        "idle": "art/pip-lv7-idle.png",
+        "parts": "art/pip-lv7-parts.png",
+        "expressions": "art/pip-lv7-expressions.png",
+        "expressionHeads": "art/pip-lv7-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          97.58
+          60,
+          97.00000000000001
         ],
         [
-          61,
-          67
+          60,
+          55.5
         ],
         [
-          34.959999999999994,
-          77
+          48,
+          62.66666666666667
         ],
         [
-          86.11,
-          77
+          72,
+          62.66666666666667
         ],
         [
-          41.260000000000005,
-          104.12
+          50.666666666666664,
+          101.33333333333333
         ],
         [
-          78.86,
-          104.12
+          69.33333333333333,
+          101.33333333333333
         ]
       ],
-      "shadowRadius": 35.88,
+      "shadowRadius": 25,
       "actions": [
         "wave",
         "look",
@@ -586,76 +542,65 @@
       "label": "Age 8",
       "id": "wayfinder",
       "name": "Wayfinder",
-      "description": "A teal knit cap, amber scarf, and longer jacket make a warm, capable walking companion.",
+      "description": "An independent schoolchild in a roomy violet hoodie, with a broad hood and kangaroo pocket.",
       "accent": "#36857e",
       "background": "#e2f1ed",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "winter-head",
-        "body": "winter-body",
-        "palette": {
-          "#78ABC6": "#70A9A0",
-          "#467C9B": "#427C76",
-          "#D86176": "#D9AB50",
-          "#E77786": "#E6BB66",
-          "#DDF2EE": "#F4E9C4",
-          "#83B9D3": "#70A9A0",
-          "#C5E5EC": "#ACD0BC",
-          "#DCEFEA": "#D5E7D5",
-          "#98C5CF": "#77AFA1"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.75,
+          "cheekWidth": 0.555,
+          "headHeight": 0.99,
+          "shoulder": 1.82,
+          "hem": 0.4,
+          "torsoWidth": 0.505
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.93 1.12) translate(-61 -104)",
-          "head": "translate(61 65) scale(0.84) translate(-61 -72)",
-          "wings": "translate(61 78) scale(0.95 1.01) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.96) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv8.svg",
-        "idle": "assets/images/mascots/growth/pip-lv8-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv8-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv8-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv8-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv8.png",
+        "idle": "assets/images/mascots/growth/pip-lv8-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv8-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv8-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv8-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv8.svg",
-        "idle": "art/pip-lv8-idle.svg",
-        "parts": "art/pip-lv8-parts.svg",
-        "expressions": "art/pip-lv8-expressions.svg",
-        "expressionHeads": "art/pip-lv8-expression-heads.svg"
+        "regular": "art/pip-lv8.png",
+        "idle": "art/pip-lv8-idle.png",
+        "parts": "art/pip-lv8-parts.png",
+        "expressions": "art/pip-lv8-expressions.png",
+        "expressionHeads": "art/pip-lv8-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          97.28
+          60,
+          96
         ],
         [
-          61,
-          65
+          60,
+          52.33333333333333
         ],
         [
-          34.400000000000006,
-          75.98
+          47.88,
+          59.666666666666664
         ],
         [
-          86.65,
-          75.98
+          72.12,
+          59.666666666666664
         ],
         [
-          40.84,
-          104.08
+          50.666666666666664,
+          100.33333333333333
         ],
         [
-          79.24,
-          104.08
+          69.33333333333333,
+          100.33333333333333
         ]
       ],
-      "shadowRadius": 36.27,
+      "shadowRadius": 25.2,
       "actions": [
         "wave",
         "look",
@@ -688,76 +633,65 @@
       "label": "Age 9",
       "id": "word-maker",
       "name": "Word Maker",
-      "description": "A tilted cornflower beret and a long maker's apron, with a slimmer face and room to create.",
+      "description": "A curious maker with round blue glasses, denim overalls and a swept feather crest.",
       "accent": "#627d9b",
       "background": "#e8edf6",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "autumn-head",
-        "body": "candy-body",
-        "palette": {
-          "#C28350": "#839EB8",
-          "#8D6746": "#5B728D",
-          "#E3AB42": "#EBC171",
-          "#9ED3C4": "#D7E6DA",
-          "#ED9BB5": "#79A4A0",
-          "#FFE4E6": "#EFE5CD",
-          "#E68DA9": "#8BB4AE",
-          "#C58DB6": "#B9935C",
-          "#976A76": "#786950"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.8,
+          "cheekWidth": 0.54,
+          "headHeight": 0.97,
+          "shoulder": 1.88,
+          "hem": 0.43,
+          "torsoWidth": 0.49
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.94 1.16) translate(-61 -104)",
-          "head": "translate(61 63) scale(0.81) translate(-61 -72)",
-          "wings": "translate(61 77) scale(0.96 1.02) translate(-61 -80)",
-          "feet": "translate(61 106) scale(0.98) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv9.svg",
-        "idle": "assets/images/mascots/growth/pip-lv9-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv9-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv9-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv9-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv9.png",
+        "idle": "assets/images/mascots/growth/pip-lv9-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv9-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv9-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv9-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv9.svg",
-        "idle": "art/pip-lv9-idle.svg",
-        "parts": "art/pip-lv9-parts.svg",
-        "expressions": "art/pip-lv9-expressions.svg",
-        "expressionHeads": "art/pip-lv9-expression-heads.svg"
+        "regular": "art/pip-lv9.png",
+        "idle": "art/pip-lv9-idle.png",
+        "parts": "art/pip-lv9-parts.png",
+        "expressions": "art/pip-lv9-expressions.png",
+        "expressionHeads": "art/pip-lv9-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          97.04
+          60,
+          95
         ],
         [
-          61,
-          63
+          60,
+          50.00000000000001
         ],
         [
-          34.120000000000005,
-          74.96
+          48.24,
+          57.66666666666667
         ],
         [
-          86.92,
-          74.96
+          71.76,
+          57.66666666666667
         ],
         [
-          40.42,
-          104.04
+          50.666666666666664,
+          99.33333333333334
         ],
         [
-          79.62,
-          104.04
+          69.33333333333333,
+          99.33333333333334
         ]
       ],
-      "shadowRadius": 36.66,
+      "shadowRadius": 24.6,
       "actions": [
         "wave",
         "look",
@@ -792,78 +726,65 @@
       "label": "Age 10",
       "id": "sky-explorer",
       "name": "Sky Explorer",
-      "description": "A teal flight cap with goggles, pearl explorer suit, and open shoulders for bigger discoveries.",
+      "description": "An adventurous older child in a backward blue cap, an open overshirt and canvas sneakers.",
       "accent": "#8e7946",
       "background": "#f3ecd8",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "summer-head",
-        "body": "space-body",
-        "palette": {
-          "#F58D76": "#719C95",
-          "#FFC3A9": "#AACFC2",
-          "#FFB27E": "#91B7A7",
-          "#CC7660": "#527F79",
-          "#E4EEF0": "#F1EDD9",
-          "#95B5C9": "#C9BA85",
-          "#9EC9D4": "#B8CDAE",
-          "#708DA7": "#9A895B",
-          "#67778A": "#7D7258"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.84,
+          "cheekWidth": 0.525,
+          "headHeight": 0.94,
+          "shoulder": 1.94,
+          "hem": 0.46,
+          "torsoWidth": 0.485
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.94 1.2) translate(-61 -104)",
-          "head": "translate(61 62) scale(0.79) translate(-61 -72)",
-          "wings": "translate(61 76) scale(0.97 1.03) translate(-61 -80)",
-          "feet": "translate(61 106) scale(1) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": [
-          "flight-goggles"
-        ]
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv10.svg",
-        "idle": "assets/images/mascots/growth/pip-lv10-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv10-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv10-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv10-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv10.png",
+        "idle": "assets/images/mascots/growth/pip-lv10-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv10-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv10-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv10-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv10.svg",
-        "idle": "art/pip-lv10-idle.svg",
-        "parts": "art/pip-lv10-parts.svg",
-        "expressions": "art/pip-lv10-expressions.svg",
-        "expressionHeads": "art/pip-lv10-expression-heads.svg"
+        "regular": "art/pip-lv10.png",
+        "idle": "art/pip-lv10-idle.png",
+        "parts": "art/pip-lv10-parts.png",
+        "expressions": "art/pip-lv10-expressions.png",
+        "expressionHeads": "art/pip-lv10-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          96.8
+          60,
+          94
         ],
         [
-          61,
-          62
+          60,
+          47.66666666666667
         ],
         [
-          33.84,
-          73.94
+          48.36,
+          55.666666666666664
         ],
         [
-          87.19,
-          73.94
+          71.64,
+          55.666666666666664
         ],
         [
-          40,
-          104
+          50.666666666666664,
+          98.33333333333334
         ],
         [
-          80,
-          104
+          69.33333333333333,
+          98.33333333333334
         ]
       ],
-      "shadowRadius": 36.66,
+      "shadowRadius": 24.4,
       "actions": [
         "wave",
         "look",
@@ -900,72 +821,65 @@
       "label": "Age 11",
       "id": "bright-navigator",
       "name": "Bright Navigator",
-      "description": "A cream navigator cap and blue field suit on a tall, balanced and confident silhouette.",
+      "description": "A confident preteen in a warm varsity jacket, headphones around the neck and a taller stance.",
       "accent": "#4e7897",
       "background": "#e6eff5",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": "ocean-head",
-        "body": "space-body",
-        "palette": {
-          "#E4EEF0": "#A0C0D0",
-          "#95B5C9": "#5F8BA4",
-          "#9EC9D4": "#DEE7DA",
-          "#708DA7": "#557487",
-          "#DF8576": "#D5A562"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.89,
+          "cheekWidth": 0.51,
+          "headHeight": 0.92,
+          "shoulder": 2,
+          "hem": 0.49,
+          "torsoWidth": 0.49
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.95 1.23) translate(-61 -104)",
-          "head": "translate(61 61) scale(0.77) translate(-61 -72)",
-          "wings": "translate(61 75) scale(0.98 1.04) translate(-61 -80)",
-          "feet": "translate(61 106) scale(1) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": []
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv11.svg",
-        "idle": "assets/images/mascots/growth/pip-lv11-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv11-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv11-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv11-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv11.png",
+        "idle": "assets/images/mascots/growth/pip-lv11-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv11-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv11-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv11-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv11.svg",
-        "idle": "art/pip-lv11-idle.svg",
-        "parts": "art/pip-lv11-parts.svg",
-        "expressions": "art/pip-lv11-expressions.svg",
-        "expressionHeads": "art/pip-lv11-expression-heads.svg"
+        "regular": "art/pip-lv11.png",
+        "idle": "art/pip-lv11-idle.png",
+        "parts": "art/pip-lv11-parts.png",
+        "expressions": "art/pip-lv11-expressions.png",
+        "expressionHeads": "art/pip-lv11-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          96.62
+          60,
+          93
         ],
         [
-          61,
-          61
+          60,
+          45.333333333333336
         ],
         [
-          33.56,
-          72.92
+          48.24,
+          53.666666666666664
         ],
         [
-          87.46000000000001,
-          72.92
+          71.76,
+          53.666666666666664
         ],
         [
-          40,
-          104
+          50.666666666666664,
+          97.33333333333333
         ],
         [
-          80,
-          104
+          69.33333333333333,
+          97.33333333333333
         ]
       ],
-      "shadowRadius": 37.05,
+      "shadowRadius": 24.6,
       "actions": [
         "wave",
         "look",
@@ -1004,76 +918,65 @@
       "label": "Age 12+",
       "id": "kind-guide",
       "name": "Kind Guide",
-      "description": "An uncovered swept tuft, cream collar, and deep teal guide jacket; tall and composed, still playful.",
+      "description": "A composed young guide with a small swept-feather head, long teal jacket, messenger bag and longer legs.",
       "accent": "#456f65",
       "background": "#e5eee2",
-      "compositionStatus": "integrated-age-silhouette",
+      "compositionStatus": "integrated-sculpted-age-model",
       "source": {
-        "head": null,
-        "body": "guide-jacket",
-        "palette": {
-          "#C28350": "#D1A65E",
-          "#8D6746": "#94733E",
-          "#E3AB42": "#E9CF8A",
-          "#4E809E": "#42756D",
-          "#5D92B0": "#70968A",
-          "#DF8576": "#D7AE59",
-          "#F2F5E8": "#F5E9BF"
+        "model": "tools/pip-growth/render.py",
+        "assembly": "tools/pip-growth/assemble.py",
+        "form": {
+          "crown": 2.92,
+          "cheekWidth": 0.49,
+          "headHeight": 0.9,
+          "shoulder": 2.05,
+          "hem": 0.52,
+          "torsoWidth": 0.47
         },
-        "proportions": {
-          "body": "translate(61 104) scale(0.96 1.26) translate(-61 -104)",
-          "head": "translate(61 60) scale(0.75) translate(-61 -72)",
-          "wings": "translate(61 74) scale(0.99 1.05) translate(-61 -80)",
-          "feet": "translate(61 106) scale(1) translate(-61 -105)"
-        },
-        "poseInsets": {
-          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
-        },
-        "details": [
-          "guide-jacket"
-        ]
+        "frameOffsetY": 3,
+        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
       },
       "art": {
-        "regular": "assets/images/mascots/growth/pip-lv12.svg",
-        "idle": "assets/images/mascots/growth/pip-lv12-idle.svg",
-        "parts": "assets/images/mascots/growth/pip-lv12-parts.svg",
-        "expressions": "assets/images/mascots/growth/pip-lv12-expressions.svg",
-        "expressionHeads": "assets/images/mascots/growth/pip-lv12-expression-heads.svg"
+        "regular": "assets/images/mascots/growth/pip-lv12.png",
+        "idle": "assets/images/mascots/growth/pip-lv12-idle.png",
+        "parts": "assets/images/mascots/growth/pip-lv12-parts.png",
+        "expressions": "assets/images/mascots/growth/pip-lv12-expressions.png",
+        "expressionHeads": "assets/images/mascots/growth/pip-lv12-expression-heads.png"
       },
       "previewArt": {
-        "regular": "art/pip-lv12.svg",
-        "idle": "art/pip-lv12-idle.svg",
-        "parts": "art/pip-lv12-parts.svg",
-        "expressions": "art/pip-lv12-expressions.svg",
-        "expressionHeads": "art/pip-lv12-expression-heads.svg"
+        "regular": "art/pip-lv12.png",
+        "idle": "art/pip-lv12-idle.png",
+        "parts": "art/pip-lv12-parts.png",
+        "expressions": "art/pip-lv12-expressions.png",
+        "expressionHeads": "art/pip-lv12-expression-heads.png"
       },
       "motionPivots": [
         [
-          61,
-          96.44
+          60,
+          91.99999999999999
         ],
         [
-          61,
-          60
+          60,
+          43.66666666666668
         ],
         [
-          33.28,
-          71.9
+          48.72,
+          52.00000000000001
         ],
         [
-          87.73,
-          71.9
+          71.28,
+          52.00000000000001
         ],
         [
-          40,
-          104
+          50.666666666666664,
+          96.33333333333331
         ],
         [
-          80,
-          104
+          69.33333333333333,
+          96.33333333333331
         ]
       ],
-      "shadowRadius": 37.44,
+      "shadowRadius": 23.799999999999997,
       "actions": [
         "wave",
         "look",

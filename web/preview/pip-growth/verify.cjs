@@ -38,8 +38,10 @@ catalog.stages.forEach((stage, index) => {
   for (const [kind, width] of [['regular', 480], ['idle', 480], ['parts', 720], ['expressions', 1200], ['expressionHeads', 1200]]) {
     const source = bytes(path.join(root, stage.art[kind]));
     assert.deepEqual(source, bytes(path.join(__dirname, stage.previewArt[kind])), `${stage.id}: ${kind} preview differs from runtime.`);
-    assert.match(source.toString(), new RegExp(`width="${width}" height="120" viewBox="0 0 ${width} 120"`));
-    assert.match(bytes(path.join(root, stage.art[kind] + '.import')).toString(), /svg\/scale=3\.0/);
+    assert.equal(source.subarray(1, 4).toString(), 'PNG');
+    assert.equal(source.readUInt32BE(16), width * 3, 'Atlas width preserves 360 px cells.');
+    assert.equal(source.readUInt32BE(20), 360, 'Atlas height preserves 360 px cells.');
+    assert.match(bytes(path.join(root, stage.art[kind] + '.import')).toString(), /compress\/mode=0/);
     if (kind === 'parts') artwork.add(hash(source));
     checked += 1;
   }
@@ -56,4 +58,4 @@ catalog.stages.forEach((stage, index) => {
 assert.equal(artwork.size, 11, 'Baby and all ten ages need distinct authored compositions.');
 for (const weight of [600, 800]) assert.deepEqual(bytes(path.join(__dirname, `Nunito-${weight}.ttf`)), bytes(path.join(root, `assets/fonts/Nunito-${weight}.ttf`)));
 assert.ok(fs.existsSync(path.join(__dirname, 'FONT-LICENSE.txt')));
-console.log(`Pip age asset contract passed: Baby and 10 ages, ${checked} matching SVG sheets, cumulative repertoires, and 10 verified Ava recordings.`);
+console.log(`Pip age asset contract passed: Baby and 10 ages, ${checked} matching PNG sheets, cumulative repertoires, and 10 verified Ava recordings.`);
