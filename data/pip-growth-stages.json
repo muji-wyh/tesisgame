@@ -1,10 +1,11 @@
 {
   "schemaVersion": 2,
   "title": "Grow with Pip",
-  "status": "Interactive age-stage design review",
-  "description": "Baby Pip and ten age compositions derived from integrated production artwork. Pip appearance follows completed curriculum ages, independently of word-mastery levels. These stages are not a developmental diagnosis.",
+  "status": "Integrated age silhouettes with a local interactive review",
+  "description": "Baby Pip and ten age silhouettes derived from integrated production artwork. Head-to-body balance, stance and clothing express the learning journey. Pip appearance follows completed curriculum ages, independently of word-mastery levels. These stages are not a developmental diagnosis.",
   "artSource": "assets/images/mascots/pip-dance-parts.svg",
   "wardrobeSource": "assets/images/mascots/outfits/wardrobe.svg",
+  "ageDetailsSource": "assets/images/mascots/growth/age-details.svg",
   "expressionsSource": "assets/images/mascots/pip-expression-heads.svg",
   "expressions": [
     "neutral",
@@ -40,7 +41,7 @@
       "description": "A downy little duckling with a round face, tiny wings, and a gentle first hello.",
       "accent": "#b7824e",
       "background": "#fbefdc",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": null,
         "body": null,
@@ -52,11 +53,15 @@
           "#F3B39B": "#F4B9AA"
         },
         "proportions": {
-          "body": "translate(61 104) scale(.84 .76) translate(-61 -104)",
-          "head": "translate(61 77) scale(1.025) translate(-61 -72)",
-          "wings": "translate(61 87) scale(.78 .82) translate(-61 -80)",
-          "feet": "translate(61 106) scale(.78 .78) translate(-61 -105)"
-        }
+          "body": "translate(61 104) scale(0.72 0.64) translate(-61 -104)",
+          "head": "translate(61 80) scale(1.045) translate(-61 -72)",
+          "wings": "translate(61 89) scale(0.64 0.69) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.68) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-baby.svg",
@@ -72,6 +77,33 @@
         "expressions": "art/pip-baby-expressions.svg",
         "expressionHeads": "art/pip-baby-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          100.16
+        ],
+        [
+          61,
+          80
+        ],
+        [
+          43.08,
+          87.62
+        ],
+        [
+          78.28,
+          87.62
+        ],
+        [
+          46.72,
+          104.64
+        ],
+        [
+          73.92,
+          104.64
+        ]
+      ],
+      "shadowRadius": 28.08,
       "actions": [
         "wave"
       ],
@@ -94,17 +126,29 @@
       "label": "Age 3",
       "id": "sprout",
       "name": "Sprout",
-      "description": "A soft mint shirt and an open, curious face. The first little hello.",
+      "description": "A round, top-heavy toddler in a mint play shirt, with short wings and close-set feet.",
       "accent": "#3c8771",
       "background": "#eaf3e7",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": null,
         "body": "summer-body",
         "palette": {
           "#67C7D5": "#87BC9E",
-          "#F6A98C": "#F3D49D"
-        }
+          "#F6A98C": "#F3D49D",
+          "#F6D36E": "#F5D582",
+          "#FFE68E": "#FFEAA3"
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.78 0.76) translate(-61 -104)",
+          "head": "translate(61 77) scale(1) translate(-61 -72)",
+          "wings": "translate(61 86) scale(0.72 0.78) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.75) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv3.svg",
@@ -120,6 +164,33 @@
         "expressions": "art/pip-lv3-expressions.svg",
         "expressionHeads": "art/pip-lv3-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          99.44
+        ],
+        [
+          61,
+          77
+        ],
+        [
+          40.84,
+          84.44
+        ],
+        [
+          80.44,
+          84.44
+        ],
+        [
+          45.25,
+          104.5
+        ],
+        [
+          75.25,
+          104.5
+        ]
+      ],
+      "shadowRadius": 30.42,
       "actions": [
         "wave"
       ],
@@ -142,14 +213,27 @@
       "label": "Age 4",
       "id": "little-helper",
       "name": "Little Helper",
-      "description": "Leaf-green overalls, ready for small discoveries and helping hands.",
+      "description": "A little taller in roomy leaf-green overalls, with small helping wings and an uncovered tuft.",
       "accent": "#4d7954",
       "background": "#ecf2db",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": null,
         "body": "spring-body",
-        "palette": {}
+        "palette": {
+          "#F6D36E": "#F5D582",
+          "#FFE68E": "#FFEAA3"
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.83 0.85) translate(-61 -104)",
+          "head": "translate(61 74) scale(0.97) translate(-61 -72)",
+          "wings": "translate(61 84) scale(0.8 0.86) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.81) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv4.svg",
@@ -165,6 +249,33 @@
         "expressions": "art/pip-lv4-expressions.svg",
         "expressionHeads": "art/pip-lv4-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          98.9
+        ],
+        [
+          61,
+          74
+        ],
+        [
+          38.599999999999994,
+          82.28
+        ],
+        [
+          82.6,
+          82.28
+        ],
+        [
+          43.989999999999995,
+          104.38
+        ],
+        [
+          76.39,
+          104.38
+        ]
+      ],
+      "shadowRadius": 32.37,
       "actions": [
         "wave",
         "look"
@@ -189,10 +300,10 @@
       "label": "Age 5",
       "id": "curious-scout",
       "name": "Curious Scout",
-      "description": "A honey-yellow cap joins the familiar overalls: ready to venture out.",
+      "description": "A jaunty honey cap, sturdy overalls, and a wider stance for a playful first explorer.",
       "accent": "#9c6c2d",
       "background": "#fbefcb",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "summer-head",
         "body": "spring-body",
@@ -201,7 +312,17 @@
           "#FFC3A9": "#F5DA8D",
           "#FFB27E": "#E7C16E",
           "#CC7660": "#A37D38"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.88 0.93) translate(-61 -104)",
+          "head": "translate(61 72) scale(0.94) translate(-61 -72)",
+          "wings": "translate(61 82) scale(0.87 0.92) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.87) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv5.svg",
@@ -217,6 +338,33 @@
         "expressions": "art/pip-lv5-expressions.svg",
         "expressionHeads": "art/pip-lv5-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          98.42
+        ],
+        [
+          61,
+          72
+        ],
+        [
+          36.64,
+          80.16
+        ],
+        [
+          84.49,
+          80.16
+        ],
+        [
+          42.730000000000004,
+          104.26
+        ],
+        [
+          77.53,
+          104.26
+        ]
+      ],
+      "shadowRadius": 34.32,
       "actions": [
         "wave",
         "look",
@@ -243,13 +391,13 @@
       "label": "Age 6",
       "id": "story-finder",
       "name": "Story Finder",
-      "description": "A raspberry beret and deep teal overalls for an imaginative storyteller.",
+      "description": "A raspberry school beret, cream shirt, and a cross-body book satchel on a newly upright silhouette.",
       "accent": "#a55867",
       "background": "#f9e6e5",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "autumn-head",
-        "body": "spring-body",
+        "body": "school-satchel",
         "palette": {
           "#C28350": "#BE7183",
           "#8D6746": "#875061",
@@ -257,7 +405,19 @@
           "#51977A": "#487F7B",
           "#37755F": "#35645F",
           "#A7D7AC": "#B8DCD0"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.89 1.01) translate(-61 -104)",
+          "head": "translate(61 69) scale(0.9) translate(-61 -72)",
+          "wings": "translate(61 80) scale(0.9 0.97) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.91) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": [
+          "school-satchel"
+        ]
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv6.svg",
@@ -273,6 +433,33 @@
         "expressions": "art/pip-lv6-expressions.svg",
         "expressionHeads": "art/pip-lv6-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          97.94
+        ],
+        [
+          61,
+          69
+        ],
+        [
+          35.8,
+          78.06
+        ],
+        [
+          85.3,
+          78.06
+        ],
+        [
+          41.89,
+          104.18
+        ],
+        [
+          78.28999999999999,
+          104.18
+        ]
+      ],
+      "shadowRadius": 34.71,
       "actions": [
         "wave",
         "look",
@@ -301,10 +488,10 @@
       "label": "Age 7",
       "id": "trail-buddy",
       "name": "Trail Buddy",
-      "description": "A sage field hat and pocketed vest make room for a growing collection of words.",
+      "description": "A sage trail hat, practical pocket vest, and longer body for an increasingly independent explorer.",
       "accent": "#657e44",
       "background": "#edf1dc",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "jungle-head",
         "body": "jungle-body",
@@ -316,7 +503,17 @@
           "#F6DE94": "#F2E2AF",
           "#E1C990": "#D9D6A2",
           "#7E9364": "#577C59"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.92 1.07) translate(-61 -104)",
+          "head": "translate(61 67) scale(0.87) translate(-61 -72)",
+          "wings": "translate(61 79) scale(0.93 1) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.94) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv7.svg",
@@ -332,6 +529,33 @@
         "expressions": "art/pip-lv7-expressions.svg",
         "expressionHeads": "art/pip-lv7-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          97.58
+        ],
+        [
+          61,
+          67
+        ],
+        [
+          34.959999999999994,
+          77
+        ],
+        [
+          86.11,
+          77
+        ],
+        [
+          41.260000000000005,
+          104.12
+        ],
+        [
+          78.86,
+          104.12
+        ]
+      ],
+      "shadowRadius": 35.88,
       "actions": [
         "wave",
         "look",
@@ -362,20 +586,34 @@
       "label": "Age 8",
       "id": "wayfinder",
       "name": "Wayfinder",
-      "description": "A flower-trimmed trail hat and a warm scarf: calm, cheerful, and prepared.",
+      "description": "A teal knit cap, amber scarf, and longer jacket make a warm, capable walking companion.",
       "accent": "#36857e",
       "background": "#e2f1ed",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
-        "head": "spring-head",
+        "head": "winter-head",
         "body": "winter-body",
         "palette": {
           "#78ABC6": "#70A9A0",
           "#467C9B": "#427C76",
           "#D86176": "#D9AB50",
           "#E77786": "#E6BB66",
-          "#DDF2EE": "#F4E9C4"
-        }
+          "#DDF2EE": "#F4E9C4",
+          "#83B9D3": "#70A9A0",
+          "#C5E5EC": "#ACD0BC",
+          "#DCEFEA": "#D5E7D5",
+          "#98C5CF": "#77AFA1"
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.93 1.12) translate(-61 -104)",
+          "head": "translate(61 65) scale(0.84) translate(-61 -72)",
+          "wings": "translate(61 78) scale(0.95 1.01) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.96) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv8.svg",
@@ -391,6 +629,33 @@
         "expressions": "art/pip-lv8-expressions.svg",
         "expressionHeads": "art/pip-lv8-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          97.28
+        ],
+        [
+          61,
+          65
+        ],
+        [
+          34.400000000000006,
+          75.98
+        ],
+        [
+          86.65,
+          75.98
+        ],
+        [
+          40.84,
+          104.08
+        ],
+        [
+          79.24,
+          104.08
+        ]
+      ],
+      "shadowRadius": 36.27,
       "actions": [
         "wave",
         "look",
@@ -423,10 +688,10 @@
       "label": "Age 9",
       "id": "word-maker",
       "name": "Word Maker",
-      "description": "A cornflower beret and a maker's apron turn familiar words into new ideas.",
+      "description": "A tilted cornflower beret and a long maker's apron, with a slimmer face and room to create.",
       "accent": "#627d9b",
       "background": "#e8edf6",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "autumn-head",
         "body": "candy-body",
@@ -440,7 +705,17 @@
           "#E68DA9": "#8BB4AE",
           "#C58DB6": "#B9935C",
           "#976A76": "#786950"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.94 1.16) translate(-61 -104)",
+          "head": "translate(61 63) scale(0.81) translate(-61 -72)",
+          "wings": "translate(61 77) scale(0.96 1.02) translate(-61 -80)",
+          "feet": "translate(61 106) scale(0.98) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv9.svg",
@@ -456,6 +731,33 @@
         "expressions": "art/pip-lv9-expressions.svg",
         "expressionHeads": "art/pip-lv9-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          97.04
+        ],
+        [
+          61,
+          63
+        ],
+        [
+          34.120000000000005,
+          74.96
+        ],
+        [
+          86.92,
+          74.96
+        ],
+        [
+          40.42,
+          104.04
+        ],
+        [
+          79.62,
+          104.04
+        ]
+      ],
+      "shadowRadius": 36.66,
       "actions": [
         "wave",
         "look",
@@ -490,10 +792,10 @@
       "label": "Age 10",
       "id": "sky-explorer",
       "name": "Sky Explorer",
-      "description": "A bright explorer cap meets a pearl field suit, with an amber instrument panel.",
+      "description": "A teal flight cap with goggles, pearl explorer suit, and open shoulders for bigger discoveries.",
       "accent": "#8e7946",
       "background": "#f3ecd8",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "summer-head",
         "body": "space-body",
@@ -507,7 +809,19 @@
           "#9EC9D4": "#B8CDAE",
           "#708DA7": "#9A895B",
           "#67778A": "#7D7258"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.94 1.2) translate(-61 -104)",
+          "head": "translate(61 62) scale(0.79) translate(-61 -72)",
+          "wings": "translate(61 76) scale(0.97 1.03) translate(-61 -80)",
+          "feet": "translate(61 106) scale(1) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": [
+          "flight-goggles"
+        ]
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv10.svg",
@@ -523,6 +837,33 @@
         "expressions": "art/pip-lv10-expressions.svg",
         "expressionHeads": "art/pip-lv10-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          96.8
+        ],
+        [
+          61,
+          62
+        ],
+        [
+          33.84,
+          73.94
+        ],
+        [
+          87.19,
+          73.94
+        ],
+        [
+          40,
+          104
+        ],
+        [
+          80,
+          104
+        ]
+      ],
+      "shadowRadius": 36.66,
       "actions": [
         "wave",
         "look",
@@ -559,10 +900,10 @@
       "label": "Age 11",
       "id": "bright-navigator",
       "name": "Bright Navigator",
-      "description": "A cream navigator cap and blue field suit carry a more confident silhouette.",
+      "description": "A cream navigator cap and blue field suit on a tall, balanced and confident silhouette.",
       "accent": "#4e7897",
       "background": "#e6eff5",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
         "head": "ocean-head",
         "body": "space-body",
@@ -572,7 +913,17 @@
           "#9EC9D4": "#DEE7DA",
           "#708DA7": "#557487",
           "#DF8576": "#D5A562"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.95 1.23) translate(-61 -104)",
+          "head": "translate(61 61) scale(0.77) translate(-61 -72)",
+          "wings": "translate(61 75) scale(0.98 1.04) translate(-61 -80)",
+          "feet": "translate(61 106) scale(1) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": []
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv11.svg",
@@ -588,6 +939,33 @@
         "expressions": "art/pip-lv11-expressions.svg",
         "expressionHeads": "art/pip-lv11-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          96.62
+        ],
+        [
+          61,
+          61
+        ],
+        [
+          33.56,
+          72.92
+        ],
+        [
+          87.46000000000001,
+          72.92
+        ],
+        [
+          40,
+          104
+        ],
+        [
+          80,
+          104
+        ]
+      ],
+      "shadowRadius": 37.05,
       "actions": [
         "wave",
         "look",
@@ -626,13 +1004,13 @@
       "label": "Age 12+",
       "id": "kind-guide",
       "name": "Kind Guide",
-      "description": "An amber beret, deep teal jacket, and gold details. Still the same friendly Pip.",
+      "description": "An uncovered swept tuft, cream collar, and deep teal guide jacket; tall and composed, still playful.",
       "accent": "#456f65",
       "background": "#e5eee2",
-      "compositionStatus": "proposed-stage-composition",
+      "compositionStatus": "integrated-age-silhouette",
       "source": {
-        "head": "autumn-head",
-        "body": "ocean-body",
+        "head": null,
+        "body": "guide-jacket",
         "palette": {
           "#C28350": "#D1A65E",
           "#8D6746": "#94733E",
@@ -641,7 +1019,19 @@
           "#5D92B0": "#70968A",
           "#DF8576": "#D7AE59",
           "#F2F5E8": "#F5E9BF"
-        }
+        },
+        "proportions": {
+          "body": "translate(61 104) scale(0.96 1.26) translate(-61 -104)",
+          "head": "translate(61 60) scale(0.75) translate(-61 -72)",
+          "wings": "translate(61 74) scale(0.99 1.05) translate(-61 -80)",
+          "feet": "translate(61 106) scale(1) translate(-61 -105)"
+        },
+        "poseInsets": {
+          "idlePreen": "translate(61 112) scale(.90) translate(-61 -112)"
+        },
+        "details": [
+          "guide-jacket"
+        ]
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv12.svg",
@@ -657,6 +1047,33 @@
         "expressions": "art/pip-lv12-expressions.svg",
         "expressionHeads": "art/pip-lv12-expression-heads.svg"
       },
+      "motionPivots": [
+        [
+          61,
+          96.44
+        ],
+        [
+          61,
+          60
+        ],
+        [
+          33.28,
+          71.9
+        ],
+        [
+          87.73,
+          71.9
+        ],
+        [
+          40,
+          104
+        ],
+        [
+          80,
+          104
+        ]
+      ],
+      "shadowRadius": 37.44,
       "actions": [
         "wave",
         "look",

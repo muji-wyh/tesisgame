@@ -23,6 +23,9 @@ assert.equal(audio.files.length, 10);
 const artwork = new Set();
 let checked = 0;
 catalog.stages.forEach((stage, index) => {
+  assert.equal(stage.motionPivots.length, 6, `${stage.id}: all articulated roots must follow the age proportions.`);
+  assert.ok(stage.motionPivots.every(pivot => pivot.length === 2 && pivot.every(Number.isFinite)));
+  assert.ok(stage.shadowRadius > 20 && stage.shadowRadius < 40);
   assert.equal(stage.actions.length, Math.max(1, index), `${stage.id}: repertoire must follow completed curriculum age.`);
   assert.equal(new Set(stage.actions).size, stage.actions.length);
   assert.equal(stage.voices.length, Math.max(1, index));

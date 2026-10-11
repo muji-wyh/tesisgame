@@ -101,7 +101,7 @@ func _age_milestones(directory: String) -> void:
 		app._record_growth("age-three-%d" % index, ids, true)
 	check(app.growth.age == 3 and app.growth.level == 19 and app.growth.learning_age() == 4,
 		"Completing the real 80-word age-three set earns Age 3 independently of Lv19")
-	check(app._pip_age_label.text == "Age 3", "The earned Age 3 appears beside Pip after promotion")
+	check(app._pip_age_description == "Age 3" and app.duck.growth_age == 3, "Pip wears the earned Age 3 appearance after promotion")
 	for mascot in [app.duck, app._phrase.pip, app._round_celebration.pip]:
 		check(mascot.growth_age == 3, "Every gameplay and celebration Pip follows earned age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
@@ -121,8 +121,8 @@ func _age_milestones(directory: String) -> void:
 		var next_ids: Array = next_words.map(func(word: Dictionary) -> String: return str(word.id))
 		for index in range(Growth.MASTERY_STREAK):
 			app._record_growth("age-%d-%d" % [next_age, index], next_ids, true)
-	check(app.growth.age == 12 and app._pip_age_label.text == "Age 12+" and app.duck.growth_age == 12,
-		"The final earned age retains its plus sign beside Pip independently of numeric Lv")
+	check(app.growth.age == 12 and app._pip_age_description == "Age 12+" and app.duck.growth_age == 12,
+		"The final appearance and accessible Age 12+ description remain independent of numeric Lv")
 	for viewport_size: Vector2i in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
 		root.size = viewport_size
 		await settle()
@@ -221,23 +221,13 @@ func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
 			check(not rect.intersects(child.get_global_rect()), "%s keeps growth separate from neighboring toolbar actions" % context)
 	check(not rect.intersects(app._mode_heading_button.get_global_rect()),
 		"%s keeps growth separate from the game selector" % context)
-	var age: Label = app._pip_age_label
-	var age_rect: Rect2 = age.get_global_rect()
 	var pip_rect: Rect2 = app.duck.get_global_rect()
-	check(age.is_visible_in_tree() and age.text == app.growth.snapshot().age_label
-		and app._header_duck_slot.is_ancestor_of(age) and age.get_parent() == badge,
-		"%s groups the earned age and mastery beside Pip" % context)
-	check(age.mouse_filter == Control.MOUSE_FILTER_IGNORE and age.focus_mode == Control.FOCUS_NONE,
-		"%s keeps the age caption passive without intercepting gameplay or creating a second action" % context)
-	check(Rect2(Vector2.ZERO, Vector2(viewport_size)).encloses(age_rect)
-		and app._header_duck_slot.get_global_rect().grow(0.5).encloses(age_rect)
-		and rect.encloses(age_rect) and not age_rect.intersects(badge.level_label.get_global_rect()) and not age_rect.intersects(pip_rect),
-		"%s keeps the complete age caption with Pip without clipping or covering Lv" % context)
-	var font: Font = age.get_theme_font("font")
-	check(font.get_string_size(age.text, HORIZONTAL_ALIGNMENT_LEFT, -1, age.get_theme_font_size("font_size")).x <= age.size.x + 0.5,
-		"%s fits the full %s caption" % [context, age.text])
+	check(app.find_child("PipAgeLabel", true, false) == null and app.duck.growth_age == app.growth.age,
+		"%s expresses earned age with Pip artwork instead of a visible caption" % context)
+	check(rect.encloses(badge.level_label.get_global_rect()) and not badge.level_label.get_global_rect().intersects(app._growth_bar.get_global_rect()),
+		"%s keeps Lv and its progress track readable beside Pip" % context)
 	check(pip_rect.size.x >= 43.5 and pip_rect.size.y >= 43.5
-		and app.duck.tooltip_text.contains(age.text) and app.duck.tooltip_text.contains("Change game mode"),
+		and app.duck.tooltip_text.contains(app.growth.snapshot().age_label) and app.duck.tooltip_text.contains("Change game mode"),
 		"%s preserves Pip's reachable menu action and announces age with the character" % context)
 	var targets: Array = [app.duck, badge, app._mode_heading_button, app._voice_button, app.hint_button, app._memory.study_button, app._storage_retry_button]
 	for index in range(targets.size()):
@@ -259,7 +249,7 @@ func _responsive_badge(app) -> void:
 	check(app.collection_button == app._growth_button and app._growth_button.get_parent() == app._header_duck_slot
 		and app._growth_bar == app._growth_button.bar and app.find_child("GrowthProgress", true, false) == null,
 		"The notebook entry and mastery bar share Pip's compact companion cluster")
-	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app._pip_age_label.text == "Baby"
+	check(app._growth_button.level_label.text == "Lv0" and app._growth_button.count_label.text == "0 / 1" and app.duck.growth_age == 0
 		and app._growth_bar.value == 0.0,
 		"A new device presents the first one-word level target independently of Baby age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
@@ -297,7 +287,7 @@ func _load_failure(directory: String) -> void:
 	check(not app.growth.ready and app.model.cards.is_empty(), "An unreadable growth save blocks scored play")
 	check(app._growth_button.level_label.text == "Lv…" and app._growth_bar.value == 0.0,
 		"The persistent entry shows unavailable progress while the saved level cannot be loaded")
-	check(app._pip_age_label.text.is_empty(), "An unreadable save does not invent a starting Pip age")
+	check(app._pip_age_description.is_empty(), "An unreadable save does not invent a starting Pip age")
 	check(app._storage_retry_button.is_visible_in_tree() and app._message.visible,
 		"The initial load failure explains how to recover")
 	check(not app.new_round(101, false, "", "pop"), "Mode switching cannot bypass the growth load gate")

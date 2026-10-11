@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120">
+  <title>Pip age wardrobe adaptations: school satchel, flight goggles, and guide jacket</title>
+  <defs>
+    <g id="school-satchel" stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M31 77Q59 84 89 76L97 92Q94 111 61 110Q30 110 26 94Z" fill="#F4E9CF"/>
+      <path d="M42 81L60 94L80 80" fill="none" stroke="#BE7183" stroke-width="5"/>
+      <path d="M33 101Q62 110 91 100L87 108Q61 115 35 108Z" fill="#487F7B"/>
+      <path d="M78 78L39 108" fill="none" stroke="#785D3E" stroke-width="7"/>
+      <path d="M78 78L39 108" fill="none" stroke="#C7975C" stroke-width="3"/>
+      <path d="M31 95L51 94L57 103L54 113Q38 116 28 110Z" fill="#BE7183"/>
+      <path d="M31 95L51 94L54 102L42 107L29 103Z" fill="#E7ABB2"/>
+      <path d="M40 104L44 103L45 109L41 110Z" fill="#F1D891" stroke-width="1.5"/>
+      <path d="M32 108L36 110" fill="none" stroke="#F5D1CC" stroke-width="1.5"/>
+    </g>
+    <g id="flight-goggles" stroke="#785D3E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M30 19Q61 13 94 20" fill="none" stroke="#785D3E" stroke-width="6"/>
+      <path d="M30 19Q61 13 94 20" fill="none" stroke="#C7975C" stroke-width="3"/>
+      <path d="M42 12Q48 9 54 12L54 20Q48 23 41 20Z" fill="#D4EBDF"/>
+      <path d="M65 12Q71 9 78 12L79 20Q71 23 65 20Z" fill="#D4EBDF"/>
+      <path d="M54 16Q59 13 65 16" fill="none"/>
+      <path d="M45 14L43 18M69 14L67 18" fill="none" stroke="#FFFDF1" stroke-width="2"/>
+    </g>
+    <g id="guide-jacket" stroke="#785D3E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M31 77Q61 86 89 77L96 95Q91 111 61 110Q31 110 26 94Z" fill="#42756D"/>
+      <path d="M32 80L46 78L61 91L77 78L90 80L77 95L61 99L44 94Z" fill="#F5E9BF"/>
+      <path d="M36 83L47 91L61 95L75 91L87 83" fill="none" stroke="#70968A" stroke-width="2"/>
+      <path d="M59 93L55 103L62 108L68 103L64 93Z" fill="#D7AE59"/>
+      <path d="M78 99Q85 92 91 96Q89 105 80 107Z" fill="#E9CF8A" stroke-width="1.5"/>
+      <path d="M80 105L87 98M35 103L47 107" fill="none" stroke="#70968A" stroke-width="1.5"/>
+    </g>
+  </defs>
+  <use href="#school-satchel"/>
+  <use href="#flight-goggles" x="120"/>
+  <use href="#guide-jacket" x="240"/>
+</svg>

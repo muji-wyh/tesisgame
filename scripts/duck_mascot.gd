@@ -602,14 +602,14 @@ func _draw_growth_action(origin: Vector2, edge: float) -> void:
 	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
 	var lift: float = maxf(0.0, -float(parts[0].y)) / 23.0
 	draw_set_transform(base_origin + Vector2(61, 112) * unit, 0.0,
-		Vector2(39.0 - lift * 9.0, 5.0) * unit)
+		Vector2(float(_growth_stage.get("shadowRadius", 39.0)) - lift * 9.0, 5.0) * unit)
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14 - lift * 0.05))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
 	for index in [4, 5, 0, 1, 2, 3]:
 		var part: Vector3 = parts[index]
 		var transform: Transform2D = _gameplay_part_transform(index, Vector2(part.x, part.y), deg_to_rad(part.z))
-		draw_set_transform_matrix(base * transform)
+		draw_set_transform_matrix(base * _growth_part_transform(index, transform))
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform(Vector2.ZERO)
 
@@ -673,6 +673,17 @@ static func _gameplay_part_transform(index: int, translation: Vector2, angle: fl
 	return transform
 
 
+func _growth_part_transform(index: int, transform: Transform2D) -> Transform2D:
+	var joints: Array = _growth_stage.get("motionPivots", [])
+	if joints.size() != GAMEPLAY_PIVOTS.size():
+		return transform
+	var pivot := Vector2(float(joints[index][0]), float(joints[index][1]))
+	var offset: Vector2 = pivot - GAMEPLAY_PIVOTS[index]
+	# Retain the authored translation and rotation around the resized limb root.
+	transform.origin += offset - transform.basis_xform(offset)
+	return transform
+
+
 static func _celebration_transforms(progress: float, reduced: bool = false, rest_seconds: float = 0.0) -> Array[Transform2D]:
 	var seconds: float = CELEBRATION_SECONDS if reduced else clampf(progress, 0.0, 1.0) * CELEBRATION_SECONDS
 	var first: String = "present"
@@ -709,12 +720,12 @@ func _draw_celebration(origin: Vector2, edge: float) -> void:
 	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
 	var lift: float = maxf(0.0, 98.0 - (transforms[0] * GAMEPLAY_PIVOTS[0]).y) / 23.0
 	draw_set_transform(base_origin + Vector2(61, 112) * unit, 0.0,
-		Vector2(37.0 - lift * 10.0, 4.2 - lift) * unit)
+		Vector2(float(_growth_stage.get("shadowRadius", 39.0)) * 37.0 / 39.0 - lift * 10.0, 4.2 - lift) * unit)
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.15 - lift * 0.06))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
 	for index in [4, 5, 0, 1, 2, 3]:
-		draw_set_transform_matrix(base * transforms[index])
+		draw_set_transform_matrix(base * _growth_part_transform(index, transforms[index]))
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform(Vector2.ZERO)
 
@@ -732,12 +743,12 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
 	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)
 	var airborne: float = clampf((98.0 - (transforms[0] * GAMEPLAY_PIVOTS[0]).y) / 24.0, 0.0, 1.0)
 	draw_set_transform(origin + Vector2(edge * 0.51, edge * 0.94), 0.0,
-		Vector2(edge * (0.31 - airborne * 0.095), edge * 0.036))
+		Vector2(edge * (0.31 * float(_growth_stage.get("shadowRadius", 39.0)) / 39.0 - airborne * 0.095), edge * 0.036))
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.19 - airborne * 0.09))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
 	for index in [4, 5, 0, 1, 2, 3]:
-		draw_set_transform_matrix(base * transforms[index])
+		draw_set_transform_matrix(base * _growth_part_transform(index, transforms[index]))
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform_matrix(base)
 	if correct:

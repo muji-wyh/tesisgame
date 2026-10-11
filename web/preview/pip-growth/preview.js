@@ -164,11 +164,11 @@ function actionPose(name, p) {
 function applyPose(pose) {
   if (!rig) return;
   pose.forEach(([x, y, angle], index) => {
-    const [px, py] = JOINTS[index];
+    const [px, py] = catalog.stages[selectedIndex].motionPivots?.[index] || JOINTS[index];
     rig.layers[index].setAttribute('transform', `translate(${x} ${y}) rotate(${angle} ${px} ${py})`);
   });
   const lift = Math.max(0, -pose[0][1]) / 23;
-  rig.shadow.setAttribute('rx', String(39 - lift * 9));
+  rig.shadow.setAttribute('rx', String((catalog.stages[selectedIndex].shadowRadius || 39) - lift * 9));
   rig.shadow.setAttribute('opacity', String(.14 - lift * .05));
 }
 

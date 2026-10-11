@@ -49,6 +49,15 @@ func _run() -> void:
 		if art == null:
 			continue
 		appearance_paths.append(art.resource_path)
+		var pivots: Array = duck._growth_stage.motionPivots
+		for index in range(pivots.size()):
+			var pivot := Vector2(float(pivots[index][0]), float(pivots[index][1]))
+			for angle in [-1.9, 0.0, 1.9]:
+				var translation := Vector2(2, -7)
+				var original: Transform2D = Mascot._gameplay_part_transform(index, translation, angle, Vector2(1.08, 0.91))
+				var retargeted: Transform2D = duck._growth_part_transform(index, original)
+				check((retargeted * pivot).is_equal_approx(pivot + translation),
+					"Age %d keeps articulated part %d attached at its resized joint" % [age, index])
 		var sheets: Array = [art, duck._outfit_idle_sheet, duck._outfit_dance_sheet, duck._expression_sheet, duck._expression_heads]
 		var cells: Array[int] = [4, 4, 6, 10, 10]
 		for index in range(sheets.size()):

@@ -118,7 +118,7 @@ var _pair_settlement_pending: bool = false
 var duck: Mascot
 var _header_duck_slot: Panel
 var _header_duck_art_slot: Control
-var _pip_age_label: Label
+var _pip_age_description: String = ""
 var _header: Control
 var _header_spacer: Control
 var _toolbar: HBoxContainer
@@ -564,11 +564,6 @@ func _build_controls() -> void:
 	_header_duck_art_slot = Control.new()
 	_header_duck_art_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_duck_slot.add_child(_header_duck_art_slot)
-	_pip_age_label = Style.label("", 13)
-	_pip_age_label.name = "PipAgeLabel"
-	_pip_age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_pip_age_label.add_theme_color_override("font_color", Color("#42644e"))
-	_header_duck_slot.add_child(_pip_age_label)
 	_header_spacer = Control.new()
 	_header_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -607,7 +602,6 @@ func _build_controls() -> void:
 	UiClick.bind_button(_growth_button)
 	_growth_button.pressed.connect(_show_collection)
 	_header_duck_slot.add_child(_growth_button)
-	_pip_age_label.reparent(_growth_button)
 	header.add_child(_coin_counter)
 	collection_button = _growth_button
 	_growth_bar = _growth_button.bar
@@ -2588,8 +2582,6 @@ func _fit_mode_buttons() -> void:
 	_header.custom_minimum_size.y = ceilf((88 if _stacked_game_header() else 44 if short_header else 56) / css_scale)
 	_toolbar.add_theme_constant_override("separation", gap)
 	_toolbar.custom_minimum_size.x = 0.0
-	_pip_age_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_pip_age_label.add_theme_font_size_override("font_size", ceili(12 / css_scale))
 	_header_duck_slot.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var accent: Color = _active_palette.get("accent", Style.GOOD)
 	var heading_focus: int = _mode_heading_button.focus_mode
@@ -2628,16 +2620,14 @@ func _layout_game_heading() -> void:
 	var short_header: bool = _short_game_header()
 	var row: float = (44.0 if stacked or short_header else 56.0) / scale
 	var gap: float = (8.0 if size.x * scale < 680 else 16.0) / scale
-	var pip_side: float = (44.0 if stacked or short_header else 52.0) / scale
-	var profile_width: float = (144.0 if short_header else 168.0) / scale
+	var pip_side: float = (44.0 if stacked or short_header else 56.0) / scale
+	var profile_width: float = (120.0 if short_header else 132.0 if stacked else 140.0) / scale
 	_header_duck_slot.position = Vector2.ZERO
 	_header_duck_slot.size = Vector2(profile_width, row)
 	_header_duck_art_slot.position = Vector2(0, (row - pip_side) * 0.5)
 	_header_duck_art_slot.size = Vector2.ONE * pip_side
 	_growth_button.position = Vector2(pip_side + 6.0 / scale, (row - 44.0 / scale) * 0.5)
 	_growth_button.size = Vector2(profile_width - _growth_button.position.x, 44.0 / scale)
-	_pip_age_label.position = Vector2(2, 2) / scale
-	_pip_age_label.size = Vector2(_growth_button.size.x - 40.0 / scale, 22.0 / scale)
 	_layout_coin_counter()
 	_toolbar.reset_size()
 	_toolbar.position = Vector2(_header.size.x - _toolbar.size.x, 44.0 / scale) if stacked else Vector2(_coin_counter.position.x - gap - _toolbar.size.x, (row - _toolbar.size.y) * 0.5)
@@ -4294,7 +4284,6 @@ func _update_duck() -> void:
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
 	var visible_here: bool = not in_collection
-	_pip_age_label.visible = visible_here and not _pip_age_label.text.is_empty()
 	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
@@ -4333,7 +4322,7 @@ func _update_duck() -> void:
 		return
 	duck.compact = false
 	var opens_menu: bool = not in_collection and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
-	var pip_identity: String = "Pip" if _pip_age_label.text.is_empty() else "Pip · " + _pip_age_label.text
+	var pip_identity: String = "Pip" if _pip_age_description.is_empty() else "Pip · " + _pip_age_description
 	duck.tooltip_text = pip_identity + (". Change game mode" if opens_menu else ". Press for a new move!")
 	_set_accessibility_name(duck, pip_identity + (". Change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else ". Press for a new move."))
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
@@ -4540,7 +4529,7 @@ func _refresh_growth() -> void:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)
-	_pip_age_label.text = str(state.age_label) if state.ready else ""
+	_pip_age_description = str(state.age_label) if state.ready else ""
 	_collection_title.text = "%s · %s" % [state.label, "Baby Pip" if state.age == 0 else "Pip · " + state.age_label] if state.ready else "Grow with Pip"
 	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
 	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
@@ -4564,11 +4553,12 @@ func _style_growth_progress() -> void:
 func _publish_growth_view() -> void:
 	if _host == null or not is_instance_valid(_growth_button):
 		return
-	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar), _growth_control(_pip_age_label)]
+	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar)]
 	for control: Control in [_mode_heading_button, _voice_button, hint_button, _memory.study_button, _coin_counter, _storage_retry_button]:
 		controls.append(_growth_control(control))
 	var state := {"visible": collection_page.visible, "controls": controls}
 	state["pip"] = _growth_control(duck)
+	state.pip["age"] = duck.growth_age
 	state["vocabulary"] = _vocabulary_snapshot()
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		controls.append(_growth_control(_vocabulary_retry))

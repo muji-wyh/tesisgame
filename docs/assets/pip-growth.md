@@ -3,12 +3,11 @@
 The growth journey keeps the original Pip silhouette, cream eyes, orange bill,
 warm outlines, and expressive six-part body. Every age remains friendly and
 recognizable. The stages describe a learning journey, not a developmental
-diagnosis. Baby has softer infant proportions; later stages use familiar outfits.
+diagnosis. Head-to-body balance, wing size, stance, and wardrobe change together.
 
-These are **new stage compositions for review**, assembled from already
-integrated production illustration. They are not newly acquired stock character
-designs, generated concept-art placeholders, or a one-to-one assignment of the
-eight world outfits to ages. The interactive review is a localhost-only asset
+These are **integrated age silhouettes**, adapted from the existing production
+illustration. The October 11 revision adds a school satchel, flight goggles,
+and guide jacket to the original wardrobe vocabulary. The interactive review is a localhost-only asset
 tool, served directly from `web/preview/pip-growth/`. Run `npm run preview:pip`
 and open `http://127.0.0.1:41774/`. It is excluded from the production export
 and has no in-game entry.
@@ -21,23 +20,26 @@ change alone never changes Pip's artwork or available actions.
 
 Baby recomposes the original uncovered duck illustration with a large head,
 shorter cream-colored body, small wings and close-set feet. Original contours,
-speaking mouth and all ten expression heads remain intact. The exact proportional
-transforms and palette changes are recorded in the Baby catalog entry. No new
-stock character, placeholder outline, or unlicensed image is introduced.
+speaking mouth and all ten expression heads remain intact. Each later stage
+gradually reduces head size relative to the body, opens the stance, and lengthens
+the torso. Every stage records its exact transforms and adjusted animation joints.
+The gameplay header presents age through Pip; Lv and its mastery track remain
+beside the character. The age remains available in Pip's accessible description
+and the vocabulary catalog's functional age selectors.
 
 | Age | Companion | Composition | Newly available action |
 | --- | --- | --- | --- |
-| Baby | Baby Pip | Cream plumage, round face, small wings and feet; no clothing | Hello wave |
-| Age 3 | Sprout | Mint striped shirt; original uncovered tuft | Hello wave |
-| Age 4 | Little Helper | Leaf-green overalls; original uncovered tuft | Curious look |
-| Age 5 | Curious Scout | Honey cap and leaf-green overalls | High five |
-| Age 6 | Story Finder | Raspberry beret and deep teal overalls | Peekaboo |
-| Age 7 | Trail Buddy | Sage field hat and pocketed vest | Wing stretch |
-| Age 8 | Wayfinder | Flower-trimmed trail hat, teal jacket, and amber scarf | Happy hop |
-| Age 9 | Word Maker | Cornflower beret and teal maker's apron | Gentle sway |
-| Age 10 | Sky Explorer | Green explorer cap and pearl field suit | Wing flutter |
-| Age 11 | Bright Navigator | Cream navigator cap and blue field suit | Two-step wave |
-| Age 12+ | Kind Guide | Amber beret, deep teal collared jacket, and gold details | Celebration dance |
+| Baby | Baby Pip | Cream down, oversized round face, tiny body, short wings and close-set feet | Hello wave |
+| Age 3 | Sprout | Top-heavy toddler proportions and a mint striped play shirt | Hello wave |
+| Age 4 | Little Helper | Slightly taller body, roomy leaf-green overalls and uncovered tuft | Curious look |
+| Age 5 | Curious Scout | Wider playful stance, honey cap and sturdy overalls | High five |
+| Age 6 | Story Finder | Upright school-age silhouette, raspberry beret, cream shirt and book satchel | Peekaboo |
+| Age 7 | Trail Buddy | Longer torso, sage field hat and practical pocket vest | Wing stretch |
+| Age 8 | Wayfinder | Teal knit cap, longer jacket and amber scarf | Happy hop |
+| Age 9 | Word Maker | Smaller face, cornflower beret and long maker's apron | Gentle sway |
+| Age 10 | Sky Explorer | Open shoulders, teal flight cap with goggles and pearl field suit | Wing flutter |
+| Age 11 | Bright Navigator | Tall balanced stance, cream navigator cap and blue field suit | Two-step wave |
+| Age 12+ | Kind Guide | Small uncovered head, full-length teal guide jacket, cream collar and leaf pin | Celebration dance |
 
 All earlier moves and voice lines remain in the preview repertoire. Breathing,
 blinking, and ten emotional expressions are available at every age; basic
@@ -52,7 +54,8 @@ jumps, sway, or idle movement. Preview speech requires an explicit click.
 | Material | Original source and creator | License / acquisition | Integration and available animation |
 | --- | --- | --- | --- |
 | Pip body, head, wings, and feet | `assets/images/mascots/pip-dance-parts.svg`, `pip.svg`, and `pip-idle-actions.svg`; existing original game art. No individual illustrator is identified in the existing repository record. | Already integrated project material. Repository package declares ISC; no separate artist license is recorded. No additional third-party license is claimed. | Original shapes retained. Six separate articulated parts, four ordinary poses, and four idle poses. These are illustration layers, not baked animation clips. |
-| Clothing | `assets/images/mascots/outfits/wardrobe.svg`; existing original project wardrobe art. | Already integrated under the same recorded project rights. | Head and body layers are recombined and deliberately recolored. Original silhouette/detail is preserved; no new character outline is substituted. Source combinations and exact palette mappings are recorded in the stage catalog. Baby adds no wardrobe layer and adapts only existing Pip proportions and colors. |
+| Clothing | `assets/images/mascots/outfits/wardrobe.svg`; existing original project wardrobe art. | Already integrated under the same recorded project rights. | Head and body layers are recombined, recolored, and proportioned with the body. Source combinations and exact palette mappings are recorded in the stage catalog. |
+| Age wardrobe details | `assets/images/mascots/growth/age-details.svg`; Codex-authored vector adaptations, October 11, from the original summer shirt, ocean collar, and autumn leaf contours. | Authored locally for this project; same repository ISC declaration, with no new third-party acquisition or additional source rights claimed. | Integrated school satchel, flight goggles, and guide jacket in all five matching atlases. Details follow the torso or head joint in every expression and action. |
 | Faces | `assets/images/mascots/pip-expression-heads.svg`; authored project adaptations described in `docs/assets/pip-expressions.md`. | Already integrated derivative art under the existing source rights. | Ten expressions retained, including complete headwear. Full-body and head-only atlases share the existing source coordinates. |
 | Motion | `scripts/duck_mascot.gd` articulated joint conventions and existing gestures. Growth timing is authored in `preview.js` and the corresponding native growth-pose function. | Original project code and animation composition. | Head, body, wings, and feet move independently around existing joints. The browser and native growth gestures use the same beat curves. These are authored animations, not a claim that source illustration includes baked clips. |
 | Preview and age-growth voice | Microsoft Edge online TTS, `speech.platform.bing.com/consumer/speech/synthesize/readaloud`; Microsoft Ava Neural. English scripts authored for this game. | Generated and acquired locally with `edge-tts` 7.2.8. Microsoft service terms apply; see the [Microsoft Services Agreement](https://www.microsoft.com/servicesagreement). The LGPLv3 client license does not grant extra rights to the voice service. | Ten original response MP3 recordings acquired and integrated. Click-only in the review page; available for explicit age-growth recognition in the game. No gameplay guide narration or duck calls are added by this asset set. |
@@ -84,7 +87,8 @@ voice selector. These are authored character lines, not vocabulary assessments.
 `web/preview/pip-growth/stages.json` is its exact preview copy. Each stage has:
 
 - `age`, `label`, `id`, `name`, and a short visual `description`.
-- `source` with the original wardrobe layer IDs and exact palette substitutions.
+- `source` with wardrobe/detail layer IDs, palette substitutions, and proportion transforms.
+- `motionPivots` with six resized joint positions and `shadowRadius` for ground contact.
 - `art` with repository-relative runtime sheet paths, and `previewArt` with
   corresponding paths relative to the review page.
 - `actions` and `voices` as cumulative ordered repertoires.
@@ -111,6 +115,9 @@ for compatibility with existing imports; their catalog identity is age-only.
 All cells retain their 120-unit coordinate system and transparent margins.
 Runtime SVG imports use the existing 3× scale. The six articulation pivots are
 `(61,98)`, `(61,72)`, `(33,78)`, `(88,78)`, `(40,103)`, and `(80,103)`.
+Each stage maps these source joints through its proportion transforms. Native
+growth gestures, answer feedback, and celebrations retarget rotations and squash
+around the resized roots while preserving their authored translations and timing.
 Paint order remains feet, body, head, then wings. The preview uses a larger
 view box for motion headroom; it does not stretch the artwork to fit a screen.
 
@@ -165,3 +172,12 @@ The asset verifier checks 11 distinct compositions, 55 identical runtime/preview
 atlases, age-only metadata, cumulative action access, and unchanged recording
 hashes. Native lifecycle, rendered motion and local preview interaction are
 covered separately by their focused suites. No new voice audio was generated.
+
+The October 11 revision makes every age a distinct head/body composition and
+removes the visible header age caption. The review includes 44- and 52-pixel
+miniatures, native rest/speech/gesture/answer/celebration contact sheets, and
+phone portrait/short landscape headers. The tucked preening pose uses a 0.90
+inset around `(61,112)` so its tilted head and cap retain transparent padding.
+The six animation roots are retargeted for all eleven appearances; a native
+contract checks their fixed-point behavior under rotation and body squash.
+The source drawings and approved voice recordings remain available unchanged.
