@@ -101,6 +101,58 @@ func _run() -> void:
 	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view.visible
 		and reveals.count("reentrant") <= 1,
 		"A host navigation during the sound cue cannot revive an obsolete reward")
+	await check_turn(view, data)
 	view.free()
 	print("Pair chest reward: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func check_turn(view, data) -> void:
+	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(390, 844), Vector2i(568, 320)]:
+		root.size = dimensions
+		view.position = Vector2(8, 64)
+		view.size = Vector2(dimensions.x - 16, 34)
+		view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
+		view.configure("turn-%s" % dimensions, "jungle", data.chests, false)
+		view.show_pair_result("turn-%s" % dimensions, true)
+		await process_frame
+		var before: float = maxf(view.chest.closed_art_rect().size.x, view.chest.closed_art_rect().size.y)
+		view.advance(0.28)
+		var pose: Dictionary = view.snapshot().motion
+		check(view.snapshot().live_turn and float(pose.edge) * float(pose.scale) >= before * 3.0,
+			"%s enlarges the actual acquired chest silhouette, rather than only its empty layout box" % dimensions)
+		check(view._title.modulate.a < 0.01 and view._surface_layer.modulate.a < 0.01,
+			"The enlarged chest takes visual priority over the compact status pill")
+		var model = view._models._pool[1]
+		var safe := Rect2(Vector2.ZERO, Vector2(dimensions))
+		var contained: bool = true
+		for age: float in [0.28, 0.55, 0.95, 1.20, 1.45, 1.72]:
+			view.advance(age - float(view.snapshot().elapsed))
+			pose = view.snapshot().motion
+			var bounds: Rect2 = model.closed_bounds()
+			var unit: float = float(pose.edge) / maxf(bounds.size.x, bounds.size.y)
+			var transform: Transform2D = view.get_global_transform_with_canvas() * Transform2D(
+				float(pose.roll), Vector2.ONE * float(pose.scale), 0.0, pose.center)
+			for corner in range(8):
+				var projected: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
+				contained = contained and safe.has_point(transform * ((projected - bounds.get_center()) * unit))
+		check(contained and is_equal_approx(float(pose.yaw), TAU),
+			"%s keeps the real model inside the viewport throughout a complete closed-chest turn" % dimensions)
+		view.set_paused(true)
+		var paused: Dictionary = view.snapshot().motion
+		view.advance(0.2)
+		check(view.snapshot().motion == paused and not view._models._active,
+			"Pausing freezes the pose and disables the extra 3D render surface")
+		view.set_paused(false)
+		view.set_reduced_motion(true)
+		check(not view.snapshot().live_turn and not view._models._active
+			and view.chest.modulate.a == 1.0 and view.chest.scale == Vector2.ONE,
+			"Reduced motion immediately restores the original still chest without a turn or flash")
+		view.set_reduced_motion(false)
+		view.advance(1.0)
+		check(not view._models._active and view.chest.modulate.a == 1.0 and view.chest.scale == Vector2.ONE
+			and view._title.modulate.a == 1.0 and view._surface_layer.modulate.a == 1.0,
+			"Completion returns to the original chest and status without keeping an animated viewport alive")
+	view.clear()
+	check(view._models._pool.is_empty() and not view.snapshot().active,
+		"Clearing the round releases the reusable turned model")

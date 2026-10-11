@@ -32,9 +32,14 @@ header and tighter outer spacing to preserve 44-pixel card targets even with
 speech controls visible. Menu, notebook and background pauses hide and freeze
 the inline effect.
 
-A new earned chest appears with a short grounded hop and settles beside
-"Chest found!". The 0.12-second reveal drives its `reward` cue, the small local
-light accent and the shared viewport confetti. GameUI keeps the paper in its own
+A new earned chest enlarges to a visible silhouette up to 128 CSS pixels wide
+or tall, lifts and makes one full vertical-axis turn before settling beside
+"Chest ready". The ordinary Meadow Explorer chest uses the same acquired closed
+3D model and turn renderer as Jelly Match and Voice Pop. The compact status pill
+fades during the enlargement so the chest remains the focal point. A local flash,
+rotating rays and seven short star glints follow its moving center. The
+0.12-second reveal drives the `reward` cue, light accent and shared viewport
+confetti. GameUI keeps the paper in its own
 CanvasLayer for a 6.4-second burst, including over four seconds of slow descent.
 The compact chest presentation still ends at 1.95 seconds; the paper tail continues
 through the same round's result and opening screens. The closed chest then remains
@@ -55,7 +60,11 @@ illustration and the five integrated 3D replacements. The illustration source
 mapping remains in `assets/chests/SOURCE.txt`; the downloaded models, creators,
 Unity Asset Store Standard EULA, acquisition records and available source clips
 remain in [the chest replacement record](chest-refresh.md). This presentation
-does not run any source opening clip.
+does not run any source opening clip. `chest_reward_model.gd` reuses the acquired
+closed models for full turns in the first four reward tiers; original 2D skins
+retain their artwork and use enlargement and a short roll instead of invented
+rear geometry. The enlarged, turned model silhouette is fitted to the viewport
+on desktop and narrow or short phones.
 
 The existing `portal_glow.png` comes from the acquired Modern 2D Animated Chests
 Pack free demo, with its byte-for-byte mapping in the same source record. The
@@ -69,7 +78,10 @@ The original Royal closed texture and existing sparkle/ray textures were
 inspected before reuse. The source chest and light artwork remains intact.
 The compact panel is interface layout, not replacement chest art. A visible
 3D chest warms its closed render for three frames, then retains its texture
-without running an idle or opening animation.
+without running an idle or opening animation. A separate turn surface renders
+only during the earned-chest performance; pause, reduced motion, completion and
+round cleanup stop that renderer. The original icon's actual silhouette anchors
+the turn, and both surfaces return to the same position and size.
 
 ## Host API and verification
 
@@ -89,7 +101,10 @@ without running an idle or opening animation.
 
 `tests/godot/pair_chest_reward_tests.gd` covers source themes, timing, viewport
 reveal signaling, duplicate and stale results, pause, reduced motion, narrow HUD
-bounds, pointer pass-through, clearing and reentrant navigation from a cue.
+bounds, pointer pass-through, clearing and reentrant navigation from a cue. It
+also checks the actual model corners throughout a full turn at desktop, portrait
+and short-landscape sizes, visible enlargement, return to the static icon and
+the additional renderer's pause, reduced-motion and cleanup lifecycle.
 `pair_chest_progress_tests.gd` covers the separate pity records, durable
 reservations, save failures, reload recovery, legacy migration, stale browser
 tabs and exactly-once settlement. `pair_chest_flow_tests.gd` drives actual Match

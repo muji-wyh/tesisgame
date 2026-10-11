@@ -321,6 +321,11 @@ func _has_art() -> bool:
 	return not _pieces.is_empty()
 
 
+func closed_art_rect() -> Rect2:
+	# The actual closed silhouette, excluding the reserved lid-opening envelope.
+	return _art.transform * _bounds
+
+
 func _fit() -> void:
 	if not _has_art() or _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return

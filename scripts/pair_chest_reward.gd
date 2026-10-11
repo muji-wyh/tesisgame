@@ -7,6 +7,8 @@ signal confetti_requested(round_id: String)
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
+const RewardModel = preload("res://scripts/chest_reward_model.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
@@ -32,8 +34,15 @@ var _anchor := Rect2()
 var _toast_rect := Rect2()
 var _chest_rect := Rect2()
 var _surface: StyleBoxFlat
+var _surface_layer := Node2D.new()
 var _surface_key: Array = []
 var _render_until_frame: int = -1
+var _models: RewardModel
+var _model_tier: int = 0
+var _model_sample: Dictionary = {}
+var _effect := Node2D.new()
+var _pose: Dictionary = {}
+var _art_rect := Rect2()
 
 
 func _init() -> void:
@@ -42,6 +51,8 @@ func _init() -> void:
 	focus_mode = Control.FOCUS_NONE
 	clip_contents = false
 	z_index = 70
+	add_child(_surface_layer)
+	_surface_layer.draw.connect(_draw_status_surface)
 	chest = ChestView.new()
 	chest.name = "PairClosedChest"
 	chest.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -54,6 +65,10 @@ func _init() -> void:
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(_title)
+	_models = RewardModel.new()
+	add_child(_models)
+	add_child(_effect)
+	_effect.draw.connect(_draw_chest_effect)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	hide()
@@ -159,6 +174,10 @@ func clear() -> void:
 	_revealed = false
 	_render_until_frame = -1
 	_cue_log.clear()
+	_model_sample.clear()
+	_pose.clear()
+	_models.clear()
+	_effect.queue_redraw()
 	chest.hide()
 	chest.set_idle_paused(true)
 	_title.text = ""
@@ -173,6 +192,7 @@ func snapshot() -> Dictionary:
 		"elapsed": _elapsed, "revealed": _revealed, "message": _title.text,
 		"cue_log": _cue_log.duplicate(),
 		"anchor": _anchor, "toast_rect": _toast_rect, "chest_rect": _chest_rect,
+		"motion": _pose.duplicate(), "live_turn": not _model_sample.is_empty(),
 		"chest_mode": chest.mode, "mouse_filter": mouse_filter}
 
 
@@ -184,6 +204,11 @@ func _prepare_chest() -> void:
 	chest.reduced_motion = true
 	chest.set_idle_paused(true)
 	chest.set_process(false)
+	_model_tier = RewardProgress.THEMES.find(_theme_id) + 1
+	if _model_tier > 4:
+		_model_tier = 0
+	if not _reduced_motion:
+		_models.prepare(_model_tier)
 	_warm_chest()
 
 
@@ -218,6 +243,8 @@ func _maintain_chest_render() -> void:
 	var warm: bool = _earned and not _paused and chest.is_visible_in_tree() and Engine.get_process_frames() < _render_until_frame
 	chest.set_idle_paused(not warm)
 	chest.set_process(false)
+	_models.set_active(_earned and _performance_active and not _paused
+		and not _reduced_motion and is_visible_in_tree())
 
 
 func _layout() -> void:
@@ -247,49 +274,114 @@ func _layout() -> void:
 	chest.pivot_offset = Vector2(edge * 0.5, edge * 0.82)
 	chest.scale = Vector2.ONE
 	chest.rotation = 0.0
+	chest.modulate.a = 1.0
+	_art_rect = chest.closed_art_rect()
 	var text_left: float = _chest_rect.end.x + 4.0 * unit if _earned else _toast_rect.position.x + 8.0 * unit
 	_title.position = Vector2(text_left, _toast_rect.position.y)
 	_title.size = Vector2(maxf(0.0, _toast_rect.end.x - text_left - 12.0 * unit), height)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if _earned else HORIZONTAL_ALIGNMENT_CENTER
 	_title.add_theme_font_size_override("font_size", maxi(10, roundi((14.0 if _earned else 12.0) * unit)))
 	_title.add_theme_color_override("font_color", Style.INK if _earned else Style.MUTED)
-	if _earned and _performance_active and not _reduced_motion:
-		var pop: float = sin(clampf((_elapsed - REVEAL_SECONDS) / 0.56, 0.0, 1.0) * PI)
-		var settle: float = sin(clampf((_elapsed - 0.68) / 0.24, 0.0, 1.0) * PI)
-		chest.position.y -= pop * 4.0 * unit
-		chest.scale = Vector2.ONE * (1.0 + pop * 0.12 + settle * 0.025)
-		chest.rotation = -sin(clampf(_elapsed / 0.68, 0.0, 1.0) * TAU) * 0.045 * pop
+	_sample_chest_motion(unit)
 	var opacity: float = 1.0
 	if not _earned and _performance_active and not _reduced_motion:
 		opacity = smoothstep(0.0, 0.08, _elapsed) * (1.0 - smoothstep(0.52, MISS_SECONDS, _elapsed))
 	_title.modulate.a = opacity
+	if _earned and not _pose.is_empty():
+		_title.modulate.a *= 1.0 - float(_pose.emphasis)
+	_surface_layer.modulate.a = _title.modulate.a
+	_surface_layer.queue_redraw()
 	queue_redraw()
+	_effect.queue_redraw()
+
+
+func _sample_chest_motion(unit: float) -> void:
+	_model_sample.clear()
+	var rest: Vector2 = _chest_rect.position + _art_rect.get_center()
+	_pose = {"center": rest, "scale": 1.0, "yaw": 0.0, "roll": 0.0,
+		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0}
+	if not _earned or not _performance_active or _reduced_motion or not _art_rect.has_area():
+		return
+	var age: float = _elapsed
+	var turn: float = smoothstep(0.06, 1.20, age)
+	var emphasis: float = smoothstep(0.0, 0.28, age) * (1.0 - smoothstep(1.12, 1.72, age))
+	var peak_edge: float = maxf(float(_pose.edge), minf(128.0 * unit, _chest_rect.size.x * 2.7))
+	var scale: float = lerpf(1.0, peak_edge / float(_pose.edge), emphasis)
+	var roll: float = sin(turn * TAU) * 0.09
+	var lift: float = sin(clampf(age / 1.45, 0.0, 1.0) * PI) * _chest_rect.size.x * 0.24
+	if _model_tier > 0:
+		_model_sample = _models.sample(_model_tier, turn * TAU)
+	var local := Rect2(-_art_rect.size * 0.5, _art_rect.size)
+	if not _model_sample.is_empty():
+		var framing: Rect2 = _model_sample.bounds
+		var turned: Rect2 = _model_sample.turn_bounds
+		var model_unit: float = float(_pose.edge) / maxf(framing.size.x, framing.size.y)
+		local = local.merge(Rect2((turned.position - framing.get_center()) * model_unit, turned.size * model_unit))
+	var bounds: Rect2 = Transform2D(roll, Vector2.ONE * scale, 0.0, Vector2.ZERO) * local
+	var safe: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
+	safe = safe.grow(-8.0 * unit)
+	var fit: float = minf(1.0, minf(safe.size.x / bounds.size.x, safe.size.y / bounds.size.y))
+	scale *= fit
+	bounds = Rect2(bounds.position * fit, bounds.size * fit)
+	var center: Vector2 = (rest - Vector2(0, lift)).clamp(safe.position - bounds.position, safe.end - bounds.end)
+	var model_weight: float = smoothstep(0.0, 0.10, age) * (1.0 - smoothstep(1.52, 1.72, age)) if not _model_sample.is_empty() else 0.0
+	_pose.merge({"center": center, "scale": scale, "yaw": turn * TAU, "roll": roll,
+		"emphasis": emphasis, "model_weight": model_weight}, true)
+	chest.pivot_offset = _art_rect.get_center()
+	chest.position = center - chest.pivot_offset
+	chest.scale = Vector2.ONE * scale
+	chest.rotation = roll
+	chest.modulate.a = 1.0 - model_weight
+
+
+func _draw_status_surface() -> void:
+	if visible and _earned and _toast_rect.has_area() and _surface != null:
+		_surface_layer.draw_style_box(_surface, _toast_rect)
 
 
 func _draw() -> void:
-	if not visible or not _toast_rect.has_area() or _surface == null:
+	if not visible or not _toast_rect.has_area() or _pose.is_empty():
 		return
-	if _earned:
-		draw_style_box(_surface, _toast_rect)
 	if not _earned or not _performance_active or _reduced_motion:
 		return
 	var t: float = _elapsed - REVEAL_SECONDS
 	if t < 0.0:
 		return
 	var accent: Color = _palette.get("spark", Color("#ffd777"))
-	var center: Vector2 = _chest_rect.get_center()
-	var edge: float = _chest_rect.size.x
-	var glow: float = (1.0 - smoothstep(0.24, 0.86, t)) * 0.42
-	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.64, Vector2.ONE * edge * 1.28), false, Color(accent, glow))
-	draw_set_transform(center, t * 0.18)
-	draw_texture_rect(RAYS, Rect2(Vector2.ONE * -edge * 0.66, Vector2.ONE * edge * 1.32), false, Color(accent.lightened(0.18), glow * 0.6))
+	var center: Vector2 = _pose.center
+	var edge: float = float(_pose.edge) * float(_pose.scale)
+	var glow: float = (1.0 - smoothstep(0.40, 1.35, t)) * 0.72
+	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.94, Vector2.ONE * edge * 1.88), false, Color(accent, glow))
+	draw_set_transform(center, t * 0.62)
+	draw_texture_rect(RAYS, Rect2(Vector2.ONE * -edge, Vector2.ONE * edge * 2.0), false, Color(accent.lightened(0.18), glow * 0.82))
 	draw_set_transform(Vector2.ZERO)
-	for index in range(3):
-		var age: float = t - float(index) * 0.07
-		if age < 0.0 or age >= 0.58:
+
+
+func _draw_chest_effect() -> void:
+	if not _earned or not _performance_active or _reduced_motion or _pose.is_empty():
+		return
+	var center: Vector2 = _pose.center
+	var edge: float = float(_pose.edge) * float(_pose.scale)
+	var accent: Color = _palette.get("spark", Color("#ffd777"))
+	if not _model_sample.is_empty() and float(_pose.model_weight) > 0.0:
+		var bounds: Rect2 = _model_sample.bounds
+		var unit: float = float(_pose.edge) / maxf(bounds.size.x, bounds.size.y)
+		_effect.draw_set_transform(center, float(_pose.roll), Vector2.ONE * float(_pose.scale))
+		_effect.draw_texture_rect(_model_sample.texture, Rect2(-bounds.get_center() * unit, Vector2.ONE * 1024.0 * unit), false,
+			Color(1, 1, 1, float(_pose.model_weight)))
+		_effect.draw_set_transform(Vector2.ZERO)
+	var t: float = _elapsed - REVEAL_SECONDS
+	if t < 0.0:
+		return
+	var flash: float = 1.0 - smoothstep(0.0, 0.24, t)
+	_effect.draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.80, Vector2.ONE * edge * 1.60), false,
+		Color(accent.lightened(0.75), flash * 0.86))
+	for index in range(7):
+		var age: float = t - float(index) * 0.065
+		if age < 0.0 or age >= 0.80:
 			continue
-		var direction: Vector2 = Vector2.from_angle(-2.55 + float(index) * 0.97)
-		var point: Vector2 = center + direction * edge * (0.38 + age * 0.15)
-		var star_size: float = edge * 0.24 * sin(age / 0.58 * PI)
-		draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * star_size * 0.5, Vector2.ONE * star_size), false,
-			Color(accent.lightened(0.5), 1.0 - age / 0.58))
+		var direction: Vector2 = Vector2.from_angle(-2.55 + float(index) * TAU / 7.0)
+		var point: Vector2 = center + direction * edge * (0.50 + age * 0.22)
+		var star_size: float = edge * 0.22 * sin(age / 0.80 * PI)
+		_effect.draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * star_size * 0.5, Vector2.ONE * star_size), false,
+			Color(accent.lightened(0.5), 1.0 - age / 0.80))
