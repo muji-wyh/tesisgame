@@ -5,6 +5,7 @@ signal gameplay_reaction_finished(correct: bool)
 const SHEET = preload("res://assets/images/mascots/pip.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
 const Outfits = preload("res://scripts/pip_outfits.gd")
+const AgeMotion = preload("res://scripts/pip_age_motion.gd")
 const GROWTH_CATALOG_PATH := "res://data/pip-growth-stages.json"
 const Style = preload("res://scripts/ui_style.gd")
 const GROWTH_ACTION_SECONDS := {"wave": 1.8, "look": 1.9, "high-five": 1.7,
@@ -154,6 +155,7 @@ func set_growth_age(value: int) -> void:
 	_outfit_dance_sheet = sheets[2]
 	_expression_sheet = sheets[3]
 	_expression_heads = sheets[4]
+	_idle_index = 0
 	_reset_idle()
 	# Keep final-answer reactions and shared celebration on their original clock.
 	_update_pose()
@@ -171,14 +173,18 @@ func growth_voice_path() -> String:
 	return "res://" + str(voice.get("path", "")) if voice.has("path") else ""
 
 
+func age_actions() -> Array[String]:
+	return AgeMotion.actions(growth_age)
+
+
 func perform_growth_action(kind: String = "") -> bool:
 	if _celebration_progress >= 0.0 or not _gameplay_reaction.is_empty() or _idle_paused or speaking or not is_visible_in_tree() or is_manual_action_busy():
 		return false
-	var available: Array[String] = growth_actions()
+	var available: Array[String] = age_actions()
 	if available.is_empty():
 		return false
 	var chosen: String = available[_idle_index % available.size()] if kind.is_empty() else kind
-	if not chosen in available:
+	if not chosen in available and not chosen in growth_actions():
 		return false
 	_reset_idle()
 	_idle_action = chosen
@@ -308,7 +314,8 @@ func clear_celebration() -> void:
 
 
 func perform_trick(kind: String) -> String:
-	return str(GROWTH_ACTION_CAPTIONS.get(kind, "")) if perform_growth_action(kind) else ""
+	var caption: String = str(AgeMotion.clip(kind).get("label", GROWTH_ACTION_CAPTIONS.get(kind, "")))
+	return caption if perform_growth_action(kind) else ""
 
 func is_manual_action_busy() -> bool:
 	# Static reduced-motion poses have no remaining animation to wait for.
@@ -364,7 +371,13 @@ func _reset_idle() -> void:
 
 
 func _idle_duration() -> float:
-	return float(GROWTH_ACTION_SECONDS.get(_idle_action, IDLE_SECONDS))
+	return float(AgeMotion.clip(_idle_action).get("seconds", GROWTH_ACTION_SECONDS.get(_idle_action, IDLE_SECONDS)))
+
+
+func _current_growth_pose(progress: float) -> Dictionary:
+	if not AgeMotion.clip(_idle_action).is_empty():
+		return AgeMotion.sample(_idle_action, progress, reduced_motion)
+	return _growth_action_pose(_idle_action, progress, reduced_motion)
 
 func _advance_idle(delta: float) -> void:
 	if _growth_action_manual:
@@ -385,7 +398,7 @@ func _advance_idle(delta: float) -> void:
 		return
 	_idle_wait -= delta
 	if _idle_wait <= 0.0:
-		var available: Array[String] = growth_actions()
+		var available: Array[String] = age_actions()
 		_idle_action = available[_idle_index % available.size()]
 		_idle_index += 1
 		_idle_left = _idle_duration()
@@ -442,7 +455,7 @@ func _select_expression() -> String:
 		return _reaction_face
 	if not _growth_stage.is_empty() and not _idle_action.is_empty():
 		var progress: float = 1.0 if reduced_motion else 1.0 - _idle_left / _idle_duration()
-		return str(_growth_action_pose(_idle_action, progress, reduced_motion).face)
+		return str(_current_growth_pose(progress).face)
 	if not _attention.is_empty():
 		return _attention
 	if _proactive_allowed and not reduced_motion and _idle_action.is_empty():
@@ -592,11 +605,11 @@ static func _growth_action_pose(kind: String, progress: float, reduced: bool = f
 
 func _draw_growth_action(origin: Vector2, edge: float) -> void:
 	var progress: float = 1.0 if reduced_motion else 1.0 - _idle_left / _idle_duration()
-	var action: Dictionary = _growth_action_pose(_idle_action, progress, reduced_motion)
+	var action: Dictionary = _current_growth_pose(progress)
 	var parts: Array = action.parts
 	# Add headroom gradually around the planted baseline; no size jump at rest.
 	var envelope: float = 0.0 if reduced_motion else smoothstep(0.0, 0.14, progress) * (1.0 - smoothstep(0.82, 1.0, progress))
-	var inset: float = 1.0 - 0.18 * envelope
+	var inset: float = 1.0 - float(action.get("inset", 0.18 * envelope))
 	var unit: float = edge * inset / 120.0
 	var base_origin := origin + Vector2(edge * (1.0 - inset) * 0.5, edge * (1.0 - inset) * 112.0 / 120.0)
 	var base := Transform2D(Vector2(unit, 0), Vector2(0, unit), base_origin)

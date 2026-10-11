@@ -185,12 +185,12 @@ func _check_idle_timing(duck) -> void:
 			and is_zero_approx(duck.reaction_left) and not duck.speaking,
 			"An invitation stays separate from intentional feedback and speaking")
 		var duration := _finish_invitation(duck)
-		var expected_seconds := 1.8
+		var expected_seconds: float = duck.AgeMotion.clip(kind).seconds
 		check(absf(duration - expected_seconds) <= 0.051
 			and duck._idle_wait >= 6.0 and duck._idle_wait <= 9.0,
 			kind + " completes its bounded routine, then starts a fresh six to nine second cooldown")
-	check(gestures == ["wave", "wave", "wave", "wave"],
-		"The initial companion repeats only its first unlocked wave")
+	check(gestures == ["toddler-wobble", "tiny-clap", "toddler-wobble", "tiny-clap"],
+		"The toddler alternates its two age-specific invitations")
 	check(events.is_empty() and duck.get_child_count() == children,
 		"Idle activity emits no activation and creates no audio, speech or effect nodes")
 	check(duck.get_global_rect() == original_rect and duck.scale == Vector2.ONE and is_zero_approx(duck.rotation),

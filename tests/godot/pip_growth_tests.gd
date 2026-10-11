@@ -146,8 +146,8 @@ func _check_lifecycle(duck) -> void:
 	for invitation in range(4):
 		duck._idle_wait = 0.01
 		duck._process(0.05)
-		check(duck._idle_action == "wave", "Baby autonomous motion cannot borrow an unearned higher-age dance")
-		_step(duck, 2.0)
+		check(duck._idle_action in duck.age_actions(), "Baby autonomous motion uses only its own signature repertoire")
+		_step(duck, 3.2)
 	duck.set_proactive_allowed(false)
 	duck.settle()
 

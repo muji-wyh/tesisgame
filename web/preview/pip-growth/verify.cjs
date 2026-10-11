@@ -11,6 +11,13 @@ const catalog = JSON.parse(bytes(path.join(root, 'data/pip-growth-stages.json'))
 const preview = JSON.parse(bytes(path.join(__dirname, 'stages.json')));
 const audio = JSON.parse(bytes(path.join(__dirname, 'audio/manifest.json')));
 assert.deepEqual(preview, catalog, 'Runtime and preview catalogs must agree.');
+const motions = JSON.parse(bytes(path.join(root, 'data/pip-age-motions.json')));
+assert.deepEqual(motions, JSON.parse(bytes(path.join(__dirname, 'age-motions.json'))), 'Preview choreography must be the exact production data.');
+assert.equal(Object.keys(motions.clips).length, 22);
+for (const stage of catalog.stages) {
+  assert.equal(motions.stages[stage.age].length, 2);
+  for (const id of motions.stages[stage.age]) assert.ok(motions.clips[id]);
+}
 assert.deepEqual(catalog.stages.map(stage => stage.age), [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 assert.equal(catalog.stages[0].label, 'Baby');
 assert.equal(catalog.stages[10].label, 'Age 12+');

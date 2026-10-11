@@ -165,6 +165,7 @@ const catalog = {
 };
 fs.writeFileSync(path.join(ROOT, 'data/pip-growth-stages.json'), JSON.stringify(catalog, null, 2) + '\n');
 fs.writeFileSync(path.join(__dirname, 'stages.json'), JSON.stringify(catalog, null, 2) + '\n');
+require('../../../tools/pip-growth/motions.cjs').generate(ROOT);
 
 // Cache is inside the owned preview tree; ignored temporary files are not shipped.
 const cache = path.join(__dirname, '.voice-cache');

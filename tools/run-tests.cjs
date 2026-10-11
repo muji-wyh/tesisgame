@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, '..');
 const groups = {
   vocabulary: { godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests'], node: ['vocabulary-loader', 'vocabulary-packs'] },
   jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
-  growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests'], node: ['growth-host', 'growth-vocabulary'] },
+  growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',

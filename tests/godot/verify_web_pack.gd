@@ -501,6 +501,10 @@ func _verify_excluded_content_absent() -> int:
 
 func _verify_growth() -> int:
 	var failures: int = 0
+	var motions: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/pip-age-motions.json"))
+	if not motions is Dictionary or motions.get("clips", {}).size() != 22 or motions.get("stages", {}).size() != 11:
+		printerr("All 22 age-specific Pip performances must ship in the startup pack.")
+		return 1
 	var stages: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/pip-growth-stages.json"))
 	if not stages is Dictionary or not stages.get("stages") is Array or stages.stages.size() != 11:
 		printerr("Baby Pip and all ten age appearances must ship in the game pack.")

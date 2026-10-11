@@ -40,7 +40,7 @@ a level change or world-theme switch cannot change it.
 | Sculpted growth models | `tools/pip-growth/render.py`; authored locally by Codex for this project on October 11, 2026, at the user's request | Original project-authored mesh, curve, material and clothing work; repository ISC declaration. No purchased or generated-image assets. | Integrated as 55 PNG atlases. Custom cross-section meshes define head/body/bill forms; tapered meshes define wings/crowns; modeled clothing has bound edges, folds, seams and pockets. Six separable roots; ten expression heads plus a speaking head. |
 | Kenney Cube Pets 2.0 | User-provided `Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Cube Pets/`; Kenney, www.kenney.nl | Local collection present. `License.txt` inspected: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/ | Pack preview and chick OBJ structure inspected. Preview-only selection: the cube silhouette does not fit Pip's growth anatomy. No mesh, texture or animation from this pack is copied or shipped. |
 | Kenney Mini Characters 1.0 | User-provided collection, `3D assets/Mini Characters/`; Kenney | Local collection present. `License.txt` inspected: CC0, same URL above | Pack preview inspected. Human silhouettes do not match Pip. No assets acquired into the repository or integrated; no animation claim. |
-| Motion | Existing `scripts/duck_mascot.gd` and `web/preview/pip-growth/preview.js` | Original project code | Existing authored gestures drive the six rendered layers with model-specific pivots. No claim of baked Blender animation clips. |
+| Motion | `tools/pip-growth/motions.cjs`, `scripts/pip_age_motion.gd`, existing mascot and preview renderers | Original project choreography authored locally on October 12, 2026; repository ISC declaration | 22 integrated age-specific performances drive the six acquired project layers with model-specific pivots. No new mesh, audio or baked Blender animation clips. |
 | Age-growth voice | Microsoft Edge online TTS, Microsoft Ava Neural; existing recordings and English scripts | Previously acquired with edge-tts 7.2.8. Microsoft service terms apply: https://www.microsoft.com/servicesagreement | Ten unchanged MP3 recordings. Baby shares the Sprout greeting. No new synthesis or processing in this revision. |
 | Preview typography | Nunito Project Authors; existing Google Fonts acquisition | SIL Open Font License 1.1, `web/preview/pip-growth/FONT-LICENSE.txt` | Existing static 600/800 font instances reused. |
 
@@ -82,6 +82,37 @@ head, wings. Normal actions settle after one play; repeated input, speech
 priority, hidden-page cancellation and reduced-motion behavior are unchanged.
 The browser review embeds cropped raster cells into the same SVG articulation
 wrappers, preserving the model's full 120-unit frame.
+
+## Age-specific motion
+
+Each age now has two signature performances. They alternate after six to nine
+quiet seconds and on deliberate result-companion interactions. The gameplay
+header still opens the mode menu. Older earned gestures remain available to
+explicit callers and the review page, but no longer dilute the default age
+repertoire. These choices describe Pip's personality, not developmental rules.
+
+| Age | Signature performances | Physical emphasis |
+| --- | --- | --- |
+| Baby | Shell wiggle; sleepy nuzzle | Planted shell and feet, delayed heavy head, tiny wing cuddle |
+| 3 | Wobbly steps; little claps | Tentative balance shifts, small lifted foot, eager wing contact |
+| 4 | Curious peek; look what I found | Broad head turns, visor-led curiosity and open presentation |
+| 5 | Rain-boot steps; boots together hop | Heavy boot lifts, feet-first contact and coat settling |
+| 6 | Ready for school; I have an answer | Shoulder-strap tug and an eager raised wing |
+| 7 | Side stretches; one-foot balance | Deliberate reach, planted sneakers and counterbalance |
+| 8 | Hoodie two-step; why not? | Loose side rhythm and playful asymmetrical shrug |
+| 9 | Think it through; an idea | Inspect, pause, try, then a clear recognition beat |
+| 10 | Scout the horizon; ready to explore | Cap-side lookout, purposeful step and confident greeting |
+| 11 | Find the rhythm; easy hello | Head-led groove, sneaker tap and relaxed wing salute |
+| 12+ | A thoughtful nod; after you | Considered pause, reassuring nod and unhurried invitation |
+
+`node tools/pip-growth/motions.cjs` regenerates `data/pip-age-motions.json` and
+its identical local preview copy. Both renderers interpolate the same authored
+beats. Only the boot hop needs extra headroom; grounded gestures keep their
+normal size. Every action settles into the exact rest pose. Reduced motion uses
+one selected still pose per action. Pronunciation, page hiding and pause cancel
+the action; late input cannot stack it or take over the reward clock. Existing
+answer reactions, shared chest timing, voice recordings and game state remain
+unchanged. The new motion is silent and adds no instructional UI text.
 
 ## Regeneration
 

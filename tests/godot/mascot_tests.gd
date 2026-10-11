@@ -93,7 +93,7 @@ func _run() -> void:
 			"Playing with the result companion never changes earned game progress")
 		check(not app.audio.voice.playing and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing),
 			"Match result Pip performs its visual trick without a duck sound")
-		check(app.duck._idle_action == "wave", "The Lv3 result companion performs its unlocked greeting")
+		check(app.duck._idle_action in app.duck.age_actions(), "The result companion performs its age-specific greeting")
 		app.audio.halt()
 		app.duck.settle()
 		app.model.phase = playing_phase
@@ -143,14 +143,14 @@ func _run() -> void:
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
 		check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._header_duck_art_slot
-			and app.duck.tooltip_text == "Pip: change game mode"
-			and app.duck.get("accessibility_name") == "Pip: change game mode. Current mode: Match",
+			and app.duck.tooltip_text.ends_with(". Change game mode")
+			and str(app.duck.get("accessibility_name")).ends_with(". Change game mode. Current mode: Match"),
 			"Match voice input retains the visible, named Pip header trigger for game modes")
 		app._stop_voice()
 		app.audio.halt()
 		app._update_duck()
 		check(app.duck.is_visible_in_tree() and not app.duck.speaking
-			and app.duck.tooltip_text == "Pip: change game mode",
+			and app.duck.tooltip_text.ends_with(". Change game mode"),
 			"Leaving voice mode keeps the quiet Pip game-mode trigger available")
 		for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 			root.size = dimensions
@@ -159,8 +159,8 @@ func _run() -> void:
 			app._update_duck()
 			check(root.get_visible_rect().encloses(app.duck.get_global_rect()), "The duck fits the supported viewport")
 			var css_size: Vector2 = app.duck.size * app.Style.ui_scale(app)
-			check(css_size.is_equal_approx(Vector2(52, 52)) and css_size.x >= 44,
-				"Pip's compact header art retains its 52 CSS-pixel accessible touch target")
+			check(is_equal_approx(css_size.x, css_size.y) and css_size.x >= 44,
+				"Pip's compact header art retains a square touch target of at least 44 CSS pixels")
 		# Headless frames can finish before the audio thread consumes its stop queue.
 		await create_timer(0.1).timeout
 		app.queue_free()
@@ -196,8 +196,8 @@ func _check_idle_actions(duck: Button) -> void:
 		previous = action
 		if gestures.size() == 4:
 			break
-	check(gestures == ["wave", "wave", "wave", "wave"],
-		"The initial companion offers only the first unlocked greeting during quiet intervals")
+	check(gestures.size() == 4 and gestures.all(func(id): return id in duck.age_actions()) and gestures[0] != gestures[1],
+		"The companion alternates its age-specific invitations during quiet intervals")
 	check(stable_bounds, "Autonomous motion preserves the button hit target and creates no effect or audio nodes")
 	duck.set_speaking(true)
 	check(duck._idle_action.is_empty(), "Pronunciation immediately interrupts idle gestures")
@@ -366,7 +366,7 @@ func _check_quiet_side_effects(app, directory: String) -> void:
 			if not offered.has(app.duck._idle_action):
 				offered.append(app.duck._idle_action)
 		previous = app.duck._idle_action
-	check(invitations >= 5 and offered == ["wave"], "The integrated Lv3 mascot repeatedly offers only its unlocked greeting")
+	check(invitations >= 5 and offered.size() == 2 and offered.all(func(id): return id in app.duck.age_actions()), "The integrated mascot repeatedly offers its two signature motions")
 	check(_quiet_state(app) == state_before and _saved_files(directory) == files_before,
 		"Quiet invitations never alter learning progress, hints, rewards or saved files")
 	check(events.is_empty() and labels.map(func(label: Label) -> String: return label.text) == text_before,

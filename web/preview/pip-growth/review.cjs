@@ -41,7 +41,7 @@ async function run() {
       for (const age of posesOnly ? [12] : [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
         await page.locator(`.age-tab[data-age="${age}"]`).click();
         await page.waitForFunction(wanted => window.pipGrowthPreview.snapshot().age === wanted && document.querySelector('#character-art svg'), age);
-        assert.equal(await page.locator('.action-button').count(), Math.max(1, age - 2));
+        assert.equal(await page.locator('.action-button').count(), Math.max(1, age - 2) + 2);
         assert.equal(await page.locator('#voice-select option').count(), Math.max(1, age - 2));
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, `${profile.name} Age${age}: horizontal overflow`);
         await page.locator('#stage-review').screenshot({ path: path.join(output, `${profile.name}-age${age}.png`) });
@@ -49,7 +49,7 @@ async function run() {
       await page.locator('.whole-journey').screenshot({ path: path.join(output, `${profile.name}-all-stages.png`) });
       await page.locator('#play-new-move').click();
       assert.equal(await page.evaluate(() => window.pipGrowthPreview.snapshot().action), null);
-      assert.equal(await page.evaluate(() => window.pipGrowthPreview.snapshot().expression), 'delighted');
+      assert.equal(await page.evaluate(() => window.pipGrowthPreview.snapshot().expression), 'encourage');
       await page.locator('#motion-toggle').click();
       if (profile.name === 'desktop') {
         const actions = posesOnly ? ['high-five', 'stretch'] : ['wave', 'look', 'high-five', 'peekaboo', 'stretch', 'hop', 'dance-sway', 'flutter', 'dance-wave', 'dance-hop'];

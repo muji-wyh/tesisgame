@@ -4358,7 +4358,7 @@ func _play_duck() -> void:
 		return
 	if duck.is_manual_action_busy():
 		return
-	var tricks: Array = duck.growth_actions()
+	var tricks: Array = duck.age_actions()
 	var caption: String = duck.perform_trick(tricks[_duck_trick_index % tricks.size()])
 	if caption.is_empty():
 		return
@@ -4559,6 +4559,8 @@ func _publish_growth_view() -> void:
 	var state := {"visible": collection_page.visible, "controls": controls}
 	state["pip"] = _growth_control(duck)
 	state.pip["age"] = duck.growth_age
+	state.pip["action"] = duck._idle_action
+	state.pip["signature_actions"] = duck.age_actions()
 	state["vocabulary"] = _vocabulary_snapshot()
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		controls.append(_growth_control(_vocabulary_retry))

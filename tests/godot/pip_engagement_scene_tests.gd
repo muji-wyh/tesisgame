@@ -26,6 +26,8 @@ func observe_idle(app, seconds: float) -> bool:
 		app._update_duck()
 		app.duck._process(0.1)
 		offered = offered or not app.duck._idle_action.is_empty()
+		if offered:
+			return true
 	return offered
 
 
@@ -69,7 +71,7 @@ func _run() -> void:
 	var original: Array = [app.model.cards.duplicate(true), app.model.hints_remaining,
 		(app.model.matched_ids.size() / 2), app.model.mistakes, app._status_announcement, app.growth.snapshot()]
 	check(not observe_idle(app, 5.5) and observe_idle(app, 3.6)
-		and app.duck._idle_action == "wave", "Lv3 Pip offers its unlocked wave within 6–9 quiet seconds")
+		and app.duck._idle_action in app.duck.age_actions(), "Pip offers its age-specific motion within six to nine quiet seconds")
 	check([app.model.cards, app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes,
 		app._status_announcement, app.growth.snapshot()] == original and not app.audio.voice.playing,
 		"Invitations never change the game, choices, status or audio")
@@ -101,7 +103,7 @@ func _run() -> void:
 	app._memory.memory.studying = false
 	app._voice_mode = true
 	check(not observe_idle(app, 20) and app.duck.is_visible_in_tree()
-		and app.duck.tooltip_text == "Pip: change game mode",
+		and app.duck.tooltip_text.ends_with(". Change game mode"),
 		"Voice input suppresses Pip's invitations while keeping its game-mode trigger available")
 	app._voice_mode = false
 	app._update_duck()
@@ -121,16 +123,17 @@ func _run() -> void:
 	await settle()
 	app.duck.settle()
 	app._play_duck()
-	check(app.duck._idle_action == "wave", "The Lv3 result companion offers its unlocked wave")
+	check(app.duck._idle_action in app.duck.age_actions(), "The result companion offers its age-specific action")
+	var manual_action: String = app.duck._idle_action
 	app._play_duck()
-	check(app.duck._idle_action == "wave" and app._duck_trick_index == 4,
+	check(app.duck._idle_action == manual_action and app._duck_trick_index == 4,
 		"A repeated result companion activation preserves the current action and next trick index")
 	app.duck._process(3.3)
 	app._play_duck()
-	check(app.duck._idle_action == "wave" and app._duck_trick_index == 5, "A completed wave releases the next deliberate Lv3 interaction")
+	check(app.duck._idle_action in app.duck.age_actions() and app.duck._idle_action != manual_action and app._duck_trick_index == 5, "Completing a signature motion releases the other age-specific interaction")
 	app.duck._process(3.3)
 	app._play_duck()
-	check(app.duck._idle_action == "wave" and app._duck_trick_index == 6, "Repeated completed interactions never offer a locked action")
+	check(app.duck._idle_action == manual_action and app._duck_trick_index == 6, "Completed interactions cycle through the two current-age actions")
 	app.duck.settle()
 	app.model.phase = playing_phase
 	app._refresh()

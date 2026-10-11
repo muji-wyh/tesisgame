@@ -12,6 +12,7 @@ const ACTIONS = {
   'dance-wave': ['Two-step wave', 2900], 'dance-hop': ['Celebration dance', 3200]
 };
 let catalog;
+let ageMotions;
 let selectedIndex = 0;
 let rig;
 let activeAction;
@@ -116,6 +117,15 @@ function smooth(start, end, value) {
 function blankPose() { return Array.from({ length: 6 }, () => [0, 0, 0]); }
 
 function actionPose(name, p) {
+  const clip = ageMotions?.clips[name];
+  if (clip) {
+    p = Math.max(0, Math.min(1, p));
+    const end = clip.beats.findIndex((frame, index) => index > 0 && p <= frame.time);
+    const first = clip.beats[end - 1], last = clip.beats[end];
+    const blend = smooth(first.time, last.time, p);
+    return { pose: first.parts.map((part, index) => part.map((value, axis) => value + (last.parts[index][axis] - value) * blend)),
+      face: blend >= .5 ? last.face : first.face };
+  }
   const pose = blankPose();
   const e = smooth(0, .14, p) * (1 - smooth(.82, 1, p));
   const beat = Math.sin(p * Math.PI * 4);
@@ -208,10 +218,12 @@ function stopAction() {
 
 function runAction(id) {
   const stage = catalog.stages[selectedIndex];
-  if (!stage.actions.includes(id) || !rig) return;
+  if (![...ageMotions.stages[stage.age], ...stage.actions].includes(id) || !rig) return;
   stopAction();
   if (reducedMotion) {
-    setExpression('delighted');
+    const still = ageMotions.clips[id] ? actionPose(id, ageMotions.clips[id].still) : { pose: blankPose(), face: 'delighted' };
+    applyPose(still.pose);
+    setExpression(still.face);
     byId('pose-caption').textContent = `${ACTIONS[id][0]} · a happy pose with reduced motion.`;
     return;
   }
@@ -321,20 +333,21 @@ async function selectStage(index, scroll = false) {
   byId('stage-name').textContent = stage.name;
   byId('stage-name-small').textContent = `${stage.label} · ${stage.name}`;
   byId('stage-description').textContent = stage.description;
-  byId('new-move-name').textContent = stage.newAction.label;
-  byId('move-count').textContent = `${stage.actions.length} ${stage.actions.length === 1 ? 'move' : 'moves'}`;
+  const signature = ageMotions.stages[stage.age];
+  byId('new-move-name').textContent = ageMotions.clips[signature[0]].label;
+  byId('move-count').textContent = `${signature.length} signature moves`;
   byId('voice-count').textContent = `${stage.voices.length} ${stage.voices.length === 1 ? 'hello' : 'hellos'}`;
   byId('pose-caption').textContent = 'Ready to say hello.';
   byId('character-art').setAttribute('aria-label', `${stage.label} ${stage.name}, ${stage.description}`);
   byId('previous-stage').disabled = index === 0;
   byId('next-stage').disabled = index === catalog.stages.length - 1;
   document.querySelectorAll('[data-age]').forEach(button => button.setAttribute('aria-current', String(Number(button.dataset.age) === stage.age)));
-  const actions = stage.actions.map(id => {
+  const actions = [...signature, ...stage.actions].map(id => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'action-button';
     button.dataset.action = id;
-    button.dataset.new = String(id === stage.newAction.id);
+    button.dataset.new = String(signature.includes(id));
     button.setAttribute('aria-pressed', 'false');
     button.textContent = ACTIONS[id][0];
     button.addEventListener('click', () => runAction(id));
@@ -365,6 +378,10 @@ async function initialize() {
   const response = await fetch('stages.json');
   if (!response.ok) throw new Error('The growth-stage catalog could not load.');
   catalog = await response.json();
+  const motionResponse = await fetch('age-motions.json');
+  if (!motionResponse.ok) throw new Error('The age motion catalog could not load.');
+  ageMotions = await motionResponse.json();
+  for (const [id, clip] of Object.entries(ageMotions.clips)) ACTIONS[id] = [clip.label, clip.seconds * 1000];
   catalog.stages.forEach((stage, index) => {
     const tab = document.createElement('button');
     tab.type = 'button';
@@ -393,7 +410,7 @@ async function initialize() {
     byId('journey-grid').append(card);
     staticCards.set(stage.id, miniature);
   });
-  byId('play-new-move').addEventListener('click', () => runAction(catalog.stages[selectedIndex].newAction.id));
+  byId('play-new-move').addEventListener('click', () => runAction(ageMotions.stages[catalog.stages[selectedIndex].age][0]));
   byId('previous-stage').addEventListener('click', () => selectStage(selectedIndex - 1).catch(showError));
   byId('next-stage').addEventListener('click', () => selectStage(selectedIndex + 1).catch(showError));
   byId('play-voice').addEventListener('click', playVoice);
