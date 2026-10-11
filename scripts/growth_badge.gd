@@ -8,6 +8,7 @@ var bar: ProgressBar
 var compact: bool = false
 var _scale: float = 1.0
 var _tiny: bool = false
+var _balance_space: float = 0.0
 var _state: Dictionary = {}
 
 
@@ -55,11 +56,14 @@ func configure(state: Dictionary) -> void:
 	_layout()
 
 
-func fit(css_scale: float, use_compact: bool, tiny: bool = false) -> void:
+func fit(css_scale: float, use_compact: bool, tiny: bool = false, balance_space: float = 0.0) -> void:
 	_scale = css_scale
 	compact = use_compact
 	_tiny = tiny
+	_balance_space = balance_space
 	custom_minimum_size = Vector2(52 if tiny else 68 if compact else 168, 44 if compact else 52) / _scale
+	if _balance_space > 0.0:
+		custom_minimum_size.y = maxf(custom_minimum_size.y, (_balance_space + (22 if compact else 28)) / _scale)
 	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	var focus := StyleBoxFlat.new()
@@ -102,5 +106,12 @@ func _layout() -> void:
 	level_label.size = Vector2(size.x - 6 / _scale if compact else 42 / _scale, 28 / _scale)
 	bar.position = Vector2(8 if _tiny else 10 if compact else 54, 31 if compact else 16) / _scale
 	bar.size = Vector2(size.x - bar.position.x - (8 if _tiny else 10 if compact else 2) / _scale, (8 if compact else 20) / _scale)
+	if _balance_space > 0.0:
+		var row_height: float = (22.0 if compact else 28.0) / _scale
+		var row_top: float = size.y - row_height
+		level_label.position = Vector2(3 / _scale, row_top)
+		level_label.size = Vector2((34 if compact else 42) / _scale, row_height)
+		bar.position = Vector2((40 if compact else 54) / _scale, row_top + (row_height - bar.size.y) * 0.5)
+		bar.size.x = maxf(1.0, size.x - bar.position.x - 2 / _scale)
 	count_label.position = bar.position + Vector2(2, 0) / _scale
 	count_label.size = Vector2(bar.size.x - 4 / _scale, bar.size.y)

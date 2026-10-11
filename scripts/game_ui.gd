@@ -579,7 +579,6 @@ func _build_controls() -> void:
 	_mode_heading_button.pressed.connect(_toggle_mode_menu)
 	_header_spacer.add_child(_mode_heading_button)
 	_coin_counter = CoinCounter.new()
-	_header_spacer.add_child(_coin_counter)
 	_header_spacer.resized.connect(_layout_game_heading)
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading = Style.label("Match", 22)
@@ -607,6 +606,8 @@ func _build_controls() -> void:
 	UiClick.bind_button(_growth_button)
 	_growth_button.pressed.connect(_show_collection)
 	_toolbar.add_child(_growth_button)
+	_growth_button.add_child(_coin_counter)
+	_growth_button.resized.connect(_layout_coin_counter)
 	collection_button = _growth_button
 	_growth_bar = _growth_button.bar
 	_build_mode_menu()
@@ -2606,7 +2607,7 @@ func _fit_mode_buttons() -> void:
 	for button in [hint_button, _memory.study_button]:
 		Style.square_icon_button(button, accent)
 	_style_voice_button()
-	var compact_retry: bool = size.x * css_scale < 360
+	var compact_retry: bool = size.x * css_scale < 480
 	_storage_retry_button.text = "Retry" if compact_retry else "Retry rewards" if _save_error else "Retry saving"
 	_set_accessibility_name(_storage_retry_button, "Retry rewards" if _save_error else "Retry saving")
 	_storage_retry_button.custom_minimum_size = Vector2(72 if compact_retry else 96, 44) / css_scale
@@ -2630,17 +2631,14 @@ func _layout_game_heading() -> void:
 	if centered_width >= title_width:
 		width = minf(width, centered_width)
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	var coin_height: float = (20.0 if _short_game_header() else 24.0) / scale
 	_mode_heading_button.size = Vector2(width, _header_spacer.size.y)
 	_mode_heading_button.position = Vector2(clampf(center - width * 0.5, 0.0, maxf(0.0, available - width)), 0)
 	_mode_heading_button.visible = available >= maxf(64 / scale, title_width) and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
-	_mode_heading.offset_bottom = -coin_height - 2 / scale
-	var coin_width: float = minf(available, (90.0 if coin_wallet.balance < 1000000 else 124.0) / scale)
-	_coin_counter.size = Vector2(coin_width, coin_height)
-	_coin_counter.position = Vector2(clampf(center - coin_width * 0.5, 0.0, maxf(0.0, available - coin_width)), _header_spacer.size.y - coin_height)
-	if not _mode_heading_button.visible:
-		_coin_counter.position.y = (_header_spacer.size.y - coin_height) * 0.5
-	_coin_counter.visible = available > 30 / scale
+	_mode_heading.offset_bottom = 0.0
+
+
+func _layout_coin_counter() -> void:
+	_coin_counter.position = Vector2(maxf(0.0, _growth_button.size.x - _coin_counter.size.x), 0.0)
 	_coin_counter.queue_redraw()
 
 
@@ -4530,7 +4528,12 @@ func _style_growth_progress() -> void:
 	var scale: float = Style.ui_scale(self)
 	var width: float = size.x * scale
 	var short_screen: bool = size.y * scale <= 440
-	_growth_button.fit(scale, width < 680 or short_screen, width < 360)
+	var coin_width: float = 76.0 if width < 360 else 90.0 if width < 480 or coin_wallet.balance < 1000000 else 124.0
+	var coin_height: float = 20.0 if _short_game_header() else 24.0
+	_coin_counter.size = Vector2(coin_width, coin_height) / scale
+	_growth_button.fit(scale, width < 680 or short_screen, width < 360, coin_height + 2.0)
+	_growth_button.custom_minimum_size.x = maxf(_growth_button.custom_minimum_size.x, coin_width / scale)
+	_layout_coin_counter()
 
 
 func _publish_growth_view() -> void:
