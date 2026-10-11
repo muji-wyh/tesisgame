@@ -53,6 +53,120 @@ async function seedProgress(page) {
   }, { roomSave, medalSave });
 }
 
+for (const reducedMotion of ['no-preference', 'reduce']) {
+  test(`themes rotate from the saved world without changing stored progress with motion ${reducedMotion}`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.clock.install();
+    await page.clock.pauseAt(new Date());
+    await seedProgress(page);
+    await maintainedShell(page);
+    await expectPreview(page, 'autumn');
+    await page.clock.fastForward(4499);
+    await expectPreview(page, 'autumn');
+    for (const id of ['winter', 'ocean', 'space', 'jungle', 'candy', 'spring', 'summer', 'autumn']) {
+      await page.clock.fastForward(id === 'winter' ? 1 : 4500);
+      await expectPreview(page, id);
+      await expect(themeButton(page, id)).toBeInViewport({ ratio: 1 });
+      await expect(page.locator('#loading-theme-options button[tabindex="0"]')).toHaveCount(1);
+      expect(await page.evaluate(() => document.activeElement.tagName)).toBe('BODY');
+    }
+    await expect(page.locator('#loading-theme-name')).toHaveAttribute('aria-live', 'off');
+    expect(await page.evaluate(key => localStorage.getItem(key), ROOM_KEY)).toBe(roomSave);
+    expect(await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY)).toBe(medalSave);
+    await expect(page.locator('#enter-game')).toBeDisabled();
+    if (reducedMotion === 'reduce') {
+      expect(await page.locator('#status').evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s');
+      expect(await page.locator('#loading-play').evaluate(el => el.getAnimations({ subtree: true }).length)).toBe(0);
+    }
+    await themeButton(page, 'autumn').click();
+    await page.clock.fastForward(18000);
+    await expectPreview(page, 'autumn');
+  });
+}
+
+test('automatic themes preserve keyboard focus and a manual choice stays selected', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await maintainedShell(page);
+  await themeButton(page, 'spring').focus();
+  await page.clock.fastForward(9000);
+  await expectPreview(page, 'spring');
+  await expect(themeButton(page, 'spring')).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expectPreview(page, 'summer');
+  await page.locator('#loading-duck').focus();
+  await page.clock.fastForward(18000);
+  await expectPreview(page, 'summer');
+  await expect(page.locator('#loading-duck')).toBeFocused();
+  await expect(page.locator('#loading-theme-name')).toHaveAttribute('aria-live', 'polite');
+});
+
+test('automatic themes restart a full interval after visibility and page suspension and stop on entry', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await maintainedShell(page);
+  await page.clock.fastForward(4500);
+  await expectPreview(page, 'summer');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.clock.fastForward(18000);
+  await expectPreview(page, 'summer');
+  await page.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.clock.fastForward(4499);
+  await expectPreview(page, 'summer');
+  await page.clock.fastForward(1);
+  await expectPreview(page, 'autumn');
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true })));
+  await page.clock.fastForward(18000);
+  await expectPreview(page, 'autumn');
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+  await page.clock.fastForward(4499);
+  await expectPreview(page, 'autumn');
+  await page.clock.fastForward(1);
+  await expectPreview(page, 'winter');
+  await page.evaluate(() => {
+    window.loadingReveals = [];
+    wordBuddiesHost.ready(theme => loadingReveals.push(theme));
+  });
+  await page.clock.runFor(2000);
+  await expect(page.locator('#enter-game')).toBeEnabled();
+  await page.locator('#enter-game').focus();
+  await page.clock.fastForward(9000);
+  await expectPreview(page, 'winter');
+  await page.locator('#enter-game').click();
+  await page.clock.fastForward(18000);
+  expect(await page.evaluate(() => loadingReveals)).toEqual(['winter']);
+  expect(await page.evaluate(() => wordBuddiesHost.loadingTheme())).toBe('winter');
+  await expect(page.locator('#canvas')).toBeFocused();
+  await expect(page.locator('#status')).toBeHidden();
+});
+
+test('an engine failure stops automatic themes and cannot restart them on pageshow', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await maintainedShell(page);
+  await page.clock.fastForward(4500);
+  await expectPreview(page, 'summer');
+  await page.evaluate(() => window.dispatchEvent(new PromiseRejectionEvent('unhandledrejection', {
+    reason: new WebAssembly.RuntimeError('Loading test failure'), promise: Promise.resolve()
+  })));
+  await expect(page.locator('#status')).toHaveAttribute('data-state', 'error');
+  await page.evaluate(() => {
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+  });
+  await page.clock.fastForward(18000);
+  expect(await page.evaluate(() => wordBuddiesHost.loadingTheme())).toBe('summer');
+  await expect(page.locator('#retry')).toBeFocused();
+  await expect(page.locator('#loading-themes')).toBeHidden();
+  await expect(page.locator('#canvas')).toHaveAttribute('inert');
+});
+
 test('all themes are selectable before the engine is available and late startup colors preserve the preview', async ({ page }) => {
   await seedProgress(page);
   // Keep a valid pending engine script so the loader remains interactive without
@@ -143,7 +257,7 @@ test('the theme rail keeps its controls and entry visible on compact and wide lo
   await maintainedShell(page);
   await page.evaluate(() => wordBuddiesHost.ready());
   await expect(page.locator('#enter-game')).toBeEnabled();
-  for (const viewport of [{ width: 320, height: 320 }, { width: 320, height: 568 },
+  for (const viewport of [{ width: 320, height: 320 }, { width: 320, height: 568 }, { width: 568, height: 320 },
     { width: 844, height: 390 }, { width: 1366, height: 768 }]) {
     await page.setViewportSize(viewport);
     await themeButton(page, 'candy').click();
@@ -183,6 +297,7 @@ async function observeNativeThemes(page) {
     window.nativeThemes = [];
     document.addEventListener('DOMContentLoaded', () => {
       const host = wordBuddiesHost;
+      window.initialLoadingTheme = host.loadingTheme();
       window.wordBuddiesHost = { ...host, background(color, accent, light, theme) {
         nativeThemes.push(theme);
         return host.background(color, accent, light, theme);
@@ -221,9 +336,16 @@ test('the real game adopts the final loading theme and remembers it without losi
     }
     const savedWords = saved.match(/^word_ids=(.*)$/m)?.[1] || '';
     expect([...savedWords.matchAll(/"([^"]+)"/g)].map(([, word]) => word)).toEqual(['apple']);
-    expect(await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY)).toBe(medalSave);
+    // Starting Match also persists its chest-roll state in the medal file.
+    // Compare earned counts independently of formatting and that new section.
+    const savedMedals = await page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
+    expect(JSON.parse(savedMedals.match(/^counts=(\{[\s\S]*?\})/m)[1])).toEqual({
+      'spring-1': 3, 'autumn-1': 3, 'autumn-2': 1
+    });
     await page.screenshot({ path: testInfo.outputPath('entered-selected-summer.png'), scale: 'css' });
     await page.reload();
+    expect(await page.evaluate(() => initialLoadingTheme)).toBe('summer');
+    await themeButton(page, 'summer').click();
     await expectPreview(page, 'summer');
     await enterGame(page);
     await expect.poll(() => page.evaluate(() => nativeThemes.at(-1))).toBe('summer');
@@ -239,11 +361,11 @@ test('blocked preference storage still allows theme selection and the real game 
   await page.addInitScript(() => {
     const read = Storage.prototype.getItem, write = Storage.prototype.setItem;
     Storage.prototype.getItem = function (key) {
-      if (key === 'wordBuddies.playroom') throw new DOMException('Preference storage is blocked', 'SecurityError');
+      if (['wordBuddies.playroom', 'pipAndWords.presentation.v1'].includes(key)) throw new DOMException('Preference storage is blocked', 'SecurityError');
       return read.call(this, key);
     };
     Storage.prototype.setItem = function (key, value) {
-      if (key === 'wordBuddies.playroom') throw new DOMException('Preference storage is blocked', 'SecurityError');
+      if (['wordBuddies.playroom', 'pipAndWords.presentation.v1'].includes(key)) throw new DOMException('Preference storage is blocked', 'SecurityError');
       return write.call(this, key, value);
     };
   });
@@ -259,6 +381,6 @@ test('blocked preference storage still allows theme selection and the real game 
   await expect.poll(() => page.evaluate(() => nativeThemes.at(-1))).toBe('winter');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[3]);
   await expect(page.locator('#canvas')).not.toHaveAttribute('inert');
-  await expect(page.locator('#game-status')).toContainText('could not be remembered');
+  await expect(page.locator('#game-status')).toContainText('Your preferences could not be saved');
   expect(errors).toEqual([]);
 });

@@ -76,11 +76,12 @@
     #status {
       position: absolute; inset: 0; display: grid; place-items: center;
       padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
+      transition: background-color 650ms ease;
     }
     [hidden] { display: none !important; }
-    .loader-layout { display: grid; grid-template-areas: "heading" "themes" "toy" "download";
-      gap: 24px; width: min(100%, 380px); }
-    .loading-heading { grid-area: heading; }
+    .loader-layout { display: grid; grid-template-areas: "heading" "toy" "themes" "download";
+      gap: 20px; width: min(100%, 380px); }
+    .loading-heading { grid-area: heading; margin-bottom: -28px; }
     .loading-eyebrow { color: var(--cp-accent); font-size: 10px; font-weight: 850; letter-spacing: .16em; margin-bottom: 8px; }
     .loading-tagline { color: var(--cp-text-muted); font-size: 15px; }
     #enter-game { box-shadow: 0 4px 0 color-mix(in srgb, var(--cp-accent), black 20%); border-radius: 16px; }
@@ -102,22 +103,24 @@
     .loading-theme:focus-visible { outline-offset: 1px; }
     h1 { margin: 0 0 8px; font-size: clamp(28px, 8vw, 44px); font-weight: 800; letter-spacing: -0.025em; }
     p { margin: 0; line-height: 1.5; }
-    #loading-play { grid-area: toy; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
+    #loading-play { grid-area: toy; min-width: 0; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
     #loading-play, #loading-play * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-    .toy-scene { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-      align-items: center; min-width: 0; }
-    #loading-toy { display: block; width: 100%; height: 244px; border: 0; padding: 0;
-      border-radius: 16px; background: var(--cp-bg); touch-action: pinch-zoom;
+    .toy-scene { position: relative; display: grid; grid-template-columns: 45% 55%;
+      align-items: end; width: min(100%, 340px); height: 212px; margin: 0 auto; }
+    #loading-toy { display: block; width: 100%; height: 180px; min-height: 44px; border: 0; padding: 0;
+      border-radius: 16px; background: transparent; touch-action: pinch-zoom;
       -webkit-appearance: none; appearance: none; }
     #loading-toy:focus:not(:focus-visible) { outline: none; }
-    #loading-toy:active { background: var(--cp-bg); }
-    #loading-toy svg { width: 100%; height: 100%; pointer-events: none; }
+    #loading-toy:active { background: transparent; }
+    #loading-toy svg { width: 100%; height: 100%; overflow: visible; pointer-events: none;
+      transform: translateX(10px); }
     .duck-sprite { display: block; width: 100%; height: 100%; aspect-ratio: 1;
       background-image: var(--pip-art); background-size: 400% 100%; background-position: 0% 0%; }
-    #loading-duck { width: 100%; height: 204px; min-height: 0; padding: 0;
+    #loading-duck { width: 100%; height: 212px; min-height: 44px; padding: 0;
       border-radius: 18px; background: transparent; touch-action: manipulation; }
     #loading-duck:focus-visible { outline-offset: 0; }
-    #loading-duck svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+    #loading-duck svg { display: block; width: 100%; height: 100%; pointer-events: none;
+      transform: translateX(-16px); }
     #loading-pip-body { transform-origin: 61px 98px; }
     #loading-pip-head { transform-origin: 61px 72px; }
     #loading-pip-left-wing { transform-origin: 33px 78px; }
@@ -137,7 +140,7 @@
       clip-path: polygon(50% 0%, 64% 32%, 100% 38%, 74% 62%, 82% 100%, 50% 82%, 18% 100%, 26% 62%, 0% 38%, 36% 32%); }
     .loading-spark[data-shape="bubble"] { clip-path: none; border-radius: 50%; }
     .loading-spark[data-shape="heart"] { clip-path: polygon(50% 100%, 0 38%, 0 14%, 15% 0, 35% 0, 50% 20%, 65% 0, 85% 0, 100% 14%, 100% 38%); }
-    .play-caption { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center;
+    .play-caption { margin-top: 0; display: flex; flex-wrap: wrap; align-items: center;
       justify-content: center; gap: 6px 8px; }
     .play-caption span { font-size: 14px; color: var(--cp-text-soft); }
     .loading-download { grid-area: download; display: grid; gap: 8px; }
@@ -298,37 +301,58 @@
     html[data-reduced-motion="true"] .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
     html[data-reduced-motion="true"] #speech-panel .speech-bubble { background: none !important; }
     html[data-reduced-motion="true"] .duck-sprite { animation: none !important; }
+    html[data-reduced-motion="true"] #status { transition: none; }
     html[data-reduced-motion="true"] #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0% !important; }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
+    #status[data-state="error"] .loading-heading { margin-bottom: 0; }
+    #status[data-state="slow"] #enter-game { display: none; }
     @media (max-height: 650px) {
       #status { padding: 16px; }
       .loader-layout { gap: 12px; }
       h1 { font-size: 32px; margin-bottom: 4px; }
-      #loading-toy { height: 140px; }
-      #loading-duck { height: 130px; }
+      .toy-scene { width: min(100%, 256px); height: 156px; }
+      #loading-toy { height: 132px; }
+      #loading-duck { height: 156px; }
     }
     @media (max-height: 500px) and (min-width: 501px) {
+      .loading-heading { margin-bottom: 0; }
       .loader-layout { width: min(100%, 720px); grid-template-columns: 1fr 1fr;
-        grid-template-areas: "heading toy" "themes toy" "download toy"; gap: 12px 32px; align-items: center; }
-      #loading-toy { height: 204px; }
-      #loading-duck { height: 180px; }
+        grid-template-areas: "heading toy" "themes toy" "download download"; gap: 12px 24px; align-items: center; }
+      .loading-eyebrow { display: none; }
+      .toy-scene { width: min(100%, 256px); height: 144px; }
+      #loading-toy { height: 122px; }
+      #loading-duck { height: 144px; }
+      .loading-download { position: relative; grid-template-columns: minmax(0, 1fr) minmax(160px, .7fr);
+        column-gap: 24px; align-items: center; }
+      .loading-download > .loading-line, .loading-download > progress { grid-column: 1; }
+      #enter-game { grid-column: 2; grid-row: 1 / 4; }
+      #loading-note { grid-column: 1; }
+      #retry { grid-column: 2; grid-row: 4; }
+      #status[data-state="slow"] .loading-tagline { display: none; }
+      #status[data-state="slow"] #retry { grid-row: 1 / 5; }
+      #status[data-state="error"] .loading-download { display: grid; grid-template-columns: 1fr; }
+      #status[data-state="error"] #retry { grid-column: 1; grid-row: auto; }
     }
     @media (max-height: 420px) and (max-width: 500px) {
       #status { padding: 12px; }
       .loader-layout, .loading-download { gap: 4px; }
+      .loading-heading { margin-bottom: 0; }
       .loading-eyebrow, .loading-tagline { display: none; }
       h1 { font-size: 28px; }
       .loading-theme-heading { display: none; }
       .loading-theme { min-height: 44px; padding-block: 8px; }
       .play-caption span { font-size: 12px; }
+      .toy-scene { width: 126px; height: 64px; }
       #loading-toy { height: 56px; }
-      #loading-duck { height: 56px; }
-      #status[data-state="slow"] #loading-toy { height: 40px; }
-      #status[data-state="slow"] #loading-duck { height: 48px; }
-      #status[data-state="slow"] #enter-game { display: none; }
+      #loading-duck { height: 64px; }
+      #loading-toy svg { transform: translateX(3px); }
+      #loading-duck svg { transform: translateX(-4px); }
+      #status[data-state="slow"] .toy-scene,
+      #status[data-state="slow"] #loading-toy,
+      #status[data-state="slow"] #loading-duck { height: 44px; }
       #loading-surprise { width: 48px; height: 48px; left: calc(50% - 24px); }
-      .play-caption { margin-top: 4px; }
+      .play-caption { margin-top: 0; }
     }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
       clip-path: inset(50%); white-space: nowrap; }
@@ -414,17 +438,10 @@
             <h1 id="loading-title">Grow with Pip</h1>
             <p class="loading-tagline">Play with words. Grow with Pip.</p>
           </header>
-          <section id="loading-themes" aria-label="Choose a theme">
-            <div class="loading-theme-heading">
-              <span id="loading-theme-label">Choose a theme</span>
-              <span id="loading-theme-name" aria-live="polite"></span>
-            </div>
-            <div id="loading-theme-options" role="group" aria-label="Themes"></div>
-          </section>
           <div id="loading-play">
             <div class="toy-scene">
               <button id="loading-toy" type="button" aria-label="Tap or wiggle the treasure chest" aria-describedby="loading-hint">
-                <svg viewBox="0 0 280 244" aria-hidden="true">
+                <svg viewBox="48 12 188 210" aria-hidden="true">
                   <circle cx="140" cy="119" r="89" fill="var(--cp-accent-soft)"/>
                   <path d="M41 75q22-28 29-8Q66 86 41 75M219 172q24-10 23 11-18 10-23-11" fill="var(--cp-success)"/>
                   <path d="m224 54 5 12 13 5-13 5-5 13-5-13-13-5 13-5Z" fill="var(--cp-warning)"/>
@@ -489,6 +506,13 @@
               <span id="loading-hint" aria-live="polite">Tap Pip for a surprise!</span>
             </div>
           </div>
+          <section id="loading-themes" aria-label="Choose a theme">
+            <div class="loading-theme-heading">
+              <span id="loading-theme-label">Choose a theme</span>
+              <span id="loading-theme-name" aria-live="off"></span>
+            </div>
+            <div id="loading-theme-options" role="group" aria-label="Themes"></div>
+          </section>
           <div class="loading-download">
             <div class="loading-line">
               <p id="message" role="status">Loading game...</p>
@@ -676,7 +700,7 @@
         if (choice.left < rail.left + 4) themeOptions.scrollLeft -= rail.left + 4 - choice.left;
         else if (choice.right > rail.right - 4) themeOptions.scrollLeft += choice.right - rail.right + 4;
       }
-      function selectLoadingTheme(requested, focus = false) {
+      function selectLoadingTheme(requested, focus = false, automatic = false) {
         selectedTheme = Object.hasOwn(loadingThemes, requested) ? requested : 'spring';
         const palette = loadingThemes[selectedTheme];
         const dark = document.documentElement.dataset.theme === 'dark';
@@ -686,6 +710,7 @@
         status.style.setProperty('--cp-accent-hover', dark ? palette.light : palette.accent);
         status.style.setProperty('--cp-accent-soft', dark ? `${palette.light}22` : `${palette.accent}12`);
         status.style.setProperty('--cp-highlight', `${palette.accent}22`);
+        themeName.setAttribute('aria-live', automatic ? 'off' : 'polite');
         themeName.textContent = palette.name;
         setPipTheme(selectedTheme);
         document.querySelector('meta[name="theme-color"]').content = dark ? '#152e29' : palette.background;
@@ -699,7 +724,7 @@
           }
         }
       }
-      selectLoadingTheme(selectedTheme);
+      selectLoadingTheme(selectedTheme, false, true);
       const downloadStatus = document.getElementById('download-status');
       const loadingEvents = new AbortController();
       const loadingListener = { signal: loadingEvents.signal };
@@ -718,6 +743,8 @@
       let failed = false;
       let readyReceived = false;
       let entered = false;
+      let themeCycleTimer = 0;
+      let themeChosenByPlayer = false;
       let revealGame = null;
       let engine = null;
       let vocabularyLoader = null;
@@ -768,8 +795,40 @@
         retry.hidden = false;
         status.dataset.state = 'slow';
       }, 16000);
+      function stopLoadingThemeCycle() {
+        window.clearTimeout(themeCycleTimer);
+        themeCycleTimer = 0;
+      }
+
+      function scheduleLoadingThemeCycle() {
+        stopLoadingThemeCycle();
+        if (themeChosenByPlayer || !canPlayLoadingDance()) return;
+        themeCycleTimer = window.setTimeout(() => {
+          themeCycleTimer = 0;
+          if (themeChosenByPlayer || !canPlayLoadingDance()) return;
+          // Keep a focused choice, entry press, or character reaction stable.
+          if (!gesture && !gamepadStartPressed && loadingDuck.dataset.activity !== 'reacting' &&
+              !themePicker.contains(document.activeElement) && document.activeElement !== enterButton) {
+            const next = (themeIds.indexOf(selectedTheme) + 1) % themeIds.length;
+            selectLoadingTheme(themeIds[next], false, true);
+          }
+          scheduleLoadingThemeCycle();
+        }, 4500);
+      }
+
+      function chooseLoadingTheme(requested, focus = false) {
+        themeChosenByPlayer = true;
+        stopLoadingThemeCycle();
+        selectLoadingTheme(requested, focus);
+      }
+
+      // Browsing the rail must not be interrupted by an automatic scroll.
+      themeOptions.addEventListener('pointerdown', () => {
+        themeChosenByPlayer = true;
+        stopLoadingThemeCycle();
+      }, loadingListener);
       themeButtons.forEach(button => {
-        button.addEventListener('click', () => selectLoadingTheme(button.dataset.theme), loadingListener);
+        button.addEventListener('click', () => chooseLoadingTheme(button.dataset.theme), loadingListener);
         button.addEventListener('keydown', event => {
           const index = themeIds.indexOf(selectedTheme);
           const next = { ArrowLeft: (index + themeIds.length - 1) % themeIds.length,
@@ -777,7 +836,7 @@
           if (next === undefined) return;
           event.preventDefault();
           void interfaceClickSound.play(event.isTrusted);
-          selectLoadingTheme(themeIds[next], true);
+          chooseLoadingTheme(themeIds[next], true);
         }, loadingListener);
       });
 
@@ -1195,6 +1254,7 @@
 
       function stopLoadingPlay() {
         window.clearTimeout(slowNotice);
+        stopLoadingThemeCycle();
         stopLoadingGamepad();
         loadingMusic.stop();
         loadingPipSounds.stop();
@@ -1299,7 +1359,7 @@
         if (themeDirection && themeDirection !== gamepadThemeDirection) {
           const next = (themeIds.indexOf(selectedTheme) + themeDirection + themeIds.length) % themeIds.length;
           void interfaceClickSound.play(true);
-          selectLoadingTheme(themeIds[next]);
+          chooseLoadingTheme(themeIds[next]);
         }
         gamepadThemeDirection = themeDirection;
         const startPressed = pads.some(pad => pad.buttons[9]?.pressed);
@@ -1365,6 +1425,7 @@
       }, loadingListener);
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
+          stopLoadingThemeCycle();
           clearLoadingEffects();
           stopLoadingGamepad();
           loadingMusic.stop();
@@ -1372,10 +1433,12 @@
         } else {
           startLoadingDance();
           startLoadingGamepad(true);
+          scheduleLoadingThemeCycle();
         }
       }, loadingListener);
       window.addEventListener('pagehide', () => {
         loadingPageSuspended = true;
+        stopLoadingThemeCycle();
         clearLoadingEffects();
         stopLoadingGamepad();
         loadingMusic.stop();
@@ -1386,9 +1449,11 @@
         loadingPageSuspended = false;
         startLoadingDance();
         startLoadingGamepad(true);
+        scheduleLoadingThemeCycle();
       }, loadingListener);
       startLoadingDance();
       startLoadingGamepad();
+      scheduleLoadingThemeCycle();
 
       function createLocalSpeechPreparation({ onChange, onDiagnostic } = {}) {
         const experimentEnabled = new URLSearchParams(window.location?.search || '').get('speechLocal') === '1';

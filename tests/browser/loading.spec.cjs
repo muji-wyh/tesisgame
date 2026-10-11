@@ -147,7 +147,7 @@ async function whileEngineScriptIsPending(page, action) {
   }
 }
 
-for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the saved ${theme} outfit while dancing`, async ({ page }, testInfo) => {
+for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the selected saved ${theme} outfit while dancing`, async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(theme => {
     localStorage.setItem('wordBuddies.playroom', `[playroom]\npreferred_theme_id="${theme}"\n`);
@@ -157,6 +157,7 @@ for (const theme of ['jungle', 'candy']) test(`loading Pip keeps the saved ${the
   await progressShell(page);
   const toy = page.locator('#loading-toy'), duck = page.locator('#loading-duck');
   await expect(duck).toHaveAttribute('data-theme', theme);
+  await page.locator(`#loading-theme-options button[data-theme="${theme}"]`).click();
   await expectAutomaticDance(page);
   const costume = await duck.locator('[id^="loading-pip-"]').evaluateAll(parts => parts.map(part => part.innerHTML));
   await page.screenshot({ path: testInfo.outputPath(`loading-${theme}-automatic-dance.png`), scale: 'css' });
