@@ -8,7 +8,7 @@ const { AGES, vocabularyCatalog, importedEntries, writeVocabularyPlan } = requir
 
 const root = path.resolve(__dirname, '..');
 
-test('each real age pack contains its exact cohort and all eligible phrase dependencies, without unrelated earlier words', () => {
+test('each real age pack contains its exact words and phrases with only their prerequisite words', () => {
   const catalog = vocabularyCatalog(root);
   const words = JSON.parse(fs.readFileSync(path.join(root, 'words.json')));
   const phrases = JSON.parse(fs.readFileSync(path.join(root, 'phrases.json')));
@@ -16,7 +16,7 @@ test('each real age pack contains its exact cohort and all eligible phrase depen
   assert.deepEqual(Object.keys(catalog.ages), AGES);
   for (const age of AGES) {
     const cohort = words.filter(word => word.min_age === Number(age));
-    const eligible = phrases.filter(phrase => phrase.min_age <= Number(age));
+    const eligible = phrases.filter(phrase => phrase.min_age === Number(age));
     const expected = new Set([...cohort.map(word => word.id), ...eligible.flatMap(phrase => phrase.words)]);
     assert.deepEqual(catalog.ages[age].word_ids, [...expected].sort());
     assert.deepEqual(catalog.ages[age].phrase_ids, eligible.map(phrase => phrase.id).sort());
@@ -73,13 +73,13 @@ test('pack plans preserve remaps and deduplicate exact age consumers without shi
     'Every source is stored once, including words and phrases shared by many ages');
   const allPaths = Object.values(plan.packs).flatMap(pack => pack.entries.map(entry => entry.path));
   assert.equal(new Set(allPaths).size, allPaths.length, 'No imported media or remap is duplicated across bundles');
-  assert.equal(plan.packs['3'].entries.length, 0, 'An age-only base can be empty when all its media is shared');
+  assert.equal(plan.packs['3'].sources.length, 3, 'The first age retains only its own phrase recordings in its base pack');
   assert.ok(plan.packs['shared-3-4-5-6-7-8-9-10-11-12']);
   for (const age of AGES) {
     const required = [plan.packs[age], ...plan.packs[age].dependencies.map(id => plan.packs[id])];
     const expected = sources.filter(source => {
       const resourceAge = Number(source.match(/(?:item|phrase)(\d+)/)[1]);
-      return resourceAge <= Number(age);
+      return resourceAge === Number(age) || (!source.includes('/phrase-') && resourceAge === 3);
     }).map(source => `res://${source}`).sort();
     assert.deepEqual(required.flatMap(pack => pack.sources).sort(), expected,
       `Age ${age} receives all and only its exact source membership`);
@@ -109,11 +109,11 @@ test('nonconsecutive age consumers share media without leaking it into the skipp
   phrases.find(phrase => phrase.min_age === 7).words.push('item4');
   write('phrases.json', JSON.stringify(phrases));
   const { packs } = writeVocabularyPlan(directory);
-  const id = 'shared-4-7-8-9-10-11-12';
+  const id = 'shared-4-7';
   const source = 'res://assets/audio/voice/word-item4.wav';
   assert.ok(packs[id].sources.includes(source));
   for (const age of AGES) {
     const loaded = [packs[age], ...packs[age].dependencies.map(id => packs[id])].flatMap(pack => pack.sources);
-    assert.equal(loaded.includes(source), age === '4' || Number(age) >= 7, `Exact membership for age ${age}`);
+    assert.equal(loaded.includes(source), age === '4' || age === '7', `Exact membership for age ${age}`);
   }
 });

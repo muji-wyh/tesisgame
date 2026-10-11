@@ -283,6 +283,9 @@ func returning_learner() -> void:
 		check(app.new_round(814, false, "", mode), "%s starts from the already mounted current-age pack" % mode)
 		check(host.requests == [4] and app.model.age_band_id == "4",
 			"%s does not download earlier review ages or future ages while starting" % mode)
+		if mode == "phrase":
+			check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) == 4),
+				"Returning learners get current-age phrases even when earlier prerequisite words are mounted")
 		check(app.duck.growth_age == 3, "%s retains the earned Pip appearance" % mode)
 	await dispose(app)
 

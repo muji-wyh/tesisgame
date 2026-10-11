@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
+const phrases = require('../../phrases.json');
 const { enterGame, openGame, openRewards, growthView, growthState, seedGrowth,
   activateGrowthControl, ageControl, tap, rendered, matchWords, chooseMode, metrics } = require('./game-ui.cjs');
 
@@ -191,22 +192,22 @@ test('notebook loading follows the selected age, retries failures, and ignores s
   }
 });
 
-test('a returning learner fetches learning age four and Phrase Builder uses its bundled dependencies', async ({ page }) => {
+for (const age of [4, 12]) test(`a returning learner fetches only learning age ${age} and its phrase prerequisites`, async ({ page }) => {
   test.setTimeout(150000);
   const observed = observePacks(page);
-  await seedGrowth(page, 4);
+  await seedGrowth(page, age);
   const errors = await openGame(page);
-  expect((await growthState(page)).age).toBe(3);
-  expect((await growthState(page)).level).toBe(19);
-  expect((await growthState(page)).learning_age).toBe(4);
-  expect(observed.ages).toEqual([4]);
-  expectScopedDependencies(observed, [4]);
-  expect((await matchWords(page)).every(text => words.some(word => word.text === text && word.min_age === 4))).toBe(true);
+  expect((await growthState(page)).age).toBe(age - 1);
+  expect((await growthState(page)).learning_age).toBe(age);
+  expect(observed.ages).toEqual([age]);
+  expectScopedDependencies(observed, [age]);
+  expect((await matchWords(page)).every(text => words.some(word => word.text === text && word.min_age === age))).toBe(true);
   await chooseMode(page, 'phrase');
   await expect.poll(async () => page.locator('#game-status').evaluate(element =>
     JSON.parse(element.dataset.phrase || '{}').visible)).toBe(true);
   await rendered(page);
   const phrase = await page.locator('#game-status').evaluate(element => JSON.parse(element.dataset.phrase));
+  expect(phrases.find(item => item.id === phrase.id)?.min_age, 'The phrase question belongs to the current learning age').toBe(age);
   expect(phrase.options.length).toBeGreaterThan(0);
   for (const option of phrase.options) {
     const word = words.find(word => (word.display_text || word.text) === option.text);
@@ -218,8 +219,8 @@ test('a returning learner fetches learning age four and Phrase Builder uses its 
   // Each candidate above is checked against its own artwork requirement.
   expect(phrase.listen.visible).toBe(true);
   expect(phrase.listen.disabled).toBe(false);
-  expect(observed.ages).toEqual([4]);
-  expectScopedDependencies(observed, [4]);
+  expect(observed.ages).toEqual([age]);
+  expectScopedDependencies(observed, [age]);
   expect(observed.looseMedia).toEqual([]);
   expect(errors).toEqual([]);
   expect(observed.errors).toEqual([]);

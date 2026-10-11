@@ -11,7 +11,7 @@ function vocabularyCatalog(root) {
   const ages = {};
   for (const age of AGES) {
     const ids = new Set(words.filter(word => word.min_age === Number(age)).map(word => word.id));
-    const eligible = phrases.filter(phrase => phrase.min_age <= Number(age));
+    const eligible = phrases.filter(phrase => phrase.min_age === Number(age));
     if (!ids.size || eligible.length < 3) throw new Error(`Age ${age} needs words and at least three phrases.`);
     for (const phrase of eligible) {
       for (const id of phrase.words) {

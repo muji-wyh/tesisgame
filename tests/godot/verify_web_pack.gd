@@ -241,7 +241,7 @@ func _verify_vocabulary_packs(path: String, words: Array) -> int:
 			if int(word.min_age) == age:
 				expected_words[str(word.id)] = true
 		for phrase: Dictionary in phrases:
-			if int(phrase.min_age) <= age:
+			if int(phrase.min_age) == age:
 				expected_phrases.append(str(phrase.id))
 				expected_sources["res://" + str(phrase.audio)] = true
 				for word_id: String in phrase.words:

@@ -35,9 +35,10 @@ func _test_catalog(vocabulary: Array) -> void:
 	check(phrases.size() == 330, "The curriculum contains 330 complete phrases")
 	for age in range(3, 13):
 		var eligible: Array = PhraseData.for_age(str(age))
-		check(eligible.size() >= 3 and eligible.all(func(phrase: Dictionary) -> bool: return int(phrase.min_age) <= age),
-			"Every age has a complete cumulative phrase pool")
-	check(PhraseData.for_age("12").size() == phrases.size(), "Lv12+ exposes the complete phrase curriculum")
+		check(eligible.size() >= 3 and eligible.all(func(phrase: Dictionary) -> bool: return int(phrase.min_age) == age),
+			"Every age has at least three phrases from its own curriculum")
+		check(eligible.size() == phrases.filter(func(phrase: Dictionary) -> bool: return int(phrase.min_age) == age).size(),
+			"Each phrase appears in exactly its assigned age pool")
 	check(PhraseData.for_age("unknown").is_empty(), "Unknown age levels do not leak a default catalog")
 	var by_id: Dictionary = {}
 	for word in vocabulary:
@@ -82,6 +83,15 @@ func _test_rounds(vocabulary: Array) -> void:
 	var distinct_orders: Dictionary = {}
 	for age in range(3, 13):
 		var age_band: String = str(age)
+		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary-packs.json"))
+		var dependencies: Array = catalog.ages[age_band].word_ids
+		var mounted_words: Array = vocabulary.filter(func(word: Dictionary) -> bool: return dependencies.has(word.id)).duplicate(true)
+		for word: Dictionary in mounted_words:
+			word["_growth_priority"] = 2 if Data.word_age(word) < age else 0
+		var scoped_model = PhraseModel.new()
+		check(scoped_model.reset(mounted_words, age_band, 47), "Each age can play with only its mounted words and prerequisites")
+		check(scoped_model.questions.all(func(phrase: Dictionary) -> bool: return int(phrase.min_age) == age),
+			"Earlier words needing practice cannot bring earlier phrase questions back into play")
 		for seed_value in range(12):
 			var model = PhraseModel.new()
 			check(model.reset(vocabulary, age_band, seed_value), "Every age level starts a three-question round")
@@ -91,7 +101,7 @@ func _test_rounds(vocabulary: Array) -> void:
 				var question: Dictionary = model.current_question()
 				check(not seen_questions.has(question.id), "Round questions never repeat")
 				seen_questions[question.id] = true
-				check(int(question.min_age) <= age, "Questions use the selected age band")
+				check(int(question.min_age) == age, "Questions use only the selected age band")
 				check(model.options.size() == question.words.size() + 2, "Every bank includes two distractors")
 				var ids: Dictionary = {}
 				var texts: Dictionary = {}
@@ -296,6 +306,9 @@ func _test_invalid_input(vocabulary: Array) -> void:
 	check(not model.reset(malformed, "12", 1), "Words without their voice metadata are rejected")
 	var small_vocabulary: Array = vocabulary.filter(func(word: Dictionary) -> bool:
 		return word.id in ["red", "apple", "big", "ball", "soft", "toy"])
+	check(not model.reset(small_vocabulary, "4", 1), "Earlier phrases cannot fill an incomplete current-age round")
+	small_vocabulary = vocabulary.filter(func(word: Dictionary) -> bool:
+		return word.id in ["soft", "toy", "we", "can", "play", "he", "run"])
 	check(model.reset(small_vocabulary, "4", 1), "A complete three-phrase subset is playable")
 	check(model.questions.size() == 3, "Missing catalog words are excluded before choosing questions")
 	check(not model.reset([], "12", 2), "A failed reset after play is reported")

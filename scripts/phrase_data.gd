@@ -27,7 +27,7 @@ static func entries() -> Array[Dictionary]:
 static func for_age(age_band: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for phrase in entries():
-		if int(phrase.get("min_age", 3)) <= int(age_band):
+		if int(phrase.get("min_age", 3)) == int(age_band):
 			result.append(phrase)
 	return result
 

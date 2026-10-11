@@ -722,7 +722,7 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	app.chest_button.button_up.emit()
 	check(app.chest.opening_committed() and _pieces(app) == 0, "Letting go after the lid releases preserves the opening")
 	app.chest._advance_animation(Feel.OPEN_SECONDS)
-	check(app.model.chest_state == "opened" and _pieces(app) == 1 and app.chest.hold_effect_snapshot().surprise.active
+	check(app.model.chest_state == "opened" and _pieces(app) == 1 and app._chest_reward_announced and not app._save_error
 		and app._new_adventure_button.is_visible_in_tree(),
 		"The finished opening saves one ordinary reward and reveals New adventure")
 	app._phrase.finished.emit()
@@ -739,8 +739,8 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	check(app._mode_id == "phrase" and app._phrase.is_visible_in_tree() and app._phrase.game.questions.size() == 3
 		and app._phrase.game.phase == "building" and app._phrase.game.completed == 0 and app._phrase.game.mistakes == 0,
 		"Public New adventure starts another fresh three-question Phrase Builder round")
-	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) <= app.growth.learning_age()),
-		"The next Phrase Builder round uses the earned level rather than a future catalogue preview")
+	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) == app.growth.learning_age()),
+		"The next Phrase Builder round uses exactly the current learning age after browsing a future age")
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().surprise.active,
 		"A new phrase round keeps saved progress and clears the previous displayed gift")
 
@@ -769,12 +769,10 @@ func _check_layout(app, directory: String) -> void:
 	check(saved.load(growth_path) == OK, "The advanced layout fixture starts from the saved learning state")
 	saved.set_value("growth", "version", 1)
 	saved.set_value("growth", "level", 12)
-	# Leave this four-word phrase unmastered so the learning-priority selector
-	# can choose it ahead of longer, already-mastered phrases in the curriculum.
+	# A completed learner still practices current-age phrases with their prerequisites.
 	var streaks: Dictionary = {}
 	for word: Dictionary in app.data.words:
-		if not ["bright", "red", "birthday", "balloon"].has(str(word.id)):
-			streaks[str(word.id)] = 6
+		streaks[str(word.id)] = 6
 	saved.set_value("growth", "streaks", streaks)
 	check(saved.save(growth_path) == OK and app.growth.load_state() and app.growth.age == 12 and app.growth.learning_age() == 12,
 		"The advanced layout fixture loads an migrated completed age-12 state with all vocabulary available")
@@ -782,7 +780,7 @@ func _check_layout(app, directory: String) -> void:
 	var probe = PhraseModel.new()
 	var layout_seed: int = -1
 	for seed_value in range(128):
-		if probe.reset(app._learning_words(), str(app.growth.learning_age()), seed_value) and probe.current_question().words.size() == 4:
+		if probe.reset(app._learning_words(true), str(app.growth.learning_age()), seed_value) and probe.current_question().words.size() == 4:
 			layout_seed = seed_value
 			break
 	check(layout_seed >= 0 and app.new_round(layout_seed, false, "", "phrase"), "A four-word, six-choice fixture starts through the real round API")
