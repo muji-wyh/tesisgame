@@ -21,7 +21,8 @@ const INITIAL_SETTLED_TILES: int = COLUMNS * 3
 const DROP_COUNT: int = 6
 const UPCOMING_COUNT: int = 6
 const SETTLE_SECONDS: float = 0.36
-const ARRIVAL_STAGGER: float = 0.045
+const ARRIVAL_STAGGER: float = 0.15
+const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
 const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
@@ -57,6 +58,7 @@ var credit_collection: Callable
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
 var _supply: Array[Dictionary] = []
+var _supply_pending: Array[Dictionary] = []
 var _completed_words: Dictionary = {}
 var _result: Dictionary = {}
 var _word_index: int = 0
@@ -80,6 +82,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_words.clear()
 	_word_lookup.clear()
 	_supply.clear()
+	_supply_pending.clear()
 	_completed_words.clear()
 	_collection_event_ids.clear()
 	_merge_history.clear()
@@ -360,7 +363,11 @@ static func arrival_contact_at(tile: Dictionary) -> float:
 
 
 static func arrival_delay(tile: Dictionary) -> float:
-	return maxf(0.0, float(tile.get("arrival_delay", float(tile.get("arrival_index", 0)) * ARRIVAL_STAGGER)))
+	return maxf(0.0, float(tile.get("arrival_delay", _scheduled_arrival_delay(int(tile.get("arrival_index", 0))))))
+
+
+static func _scheduled_arrival_delay(slot: int) -> float:
+	return float(maxi(0, ARRIVAL_ORDER.find(slot))) * ARRIVAL_STAGGER
 
 
 static func settle_duration(tile: Dictionary) -> float:
@@ -482,15 +489,53 @@ func _fill_upcoming() -> void:
 
 
 func _build_supply() -> void:
-	# Every word's ordered chunks arrive in the same bounded supply packet, so a
-	# player never needs a chunk that only exists in another age's vocabulary.
-	var word: Dictionary = _words[_word_index % _words.size()]
-	_word_index += 1
-	_supply_words += 1
-	var parts: Array[String] = _parts_for_word(word)
-	var marked: int = _rng.randi_range(0, parts.size() - 1) if _supply_words % 2 == 0 else -1
-	for index in range(parts.size()):
-		_supply.append(_new_tile(parts[index], 1, 1 if index == marked else 0))
+	# Mix only a new six-root packet. Advertised preview identities never move,
+	# and any word crossing a packet boundary keeps its remaining chunks first.
+	while _supply_pending.size() < UPCOMING_COUNT:
+		var word: Dictionary = _words[_word_index % _words.size()]
+		_word_index += 1
+		_supply_words += 1
+		var parts: Array[String] = _parts_for_word(word)
+		var marked: int = _rng.randi_range(0, parts.size() - 1) if _supply_words % 2 == 0 else -1
+		for index in range(parts.size()):
+			var tile: Dictionary = _new_tile(parts[index], 1, 1 if index == marked else 0)
+			tile.supply_group = _supply_words
+			tile.supply_part = index
+			tile.supply_parts = parts.size()
+			tile.source_word_id = str(word.id)
+			_supply_pending.append(tile)
+	var packet: Array[Dictionary] = []
+	for index in range(UPCOMING_COUNT):
+		packet.append(_supply_pending.pop_front())
+	var best: Dictionary = {"score": 2147483647, "order": []}
+	_search_supply_order(packet, [], 0, best)
+	for index: int in best.order:
+		_supply.append(packet[index])
+
+
+func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: int, best: Dictionary) -> void:
+	if score >= int(best.score):
+		return
+	if order.size() == packet.size():
+		best.score = score
+		best.order = order.duplicate()
+		return
+	# Six slots have at most 720 arrangements. Deterministic scoring avoids a
+	# greedy tail that leaves siblings adjacent when a separated order exists.
+	for index in range(packet.size()):
+		if index in order:
+			continue
+		var next_score: int = score
+		for previous in range(order.size()):
+			var distance: int = order.size() - previous
+			var neighbor: Dictionary = packet[order[previous]]
+			if int(packet[index].supply_group) == int(neighbor.supply_group):
+				next_score += 1000 if distance == 1 else (10 if distance == 2 else 0)
+			elif distance == 1 and packet[index].source_word_id == neighbor.source_word_id:
+				next_score += 100
+		order.append(index)
+		_search_supply_order(packet, order, next_score, best)
+		order.pop_back()
 
 
 func _spawn_drop() -> void:
@@ -502,7 +547,8 @@ func _spawn_drop() -> void:
 		var column: int = int(tile.column)
 		if column_delays.has(column):
 			# Give the preceding root at least one row of clearance before the
-			# next root starts down the same entry lane.
+			# next root starts down the same entry lane. A shared lane keeps its
+			# floor-up order even when other lanes use an alternating release.
 			tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]) + sqrt(2.0 / Motion.ARRIVAL_GRAVITY))
 		column_delays[column] = float(tile.arrival_delay)
 
@@ -521,7 +567,7 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	tile.settling = arrival
 	tile.arrival = arrival
 	tile.arrival_index = arrival_index if arrival else 0
-	tile.arrival_delay = float(arrival_index) * ARRIVAL_STAGGER if arrival else 0.0
+	tile.arrival_delay = _scheduled_arrival_delay(arrival_index) if arrival else 0.0
 	tile.falling_rows = position.y + 1 if arrival else 0
 	cells.append(tile)
 	generated_tiles += 1

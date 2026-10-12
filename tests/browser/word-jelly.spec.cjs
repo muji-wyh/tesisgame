@@ -193,6 +193,28 @@ function expectSupportedChild(state, child) {
   }
 }
 
+function expectMixedRootPacket(roots, label) {
+  expect(roots, `${label} contains six roots`).toHaveLength(6);
+  expect(new Set(roots.map(root => root.supply_group)).size,
+    `${label} contains parts from several words`).toBeGreaterThan(1);
+  for (const [index, root] of roots.entries()) {
+    expect(Number.isInteger(root.supply_group), `${label}: root provenance remains available`).toBe(true);
+    expect(root.source_word_id, `${label}: every root retains its vocabulary identity`).toBeTruthy();
+    if (index > 0) expect(root.supply_group,
+      `${label}: parts from the same supplied word have another root between them`)
+      .not.toBe(roots[index - 1].supply_group);
+  }
+}
+
+function expectRootBreathingRoom(roots, pitch, label) {
+  const ordered = [...roots].sort((a, b) => a.rect[0] - b.rect[0]);
+  for (let index = 1; index < ordered.length; index++) {
+    const previous = ordered[index - 1].rect, current = ordered[index].rect;
+    expect(current[0] - previous[0] - previous[2],
+      `${label}: neighboring root bodies retain visible breathing room`).toBeGreaterThanOrEqual(pitch * 0.08);
+  }
+}
+
 async function observeArrival(page, before) {
   await page.evaluate(before => {
     window.wordJellyArrivalObserver?.disconnect();
@@ -200,13 +222,21 @@ async function observeArrival(page, before) {
     const wanted = new Set(before.upcoming.map(tile => tile.id));
     window.wordJellyArrivalTimeline = [];
     window.wordJellyArrivalFrame = null;
+    window.wordJellyStaggerFrame = null;
     let capturePending = false;
+    let staggerCapturePending = false;
     const source = before.preview.slots.find(slot => slot.id === before.upcoming[0].id);
+    const capture = key => document.getElementById('canvas').toBlob(blob => {
+      if (!blob) return;
+      const reader = new FileReader();
+      reader.onload = () => { window[key] = reader.result.split(',')[1]; };
+      reader.readAsDataURL(blob);
+    }, 'image/png');
     const record = () => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       const tracked = state.tiles?.filter(tile => wanted.has(tile.id)) || [];
       if (!tracked.length) return;
-      window.wordJellyArrivalTimeline.push(tracked.map(tile => ({ ...tile, time: performance.now() })));
+      window.wordJellyArrivalTimeline.push({ tiles: tracked, preview: state.preview.slots, time: performance.now() });
       const first = tracked.find(tile => tile.id === source.id);
       const boardPitch = state.board_rect[3] / state.rows;
       const targetY = state.board_rect[1] + (first?.row + 0.5) * boardPitch;
@@ -215,12 +245,16 @@ async function observeArrival(page, before) {
       if (!capturePending && first && !first.settled && progress > 0.20 && progress < 0.72) {
         capturePending = true;
         // Keep the simulation running while the real intermediate frame is encoded.
-        document.getElementById('canvas').toBlob(blob => {
-          if (!blob) return;
-          const reader = new FileReader();
-          reader.onload = () => { window.wordJellyArrivalFrame = reader.result.split(',')[1]; };
-          reader.readAsDataURL(blob);
-        }, 'image/png');
+        capture('wordJellyArrivalFrame');
+      }
+      const travel = tracked.map(tile => {
+        const preview = before.preview.slots.find(slot => slot.id === tile.id);
+        return tile.rect[1] + tile.rect[3] / 2 - preview.rect[1] - preview.rect[3] / 2;
+      });
+      if (!staggerCapturePending && travel.some(value => Math.abs(value) < 1) &&
+        travel.some(value => value > boardPitch * 0.25)) {
+        staggerCapturePending = true;
+        capture('wordJellyStaggerFrame');
       }
     };
     window.wordJellyArrivalObserver = new MutationObserver(record);
@@ -237,10 +271,13 @@ async function verifyArrival(page, info, before, label) {
     message: `${label} supply visibly descends and finishes its planted recovery` }).toBe(true);
   const after = await jelly(page);
   const timeline = await page.evaluate(() => window.wordJellyArrivalTimeline);
+  await info.attach(`word-jelly-${label}-arrival-timeline.json`, {
+    body: JSON.stringify({ before: before.preview, roots: before.upcoming, timeline }, null, 2), contentType: 'application/json'
+  });
   for (const root of before.upcoming) {
     const source = before.preview.slots.find(slot => slot.id === root.id);
     const target = after.tiles.find(tile => tile.id === root.id);
-    const frames = timeline.flatMap(frame => frame.filter(tile => tile.id === root.id));
+    const frames = timeline.flatMap(frame => frame.tiles.filter(tile => tile.id === root.id));
     const sourceY = source.rect[1] + source.rect[3] / 2;
     const destinationY = target.rect[1] + target.rect[3] / 2;
     const descent = frames.filter(tile => !tile.settled && tile.rect[1] + tile.rect[3] / 2 < destinationY - 0.1);
@@ -269,6 +306,29 @@ async function verifyArrival(page, info, before, label) {
     expect(target.fragments).toBe(root.fragments);
     expectSupportedChild(after, target);
   }
+  const arrivals = before.upcoming.map((root, slot) => ({
+    ...after.tiles.find(tile => tile.id === root.id), slot, source: before.preview.slots[slot]
+  }));
+  const delay = root => root.arrival_delay;
+  expect(new Set(arrivals.map(delay)).size, `${label}: all six roots have separate release beats`).toBe(6);
+  expect(Math.max(...arrivals.map(delay)) - Math.min(...arrivals.map(delay)),
+    `${label}: the packet spreads across a perceptible release sequence`).toBeGreaterThan(0.55);
+  const crossLanePairs = arrivals.flatMap(early => arrivals
+    .filter(late => early.slot > late.slot && delay(late) - delay(early) > 0.29)
+    .map(late => ({ early, late })));
+  expect(crossLanePairs.length, `${label}: release order crosses the row instead of sweeping left to right`).toBeGreaterThan(0);
+  const pitch = after.board_rect[3] / after.rows;
+  const travel = (frame, root) => {
+    const tile = frame.tiles.find(tile => tile.id === root.id);
+    return tile ? tile.rect[1] + tile.rect[3] / 2 - root.source.rect[1] - root.source.rect[3] / 2 : Number.NaN;
+  };
+  expect(timeline.some(frame => crossLanePairs.some(({ early, late }) =>
+    travel(frame, early) > pitch * 0.15 && Math.abs(travel(frame, late)) < 1)),
+  `${label}: a later column visibly falls while an earlier column still waits at the tray`).toBe(true);
+  expect(timeline.some(frame => arrivals.some(early => travel(frame, early) > pitch * 0.25 &&
+    frame.preview[early.slot].visible && frame.preview[early.slot].id !== early.id) &&
+    arrivals.some(late => Math.abs(travel(frame, late)) < 1 && !frame.preview[late.slot].visible)),
+  `${label}: cleared preview slots refill while other departing roots still wait`).toBe(true);
   expect(after.generated_tiles).toBe(before.generated_tiles + 6);
   expect(after.merged_count).toBe(before.merged_count);
   expect(after.cleared_pairs).toBe(before.cleared_pairs);
@@ -277,6 +337,10 @@ async function verifyArrival(page, info, before, label) {
     { message: 'The actual browser captures the jellies between the tray and their support' }).toBe(true);
   const encoded = await page.evaluate(() => window.wordJellyArrivalFrame);
   fs.writeFileSync(info.outputPath(`word-jelly-${label}-falling-midpoint.png`), Buffer.from(encoded, 'base64'));
+  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyStaggerFrame)),
+    { message: 'The browser captures roots falling at visibly different heights' }).toBe(true);
+  const stagger = await page.evaluate(() => window.wordJellyStaggerFrame);
+  fs.writeFileSync(info.outputPath(`word-jelly-${label}-staggered-release.png`), Buffer.from(stagger, 'base64'));
   await capture(page, info, `word-jelly-${label}-landed`);
   await page.evaluate(() => window.wordJellyArrivalObserver.disconnect());
 }
@@ -285,6 +349,13 @@ test('manual and automatic preview packets naturally fall into the well', async 
   test.setTimeout(120000);
   const errors = await startWordJelly(page), manual = await jelly(page);
   expectSupplyLayout(manual, await metrics(page));
+  for (let row = manual.rows - 3; row < manual.rows; row++) {
+    const roots = manual.tiles.filter(tile => tile.row === row).sort((a, b) => a.column - b.column);
+    expectMixedRootPacket(roots, `Starter row ${row}`);
+    expectRootBreathingRoom(roots, manual.board_rect[2] / manual.columns, `Starter row ${row}`);
+  }
+  expectMixedRootPacket(manual.upcoming, 'Manual supply');
+  expectRootBreathingRoom(manual.preview.slots, manual.board_rect[2] / manual.columns, 'Preview row');
   expect(manual.preview.slots.filter(slot => slot.visible)).toHaveLength(6);
   expect(manual.preview.rect[1] + manual.preview.rect[3], 'The supply tray is above the well on every layout')
     .toBeLessThanOrEqual(manual.board_rect[1]);
@@ -295,6 +366,7 @@ test('manual and automatic preview packets naturally fall into the well', async 
   await pressRect(page, manual.preview.rect);
   await verifyArrival(page, info, manual, 'manual-supply');
   const automatic = await jelly(page);
+  expectMixedRootPacket(automatic.upcoming, 'Automatic supply');
   await observeArrival(page, automatic);
   await verifyArrival(page, info, automatic, 'automatic-supply');
   expect(errors).toEqual([]);
@@ -302,30 +374,28 @@ test('manual and automatic preview packets naturally fall into the well', async 
 
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
-  const words = new Map(vocabulary.filter(word => word.min_age === 3).map(word => [normalize(word.text), word]));
   const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1)
     .sort((a, b) => a.column - b.column);
-  let roots;
-  for (const count of [2, 3]) {
-    for (let start = 0; start <= floor.length - count; start++) {
-      const packet = floor.slice(start, start + count);
-      if (packet.every((tile, index) => tile.column === packet[0].column + index) &&
-        words.has(normalize(packet.map(tile => tile.text).join('')))) {
-        roots = packet;
-        break;
-      }
-    }
-    if (roots) break;
-  }
-  expect(roots, 'The first ordinary supply packet contains a complete adjacent floor word').toBeTruthy();
+  const found = rootsForWord({ tiles: floor }, 3, 2) || rootsForWord({ tiles: floor }, 3, 3);
+  expect(found, 'The first ordinary supply packet contains a complete word among its dispersed floor roots').toBeTruthy();
+  const { roots, word } = found;
   let completed = await merge(page, roots[0].id, roots[1].id);
   for (const root of roots.slice(2)) completed = await merge(page, completed.id, root.id);
-  expect(completed.word.id).toBe(words.get(normalize(roots.map(tile => tile.text).join(''))).id);
-  expect(completed.row, 'The completed floor word remains underneath the initial upper row').toBe(opening.rows - 1);
+  expect(completed.word.id).toBe(word.id);
   const before = await jelly(page);
-  const stack = before.tiles.filter(tile => tile.row + tile.height === completed.row &&
-    tile.column >= completed.column && tile.column + tile.width <= completed.column + completed.width);
-  expect(stack.length, 'The real floor word supports multiple upper jellies').toBeGreaterThanOrEqual(2);
+  // Joining separated floor roots can move their larger body upward. Their old
+  // columns stay in place until collection initiates the ordinary gravity pass.
+  const stack = before.tiles.filter(tile => tile.row === before.rows - 2 && tile.mass === 1 &&
+    roots.some(root => root.column === tile.column) &&
+    !before.tiles.some(support => support.id !== completed.id && support.row === before.rows - 1 &&
+      support.column <= tile.column && support.column + support.width > tile.column));
+  expect(stack.length, 'At least one original upper root will lose its floor support after collection').toBeGreaterThan(0);
+  for (const tile of stack) {
+    const original = opening.tiles.find(root => root.id === tile.id);
+    expect(tile.settled, 'Merging keeps the suspended upper root still until collection').toBe(true);
+    expect([tile.column, tile.row]).toEqual([original.column, original.row]);
+    expect(tile.rect).toEqual(original.rect);
+  }
   await page.evaluate(stack => {
     const status = document.getElementById('game-status');
     window.wordJellyGravityTimeline = [];

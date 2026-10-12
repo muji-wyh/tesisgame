@@ -57,6 +57,8 @@ func _run() -> void:
 	_test_independent_operations()
 	_test_lifecycle_reentry()
 	_test_supply_and_determinism()
+	_test_supply_packets()
+	_test_supply_preview_stability()
 	_test_arrival_timing()
 	_test_arrival_readiness_and_pause()
 	_test_arrival_automatic_timing()
@@ -64,6 +66,7 @@ func _run() -> void:
 	_test_arrival_reachable_lanes()
 	_test_arrival_reserved_lanes()
 	_test_arrival_same_lane_spacing()
+	_test_arrival_mixed_lane_readiness()
 	print("Word Jelly model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -202,7 +205,7 @@ func _test_configuration() -> void:
 	var configured := _word("sunflower")
 	configured.jelly_parts = ["sun", "flower"]
 	model.configure([configured], 3, 1)
-	check(model.cells[0].text == "sun" and model.cells[1].text == "flower", "explicit curated parts override fallback chunks")
+	_assert_supply_conservation(model.cells, [configured], "curated two-part opening", false)
 
 
 func _test_merging_and_collection() -> void:
@@ -1418,6 +1421,147 @@ func _test_supply_and_determinism() -> void:
 	_assert_board(whole, "automatic supply")
 
 
+func _curated_word(text: String, parts: Array[String]) -> Dictionary:
+	var word: Dictionary = _word(text)
+	word.jelly_parts = parts
+	return word
+
+
+func _assert_supply_packet(packet: Array, label: String) -> void:
+	check(packet.size() == Model.UPCOMING_COUNT, label + ": each advertised packet contains six roots")
+	for index in range(1, packet.size()):
+		check(int(packet[index].get("supply_group", -1)) != int(packet[index - 1].get("supply_group", -1)),
+			label + ": sibling chunks have an intervening root when other source groups are available")
+
+
+func _assert_supply_conservation(roots: Array, words: Array, label: String, allow_partial_tail: bool = true) -> Dictionary:
+	var sources: Dictionary = {}
+	for word: Dictionary in words:
+		sources[str(word.id)] = word
+	var ids: Dictionary = {}
+	var groups: Dictionary = {}
+	for root_index in range(roots.size()):
+		var root: Dictionary = roots[root_index]
+		check(not ids.has(int(root.id)), label + ": each original root appears exactly once")
+		ids[int(root.id)] = true
+		for key in ["supply_group", "supply_part", "supply_parts"]:
+			check(root.get(key) is int, label + ": emitted roots retain integer " + key)
+		var group_id: int = int(root.get("supply_group", -1))
+		var part_index: int = int(root.get("supply_part", -1))
+		var source: Dictionary = sources.get(str(root.get("source_word_id", "")), {})
+		check(group_id > 0 and not source.is_empty(), label + ": every root identifies its source-word emission")
+		if group_id <= 0 or source.is_empty():
+			continue
+		var expected_parts: Array = source.jelly_parts
+		check(int(root.get("supply_parts", 0)) == expected_parts.size(), label + ": the complete source part count survives mixing")
+		check(part_index >= 0 and part_index < expected_parts.size(), label + ": original part indexes stay in range")
+		if part_index < 0 or part_index >= expected_parts.size():
+			continue
+		check(str(root.text) == str(expected_parts[part_index]), label + ": every part retains its exact curated spelling")
+		check(int(root.mass) == 1 and int(root.parts_count) == 1 and int(root.width) == 1 and int(root.height) == 1
+			and str(root.kind) == "root" and root.word.is_empty(), label + ": mixing preserves one-cell unmerged roots")
+		check(int(root.fragments) in [0, 1] and bool(root.chest) == (int(root.fragments) == 1),
+			label + ": source fragments remain attached to their original roots")
+		if not groups.has(group_id):
+			groups[group_id] = {"source": source, "parts": {}, "fragments": 0, "packets": {}}
+		var group: Dictionary = groups[group_id]
+		check(str(group.source.id) == str(source.id), label + ": an emission never combines parts from different source words")
+		check(not group.parts.has(part_index), label + ": no original source part is duplicated")
+		group.parts[part_index] = root
+		group.fragments += int(root.fragments)
+		group.packets[int(root_index / Model.UPCOMING_COUNT)] = true
+	var group_ids: Array = groups.keys()
+	group_ids.sort()
+	check(not group_ids.is_empty(), label + ": supply contains traceable source groups")
+	for index in range(group_ids.size()):
+		var group_id: int = int(group_ids[index])
+		var group: Dictionary = groups[group_id]
+		var expected_parts: Array = group.source.jelly_parts
+		var complete: bool = group.parts.size() == expected_parts.size()
+		check(group_id == index + 1, label + ": FIFO source emissions are conserved without gaps")
+		check(complete or (allow_partial_tail and index == group_ids.size() - 1),
+			label + ": only the last packet boundary may leave a source word awaiting its remaining chunks")
+		for part_index in range(group.parts.size()):
+			check(group.parts.has(part_index), label + ": observed source chunks form an intact original prefix")
+		check(int(group.fragments) <= 1, label + ": mixing cannot duplicate a source-word chest fragment")
+		if complete:
+			var spelling: String = ""
+			for part_index in range(expected_parts.size()):
+				if group.parts.has(part_index):
+					spelling += str(group.parts[part_index].text)
+			check(spelling == str(group.source.text), label + ": all emitted parts reconstruct their vocabulary word")
+			check(int(group.fragments) == (1 if group_id % 2 == 0 else 0),
+				label + ": complete source emissions preserve the established fragment frequency")
+	return groups
+
+
+func _test_supply_packets() -> void:
+	var cat: Dictionary = _curated_word("cat", ["ca", "t"])
+	var dog: Dictionary = _curated_word("dog", ["d", "og"])
+	var rainbow: Dictionary = _curated_word("rainbow", ["rain", "b", "ow"])
+	var sunflower: Dictionary = _curated_word("sunflower", ["sun", "flow", "er"])
+	var vocabularies: Array = [[cat, dog], [rainbow, sunflower], [cat, rainbow, dog]]
+	for vocabulary_index in range(vocabularies.size()):
+		var words: Array = vocabularies[vocabulary_index]
+		for seed_value in [7, 73, 411]:
+			var model := Model.new()
+			var repeated := Model.new()
+			model.configure(words, 3, seed_value)
+			repeated.configure(words, 3, seed_value)
+			model.spawn_interval = 10000.0
+			repeated.spawn_interval = 10000.0
+			var label: String = "mixed supply %d seed %d" % [vocabulary_index, seed_value]
+			var emitted: Array = model.cells.duplicate(true)
+			check(model.snapshot() == repeated.snapshot(), label + ": the opening and its metadata are seed-deterministic")
+			for packet_index in range(3):
+				_assert_supply_packet(emitted.slice(packet_index * Model.UPCOMING_COUNT, (packet_index + 1) * Model.UPCOMING_COUNT), label + " opening")
+			for packet_index in range(6):
+				var preview: Array = model.upcoming.duplicate(true)
+				_assert_supply_packet(preview, label + " future packet %d" % packet_index)
+				check(preview == repeated.upcoming, label + ": repeated seeds advertise the same future IDs, chunks, and fragments")
+				emitted.append_array(preview)
+				# Clear only settled fixture bodies, leaving the source and preview queues untouched.
+				model.cells.clear()
+				repeated.cells.clear()
+				var generated_before: int = model.generated_tiles
+				check(model.drop_now(int(preview[0].id)) and repeated.drop_now(int(preview[0].id)), label + ": the complete advertised packet releases")
+				check(model.generated_tiles == generated_before + Model.DROP_COUNT, label + ": each released packet contributes exactly six roots")
+				for root: Dictionary in preview:
+					var released: Dictionary = model.cell(int(root.id))
+					for key in ["text", "mass", "parts_count", "fragments", "chest", "supply_group", "supply_part", "supply_parts", "source_word_id"]:
+						check(released.get(key) == root.get(key), label + ": release preserves advertised " + key)
+				var ready: float = _latest_arrival_ready(model)
+				model.step(ready)
+				repeated.step(ready)
+				check(model.snapshot() == repeated.snapshot(), label + ": packet mixing and arrival remain deterministic across rounds of supply")
+				check(model.can_drop_now(), label + ": the next packet waits only for the completed batch recovery")
+			var groups: Dictionary = _assert_supply_conservation(emitted, words, label)
+			if vocabulary_index == 2:
+				var crossed_groups: int = 0
+				for group: Dictionary in groups.values():
+					if group.packets.size() > 1:
+						crossed_groups += 1
+				check(crossed_groups > 0, label + ": mixed two- and three-part words exercise six-root packet boundaries")
+
+
+func _test_supply_preview_stability() -> void:
+	var model = _model([_curated_word("cat", ["ca", "t"]), _curated_word("sunflower", ["sun", "flow", "er"])])
+	var preview: Array = model.upcoming.duplicate(true)
+	model._fill_upcoming()
+	model.step(0.1)
+	check(model.upcoming == preview, "an advertised packet never reshuffles while waiting or being topped up")
+	check(not model.drop_now(-999) and model.upcoming == preview, "a stale release request cannot reshuffle committed previews")
+	model.set_paused(true)
+	model.step(30.0)
+	check(not model.drop_now(int(preview[0].id)) and model.upcoming == preview, "pause retains every advertised root and its order")
+	model.set_paused(false)
+	check(model.drop_now(int(preview[0].id)), "resuming releases the exact packet advertised before pause")
+	var following: Array = model.upcoming.duplicate(true)
+	check(not model.drop_now() and model.upcoming == following, "a blocked overlapping drop cannot reshuffle the following packet")
+	model.step(_latest_arrival_ready(model))
+	check(model.upcoming == following, "settling the current packet preserves the next advertised packet byte for byte")
+
+
 func _arrival_ids(model) -> Array[int]:
 	var ids: Array[int] = []
 	for tile: Dictionary in model.upcoming:
@@ -1425,8 +1569,28 @@ func _arrival_ids(model) -> Array[int]:
 	return ids
 
 
+func _arrivals_by_readiness(model) -> Array[Dictionary]:
+	var roots: Array[Dictionary] = []
+	for tile: Dictionary in model.cells:
+		if bool(tile.get("arrival", false)):
+			roots.append(tile.duplicate(true))
+	roots.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return Model.settle_duration(a) < Model.settle_duration(b))
+	return roots
+
+
+func _latest_arrival_ready(model) -> float:
+	var ready: float = 0.0
+	for tile: Dictionary in model.cells:
+		if bool(tile.get("arrival", false)):
+			ready = maxf(ready, Model.settle_duration(tile))
+	return ready
+
+
 func _test_arrival_timing() -> void:
 	var initial = _model([_word("cat")])
+	var onset_slots: Array[int] = [0, 3, 1, 4, 2, 5]
+	check(is_equal_approx(Model.ARRIVAL_STAGGER, 0.15), "arrival onsets have a readable 150-millisecond separation")
 	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the three-row opening")
 	for tile: Dictionary in initial.cells:
 		check(initial.is_settled(tile) and not bool(tile.arrival) and is_equal_approx(Model.settle_duration(tile), Model.SETTLE_SECONDS),
@@ -1437,21 +1601,25 @@ func _test_arrival_timing() -> void:
 		_fill_rows(model, row + 1, Model.ROWS - 1)
 		var incoming: Array[int] = _arrival_ids(model)
 		check(model.drop_now(incoming[0]), "each supported row accepts a manual arrival batch")
-		var previous_contact: float = -1.0
 		for index in range(incoming.size()):
 			var tile: Dictionary = model.cell(incoming[index])
-			var stagger: float = float(index) * Model.ARRIVAL_STAGGER
+			var stagger: float = float(onset_slots.find(index)) * 0.15
 			var expected_contact: float = stagger + sqrt(2.0 * float(row + 1) / Motion.ARRIVAL_GRAVITY)
 			check(tile.row == row and tile.column == index and tile.falling_rows == row + 1,
 				"arrival distance spans the whole well from one row above the board")
 			check(tile.arrival_index == index and bool(tile.arrival) and bool(tile.settling) and tile.age == 0.0,
-				"batch roots retain their ordered delay and start on the shared model clock")
+				"batch roots retain their advertised preview slot and start on the shared model clock")
+			check(is_equal_approx(Model.arrival_delay(tile), stagger),
+				"unrestricted lanes launch in the alternating 0, 3, 1, 4, 2, 5 preview-slot order")
 			check(is_equal_approx(Model.arrival_contact_at(tile), expected_contact),
 				"arrival contact follows board-scaled acceleration and batch stagger")
 			check(is_equal_approx(Model.settle_duration(tile), expected_contact + Motion.COMPRESSION_SECONDS + Motion.REBOUND_SECONDS + Motion.RECOVERY_SECONDS),
 				"arrival input readiness includes planted compression and complete recovery")
-			check(Model.arrival_contact_at(tile) > previous_contact, "equal-height roots contact in a gentle stagger")
-			previous_contact = Model.arrival_contact_at(tile)
+		for onset_index in range(1, onset_slots.size()):
+			var previous: Dictionary = model.cell(incoming[onset_slots[onset_index - 1]])
+			var current: Dictionary = model.cell(incoming[onset_slots[onset_index]])
+			check(is_equal_approx(Model.arrival_contact_at(current) - Model.arrival_contact_at(previous), 0.15),
+				"equal-height roots contact in the visible onset order without changing preview columns")
 		_assert_board(model, "arrival row %d" % row)
 
 
@@ -1460,13 +1628,16 @@ func _test_arrival_readiness_and_pause() -> void:
 	var incoming: Array[int] = _arrival_ids(model)
 	var target_id: int = int(model.cells[0].id)
 	check(model.drop_now(incoming[0]), "arrival readiness fixture releases its committed preview")
-	var first_contact: float = Model.arrival_contact_at(model.cell(incoming[0]))
-	var first_ready: float = Model.settle_duration(model.cell(incoming[0]))
-	var last_ready: float = Model.settle_duration(model.cell(incoming.back()))
+	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
+	var first_id: int = int(by_readiness.front().id)
+	var last_id: int = int(by_readiness.back().id)
+	var first_contact: float = Model.arrival_contact_at(model.cell(first_id))
+	var first_ready: float = Model.settle_duration(model.cell(first_id))
+	var last_ready: float = Model.settle_duration(model.cell(last_id))
 	model.step(first_contact)
-	check(not model.is_settled(model.cell(incoming[0])) and bool(model.cell(incoming[0]).settling),
+	check(not model.is_settled(model.cell(first_id)) and bool(model.cell(first_id).settling),
 		"touching support does not enable a jelly while it is still compressing")
-	check(model.try_merge(incoming[0], target_id) == "ignored" and model.try_merge(target_id, incoming[0]) == "ignored",
+	check(model.try_merge(first_id, target_id) == "ignored" and model.try_merge(target_id, first_id) == "ignored",
 		"a falling or recovering root cannot be used as a merge source or target")
 	check(not model.can_drop_now() and not model.drop_now(), "a new batch cannot overlap the current arrival recovery")
 	var frozen: Dictionary = model.snapshot()
@@ -1476,15 +1647,15 @@ func _test_arrival_readiness_and_pause() -> void:
 		"pause freezes arrival positions, stagger ages, and the next supply clock")
 	model.set_paused(false)
 	model.step(first_ready - first_contact - 0.001)
-	check(not model.is_settled(model.cell(incoming[0])) and not model.can_drop_now(), "input remains blocked until the final recovery millisecond")
+	check(not model.is_settled(model.cell(first_id)) and not model.can_drop_now(), "input remains blocked until the final recovery millisecond")
 	model.step(0.001)
-	check(model.is_settled(model.cell(incoming[0])) and not bool(model.cell(incoming[0]).settling), "first root becomes ready at its own exact recovery boundary")
-	check(not model.is_settled(model.cell(incoming.back())) and not model.can_drop_now(), "the last staggered root retains its later readiness deadline")
+	check(model.is_settled(model.cell(first_id)) and not bool(model.cell(first_id).settling), "first root becomes ready at its own exact recovery boundary")
+	check(not model.is_settled(model.cell(last_id)) and not model.can_drop_now(), "the last staggered root retains its later readiness deadline")
 	model.step(last_ready - first_ready)
 	check(model.can_drop_now(), "supply releases again only after the complete batch is ready")
 	for id in incoming:
 		check(model.is_settled(model.cell(id)) and not bool(model.cell(id).settling), "each arrived root completes its settling flag and readiness together")
-	check(model.try_merge(incoming[0], target_id) == "merged", "an arrived root can merge after recovery")
+	check(model.try_merge(first_id, target_id) == "merged", "an arrived root can merge after recovery")
 	model.step(Model.FUSION_SECONDS)
 	var merged: Dictionary = model.cells.back()
 	check(not bool(merged.arrival) and is_equal_approx(Model.settle_duration(merged), Model.SETTLE_SECONDS),
@@ -1506,7 +1677,7 @@ func _test_arrival_automatic_timing() -> void:
 	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "automatic supply starts one six-root batch at its existing deadline")
 	for id in incoming:
 		check(manual.cell(id) == automatic.cell(id), "manual and automatic arrival share identities, placement, delays, and clocks")
-	var latest_ready: float = Model.settle_duration(automatic.cell(incoming.back()))
+	var latest_ready: float = _latest_arrival_ready(automatic)
 	automatic.step(latest_ready)
 	check(automatic.can_drop_now() and is_equal_approx(automatic.spawn_elapsed, latest_ready), "descent does not pause or restart the next automatic supply timer")
 	check(is_equal_approx(automatic.spawn_interval, 20.0) and is_equal_approx(Model.MIN_SPAWN_INTERVAL, 16.0),
@@ -1520,7 +1691,7 @@ func _test_arrival_full_board_determinism() -> void:
 		model.cells.clear()
 		_fill_rows(model, 1, Model.ROWS - 1)
 		check(model.drop_now(), "last open row accepts a batch before full-board danger")
-	var latest_ready: float = Model.settle_duration(whole.cells.back())
+	var latest_ready: float = _latest_arrival_ready(whole)
 	whole.step(latest_ready - 0.001)
 	check(whole.full_elapsed < 0.0 and whole.phase == "playing", "danger waits for the last staggered arrival to finish recovering")
 	whole.step(0.001)
@@ -1584,16 +1755,23 @@ func _test_arrival_reserved_lanes() -> void:
 	check(reserved.column == 1 and reserved.row == 3 and reserved.width == 2,
 		"future word reserves its neighboring entry lane before the visual merge finishes")
 	var incoming: Array[int] = _arrival_ids(model)
+	var preview: Array = model.upcoming.duplicate(true)
+	var generated_before: int = model.generated_tiles
 	check(model.drop_now(), "remaining entry space accepts arrivals during a merge")
 	for index in range(incoming.size()):
 		var tile: Dictionary = model.cell(incoming[index])
 		if index < 3:
 			check(not tile.is_empty() and tile.column == 1 and tile.row == 2 - index,
 				"roots stack above the reserved result instead of crossing its future footprint")
+			check(int(tile.arrival_index) == index and is_equal_approx(Model.arrival_delay(tile), float(index) * 0.4),
+				"partial same-lane batches preserve preview identity and safe FIFO launch spacing")
 		else:
 			check(tile.is_empty(), "a partial batch stops when every entry lane is sealed")
+			check(model.upcoming[index - 3] == preview[index],
+				"every unreleased preview keeps its complete original identity and order after a partial batch")
 	check(not model.can_drop_now() and model.upcoming[0].id == incoming[3],
 		"unreleased roots stay committed at the front of the preview after a partial batch")
+	check(model.generated_tiles == generated_before + 3, "partial batches consume exactly the admitted FIFO prefix")
 	_assert_reservations(model, "arrival respects a future word roof")
 	_assert_board(model, "partial arrival into a reserved lane")
 
@@ -1605,33 +1783,79 @@ func _test_arrival_same_lane_spacing() -> void:
 		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
 	var incoming: Array[int] = _arrival_ids(model)
 	check(model.drop_now(), "one deep open entry lane can admit a complete batch")
-	var clearance: float = sqrt(2.0 / Motion.ARRIVAL_GRAVITY)
+	var clearance: float = 0.4
 	for index in range(incoming.size()):
 		var tile: Dictionary = model.cell(incoming[index])
 		check(tile.column == Model.COLUMNS - 1 and tile.row == Model.ROWS - 1 - index,
 			"the only reachable lane stacks new roots from the floor upward")
 		check(is_equal_approx(Model.arrival_delay(tile), float(index) * clearance),
-			"repeated use of one lane gives the preceding root a full row of headroom")
+			"repeated use of one lane reserves at least 400 milliseconds of headroom in FIFO landing order")
 		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
 			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
 			"contact and input readiness use the stored lane delay")
-	for sample_index in range(160):
+	_assert_arrival_lane_clearance(model, "same-lane batch")
+	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
+	var last_id: int = int(by_readiness.back().id)
+	var last_ready: float = Model.settle_duration(model.cell(last_id))
+	model.step(last_ready - 0.001)
+	check(not model.can_drop_now() and not model.is_settled(model.cell(last_id)),
+		"long lane stagger remains part of the authoritative input lock")
+	model.step(0.001)
+	check(model.can_drop_now() and model.is_settled(model.cell(last_id)),
+		"the next supply unlocks after the last same-lane root recovers")
+	_assert_board(model, "same-lane arrival settlement")
+
+
+func _assert_arrival_lane_clearance(model, label: String) -> void:
+	var roots: Array[Dictionary] = _arrivals_by_readiness(model)
+	roots.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return Model.arrival_delay(a) < Model.arrival_delay(b))
+	for sample_index in range(ceili(_latest_arrival_ready(model) / 0.025) + 2):
 		var elapsed: float = float(sample_index) * 0.025
-		var previous_y: float = INF
-		for id in incoming:
-			var tile: Dictionary = model.cell(id)
+		var previous_y: Dictionary = {}
+		for root: Dictionary in roots:
+			var tile: Dictionary = root.duplicate(true)
 			var age: float = elapsed - Model.arrival_delay(tile)
 			if age < 0.0:
 				continue
 			tile.age = age
 			var y: float = float(tile.row) - float(Motion.sample(tile).lift_rows)
-			check(y + 1.0 <= previous_y + Model.EPSILON, "same-lane arrivals keep one full row between visible bodies throughout descent")
-			previous_y = y
-	var last_ready: float = Model.settle_duration(model.cell(incoming.back()))
-	model.step(last_ready - 0.001)
-	check(not model.can_drop_now() and not model.is_settled(model.cell(incoming.back())),
-		"long lane stagger remains part of the authoritative input lock")
+			var column: int = int(tile.column)
+			check(y + 1.0 <= float(previous_y.get(column, INF)) + Model.EPSILON,
+				label + ": arrivals retain one full row of physical clearance in actual launch order")
+			previous_y[column] = y
+
+
+func _test_arrival_mixed_lane_readiness() -> void:
+	var model = _model([_word("cat")])
+	model.cells.clear()
+	for column in range(Model.COLUMNS):
+		var first_occupied_row: int = maxi(0, 3 - column)
+		for row in range(first_occupied_row, Model.ROWS):
+			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
+	var incoming: Array[int] = _arrival_ids(model)
+	check(model.drop_now(), "uneven lanes admit the advertised six roots into a three-two-one staircase")
+	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
+	var last_id: int = int(by_readiness.back().id)
+	var last_ready: float = Model.settle_duration(model.cell(last_id))
+	var final_slot_ready: float = Model.settle_duration(model.cell(incoming.back()))
+	check(last_id == incoming[4] and final_slot_ready < last_ready,
+		"same-lane clearance can make an earlier preview slot recover after the final advertised slot")
+	for index in range(incoming.size()):
+		var tile: Dictionary = model.cell(incoming[index])
+		check(int(tile.arrival_index) == index, "uneven lane placement retains the original preview slot identity")
+	check(is_equal_approx(Model.arrival_delay(model.cell(incoming[4])), 1.0),
+		"the fifth preview root waits behind its earlier same-lane sibling")
+	_assert_arrival_lane_clearance(model, "uneven-lane batch")
+	model.step(final_slot_ready)
+	check(model.is_settled(model.cell(incoming.back())) and not model.is_settled(model.cell(last_id))
+		and model.full_elapsed < 0.0, "the last advertised root cannot start danger before the physically latest arrival recovers")
+	model.step(last_ready - final_slot_ready - 0.001)
+	check(not model.is_settled(model.cell(last_id)) and model.full_elapsed < 0.0,
+		"uneven-lane danger remains blocked through the final recovery millisecond")
 	model.step(0.001)
-	check(model.can_drop_now() and model.is_settled(model.cell(incoming.back())),
-		"the next supply unlocks after the last same-lane root recovers")
-	_assert_board(model, "same-lane arrival settlement")
+	check(model.is_settled(model.cell(last_id)) and is_zero_approx(model.full_elapsed),
+		"full-board danger starts at the maximum stored readiness across the whole batch")
+	model.step(0.2)
+	check(is_equal_approx(model.full_elapsed, 0.2), "uneven-lane danger counts only time after every root recovers")
+	_assert_board(model, "uneven-lane arrival settlement")

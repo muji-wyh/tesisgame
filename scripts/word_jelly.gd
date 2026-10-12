@@ -356,7 +356,7 @@ func _arrival_rect(cell: Dictionary) -> Rect2:
 	return rect
 
 func _arrival_delay(cell: Dictionary) -> float:
-	return float(cell.get("arrival_delay", float(cell.get("arrival_index", 0)) * WordModel.ARRIVAL_STAGGER))
+	return WordModel.arrival_delay(cell)
 
 func _sync_positions() -> void:
 	for cell: Dictionary in game.cells:
@@ -435,13 +435,19 @@ func _sync_positions() -> void:
 	_refresh_contact()
 
 func _sync_preview() -> void:
-	var refill: float = 1.0
+	var refills: Array[float] = []
+	refills.resize(_preview_tiles.size())
+	refills.fill(1.0)
 	if not reduced_motion:
 		for cell: Dictionary in game.cells:
 			if bool(cell.get("arrival", false)) and _arrival_origins.has(int(cell.id)):
-				refill = minf(refill, (float(cell.age) - _arrival_delay(cell) - 0.18) / 0.18)
+				var slot: int = int(_arrival_origins[int(cell.id)].slot)
+				# Each departing body frees its own preview slot. Later roots can
+				# keep waiting while the cleared slots quietly refill behind them.
+				refills[slot] = minf(refills[slot], (float(cell.age) - _arrival_delay(cell) - 0.18) / 0.18)
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
+		var refill: float = refills[index]
 		preview.visible = _configured and not _result_visible and index < game.upcoming.size() and refill > 0.0
 		if not preview.visible:
 			continue
@@ -716,7 +722,7 @@ func _layout() -> void:
 		_reflow.clear()
 		_snapbacks.clear()
 	_board = next_board
-	_gap = maxf(1.5 / s, _pitch * 0.025)
+	_gap = maxf(3.0 / s, _pitch * 0.09)
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size

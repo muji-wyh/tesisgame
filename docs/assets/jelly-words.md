@@ -19,3 +19,19 @@ floating instruction label. Each original chunk adds mass and 50 coins; merging
 preserves all fragment markers, while tapping the complete word collects them.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
+
+New six-root supply packets mix parts from different words, leaving intervening
+roots between siblings whenever the packet permits it. The same arrangement
+feeds the three opening rows. Word provenance, part order, and fragment markers
+stay attached to each root; already visible previews are never reshuffled.
+Neighboring bodies leave a nine-percent cell gap for clearer separation.
+
+Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
+between starts. The bodies accelerate under the existing gravity and recover
+after landing. Shared entry lanes retain extra clearance so a later root cannot
+overtake an earlier one. Each preview slot refills after its own departing body
+has cleared it. Reduced motion keeps the same readiness clocks while placing
+bodies directly at their reserved destinations. The six-column board, initial
+three rows, 20-to-16-second supply cadence, merge, split, and collection rules
+remain unchanged. This polish reuses the integrated gel artwork and landing
+audio above; it adds no downloaded assets.

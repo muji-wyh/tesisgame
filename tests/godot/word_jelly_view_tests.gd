@@ -80,6 +80,7 @@ func _run() -> void:
 	_check_wallet_failure(view)
 	_check_keyboard(view)
 	_check_arrival_packet(view)
+	_check_staggered_preview_refill(view)
 	_check_arrival_land_timing(view)
 	_check_danger_ends_when_collecting(view)
 	_check_danger_ends_when_merge_frees_space(view)
@@ -167,6 +168,16 @@ func _check_opening_and_bounds(view) -> void:
 			check(tile.settled and tile.visible and not tile.picture_visible, "opening root shows text without a word picture")
 			check(view._tiles[int(tile.id)]._label.text == tile.text, "root label matches its part")
 			check(view._board.encloses(view._tile_rect(tile)), "root rectangle stays inside the well")
+			for neighbor: Dictionary in state.tiles:
+				if int(neighbor.row) != int(tile.row) or int(neighbor.column) != int(tile.column) + 1:
+					continue
+				var left: Rect2 = view._tile_rect(tile)
+				var right: Rect2 = view._tile_rect(neighbor)
+				check(right.position.x - left.end.x >= view._pitch * 0.08,
+					"neighboring roots leave a visible gap instead of reading as one connected word")
+				var between := Vector2((left.end.x + right.position.x) * 0.5, left.get_center().y)
+				check(not view._press(-1, view.get_global_transform() * between),
+					"pressing the clear gap cannot accidentally pick up either neighboring root")
 		for tile in view._preview_tiles:
 			check(tile.visible and view._preview_rect.encloses(tile.get_rect()), "preview parts remain within their drop control")
 		_check_supply_layout(view)
@@ -1265,6 +1276,41 @@ func _check_arrival_packet(view) -> void:
 						"every supplied jelly finishes planted exactly on its reserved board cell")
 				check(view.game.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and view.game.merged_count == 0 and payouts.is_empty(),
 					"arrival, pause and resize preserve the supply and reward ledgers")
+	view.size = Vector2(1000, 720)
+
+
+func _check_staggered_preview_refill(view) -> void:
+	for reduced: bool in [false, true]:
+		for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 844)]:
+			view.size = dimensions
+			_reset(view, reduced)
+			var packet: Array = view.game.upcoming.duplicate(true)
+			var origins: Array[Rect2] = []
+			for preview in view._preview_tiles:
+				origins.append(preview.get_rect())
+			view._drop_next(int(packet[0].id))
+			_advance(view, 0.40)
+			var waiting: int = 0
+			var refilled: int = 0
+			for index in range(packet.size()):
+				var outgoing: Dictionary = view.game.cell(int(packet[index].id))
+				var preview = view._preview_tiles[index]
+				if reduced:
+					check(preview.visible and is_equal_approx(preview.modulate.a, 1.0),
+						"reduced motion shows the next preview immediately without a delayed fade")
+				elif Model.arrival_delay(outgoing) > float(outgoing.age):
+					waiting += 1
+					check(not preview.visible and view._tiles[int(outgoing.id)].get_rect().is_equal_approx(origins[index]),
+						"a waiting root owns its original tray slot until departure")
+				elif float(outgoing.age) - Model.arrival_delay(outgoing) >= 0.36:
+					refilled += 1
+					check(preview.visible and is_equal_approx(preview.modulate.a, 1.0)
+						and preview.tile_id == int(view.game.upcoming[index].id),
+						"a cleared slot reveals its next committed root without waiting for the whole wave")
+			if not reduced:
+				check(waiting >= 2 and refilled >= 1,
+					"staggered release visibly combines falling, waiting, and replenished roots")
+			check(not view.game.can_drop_now(), "partially refilled supply cannot release a second batch during descent")
 	view.size = Vector2(1000, 720)
 
 
