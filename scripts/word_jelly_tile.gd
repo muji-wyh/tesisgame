@@ -77,11 +77,13 @@ func _layout() -> void:
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	var pixels: int = maxi(12, mini(28, roundi(_unit * 0.34)))
-	while pixels > 10 and Style.HEADING_FONT.get_height(pixels) > _label.size.y:
+	# Logical font pixels also scale with the viewport. Fit the actual line
+	# height so small column-aligned previews keep their letters visible.
+	while pixels > 1 and Style.HEADING_FONT.get_height(pixels) > _label.size.y:
 		pixels -= 1
 	# Wrapped content has a real second line; long builds never use ellipses.
 	var lines: int = maxi(1, floori(_label.size.y / (pixels * 1.15)))
-	while pixels > 10 and Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > _label.size.x * lines:
+	while pixels > 1 and Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > _label.size.x * lines:
 		pixels -= 1
 		lines = maxi(1, floori(_label.size.y / (pixels * 1.15)))
 	_label.add_theme_font_size_override("font_size", pixels)

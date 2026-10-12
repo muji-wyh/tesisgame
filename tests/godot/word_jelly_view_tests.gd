@@ -4,6 +4,8 @@ const Jelly = preload("res://scripts/word_jelly.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const LAYOUT_SIZES: Array[Vector2] = [Vector2(1473, 1175), Vector2(1000, 720), Vector2(768, 1024),
+	Vector2(390, 844), Vector2(390, 700), Vector2(568, 320), Vector2(568, 260), Vector2(320, 480), Vector2(320, 320)]
 
 var checks: int = 0
 var failures: int = 0
@@ -141,7 +143,7 @@ func _merged_id(view) -> int:
 
 
 func _check_opening_and_bounds(view) -> void:
-	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(768, 1024), Vector2(390, 700), Vector2(568, 260)]:
+	for dimensions: Vector2 in LAYOUT_SIZES:
 		view.size = dimensions
 		_reset(view)
 		var state: Dictionary = view.snapshot()
@@ -167,8 +169,45 @@ func _check_opening_and_bounds(view) -> void:
 			check(view._board.encloses(view._tile_rect(tile)), "root rectangle stays inside the well")
 		for tile in view._preview_tiles:
 			check(tile.visible and view._preview_rect.encloses(tile.get_rect()), "preview parts remain within their drop control")
+		_check_supply_layout(view)
 		_check_preview_label_height(view)
 	view.size = Vector2(1000, 720)
+
+
+func _check_supply_layout(view) -> void:
+	var context: String = " at %s" % view.size
+	var board: Rect2 = view._board
+	var tray: Rect2 = view._preview_rect
+	check(is_equal_approx(tray.position.x, board.position.x) and is_equal_approx(tray.size.x, board.size.x),
+		"the supply tray matches the well's horizontal bounds" + context)
+	check(view.drop_button.get_rect().is_equal_approx(tray), "the whole aligned tray is the manual drop target" + context)
+	for index in range(view._preview_tiles.size()):
+		var preview: Rect2 = view._preview_tiles[index].get_rect()
+		var column_center: float = board.position.x + (float(index) + 0.5) * board.size.x / Model.COLUMNS
+		check(absf(preview.get_center().x - column_center) < 0.01,
+			"preview %d is centered above its well column%s" % [index, context])
+	var regions: Dictionary = {"well": board, "supply tray": tray, "chest meter": view._loot_meter.get_rect(),
+		"Finish": view.finish_button.get_rect()}
+	if view._loot_detail.visible:
+		regions["chest detail"] = view._loot_detail.get_rect()
+		var detail_font: Font = view._loot_detail.get_theme_font("font")
+		var detail_pixels: int = view._loot_detail.get_theme_font_size("font_size")
+		check(detail_font.get_string_size(view._loot_detail.text, HORIZONTAL_ALIGNMENT_LEFT, -1, detail_pixels).x <= view._loot_detail.size.x + 0.01
+			and detail_font.get_height(detail_pixels) <= view._loot_detail.size.y + 0.01,
+			"visible chest detail fits its allotted area" + context)
+	var names: Array = regions.keys()
+	var bounds := Rect2(Vector2.ZERO, view.size).grow(0.1)
+	for index in range(names.size()):
+		var region: Rect2 = regions[names[index]]
+		check(region.size.x > 0.0 and region.size.y > 0.0 and bounds.encloses(region),
+			"%s remains inside the playfield%s" % [names[index], context])
+		for other in range(index + 1, names.size()):
+			var overlap: Rect2 = region.intersection(regions[names[other]])
+			check(overlap.size.x < 0.01 or overlap.size.y < 0.01,
+				"%s and %s do not overlap%s" % [names[index], names[other], context])
+	var s: float = Style.ui_scale(view)
+	check(tray.size.y * s >= 44.0 - 0.01 and view.finish_button.size.y * s >= 44.0 - 0.01,
+		"manual drop and Finish retain forty-four-pixel target heights" + context)
 
 
 func _check_preview_label_height(view) -> void:
@@ -216,6 +255,7 @@ func _check_paused_resize(view) -> void:
 			check(view._board.encloses(body.get_rect()), "paused populated body moves immediately into the resized board")
 			check(body.get_rect().is_equal_approx(view._tile_rect(tile)), "paused body matches its new hit target without waiting for animation time")
 			check(is_equal_approx(float(tile.age), float(ages[int(tile.id)])), "resize does not age a paused tile to force it into place")
+		_check_supply_layout(view)
 		_check_preview_label_height(view)
 	view.pause(false)
 
@@ -1142,7 +1182,7 @@ func _check_keyboard(view) -> void:
 func _check_arrival_packet(view) -> void:
 	for reduced: bool in [false, true]:
 		for automatic: bool in [false, true]:
-			for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700)]:
+			for dimensions: Vector2 in [Vector2(1473, 1175), Vector2(768, 1024), Vector2(390, 844), Vector2(568, 320), Vector2(1000, 720), Vector2(390, 700)]:
 				view.size = dimensions
 				_reset(view, reduced)
 				var packet: Array = view.game.upcoming.duplicate(true)
@@ -1213,9 +1253,10 @@ func _check_arrival_packet(view) -> void:
 				check(is_equal_approx(float(view.game.cell(first_id).age), resize_age), "resize never rewinds the arrival timeline")
 				var resized_body: Rect2 = view._tiles[first_id].get_rect()
 				var resized_target: Rect2 = view._tile_rect(view.game.cell(first_id))
-				check(resized_body.get_center().y <= resized_target.get_center().y
-					and view._tiles[first_id]._label.text == packet[0].text,
-					"resize keeps the same visible letters on a coherent route to the new well")
+				var coherent_route: bool = resized_body.is_equal_approx(resized_target) if reduced else resized_body.get_center().y <= resized_target.get_center().y
+				check(coherent_route and view._tiles[first_id]._label.text == packet[0].text,
+					"resize keeps the same visible letters on a coherent route to the new well: reduced=%s, automatic=%s, dimensions=%s, body_y=%.9f, target_y=%.9f, body=%s, target=%s" %
+					[reduced, automatic, dimensions, resized_body.get_center().y, resized_target.get_center().y, resized_body, resized_target])
 				_advance(view, final_ready + 0.001 - float(view.game.cell(first_id).age))
 				for original: Dictionary in packet:
 					var id: int = int(original.id)

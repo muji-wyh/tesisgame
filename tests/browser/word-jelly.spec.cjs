@@ -141,6 +141,46 @@ function expectInside(rect, bounds) {
   expect(rect[1] + rect[3]).toBeLessThanOrEqual(bounds.height + 1);
 }
 
+function expectSupplyLayout(state, bounds) {
+  const board = state.board_rect, tray = state.preview.rect, area = state.playfield_rect;
+  const scale = Math.max(2 / 3, bounds.scale), tolerance = 0.25 / bounds.scale;
+  const inside = (rect, parent, label) => {
+    expect(rect.every(Number.isFinite), `${label} has finite bounds`).toBe(true);
+    expect(rect[2], `${label} has visible width`).toBeGreaterThan(0);
+    expect(rect[3], `${label} has visible height`).toBeGreaterThan(0);
+    expect(rect[0], `${label} is inside the left edge`).toBeGreaterThanOrEqual(parent[0] - tolerance);
+    expect(rect[1], `${label} is inside the top edge`).toBeGreaterThanOrEqual(parent[1] - tolerance);
+    expect(rect[0] + rect[2], `${label} is inside the right edge`).toBeLessThanOrEqual(parent[0] + parent[2] + tolerance);
+    expect(rect[1] + rect[3], `${label} is inside the bottom edge`).toBeLessThanOrEqual(parent[1] + parent[3] + tolerance);
+  };
+  expect(Math.abs(tray[0] - board[0]), 'The supply tray starts at the well left edge').toBeLessThan(tolerance);
+  expect(Math.abs(tray[2] - board[2]), 'The supply tray is exactly as wide as the six-column well').toBeLessThan(tolerance);
+  expect(tray[1] + tray[3], 'The supply tray stays above the well').toBeLessThanOrEqual(board[1] + tolerance);
+  for (const [axis, value] of state.preview.control.rect.entries())
+    expect(Math.abs(value - tray[axis]), 'The whole tray remains the manual drop target').toBeLessThan(tolerance);
+  expect(state.preview.slots).toHaveLength(6);
+  for (const [index, slot] of state.preview.slots.entries()) {
+    expect(slot.visible, `Preview ${index} stays visible`).toBe(true);
+    inside(slot.rect, tray, `Preview ${index}`);
+    expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + 0.5) * board[2] / 6)),
+      `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
+  }
+  const regions = [['well', board], ['supply tray', tray], ['chest meter', state.loot.progress.rect], ['Finish', state.finish.rect]];
+  inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
+  for (const [index, [label, rect]] of regions.entries()) {
+    inside(rect, area, label);
+    for (const [otherLabel, other] of regions.slice(index + 1)) {
+      const width = Math.min(rect[0] + rect[2], other[0] + other[2]) - Math.max(rect[0], other[0]);
+      const height = Math.min(rect[1] + rect[3], other[1] + other[3]) - Math.max(rect[1], other[1]);
+      expect(width <= tolerance || height <= tolerance, `${label} and ${otherLabel} do not overlap`).toBe(true);
+    }
+  }
+  expect(tray[3] * scale, 'The supply tray retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
+  expect(state.finish.rect[3] * scale, 'Finish retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
+  const bottom = Math.max(board[1] + board[3], state.finish.rect[1] + state.finish.rect[3]);
+  expect(Math.abs(bottom - (area[1] + area[3] - 12 / scale)), 'The game retains twelve-pixel bottom padding').toBeLessThan(tolerance);
+}
+
 function expectSupportedChild(state, child) {
   const bottom = child.row + child.height;
   const supported = bottom === state.rows || state.tiles.some(other => other.id !== child.id &&
@@ -244,6 +284,7 @@ async function verifyArrival(page, info, before, label) {
 test('manual and automatic preview packets naturally fall into the well', async ({ page }, info) => {
   test.setTimeout(120000);
   const errors = await startWordJelly(page), manual = await jelly(page);
+  expectSupplyLayout(manual, await metrics(page));
   expect(manual.preview.slots.filter(slot => slot.visible)).toHaveLength(6);
   expect(manual.preview.rect[1] + manual.preview.rect[3], 'The supply tray is above the well on every layout')
     .toBeLessThanOrEqual(manual.board_rect[1]);
@@ -435,6 +476,18 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
     expectInside(tile.rect, bounds);
   }
   await capture(page, info, 'word-jelly-six-column-opening');
+  const originalViewport = page.viewportSize();
+  for (const viewport of [{ width: 1473, height: 1175 }, { width: 768, height: 1024 },
+    { width: 390, height: 844 }, { width: 568, height: 320 }]) {
+    await page.setViewportSize(viewport);
+    await rendered(page);
+    await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
+      .toPass({ timeout: 5000 });
+  }
+  await page.setViewportSize(originalViewport);
+  await rendered(page);
+  await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
+    .toPass({ timeout: 5000 });
   const { roots, word } = await availableWord(page, 3, 2), startingWallet = await wallet(page);
   await pressRect(page, roots[0].rect);
   await page.waitForTimeout(500);

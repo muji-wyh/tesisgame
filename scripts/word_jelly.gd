@@ -689,15 +689,24 @@ func _layout() -> void:
 	var accent: Color = _theme.get("accent", Style.GOOD)
 	Style.action_button(chests_button, accent, true)
 	Style.action_button(replay_button, accent)
-	var wide: bool = size.x > size.y * 1.18 or size.y * s < 340.0
-	_compact_hud = wide
 	var edge: float = 8.0 / s
 	var bottom_padding: float = 12.0 / s
-	var side: float = minf(144.0 / s, size.x * 0.18) if wide else 0.0
-	var feed_height: float = 64.0 / s if wide else 78.0 / s
-	var footer_height: float = 0.0 if wide else 44.0 / s + edge
-	var available: Vector2 = Vector2(size.x - 2.0 * (edge + side), size.y - feed_height - footer_height - bottom_padding)
-	_pitch = maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, available.y / WordModel.ROWS), 78.0 / s))
+	var padding: float = 5.0 / s
+	var feed_gap: float = 10.0 / s
+	var hud_width: float = 108.0 / s
+	var hud_gap: float = 12.0 / s
+	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - padding * 2.0 - feed_gap)
+	_pitch = _fit_layout_pitch(available, s)
+	# The well determines the supply columns and the available HUD gutter.
+	# Portrait tablets can have a side rail; narrow phones use a shared footer.
+	var side_hud: bool = (size.x - _pitch * WordModel.COLUMNS) * 0.5 >= edge + hud_gap + hud_width
+	_compact_hud = side_hud
+	var footer_height: float = 0.0 if side_hud else 44.0 / s + edge
+	available.y -= footer_height
+	_pitch = _fit_layout_pitch(available, s)
+	var preview_size: float = minf(48.0 / s, _pitch * 0.84)
+	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
+	var feed_height: float = preview_height + feed_gap
 	var group_top: float = maxf(0.0, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
 	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
@@ -711,32 +720,29 @@ func _layout() -> void:
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
-	var hud_width: float = minf(128.0 / s, maxf(32.0 / s, _board.position.x - edge * 2.0)) if wide else 64.0 / s
-	var meter_edge: float = minf(60.0 / s, hud_width)
-	_loot_meter.position = Vector2(maxf(edge, _board.position.x - hud_width - edge), _board.position.y + edge) if wide else Vector2(edge, group_top)
+	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 260.0 / s))
+	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
+	var meter_edge: float = (60.0 if side_hud else 44.0) / s
+	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(hud_x, _board.end.y + edge)
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
-	_loot_detail.position = _loot_meter.position + Vector2(-8.0 / s, meter_edge)
-	_loot_detail.size = Vector2(meter_edge + 16.0 / s, 16.0 / s)
-	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loot_detail.position = Vector2(hud_x, _loot_meter.position.y + meter_edge + 2.0 / s) if side_hud else _loot_meter.position + Vector2(meter_edge + 6.0 / s, 14.0 / s)
+	_loot_detail.size = Vector2(hud_width if side_hud else maxf(0.0, footer_width - meter_edge - hud_width - 14.0 / s), 16.0 / s)
+	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if side_hud else HORIZONTAL_ALIGNMENT_LEFT
 	_loot_detail.add_theme_font_size_override("font_size", ceili(10.0 / s))
-	var preview_width: float = minf(size.x - edge * 2.0, maxf(_board.size.x, 240.0 / s)) if wide else size.x - 88.0 / s - edge
-	var columns: int = WordModel.UPCOMING_COUNT
-	var padding: float = 5.0 / s
-	var preview_size: float = minf(48.0 / s, (preview_width - padding * 2.0) / columns)
-	_preview_rect = Rect2(Vector2((size.x - preview_width) * 0.5, group_top) if wide else Vector2(80.0 / s, group_top), Vector2(preview_width, preview_size + padding * 2.0))
+	_preview_rect = Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height))
 	drop_button.position = _preview_rect.position
 	drop_button.size = _preview_rect.size
 	_style_drop_button()
 	for index in range(_preview_tiles.size()):
 		_preview_tiles[index].size = Vector2.ONE * preview_size
-		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * preview_width / columns - preview_size * 0.5, padding)
+		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * _pitch - preview_size * 0.5, (preview_height - preview_size) * 0.5)
 	_style_finish_button()
-	finish_button.size = Vector2(minf(108.0 / s, hud_width) if wide else 108.0 / s, 44.0 / s)
-	finish_button.position = Vector2(_loot_meter.position.x, _board.end.y - finish_button.size.y) if wide else Vector2(_board.end.x - finish_button.size.x, _board.end.y + edge)
-	_notice.position = Vector2(_board.position.x, _board.end.y + edge)
-	_notice.size = Vector2(maxf(0, _board.size.x - finish_button.size.x - edge), 42.0 / s)
+	finish_button.size = Vector2(hud_width, 44.0 / s)
+	finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge)
+	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(_board.position.x, maxf(0.0, group_top - 42.0 / s - edge))
+	_notice.size = Vector2(hud_width if side_hud else _board.size.x, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_result.position = Vector2.ZERO
 	_result.size = size
@@ -750,6 +756,12 @@ func _layout() -> void:
 	_refresh_hud()
 	queue_redraw()
 	_publish()
+
+func _fit_layout_pitch(available: Vector2, s: float) -> float:
+	# A small well also has a smaller supply row, leaving room for the game.
+	var height_pitch: float = maxf(available.y / (WordModel.ROWS + 0.84), (available.y - 48.0 / s) / WordModel.ROWS)
+	height_pitch = minf(height_pitch, (available.y - 34.0 / s) / WordModel.ROWS)
+	return maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, height_pitch), 78.0 / s))
 
 func snapshot() -> Dictionary:
 	var state: Dictionary = super.snapshot()
