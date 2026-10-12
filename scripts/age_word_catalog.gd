@@ -9,6 +9,10 @@ const Style = preload("res://scripts/ui_style.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
+const MASTERY_MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
+const MASTERY_PAPER := Color("#f0f6e8")
+const MASTERY_GOLD := Color("#d4b465")
+const MASTERY_INK := Color("#715321")
 const PAGE_SIZE: int = 60
 
 var scroll: ResultScroll
@@ -242,10 +246,14 @@ func _rebuild_words() -> void:
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.set_meta("word", word)
 		button.set_meta("word_id", id)
+		var streak: int = int(_growth.get("streaks", {}).get(id, 0))
+		var mastered: bool = streak >= GrowthState.MASTERY_STREAK
+		var accessible_name: String = ("Hear " + str(word.get("text", ""))
+			+ (". " + str(word.meaning) if word.has("meaning") else "") + _practice_hint(word)).trim_suffix(".")
+		accessible_name += ". Mastered." if mastered else ". %d of %d correct in a row." % [streak, GrowthState.MASTERY_STREAK]
 		for property: Dictionary in button.get_property_list():
 			if property.name == "accessibility_name":
-				button.set("accessibility_name", "Hear " + str(word.get("text", ""))
-					+ (". " + str(word.meaning) if word.has("meaning") else "") + _practice_hint(word))
+				button.set("accessibility_name", accessible_name)
 				break
 		grid.add_child(button)
 		var column := VBoxContainer.new()
@@ -273,13 +281,25 @@ func _rebuild_words() -> void:
 			column.alignment = BoxContainer.ALIGNMENT_CENTER
 		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		column.add_child(caption)
-		var streak: int = int(_growth.get("streaks", {}).get(id, 0))
-		var mastered: bool = streak >= GrowthState.MASTERY_STREAK
+		button.set_meta("mastered", mastered)
 		var progress_label := Style.label("Mastered" if mastered else "%d / %d" % [streak, GrowthState.MASTERY_STREAK], 12)
 		progress_label.name = "WordMastery"
 		progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		progress_label.add_theme_color_override("font_color", Style.GOOD if mastered else Style.MUTED)
+		progress_label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		progress_label.add_theme_color_override("font_color", MASTERY_INK if mastered else Style.MUTED)
+		if mastered:
+			progress_label.add_theme_font_override("font", Style.HEADING_FONT)
 		column.add_child(progress_label)
+		var medal := TextureRect.new()
+		medal.name = "WordMasteryMedal"
+		medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		medal.texture = MASTERY_MEDAL
+		medal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		medal.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		medal.visible = mastered
+		button.add_child(medal)
+		button.set_meta("mastery_badge", medal)
 		button.set_meta("mastery_label", progress_label)
 		button.set_meta("word_art", picture)
 		button.set_meta("word_label", caption)
@@ -441,10 +461,13 @@ func _layout(reveal_focus: bool = true) -> void:
 		button.custom_minimum_size = Vector2(80.0, 48.0) / scale
 		button.add_theme_font_size_override("font_size", ceili(13.0 / scale))
 	for button: Button in word_buttons:
+		var mastered: bool = bool(button.get_meta("mastered", false))
 		if restyle:
 			var previous_focus: int = button.focus_mode
 			Style.action_button(button, accent)
 			button.focus_mode = previous_focus
+			if mastered:
+				_style_mastered_card(button, scale)
 			button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))
 		button.custom_minimum_size = Vector2(0, ceilf(146.0 / scale))
 		var column: VBoxContainer = button.get_meta("word_column")
@@ -455,6 +478,18 @@ func _layout(reveal_focus: bool = true) -> void:
 		column.add_theme_constant_override("separation", ceili(4.0 / scale))
 		var progress_label: Label = button.get_meta("mastery_label")
 		progress_label.add_theme_font_size_override("font_size", ceili(12 / scale))
+		if restyle and mastered:
+			var mastery_pill := Style.box(Color("#f8e8b4"), Color.TRANSPARENT, ceili(7.0 / scale), 0)
+			mastery_pill.content_margin_left = 9.0 / scale
+			mastery_pill.content_margin_right = 9.0 / scale
+			mastery_pill.content_margin_top = 0.0
+			mastery_pill.content_margin_bottom = 0.0
+			progress_label.add_theme_stylebox_override("normal", mastery_pill)
+		var medal: TextureRect = button.get_meta("mastery_badge")
+		medal.offset_left = -33.0 / scale
+		medal.offset_right = -5.0 / scale
+		medal.offset_top = 5.0 / scale
+		medal.offset_bottom = 33.0 / scale
 		var picture: TextureRect = button.get_meta("word_art")
 		picture.custom_minimum_size.y = ceilf(70.0 / scale)
 		var caption: Label = button.get_meta("word_label")
@@ -466,17 +501,37 @@ func _layout(reveal_focus: bool = true) -> void:
 		_reveal_focused_word.call_deferred()
 
 
+func _style_mastered_card(button: Button, scale: float) -> void:
+	# A quiet, permanent award treatment keeps the word picture as the focal point.
+	for state: String in ["normal", "hover", "pressed"]:
+		var fill: Color = MASTERY_PAPER
+		if state == "hover":
+			fill = Color("#e7f2d9")
+		elif state == "pressed":
+			fill = Color("#dcecc8")
+		var surface := Style.box(fill, MASTERY_GOLD, ceili(12.0 / scale), maxi(1, roundi(1.5 / scale)))
+		surface.border_width_bottom = maxi(2, ceili(3.0 / scale))
+		surface.content_margin_left = 12.0 / scale
+		surface.content_margin_right = 12.0 / scale
+		surface.content_margin_top = 6.0 / scale
+		surface.content_margin_bottom = 6.0 / scale
+		button.add_theme_stylebox_override(state, surface)
+
+
 func snapshot() -> Dictionary:
 	var ids: Array[String] = []
 	for word: Dictionary in _words:
 		ids.append(str(word.id))
 	var visible_ids: Array[String] = []
+	var mastered_ids: Array[String] = []
 	for button: Button in word_buttons:
 		visible_ids.append(str(button.get_meta("word_id")))
+		if bool(button.get_meta("mastered", false)):
+			mastered_ids.append(str(button.get_meta("word_id")))
 	return {"growth": _growth, "loading": _loading_state.duplicate(true),
 		"loading_state": str(_loading_state.get("state", "ready")), "loading_progress": float(_loading_state.get("progress", 1.0)),
 		"visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
-		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids,
+		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids, "mastered_word_ids": mastered_ids,
 		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text if meaning_label != null else "",
 		"columns": grid.columns if grid != null else 0,
 		"scroll_offset": scroll.scroll_vertical if scroll != null else 0,

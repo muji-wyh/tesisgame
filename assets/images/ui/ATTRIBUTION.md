@@ -14,3 +14,9 @@ artwork and contains no animation.
 The button surface is an intentional interface container, using the game's
 existing typography and click cue. State styling provides a raised cream face,
 pressed depth, and a separate keyboard focus outline without changing its hit area.
+
+`mastery-medal.webp` reuses the acquired Microsoft Fluent Emoji Sports medal 3D
+illustration by Microsoft Corporation under the MIT License. It is a byte-identical
+copy of the integrated word-library artwork. The source, hash, license, acquisition
+status, and static-animation record are in
+[the vocabulary mastery record](../../../docs/assets/vocabulary-mastery.md).

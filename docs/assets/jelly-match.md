@@ -314,6 +314,14 @@ input geometry do not move. No full-screen flash or additional warning label is
 introduced. Reduced motion removes traveling highlights and repeated flashes,
 retaining a stationary glow with gradual color and intensity changes.
 
+Jelly Match and Jelly Words share the stronger warning presentation. Its
+exterior light now has a 54-screen-pixel drawing margin, a broader textured
+bloom, wider traveling glints and a soft outward wave on each existing pulse.
+The later double beat produces the strongest coral-red peaks. The interior
+fade stays within eight pixels, preserving word faces and drag targets. The
+wave follows the model-driven pulse and disappears in reduced motion; the
+eight-second Match and ten-second Words rescue windows and audio stay unchanged.
+
 The rim reuses the acquired `portal_glow.png` from Bobardo's Modern 2D Animated
 Chests Pack_FREE Demo 1.0.2, under the existing Standard Unity Asset Store EULA
 record in [treasure assets](../voice-pop-treasure.md). Its local source mapping

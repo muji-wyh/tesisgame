@@ -75,6 +75,7 @@ func _run() -> void:
 	root.add_child(catalog)
 	await settle()
 	await _check_content(catalog, data.words)
+	await _check_mastery_state(catalog, data.words)
 	await _check_paging(catalog, data.words)
 	await _check_contextual_guidance(catalog, data.words)
 	await _check_layout(catalog)
@@ -155,6 +156,56 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 		check(catalog.word_buttons.back() == last and last.has_focus() and catalog.scroll.scroll_vertical == offset,
 			"Refreshing the selected age preserves focused words and reading position")
 	check(not catalog.focus_word("missing-word"), "Unknown word focus requests are rejected")
+	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	await settle()
+
+
+func _check_mastery_state(catalog: Catalog, words: Array) -> void:
+	var cohort: Array = words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 3)
+	var progress := {"streaks": {"apple": Growth.MASTERY_STREAK, "book": Growth.MASTERY_STREAK - 1}}
+	catalog.configure(cohort, Data.age_band("3"), Data.theme("spring"), progress)
+	await settle()
+	var mastered: Button = catalog._by_id.apple
+	var learning: Button = catalog._by_id.book
+	var badge: TextureRect = mastered.get_meta("mastery_badge")
+	var learning_badge: TextureRect = learning.get_meta("mastery_badge")
+	check(bool(mastered.get_meta("mastered")) and badge.visible and badge.texture != null
+		and not bool(learning.get_meta("mastered")) and not learning_badge.visible,
+		"Only currently mastered words show the acquired medal")
+	check(catalog.snapshot().mastered_word_ids == ["apple"],
+		"The published page identifies the same currently mastered word as the cards")
+	check(badge.mouse_filter == Control.MOUSE_FILTER_IGNORE and badge.focus_mode == Control.FOCUS_NONE,
+		"The mastery medal cannot take pointer or keyboard ownership from the word")
+	check(mastered.get_theme_stylebox("normal").bg_color != learning.get_theme_stylebox("normal").bg_color,
+		"Mastered cards remain distinguishable from unfinished words without reading the status")
+	check(str(mastered.get("accessibility_name")).contains("Mastered.")
+		and str(learning.get("accessibility_name")).contains("2 of 3 correct in a row."),
+		"Mastery and exact unfinished progress remain available without the visual medal")
+	for touch: bool in [false, true]:
+		var before := heard.size()
+		var point: Vector2 = badge.get_global_transform_with_canvas() * (badge.size * 0.5)
+		await pointer(point, true, touch)
+		await pointer(point, false, touch)
+		check(heard.size() == before + 1 and heard.back().id == "apple",
+			"Tapping the mastery medal still pronounces its word with %s input" % ("touch" if touch else "mouse"))
+	progress.streaks.apple = 0
+	progress.streaks.book = Growth.MASTERY_STREAK
+	catalog.configure(cohort, Data.age_band("3"), Data.theme("spring"), progress)
+	await settle()
+	mastered = catalog._by_id.book
+	learning = catalog._by_id.apple
+	badge = mastered.get_meta("mastery_badge")
+	learning_badge = learning.get_meta("mastery_badge")
+	check(not bool(learning.get_meta("mastered")) and not learning_badge.visible
+		and bool(mastered.get_meta("mastered")) and badge.visible
+		and catalog.snapshot().mastered_word_ids == ["book"],
+		"A mistake clears the old medal while a newly mastered word gains its own marker")
+	check(learning.get_meta("mastery_label").text == "0 / 3"
+		and mastered.get_meta("mastery_label").text == "Mastered",
+		"Mastery decoration and readable progress update together after streak changes")
+	check(not str(learning.get("accessibility_name")).contains("Mastered.")
+		and str(learning.get("accessibility_name")).contains("0 of 3 correct in a row."),
+		"Resetting a streak also clears stale mastery from its accessible description")
 	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
 	await settle()
 

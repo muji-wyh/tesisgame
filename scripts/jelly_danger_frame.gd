@@ -4,7 +4,7 @@ extends ColorRect
 const LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const GLINT = preload("res://assets/chests/milestone/sparkle.png")
 const FRAME_SHADER = preload("res://scripts/jelly_danger_frame.gdshader")
-const HALO_MARGIN: float = 30.0
+const HALO_MARGIN: float = 54.0
 
 var state: Dictionary = {}
 
