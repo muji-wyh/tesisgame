@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, metrics, tap, rendered, enterGame } = require('./game-ui.cjs');
+const { openGame, openModeMenu, metrics, tap, rendered, enterGame, observeAudio } = require('./game-ui.cjs');
+const { recordingTiming } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -468,6 +469,118 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   await page.reload();
   await enterGame(page);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
+  expect(errors).toEqual([]);
+});
+
+test('collected words reveal their picture and spelling above the bottom-anchored game with one pronunciation', async ({ page, browserName }, info) => {
+  await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 4 });
+  const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
+  const scale = Math.max(2 / 3, bounds.scale), area = opening.playfield_rect;
+  const gameBottom = Math.max(opening.board_rect[1] + opening.board_rect[3], opening.finish.rect[1] + opening.finish.rect[3]);
+  expect(Math.abs(gameBottom - (area[1] + area[3] - 12 / scale)) * bounds.scale,
+    'The game group ends at its bottom padding within a quarter rendered pixel, including the portrait Finish control')
+    .toBeLessThan(0.25);
+  expect(opening.preview.rect[1] + opening.preview.rect[3], 'The full supply tray remains above the board')
+    .toBeLessThanOrEqual(opening.board_rect[1]);
+  expect(opening.word_reveal.visible).toBe(false);
+  await capture(page, info, 'word-jelly-bottom-anchored-opening');
+  const supportedWords = state => rootsForWord({ ...state, tiles: state.tiles.filter(tile => tile.row + tile.height === state.rows) }, 3, 2);
+  const first = supportedWords(await jelly(page));
+  expect(first, 'A floor-supported word is available for the first collection').toBeTruthy();
+  const firstMerged = await merge(page, first.roots[0].id, first.roots[1].id);
+  const second = supportedWords(await jelly(page));
+  expect(second, 'The initial board supplies another word for rapid successive collection').toBeTruthy();
+  const secondMerged = await merge(page, second.roots[0].id, second.roots[1].id);
+  expect(second.word.id).not.toBe(first.word.id);
+  await page.exposeFunction('saveWordRevealFrame', (id, encoded) =>
+    fs.writeFileSync(info.outputPath(`word-jelly-reveal-${id}.png`), Buffer.from(encoded, 'base64')));
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.wordRevealTimeline = [];
+    window.wordRevealFrames = {};
+    window.wordRevealInputs = [];
+    window.wordRevealInputHandler = event => {
+      if (event.isTrusted && event.target.id === 'canvas')
+        window.wordRevealInputs.push({ at: performance.now(), sounds: window.audioObservation.playbacks.length });
+    };
+    document.addEventListener('pointerdown', window.wordRevealInputHandler, { capture: true });
+    const pending = new Set();
+    window.wordRevealObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}'), reveal = state.word_reveal;
+      if (!reveal) return;
+      window.wordRevealTimeline.push({ ...reveal, at: performance.now(), cleared: state.cleared_pairs });
+      if (!reveal.visible || reveal.content_alpha < 0.95 || reveal.elapsed < 0.20 || pending.has(reveal.word_id)) return;
+      pending.add(reveal.word_id);
+      document.getElementById('canvas').toBlob(blob => {
+        if (!blob) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const encoded = reader.result.split(',')[1];
+          window.wordRevealFrames[reveal.word_id] = encoded;
+          window.saveWordRevealFrame(reveal.word_id, encoded);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/png');
+    });
+    window.wordRevealObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  const before = await jelly(page), startingWallet = await wallet(page);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(audioAvailable).toBe(true);
+  const candidates = [{ merged: firstMerged, word: first.word }, { merged: secondMerged, word: second.word }];
+  const points = candidates.map(candidate => center(before.tiles.find(tile => tile.id === candidate.merged.id).rect, bounds));
+  // Keep trusted gestures inside the reading beat. Helpers that wait for DOM
+  // snapshots between each tap can consume the whole short effect under tracing.
+  await page.touchscreen.tap(points[0].x, points[0].y);
+  await page.touchscreen.tap(points[0].x, points[0].y);
+  await page.waitForTimeout(240);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.touchscreen.tap(points[1].x, points[1].y);
+  await page.touchscreen.tap(points[1].x, points[1].y);
+  await expect.poll(() => page.evaluate(() => Object.keys(window.wordRevealFrames).length),
+    { message: 'Both real reading beats produce a captured opaque picture and spelling' }).toBe(2);
+  const evidence = await page.evaluate(() => ({ timeline: window.wordRevealTimeline, frames: window.wordRevealFrames,
+    inputs: window.wordRevealInputs, sounds: window.audioObservation.playbacks }));
+  fs.writeFileSync(info.outputPath('word-jelly-reveal-timeline.json'), JSON.stringify(evidence.timeline, null, 2));
+  const firstReplacement = evidence.timeline.findIndex(reveal => reveal.visible && reveal.word_id === second.word.id);
+  expect(firstReplacement).toBeGreaterThan(0);
+  expect(evidence.timeline[firstReplacement - 1].word_id, 'The next word replaces the first while its layer is still active').toBe(first.word.id);
+  expect(evidence.timeline[firstReplacement - 1].visible).toBe(true);
+  if (audioAvailable) expect(evidence.inputs, 'The four real taps delimit separate word-audio windows').toHaveLength(4);
+  const pronunciationObservations = [];
+  for (const [index, candidate] of candidates.entries()) {
+    const reveal = evidence.timeline.find(frame => frame.visible && frame.word_id === candidate.word.id && frame.content_alpha > 0.95);
+    expect(reveal, 'Each collected word owns a readable opaque hold within its actual lifetime').toBeTruthy();
+    expect(reveal.spelling).toBe(candidate.word.text);
+    expect(reveal.word.id).toBe(candidate.word.id);
+    expect(reveal.picture.replace(/^res:\/\//, '')).toBe(candidate.merged.word.image);
+    for (const rect of [reveal.rect, reveal.picture_rect, reveal.spelling_rect]) expectInside(rect, bounds);
+    expect(reveal.rect[1] + reveal.rect[3], 'The reveal uses the upper part of the playfield')
+      .toBeLessThan(area[1] + area[3] * 0.42);
+    expect(reveal.picture_rect[0] + reveal.picture_rect[2]).toBeLessThan(reveal.spelling_rect[0]);
+    if (index === 1) expect(reveal.reduced_motion, 'The replacement word also supports a steady reduced-motion reading beat').toBe(true);
+    if (audioAvailable) {
+      const from = evidence.inputs[index * 2].sounds, end = evidence.inputs[(index + 1) * 2]?.sounds;
+      const timing = recordingTiming(candidate.word.audio);
+      const sounds = evidence.sounds.slice(from, end).filter(sound => sound.contextState === 'running' &&
+        Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
+      expect(sounds, 'Duplicate taps and the effect play one pronunciation per word, even when both recordings have equal length').toHaveLength(1);
+      expect(sounds[0].peak, 'The bundled pronunciation contains audible samples').toBeGreaterThan(0.01);
+      pronunciationObservations.push({ from, end, relative: candidate.word.audio, sound: sounds[0] });
+    }
+  }
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 2);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 200);
+  await expect.poll(async () => (await jelly(page)).word_reveal.visible,
+    { message: 'The picture and spelling leave on their own after the reading beat' }).toBe(false);
+  const final = await jelly(page);
+  expect(final.collected_coins).toBe(before.collected_coins + 200);
+  expect(final.fragment_count).toBe(before.fragment_count + firstMerged.fragments + secondMerged.fragments);
+  fs.writeFileSync(info.outputPath('word-jelly-reveal-timeline.json'), JSON.stringify({ timeline: evidence.timeline, pronunciationObservations }, null, 2));
+  await page.evaluate(() => {
+    window.wordRevealObserver.disconnect();
+    document.removeEventListener('pointerdown', window.wordRevealInputHandler, { capture: true });
+  });
   expect(errors).toEqual([]);
 });
 

@@ -98,6 +98,10 @@ soft landing. Held bodies and active merges or splits finish before their
 deferred fall. Larger bodies and long text wrap across rows when needed;
 ordinary merges keep their target height.
 
+The preview, well and Finish control form one group anchored to the bottom of
+the available play area, with a 12-pixel inner bottom margin in addition to the
+page padding. Resizing keeps the supply above the well and the footer in reach.
+
 At rest, exact-word partners share a painted color, including partners in the
 upcoming preview. Other pairs use different hues. Picking up a chunk updates
 the color hints: every target that completes a current-age word in the dragged
@@ -128,6 +132,13 @@ a warm rim. Tap that word to collect it for 50 coins per original chunk: a
 two-part word earns 100 coins, and a three-part word earns 150. Merging alone
 does not grant coins or mastery. Failed coin saves preserve the word for retry;
 repeated input cannot award the same collection twice.
+
+An accepted word tap also presents its picture and spelling in a brief upper
+overlay. The picture rises with a soft glow and painted glints, peaking with
+the existing collection pop at 180 ms, while the word's recorded pronunciation
+plays once. The overlay never blocks the board. Rapid collections replace it
+with the newest word; it fades after a reading hold and clears on pause, exit
+or round completion. Reduced motion keeps the picture and spelling steady.
 
 Chest fragments remain attached when either jelly is merged. Two marked pieces
 produce two visible markers, and collecting the complete word banks all of its

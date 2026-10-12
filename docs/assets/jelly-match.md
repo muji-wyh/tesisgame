@@ -418,3 +418,23 @@ live resize, Windows WebKit retains its previously documented
 captures can be blank while the raw canvas renders correctly. Both captures are
 retained; the raw canvas and touch/keyboard interactions pass at 390 x 844 and
 844 x 390. This does not establish physical iPhone rotation behavior.
+
+## Jelly Words picture reveal
+
+The upper picture-and-spelling reveal reuses the exact current-age word texture
+through `WordArt`, including its existing animation and recorded pronunciation.
+Those acquired and integrated vocabulary sources remain catalogued in
+`docs/assets/word-library.json` and `data/word-motion.json`; no new word artwork
+is synthesized.
+
+The short light accent uses the already integrated
+`assets/chests/particles/portal_glow.png` from Bobardo's Modern 2D Animated Chests.
+The painted glints reuse `assets/chests/milestone/sparkle.png` from Toon FX 1.52,
+by Kenneth Foldal Moe / Archanor VFX, under the Standard Unity Asset Store EULA.
+The original sources, acquisition records and texture hashes are preserved in
+`assets/chests/SOURCE.txt` and [Jelly fragments](jelly-fragments.md). These are
+static production textures animated by the reveal; no new assets are acquired.
+
+The reveal peaks at the existing 180 ms collection-pop boundary. The recorded
+word and unchanged `clear.wav` cue retain their normal playback, speech ducking,
+mute and interruption rules; no second pronunciation or chest reward cue is added.

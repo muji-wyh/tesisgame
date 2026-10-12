@@ -7,6 +7,7 @@ signal collected(event_id: String, word: Dictionary, amount: int, fragments: int
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const WordTile = preload("res://scripts/word_jelly_tile.gd")
 const Palette = preload("res://scripts/word_jelly_palette.gd")
+const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
 
 var credit_collection: Callable:
 	set(value):
@@ -20,6 +21,7 @@ var _palette := Palette.new()
 var _palette_indices: Dictionary = {}
 var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
+var _word_reveal: WordReveal
 
 func _init() -> void:
 	super()
@@ -47,8 +49,12 @@ func _init() -> void:
 		_preview_origins.append(Vector2.ZERO)
 	drop_button.set("accessibility_name", "Drop the next word parts")
 	drop_button.tooltip_text = "Drop the next word parts"
+	_word_reveal = WordReveal.new()
+	add_child(_word_reveal)
 
 func stop() -> void:
+	if _word_reveal != null:
+		_word_reveal.reset()
 	super.stop()
 	_collection_origins.clear()
 	_rest_rects.clear()
@@ -58,6 +64,24 @@ func stop() -> void:
 	_palette_indices.clear()
 	_palette_cache.clear()
 	_arrival_origins.clear()
+
+func pause(value: bool = true) -> void:
+	if value and _word_reveal != null:
+		_word_reveal.reset()
+	super.pause(value)
+
+func set_reduced_motion(value: bool) -> void:
+	_word_reveal.set_reduced_motion(value)
+	super.set_reduced_motion(value)
+
+func _visibility_changed() -> void:
+	if not is_visible_in_tree() and _word_reveal != null:
+		_word_reveal.reset()
+	super._visibility_changed()
+
+func _finished(result: Dictionary) -> void:
+	_word_reveal.reset()
+	super._finished(result)
 
 func cancel_input() -> void:
 	_keyboard_source = -1
@@ -193,7 +217,8 @@ func _collect(id: int) -> void:
 		return
 	var word: Dictionary = _cell(id).word.duplicate(true)
 	var origin: Vector2 = _tiles[id].get_global_rect().get_center()
-	if not game.collect(id):
+	var generation: int = _generation
+	if not game.collect(id) or generation != _generation or not _can_play():
 		return
 	if _keyboard_source == id:
 		_keyboard_source = -1
@@ -201,6 +226,8 @@ func _collect(id: int) -> void:
 	for fusion: Dictionary in game.fusions:
 		if str(fusion.operation) == "collect" and int(fusion.a_id) == id:
 			_collection_origins[str(fusion.attempt_id)] = origin
+	_word_reveal.set_reduced_motion(reduced_motion)
+	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD))
 	word_requested.emit(word)
 	_refresh_controls()
 	_refresh_fusion()
@@ -432,6 +459,8 @@ func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
 
 func _process(delta: float) -> void:
+	if _can_play() and delta <= 0.5:
+		_word_reveal.advance(delta)
 	var generation: int = _generation
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:
@@ -644,6 +673,7 @@ func _refresh_hud() -> void:
 		_notice.show()
 
 func result_reveal() -> void:
+	_word_reveal.reset()
 	super.result_reveal()
 	_result_caption.text = "%d words · %d coins" % [game.cleared_pairs, game.collected_coins]
 	_publish()
@@ -662,11 +692,14 @@ func _layout() -> void:
 	var wide: bool = size.x > size.y * 1.18 or size.y * s < 340.0
 	_compact_hud = wide
 	var edge: float = 8.0 / s
+	var bottom_padding: float = 12.0 / s
 	var side: float = minf(144.0 / s, size.x * 0.18) if wide else 0.0
 	var feed_height: float = 64.0 / s if wide else 78.0 / s
-	var available: Vector2 = Vector2(size.x - 2.0 * (edge + side), size.y - (feed_height + edge if wide else 136.0 / s))
+	var footer_height: float = 0.0 if wide else 44.0 / s + edge
+	var available: Vector2 = Vector2(size.x - 2.0 * (edge + side), size.y - feed_height - footer_height - bottom_padding)
 	_pitch = maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, available.y / WordModel.ROWS), 78.0 / s))
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var group_top: float = maxf(0.0, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
+	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -680,7 +713,7 @@ func _layout() -> void:
 	_falling_layer.size = _board.size
 	var hud_width: float = minf(128.0 / s, maxf(32.0 / s, _board.position.x - edge * 2.0)) if wide else 64.0 / s
 	var meter_edge: float = minf(60.0 / s, hud_width)
-	_loot_meter.position = Vector2(maxf(edge, _board.position.x - hud_width - edge), _board.position.y + edge) if wide else Vector2(edge, 0)
+	_loot_meter.position = Vector2(maxf(edge, _board.position.x - hud_width - edge), _board.position.y + edge) if wide else Vector2(edge, group_top)
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
@@ -692,7 +725,7 @@ func _layout() -> void:
 	var columns: int = WordModel.UPCOMING_COUNT
 	var padding: float = 5.0 / s
 	var preview_size: float = minf(48.0 / s, (preview_width - padding * 2.0) / columns)
-	_preview_rect = Rect2(Vector2((size.x - preview_width) * 0.5, 0) if wide else Vector2(80.0 / s, 0), Vector2(preview_width, preview_size + padding * 2.0))
+	_preview_rect = Rect2(Vector2((size.x - preview_width) * 0.5, group_top) if wide else Vector2(80.0 / s, group_top), Vector2(preview_width, preview_size + padding * 2.0))
 	drop_button.position = _preview_rect.position
 	drop_button.size = _preview_rect.size
 	_style_drop_button()
@@ -700,7 +733,7 @@ func _layout() -> void:
 		_preview_tiles[index].size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * preview_width / columns - preview_size * 0.5, padding)
 	_style_finish_button()
-	finish_button.size = Vector2(minf(108.0 / s, hud_width) if wide else 108.0 / s, 42.0 / s)
+	finish_button.size = Vector2(minf(108.0 / s, hud_width) if wide else 108.0 / s, 44.0 / s)
 	finish_button.position = Vector2(_loot_meter.position.x, _board.end.y - finish_button.size.y) if wide else Vector2(_board.end.x - finish_button.size.x, _board.end.y + edge)
 	_notice.position = Vector2(_board.position.x, _board.end.y + edge)
 	_notice.size = Vector2(maxf(0, _board.size.x - finish_button.size.x - edge), 42.0 / s)
@@ -709,6 +742,8 @@ func _layout() -> void:
 	_result.size = size
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
+	if _word_reveal != null:
+		_word_reveal.configure_layout(Rect2(Vector2(edge, edge), Vector2(size.x - edge * 2.0, minf(180.0 / s, size.y * 0.36))), s)
 	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
@@ -722,6 +757,8 @@ func snapshot() -> Dictionary:
 	state["columns"] = WordModel.COLUMNS
 	state["rows"] = WordModel.ROWS
 	state["board_ratio"] = float(WordModel.COLUMNS) / WordModel.ROWS
+	state["playfield_rect"] = _rect(get_global_rect())
+	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
 	state.drag.selected = _keyboard_source
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]

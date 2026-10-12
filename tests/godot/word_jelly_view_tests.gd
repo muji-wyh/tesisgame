@@ -3,6 +3,7 @@ extends SceneTree
 const Jelly = preload("res://scripts/word_jelly.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Data = preload("res://scripts/game_data.gd")
+const Style = preload("res://scripts/ui_style.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -57,6 +58,8 @@ func _run() -> void:
 	_check_edge_drag(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
+	_check_word_reveal(view)
+	_check_word_reveal_lifecycle(view)
 	_check_collection_stack_fall(view)
 	_check_release_after_support_collection(view)
 	_check_coarse_frame_collection_landing(view)
@@ -138,7 +141,7 @@ func _merged_id(view) -> int:
 
 
 func _check_opening_and_bounds(view) -> void:
-	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700), Vector2(568, 260)]:
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(768, 1024), Vector2(390, 700), Vector2(568, 260)]:
 		view.size = dimensions
 		_reset(view)
 		var state: Dictionary = view.snapshot()
@@ -152,6 +155,12 @@ func _check_opening_and_bounds(view) -> void:
 				"all six upcoming bodies form one horizontal row above the well")
 		check(view._board.position.x >= 0 and view._board.position.y >= 0 and view._board.end.x <= dimensions.x + 0.1
 			and view._board.end.y <= dimensions.y + 0.1, "board fits portrait and landscape bounds")
+		var s: float = Style.ui_scale(view)
+		var bottom: float = view._board.end.y if view._compact_hud else view.finish_button.get_rect().end.y
+		check(is_equal_approx(bottom, dimensions.y - 12.0 / s),
+			"game group at %s ends above twelve-pixel padding: actual %.3f, expected %.3f" % [dimensions, bottom, dimensions.y - 12.0 / s])
+		check(view._preview_rect.position.y >= 0 and view.finish_button.get_rect().end.y <= dimensions.y,
+			"bottom alignment preserves room for the complete preview and finish control")
 		for tile: Dictionary in state.tiles:
 			check(tile.settled and tile.visible and not tile.picture_visible, "opening root shows text without a word picture")
 			check(view._tiles[int(tile.id)]._label.text == tile.text, "root label matches its part")
@@ -219,6 +228,7 @@ func _check_root_tap(view) -> void:
 	view._release(center)
 	_advance(view, 0.5)
 	check(heard.is_empty() and payouts.is_empty() and attempts.is_empty(), "tapping a root neither speaks a full word nor collects reward")
+	check(not view.snapshot().word_reveal.visible, "tapping a standalone root never reveals a completed word")
 	check(view.game.cells.size() == 2 and view.game.fusions.is_empty(), "root tap does not consume either jelly")
 
 
@@ -270,6 +280,106 @@ func _check_collect_and_fragments(view) -> void:
 	check(payouts[0].amount == 100 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
 		"coin and fragment flight origin matches the tapped merged jelly")
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
+
+
+func _snapshot_rect(value: Array) -> Rect2:
+	return Rect2(float(value[0]), float(value[1]), float(value[2]), float(value[3]))
+
+
+func _check_reveal_content(view, expected: Dictionary) -> void:
+	var reveal: Dictionary = view.snapshot().word_reveal
+	check(reveal.visible and reveal.word_id == expected.id and reveal.word.id == expected.id,
+		"collecting a completed word reveals that word above the board")
+	check(reveal.spelling == expected.text and str(reveal.picture).trim_prefix("res://") == expected.image,
+		"the reveal uses the collected word's complete spelling and production image")
+	check(reveal.content_alpha > 0.95 and view._word_reveal._picture.texture != null,
+		"the reveal reaches a readable opaque hold with real picture art")
+	var panel: Rect2 = _snapshot_rect(reveal.rect)
+	var picture: Rect2 = _snapshot_rect(reveal.picture_rect)
+	var spelling: Rect2 = _snapshot_rect(reveal.spelling_rect)
+	check(view.get_global_rect().encloses(panel) and panel.end.y <= view.get_global_rect().position.y + view.size.y * 0.42,
+		"the reveal remains near the top and inside the available playfield")
+	check(panel.encloses(picture) and panel.encloses(spelling) and picture.end.x < spelling.position.x,
+		"picture and spelling have separate readable space inside the reveal")
+	var label: Label = view._word_reveal._spelling
+	var font: Font = label.get_theme_font("font")
+	var pixels: int = label.get_theme_font_size("font_size")
+	check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x <= label.size.x + 0.1,
+		"the complete word spelling fits without truncation")
+	check(view._word_reveal.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"the brief reading layer leaves gameplay input available")
+
+
+func _check_word_reveal(view) -> void:
+	for reduced: bool in [false, true]:
+		for dimensions: Vector2 in [Vector2(1000, 720), Vector2(768, 1024), Vector2(390, 700), Vector2(568, 260)]:
+			view.size = dimensions
+			_reset(view, reduced)
+			var ids: Array[int] = _install(view, ["cat", "caterpillar"], [1, 1], [2, 2])
+			for id: int in ids:
+				view._cell(id).row = Model.ROWS - 1
+			view._rest_rects.clear()
+			view._reflow.clear()
+			view._sync_positions()
+			check(not view.snapshot().word_reveal.visible, "a new round starts without a previous word reveal")
+			var point: Vector2 = _center(view, ids[0])
+			view._press(7, point)
+			view._release(point)
+			_advance(view, 0.20)
+			_check_reveal_content(view, words[0])
+			var first: Dictionary = view.snapshot().word_reveal
+			view._activate(ids[0])
+			check(is_equal_approx(view.snapshot().word_reveal.elapsed, first.elapsed) and heard.size() == 1,
+				"duplicate activation cannot restart the reveal or repeat pronunciation")
+			check(cues.count("pop") == 1, "the reveal peak shares the one existing disappearance sound")
+			if reduced:
+				check(view._word_reveal._visual.scale == Vector2.ONE and not view._word_reveal._aura.visible,
+					"reduced motion preserves a steady readable picture and spelling")
+			_advance(view, Model.COLLECT_SECONDS)
+			view._activate(ids[1])
+			_advance(view, 0.20)
+			_check_reveal_content(view, words[1])
+			check(view.snapshot().word_reveal.elapsed < first.elapsed + 0.01 and heard.size() == 2,
+				"another keyboard collection immediately replaces the first word instead of queuing stale overlays")
+			_advance(view, Model.COLLECT_SECONDS)
+			check(payouts.size() == 2 and view.game.collected_coins == 200 and cues.count("pop") == 2,
+				"rapid different-word reveals preserve exactly one reward and one disappearance cue per collection")
+			_advance(view, float(view.snapshot().word_reveal.duration))
+			check(not view.snapshot().word_reveal.visible and heard.size() == 2 and payouts.size() == 2,
+				"the reveal clears itself without replaying a word or collecting another reward")
+	view.size = Vector2(1000, 720)
+
+
+func _check_word_reveal_lifecycle(view) -> void:
+	for action: String in ["pause", "hide", "finish", "stop", "configure"]:
+		_reset(view)
+		var ids: Array[int] = _install(view, ["cat"], [], [2])
+		view._activate(ids[0])
+		_advance(view, 0.2)
+		check(view.snapshot().word_reveal.visible, "lifecycle fixture begins with a visible collected word")
+		match action:
+			"pause": view.pause(true)
+			"hide": view.hide()
+			"finish": view._finish_round()
+			"stop": view.stop()
+			"configure": view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
+		check(not view.snapshot().word_reveal.visible, action + " clears the temporary word reveal immediately")
+		view.show()
+		view.pause(false)
+		_advance(view, 0.1)
+		check(not view.snapshot().word_reveal.visible, action + " never restores a stale collected-word overlay")
+	_reset(view)
+	var ids: Array[int] = _install(view, ["cat"], [], [2])
+	view._activate(ids[0])
+	_advance(view, 0.2)
+	var elapsed: float = float(view.snapshot().word_reveal.elapsed)
+	view.interaction_allowed = func() -> bool: return false
+	_advance(view, 0.4)
+	check(is_equal_approx(float(view.snapshot().word_reveal.elapsed), elapsed),
+		"an external interaction gate cannot advance the reading beat")
+	view.interaction_allowed = Callable()
+	_advance(view, 0.1)
+	check(float(view.snapshot().word_reveal.elapsed) > elapsed, "the reading beat resumes only with allowed gameplay")
 
 
 func _check_collection_stack_fall(view) -> void:
@@ -726,6 +836,7 @@ func _check_split_pointer_recovery(view) -> void:
 				"the liquid separation artwork follows the selected motion preference")
 			check(heard.is_empty() and payouts.is_empty() and attempts.is_empty() and cues.count("pop") == 0,
 				"splitting never speaks a word, records an answer, or plays the collection disappearance")
+			check(not view.snapshot().word_reveal.visible, "splitting an invalid word never opens the collected-word reveal")
 			_advance(view, Model.SPLIT_SECONDS * 0.5 - 0.001)
 			var final_rects: Dictionary = {}
 			for index in range(2):
