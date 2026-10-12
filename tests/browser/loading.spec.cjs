@@ -188,10 +188,10 @@ test('loading keeps one visible progress readout beneath its introduction', asyn
   await expect(page.locator('#loading-hint')).toBeVisible();
 });
 
-for (const reduced of [true, false]) test(`loading respects saved sound and motion choices with reduced motion ${reduced}`, async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: reduced ? 'no-preference' : 'reduce' });
+for (const reduced of [true, false]) test(`loading uses system motion ${reduced} despite a legacy saved override`, async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
   await page.addInitScript(value => localStorage.setItem('pipAndWords.presentation.v1',
-    JSON.stringify({ muted: true, reduced_motion: value })), reduced);
+    JSON.stringify({ muted: true, reduced_motion: !value })), reduced);
   await observeLoadingAudio(page);
   await controlPipMedia(page);
   await progressShell(page);
@@ -203,8 +203,10 @@ for (const reduced of [true, false]) test(`loading respects saved sound and moti
   await reactionPose(page);
   expect(await page.evaluate(() => loadingPipMediaProbe.calls.length)).toBe(0);
   expect(await page.evaluate(() => loadingAudioProbe.notes.length)).toBe(0);
-  await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
-  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', String(reduced));
+  await page.emulateMedia({ reducedMotion: reduced ? 'no-preference' : 'reduce' });
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', String(!reduced));
+  if (reduced) await expectAutomaticDance(page);
+  else await expect(duck).not.toHaveAttribute('data-activity', 'dancing');
 });
 
 async function progressShell(page, engineScript = `window.Engine = class {

@@ -63,6 +63,8 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
     const errors = await openHome(page, { reducedMotion });
     expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryClose'),
       'The home screen has no dismissal that bypasses choosing a game').toBe(false);
+    expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryMotion'),
+      'Home has no manual motion control').toBe(false);
     await page.keyboard.press('Escape');
     await rendered(page);
     expect((await metrics(page)).library.visible, 'Escape keeps the player at home').toBe(true);
@@ -98,7 +100,11 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       if (browserName === 'chromium' && reducedMotion === 'reduce' && size.width === 390 && size.height === 420) {
         await swipeHome(page, testInfo);
       }
-      for (const name of [...THEME_NAMES, ...names, 'HomeCollection', 'LibrarySound', 'LibraryMotion']) {
+      const footer = (await metrics(page)).library.controls.filter(item => !THEME_NAMES.includes(item.name) && !item.name.startsWith('Mode_'));
+      expect(footer.map(item => item.name), 'The Home footer contains only the word library and sound controls')
+        .toEqual(['HomeCollection', 'LibrarySound']);
+      expect(Math.abs(footer[0].rect[2] - footer[1].rect[2]), 'The two footer controls share the width equally').toBeLessThanOrEqual(1);
+      for (const name of [...THEME_NAMES, ...names, 'HomeCollection', 'LibrarySound']) {
         const control = await libraryControl(page, name), bounds = await metrics(page);
         const [x, y, w, h] = control.rect;
         expect(control.disabled, `${name} is enabled`).toBe(false);
@@ -241,22 +247,40 @@ test('returning home releases the microphone until Voice Pop is selected again',
   expect(errors).toEqual([]);
 });
 
-test('home sound and explicit motion choices persist while system motion remains the default', async ({ page }) => {
+test('home keeps sound and theme choices while motion follows the system and ignores old saved overrides', async ({ page }) => {
   test.setTimeout(180000);
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem('legacyMotionSeeded')) return;
+    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: false, reduced_motion: false, preferred_theme: 'spring' }));
+    sessionStorage.setItem('legacyMotionSeeded', 'true');
+  });
   const errors = await openHome(page);
-  const preferredTheme = await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme);
-  await activateLibraryControl(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, preferred_theme: preferredTheme });
-  await activateLibraryControl(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: false, preferred_theme: preferredTheme });
-  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
-  await page.reload();
-  await enterGame(page, { home: true });
-  const reloadedTheme = await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).preferred_theme);
-  await activateLibraryControl(page, 'LibraryMotion');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: true, reduced_motion: true, preferred_theme: reloadedTheme });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'true');
+  expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryMotion')).toBe(false);
+  await chooseTheme(page, 4);
   await activateLibraryControl(page, 'LibrarySound');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, reduced_motion: true, preferred_theme: reloadedTheme });
+  const savedPreferences = { muted: true, preferred_theme: 'ocean' };
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual(savedPreferences);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'true');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'))),
+    'System motion changes do not become saved manual overrides').toEqual(savedPreferences);
+  await page.evaluate(() => {
+    const saved = JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'));
+    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ ...saved, reduced_motion: true }));
+  });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#loading-theme-options button[data-theme="ocean"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#loading-theme-options button[data-theme="ocean"]').focus();
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
+  await enterGame(page, { home: true });
+  expect((await metrics(page)).library.theme_id, 'The selected Home theme survives reload').toBe('ocean');
+  expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryMotion')).toBe(false);
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
+  await activateLibraryControl(page, 'LibrarySound');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, preferred_theme: 'ocean' });
   expect(errors).toEqual([]);
 });

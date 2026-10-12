@@ -7,7 +7,7 @@ for (const age of [0, 7, 12]) test(`Age ${age} Pip performs its own two quiet ac
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(age => {
     localStorage.setItem('growWithPip.growth.v1', `[growth]\nversion=3\nlevel=0\nage=${age}\nstreaks={}\nmastered_words=[]\nreceipts=[]\n`);
-    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: true, reduced_motion: false, preferred_theme: 'spring' }));
+    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: true, preferred_theme: 'spring' }));
   }, age);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   const read = () => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.view).pip);

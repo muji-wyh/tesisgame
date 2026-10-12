@@ -405,7 +405,7 @@
         Your progress stays on this device without a player name or profile. An unsaved progress message lets you retry a failed save.
         Eight worlds offer Spring, Summer, Autumn, Winter, Ocean, Space, Jungle, and Candy. Your chosen world is remembered.
         When you earn a chest, hold until the lid opens and the light flashes, then you can let go while the animation finishes and gift progress is saved. Release before the lid opens to cancel and start again. Reduced motion uses a shorter hold.
-        Adjust sound and motion on Home. Open your word library from Home to explore words and Pip's growth. Motion follows your device's reduced-motion setting until you choose a preference.</p>
+        Adjust sound on Home. Open your word library from Home to explore words and Pip's growth. Motion follows your device's reduced-motion setting.</p>
       <p id="game-status" class="sr-only" role="status" aria-live="polite"></p>
       <div id="chest-progress" class="sr-only" role="progressbar" aria-label="Treasure chest unlock progress"
         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden></div>
@@ -537,8 +537,7 @@
           return value && typeof value === 'object' ? value : {};
         } catch { return {}; }
       })();
-      const loadingMotionReduced = () => typeof loadingPreferences.reduced_motion === 'boolean'
-        ? loadingPreferences.reduced_motion : motion.matches;
+      const loadingMotionReduced = () => motion.matches;
       document.documentElement.dataset.reducedMotion = String(loadingMotionReduced());
       function createInterfaceClickSound() {
         let player = null;

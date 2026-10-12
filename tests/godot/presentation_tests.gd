@@ -38,13 +38,28 @@ func _run() -> void:
 	preferences.load_preferences(true)
 	check(preferences.reduced_motion and not preferences.muted, "First visit respects the system motion preference")
 	preferences.muted = true
+	preferences.preferred_theme = "candy"
 	preferences.reduced_motion = false
-	preferences.has_motion_override = true
 	check(preferences.save_preferences(), "Presentation choices save independently of game progress")
 	var restored := Preferences.new()
 	restored.path = preferences.path
 	restored.load_preferences(true)
-	check(restored.muted and not restored.reduced_motion, "Explicit saved choices override defaults after restart")
+	check(restored.muted and restored.preferred_theme == "candy" and restored.reduced_motion,
+		"Theme and sound survive restart while motion uses the current system preference")
+	for legacy_reduced in [true, false]:
+		var legacy := ConfigFile.new()
+		legacy.set_value("presentation", "preferred_theme", "space")
+		legacy.set_value("presentation", "muted", true)
+		legacy.set_value("presentation", "reduced_motion", legacy_reduced)
+		check(legacy.save(preferences.path) == OK, "Legacy native settings are available for migration")
+		restored.load_preferences(not legacy_reduced)
+		check(restored.reduced_motion == not legacy_reduced and restored.muted and restored.preferred_theme == "space",
+			"Legacy native motion overrides cannot replace the current system preference")
+		check(restored.save_preferences(), "Legacy presentation settings can be saved normally")
+		var saved := ConfigFile.new()
+		check(saved.load(preferences.path) == OK and not saved.has_section_key("presentation", "reduced_motion")
+			and saved.get_value("presentation", "preferred_theme") == "space" and saved.get_value("presentation", "muted") == true,
+			"Native saves retain theme and sound while dropping the retired motion setting")
 	restored.path = directory + "/missing/settings.cfg"
 	check(not restored.save_preferences(), "Unwritable preferences report failure without pretending to persist")
 	check(Style.HEADING_FONT.variation_opentype.get(2003265652) == 850.0, "Godot receives the numeric OpenType weight axis")
@@ -62,7 +77,7 @@ func _run() -> void:
 		for frame in range(8):
 			await process_frame
 		check(library.size.x <= dimensions.x - 23 and library.size.y <= dimensions.y - 23, "Library fits %s: actual %s" % [dimensions, library.size])
-		for button in library.buttons + library.theme_buttons + [library.sound_button, library.motion_button, library.collection_button]:
+		for button in library.buttons + library.theme_buttons + [library.sound_button, library.collection_button]:
 			library.scroll.ensure_control_visible(button)
 			for frame in range(4):
 				await process_frame
@@ -78,21 +93,27 @@ func _test_host_preferences() -> void:
 	var storage := Storage.new()
 	var preferences := Preferences.new(storage)
 	preferences.load_preferences(true)
-	check(preferences.reduced_motion and not preferences.has_motion_override,
+	check(preferences.reduced_motion,
 		"Missing browser preferences keep the system motion default")
 	preferences.preferred_theme = "candy"
 	preferences.muted = true
 	check(preferences.save_preferences(), "A verified host write reports successful preference persistence")
 	var decoded: Dictionary = JSON.parse_string(storage.text)
 	check(decoded.preferred_theme == "candy" and decoded.muted and not decoded.has("reduced_motion"),
-		"Browser saves preserve the theme and mute state without inventing a motion override")
-	preferences.reduced_motion = false
-	preferences.has_motion_override = true
-	check(preferences.save_preferences(), "Explicit browser motion preference can be saved")
+		"Browser saves preserve only the theme and mute state")
 	var restored := Preferences.new(storage)
 	restored.load_preferences(true)
-	check(restored.preferred_theme == "candy" and restored.muted and restored.has_motion_override and not restored.reduced_motion,
-		"Theme, mute and explicit motion preferences survive a host-backed reload")
+	check(restored.preferred_theme == "candy" and restored.muted and restored.reduced_motion,
+		"Theme and mute survive a host-backed reload while motion keeps the system default")
+	for legacy_reduced in [true, false]:
+		storage.text = JSON.stringify({"preferred_theme": "candy", "muted": true, "reduced_motion": legacy_reduced})
+		restored.load_preferences(not legacy_reduced)
+		check(restored.reduced_motion == not legacy_reduced and restored.preferred_theme == "candy" and restored.muted,
+			"Legacy browser motion overrides cannot replace the current system preference")
+		check(restored.save_preferences(), "Legacy browser settings can be saved normally")
+		decoded = JSON.parse_string(storage.text)
+		check(decoded == {"preferred_theme": "candy", "muted": true},
+			"Browser saves discard the retired motion setting while preserving theme and sound")
 	var previous: String = storage.text
 	storage.writable = false
 	restored.preferred_theme = "space"
@@ -103,5 +124,5 @@ func _test_host_preferences() -> void:
 	storage.readable = false
 	var unavailable := Preferences.new(storage)
 	unavailable.load_preferences(true)
-	check(unavailable.reduced_motion and not unavailable.has_motion_override and unavailable.preferred_theme.is_empty(),
-		"Unreadable browser preferences use presentation defaults without inventing an override")
+	check(unavailable.reduced_motion and unavailable.preferred_theme.is_empty(),
+		"Unreadable browser preferences retain the system motion default")

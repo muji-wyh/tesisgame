@@ -35,6 +35,10 @@ func _run() -> void:
 	check(not library.buttons.any(func(button: Button) -> bool: return button.button_pressed),
 		"A first visit to Home does not claim a current game")
 	check(library.find_child("LibraryClose", true, false) == null, "Home has no menu dismissal button")
+	check(library.find_child("LibraryMotion", true, false) == null
+		and not library.snapshot().controls.any(func(control: Dictionary) -> bool: return control.name == "LibraryMotion"),
+		"Home has no manual motion control in its navigation or snapshot")
+	check(library._footer.get_child_count() == 2, "Home keeps only the word library and sound controls in its footer")
 	library.configure("word_jelly", false, true)
 	check(library.buttons.back().button_pressed, "Home identifies the resumable Jelly Words game")
 	library.pip.set_idle_paused(true)
@@ -82,7 +86,9 @@ func _run() -> void:
 				"%s: keyboard focus reveals %s" % [dimensions, button.name])
 			button.pressed.emit()
 			check(chosen == tile.entry.id, "Each Home card requests its own game: " + str(tile.entry.id))
-		for button: Button in [library.sound_button, library.motion_button, library.collection_button]:
+		check(absf(library.sound_button.size.x - library.collection_button.size.x) <= 1.0,
+			"%s: both Home footer controls share the available width equally" % dimensions)
+		for button: Button in [library.collection_button, library.sound_button]:
 			button.grab_focus()
 			await settle()
 			check(bounds.grow(1).encloses(button.get_global_rect()) and button.size.y >= 43,

@@ -67,7 +67,7 @@ test('presentation choices round-trip through the existing key without replacing
   const records = new Map([[key, 'learning progress'], ['wordBuddies.playroom', 'legacy theme record']]);
   const bridge = presentationHost({ getItem: name => records.get(name) ?? null, setItem: (name, value) => records.set(name, value) });
   assert.equal(bridge.presentationState(), null);
-  const text = JSON.stringify({ muted: true, preferred_theme: 'candy', reduced_motion: false });
+  const text = JSON.stringify({ muted: true, preferred_theme: 'candy' });
   assert.equal(bridge.savePresentationState(text), true);
   assert.equal(bridge.presentationState(), text);
   assert.equal(records.get('pipAndWords.presentation.v1'), text);

@@ -3,7 +3,6 @@ extends PanelContainer
 
 signal mode_requested(id: String)
 signal sound_toggled
-signal motion_toggled
 signal collection_requested
 signal theme_requested(id: String)
 
@@ -28,7 +27,6 @@ var grid: GridContainer
 var buttons: Array[Button] = []
 var theme_buttons: Array[Button] = []
 var sound_button: Button
-var motion_button: Button
 var collection_button: Button
 var scroll: ResultScroll
 var pip: DuckMascot
@@ -50,7 +48,6 @@ var _tiles: Array[Dictionary] = []
 var _current := ""
 var _factor := 1.0
 var _muted := false
-var _reduced := false
 var _available := Vector2(1280, 800)
 
 
@@ -115,12 +112,7 @@ func _init() -> void:
 	sound_button.name = "LibrarySound"
 	sound_button.pressed.connect(func() -> void: sound_toggled.emit())
 	_footer.add_child(sound_button)
-	motion_button = Button.new()
-	UiClick.bind_button(motion_button)
-	motion_button.name = "LibraryMotion"
-	motion_button.pressed.connect(func() -> void: motion_toggled.emit())
-	_footer.add_child(motion_button)
-	for button: Button in [collection_button, sound_button, motion_button]:
+	for button: Button in [collection_button, sound_button]:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_credit = Style.label("Pip: original game art · Twemoji: CC BY 4.0", 10)
 	_credit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -262,7 +254,6 @@ func _portrait(texture: Texture2D) -> AtlasTexture:
 func configure(current: String, muted: bool, reduced: bool) -> void:
 	_current = current
 	_muted = muted
-	_reduced = reduced
 	pip.set_reduced_motion(reduced)
 	coin_counter.reduced_motion = reduced
 	_style_footer()
@@ -345,15 +336,13 @@ func _style_footer() -> void:
 	if collection_button == null:
 		return
 	var narrow: bool = _available.x * _factor < 440
-	collection_button.text = "Words" if narrow else "Word library"
+	collection_button.text = "Word library"
 	sound_button.text = "Sound: off" if _muted else "Sound: on"
-	motion_button.text = ("Motion: less" if narrow else "Motion: reduced") if _reduced else "Motion: full"
 	sound_button.set("accessibility_name", "Turn sound on" if _muted else "Turn sound off")
-	motion_button.set("accessibility_name", "Use full motion" if _reduced else "Use reduced motion")
-	for button: Button in [collection_button, sound_button, motion_button]:
+	for button: Button in [collection_button, sound_button]:
 		Style.action_button(button, Style.GOOD)
 		button.custom_minimum_size = Vector2(0, 44.0 / _factor)
-		button.add_theme_font_size_override("font_size", ceili((11.0 if narrow else 13.0) / _factor))
+		button.add_theme_font_size_override("font_size", ceili(13.0 / _factor))
 		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 			var surface: StyleBox = button.get_theme_stylebox(state)
 			surface.content_margin_left = (6.0 if narrow else 12.0) / _factor
@@ -428,7 +417,7 @@ func _layout_tile(tile: Dictionary) -> void:
 func snapshot() -> Dictionary:
 	var controls: Array = []
 	var viewport: Rect2 = scroll.get_global_rect()
-	for button: Button in theme_buttons + buttons + [collection_button, sound_button, motion_button]:
+	for button: Button in theme_buttons + buttons + [collection_button, sound_button]:
 		var rect: Rect2 = button.get_global_rect()
 		controls.append({"name": str(button.name), "rect": _rect_values(rect), "disabled": button.disabled,
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),

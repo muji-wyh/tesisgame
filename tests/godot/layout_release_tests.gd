@@ -26,8 +26,6 @@ func _run() -> void:
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
 	app._presentation.muted = true
-	app._presentation.reduced_motion = true
-	app._presentation.has_motion_override = true
 	check(app._presentation.save_preferences(), "Layout release uses isolated presentation preferences")
 	root.size = Vector2i(679, 900)
 	root.add_child(app)

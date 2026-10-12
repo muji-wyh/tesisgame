@@ -87,8 +87,6 @@ func make_app(mode: String, storage = null):
 	app.medal_progress = Progress.new(directory + "/medals.cfg", directory + "/legacy.cfg", host)
 	app._presentation.path = directory + "/presentation.cfg"
 	app._presentation.muted = true
-	app._presentation.reduced_motion = false
-	app._presentation.has_motion_override = true
 	check(app._presentation.save_preferences(), "Save muted presentation fixture")
 	app._mode_id = mode
 	check(app.medal_progress.load_progress(), "Load isolated medal ledger")

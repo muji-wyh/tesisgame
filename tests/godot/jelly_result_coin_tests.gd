@@ -67,9 +67,7 @@ func make_app(storage = null):
 	app.medal_progress = Progress.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
 	app._presentation.muted = true
-	app._presentation.reduced_motion = false
-	app._presentation.has_motion_override = true
-	check(app._presentation.save_preferences(), "The result fixture saves muted normal-motion preferences")
+	check(app._presentation.save_preferences(), "The result fixture saves muted presentation preferences")
 	app._mode_id = "jelly"
 	root.add_child(app)
 	await settle()

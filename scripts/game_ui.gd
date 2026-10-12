@@ -919,7 +919,6 @@ func _build_mode_menu() -> void:
 	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
 	_mode_panel.collection_requested.connect(_show_collection)
 	_mode_panel.sound_toggled.connect(_toggle_library_sound)
-	_mode_panel.motion_toggled.connect(_toggle_library_motion)
 
 
 func _toggle_library_sound() -> void:
@@ -932,21 +931,12 @@ func _toggle_library_sound() -> void:
 	_save_presentation()
 
 
-func _toggle_library_motion() -> void:
-	if not _mode_menu_open():
-		return
-	set_reduced_motion(not reduced_motion)
-	_presentation.reduced_motion = reduced_motion
-	_presentation.has_motion_override = true
-	_save_presentation()
-
-
 func _save_presentation() -> void:
 	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted, reduced_motion)
 	if _host != null:
 		_host.presentationSettings(reduced_motion, audio.muted)
 	var saved: bool = _presentation.save_preferences()
-	_announce_status(("Sound off. " if audio.muted else "Sound on. ") + ("Reduced motion." if reduced_motion else "Full motion.") + ("" if saved else " Preferences could not be saved on this device. Your choices work for this visit."))
+	_announce_status(("Sound off." if audio.muted else "Sound on.") + ("" if saved else " Preferences could not be saved on this device. Your choices work for this visit."))
 
 
 func _mode_menu_open() -> bool:
@@ -3656,8 +3646,7 @@ func _connect_browser() -> void:
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
 	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		if not _presentation.has_motion_override:
-			set_reduced_motion(bool(arguments[0])))
+		set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
 		_memory.release_peek_pointer(int(arguments[0]), bool(arguments[1]))

@@ -145,7 +145,7 @@ test('accessible help describes the current controls rather than the removed mot
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
   assert.ok(help, 'The canvas needs accessible gameplay instructions.');
-  assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button/i);
+  assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button|sound and motion on Home|until you choose a preference/i);
   assert.match(help, /device.*reduced-motion/i);
   assert.match(help, /Keep trying until every pair is matched/);
   assert.doesNotMatch(shell, /speech-successes|speech-mistakes|speech-score|roundProgress|Three mistakes/);

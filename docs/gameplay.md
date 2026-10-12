@@ -179,8 +179,8 @@ the mode heading opens the game library. Escape/controller Back closes an
 overlay and returns to the current round. Menu access and exit remain available
 during celebrations, but underlying answer, result and chest actions are gated.
 
-The library contains sound and reduced-motion preferences. Motion follows the
-system unless explicitly changed. Reduced motion keeps static artwork and clear
+Home contains the word library and sound control. Motion follows the device's
+system setting automatically. Reduced motion keeps static artwork and clear
 feedback while removing unnecessary jumps, sways and glows. Word and phrase
 pronunciation remain independently replayable when sound is enabled. Menus use
 the shared concise selection cue.

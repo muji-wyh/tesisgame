@@ -114,7 +114,7 @@ test('native menus play the same click once, gameplay cards stay separate, and m
   const evidence = [];
   for (const [name, action] of [
     ['open home', () => openModeMenu(page)],
-    ['change motion', () => activateLibrary(page, 'LibraryMotion')],
+    ['change theme', () => activateLibrary(page, 'Summer')],
     ['continue Match', () => chooseMode(page, 'match')]
   ]) {
     const from = await page.evaluate(() => audioObservation.playbacks.length);

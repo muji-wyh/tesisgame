@@ -182,7 +182,7 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app._mode_menu_open(), "The real application starts at Home")
-	named([app._mode_panel.sound_button, app._mode_panel.motion_button, app._mode_panel.collection_button, app._mode_panel.pip], "Home settings")
+	named([app._mode_panel.sound_button, app._mode_panel.collection_button, app._mode_panel.pip], "Home settings")
 	for button: Button in app._mode_panel.theme_buttons:
 		button.pressed.emit()
 		named([button], "Home theme")

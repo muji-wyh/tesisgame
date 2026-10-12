@@ -72,7 +72,6 @@ func _check_library(app) -> void:
 	app.choose_mode("match")
 	_click(app, app._mode_heading_button, "The header Home button")
 	check(app._mode_menu_open(), "Home opens through its real header action")
-	_click(app, app._mode_panel.motion_button, "The motion setting")
 	_click(app, app.theme_buttons[1], "The Home theme selector")
 	var count: int = app.audio.click_count
 	var cancel := InputEventAction.new()
@@ -100,7 +99,7 @@ func _check_library(app) -> void:
 	app._mode_panel.sound_button.pressed.emit()
 	check(app.audio.muted and not app.audio.ui_click.playing and app.audio.click_count == count,
 		"Switching sound off immediately silences UI audio")
-	app._mode_panel.motion_button.pressed.emit()
+	app.theme_buttons[2].pressed.emit()
 	check(app.audio.click_count == count, "Other settings remain silent while muted")
 	_click(app, app._mode_panel.sound_button, "Switching sound back on")
 	app.choose_mode("match")
