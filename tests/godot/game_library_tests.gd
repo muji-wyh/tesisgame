@@ -4,6 +4,7 @@ const Library = preload("res://scripts/game_library.gd")
 var checks := 0
 var failures := 0
 var chosen := ""
+var mode_requests := 0
 var collection_visits := 0
 var theme_chosen := ""
 
@@ -19,6 +20,86 @@ func check(condition: bool, message: String) -> void:
 func settle() -> void:
 	for frame in range(5):
 		await process_frame
+
+func move_pointer(point: Vector2) -> void:
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	root.push_input(motion, true)
+	await process_frame
+
+func check_mode_previews(library: Library) -> void:
+	root.size = Vector2i(1280, 900)
+	library.fit(Vector2(1280, 900), 1.0)
+	library.configure("word_jelly", false, false)
+	await settle()
+	await move_pointer(Vector2(1, 1))
+	var initial_requests: int = mode_requests
+	for tile: Dictionary in library._tiles:
+		var preview: Control = tile.preview
+		check(preview.mouse_filter == Control.MOUSE_FILTER_IGNORE and preview.focus_mode == Control.FOCUS_NONE,
+			"%s: the decorative preview cannot intercept pointer or keyboard focus" % tile.entry.title)
+		tile.button.grab_focus()
+		await settle()
+		check(tile.button.has_focus() and preview.is_processing(),
+			"%s: focusing its game button starts the demonstration" % tile.entry.title)
+		preview._process(preview.DURATION + 0.1)
+		await settle()
+		check(not preview.is_processing(),
+			"%s: the demonstration settles while the card remains focused" % tile.entry.title)
+		tile.button.grab_focus()
+		await settle()
+		check(not preview.is_processing(),
+			"%s: unchanged focus cannot loop the demonstration" % tile.entry.title)
+		library.pip.grab_focus()
+		await settle()
+		check(not preview.highlighted and not preview.is_processing(),
+			"%s: moving focus away clears the demonstration highlight" % tile.entry.title)
+	check(mode_requests == initial_requests, "Previewing all six games never starts a game")
+	var tile: Dictionary = library._tiles[0]
+	var point: Vector2 = tile.preview.get_global_rect().get_center()
+	await move_pointer(point)
+	check(tile.button.is_hovered() and tile.preview.is_processing(),
+		"Hovering the miniature scene starts its parent card's demonstration")
+	await move_pointer(Vector2(1, 1))
+	check(not tile.preview.highlighted and not tile.preview.is_processing(),
+		"Moving the pointer off an unfocused card stops its demonstration")
+	tile.button.grab_focus()
+	await settle()
+	library.hide()
+	await settle()
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Leaving Home stops every preview")
+	library.show()
+	await settle()
+	check(not tile.preview.is_processing(), "Returning Home does not replay an interrupted preview automatically")
+	library.pip.grab_focus()
+	tile.button.grab_focus()
+	await settle()
+	check(tile.preview.is_processing(), "A new focus gesture can replay a completed or interrupted preview")
+	library.configure("word_jelly", false, true)
+	await settle()
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Enabling system reduced motion freezes all demonstrations immediately")
+	library.pip.grab_focus()
+	await move_pointer(point)
+	check(not tile.preview.is_processing(), "Reduced motion preserves a static scene even when hovered")
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.position = point
+	press.global_position = point
+	press.pressed = true
+	press.button_mask = MOUSE_BUTTON_MASK_LEFT
+	root.push_input(press, true)
+	var release := press.duplicate() as InputEventMouseButton
+	release.pressed = false
+	release.button_mask = 0
+	root.push_input(release, true)
+	await settle()
+	check(chosen == "match" and mode_requests == initial_requests + 1,
+		"Clicking inside a preview selects its game exactly once through the parent button")
+	await move_pointer(Vector2(1, 1))
+	library.pip.grab_focus()
 
 func check_label_fits(label: Label, context: String) -> void:
 	check(label.get_minimum_size().y <= label.size.y + 1.0,
@@ -76,7 +157,9 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var library := Library.new()
 	root.add_child(library)
-	library.mode_requested.connect(func(id: String) -> void: chosen = id)
+	library.mode_requested.connect(func(id: String) -> void:
+		chosen = id
+		mode_requests += 1)
 	library.collection_requested.connect(func() -> void: collection_visits += 1)
 	library.theme_requested.connect(func(id: String) -> void: theme_chosen = id)
 	library.configure_theme("ocean", false, false)
@@ -103,6 +186,7 @@ func _run() -> void:
 	check_growth_states(library)
 	library.collection_button.pressed.emit()
 	check(collection_visits == 1, "Home requests the collection once")
+	await check_mode_previews(library)
 	for dimensions: Vector2 in [Vector2(320, 320), Vector2(390, 420), Vector2(390, 600), Vector2(390, 844), Vector2(844, 390), Vector2(1280, 800)]:
 		root.size = dimensions
 		library.position = Vector2.ZERO
@@ -145,6 +229,11 @@ func _run() -> void:
 				"%s: scrolling fully reveals %s" % [dimensions, button.name])
 			check(button.get_global_rect().grow(1).encloses(tile.title.get_global_rect()),
 				"%s: the %s title fits its card" % [dimensions, tile.entry.title])
+			var preview_bounds: Rect2 = tile.preview.get_global_rect()
+			check(button.get_global_rect().grow(1).encloses(preview_bounds)
+				and not preview_bounds.intersects(tile.title.get_global_rect())
+				and not preview_bounds.intersects(tile.copy.get_global_rect()),
+				"%s: the %s preview fits above its readable title and description" % [dimensions, tile.entry.title])
 			button.grab_focus()
 			await settle()
 			check(button.has_focus() and library.scroll.get_global_rect().has_point(button.get_global_rect().get_center()),

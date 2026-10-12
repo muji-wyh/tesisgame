@@ -29,6 +29,57 @@ async function captureHome(page, testInfo, name) {
 
 const jellyState = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 
+test('Home previews explain all six games without taking over card input', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
+  const errors = await openHome(page, { reducedMotion: 'no-preference' });
+  // The loading-screen click can leave the pointer over a game card.
+  // Keep hover separate from this keyboard-focus demonstration check.
+  await page.mouse.move(1, 1);
+  await rendered(page);
+  expect((await metrics(page)).library.previews.map(item => item.mode)).toEqual(MODES);
+  for (const mode of MODES) {
+    const name = `Mode_${mode}`;
+    if ((await metrics(page)).library.controls.find(item => item.name === name).focused) {
+      await page.locator('#canvas').press('Shift+Tab');
+      await rendered(page);
+    }
+    for (let step = 0; step < 28; step++) {
+      if ((await metrics(page)).library.controls.find(item => item.name === name).focused) break;
+      await page.locator('#canvas').press('Tab');
+      await rendered(page);
+    }
+    expect((await metrics(page)).library.controls.find(item => item.name === name).focused).toBe(true);
+    await expect.poll(async () => (await metrics(page)).library.previews.find(item => item.mode === mode).animating,
+      { message: `${mode} demonstrates its action when the card is focused` }).toBe(true);
+    expect((await metrics(page)).library.visible, 'Previewing a game does not enter it').toBe(true);
+    if (mode === 'match' || mode === 'phrase') await captureHome(page, testInfo, `mechanics-${mode}`);
+  }
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => !item.animating),
+    { message: 'Backgrounding the browser ends every preview' }).toBe(true);
+  await page.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await rendered(page);
+  expect((await metrics(page)).library.previews.every(item => !item.animating), 'Returning does not replay an interrupted scene').toBe(true);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.reduced_motion && !item.animating),
+    { message: 'The device motion setting keeps every illustration static' }).toBe(true);
+  const card = await libraryControl(page, 'Mode_match');
+  const preview = (await metrics(page)).library.previews.find(item => item.mode === 'match');
+  const [x, y, w, h] = preview.rect;
+  expect(card.fully_visible).toBe(true);
+  await tap(page, x + w / 2, y + h / 2);
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  expect((await metrics(page)).library.current).toBe('match');
+  expect((await metrics(page)).library.previews.every(item => !item.animating), 'Hidden demonstrations stop').toBe(true);
+  expect(errors).toEqual([]);
+});
+
 test('Home grows alongside Pip when a word is mastered and after reloading', async ({ page }, testInfo) => {
   test.setTimeout(180000);
   const cohort = require('../../words.json').filter(word => word.min_age === 3);

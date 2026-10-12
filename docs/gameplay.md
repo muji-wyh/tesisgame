@@ -32,6 +32,16 @@ appearance, independently of mastery levels. Completing all growth stages turns
 the journey into a recap without promising another appearance. The six games
 follow this welcome; theme and sound choices remain secondary.
 
+Each Home game card shows a miniature example of its actual mechanic: linking
+a picture and word, turning Memory cards, speaking to pop a flying word card,
+ordering phrase pieces, merging a Jelly Match pair, or building and collecting
+a Jelly Words word. These decorative examples use fixed interface artwork and
+do not select curriculum words, load another age's vocabulary, or earn rewards.
+Hovering or focusing a card plays a short, silent demonstration. Other cards
+stay still, and the system reduced-motion setting keeps every example static.
+The reused artwork and source rights are recorded in the
+[mode illustration attribution](../assets/images/ui/modes/ATTRIBUTION.md).
+
 Home offers eight illustrated theme choices below the game cards, arranged in
 one row on wide screens and two rows on phones. The selected theme is highlighted
 and saved automatically. Theme switching is available only on Home, including

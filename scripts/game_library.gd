@@ -13,13 +13,14 @@ const UiClick = preload("res://scripts/ui_click.gd")
 const DuckMascot = preload("res://scripts/duck_mascot.gd")
 const CoinCounter = preload("res://scripts/coin_counter.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
+const ModePreview = preload("res://scripts/game_mode_preview.gd")
 const CATALOG := [
-	{"id": "match", "title": "Match", "copy": "Pair pictures\nwith words.", "detail": "5 PAIRS", "art": "res://assets/images/ui/modes/cat.svg", "tint": Color("#e6efe3")},
-	{"id": "memory", "title": "Memory", "copy": "Flip cards.\nFind each pair.", "detail": "NO TIMER", "art": "res://assets/images/ui/modes/rainbow.svg", "tint": Color("#f2e9d8")},
-	{"id": "pop", "title": "Voice Pop", "copy": "Say a word.\nMake it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/images/ui/modes/rocket.svg", "tint": Color("#e3eef1")},
-	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen, then\nbuild a phrase.", "detail": "3 PHRASES", "art": "res://assets/images/mascots/growth/pip-baby.png", "tint": Color("#f5ebce")},
-	{"id": "jelly", "title": "Jelly Match", "copy": "Slide a pair.\nWatch it merge.", "detail": "MERGE PAIRS · TREASURE", "art": "res://assets/images/jelly-match/gel-mint.png", "tint": Color("#e1efea")},
-	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join pieces.\nMake a word.", "detail": "BUILD WORDS · COINS", "art": "res://assets/images/jelly-match/gel-lilac.png", "tint": Color("#eee5f4")}
+	{"id": "match", "title": "Match", "copy": "Match a picture\nto its word.", "detail": "5 PAIRS", "tint": Color("#e6efe3")},
+	{"id": "memory", "title": "Memory", "copy": "Remember, flip,\nfind the pair.", "detail": "NO TIMER", "tint": Color("#f2e9d8")},
+	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nPop flying cards.", "detail": "50 SECONDS · MIC", "tint": Color("#e3eef1")},
+	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen. Drag words\ninto a phrase.", "detail": "3 PHRASES", "tint": Color("#f5ebce")},
+	{"id": "jelly", "title": "Jelly Match", "copy": "Drag matching pairs.\nMerge & collect.", "detail": "MERGE PAIRS · TREASURE", "tint": Color("#e1efea")},
+	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join letter pieces.\nCollect your words.", "detail": "BUILD WORDS · COINS", "tint": Color("#eee5f4")}
 ]
 
 var heading: Label
@@ -128,7 +129,7 @@ func _init() -> void:
 	_footer.add_child(sound_button)
 	for button: Button in [collection_button, sound_button]:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_credit = Style.label("Pip: original game art · Twemoji: CC BY 4.0", 10)
+	_credit = Style.label("Pip: original art · Fluent Emoji: MIT · Twemoji: CC BY 4.0", 10)
 	_credit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_credit.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_credit.add_theme_color_override("font_color", Style.MUTED)
@@ -303,14 +304,9 @@ func _add_game_card(entry: Dictionary) -> void:
 	tile.pressed.connect(func() -> void: mode_requested.emit(str(entry.id)))
 	grid.add_child(tile)
 	buttons.append(tile)
-	var picture := TextureRect.new()
-	picture.texture = load(entry.art)
-	if entry.id == "phrase":
-		picture.texture = _portrait(picture.texture)
-	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tile.add_child(picture)
+	var preview := ModePreview.new()
+	preview.configure(str(entry.id))
+	tile.add_child(preview)
 	var title := Style.label(entry.title, 22)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.clip_text = true
@@ -322,9 +318,15 @@ func _add_game_card(entry: Dictionary) -> void:
 	var current := Style.label("CONTINUE", 10)
 	current.add_theme_color_override("font_color", Style.GOOD)
 	tile.add_child(current)
-	var info := {"button": tile, "picture": picture, "title": title, "copy": copy, "current": current, "entry": entry}
+	var info := {"button": tile, "preview": preview, "title": title, "copy": copy, "current": current, "entry": entry}
 	_tiles.append(info)
 	tile.resized.connect(_layout_tile.bind(info))
+	for interaction: Signal in [tile.mouse_entered, tile.mouse_exited, tile.focus_entered, tile.focus_exited]:
+		interaction.connect(_preview_focus_changed.bind(info))
+
+
+func _preview_focus_changed(tile: Dictionary) -> void:
+	tile.preview.set_highlighted(tile.button.is_hovered() or tile.button.has_focus())
 
 
 func _portrait(texture: Texture2D) -> AtlasTexture:
@@ -342,6 +344,7 @@ func configure(current: String, muted: bool, reduced: bool) -> void:
 	coin_counter.reduced_motion = reduced
 	_style_footer()
 	for tile: Dictionary in _tiles:
+		tile.preview.set_reduced_motion(reduced)
 		var selected: bool = tile.entry.id == current and not current.is_empty()
 		tile.button.button_pressed = selected
 		tile.current.visible = selected
@@ -350,14 +353,15 @@ func configure(current: String, muted: bool, reduced: bool) -> void:
 
 func set_growth_age(age: int) -> void:
 	pip.set_growth_age(age)
-	var path: String = "res://assets/images/mascots/growth/pip-%s.png" % ("baby" if age < 3 else "lv%d" % clampi(age, 3, 12))
-	for tile: Dictionary in _tiles:
-		if tile.entry.id == "phrase":
-			tile.picture.texture = _portrait(load(path) as Texture2D)
 
 
 func set_home_coins(amount: int) -> void:
 	coin_counter.sync(amount)
+
+
+func finish_previews() -> void:
+	for tile: Dictionary in _tiles:
+		tile.preview.finish_demo()
 
 
 func ensure_mode_visible(id: String) -> void:
@@ -404,7 +408,7 @@ func fit(available: Vector2, factor: float) -> void:
 	grid.columns = 3 if wide else 2
 	grid.add_theme_constant_override("h_separation", ceili((14.0 if wide else 10.0) / _factor))
 	grid.add_theme_constant_override("v_separation", ceili((14.0 if wide else 10.0) / _factor))
-	var tile_height: float = (180.0 if css.y >= 780 else 162.0) if wide else (168.0 if css.y >= 740 else 152.0 if css.y >= 560 else 144.0)
+	var tile_height: float = (210.0 if css.y >= 780 else 196.0) if wide else (200.0 if css.y >= 740 else 184.0)
 	for tile: Dictionary in _tiles:
 		tile.button.custom_minimum_size = Vector2(0, tile_height / _factor)
 		_style_tile(tile)
@@ -507,13 +511,13 @@ func _layout_hero() -> void:
 func _layout_tile(tile: Dictionary) -> void:
 	var area: Vector2 = tile.button.size
 	var pad: float = 10.0 / _factor
-	var compact: bool = area.y * _factor < 160
+	var compact: bool = area.x * _factor < 170
 	tile.copy.add_theme_font_size_override("font_size", ceili((12.0 if compact else 13.0) / _factor))
 	var copy_height: float = maxf(34.0 / _factor, tile.copy.get_minimum_size().y)
 	var title_y: float = area.y - copy_height - 43.0 / _factor
-	var art_height: float = maxf(36.0 / _factor, title_y - 10.0 / _factor)
-	tile.picture.position = Vector2(pad, 8.0 / _factor)
-	tile.picture.size = Vector2(maxf(1.0, area.x - pad * 2.0), art_height)
+	var art_height: float = maxf(36.0 / _factor, title_y - 20.0 / _factor)
+	tile.preview.position = Vector2(pad, 16.0 / _factor)
+	tile.preview.size = Vector2(maxf(1.0, area.x - pad * 2.0), art_height)
 	tile.title.position = Vector2(pad, title_y)
 	tile.title.size = Vector2(maxf(1.0, area.x - pad * 2.0), 28.0 / _factor)
 	tile.copy.position = Vector2(pad, title_y + 29.0 / _factor)
@@ -530,13 +534,17 @@ func _layout_tile(tile: Dictionary) -> void:
 
 func snapshot() -> Dictionary:
 	var controls: Array = []
+	var previews: Array = []
+	for tile: Dictionary in _tiles:
+		previews.append({"mode": tile.entry.id, "rect": _rect_values(tile.preview.get_global_rect()),
+			"animating": tile.preview.is_processing(), "reduced_motion": tile.preview.reduced_motion})
 	var viewport: Rect2 = scroll.get_global_rect()
 	for button: Button in theme_buttons + buttons + [collection_button, sound_button]:
 		var rect: Rect2 = button.get_global_rect()
 		controls.append({"name": str(button.name), "rect": _rect_values(rect), "disabled": button.disabled,
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
-	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls,
+	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls, "previews": previews,
 		"hero": {"title": heading.text, "intro": _intro.text, "ready": _growth.get("ready", false),
 			"completed": _growth.get("completed", false), "mastered": _growth.get("mastered", 0), "total": _growth.get("total", 0),
 			"progress": _journey_bar.value / 100.0, "next_age": _next_age, "rect": _rect_values(_hero.get_global_rect()),

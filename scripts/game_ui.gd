@@ -3111,6 +3111,7 @@ func on_page_hidden() -> void:
 	_mode_menu_resume_pop = false
 	_mode_panel.pip.set_idle_paused(true)
 	_mode_panel.scroll.cancel_drag()
+	_mode_panel.finish_previews()
 	if is_instance_valid(_pop_rewards):
 		_pop_rewards.pause()
 	if is_instance_valid(_jelly_rewards):
