@@ -324,9 +324,7 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		merged.show()
 		return
 	var target_size: Vector2 = _tile_rect(fusion.result).size
-	var destination: Vector2 = _tile_rect(fusion.b).get_center()
-	destination.x = clampf(destination.x, _board.position.x + target_size.x * 0.5, _board.end.x - target_size.x * 0.5)
-	destination.y = clampf(destination.y, _board.position.y + target_size.y * 0.5, _board.end.y - target_size.y * 0.5)
+	var destination: Vector2 = _tile_rect(fusion.result).get_center()
 	var joining: float = smoothstep(0.0, 0.68, p)
 	var a: Vector2 = Vector2(visual.origin_a).lerp(destination, joining)
 	var b: Vector2 = Vector2(visual.origin_b).lerp(destination, joining)

@@ -62,6 +62,7 @@ var _next_tile_id: int = 1
 var _next_event_id: int = 1
 var _collection_event_ids: Dictionary = {}
 var _generation: int = 0
+var _growth_pending: bool = false
 var _rng := RandomNumberGenerator.new()
 
 
@@ -92,6 +93,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_supply_words = 0
 	_next_tile_id = 1
 	_next_event_id = 1
+	_growth_pending = false
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
@@ -143,6 +145,14 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	var mass: int = int(a.mass) + int(b.mass)
 	var result: Dictionary = _new_tile(str(a.text) + str(b.text), mass, int(a.fragments) + int(b.fragments))
 	result.skin = int(b.get("skin", b.id))
+	var position: Vector2i = _position_near(_occupied([a_id, b_id]), int(result.width), int(result.height), b)
+	if position.x < 0:
+		# Keep a crowded merge at its destination until room for growth opens up.
+		result.width = int(b.width)
+		result.height = int(b.height)
+		position = Vector2i(int(b.column), int(b.row))
+	result.column = position.x
+	result.row = position.y
 	var active: Dictionary = {
 		"operation": "merge", "a_id": a_id, "b_id": b_id,
 		"a": a.duplicate(true), "b": b.duplicate(true), "result": result,
@@ -191,6 +201,8 @@ func step(delta: float) -> void:
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
 		var consumed: float = remaining
+		if _growth_pending and _settling_remaining() > EPSILON:
+			consumed = minf(consumed, _settling_remaining())
 		for active in fusions:
 			var boundary: float = float(active.duration)
 			if str(active.operation) == "collect" and not bool(active.popped):
@@ -229,6 +241,8 @@ func step(delta: float) -> void:
 				_complete_operation(str(active.attempt_id))
 		if not _can_continue(generation):
 			break
+		if _growth_pending and _settling_remaining() <= EPSILON:
+			_restore_growth()
 		if not _has_free_cell():
 			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 				full_elapsed = 0.0
@@ -472,26 +486,14 @@ func _complete_merge(completed: Dictionary) -> void:
 		if int(cells[index].id) in [int(a.id), int(b.id)]:
 			cells.remove_at(index)
 	var result: Dictionary = completed.result.duplicate(true)
-	# A newly joined body must land even when its packed position equals the
-	# factory default. Its visible travel and input readiness share this clock.
+	# The fusion already ends at this reserved rectangle. Allow its final wobble
+	# to settle before accepting another drag or collection.
 	result.age = 0.0
 	result.settling = true
 	result.arrival = false
 	result.falling_rows = 0
-	var candidates: Array[Dictionary] = cells.duplicate(true)
-	candidates.append(result)
-	if not _pack(candidates):
-		# A full well may lack a contiguous rectangle for the preferred growth.
-		# Retain the larger input's legal footprint until later space is available;
-		# logical mass, word content, fragments, and coins are never discarded.
-		var anchor: Dictionary = a if int(a.width) * int(a.height) >= int(b.width) * int(b.height) else b
-		result.column = int(anchor.column)
-		result.row = int(anchor.row)
-		result.width = int(anchor.width)
-		result.height = int(anchor.height)
-		cells.append(result)
-	else:
-		cells = candidates
+	cells.append(result)
+	_restore_growth(int(result.id))
 	merged_count += 1
 	full_elapsed = -1.0
 	completed.result = cell(int(result.id))
@@ -508,9 +510,7 @@ func _complete_collection(completed: Dictionary) -> void:
 		return
 	cells.remove_at(index)
 	_collection_event_ids.erase(int(completed.a_id))
-	var candidates: Array[Dictionary] = cells.duplicate(true)
-	if _pack(candidates):
-		cells = candidates
+	_restore_growth()
 	var coins: int = int(completed.coins)
 	var awarded: int = int(completed.fragments)
 	cleared_pairs += 1
@@ -545,60 +545,69 @@ func _complete_collection(completed: Dictionary) -> void:
 		changed.emit()
 
 
-func _pack(tiles: Array[Dictionary]) -> bool:
-	# A crowded merge may temporarily keep a smaller legal footprint. Restore
-	# full growth as soon as the entire preferred layout fits, without partially
-	# changing live footprints when that attempt still has too little room.
-	var preferred: Array[Dictionary] = tiles.duplicate(true)
-	for tile in preferred:
+func _restore_growth(excluded_id: int = -1) -> void:
+	# Removing a body leaves a hole, not a collapsing stack. Only compressed
+	# bodies may expand into newly available space; every other anchor stays put.
+	_growth_pending = false
+	for tile in cells:
 		var extent: Vector2i = _preferred_size(int(tile.mass))
-		if int(tile.width) != extent.x or int(tile.height) != extent.y:
-			tile.width = extent.x
-			tile.height = extent.y
-			tile.age = 0.0
-			tile.settling = true
-			tile.arrival = false
-			tile.falling_rows = 0
-	if _pack_footprints(preferred):
-		for index in range(tiles.size()):
-			tiles[index].merge(preferred[index], true)
-		return true
-	return _pack_footprints(tiles)
-
-
-func _pack_footprints(tiles: Array[Dictionary]) -> bool:
-	# Largest-first, bottom-left packing has a stable result across frame rates.
-	# Work on copies so a failed layout never partially moves the live board.
-	var ordered: Array[Dictionary] = tiles.duplicate()
-	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var a_area: int = int(a.width) * int(a.height)
-		var b_area: int = int(b.width) * int(b.height)
-		return a_area > b_area if a_area != b_area else int(a.id) < int(b.id))
-	var occupied: Dictionary = {}
-	var positions: Dictionary = {}
-	for tile in ordered:
-		var position: Vector2i = _free_position(occupied, int(tile.width), int(tile.height))
+		if int(tile.width) == extent.x and int(tile.height) == extent.y:
+			continue
+		if is_fusing(int(tile.id)):
+			continue
+		if int(tile.id) == excluded_id or not is_settled(tile):
+			# Another collection may free space during this body's final wobble.
+			_growth_pending = true
+			continue
+		var position: Vector2i = _position_near(_occupied([int(tile.id)]), extent.x, extent.y, tile)
 		if position.x < 0:
-			return false
-		positions[int(tile.id)] = position
-		_occupy(occupied, position.x, position.y, int(tile.width), int(tile.height))
-	for tile in tiles:
-		var position: Vector2i = positions[int(tile.id)]
-		if int(tile.column) != position.x or int(tile.row) != position.y:
-			tile.falling_rows = maxi(0, position.y - int(tile.row))
-			tile.column = position.x
-			tile.row = position.y
-			tile.age = 0.0
-			tile.settling = true
-			tile.arrival = false
-	return true
+			continue
+		tile.column = position.x
+		tile.row = position.y
+		tile.width = extent.x
+		tile.height = extent.y
+		tile.age = 0.0
+		tile.settling = true
+		tile.arrival = false
+		tile.falling_rows = 0
 
 
-func _occupied() -> Dictionary:
+func _occupied(excluded_ids: Array[int] = []) -> Dictionary:
 	var occupied: Dictionary = {}
 	for tile in cells:
-		_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
+		if not int(tile.id) in excluded_ids:
+			_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
+	# A fusion owns its future footprint throughout the animation, so another
+	# merge or incoming batch cannot take its destination before handover.
+	for active in fusions:
+		if str(active.operation) == "merge":
+			var result: Dictionary = active.result
+			_occupy(occupied, int(result.column), int(result.row), int(result.width), int(result.height))
 	return occupied
+
+
+func _position_near(occupied: Dictionary, width: int, height: int, anchor: Dictionary) -> Vector2i:
+	var center := Vector2(float(anchor.column) + float(anchor.width) * 0.5, float(anchor.row) + float(anchor.height) * 0.5)
+	var nearest := Vector2i(-1, -1)
+	var distance: float = INF
+	# Prefer the target's height and nearest horizontal fit. Growth can wrap
+	# upward when space is tight, but never sends a merged body down the well.
+	for row in range(mini(int(anchor.row), ROWS - height), -1, -1):
+		for column in range(COLUMNS - width + 1):
+			var candidate := Vector2(column + width * 0.5, row + height * 0.5)
+			var candidate_distance: float = center.distance_squared_to(candidate)
+			if candidate_distance < distance and _fits(occupied, column, row, width, height):
+				nearest = Vector2i(column, row)
+				distance = candidate_distance
+	return nearest
+
+
+func _fits(occupied: Dictionary, column: int, row: int, width: int, height: int) -> bool:
+	for y in range(row, row + height):
+		for x in range(column, column + width):
+			if occupied.has(y * COLUMNS + x):
+				return false
+	return true
 
 
 func _occupy(occupied: Dictionary, column: int, row: int, width: int, height: int) -> void:
@@ -610,15 +619,7 @@ func _occupy(occupied: Dictionary, column: int, row: int, width: int, height: in
 func _free_position(occupied: Dictionary, width: int, height: int) -> Vector2i:
 	for row in range(ROWS - height, -1, -1):
 		for column in range(COLUMNS - width + 1):
-			var clear: bool = true
-			for y in range(row, row + height):
-				for x in range(column, column + width):
-					if occupied.has(y * COLUMNS + x):
-						clear = false
-						break
-				if not clear:
-					break
-			if clear:
+			if _fits(occupied, column, row, width, height):
 				return Vector2i(column, row)
 	return Vector2i(-1, -1)
 

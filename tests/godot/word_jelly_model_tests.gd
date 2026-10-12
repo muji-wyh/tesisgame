@@ -25,7 +25,11 @@ func _run() -> void:
 	_test_wallet_retry()
 	_test_chests()
 	_test_packing_and_growth()
+	_test_target_placement()
+	_test_edge_placement()
+	_test_fusion_reservations()
 	_test_deferred_growth()
+	_test_growth_after_settlement()
 	_test_full_board()
 	_test_independent_operations()
 	_test_lifecycle_reentry()
@@ -60,6 +64,47 @@ func _board(model, pieces: Array[String], fragments: Array[int] = []) -> void:
 		tile.column = index % Model.COLUMNS
 		tile.row = Model.ROWS - 1 - int(index / Model.COLUMNS)
 		model.cells.append(tile)
+
+
+func _placed_tile(id: int, text: String, column: int, row: int, mass: int = 1, fragments: int = 0, word: Dictionary = {}) -> Dictionary:
+	var tile: Dictionary = _tile(id, text, mass, fragments, word)
+	tile.column = column
+	tile.row = row
+	tile.width = mini(mass, Model.COLUMNS)
+	tile.height = ceili(float(mass) / Model.COLUMNS)
+	return tile
+
+
+func _footprint(tile: Dictionary) -> Rect2i:
+	return Rect2i(int(tile.column), int(tile.row), int(tile.width), int(tile.height))
+
+
+func _fill_rows(model, first_row: int, last_row: int) -> void:
+	var next_id: int = 2000
+	for row in range(first_row, last_row + 1):
+		for column in range(Model.COLUMNS):
+			var occupied: bool = false
+			for tile: Dictionary in model.cells:
+				if _footprint(tile).has_point(Vector2i(column, row)):
+					occupied = true
+					break
+			if not occupied:
+				model.cells.append(_placed_tile(next_id, "x", column, row))
+				next_id += 1
+
+
+func _assert_reservations(model, label: String) -> void:
+	var results: Array[Rect2i] = []
+	for active: Dictionary in model.fusions:
+		if str(active.operation) != "merge":
+			continue
+		var footprint: Rect2i = _footprint(active.result)
+		for previous: Rect2i in results:
+			check(not footprint.intersects(previous), label + ": independent future footprints never overlap")
+		for tile: Dictionary in model.cells:
+			if int(tile.id) not in [int(active.a_id), int(active.b_id)]:
+				check(not footprint.intersects(_footprint(tile)), label + ": live neighbors cannot occupy a reserved destination")
+		results.append(footprint)
 
 
 func _merge(model, source: int, target: int) -> Dictionary:
@@ -139,7 +184,7 @@ func _test_merging_and_collection() -> void:
 	model.step(0.01)
 	check(model.cells.size() == 1 and model.cells[0].text == "cat", "fusion creates one persistent concatenated jelly")
 	var result: Dictionary = model.cells[0]
-	check(not model.is_settled(result) and bool(result.settling), "new merged result reserves its settlement window even when packed at its default coordinates")
+	check(not model.is_settled(result) and bool(result.settling), "the fixed fusion rectangle reserves its final settlement window before new input")
 	check(result.word.id == "cat" and result.kind == "word", "exact current vocabulary match reveals its word image")
 	check(result.mass == 2 and result.fragments == 2 and result.width > 1, "merged jelly grows and preserves both fragments")
 	check(result.skin == 1001, "merged body retains the target jelly skin across the animation boundary")
@@ -305,7 +350,99 @@ func _test_packing_and_growth() -> void:
 	check(Model.coins_for_tile(large) == 500, "large jelly value follows accumulated root mass")
 
 
-func _test_deferred_growth() -> void:
+func _test_target_placement() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([
+		_placed_tile(1000, "ca", 0, 7, 1, 1),
+		_placed_tile(1001, "t", 3, 1, 1, 2),
+		_placed_tile(1002, "x", 5, 5)
+	])
+	var neighbor: Rect2i = _footprint(model.cell(1002))
+	check(model.try_merge(1000, 1001) == "merged", "a lower source can merge into an upper target")
+	var planned: Dictionary = model.fusions[0].result.duplicate(true)
+	check(planned.row == 1 and planned.width == 2 and absf(float(planned.column) + 1.0 - 3.5) <= 0.5,
+		"the frozen footprint stays beside the upper target instead of returning to the floor")
+	model.step(Model.FUSION_SECONDS)
+	var merged: Dictionary = model.cell(int(planned.id))
+	check(_footprint(merged) == _footprint(planned), "fusion handover commits the exact preannounced destination")
+	check(_footprint(model.cell(1002)) == neighbor, "merging does not move an unrelated jelly")
+	check(merged.mass == 2 and merged.fragments == 3 and merged.text == "cat", "target placement preserves all merged content and fragments")
+	model.step(Model.SETTLE_SECONDS)
+	model.cells.append(_placed_tile(1003, "cat", 0, 7, 2, 0, _word("cat")))
+	check(model.collect(1003), "a lower word can be collected underneath the upper merge")
+	model.step(Model.COLLECT_SECONDS)
+	check(_footprint(model.cell(int(planned.id))) == _footprint(planned) and _footprint(model.cell(1002)) == neighbor,
+		"collecting a lower word leaves all remaining anchors in place")
+	_assert_board(model, "stable target placement")
+	model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "ca", 0, 7, 4, 2), _placed_tile(1001, "t", 5, 1, 1, 3)])
+	_fill_rows(model, 0, Model.ROWS - 1)
+	check(model.try_merge(1000, 1001) == "merged", "a crowded target accepts a much larger distant source")
+	planned = model.fusions[0].result.duplicate(true)
+	check(_footprint(planned) == Rect2i(5, 1, 1, 1), "crowded fallback keeps the target footprint instead of the distant larger source")
+	model.step(Model.FUSION_SECONDS)
+	merged = model.cell(int(planned.id))
+	check(_footprint(merged) == _footprint(planned) and merged.mass == 5 and merged.fragments == 5,
+		"temporary target-sized compression preserves full mass and every fragment")
+	_assert_board(model, "crowded target fallback")
+
+
+func _test_edge_placement() -> void:
+	for target_row: int in [0, 1, Model.ROWS - 1]:
+		var model = _model([_word("caterpillar")])
+		model.cells.assign([
+			_placed_tile(1000, "cater", 0, 6 if target_row == Model.ROWS - 1 else 7, 6, 2),
+			_placed_tile(1001, "pillar", 5, target_row, 1, 3)
+		])
+		check(model.try_merge(1000, 1001) == "merged", "an edge target accepts growth across a wrapped row")
+		var planned: Dictionary = model.fusions[0].result.duplicate(true)
+		check(planned.column == 0 and planned.width == 6 and planned.height == 2 and planned.row <= target_row,
+			"wrapped growth fits six columns without sinking below its target row")
+		check(int(planned.row) >= 0 and int(planned.row) + int(planned.height) <= Model.ROWS,
+			"top and bottom edge destinations remain inside the well")
+		model.step(Model.FUSION_SECONDS)
+		check(_footprint(model.cell(int(planned.id))) == _footprint(planned), "edge fusion and final footprint share one placement")
+		_assert_board(model, "wrapped edge placement")
+
+
+func _test_fusion_reservations() -> void:
+	for stagger: float in [0.0, 0.1]:
+		var model = _model([_word("cat")])
+		model.cells.assign([
+			_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 1, 4),
+			_placed_tile(1002, "ca", 5, 7), _placed_tile(1003, "t", 3, 4),
+			_placed_tile(1004, "x", 0, 4), _placed_tile(1005, "x", 4, 4)
+		])
+		_fill_rows(model, 5, 7)
+		check(model.try_merge(1000, 1001) == "merged", "the first fusion can reserve the shared gap")
+		var first: Dictionary = model.fusions[0].result.duplicate(true)
+		check(_footprint(first).has_point(Vector2i(2, 4)), "the first planned body occupies the sole neighboring gap")
+		if stagger > 0.0:
+			model.step(stagger)
+		check(model.try_merge(1002, 1003) == "merged", "a disjoint second fusion remains playable")
+		var second: Dictionary = model.fusions[1].result.duplicate(true)
+		check(not _footprint(first).intersects(_footprint(second)), "the second fusion cannot promise the first fusion's gap")
+		_assert_reservations(model, "simultaneous reservations")
+		var incoming: Array[Dictionary] = model.upcoming.duplicate(true)
+		check(model.drop_now(), "manual supply can arrive while independent bodies merge")
+		for tile: Dictionary in incoming:
+			var arrived: Dictionary = model.cell(int(tile.id))
+			check(not arrived.is_empty() and not _footprint(arrived).intersects(_footprint(first))
+				and not _footprint(arrived).intersects(_footprint(second)), "incoming roots skip both reserved future footprints")
+		_assert_reservations(model, "reservations after a manual drop")
+		model.step(Model.FUSION_SECONDS - stagger)
+		check(_footprint(model.cell(int(first.id))) == _footprint(first), "the first completed operation retains its frozen destination")
+		if stagger > 0.0:
+			check(model.fusions.size() == 1 and _footprint(model.cell(1002)) == Rect2i(5, 7, 1, 1)
+				and _footprint(model.cell(1003)) == Rect2i(3, 4, 1, 1), "completing one fusion cannot move the other fusion's live inputs")
+			check(_footprint(model.fusions[0].result) == _footprint(second), "the pending animation keeps its reserved destination")
+			_assert_reservations(model, "reservation after an earlier completion")
+			model.step(stagger)
+		check(_footprint(model.cell(int(second.id))) == _footprint(second), "the second completion commits its own collision-free destination")
+		_assert_board(model, "completed simultaneous placements")
+
+
+func _crowded_growth_model():
 	var model = _model([_word("cat")])
 	model.cells.clear()
 	for index in range(4):
@@ -313,10 +450,17 @@ func _test_deferred_growth() -> void:
 			4 if index < 2 else 2, 2 if index == 0 else 3 if index == 1 else 1,
 			{} if index < 2 else _word("cat"))
 		tile.width = int(tile.mass)
+		tile.column = 0 if index < 2 else 4
+		tile.row = 7 if index in [0, 2] else 6
 		model.cells.append(tile)
 	for index in range(36):
-		model.cells.append(_tile(1004 + index, "a"))
-	check(model._pack(model.cells), "full preferred footprints can create the crowded growth fixture")
+		model.cells.append(_placed_tile(1004 + index, "a", index % Model.COLUMNS, 5 - int(index / Model.COLUMNS)))
+	return model
+
+
+func _test_deferred_growth() -> void:
+	var model = _crowded_growth_model()
+	check(not model._has_free_cell(), "explicit legal footprints fill the crowded growth fixture")
 	model.step(Model.SETTLE_SECONDS)
 	_assert_board(model, "crowded growth fixture")
 	var merged: Dictionary = _merge(model, 1000, 1001)
@@ -344,8 +488,8 @@ func _test_deferred_growth() -> void:
 	check(not model.is_settled(merged) and bool(merged.settling), "restored growth reserves its settlement window")
 	_assert_board(model, "restored growth")
 	var first_layout: Array[Dictionary] = model.cells.duplicate(true)
-	check(model._pack(model.cells) and model.cells == first_layout,
-		"repacking the restored footprints is stable and does not restart settlement")
+	model._restore_growth()
+	check(model.cells == first_layout, "restoring unchanged footprints is stable and does not restart settlement")
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(merged_id), "the expanded word remains collectible")
 	model.step(Model.COLLECT_SECONDS)
@@ -358,12 +502,48 @@ func _test_deferred_growth() -> void:
 	fixed_origin.row = Model.ROWS - 2
 	fixed_origin.width = 4
 	model.cells.append(fixed_origin)
-	check(model._pack(model.cells), "a compressed footprint can expand without changing its top-left corner")
+	model._restore_growth()
 	merged = model.cell(1000)
 	check(merged.column == 0 and merged.row == Model.ROWS - 2 and merged.width == 6 and merged.height == 2,
 		"same-position growth restores the full preferred footprint")
 	check(not model.is_settled(merged) and bool(merged.settling),
 		"dimension-only growth prevents collection until its visual settlement completes")
+
+
+func _test_growth_after_settlement() -> void:
+	var final_states: Array[Dictionary] = []
+	for sliced: bool in [false, true]:
+		var model = _crowded_growth_model()
+		check(model.try_merge(1000, 1001) == "merged", "a crowded merge starts before neighboring collections")
+		var id: int = int(model.fusions[0].result.id)
+		model.step(0.55)
+		check(model.collect(1002) and model.collect(1003), "two neighbors can clear while the existing fusion is running")
+		var until_collection: float = Model.COLLECT_SECONDS
+		if sliced:
+			for index in range(42):
+				model.step(until_collection / 42.0)
+		else:
+			model.step(until_collection)
+		var merged: Dictionary = model.cell(id)
+		check(merged.width == 4 and merged.height == 1 and not model.is_settled(merged),
+			"space freed during settlement cannot replace the frozen fusion footprint early")
+		check(model._growth_pending and model.cleared_pairs == 2, "deferred growth remembers newly freed room without another player action")
+		var settle_remaining: float = Model.SETTLE_SECONDS - float(merged.age)
+		model.step(settle_remaining - 0.001)
+		check(model.cell(id).width == 4, "compressed body remains unchanged just before its settlement boundary")
+		model.step(0.002)
+		merged = model.cell(id)
+		check(merged.width == 6 and merged.height == 2 and merged.column == 0 and merged.row == 6,
+			"settlement completion retries local growth into the newly cleared rows")
+		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 400,
+			"automatic expansion reserves fresh settlement and preserves its full reward")
+		_assert_board(model, "deferred growth after settlement")
+		final_states.append({"rect": _footprint(merged), "age": float(merged.age), "coins": model.collected_coins,
+			"fragments": model.fragment_count, "mass": int(merged.mass), "text": str(merged.text)})
+	check(final_states[0].rect == final_states[1].rect and is_equal_approx(final_states[0].age, final_states[1].age)
+		and final_states[0].coins == final_states[1].coins and final_states[0].fragments == final_states[1].fragments
+		and final_states[0].mass == final_states[1].mass and final_states[0].text == final_states[1].text,
+		"whole and sliced frames agree on restored placement, readiness, words, and rewards")
 
 
 func _test_full_board() -> void:

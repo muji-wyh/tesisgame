@@ -55,7 +55,7 @@ func _run() -> void:
 	_check_paused_resize(view)
 	_check_root_tap(view)
 	_check_edge_drag(view)
-	_check_merge_reflow_input(view)
+	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
 	_check_repeat_merge_and_wrap(view)
 	_check_variable_outline(view)
@@ -171,9 +171,10 @@ func _check_paused_resize(view) -> void:
 			target = int(tile.id)
 	check(source >= 0 and target >= 0, "paused resize fixture has a real starter word to merge")
 	_drag(view, source, target)
+	var merged: int = _merged_id(view)
 	_advance(view, Model.FUSION_SECONDS)
 	view.pause(true)
-	check(not view._reflow.is_empty() or not view._snapbacks.is_empty(), "resize begins with paused gameplay motion still pending")
+	check(not view.game.is_settled(view.game.cell(merged)), "resize begins before the paused merged body's input settling window ends")
 	var spawn_elapsed: float = float(view.game.spawn_elapsed)
 	var ages: Dictionary = {}
 	for tile: Dictionary in view.game.cells:
@@ -253,24 +254,49 @@ func _check_collect_and_fragments(view) -> void:
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
 
 
-func _check_merge_reflow_input(view) -> void:
-	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"])
-	_drag(view, ids[0], ids[1])
-	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS)
-	var tile: Dictionary = view.game.cell(id)
-	var rest: Rect2 = view._tile_rect(tile)
-	var rendered: Rect2 = view._tiles[id].get_rect()
-	check(not rendered.is_equal_approx(rest), "merge input regression begins during the visible journey from drop target to packed cell")
-	check(not view.game.is_settled(tile) and not view._settled(tile), "new merged body stays unavailable while its visual position is settling")
-	check(not view._press(-1, view.get_global_transform() * rest.get_center()), "future packed destination cannot act as an invisible collection hit target")
-	view.cancel_input()
-	_advance(view, Model.SETTLE_SECONDS)
-	tile = view.game.cell(id)
-	check(view.game.is_settled(tile) and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(tile)), "input becomes available after body and packed destination agree")
-	check(view._press(-1, _center(view, id)), "settled merged body accepts input at its visible position")
-	view.cancel_input()
+func _check_merge_handover_stability(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		var ids: Array[int] = _install(view, ["ca", "t"])
+		var target: Dictionary = view.game.cell(ids[1])
+		var target_rect: Rect2 = view._tile_rect(target)
+		var neighbor: Dictionary = view.game._new_tile("stay", 1, 0)
+		neighbor.column = 1
+		neighbor.row = 1
+		view.game.cells.append(neighbor)
+		view._sync_tiles()
+		var neighbor_rect: Rect2 = view._tiles[int(neighbor.id)].get_rect()
+		_drag(view, ids[0], ids[1])
+		var id: int = _merged_id(view)
+		_advance(view, Model.FUSION_SECONDS - 0.001)
+		var final_fusion_rect: Rect2 = view._fusion_visuals.values()[0].merged.get_rect()
+		check(final_fusion_rect.is_equal_approx(view._tile_rect(view.game.fusions[0].result)),
+			"the final liquid union converges to its reserved result rectangle")
+		_advance(view, 0.002)
+		var tile: Dictionary = view.game.cell(id)
+		var rest: Rect2 = view._tile_rect(tile)
+		var rendered: Rect2 = view._tiles[id].get_rect()
+		check(int(tile.row) == int(target.row) and is_equal_approx(rendered.position.y, target_rect.position.y),
+			"a sparse upper target keeps its merged word on the same row instead of sinking into empty rows")
+		check(rendered.is_equal_approx(final_fusion_rect) and rendered.is_equal_approx(rest),
+			"handover from fusion to the persistent body keeps exactly the same position and size")
+		check(not view.game.is_settled(tile) and not view._settled(tile),
+			"the stable merged body still waits for its input settling window")
+		check(not view._press(-1, view.get_global_transform() * rendered.get_center()),
+			"a tap cannot collect the newly handed-over word before input settles")
+		view.cancel_input()
+		_advance(view, Model.SETTLE_SECONDS)
+		tile = view.game.cell(id)
+		check(view.game.is_settled(tile) and view._tiles[id].get_rect().is_equal_approx(final_fusion_rect),
+			"the input settling window cannot move the body away from its fusion destination")
+		check(view._press(-1, _center(view, id)), "settled merged body accepts input at its visible position")
+		view.cancel_input()
+		_advance(view, 0.6)
+		check(view._tiles[id].get_rect().is_equal_approx(final_fusion_rect), "a completed merge remains at its chosen height after settling")
+		var unchanged: Dictionary = view.game.cell(int(neighbor.id))
+		check(int(unchanged.column) == int(neighbor.column) and int(unchanged.row) == int(neighbor.row)
+			and view._tiles[int(neighbor.id)].get_rect().is_equal_approx(neighbor_rect),
+			"merging leaves unrelated settled jelly positions unchanged")
 
 
 func _check_repeat_merge_and_wrap(view) -> void:

@@ -92,8 +92,9 @@ are described in [Voice Pop treasure](voice-pop-treasure.md).
 
 Join letter chunks on a six-column board. Dragging `ca` onto `t` makes `cat`:
 the dragged chunk comes first. Both bodies flow into one larger jelly, which
-stays on the board and can join another piece. Larger bodies and long text wrap
-across rows when needed.
+stays near the drop target and can join another piece. Merging and collecting
+leave the other jellies in place. Larger bodies and long text wrap across rows
+when needed; crowded bodies expand into available space without sinking.
 
 Automatic batches start 20 seconds apart. Each collected word shortens the
 interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can

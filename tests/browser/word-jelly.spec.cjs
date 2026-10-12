@@ -99,6 +99,26 @@ async function merge(page, sourceId, targetId) {
   expect(after.cleared_pairs, 'Merging does not automatically collect a word').toBe(before.cleared_pairs);
   expect(after.fragment_count, 'Carried fragments are collected only after a valid word is tapped').toBe(before.fragment_count);
   expect(result.fragments).toBe(source.fragments + target.fragments);
+  expect(result.row, 'A merged jelly stays at the target row or grows upward without sinking').toBeLessThanOrEqual(target.row);
+  for (const original of before.tiles.filter(tile => tile.id !== sourceId && tile.id !== targetId && tile.settled)) {
+    const unchanged = after.tiles.find(tile => tile.id === original.id);
+    expect(unchanged, 'Merging preserves every unrelated jelly').toBeTruthy();
+    const expanded = unchanged.width !== original.width || unchanged.height !== original.height;
+    if (expanded) {
+      const compressed = original.width < Math.min(before.columns, original.mass) ||
+        original.height < Math.min(before.rows, Math.ceil(original.mass / before.columns));
+      expect(compressed, 'Only an already compressed jelly can expand when a merge frees space').toBe(true);
+      expect(unchanged.width).toBeGreaterThanOrEqual(original.width);
+      expect(unchanged.height).toBeGreaterThanOrEqual(original.height);
+      expect(unchanged.row, 'Restored growth cannot make an unrelated jelly sink').toBeLessThanOrEqual(original.row);
+      continue;
+    }
+    expect([unchanged.column, unchanged.row], 'A merge leaves unrelated occupied cells in place')
+      .toEqual([original.column, original.row]);
+    for (let axis = 0; axis < original.rect.length; axis++)
+      expect(unchanged.rect[axis], 'Unrelated settled jelly positions and sizes remain visually stable')
+        .toBeCloseTo(original.rect[axis], 3);
+  }
   return result;
 }
 
