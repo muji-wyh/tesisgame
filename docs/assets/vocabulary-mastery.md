@@ -1,15 +1,15 @@
 # Vocabulary mastery cards
 
-The vocabulary catalog distinguishes a currently mastered word with a pale mint
-card, a warm gold edge, a gold status pill, and a static medal in its upper-right
-corner. The word illustration and spelling remain the main content. Learning
-cards retain their paper surface and exact practice streak. This treatment uses
-the current streak threshold, not lifetime learning credit; a reset removes the
-award treatment when progress is refreshed.
+The vocabulary catalog distinguishes a currently mastered word with a warm gold
+card, a pronounced gold edge, a gold status pill, and a larger static medal in its
+upper-right corner. The bold warm-brown spelling and word illustration remain
+the main content. Learning cards retain their paper surface and exact practice
+streak. This treatment uses the current streak threshold, not lifetime learning
+credit; a reset removes the award treatment when progress is refreshed.
 
 The medal and status decorations ignore input. The whole card remains available
 for pronunciation, scrolling, and keyboard focus. The treatment has no idle
-animation, including when many mastered cards share a page.
+animation, including when many mastered cards share the scrolling grid.
 
 ## Integrated artwork
 

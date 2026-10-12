@@ -10,9 +10,9 @@ const ResultScroll = preload("res://scripts/result_scroll.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
 const MASTERY_MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
-const MASTERY_PAPER := Color("#f0f6e8")
-const MASTERY_GOLD := Color("#d4b465")
-const MASTERY_INK := Color("#715321")
+const MASTERY_PAPER := Color("#fff0be")
+const MASTERY_GOLD := Color("#c9952b")
+const MASTERY_INK := Color("#6b4819")
 
 var scroll: ResultScroll
 var grid: GridContainer
@@ -439,22 +439,25 @@ func _layout(reveal_focus: bool = true) -> void:
 		var progress_label: Label = button.get_meta("mastery_label")
 		progress_label.add_theme_font_size_override("font_size", ceili(12 / scale))
 		if restyle and mastered:
-			var mastery_pill := Style.box(Color("#f8e8b4"), Color.TRANSPARENT, ceili(7.0 / scale), 0)
+			var mastery_pill := Style.box(Color("#ffdc78"), Color.TRANSPARENT, ceili(7.0 / scale), 0)
 			mastery_pill.content_margin_left = 9.0 / scale
 			mastery_pill.content_margin_right = 9.0 / scale
 			mastery_pill.content_margin_top = 0.0
 			mastery_pill.content_margin_bottom = 0.0
 			progress_label.add_theme_stylebox_override("normal", mastery_pill)
 		var medal: TextureRect = button.get_meta("mastery_badge")
-		medal.offset_left = -33.0 / scale
-		medal.offset_right = -5.0 / scale
-		medal.offset_top = 5.0 / scale
-		medal.offset_bottom = 33.0 / scale
+		medal.offset_left = -40.0 / scale
+		medal.offset_right = -6.0 / scale
+		medal.offset_top = 6.0 / scale
+		medal.offset_bottom = 40.0 / scale
 		var picture: TextureRect = button.get_meta("word_art")
 		picture.custom_minimum_size.y = ceilf(70.0 / scale)
 		var caption: Label = button.get_meta("word_label")
 		caption.custom_minimum_size.y = ceilf(34.0 / scale)
 		caption.add_theme_font_size_override("font_size", ceili(14.0 / scale))
+		if restyle and mastered:
+			caption.add_theme_font_override("font", Style.HEADING_FONT)
+			caption.add_theme_color_override("font_color", MASTERY_INK)
 	_styled_scale = scale
 	_styled_accent = accent
 	_queue_visible_art()
@@ -463,15 +466,15 @@ func _layout(reveal_focus: bool = true) -> void:
 
 
 func _style_mastered_card(button: Button, scale: float) -> void:
-	# A quiet, permanent award treatment keeps the word picture as the focal point.
+	# Warm gold distinguishes mastered cards without competing idle animations.
 	for state: String in ["normal", "hover", "pressed"]:
 		var fill: Color = MASTERY_PAPER
 		if state == "hover":
-			fill = Color("#e7f2d9")
+			fill = Color("#ffe7a0")
 		elif state == "pressed":
-			fill = Color("#dcecc8")
-		var surface := Style.box(fill, MASTERY_GOLD, ceili(12.0 / scale), maxi(1, roundi(1.5 / scale)))
-		surface.border_width_bottom = maxi(2, ceili(3.0 / scale))
+			fill = Color("#ffdc83")
+		var surface := Style.box(fill, MASTERY_GOLD, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale)))
+		surface.border_width_bottom = maxi(3, ceili(4.0 / scale))
 		surface.content_margin_left = 12.0 / scale
 		surface.content_margin_right = 12.0 / scale
 		surface.content_margin_top = 6.0 / scale
