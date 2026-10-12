@@ -13,7 +13,6 @@ const MASTERY_MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const MASTERY_PAPER := Color("#f0f6e8")
 const MASTERY_GOLD := Color("#d4b465")
 const MASTERY_INK := Color("#715321")
-const PAGE_SIZE: int = 60
 
 var scroll: ResultScroll
 var grid: GridContainer
@@ -21,22 +20,17 @@ var word_buttons: Array[Button] = []
 var title_label: Label
 var count_label: Label
 var meaning_label: Label
-var previous_button: Button
-var next_button: Button
-var page_label: Label
 var retry_button: Button
 var interaction_allowed: Callable
 
 var _heading: HBoxContainer
 var _content: MarginContainer
-var _navigation: HBoxContainer
 var _words: Array = []
 var _band: Dictionary = {}
 var _palette: Dictionary = {}
 var _textures: Dictionary = {}
 var _by_id: Dictionary = {}
 var _word_indices: Dictionary = {}
-var _page_index: int = 0
 var _growth: Dictionary = {}
 var _styled_scale: float = -1.0
 var _styled_accent: Color = Color.TRANSPARENT
@@ -45,6 +39,7 @@ var _loading_word_count: int = 0
 var _loading_box: VBoxContainer
 var _loading_label: Label
 var _loading_progress: ProgressBar
+var _art_sync_queued: bool = false
 
 
 func _init() -> void:
@@ -104,6 +99,8 @@ func _build() -> void:
 	_content.add_child(grid)
 	grid.resized.connect(_reveal_focused_word)
 	scroll.resized.connect(_layout)
+	scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _queue_visible_art())
+	grid.sort_children.connect(_queue_visible_art)
 	_loading_box = VBoxContainer.new()
 	_loading_box.name = "AgeVocabularyLoading"
 	_loading_box.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -134,28 +131,6 @@ func _build() -> void:
 		if _can_interact() and _loading_state.get("state", "") == "failed":
 			retry_requested.emit())
 	_loading_box.add_child(retry_button)
-	_navigation = HBoxContainer.new()
-	_navigation.name = "AgeWordPages"
-	_navigation.mouse_filter = Control.MOUSE_FILTER_PASS
-	add_child(_navigation)
-	previous_button = Button.new()
-	previous_button.name = "AgeWordPrevious"
-	previous_button.text = "Previous"
-	UiClick.bind_button(previous_button)
-	previous_button.pressed.connect(_change_page.bind(-1))
-	_navigation.add_child(previous_button)
-	page_label = Style.label("Page 1 of 1", 13)
-	page_label.name = "AgeWordPage"
-	page_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_navigation.add_child(page_label)
-	next_button = Button.new()
-	next_button.name = "AgeWordNext"
-	next_button.text = "Next"
-	UiClick.bind_button(next_button)
-	next_button.pressed.connect(_change_page.bind(1))
-	_navigation.add_child(next_button)
-	_update_navigation()
 
 
 func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Dictionary = {}) -> void:
@@ -163,7 +138,6 @@ func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Di
 	_loading_state.clear()
 	_loading_box.hide()
 	scroll.show()
-	_navigation.show()
 	var ordered: Array = words.duplicate(true)
 	ordered.sort_custom(func(first: Dictionary, second: Dictionary) -> bool:
 		var first_text: String = str(first.get("text", "")).to_lower()
@@ -184,7 +158,6 @@ func configure(words: Array, band: Dictionary, palette: Dictionary, progress: Di
 		for index in range(_words.size()):
 			_word_indices[str(_words[index].id)] = index
 	if words_changed or band_changed:
-		_page_index = 0
 		meaning_label.text = "Tap a word to hear it."
 		_rebuild_words()
 		scroll.scroll_vertical = 0
@@ -203,7 +176,6 @@ func show_loading(band: Dictionary, word_count: int, state: Dictionary, palette:
 	_words.clear()
 	_word_indices.clear()
 	_growth.clear()
-	_page_index = 0
 	_clear_word_buttons()
 	title_label.text = str(_band.get("name", "All words"))
 	count_label.text = "%d %s" % [_loading_word_count, "word" if _loading_word_count == 1 else "words"]
@@ -216,10 +188,7 @@ func show_loading(band: Dictionary, word_count: int, state: Dictionary, palette:
 	_loading_progress.visible = not failed
 	retry_button.visible = failed
 	retry_button.disabled = not failed
-	previous_button.disabled = true
-	next_button.disabled = true
 	scroll.hide()
-	_navigation.hide()
 	_loading_box.show()
 	_layout(false)
 
@@ -234,9 +203,9 @@ func _clear_word_buttons() -> void:
 
 
 func _rebuild_words() -> void:
-	# Keep only the current page's image resources alive.
+	# Stable controls keep every word reachable by scrolling or keyboard focus.
 	_clear_word_buttons()
-	for word: Dictionary in _words.slice(_page_index * PAGE_SIZE, (_page_index + 1) * PAGE_SIZE):
+	for word: Dictionary in _words:
 		var button := Button.new()
 		var id: String = str(word.get("id", word.get("text", "")))
 		button.name = "AgeWord_" + id
@@ -267,17 +236,16 @@ func _rebuild_words() -> void:
 		picture.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		picture.texture = _word_texture(str(word.get("image", "")))
-		WordArt.bind(picture.texture, picture)
+		picture.set_meta("source", str(word.get("image", "")))
 		column.add_child(picture)
-		picture.visible = picture.texture != null
+		picture.visible = not str(word.get("image", "")).is_empty()
 		var caption := Style.label(str(word.get("display_text", word.get("text", ""))), 14)
 		caption.name = "WordLabel"
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		caption.add_theme_constant_override("line_spacing", 0)
 		caption.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		if picture.texture == null:
+		if not picture.visible:
 			column.alignment = BoxContainer.ALIGNMENT_CENTER
 		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		column.add_child(caption)
@@ -309,47 +277,49 @@ func _rebuild_words() -> void:
 		word_buttons.append(button)
 		_by_id[id] = button
 	_styled_scale = -1.0
-	_update_navigation()
 
 
 func word_count() -> int:
 	return _words.size() if _loading_state.is_empty() else _loading_word_count
 
 
-func _page_count() -> int:
-	return maxi(1, ceili(float(_words.size()) / PAGE_SIZE))
-
-
-func _update_navigation() -> void:
-	if previous_button == null:
+func _queue_visible_art() -> void:
+	if _art_sync_queued:
 		return
-	previous_button.disabled = _page_index == 0
-	next_button.disabled = _page_index >= _page_count() - 1
-	page_label.text = "Page %d of %d" % [_page_index + 1, _page_count()]
+	_art_sync_queued = true
+	_flush_visible_art.call_deferred()
 
 
-func _change_page(direction: int) -> void:
-	if not _can_interact():
+func _flush_visible_art() -> void:
+	_art_sync_queued = false
+	_sync_visible_art()
+
+
+func _sync_visible_art() -> void:
+	if scroll == null or word_buttons.is_empty() or not is_visible_in_tree():
 		return
-	var focus_previous: bool = previous_button.has_focus()
-	var focus_next: bool = next_button.has_focus()
-	_set_page(_page_index + direction)
-	if focus_previous and previous_button.disabled and not next_button.disabled:
-		next_button.grab_focus()
-	elif focus_next and next_button.disabled and not previous_button.disabled:
-		previous_button.grab_focus()
-
-
-func _set_page(index: int) -> void:
-	var next_page: int = clampi(index, 0, _page_count() - 1)
-	if next_page == _page_index:
+	# New cards briefly share the origin before GridContainer lays out its rows.
+	if word_buttons.size() > grid.columns and word_buttons.back().position.y <= word_buttons.front().position.y:
 		return
-	cancel_input()
-	_page_index = next_page
-	meaning_label.text = "Tap a word to hear it."
-	_rebuild_words()
-	scroll.scroll_vertical = 0
-	_layout(false)
+	# Prefetch one row above and below the viewport while releasing distant art.
+	# Cards retain their geometry and focus even when their textures are unloaded.
+	var scale: float = Style.ui_scale(self)
+	var nearby: Rect2 = scroll.get_global_rect().grow_individual(0, 154.0 / scale, 0, 154.0 / scale)
+	var retained: Dictionary = {}
+	for button: Button in word_buttons:
+		var picture: TextureRect = button.get_meta("word_art")
+		var source: String = str(picture.get_meta("source", ""))
+		if source.is_empty():
+			continue
+		if not nearby.intersects(button.get_global_rect()):
+			picture.texture = null
+			continue
+		var path: String = source if source.begins_with("res://") else "res://" + source
+		var texture: Texture2D = _word_texture(path)
+		picture.texture = texture
+		WordArt.bind(texture, picture)
+		retained[path] = texture
+	_textures = retained
 
 
 func _word_texture(source: String) -> Texture2D:
@@ -386,7 +356,6 @@ func cancel_input() -> void:
 func focus_word(id: String) -> bool:
 	if not _word_indices.has(id) or not _can_interact():
 		return false
-	_set_page(int(_word_indices[id]) / PAGE_SIZE)
 	var button: Button = _by_id.get(id)
 	button.grab_focus()
 	ensure_control_visible(button, true)
@@ -421,7 +390,7 @@ func _reveal_focused_word() -> void:
 
 
 func _layout(reveal_focus: bool = true) -> void:
-	if scroll == null or _navigation == null or size.x <= 0:
+	if scroll == null or size.x <= 0:
 		return
 	var scale: float = Style.ui_scale(self)
 	var gap: int = ceili(8.0 / scale)
@@ -433,8 +402,6 @@ func _layout(reveal_focus: bool = true) -> void:
 	count_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
 	meaning_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
 	meaning_label.custom_minimum_size.y = ceilf(34.0 / scale)
-	_navigation.add_theme_constant_override("separation", gap)
-	page_label.add_theme_font_size_override("font_size", ceili(12.0 / scale))
 	for edge in ["left", "right", "top", "bottom"]:
 		_content.add_theme_constant_override("margin_" + edge, inset)
 	var available: float = maxf(1.0, size.x - inset * 2.0)
@@ -453,13 +420,6 @@ func _layout(reveal_focus: bool = true) -> void:
 		Style.action_button(retry_button, accent)
 	retry_button.custom_minimum_size = Vector2(128.0, 48.0) / scale
 	retry_button.add_theme_font_size_override("font_size", ceili(14.0 / scale))
-	for button: Button in [previous_button, next_button]:
-		if restyle:
-			var previous_focus: int = button.focus_mode
-			Style.action_button(button, accent)
-			button.focus_mode = previous_focus
-		button.custom_minimum_size = Vector2(80.0, 48.0) / scale
-		button.add_theme_font_size_override("font_size", ceili(13.0 / scale))
 	for button: Button in word_buttons:
 		var mastered: bool = bool(button.get_meta("mastered", false))
 		if restyle:
@@ -497,6 +457,7 @@ func _layout(reveal_focus: bool = true) -> void:
 		caption.add_theme_font_size_override("font_size", ceili(14.0 / scale))
 	_styled_scale = scale
 	_styled_accent = accent
+	_queue_visible_art()
 	if reveal_focus:
 		_reveal_focused_word.call_deferred()
 
@@ -532,7 +493,7 @@ func snapshot() -> Dictionary:
 		"loading_state": str(_loading_state.get("state", "ready")), "loading_progress": float(_loading_state.get("progress", 1.0)),
 		"visible": is_visible_in_tree(), "age_band": str(_band.get("id", "")),
 		"word_count": word_count(), "word_ids": ids, "visible_word_ids": visible_ids, "mastered_word_ids": mastered_ids,
-		"page": _page_index + 1, "page_count": _page_count(), "meaning": meaning_label.text if meaning_label != null else "",
+		"loaded_image_count": _textures.size(), "meaning": meaning_label.text if meaning_label != null else "",
 		"columns": grid.columns if grid != null else 0,
 		"scroll_offset": scroll.scroll_vertical if scroll != null else 0,
 		"scroll_max": maxf(0.0, scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page) if scroll != null else 0.0}

@@ -21,8 +21,10 @@ practice again. Hints, pronunciation, peek, cancelled selections and idle time g
 The persistent level display and progress bar show new words mastered toward the
 next experience level. The display or **More** opens the learning notebook. It
 includes all words in each cohort, their 0-2 practice streaks or Mastered labels,
-pronunciation and short meanings. Future cohorts are clearly previews: browsing
-them cannot change the game's earned level or age.
+pronunciation and short meanings. Each age uses one continuous scrolling grid;
+all its words are reachable without page controls, and nearby pictures load as
+the player scrolls. Future cohorts are clearly previews: browsing them cannot
+change the game's earned level or age.
 
 Home offers eight illustrated theme choices above the game cards, arranged in
 one row on wide screens and two rows on phones. The selected theme is highlighted

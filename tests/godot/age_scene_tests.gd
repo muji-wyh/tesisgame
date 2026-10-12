@@ -31,7 +31,11 @@ func check_catalog(app, age_id: String) -> void:
 	expected.sort()
 	actual.sort()
 	check(actual == expected, "Age " + age_id + " shows its exact disjoint curriculum cohort")
-	check(app._age_catalog.word_buttons.size() <= app._age_catalog.PAGE_SIZE, "Rendered notebook cards remain bounded by page size")
+	check(app._age_catalog.word_buttons.size() == expected.size(), "Every word in the selected cohort belongs to one continuous grid")
+	check(app._age_catalog.find_child("AgeWordPages", true, false) == null
+		and app._age_catalog.find_child("AgeWordPrevious", true, false) == null
+		and app._age_catalog.find_child("AgeWordNext", true, false) == null,
+		"The notebook exposes no pagination bar or navigation buttons")
 	var heading: String = str(band.name) + (" · Preview" if int(age_id) > app.growth.learning_age() else "")
 	check(app._age_catalog.title_label.text == heading
 		and app._age_catalog.count_label.text == "%d words" % expected.size(), "The notebook accurately names its cohort, preview status and word count")
@@ -47,7 +51,11 @@ func check_catalog(app, age_id: String) -> void:
 		if word.image.is_empty():
 			check(picture.texture == null and not picture.visible, "Context words use readable text without a misleading picture")
 		else:
-			check(WordArt.source_path(picture.texture) == "res://" + word.image, "Pictured words retain their real source illustration")
+			check(picture.visible and ResourceLoader.exists("res://" + word.image)
+				and (picture.texture == null or WordArt.source_path(picture.texture) == "res://" + word.image),
+				"Pictured words retain their real source illustration and stable card layout")
+			if app._age_catalog.scroll.get_global_rect().intersects(button.get_global_rect()):
+				check(picture.texture != null, "Every visible notebook picture is ready to read")
 		var mastery: Label = button.get_meta("mastery_label")
 		var streak: int = app.growth.streak(word.id)
 		check(mastery.text == ("Mastered" if streak == Growth.MASTERY_STREAK else "%d / %d" % [streak, Growth.MASTERY_STREAK]), "Every word shows its saved mastery state")
@@ -105,6 +113,7 @@ func _run() -> void:
 	Fixture.install(app, directory)
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app._mode_id == "match" and app.model.age_band_id == "3" and app.growth.level == 0 and app.growth.age == 0, "Every new learner begins with a playable age-3 Match round with Baby Pip")
@@ -239,11 +248,13 @@ func _run() -> void:
 			and app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y + 1
 			and app._age_catalog.scroll.size.y > 0, "The full notebook fits at %s: app=%s catalog=%s ages=%s scroll=%s" % [dimensions, app.get_global_rect(), app._age_catalog.get_global_rect(), app._age_choices.get_global_rect(), app._age_catalog.scroll.size])
 		var last_id: String = app._age_catalog.snapshot().word_ids.back()
-		check(app._age_catalog.focus_word(last_id), "The final word can be reached across page boundaries")
+		var original_buttons: Array[Button] = app._age_catalog.word_buttons.duplicate()
+		check(app._age_catalog.focus_word(last_id), "The final word can be reached in the same continuous list")
 		await settle()
 		var last: Button = root.gui_get_focus_owner()
 		var target: Control = last.get_meta("word_label") if last.size.y > app._age_catalog.scroll.size.y else last
-		check(app._age_catalog.snapshot().page == app._age_catalog.snapshot().page_count
+		check(app._age_catalog.word_buttons == original_buttons
+			and last == original_buttons.back() and app._age_catalog.scroll.scroll_vertical > 0
 			and app._age_catalog.scroll.get_global_rect().grow(1).encloses(target.get_global_rect())
 			and not app._age_catalog.scroll.get_v_scroll_bar().visible and not app._age_catalog.scroll.get_h_scroll_bar().visible,
 			"Hidden scrollbars still reveal the final word's caption at " + str(dimensions))

@@ -2,6 +2,7 @@ extends SceneTree
 ## Rendered native benchmark. Never use the one-second TIME_PROCESS maximum as a frame sample.
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const SCENARIOS := ["match", "memory", "voice-pop", "growth", "catalog", "chest"]
 const PROTOCOL := "main-scene-rendered-v2"
 
@@ -37,6 +38,7 @@ var _drawn_target_peak: int = 0
 var _actions: Array[Dictionary] = []
 var _pairs: Array = []
 var _catalog_word_ids: Array[String] = []
+var _catalog_buttons: Array[Button] = []
 var _growth_before: Dictionary = {}
 var _catalog_card_peak: int = 0
 var _catalog_texture_peak: int = 0
@@ -183,10 +185,12 @@ func _install_scene() -> void:
 		return
 	_app = load("res://scenes/main.tscn").instantiate()
 	_app.medal_progress = load("res://scripts/medal_progress.gd").new(_directory + "/medals.cfg", _directory + "/legacy.cfg")
+	_app._presentation.path = _directory + "/presentation.cfg"
 	PlayerFixture.install(_app, _directory)
 	root.add_child(_app)
 	await process_frame
 	await process_frame
+	PlayerFixture.enter_mode(_app, "match")
 	_app.set_reduced_motion(false)
 	_app.audio.set_muted(false)
 	# Pip uses a private RNG, independent of the seeded global gameplay generator.
@@ -199,6 +203,7 @@ func _install_scene() -> void:
 func _prepare_scenario() -> void:
 	_pairs.clear()
 	_catalog_word_ids.clear()
+	_catalog_buttons.clear()
 	_catalog_card_peak = 0
 	_catalog_texture_peak = 0
 	_chest_cues.clear()
@@ -235,9 +240,10 @@ func _prepare_scenario() -> void:
 			_growth_before = _app.growth.snapshot()
 			if _scenario == "catalog":
 				_app._age_buttons["7"].pressed.emit()
-				# Capture the complete ordered age-seven cohort before timing; rendered cards
-				# contain only the current page and cannot select a distant word.
+				# Capture the complete age-seven cohort and its persistent card identities.
+				# The timed focus jumps scroll one grid and refresh only nearby artwork.
 				_catalog_word_ids.assign(_app._age_catalog.snapshot().word_ids)
+				_catalog_buttons.assign(_app._age_catalog.word_buttons)
 
 
 func _begin_frame(_delta: float) -> void:
@@ -326,7 +332,7 @@ func _scheduled_input(frame: int) -> void:
 			if frame in [early, middle, int(_sample_count * 0.84)]:
 				var index: int = 0 if frame == early else _catalog_word_ids.size() / 2 if frame == middle else _catalog_word_ids.size() - 1
 				var id: String = _catalog_word_ids[index]
-				if not _require(_app._age_catalog.focus_word(id), "Catalogue word must be reachable across pages: " + id):
+				if not _require(_app._age_catalog.focus_word(id), "Catalogue word must be reachable in the continuous list: " + id):
 					return
 				var button := _app.get_viewport().gui_get_focus_owner() as Button
 				if not _require(button != null and str(button.get_meta("word_id", "")) == id,
@@ -334,7 +340,7 @@ func _scheduled_input(frame: int) -> void:
 					return
 				button.pressed.emit()
 				_actions.append({"frame": frame, "action": "catalog_word", "index": index,
-					"word_id": id, "page": _app._age_catalog._page_index + 1})
+					"word_id": id, "cards": _app._age_catalog.word_buttons.size()})
 
 
 func _state() -> Dictionary:
@@ -347,15 +353,26 @@ func _state() -> Dictionary:
 			"summary": _app._growth_summary.text, "progress_unchanged": _app.growth.snapshot() == _growth_before}
 		"catalog":
 			var catalog: Dictionary = _app._age_catalog.snapshot()
-			var pictured_paths: Dictionary = {}
+			var loaded_paths: Dictionary = {}
+			var visible_images_ready := true
+			var loaded_images_match_sources := true
+			var bounds: Rect2 = _app._age_catalog.scroll.get_global_rect()
 			for button: Button in _app._age_catalog.word_buttons:
 				var source: String = str(button.get_meta("word").get("image", ""))
-				if not source.is_empty():
-					pictured_paths[source] = true
+				var picture: TextureRect = button.get_meta("word_art")
+				if not source.is_empty() and bounds.intersects(button.get_global_rect()):
+					visible_images_ready = visible_images_ready and picture.texture != null
+				if picture.texture != null:
+					loaded_paths[source] = true
+					loaded_images_match_sources = loaded_images_match_sources and WordArt.source_path(picture.texture) == "res://" + source
+			var texture_limit: int = _app._age_catalog.grid.columns * (ceili(_app._age_catalog.scroll.size.y / _catalog_buttons.front().size.y) + 4)
 			return {"visible": _visible_control(_app._age_catalog), "word_count": catalog.word_count,
-				"age": _app._catalog_age, "expected_textures": pictured_paths.size(),
-				"page": catalog.page, "page_count": catalog.page_count, "page_size": _app._age_catalog.PAGE_SIZE,
+				"age": _app._catalog_age, "expected_textures": loaded_paths.size(), "texture_limit": texture_limit,
+				"visible_images_ready": visible_images_ready, "loaded_images_match_sources": loaded_images_match_sources,
+				"cards_retained": _app._age_catalog.word_buttons == _catalog_buttons,
+				"pagination_controls": _app._age_catalog.find_child("AgeWordPages", true, false) != null,
 				"cards": _app._age_catalog.word_buttons.size(), "textures": _app._age_catalog._textures.size(),
+				"loaded_image_count": catalog.loaded_image_count,
 				"scroll": catalog.scroll_offset, "progress_unchanged": _app.growth.snapshot() == _growth_before}
 		"chest": return {"visible": _visible_control(_app.chest), "phase": _app.model.phase, "chest_state": _app.model.chest_state, "cues": _chest_cues.duplicate()}
 	return {}
@@ -381,14 +398,14 @@ func _assert_workload(after: bool) -> bool:
 			and (not after or (_actions.size() == 3 and _actions[0].action == "browse_age" and _actions[0].age == 4 \
 				and _actions[1].action == "browse_age" and _actions[1].age == 3 and _actions[2].action == "growth_word"))
 		"catalog":
-			var expected_cards: int = mini(state.page_size, state.word_count - (state.page - 1) * state.page_size)
 			valid = state.age == 7 and state.word_count == 284 and _catalog_word_ids.size() == state.word_count \
-				and state.page_size == 60 and state.page_count == 5 and state.page >= 1 and state.page <= state.page_count \
-				and state.cards == expected_cards and state.cards > 0 and state.cards <= state.page_size \
-				and state.textures == state.expected_textures and state.progress_unchanged \
-				and ((state.page == 1) if not after else (state.page == state.page_count and state.scroll > 0 \
-					and _catalog_card_peak > 0 and _catalog_card_peak <= state.page_size \
-					and _catalog_texture_peak > 0 and _catalog_texture_peak <= state.page_size and _catalog_inputs_recorded()))
+				and state.cards == state.word_count and state.cards_retained and not state.pagination_controls \
+				and state.textures == state.expected_textures and state.textures == state.loaded_image_count \
+				and state.textures > 0 and state.textures <= state.texture_limit \
+				and state.visible_images_ready and state.loaded_images_match_sources and state.progress_unchanged \
+				and ((state.scroll == 0) if not after else (state.scroll > 0 \
+					and _catalog_card_peak == state.word_count \
+					and _catalog_texture_peak > 0 and _catalog_texture_peak <= state.texture_limit and _catalog_inputs_recorded()))
 		"chest": valid = state.phase == "won" and ((state.chest_state in ["closed", "opening"] and "release" not in state.cues) if not after else (state.chest_state in ["opening", "opened"] and "release" in state.cues))
 	return _require(valid, "Inactive or incorrect workload for %s: %s" % [_scenario, JSON.stringify(state)])
 
@@ -400,9 +417,8 @@ func _catalog_inputs_recorded() -> bool:
 		return false
 	for index in range(indices.size()):
 		var expected_index: int = indices[index]
-		var expected_page: int = expected_index / _app._age_catalog.PAGE_SIZE + 1
 		if selected[index].index != expected_index or selected[index].word_id != _catalog_word_ids[expected_index] \
-			or selected[index].page != expected_page:
+			or selected[index].cards != _catalog_word_ids.size():
 			return false
 	return true
 

@@ -76,7 +76,7 @@ func _run() -> void:
 	await settle()
 	await _check_content(catalog, data.words)
 	await _check_mastery_state(catalog, data.words)
-	await _check_paging(catalog, data.words)
+	await _check_continuous_scroll(catalog, data.words)
 	await _check_contextual_guidance(catalog, data.words)
 	await _check_layout(catalog)
 	root.size = Vector2i(640, 800)
@@ -113,40 +113,45 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 			"Age " + band.id + " shows only its own range's word count with an English heading")
 		var seen: Dictionary = {}
 		var previous := ""
-		check(catalog.snapshot().page == 1 and catalog.previous_button.disabled, "A new age starts on its first page")
-		for page in range(catalog.snapshot().page_count):
-			if page > 0:
-				catalog.next_button.pressed.emit()
-				await settle()
-			check(catalog.word_buttons.size() <= Catalog.PAGE_SIZE and catalog._textures.size() <= Catalog.PAGE_SIZE,
-				"A page bounds both live controls and retained picture resources")
-			check(catalog.scroll.scroll_vertical == 0 and catalog.snapshot().page == page + 1,
-				"Every page starts at its top without changing the total count")
-			for button: Button in catalog.word_buttons:
-				var word: Dictionary = button.get_meta("word")
-				var picture: TextureRect = button.get_meta("word_art")
-				var caption: Label = button.get_meta("word_label")
-				check(not seen.has(word.id) and eligible.has(word), "Each eligible word appears exactly once: " + word.id)
-				seen[word.id] = true
-				check(english.search(caption.text) != null and caption.text == Data.display_word(word)
-					and previous.naturalnocasecmp_to(caption.text) <= 0,
-					"English word labels are alphabetically ordered across page boundaries: " + word.id)
-				previous = caption.text
-				check(ResourceLoader.exists("res://" + word.audio), "Every pictured or contextual word retains a bundled pronunciation: " + word.id)
-				if word.image.is_empty():
-					check(picture.texture == null and not picture.visible and word.practice_modes == ["phrase"], "Contextual words remain readable without invented pictures: " + word.id)
-				else:
-					check(picture.texture != null and WordArt.source_path(picture.texture) == "res://" + word.image, "The catalogue retains its production illustration: " + word.id)
-				var mastery: Label = button.get_meta("mastery_label")
-				var streak: int = int(progress.streaks.get(word.id, 0))
-				check(mastery.text == ("Mastered" if streak == Growth.MASTERY_STREAK else "%d / %d" % [streak, Growth.MASTERY_STREAK]), "Mastered and learning words expose their exact streak: " + word.id)
-		check(catalog.next_button.disabled, "The final page cannot advance past the catalog")
+		check(catalog.scroll.scroll_vertical == 0, "A new age starts at the top of its continuous list")
+		check(catalog.word_buttons.size() == expected.size()
+			and catalog.snapshot().visible_word_ids.size() == expected.size(),
+			"Every word remains in the same scrollable grid")
+		for retired_name in ["AgeWordPages", "AgeWordPrevious", "AgeWordNext", "AgeWordPage"]:
+			check(catalog.find_child(retired_name, true, false) == null, "The notebook has no pagination control: " + retired_name)
+		for button: Button in catalog.word_buttons:
+			var word: Dictionary = button.get_meta("word")
+			var picture: TextureRect = button.get_meta("word_art")
+			var caption: Label = button.get_meta("word_label")
+			check(not seen.has(word.id) and eligible.has(word), "Each eligible word appears exactly once: " + word.id)
+			seen[word.id] = true
+			check(english.search(caption.text) != null and caption.text == Data.display_word(word)
+				and previous.naturalnocasecmp_to(caption.text) <= 0,
+				"English word labels are alphabetically ordered throughout the list: " + word.id)
+			previous = caption.text
+			check(ResourceLoader.exists("res://" + word.audio), "Every pictured or contextual word retains a bundled pronunciation: " + word.id)
+			if word.image.is_empty():
+				check(picture.texture == null and not picture.visible and word.practice_modes == ["phrase"], "Contextual words remain readable without invented pictures: " + word.id)
+			else:
+				check(picture.visible and ResourceLoader.exists("res://" + word.image)
+					and (picture.texture == null or WordArt.source_path(picture.texture) == "res://" + word.image),
+					"The catalogue keeps the production picture source and its reserved layout: " + word.id)
+			var mastery: Label = button.get_meta("mastery_label")
+			var streak: int = int(progress.streaks.get(word.id, 0))
+			check(mastery.text == ("Mastered" if streak == Growth.MASTERY_STREAK else "%d / %d" % [streak, Growth.MASTERY_STREAK]), "Mastered and learning words expose their exact streak: " + word.id)
 		check(seen.size() == expected.size() and expected.all(func(id: String) -> bool: return seen.has(id)),
 			"Age " + band.id + " contains its exact curriculum tier")
 		for topic: Dictionary in Data.adventures(words):
 			var topic_words: Array = eligible.filter(func(word: Dictionary) -> bool: return topic.words.has(word.id))
 			check(topic_words.all(func(word: Dictionary) -> bool: return seen.has(word.id)),
 				"Age " + band.id + " includes all eligible vocabulary from " + topic.name)
+		var original_buttons: Array[Button] = catalog.word_buttons.duplicate()
+		for index in [0, catalog.word_buttons.size() / 2, catalog.word_buttons.size() - 1]:
+			var sample: Button = original_buttons[index]
+			check(catalog.focus_word(str(sample.get_meta("word_id"))), "The first, middle and final word remain directly reachable")
+			await settle()
+			_check_visible_art(catalog)
+			check(catalog.word_buttons == original_buttons, "Scrolling never replaces or omits any word card")
 		var last: Button = catalog.word_buttons.back()
 		check(catalog.focus_word(str(last.get_meta("word_id"))), "Words can be located through the public focus API")
 		await settle()
@@ -156,8 +161,29 @@ func _check_content(catalog: Catalog, words: Array) -> void:
 		check(catalog.word_buttons.back() == last and last.has_focus() and catalog.scroll.scroll_vertical == offset,
 			"Refreshing the selected age preserves focused words and reading position")
 	check(not catalog.focus_word("missing-word"), "Unknown word focus requests are rejected")
-	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	catalog.configure(_cohort(words, 7), Data.age_band("7"), Data.theme("spring"))
 	await settle()
+
+
+func _cohort(words: Array, age: int) -> Array:
+	return words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == age)
+
+
+func _check_visible_art(catalog: Catalog) -> void:
+	var bounds: Rect2 = catalog.scroll.get_global_rect()
+	var retained: Dictionary = {}
+	for button: Button in catalog.word_buttons:
+		var picture: TextureRect = button.get_meta("word_art")
+		var source: String = str(button.get_meta("word").image)
+		if not source.is_empty() and bounds.intersects(button.get_global_rect()):
+			check(picture.texture != null and WordArt.source_path(picture.texture) == "res://" + source,
+				"Every visible pictured card has its production artwork: " + str(button.get_meta("word_id")))
+		if picture.texture != null:
+			retained[source] = true
+	var texture_limit: int = catalog.grid.columns * (ceili(catalog.scroll.size.y / catalog.word_buttons.front().size.y) + 4)
+	check(catalog._textures.size() == retained.size() and catalog.snapshot().loaded_image_count == retained.size()
+		and retained.size() > 0 and retained.size() <= texture_limit,
+		"Only a bounded nearby working set of pictures remains loaded while the whole cohort stays reachable")
 
 
 func _check_mastery_state(catalog: Catalog, words: Array) -> void:
@@ -173,7 +199,7 @@ func _check_mastery_state(catalog: Catalog, words: Array) -> void:
 		and not bool(learning.get_meta("mastered")) and not learning_badge.visible,
 		"Only currently mastered words show the acquired medal")
 	check(catalog.snapshot().mastered_word_ids == ["apple"],
-		"The published page identifies the same currently mastered word as the cards")
+		"The published list identifies the same currently mastered word as the cards")
 	check(badge.mouse_filter == Control.MOUSE_FILTER_IGNORE and badge.focus_mode == Control.FOCUS_NONE,
 		"The mastery medal cannot take pointer or keyboard ownership from the word")
 	check(mastered.get_theme_stylebox("normal").bg_color != learning.get_theme_stylebox("normal").bg_color,
@@ -206,21 +232,21 @@ func _check_mastery_state(catalog: Catalog, words: Array) -> void:
 	check(not str(learning.get("accessibility_name")).contains("Mastered.")
 		and str(learning.get("accessibility_name")).contains("0 of 3 correct in a row."),
 		"Resetting a streak also clears stale mastery from its accessible description")
-	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	catalog.configure(_cohort(words, 7), Data.age_band("7"), Data.theme("spring"))
 	await settle()
 
 
-func _check_paging(catalog: Catalog, words: Array) -> void:
+func _check_continuous_scroll(catalog: Catalog, words: Array) -> void:
 	var before := heard.size()
-	var button: Button = catalog.next_button
-	var point: Vector2 = button.get_global_transform_with_canvas() * (button.size * 0.5)
-	await pointer(point, true, true)
-	await pointer(point, true, false)
-	await pointer(point, false, true)
-	await pointer(point, false, false)
+	var original_buttons: Array[Button] = catalog.word_buttons.duplicate()
+	var last_id: String = catalog.snapshot().word_ids.back()
+	check(catalog.focus_word(last_id), "Global word focus directly reaches the final card in the same list")
 	await settle()
-	check(catalog.snapshot().page == 2 and heard.size() == before, "Touch pagination changes one page without pronouncing a word")
-	catalog.previous_button.grab_focus()
+	var last: Button = catalog.word_buttons.back()
+	check(last.has_focus() and catalog.scroll.scroll_vertical > 0 and heard.size() == before
+		and catalog.word_buttons == original_buttons,
+		"Revealing a distant word preserves the whole cohort without speaking it")
+	_check_visible_art(catalog)
 	for down in [true, false]:
 		var event := InputEventAction.new()
 		event.action = "ui_accept"
@@ -228,14 +254,9 @@ func _check_paging(catalog: Catalog, words: Array) -> void:
 		root.push_input(event, true)
 		await process_frame
 	await settle()
-	check(catalog.snapshot().page == 1 and catalog.previous_button.disabled and catalog.next_button.has_focus(),
-		"Keyboard pagination returns to the first page and leaves focus on an available control")
-	var last_id: String = catalog.snapshot().word_ids.back()
-	check(catalog.focus_word(last_id), "Global word focus can navigate directly to the final page")
-	await settle()
-	check(catalog.snapshot().page == catalog.snapshot().page_count and catalog.word_buttons.back().has_focus(),
-		"Cross-page focus reveals the requested final word")
-	var described: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.has("meaning"))[0]
+	check(heard.size() == before + 1 and heard.back().id == last_id,
+		"Keyboard activation pronounces a word beyond the former first page")
+	var described: Dictionary = _cohort(words, 7).filter(func(word: Dictionary) -> bool: return word.has("meaning"))[0]
 	catalog.focus_word(described.id)
 	await settle()
 	var described_button: Button = root.gui_get_focus_owner()
@@ -244,21 +265,24 @@ func _check_paging(catalog: Catalog, words: Array) -> void:
 	check(catalog.meaning_label.text.contains(described.meaning) and heard.back().id == described.id,
 		"Selecting a new word displays its meaning and plays its pronunciation")
 	check(catalog.get_global_rect().encloses(catalog.meaning_label.get_global_rect()), "The definition is visible within the catalog")
-	catalog._change_page(1)
+	var definition: String = catalog.meaning_label.text
+	catalog.focus_word(last_id)
 	await settle()
-	check(catalog.meaning_label.text == "Tap a word to hear it.", "Changing a page clears the previous word's definition")
+	check(catalog.meaning_label.text == definition, "Browsing the continuous list retains the last spoken word's definition")
 	catalog.focus_word(str(catalog.snapshot().word_ids.front()))
 	await settle()
-	catalog.configure(words, Data.age_band("3"), Data.theme("spring"))
+	catalog.configure(_cohort(words, 3), Data.age_band("3"), Data.theme("spring"))
 	await settle()
-	check(catalog.snapshot().page == 1 and catalog.meaning_label.text == "Tap a word to hear it.",
-		"Changing the age resets pagination and the selected definition")
-	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	check(catalog.scroll.scroll_vertical == 0 and catalog.meaning_label.text == "Tap a word to hear it.",
+		"Changing the age resets the list position and the selected definition")
+	catalog.configure(_cohort(words, 7), Data.age_band("7"), Data.theme("spring"))
 	await settle()
 
 
 func _check_contextual_guidance(catalog: Catalog, words: Array) -> void:
 	var contextual: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.id == "i")[0]
+	catalog.configure(_cohort(words, 3), Data.age_band("3"), Data.theme("spring"))
+	await settle()
 	for dimensions in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(844, 390)]:
 		root.size = dimensions
 		catalog.size = Vector2(dimensions.x - 24, dimensions.y - 120)
@@ -281,8 +305,7 @@ func _check_contextual_guidance(catalog: Catalog, words: Array) -> void:
 		check(catalog.scroll.get_global_rect().grow(1).encloses(caption.get_global_rect()), "The context word stays readable below its practice guidance")
 	root.size = Vector2i(640, 800)
 	catalog.size = Vector2(616, 680)
-	catalog.configure(words, Data.age_band("3"), Data.theme("spring"))
-	catalog.configure(words, Data.age_band("12"), Data.theme("spring"))
+	catalog.configure(_cohort(words, 7), Data.age_band("7"), Data.theme("spring"))
 	await settle()
 
 
@@ -320,7 +343,7 @@ func _check_layout(catalog: Catalog) -> void:
 		catalog.focus_word(str(first.get_meta("word_id")))
 		await settle()
 		var first_label: Label = first.get_meta("word_label")
-		# The meaning and page controls can leave less than one full card of
+		# The meaning can leave less than one full card of
 		# space. In that case, returning to the first word reveals its caption.
 		var focus_target: Control = first_label if first.size.y > catalog.scroll.size.y else first
 		var target_rect: Rect2 = catalog._content.get_global_transform().affine_inverse() * focus_target.get_global_rect()

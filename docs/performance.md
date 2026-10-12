@@ -52,7 +52,7 @@ The six default scenarios receive equal weight:
 | Memory (`memory`) | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
 | Voice Pop (`voice-pop`) | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
 | Growth notebook (`growth`) | The 80-word Lv3 cohort; browse age 4, return to age 3, then hear its first card. Browsing and listening must leave learning progress unchanged. |
-| Age catalogue (`catalog`) | The 284-word age-7 preview cohort in five pages of at most 60 cards; focus, scroll, pagination, and pronunciation at the first, middle, and last card. Only pictured words retain image textures. |
+| Age catalogue (`catalog`) | The 284-word age-7 preview cohort in one continuous scroll; focus and pronounce the first, middle, and last card. All card identities persist while only visible and nearby pictures retain image textures. |
 | Chest (`chest`) | A real Match win and continuous chest hold after the celebration gate; the hold begins during the final 60 warmup frames so measurement includes charge, release, and reward presentation. |
 
 Talk Quest and its map diagnostic were retired on 2026-10-06. Protocol v2 replaces
@@ -72,8 +72,11 @@ and peak counts. At least one quarter of measured frames must contain live and
 drawn targets; successful hits must also be recorded. This allows a legitimate
 empty interval between volleys at the end of measurement. The growth notebook
 must retain its catalogue, Lv3 summary, expected cohort, and unchanged progress.
-Age-catalogue assertions verify all 284 words, pagination, actual pictured-resource
-counts, and unchanged progress. Evidence collection occurs after the timing
+Age-catalogue assertions verify all 284 persistent cards, the absence of pagination,
+loaded artwork for visible cards, a bounded nearby texture working set, and unchanged
+progress. The continuous-scroll catalogue replaces the older paged workload; its
+harness fingerprint differs, so results from the two workloads are not comparable.
+Evidence collection occurs after the timing
 endpoint; workload assertions run outside measurement. The JSON records state before and after,
 scheduled actions, node/object counts, engine version, graphics adapter, render
 backend, display size, and pacing settings. All save paths are assigned before
