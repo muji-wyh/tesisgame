@@ -9,11 +9,12 @@ const Style = preload("res://scripts/ui_style.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
 const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Flight = preload("res://scripts/chest_reward_flight.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
-const REVEAL_SECONDS: float = 0.12
-const REWARD_SECONDS: float = 1.95
+const REVEAL_SECONDS: float = Flight.REVEAL_SECONDS
+const REWARD_SECONDS: float = Flight.PERFORMANCE_SECONDS
 const MISS_SECONDS: float = 0.80
 
 var chest: ChestView
@@ -41,6 +42,8 @@ var _models: RewardModel
 var _model_tier: int = 0
 var _model_sample: Dictionary = {}
 var _effect := Node2D.new()
+var _overlay := CanvasLayer.new()
+var _glow := Node2D.new()
 var _pose: Dictionary = {}
 var _art_rect := Rect2()
 
@@ -53,11 +56,16 @@ func _init() -> void:
 	z_index = 70
 	add_child(_surface_layer)
 	_surface_layer.draw.connect(_draw_status_surface)
+	_overlay.layer = 70
+	_overlay.visible = false
+	add_child(_overlay)
+	_overlay.add_child(_glow)
+	_glow.draw.connect(_draw_chest_glow)
 	chest = ChestView.new()
 	chest.name = "PairClosedChest"
 	chest.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chest.reduced_motion = true
-	add_child(chest)
+	_overlay.add_child(chest)
 	_title = Style.label("", 14)
 	_title.name = "PairRewardStatus"
 	_title.add_theme_font_override("font", Style.HEADING_FONT)
@@ -67,7 +75,7 @@ func _init() -> void:
 	add_child(_title)
 	_models = RewardModel.new()
 	add_child(_models)
-	add_child(_effect)
+	_overlay.add_child(_effect)
 	_effect.draw.connect(_draw_chest_effect)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
@@ -177,6 +185,8 @@ func clear() -> void:
 	_model_sample.clear()
 	_pose.clear()
 	_models.clear()
+	_overlay.visible = false
+	_glow.queue_redraw()
 	_effect.queue_redraw()
 	chest.hide()
 	chest.set_idle_paused(true)
@@ -192,7 +202,7 @@ func snapshot() -> Dictionary:
 		"elapsed": _elapsed, "revealed": _revealed, "message": _title.text,
 		"cue_log": _cue_log.duplicate(),
 		"anchor": _anchor, "toast_rect": _toast_rect, "chest_rect": _chest_rect,
-		"motion": _pose.duplicate(), "live_turn": not _model_sample.is_empty(),
+		"motion": _pose.duplicate(), "live_turn": not _model_sample.is_empty(), "overlay_visible": _overlay.visible,
 		"chest_mode": chest.mode, "mouse_filter": mouse_filter}
 
 
@@ -238,6 +248,7 @@ func _warm_chest() -> void:
 
 
 func _maintain_chest_render() -> void:
+	_sync_overlay()
 	# Render a newly visible closed model, then retain the texture without an idle
 	# render loop. Neither its native mechanical clock nor its opening can run here.
 	var warm: bool = _earned and not _paused and chest.is_visible_in_tree() and Engine.get_process_frames() < _render_until_frame
@@ -247,6 +258,15 @@ func _maintain_chest_render() -> void:
 		and not _reduced_motion and is_visible_in_tree())
 
 
+func _sync_overlay() -> void:
+	if not is_inside_tree():
+		return
+	# The flight crosses the bounded board, while its coordinates remain local
+	# to the original reward row. CanvasLayer bypasses ancestor clipping only.
+	_overlay.transform = get_global_transform_with_canvas()
+	_overlay.visible = _earned and not _paused and is_visible_in_tree()
+
+
 func _layout() -> void:
 	var unit: float = 1.0 / Style.ui_scale(self)
 	var available: Rect2 = _anchor
@@ -254,7 +274,8 @@ func _layout() -> void:
 		available = Rect2(Vector2.ZERO, size)
 	if not available.has_area():
 		return
-	var desired_width: float = (210.0 if _earned and _performance_active else 184.0 if _earned else 170.0) * unit
+	# Keep the resting chest in one place before and after the flight.
+	var desired_width: float = (184.0 if _earned else 170.0) * unit
 	var width: float = minf(desired_width, available.size.x)
 	var height: float = minf(46.0 * unit, available.size.y)
 	_toast_rect = Rect2(available.get_center() - Vector2(width, height) * 0.5, Vector2(width, height))
@@ -291,7 +312,8 @@ func _layout() -> void:
 		_title.modulate.a *= 1.0 - float(_pose.emphasis)
 	_surface_layer.modulate.a = _title.modulate.a
 	_surface_layer.queue_redraw()
-	queue_redraw()
+	_sync_overlay()
+	_glow.queue_redraw()
 	_effect.queue_redraw()
 
 
@@ -299,39 +321,30 @@ func _sample_chest_motion(unit: float) -> void:
 	_model_sample.clear()
 	var rest: Vector2 = _chest_rect.position + _art_rect.get_center()
 	_pose = {"center": rest, "scale": 1.0, "yaw": 0.0, "roll": 0.0,
-		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0}
+		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0, "phase": "rest"}
 	if not _earned or not _performance_active or _reduced_motion or not _art_rect.has_area():
 		return
-	var age: float = _elapsed
-	var turn: float = smoothstep(0.06, 1.20, age)
-	var emphasis: float = smoothstep(0.0, 0.28, age) * (1.0 - smoothstep(1.12, 1.72, age))
-	var peak_edge: float = maxf(float(_pose.edge), minf(128.0 * unit, _chest_rect.size.x * 2.7))
-	var scale: float = lerpf(1.0, peak_edge / float(_pose.edge), emphasis)
-	var roll: float = sin(turn * TAU) * 0.09
-	var lift: float = sin(clampf(age / 1.45, 0.0, 1.0) * PI) * _chest_rect.size.x * 0.24
-	if _model_tier > 0:
-		_model_sample = _models.sample(_model_tier, turn * TAU)
+	var safe: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
+	safe = safe.grow(-2.0 * unit)
+	_pose.merge(Flight.sample(_elapsed, rest, safe, float(_pose.edge), 176.0 * unit), true)
+	if _model_tier > 0 and float(_pose.model_weight) > 0.0:
+		_model_sample = _models.sample(_model_tier, float(_pose.yaw))
 	var local := Rect2(-_art_rect.size * 0.5, _art_rect.size)
 	if not _model_sample.is_empty():
 		var framing: Rect2 = _model_sample.bounds
 		var turned: Rect2 = _model_sample.turn_bounds
 		var model_unit: float = float(_pose.edge) / maxf(framing.size.x, framing.size.y)
 		local = local.merge(Rect2((turned.position - framing.get_center()) * model_unit, turned.size * model_unit))
-	var bounds: Rect2 = Transform2D(roll, Vector2.ONE * scale, 0.0, Vector2.ZERO) * local
-	var safe: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
-	safe = safe.grow(-8.0 * unit)
-	var fit: float = minf(1.0, minf(safe.size.x / bounds.size.x, safe.size.y / bounds.size.y))
-	scale *= fit
-	bounds = Rect2(bounds.position * fit, bounds.size * fit)
-	var center: Vector2 = (rest - Vector2(0, lift)).clamp(safe.position - bounds.position, safe.end - bounds.end)
-	var model_weight: float = smoothstep(0.0, 0.10, age) * (1.0 - smoothstep(1.52, 1.72, age)) if not _model_sample.is_empty() else 0.0
-	_pose.merge({"center": center, "scale": scale, "yaw": turn * TAU, "roll": roll,
-		"emphasis": emphasis, "model_weight": model_weight}, true)
+	else:
+		# Source sprites turn in their own plane without invented rear geometry.
+		_pose.roll = _pose.yaw
+		_pose.model_weight = 0.0
+	_pose = Flight.fit(_pose, local, safe)
 	chest.pivot_offset = _art_rect.get_center()
-	chest.position = center - chest.pivot_offset
-	chest.scale = Vector2.ONE * scale
-	chest.rotation = roll
-	chest.modulate.a = 1.0 - model_weight
+	chest.position = Vector2(_pose.center) - chest.pivot_offset
+	chest.scale = Vector2.ONE * float(_pose.scale)
+	chest.rotation = float(_pose.roll)
+	chest.modulate.a = 1.0 - float(_pose.model_weight)
 
 
 func _draw_status_surface() -> void:
@@ -339,7 +352,7 @@ func _draw_status_surface() -> void:
 		_surface_layer.draw_style_box(_surface, _toast_rect)
 
 
-func _draw() -> void:
+func _draw_chest_glow() -> void:
 	if not visible or not _toast_rect.has_area() or _pose.is_empty():
 		return
 	if not _earned or not _performance_active or _reduced_motion:
@@ -351,10 +364,10 @@ func _draw() -> void:
 	var center: Vector2 = _pose.center
 	var edge: float = float(_pose.edge) * float(_pose.scale)
 	var glow: float = (1.0 - smoothstep(0.40, 1.35, t)) * 0.72
-	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.94, Vector2.ONE * edge * 1.88), false, Color(accent, glow))
-	draw_set_transform(center, t * 0.62)
-	draw_texture_rect(RAYS, Rect2(Vector2.ONE * -edge, Vector2.ONE * edge * 2.0), false, Color(accent.lightened(0.18), glow * 0.82))
-	draw_set_transform(Vector2.ZERO)
+	_glow.draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.94, Vector2.ONE * edge * 1.88), false, Color(accent, glow))
+	_glow.draw_set_transform(center, t * 0.62)
+	_glow.draw_texture_rect(RAYS, Rect2(Vector2.ONE * -edge, Vector2.ONE * edge * 2.0), false, Color(accent.lightened(0.18), glow * 0.82))
+	_glow.draw_set_transform(Vector2.ZERO)
 
 
 func _draw_chest_effect() -> void:

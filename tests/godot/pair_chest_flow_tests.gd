@@ -3,6 +3,7 @@ extends SceneTree
 const Progress = preload("res://scripts/medal_progress.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const PairReward = preload("res://scripts/pair_chest_reward.gd")
 var checks: int = 0
 var failures: int = 0
 var serial: int = 0
@@ -50,6 +51,7 @@ func make_app(mode: String, slot: int, storage = null):
 	app._memory.set_process(false)
 	app._round_celebration.set_process(false)
 	app.set_reduced_motion(false)
+	Fixture.enter_mode(app, mode)
 	return app
 
 func match_pair(app, index: int) -> void:
@@ -99,7 +101,7 @@ func check_reward(mode: String, slot: int) -> void:
 		check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
 			mode + " saves chest ownership without prematurely awarding its coins")
 		if index + 1 == slot:
-			app._advance_ui(0.22)
+			app._advance_ui(PairReward.REVEAL_SECONDS + 0.01)
 			check(app._status_announcement.begins_with("Chest found!"), mode + " preserves the earned chest announcement after board refresh")
 			check(app._reward_confetti.snapshot().visible and app._pair_reward.chest.is_visible_in_tree(), mode + " plays chest and full-screen paper on the live board")
 			check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1),

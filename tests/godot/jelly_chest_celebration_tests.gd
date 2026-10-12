@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Celebration = preload("res://scripts/jelly_chest_celebration.gd")
+const Flight = preload("res://scripts/chest_reward_flight.gd")
 const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const ChestModel = preload("res://scripts/chest_model_view.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
@@ -41,6 +42,7 @@ func _run() -> void:
 	_check_reentry(view)
 	_check_reduced_motion(view)
 	_check_layouts(view)
+	_check_flight_route(view)
 	_check_upgrade_containment(view)
 	_check_model_lifecycle(view)
 	view.clear()
@@ -63,13 +65,13 @@ func _check_timeline(view) -> void:
 	_begin(view)
 	check(view.is_active() and not view.visible and view.snapshot().kind == "synthesis",
 		"Synthesis reserves its timeline without obscuring the fragment flight")
-	view.advance(0.64)
+	view.advance(Celebration.ARRIVAL_SECONDS - 0.01)
 	check(not view.visible and heard.is_empty(), "A fragment gets its entire flight before assembly begins")
 	view.advance(0.02)
 	check(view.visible and heard.size() == 1 and heard[0].cue == "assemble"
 		and is_equal_approx(float(heard[0].state.elapsed), Celebration.ARRIVAL_SECONDS),
 		"Assembly sound is published at the precise flight-arrival boundary")
-	view.advance(0.70)
+	view.advance(Celebration.REVEAL_SECONDS - 0.02)
 	check(not view.snapshot().revealed and heard.size() == 1,
 		"The new chest and reward sound wait until the assembly finishes")
 	view.advance(0.02)
@@ -79,7 +81,7 @@ func _check_timeline(view) -> void:
 	check(reveals.size() == 1 and reveals[0].kind == "synthesis"
 		and is_equal_approx(float(reveals[0].elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
 		"The first unlocked chest requests shared paper at its exact reveal boundary")
-	view.advance(1.43)
+	view.advance(Celebration.PERFORMANCE_SECONDS - Celebration.REVEAL_SECONDS)
 	check(not view.is_active() and not view.visible and heard.size() == 2,
 		"A completed synthesis releases the scene without looping its animation")
 	view.advance(30.0)
@@ -89,7 +91,7 @@ func _check_timeline(view) -> void:
 	for delta: float in [-1.0, 0.0, INF, NAN]:
 		view.advance(delta)
 	check(view.snapshot() == before and heard.is_empty(), "Invalid clock samples leave queued rewards untouched")
-	view.advance(2.0)
+	view.advance(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.1)
 	check(heard.size() == 2
 		and is_equal_approx(float(heard[0].state.elapsed), Celebration.ARRIVAL_SECONDS)
 		and is_equal_approx(float(heard[1].state.elapsed), Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS),
@@ -149,27 +151,27 @@ func _check_reentry(view) -> void:
 
 func _check_reduced_motion(view) -> void:
 	_begin(view, 2, 3, true)
-	view.advance(0.64)
+	view.advance(Celebration.ARRIVAL_SECONDS - 0.01)
 	check(not view.visible, "Reduced motion preserves the fragment arrival gate")
 	view.advance(0.02)
 	check(view.visible and reveals.is_empty(),
 		"Reduced motion shows the static HUD chest without flying paper")
-	view.advance(0.72)
+	view.advance(Celebration.REVEAL_SECONDS)
 	check(view.snapshot().revealed and reveals.is_empty() and heard.size() == 2,
 		"Reduced motion preserves the same reward gate and one sound per milestone")
-	view.advance(2.0)
+	view.advance(Celebration.PERFORMANCE_SECONDS)
 	check(not view.is_active(), "Static presentation finishes after the same duration")
 
 
 func _check_layouts(view) -> void:
 	_begin(view, 1, 2)
-	view.advance(1.5)
+	view.advance(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.1)
 	for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(320, 220), Vector2(844, 235)]:
 		view.size = dimensions
 		var anchor := Rect2(Vector2(16, 12), Vector2.ONE * minf(72.0, dimensions.y * 0.25))
 		view.set_chest_anchor(anchor)
 		check(_rect(view.snapshot().anchor).is_equal_approx(anchor),
-			"%s keeps the chest effect at its supplied HUD location" % dimensions)
+			"%s retains the supplied HUD location as the flight's return anchor" % dimensions)
 	check(view.mouse_filter == Control.MOUSE_FILTER_IGNORE
 		and view.find_children("*", "BaseButton", true, false).is_empty(),
 		"The HUD celebration cannot capture a game gesture")
@@ -181,40 +183,126 @@ func _rect(values: Array) -> Rect2:
 	return Rect2(Vector2(float(values[0]), float(values[1])), Vector2(float(values[2]), float(values[3])))
 
 
+func _pose_at(view, age: float) -> Dictionary:
+	view._elapsed = Celebration.ARRIVAL_SECONDS + age
+	view._started = true
+	view._revealed = age >= Celebration.REVEAL_SECONDS
+	view._sync()
+	var pose: Dictionary = view._motion(age)
+	var edge: float = minf(view._anchor.size.x, view._anchor.size.y)
+	var placement: Dictionary = view._placement(pose, edge, view._anchor.get_center())
+	return {"center": placement.center, "scale": placement.scale, "yaw": pose.yaw, "roll": pose.roll, "phase": pose.phase}
+
+
+func _check_flight_route(view) -> void:
+	root.size = Vector2i(1000, 720)
+	view.position = Vector2(164, 200)
+	view.size = Vector2(672, 480)
+	var anchor := Rect2(20, 408, 44, 44)
+	view.set_chest_anchor(anchor)
+	var safe: Rect2 = view._flight_bounds()
+	check(not safe.get_center().is_equal_approx(view.size * 0.5),
+		"The flight fixture distinguishes the screen center from a bounded game area's center")
+	for previous: int in [0, 1, 4, 5]:
+		_begin(view, previous, previous + 1)
+		var departure: Dictionary = _pose_at(view, 0.0)
+		var central: Dictionary = _pose_at(view, Flight.CENTER_SECONDS)
+		var upper: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
+		var peak: Dictionary = _pose_at(view, Flight.REVEAL_SECONDS)
+		var turned: Dictionary = _pose_at(view, Flight.TURN_END)
+		var returning: Dictionary = _pose_at(view, lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 0.5))
+		var arrived: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
+		check(Vector2(departure.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(departure.scale), 1.0),
+			"Tier %d departs from its exact chest anchor at the resting size" % (previous + 1))
+		check(Vector2(central.center).distance_to(safe.get_center()) < 0.1,
+			"Tier %d first reaches the actual screen center" % (previous + 1))
+		check(absf(float(upper.center.x) - safe.get_center().x) < 0.1 and float(upper.center.y) < safe.position.y + safe.size.y * 0.4,
+			"Tier %d then reaches a separate centered point in the upper screen" % (previous + 1))
+		check(is_zero_approx(float(central.yaw)) and is_zero_approx(float(upper.yaw)) and float(upper.scale) <= 1.05,
+			"The chest finishes traveling upward before its enlargement and turn")
+		check(Vector2(peak.center).distance_to(upper.center) < 0.1 and float(peak.scale) > 1.3
+			and float(peak.yaw) > 0.1 and float(peak.yaw) < TAU,
+			"The reveal enlarges and rotates the chest at its upper-screen destination")
+		check(is_equal_approx(float(turned.yaw), TAU) and Vector2(turned.center).distance_to(upper.center) < 0.1,
+			"The chest completes a full closed turn before beginning its return")
+		check(Vector2(returning.center).distance_to(anchor.get_center()) < Vector2(upper.center).distance_to(anchor.get_center())
+			and float(returning.scale) < float(peak.scale),
+			"The return visibly approaches the anchor while recovering the resting size")
+		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
+			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)), "The chest lands exactly at its original anchor without residual roll")
+		for boundary: float in [Flight.CENTER_SECONDS, Flight.TOP_SECONDS, Flight.TURN_START,
+			Flight.REVEAL_SECONDS, Flight.TURN_END, Flight.RETURN_START, Flight.PERFORMANCE_SECONDS]:
+			var before: Dictionary = _pose_at(view, boundary - 0.0001)
+			var after: Dictionary = _pose_at(view, boundary + 0.0001)
+			check(Vector2(before.center).distance_to(after.center) < 0.1 and absf(float(before.scale) - float(after.scale)) < 0.01
+				and absf(float(before.yaw) - float(after.yaw)) < 0.01 and absf(float(before.roll) - float(after.roll)) < 0.01,
+				"Tier %d stays continuous across the %.2f-second flight boundary" % [previous + 1, boundary])
+	_begin(view, 1, 2)
+	view.advance(Celebration.ARRIVAL_SECONDS + Flight.CENTER_SECONDS * 0.5)
+	var elapsed: float = view._elapsed
+	var cue_count: int = heard.size()
+	root.size = Vector2i(390, 844)
+	view.position = Vector2(8, 188)
+	view.size = Vector2(374, 640)
+	var resized_anchor := Rect2(20, 580, 36, 36)
+	view.set_chest_anchor(resized_anchor)
+	check(is_equal_approx(view._elapsed, elapsed) and heard.size() == cue_count,
+		"A viewport and anchor change during departure cannot restart the clock or its sound")
+	var resized_center: Dictionary = _pose_at(view, Flight.CENTER_SECONDS)
+	check(Vector2(resized_center.center).distance_to(view._flight_bounds().get_center()) < 0.1,
+		"An in-flight resize targets the resized screen center")
+	var resized_arrival: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
+	check(Vector2(resized_arrival.center).is_equal_approx(resized_anchor.get_center())
+		and is_equal_approx(float(resized_arrival.scale), 1.0), "The resized flight returns to the current chest anchor")
+	view.hide()
+	view.set_chest_anchor(Rect2(22, 578, 36, 36))
+	check(not view.visible and not view._flight_surface.is_visible_in_tree(),
+		"Updating a hidden celebration anchor cannot reshow its independent screen overlay")
+	view.clear()
+	root.size = Vector2i(1000, 720)
+	view.position = Vector2(24, 60)
+	view.size = Vector2(952, 636)
+
+
 func _check_upgrade_containment(view) -> void:
-	for previous in range(1, 6):
+	for previous in range(0, 6):
 		_begin(view, previous, previous + 1)
 		var contained: bool = true
 		var recovered: bool = true
-		for frame in range(130):
-			var age: float = float(frame) / 60.0
+		var frames: int = ceili(Celebration.PERFORMANCE_SECONDS * 60.0)
+		for frame in range(frames + 1):
+			var age: float = minf(float(frame) / 60.0, Celebration.PERFORMANCE_SECONDS)
 			view._elapsed = Celebration.ARRIVAL_SECONDS + age
 			view._started = true
 			view._revealed = age >= Celebration.REVEAL_SECONDS
 			view._sync()
-			var pose: Dictionary = view._motion(age)
 			for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(320, 220), Vector2(844, 235)]:
+				root.size = Vector2i(dimensions)
+				view.position = Vector2(12, 40)
 				view.size = dimensions
-				for anchor: Rect2 in [Rect2(6, 4, 43, 43), Rect2(6, dimensions.y - 36, 38, 32), Rect2(dimensions.x - 49, 4, 43, 43)]:
+				for screen_anchor: Rect2 in [Rect2(6, 4, 43, 43), Rect2(6, dimensions.y - 36, 38, 32), Rect2(dimensions.x - 49, 4, 43, 43)]:
+					var anchor := Rect2(screen_anchor.position - view.position, screen_anchor.size)
 					view.set_chest_anchor(anchor)
+					var pose: Dictionary = view._motion(age)
 					var edge: float = minf(anchor.size.x, anchor.size.y)
 					var placement: Dictionary = view._placement(pose, edge, anchor.get_center())
 					var transform := Transform2D(float(pose.roll), Vector2.ONE * float(placement.scale), 0.0, placement.center)
-					var safe := Rect2(Vector2.ONE * 1.99, dimensions - Vector2.ONE * 3.98)
+					var safe: Rect2 = view._flight_bounds().grow(0.01)
 					contained = contained and safe.encloses(transform * Rect2(Vector2.ONE * -edge * 0.5, Vector2.ONE * edge))
 					if not view._model_sample.is_empty():
-						var tier: int = previous + 1 if view._revealed else previous
+						var tier: int = previous + 1 if view._revealed or previous == 0 else previous
 						var model = view._models._pool[tier]
 						var bounds: Rect2 = model.closed_bounds()
 						var unit: float = edge / maxf(bounds.size.x, bounds.size.y)
 						for corner in range(8):
 							var projected: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
 							contained = contained and safe.has_point(transform * ((projected - bounds.get_center()) * unit))
-					if frame == 0 or frame == 129:
+					if frame == 0 or frame == frames:
 						recovered = recovered and Vector2(placement.center).is_equal_approx(anchor.get_center()) \
 							and is_equal_approx(float(placement.scale), 1.0)
-		check(contained, "Upgrade %d keeps every turned model corner and static fallback inside desktop and phone HUD edges" % previous)
-		check(recovered, "Upgrade %d starts and settles at the original HUD position and size" % previous)
+		check(contained, "Chest transition %d keeps every turned model corner and static fallback inside the viewport" % previous)
+		check(recovered, "Chest transition %d starts and settles at the original HUD position and size" % previous)
+	root.size = Vector2i(1000, 720)
 
 
 func _models_stopped(models) -> bool:
@@ -404,7 +492,7 @@ func _check_owner_lifecycle() -> void:
 	_check_finish_during_reward(view, words, data.chests)
 	view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
 	view._chest_milestone(0, 1)
-	view.advance_reward_presentation(2.77)
+	view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.PERFORMANCE_SECONDS - 0.03)
 	view._process(0.1)
 	check(not view._reward_presentation.is_active() and is_equal_approx(view.game.spawn_elapsed, 0.1),
 		"The frame advances gameplay in full even when the chest effect ends partway through it")
@@ -412,7 +500,8 @@ func _check_owner_lifecycle() -> void:
 		for action: String in ["stop", "reconfigure"]:
 			view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
 			view._chest_milestone(0, 1)
-			view.advance_reward_presentation(0.6 if at == "assemble" else 1.32)
+			view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS - 0.05 if at == "assemble"
+				else Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS - 0.05)
 			var interrupt: Callable = func(cue: String) -> void:
 				if cue != at:
 					return
@@ -480,7 +569,7 @@ func _check_pending_fusions(view, words: Array, manifest: Dictionary) -> void:
 	_advance_owner(view, 0.3)
 	check(view._reward_presentation.visible and view.game.fragment_count == 4 and view.game.chest_count == 1,
 		"Synthesis then starts once with the previously committed single chest")
-	_advance_owner(view, 0.7)
+	_advance_owner(view, Celebration.REVEAL_SECONDS)
 	check(view._reward_presentation.snapshot().revealed and view.snapshot().drag.active
 		and int(view.snapshot().drag.source) == other[0],
 		"The chest reveal reaches its paper-request beat without dropping the held jelly")
@@ -499,7 +588,7 @@ func _check_active_gameplay(view, words: Array, manifest: Dictionary) -> void:
 	for reduced: bool in [false, true]:
 		view.configure(words, 3, Data.theme("spring"), manifest, reduced, 42)
 		view._chest_milestone(0, 1)
-		_advance_owner(view, 1.4)
+		_advance_owner(view, Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.03)
 		check(view._reward_presentation.visible and view._reward_presentation.snapshot().revealed
 			and view._reward_presentation.snapshot().reduced_motion == reduced,
 			"The input fixture reaches a live chest reveal with the selected motion preference")
@@ -527,10 +616,26 @@ func _check_active_gameplay(view, words: Array, manifest: Dictionary) -> void:
 		check(view.game.cells == snapshot.cells and view.game.fusions == snapshot.fusions
 			and view._reward_presentation.snapshot() == reward,
 			"An explicit menu pause still freezes an active fusion and chest effect together")
+		check(not view._reward_presentation._flight_surface.is_visible_in_tree(),
+			"A paused Jelly celebration cannot draw above Home or the vocabulary page")
+		var original_size: Vector2 = view.size
+		view.size = Vector2(390, 700)
+		view._layout()
+		for preference: bool in [true, false]:
+			view.set_reduced_motion(preference)
+			check(not view._reward_presentation._flight_surface.is_visible_in_tree()
+				and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), float(reward.elapsed)),
+				"Resizing or changing motion preferences cannot reshow a paused Jelly flight")
+		view.set_reduced_motion(reduced)
+		view.size = original_size
+		view._layout()
 		view.pause(false)
+		check(view._reward_presentation._flight_surface.is_visible_in_tree()
+			and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), float(reward.elapsed)),
+			"Resuming Jelly restores the same visible chest pose without restarting its clock")
 		view.configure(words, 3, Data.theme("spring"), manifest, reduced, 42)
 		view._chest_milestone(0, 1)
-		view.advance_reward_presentation(1.4)
+		view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.03)
 		view.game.spawn_elapsed = view.game.spawn_interval - 0.05
 		count = view.game.generated_tiles
 		view._process(0.1)
@@ -544,7 +649,7 @@ func _check_active_gameplay(view, words: Array, manifest: Dictionary) -> void:
 		view._sync_tiles()
 		view._refresh_hud()
 		view._chest_milestone(0, 1)
-		view.advance_reward_presentation(1.4)
+		view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.03)
 		var danger: float = view.game.full_elapsed
 		view._process(0.2)
 		check(danger >= 0.0 and is_equal_approx(view.game.full_elapsed, danger + 0.2)
@@ -563,7 +668,7 @@ func _check_later_pickup(view, words: Array, manifest: Dictionary) -> void:
 	view._refresh_hud()
 	view._loot_meter.settle()
 	view._chest_milestone(0, 1)
-	view.advance_reward_presentation(0.64)
+	view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS - 0.01)
 	view._process(0.02)
 	check(view._reward_presentation.visible and view._loot_flights.size() == 1
 		and is_equal_approx(float(view._loot_flights[0].elapsed), 0.02)
@@ -578,7 +683,7 @@ func _check_finish_during_reward(view, words: Array, manifest: Dictionary) -> vo
 	var pair: Array[int] = _matching_pair(view, true)
 	check(pair.size() == 2 and view.game.try_merge(pair[0], pair[1]) == "correct",
 		"The finish fixture unlocks a real chest through a marked match")
-	_advance_owner(view, 2.9)
+	_advance_owner(view, view.game.FUSION_SECONDS + Celebration.ARRIVAL_SECONDS + view._loot_meter.FILL_SECONDS + Celebration.REVEAL_SECONDS + 0.1)
 	check(view.game.fragment_count == 4 and view.game.chest_count == 1
 		and view._reward_presentation.snapshot().revealed,
 		"A committed chest is already earned when its paper-request beat is reached")

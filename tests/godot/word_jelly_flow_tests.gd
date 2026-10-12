@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 var checks := 0
 var failures := 0
 
@@ -110,9 +111,24 @@ func _run() -> void:
 	game.step(game.COLLECT_SECONDS)
 	check(not game.paused and game.fragment_count == 4 and game.chest_tier == 1 and app.coin_wallet.balance == 200, "Returning to play completes collection and unlocks the first chest")
 	check(view._reward_presentation.snapshot().kind == "synthesis", "The first chest uses the shared fragment-synthesis presentation")
-	view.advance_reward_presentation(1.4)
+	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
 	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:1"), "The new mode's chest acquisition launches screen confetti")
-	view.advance_reward_presentation(2.0)
+	var reward_elapsed: float = float(view._reward_presentation.snapshot().elapsed)
+	app._show_mode_menu()
+	check(game.paused and not view._reward_presentation._flight_surface.is_visible_in_tree(),
+		"Home hides the independent chest flight layer while retaining its earned reward")
+	app._hide_mode_menu()
+	check(not game.paused and view._reward_presentation._flight_surface.is_visible_in_tree()
+		and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), reward_elapsed),
+		"Returning from Home restores the same in-progress chest flight")
+	app._show_collection()
+	check(game.paused and not view._reward_presentation._flight_surface.is_visible_in_tree(),
+		"The vocabulary page is never covered by a paused chest flight")
+	app._hide_collection()
+	check(not game.paused and view._reward_presentation._flight_surface.is_visible_in_tree()
+		and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), reward_elapsed),
+		"Closing vocabulary resumes the original flight without replaying its reveal")
+	view.advance_reward_presentation(ChestCelebration.PERFORMANCE_SECONDS - ChestCelebration.REVEAL_SECONDS)
 	merged = merged_word(view, word, 1)
 	var wallet_path: String = app.coin_wallet._path
 	app.coin_wallet._path = directory + "/missing/coins.cfg"
@@ -144,7 +160,7 @@ func _run() -> void:
 		game.step(game.COLLECT_SECONDS)
 	check(game.fragment_count == 9 and game.chest_tier == 2, "Additional collections upgrade the earned chest")
 	check(view._reward_presentation.snapshot().kind == "upgrade", "The next chest tier uses the enlarged spinning upgrade presentation")
-	view.advance_reward_presentation(1.4)
+	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
 	check(app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:2"), "The new chest tier launches its own single confetti burst")
 	var earned_round: String = app._round_id
 	Fixture.enter_mode(app, "jelly")

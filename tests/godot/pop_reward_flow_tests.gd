@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 
 class Storage extends RefCounted:
 	var text: Variant = null
@@ -61,7 +62,7 @@ func _create_app():
 	app.audio.muted = true
 	await process_frame
 	await process_frame
-	app.choose_mode("pop")
+	Fixture.enter_mode(app, "pop")
 	Fixture.choose_pop_player(app)
 	app._pop.set_listening(true, true, "Listening.")
 	app._pop_speech_active = true
@@ -89,7 +90,7 @@ func _earn_fragments(app, count: int, finish_presentation: bool = true) -> void:
 			check(is_equal_approx(app._pop.game.remaining, remaining - 0.1), "The round clock advances during the chest presentation")
 			if not finish_presentation:
 				return
-			app._pop.advance_reward_presentation(3.0)
+			app._pop.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.PERFORMANCE_SECONDS + 0.01)
 			check(not app._pop.reward_presentation_active() and app._pop._listening and app._pop_speech_active,
 				"The chest milestone completes without restarting live speech")
 			app._pop.set_process(false)
@@ -212,7 +213,7 @@ func _early_exit_checks() -> void:
 		await _earn_fragments(app, fragments, false)
 		check(app._pop.game.phase == "running",
 			"Prepare a live round exit during a partial recipe or active chest assembly")
-		app.choose_mode("match")
+		Fixture.enter_mode(app, "match")
 		check(app._mode_id == "match" and not app._pop.reward_presentation_active()
 			and not app._round_celebration.is_active(),
 			"Switching mode stops the accepted round and its reward animation without replaying celebration")
@@ -222,7 +223,7 @@ func _early_exit_checks() -> void:
 			check(app._pop_rewards.rewards.entries[0].tier == 1,
 				"Exiting during assembly preserves the already accepted chest at its actual tier")
 			var saved: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
-			app.choose_mode("pop")
+			Fixture.enter_mode(app, "pop")
 			check(app._pop_rewards_shown and app._pop.game.phase == "ready"
 				and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved,
 				"Returning restores the saved final chest without replaying assembly or appending another reward")
@@ -242,7 +243,7 @@ func _save_failure_checks() -> void:
 	app._pop.replay_button.pressed.emit()
 	check(app._pop_rewards_shown and app._pop.game.phase == "finished" and app._pop.game.round_id == round_id,
 		"Play again cannot discard a final chest that still needs to be saved")
-	app.choose_mode("match")
+	Fixture.enter_mode(app, "match")
 	check(app._mode_id == "pop" and app._pop_rewards_shown,
 		"Switching modes preserves the same unsaved chest and recovery action")
 	storage.writable = true
@@ -270,7 +271,7 @@ func _pending_treasure_reload_checks() -> void:
 		app.audio.muted = true
 		await process_frame
 		await process_frame
-		app.choose_mode("pop")
+		Fixture.enter_mode(app, "pop")
 		await process_frame
 		await process_frame
 		if reload_index == 0:
@@ -286,10 +287,10 @@ func _pending_treasure_reload_checks() -> void:
 				"A real hold saves one opened chest and leaves two pending before navigation")
 			saved_entries = room.rewards.entries.duplicate(true)
 			saved_text = FileAccess.get_file_as_string(app.pop_reward_save_path)
-			app.choose_mode("match")
+			Fixture.enter_mode(app, "match")
 			check(app._mode_id == "match" and not app._pop_rewards.visible,
 				"Switching to Match leaves the partial Pop reward batch available")
-			app.choose_mode("pop")
+			Fixture.enter_mode(app, "pop")
 			await process_frame
 			await process_frame
 		_check_restored_pending_room(app, saved_entries, saved_text,

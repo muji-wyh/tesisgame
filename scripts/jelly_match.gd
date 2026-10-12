@@ -316,6 +316,7 @@ func pause(value: bool = true) -> void:
 		return
 	_paused = value
 	game.set_paused(value)
+	_reward_presentation.set_paused(value)
 	cancel_input()
 	if not value:
 		_result_transition = false

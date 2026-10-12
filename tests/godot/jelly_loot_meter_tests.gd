@@ -4,6 +4,7 @@ const Jelly = preload("res://scripts/jelly_match.gd")
 const Meter = preload("res://scripts/jelly_loot_meter.gd")
 const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -290,7 +291,7 @@ func _check_threshold(view, previous_fragments: int, required: int) -> void:
 		return
 	check(_progress(view).filled == required - 1 and view._reward_presentation.is_active(),
 		"A milestone queues its celebration while the final fragment is still flying")
-	_advance(view, 0.66)
+	_advance(view, ChestCelebration.ARRIVAL_SECONDS + 0.01)
 	check(_progress(view).filled == required and _progress(view).required == required
 		and not view._reward_presentation.visible,
 		"The last arriving fragment starts filling its ring before the reward overlay")
@@ -302,12 +303,14 @@ func _check_threshold(view, previous_fragments: int, required: int) -> void:
 	check(is_equal_approx(float(_progress(view).displayed), float(required))
 		and view._reward_presentation.visible and not view._reward_presentation.snapshot().revealed,
 		"Chest assembly begins only after the completed ring has been shown")
-	_advance(view, 0.8)
+	_advance(view, ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS
+		- float(view._reward_presentation.snapshot().elapsed) + 0.01)
 	check(view._reward_presentation.snapshot().revealed and _progress(view).filled == 0
 		and _progress(view).required == 5 and is_zero_approx(float(_progress(view).displayed)),
 		"Only the actual reward reveal resets the ring for the next upgrade")
 	check(view._loot_detail.text == "Upgrade chest", "An unlocked treasure explains its next upgrade without numbers")
-	_advance(view, 1.5)
+	_advance(view, ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.PERFORMANCE_SECONDS
+		- float(view._reward_presentation.snapshot().elapsed) + 0.01)
 	check(not view._reward_presentation.is_active() and _progress(view).filled == 0
 		and view.game.fragment_count == previous_fragments + 1 and view.game.chest_count == 1,
 		"Finishing the performance neither replays progress nor creates another chest")

@@ -758,19 +758,40 @@ test('splitting a raised incorrect merge places both original roots on solid sup
 });
 
 test('ordinary collected fragments synthesize a chest and then celebrate its upgrade', async ({ page }, info) => {
-  test.skip(info.project.name !== 'desktop-chromium', 'The complete milestone path supplements the phone and desktop core interactions.');
+  test.skip(!['desktop-chromium', 'iphone-webkit'].includes(info.project.name), 'The complete milestone route covers desktop and phone renderers.');
   test.setTimeout(180000);
   const errors = await startWordJelly(page, { reducedMotion: 'no-preference' });
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
     window.wordJellyMilestones = [];
     window.wordJellyMilestoneFrames = {};
+    window.wordJellyFlightFrames = {};
+    const captureFlight = key => {
+      if (Object.hasOwn(window.wordJellyFlightFrames, key)) return;
+      window.wordJellyFlightFrames[key] = null;
+      document.getElementById('canvas').toBlob(blob => {
+        if (!blob) return;
+        const reader = new FileReader();
+        reader.onload = () => { window.wordJellyFlightFrames[key] = reader.result.split(',')[1]; };
+        reader.readAsDataURL(blob);
+      }, 'image/png');
+    };
     const record = () => {
       const state = JSON.parse(status.dataset.jelly || '{}'), presentation = state.reward_presentation;
       if (state.mode !== 'word_jelly' || !presentation?.active) return;
       window.wordJellyMilestones.push({ kind: presentation.kind, tier: presentation.tier,
         visible: presentation.visible, revealed: presentation.revealed, elapsed: presentation.elapsed,
-        fragments: state.fragment_count, chests: state.chest_count });
+        fragments: state.fragment_count, chests: state.chest_count, motion: presentation.motion,
+        anchor: presentation.anchor, flightBounds: presentation.flight_bounds,
+        wordRevealVisible: state.word_reveal.visible });
+      if (presentation.visible && presentation.motion?.center) {
+        const motion = presentation.motion, kind = presentation.kind;
+        if (motion.phase === 'center') captureFlight(`${kind}-departure`);
+        if (motion.phase === 'rise') captureFlight(`${kind}-screen-center`);
+        if (motion.phase === 'celebrate' && !presentation.revealed) captureFlight(`${kind}-upper-arrival`);
+        if (presentation.revealed && motion.phase === 'celebrate') captureFlight(`${kind}-enlarged-turn`);
+        if (motion.phase === 'return' && motion.scale < 1.75) captureFlight(`${kind}-return`);
+      }
       if (presentation.visible && presentation.revealed && !window.wordJellyMilestoneFrames[presentation.kind])
         window.wordJellyMilestoneFrames[presentation.kind] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
     };
@@ -811,12 +832,54 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
   expect(final.fragment_count).toBeGreaterThanOrEqual(9);
   expect(final.chest_count).toBe(1);
   expect(final.chest_tier).toBe(2);
+  await expect.poll(async () => (await jelly(page)).reward_presentation.active,
+    { timeout: 10000, message: 'The upgraded chest visibly finishes its return to the HUD anchor' }).toBe(false);
+  await capture(page, info, 'word-jelly-chest-returned-to-anchor');
   const milestones = await page.evaluate(() => window.wordJellyMilestones);
   for (const [kind, tier] of [['synthesis', 1], ['upgrade', 2]]) {
     const frames = milestones.filter(frame => frame.kind === kind && frame.tier === tier);
     expect(frames.some(frame => frame.visible && !frame.revealed), `${kind} has visible anticipation`).toBe(true);
     expect(frames.some(frame => frame.visible && frame.revealed), `${kind} has a visible reward reveal`).toBe(true);
     expect(new Set(frames.map(frame => frame.elapsed)).size, `${kind} advances through several rendered poses`).toBeGreaterThan(3);
+    const visible = frames.filter(frame => frame.visible && frame.motion?.center);
+    const first = visible[0], bounds = first.flightBounds, anchor = first.anchor;
+    const screenCenter = [bounds[0] + bounds[2] / 2, bounds[1] + bounds[3] / 2];
+    const anchorCenter = [anchor[0] + anchor[2] / 2, anchor[1] + anchor[3] / 2];
+    const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    const tolerance = Math.max(3, Math.hypot(bounds[2], bounds[3]) * 0.03);
+    expect(distance(first.motion.center, anchorCenter), `${kind} departs from the current HUD chest`).toBeLessThan(tolerance);
+    const centered = visible.filter(frame => ['center', 'rise'].includes(frame.motion.phase));
+    expect(Math.min(...centered.map(frame => distance(frame.motion.center, screenCenter))),
+      `${kind} visibly travels through the actual screen center`).toBeLessThan(tolerance);
+    const upper = visible.filter(frame => frame.motion.phase === 'celebrate');
+    expect(upper.length, `${kind} has an upper-screen presentation beat`).toBeGreaterThan(2);
+    for (const frame of upper) {
+      expect(Math.abs(frame.motion.center[0] - screenCenter[0]), `${kind} stays horizontally centered upstairs`).toBeLessThan(1);
+      expect(frame.motion.center[1], `${kind} celebrates in the upper portion of the screen`).toBeLessThan(bounds[1] + bounds[3] * 0.4);
+    }
+    expect(centered.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01),
+      `${kind} travels to its upper destination before enlarging and turning`).toBe(true);
+    expect(Math.max(...upper.map(frame => frame.motion.scale)), `${kind} clearly enlarges at its destination`).toBeGreaterThan(1.3);
+    expect(Math.max(...upper.map(frame => frame.motion.yaw)), `${kind} completes its full closed-chest turn`).toBeGreaterThan(6.2);
+    const returning = visible.filter(frame => frame.motion.phase === 'return');
+    expect(returning.length, `${kind} has a visible return journey`).toBeGreaterThan(2);
+    let previousDistance = Infinity;
+    for (const frame of returning) {
+      const currentDistance = distance(frame.motion.center, anchorCenter);
+      expect(currentDistance, `${kind} returns continuously toward its original anchor`).toBeLessThanOrEqual(previousDistance + 0.1);
+      previousDistance = currentDistance;
+    }
+    expect(previousDistance, `${kind} lands back at the anchor before the static HUD icon returns`).toBeLessThan(tolerance);
+    expect(returning.at(-1).motion.scale, `${kind} returns to its original size`).toBeLessThan(1.1);
+    const firstReveal = visible.find(frame => frame.revealed);
+    expect(firstReveal.wordRevealVisible, 'The chest peak follows the completed word-picture reading beat').toBe(false);
+    await expect.poll(() => page.evaluate(kind => ['departure', 'screen-center', 'upper-arrival', 'enlarged-turn', 'return']
+      .every(phase => Boolean(window.wordJellyFlightFrames[`${kind}-${phase}`])), kind),
+    { message: `${kind} records all five real rendered flight keyframes` }).toBe(true);
+    const keyframes = await page.evaluate(kind => Object.fromEntries(Object.entries(window.wordJellyFlightFrames)
+      .filter(([name]) => name.startsWith(`${kind}-`))), kind);
+    for (const [name, encoded] of Object.entries(keyframes))
+      fs.writeFileSync(info.outputPath(`word-jelly-chest-${name}.png`), Buffer.from(encoded, 'base64'));
   }
   await info.attach('word-jelly-chest-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
   expect(errors).toEqual([]);

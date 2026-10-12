@@ -2,6 +2,9 @@ extends SceneTree
 
 const PopView = preload("res://scripts/voice_pop.gd")
 const Progress = preload("res://scripts/jelly_reward_progress.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const MILESTONE_REVEAL: float = ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.01
+const MILESTONE_COMPLETE: float = ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.PERFORMANCE_SECONDS + 0.01
 const WORDS := [{"id": "cat", "text": "cat", "image": "missing-cat.svg", "audio": "missing-cat.wav"}]
 
 var checks: int = 0
@@ -47,7 +50,7 @@ func strike(view, marked: bool, id: String) -> Dictionary:
 
 
 func finish_reward(view) -> void:
-	view.advance_reward_presentation(3.0)
+	view.advance_reward_presentation(MILESTONE_COMPLETE)
 	view._listening_tick_usec = -1
 
 
@@ -87,7 +90,7 @@ func _test_scene(dimensions: Vector2i) -> void:
 			var remaining: float = view.game.remaining
 			view._advance_game(0.1)
 			check(is_equal_approx(view.game.remaining, remaining - 0.1), "The round clock continues during the milestone")
-			view.advance_reward_presentation(1.4)
+			view.advance_reward_presentation(MILESTONE_REVEAL)
 			check(view.snapshot().reward_presentation.revealed and view._displayed_chest_tier == tier,
 				"The synchronized reveal updates the displayed chest tier")
 			check(reveals.size() == tier and reveals.back() == tier,
@@ -141,16 +144,28 @@ func _test_interruption() -> void:
 	view._reward_presentation.confetti_requested.connect(func() -> void: reveals.append(true))
 	for index in range(4):
 		strike(view, true, "pause-%d" % index)
-	view.advance_reward_presentation(1.5)
+	view.advance_reward_presentation(MILESTONE_REVEAL)
 	check(reveals.size() == 1, "The interruption fixture requests one paper burst")
+	check(view._reward_presentation._flight_surface.is_visible_in_tree(),
+		"The interruption fixture shows its chest in the viewport overlay")
 	var elapsed: float = float(view.snapshot().reward_presentation.elapsed)
 	view.pause()
 	view.advance_reward_presentation(5.0)
 	check(view.snapshot().reward_presentation.elapsed == elapsed and not view.snapshot().reward_presentation.visible,
 		"A menu pause freezes the timeline and reveals the listening recovery gate")
+	check(not view._reward_presentation._flight_surface.is_visible_in_tree(),
+		"A menu pause also hides the independent chest drawing layer")
+	for dimensions: Vector2 in [Vector2(390, 640), Vector2(844, 250), Vector2(640, 480)]:
+		view.size = dimensions
+		view._layout()
+		check(not view._reward_presentation._flight_surface.is_visible_in_tree()
+			and not view.snapshot().reward_presentation.visible
+			and view.snapshot().reward_presentation.elapsed == elapsed,
+			"Resizing cannot restore a paused chest over the listening recovery gate")
 	for reduce: bool in [true, false]:
 		view.set_reduced_motion(reduce)
 		check(not view.snapshot().reward_presentation.visible and reveals.size() == 1
+			and not view._reward_presentation._flight_surface.is_visible_in_tree()
 			and view.snapshot().reward_presentation.elapsed == elapsed,
 			"Motion preferences cannot reveal a paused chest over the listening recovery gate")
 	view.set_listening(true, true, "Listening.")
@@ -159,7 +174,8 @@ func _test_interruption() -> void:
 	view.hide()
 	view.advance_reward_presentation(4.0)
 	check(view.snapshot().reward_paused and view.snapshot().reward_presentation.elapsed == elapsed
-		and not view._reward_presentation.is_visible_in_tree() and reveals.size() == 1,
+		and not view._reward_presentation.is_visible_in_tree()
+		and not view._reward_presentation._flight_surface.is_visible_in_tree() and reveals.size() == 1,
 		"Hiding behind a page pauses the active milestone without requesting another paper burst")
 	view.show()
 	view.set_process(false)
@@ -170,7 +186,8 @@ func _test_interruption() -> void:
 		"Reduced motion preserves the milestone without requesting further motion")
 	view.stop()
 	view.advance_reward_presentation(4.0)
-	check(not view._listening and not view.reward_presentation_active() and view._loot_flights.is_empty(),
+	check(not view._listening and not view.reward_presentation_active() and view._loot_flights.is_empty()
+		and not view._reward_presentation._flight_surface.is_visible_in_tree(),
 		"Leaving cancels presentation and flights without restarting the microphone")
 	view.configure(WORDS, false, 9)
 	view.advance_reward_presentation(4.0)
@@ -192,7 +209,7 @@ func _test_callback_reentry() -> void:
 	view.round_finished.connect(func(result: Dictionary) -> void: finished.append(result))
 	var finish_on_cue: Callable = func(_cue: String) -> void: view.finish_round()
 	view.reward_cue_requested.connect(finish_on_cue)
-	view.advance_reward_presentation(3.0)
+	view.advance_reward_presentation(MILESTONE_COMPLETE)
 	view.finish_round()
 	check(finished.size() == 1 and finished[0].chest_tier == 1 and finished[0].chest_count == 1,
 		"Settlement inside a cue saves the accepted final tier exactly once")
@@ -223,7 +240,7 @@ func _test_live_queue_and_expiry() -> void:
 	check(view.game.fragment_count == 9 and view.game.chest_tier == 2
 		and int(view.snapshot().reward_presentation.queued) == 2 and view._listening,
 		"Continuous recognized words can queue the next chest upgrade during its unlock animation")
-	view.advance_reward_presentation(1.5)
+	view.advance_reward_presentation(MILESTONE_REVEAL)
 	view._advance_game(0.1)
 	check(view.game.phase == "running" and view.snapshot().reward_presentation.revealed,
 		"Targets and the live clock continue under the queued milestone confetti")
@@ -251,7 +268,7 @@ func _test_listening_recovery() -> void:
 	view.set_listening(true, true, "Listening.")
 	for index in range(4):
 		strike(view, true, "listen-%d" % index)
-	view.advance_reward_presentation(1.5)
+	view.advance_reward_presentation(MILESTONE_REVEAL)
 	var elapsed: float = float(view.snapshot().reward_presentation.elapsed)
 	var round_id: String = view.game.round_id
 	view.set_listening(true, false, "Listening paused. Continuing…")
@@ -259,6 +276,7 @@ func _test_listening_recovery() -> void:
 	check(view._reconnecting and view.game.phase == "paused" and not view._gate.visible
 		and view._reward_icon.visible
 		and not view.snapshot().reward_presentation.visible
+		and not view._reward_presentation._flight_surface.is_visible_in_tree()
 		and float(view.snapshot().reward_presentation.elapsed) == elapsed,
 		"Recognizer rollover freezes the milestone without covering the retained playfield")
 	view.set_listening(true, true, "Listening.")
@@ -269,6 +287,7 @@ func _test_listening_recovery() -> void:
 	view.advance_reward_presentation(5.0)
 	check(view._gate.visible and view.controls().has(view.retry_button)
 		and view.default_focus() == view.retry_button and not view._listening
+		and not view._reward_presentation._flight_surface.is_visible_in_tree()
 		and float(view.snapshot().reward_presentation.elapsed) == elapsed,
 		"A real microphone error exposes recovery controls and cannot be resumed by a reward callback")
 	view.set_listening(true, true, "Listening.")

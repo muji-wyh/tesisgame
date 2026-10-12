@@ -22,27 +22,31 @@ across the screen. The still review samples the complete video at one frame per
 second and the relevant sequences at five frames per second. These samples
 establish visible beats; they do not constitute a normal-speed audio review.
 
-The adaptation preserves the existing 0.65-second pickup flight. Synthesis
-assembles four portions of the actual closed-chest artwork. Upgrade motion uses
-a rigid upward hop and a full vertical-axis turn of the acquired closed 3D
-chest for tiers 1-4. The new material appears at the back-facing apex, with
-two expanding light rings, sourced radial streaks and short glints. Royal and
-Crystal preserve their original 2D artwork with the same hop, roll and reveal
-beats instead of inventing unseen rear geometry. Full-screen paper confetti
-accompanies both paths. Intermediate chests never run the final opening or saving
-callbacks. Motion, sound and the chest-change accent share one performance
-clock. The gameplay model owns fragment credit and tier changes; the visual
-timeline does not grant rewards.
+The adaptation preserves the existing 0.65-second pickup flight and progress
+fill. The whole closed chest then travels from its HUD anchor to the actual
+viewport center, rises to the upper area, enlarges and rotates, and flies back
+to the same anchor. Match and Memory share the same flight choreography.
+Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn.
+Transitions to Royal and Crystal rotate their original 2D artwork in the screen
+plane without inventing rear geometry. No new artwork or sound is acquired.
+Intermediate chests never run final opening or saving callbacks; the gameplay
+model alone owns fragment credit and tier changes.
 
-After the pickup reaches the HUD and its progress segment fills, the milestone
-performance lasts 2.15 seconds.
-A 0.18-second anticipation leads into the lift and turn, the new chest appears
-at 0.72 seconds, and the body lands at 1.26 seconds before returning to its
-static HUD size. Upgrades peak at 3.2 times the resting icon size; first-chest
-synthesis retains its 1.48-times peak. The turned silhouette stays inside all
-four gameplay edges, including the lower Voice Pop HUD, then returns to its
-original anchor. Local light accents grow with the chest without adding a modal. The
-sound accent, upgraded art and confetti emission use this same reveal event.
+After pickup, the 2.65-second performance reaches the center at 0.44 seconds
+and the upper destination at 0.84 seconds. Enlargement follows arrival; the
+full turn runs from 0.90 to 1.82 seconds. Material change, local flash, reward
+sound and confetti share the 1.36-second midpoint. This places the Jelly Words
+milestone peak after its 1.95-second word-picture reading beat. The return runs
+from 1.98 to 2.65 seconds, recovering the original position and size without
+fading the chest away. First-chest and pair rewards target a 176px silhouette;
+upgrades target 216px, fitted to the available viewport on small screens.
+
+The flight draws on a noninteractive viewport layer, outside gameplay clipping.
+Its source coordinates and actual turned silhouette remain tied to the current
+HUD layout. Hiding the owner, entering Home or the word library, pausing, or
+clearing the round hides this layer and stops the active model renderers.
+Reduced motion keeps a static chest at its HUD anchor and the same reward gate.
+
 The chest settles in its existing gameplay HUD while the paper spreads across
 the viewport and falls away. There is no dimming panel, centered reward page,
 input lock, or automatic gameplay pause. Jelly dragging, merging, dropping,
@@ -214,8 +218,8 @@ The current HUD presentation was captured in the real Jelly scene at 1000 x 800,
 390 x 844 and 844 x 390. A 60 fps native capture follows a held drag through
 fragment arrival, meter fill, assembly and confetti while the spawn clock keeps
 advancing. The reduced-motion captures retain the same HUD without paper.
-Only the paper uses top-level canvas drawing, so Voice Pop's live arena remains
-clipped. A separate native render verifies full-viewport paper through a clipped
+Those earlier captures used top-level drawing only for paper; the current
+chest flight also escapes clipping while Voice Pop's live arena remains clipped. A separate native render verifies full-viewport paper through a clipped
 parent and its immediate removal when that parent is hidden. These captures are
 muted visual checks; the unchanged reward sounds were not acoustically reviewed.
 
@@ -228,3 +232,10 @@ acoustic-quality claim follows from the visual review. Focused tests verify
 all four 3D tiers stay closed and inside a fixed camera envelope through a full
 turn, use at most two 512px surfaces, and stop rendering when hidden or cleared.
 The original chest-opening mechanism remains independent.
+
+The screen-flight revision was inspected in local native renders at 1366 x 768,
+390 x 844 and 568 x 320 for Jelly Words, Voice Pop and Memory. These are muted
+visual fixtures with sampled center, rise, turn, reveal and return frames, not
+physical-device or acoustic playback evidence. Focused route and lifecycle tests
+cover actual viewport coordinates, small-screen silhouette containment, pause,
+Home/library navigation, resize, reduced motion and exact HUD handoff.

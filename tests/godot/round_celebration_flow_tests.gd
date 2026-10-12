@@ -4,6 +4,7 @@ const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const MatchModel = preload("res://scripts/game_model.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 
 class StopFailureApp:
 	extends "res://scripts/game_ui.gd"
@@ -352,7 +353,7 @@ func cover(app, kind: String, enabled: bool) -> void:
 		if enabled:
 			app._mode_heading_button.pressed.emit()
 		else:
-			app._mode_panel.close_button.pressed.emit()
+			app.choose_mode(app._mode_id)
 	elif kind == "growth":
 		if enabled:
 			app.collection_button.pressed.emit()
@@ -432,7 +433,7 @@ func check_jelly_confetti_owner(app) -> void:
 	app._jelly.game.chest_count = 1
 	app._jelly.game.chest_tier = 1
 	app._jelly._chest_milestone(0, 1)
-	app._jelly.advance_reward_presentation(1.4)
+	app._jelly.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.01)
 	check_fullscreen_confetti(app, "Jelly unlock")
 	var identity: String = app._round_id
 	var earned_keys: Array = app._reward_confetti.snapshot().keys.duplicate()
@@ -442,11 +443,11 @@ func check_jelly_confetti_owner(app) -> void:
 		root.size = dimensions
 		await settle()
 		check_fullscreen_confetti(app, "Jelly resize " + str(dimensions))
-	app._jelly.advance_reward_presentation(1.5)
+	app._jelly.advance_reward_presentation(ChestCelebration.PERFORMANCE_SECONDS - ChestCelebration.REVEAL_SECONDS)
 	app._advance_ui(3.0)
 	check(not app._jelly._reward_presentation.is_active() and app._reward_confetti.is_active()
 		and app._reward_confetti.snapshot().ages[0] >= 3.0,
-		"Jelly paper keeps falling after the compact chest motion has fully ended")
+		"Jelly paper keeps falling after the chest has returned to its HUD anchor")
 	app._jelly.finish_button.pressed.emit()
 	check(app._jelly.game.phase == "finished" and app._reward_confetti.is_active(),
 		"Finishing Jelly retains the earned paper tail over the resulting screen")
@@ -488,12 +489,12 @@ func check_pop_result(app, fragments: int) -> void:
 		if not app._pop.game.targets.is_empty():
 			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
 		if app._pop.reward_presentation_active():
-			app._pop.advance_reward_presentation(1.5)
+			app._pop.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.01)
 			check_fullscreen_confetti(app, "Pop chest milestone")
 			check(app._pop.clip_contents and app._pop_speech_active and app._pop._listening
 				and app._pop.game.phase == "running",
 				"Pop milestone confetti spans the viewport while gameplay stays clipped and its microphone remains active")
-			app._pop.advance_reward_presentation(1.5)
+			app._pop.advance_reward_presentation(ChestCelebration.PERFORMANCE_SECONDS - ChestCelebration.REVEAL_SECONDS)
 	check(app._pop.game.fragment_count == fragments and app._pop.game.chest_count == chest_count
 		and app._pop.game.chest_tier == chest_tier,
 		"Real recognized marked targets produce exactly %d fragments and final chest tier %d" % [fragments, chest_tier])

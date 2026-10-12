@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PairReward = preload("res://scripts/pair_chest_reward.gd")
+const Flight = preload("res://scripts/chest_reward_flight.gd")
 const Data = preload("res://scripts/game_data.gd")
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 
@@ -79,7 +80,7 @@ func _run() -> void:
 			"Theme " + theme_id + " reuses real closed chest artwork")
 		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation) and reveals == ["round-a"],
 			"Reduced motion preserves a static earned status in " + theme_id)
-		view.advance(2.0)
+		view.advance(PairReward.REWARD_SECONDS)
 		check(not view.snapshot().performance_active and view.snapshot().earned,
 			"Reduced motion completes the same presentation deadline for " + theme_id)
 	for area: Rect2 in [Rect2(12, 64, 336, 46), Rect2(12, 40, 780, 46), Rect2(12, 64, 184, 42)]:
@@ -97,7 +98,7 @@ func _run() -> void:
 		if id == "reentrant":
 			view.clear())
 	view.show_pair_result("reentrant", true)
-	view.advance(0.3)
+	view.advance(PairReward.REVEAL_SECONDS + 0.01)
 	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view.visible
 		and reveals.count("reentrant") <= 1,
 		"A host navigation during the sound cue cannot revive an obsolete reward")
@@ -117,16 +118,31 @@ func check_turn(view, data) -> void:
 		view.show_pair_result("turn-%s" % dimensions, true)
 		await process_frame
 		var before: float = maxf(view.chest.closed_art_rect().size.x, view.chest.closed_art_rect().size.y)
-		view.advance(0.28)
+		var rest: Dictionary = view.snapshot().motion
+		var resting_chest: Rect2 = view.snapshot().chest_rect
+		view.advance(Flight.CENTER_SECONDS)
 		var pose: Dictionary = view.snapshot().motion
-		check(view.snapshot().live_turn and float(pose.edge) * float(pose.scale) >= before * 3.0,
+		var screen_center: Vector2 = view.get_global_transform_with_canvas() * Vector2(pose.center)
+		check(screen_center.is_equal_approx(Vector2(dimensions) * 0.5)
+			and is_equal_approx(float(pose.scale), 1.0) and is_zero_approx(float(pose.yaw)),
+			"%s reaches the screen center before growing or turning" % dimensions)
+		view.advance(Flight.TOP_SECONDS - float(view.snapshot().elapsed))
+		pose = view.snapshot().motion
+		var upper: Vector2 = pose.center
+		check((view.get_global_transform_with_canvas() * upper).y < float(dimensions.y) * 0.36
+			and is_equal_approx(float(pose.scale), 1.0) and is_zero_approx(float(pose.yaw)),
+			"%s moves to the upper area before the reward performance" % dimensions)
+		view.advance(Flight.REVEAL_SECONDS - float(view.snapshot().elapsed))
+		pose = view.snapshot().motion
+		check(view.snapshot().live_turn and float(pose.edge) * float(pose.scale) >= before * 3.0
+			and Vector2(pose.center).is_equal_approx(upper) and is_equal_approx(float(pose.yaw), PI),
 			"%s enlarges the actual acquired chest silhouette, rather than only its empty layout box" % dimensions)
 		check(view._title.modulate.a < 0.01 and view._surface_layer.modulate.a < 0.01,
 			"The enlarged chest takes visual priority over the compact status pill")
 		var model = view._models._pool[1]
 		var safe := Rect2(Vector2.ZERO, Vector2(dimensions))
 		var contained: bool = true
-		for age: float in [0.28, 0.55, 0.95, 1.20, 1.45, 1.72]:
+		for age: float in [1.36, 1.55, 1.72, Flight.TURN_END]:
 			view.advance(age - float(view.snapshot().elapsed))
 			pose = view.snapshot().motion
 			var bounds: Rect2 = model.closed_bounds()
@@ -141,18 +157,89 @@ func check_turn(view, data) -> void:
 		view.set_paused(true)
 		var paused: Dictionary = view.snapshot().motion
 		view.advance(0.2)
-		check(view.snapshot().motion == paused and not view._models._active,
-			"Pausing freezes the pose and disables the extra 3D render surface")
+		check(view.snapshot().motion == paused and not view._models._active and not view.snapshot().overlay_visible,
+			"Pausing freezes the pose and hides the flight without leaving its extra 3D render surface active")
 		view.set_paused(false)
 		view.set_reduced_motion(true)
 		check(not view.snapshot().live_turn and not view._models._active
 			and view.chest.modulate.a == 1.0 and view.chest.scale == Vector2.ONE,
 			"Reduced motion immediately restores the original still chest without a turn or flash")
 		view.set_reduced_motion(false)
-		view.advance(1.0)
+		view.advance(Flight.RETURN_START - float(view.snapshot().elapsed))
+		check(Vector2(view.snapshot().motion.center).is_equal_approx(upper),
+			"The chest finishes its turn in the upper area before flying back")
+		view.advance((Flight.PERFORMANCE_SECONDS - Flight.RETURN_START) * 0.5)
+		pose = view.snapshot().motion
+		check(Vector2(pose.center).distance_to(rest.center) < upper.distance_to(rest.center)
+			and float(pose.scale) > 1.0,
+			"The return flight moves toward the original chest while recovering its size")
+		view.advance(Flight.PERFORMANCE_SECONDS)
 		check(not view._models._active and view.chest.modulate.a == 1.0 and view.chest.scale == Vector2.ONE
 			and view._title.modulate.a == 1.0 and view._surface_layer.modulate.a == 1.0,
 			"Completion returns to the original chest and status without keeping an animated viewport alive")
+		check(view.snapshot().chest_rect.is_equal_approx(resting_chest)
+			and Vector2(view.snapshot().motion.center).is_equal_approx(rest.center),
+			"The final status keeps the exact original chest anchor without a pill-width jump")
+	await check_overlay_lifecycle(view, data)
+	check_sprite_flight(view, data)
 	view.clear()
-	check(view._models._pool.is_empty() and not view.snapshot().active,
-		"Clearing the round releases the reusable turned model")
+	check(view._models._pool.is_empty() and not view.snapshot().active and not view.snapshot().overlay_visible,
+		"Clearing the round releases the reusable turned model and viewport overlay")
+
+
+func check_overlay_lifecycle(view, data) -> void:
+	var parent := Control.new()
+	root.add_child(parent)
+	parent.position = Vector2(36, 80)
+	parent.size = Vector2(280, 140)
+	parent.clip_contents = true
+	view.reparent(parent)
+	view.position = Vector2(10, 16)
+	view.size = Vector2(260, 40)
+	view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
+	view.configure("clipped-parent", "jungle", data.chests, false)
+	view.show_pair_result("clipped-parent", true)
+	view.advance(Flight.CENTER_SECONDS)
+	check(view._overlay.layer == 70 and view.snapshot().overlay_visible
+		and view._overlay.transform.is_equal_approx(view.get_global_transform_with_canvas())
+		and view.chest.get_parent() == view._overlay,
+		"The flight uses a viewport overlay with the row's transform rather than the clipped game board")
+	var elapsed: float = view.snapshot().elapsed
+	parent.hide()
+	view.advance(1.0)
+	check(not view.snapshot().overlay_visible and not view._models._active
+		and is_equal_approx(float(view.snapshot().elapsed), elapsed),
+		"Hiding an ancestor immediately removes its flight and freezes its timeline")
+	parent.show()
+	view.advance(0.1)
+	check(view.snapshot().overlay_visible and float(view.snapshot().elapsed) > elapsed,
+		"Showing the board resumes its same flight without creating a second overlay")
+	view.reparent(root)
+	parent.free()
+
+
+func check_sprite_flight(view, data) -> void:
+	root.size = Vector2i(390, 844)
+	view.position = Vector2(8, 80)
+	view.size = Vector2(374, 46)
+	view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
+	view.configure("sprite-flight", "spring", data.chests, false)
+	view.show_pair_result("sprite-flight", true)
+	var contained: bool = true
+	var saw_rotation: bool = false
+	var safe := Rect2(Vector2.ZERO, Vector2(root.size))
+	for frame in range(160):
+		view.advance(1.0 / 60.0)
+		var pose: Dictionary = view.snapshot().motion
+		var local := Rect2(-view._art_rect.size * 0.5, view._art_rect.size)
+		var transform: Transform2D = view.get_global_transform_with_canvas() * Transform2D(
+			float(pose.roll), Vector2.ONE * float(pose.scale), 0.0, pose.center)
+		for point: Vector2 in [local.position, Vector2(local.end.x, local.position.y), local.end,
+			Vector2(local.position.x, local.end.y)]:
+			contained = contained and safe.has_point(transform * point)
+		if float(pose.roll) > PI * 0.5 and float(pose.roll) < PI * 1.5:
+			saw_rotation = true
+	check(contained and saw_rotation and not view.snapshot().live_turn,
+		"Source 2D chest art visibly rotates in its own plane while staying inside the portrait viewport")
+	check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation),
+		"A source sprite returns to its exact authored pose after its full flight")
