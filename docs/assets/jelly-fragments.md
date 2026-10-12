@@ -70,6 +70,12 @@ Menu and background pauses hide and freeze the tail. Leaving the round or
 starting another clears it; reduced motion suppresses it. Round identity
 prevents an already announced chest from bursting again at the finale.
 
+Phrase Builder also starts this same paper burst with each accepted correct
+answer, alongside its existing success sound and phrase playback. Answer bursts
+use the round and attempt identity, so repeated input cannot replay them and
+each of the three answers can celebrate independently of the final chest.
+They share the same pause, round cleanup and reduced-motion behavior.
+
 The Jelly Match gameplay HUD uses a segmented halo around the existing chest
 art instead of a numeric fragment counter. Four segments fill to unlock the
 first chest; five segments fill for each subsequent upgrade. A segment charges

@@ -675,7 +675,7 @@ func _build_controls() -> void:
 	_phrase.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_phrase.interaction_allowed = _phrase_interaction_allowed
 	_phrase.completion_requested.connect(_phrase_completion_requested)
-	_phrase.word_attempted.connect(_phrase_growth_answer)
+	_phrase.word_attempted.connect(_phrase_answered)
 	_phrase.finished.connect(_phrase_finished)
 	_phrase.status_changed.connect(_phrase_status_changed)
 	_phrase.audio_requested.connect(_phrase_audio_requested)
@@ -4499,9 +4499,14 @@ func _pair_reward_cue(round_id: String, cue: String) -> void:
 	audio.play_jelly_cue(cue)
 
 
-func _phrase_growth_answer(id: String, words: Array[String], correct: bool) -> void:
-	if _phrase_interaction_allowed():
-		_record_growth(id, words, correct)
+func _phrase_answered(id: String, words: Array[String], correct: bool) -> void:
+	if not _phrase_interaction_allowed():
+		return
+	_record_growth(id, words, correct)
+	if correct and not _round_id.is_empty() and not reduced_motion and _reward_confetti_allowed():
+		_sync_reward_confetti()
+		# Answer celebrations are independent of the chest earned at the finale.
+		_reward_confetti.burst("%s:phrase:answer:%s" % [_round_id, id])
 
 
 func _pop_growth_answer(id: String, words: Array[String], correct: bool) -> void:

@@ -169,7 +169,98 @@ func _run() -> void:
 	view.finished.emit()
 	check(app._mode_id == "match" and app.model.phase != "won" and view.game.snapshot() == stopped and _pieces(app) == 1,
 		"Leaving Phrase Builder rejects stale tiles, audio and completion callbacks")
+	await _check_answer_confetti(app)
 	await _finish(app, directory)
+
+
+func _check_answer_confetti(app) -> void:
+	await _choose_mode(app, "phrase")
+	app.set_reduced_motion(false)
+	app.set_process(false)
+	check(app.new_round(173, false, "", "phrase"), "A fresh Phrase round starts for answer confetti")
+	await _settle()
+	var view = app._phrase
+	var paper = app._reward_confetti
+	var wrong_order: Array = view.game.current_question().words.duplicate()
+	wrong_order.reverse()
+	_select_words(view, wrong_order)
+	for attempt in range(3):
+		view.action_button.pressed.emit()
+	check(view.game.mistakes == 3 and paper.snapshot().keys.is_empty() and not paper.is_active(),
+		"Incorrect Phrase submissions never launch confetti when animation is enabled")
+	while not view.game.answer.is_empty():
+		view.answer_buttons[0].pressed.emit()
+	var answer_keys: Array = []
+	for question in range(3):
+		_solve(view)
+		var burst: Dictionary = paper.snapshot()
+		check(burst.active and burst.visible and not burst.paused and burst.keys.size() == question + 1,
+			"Correct Phrase answer %d launches its own visible confetti burst" % (question + 1))
+		check(burst.ages.size() == question + 1 and is_zero_approx(float(burst.ages.back())),
+			"Correct Phrase answer %d starts fresh paper while earlier paper can continue falling" % (question + 1))
+		answer_keys = burst.keys.duplicate()
+		for repeat in range(4):
+			view.action_button.pressed.emit()
+		check(paper.snapshot().keys == answer_keys and view.game.completed == question + 1,
+			"Rapid repeated Check answer callbacks cannot repeat answer %d or its confetti" % (question + 1))
+		if question < 2:
+			view.pip._process(view.pip.GAMEPLAY_HAPPY_SECONDS + 0.01)
+			view.action_button.pressed.emit()
+			check(paper.snapshot().keys == answer_keys and view.game.phase == "building",
+				"Continue keeps the current paper without launching another burst")
+	app._round_celebration.set_process(false)
+	app._round_celebration.advance(2.0)
+	check(paper.snapshot().keys.size() == 4,
+		"The final chest celebration retains its independent burst after all three answer celebrations")
+	check(app.new_round(174, false, "", "phrase"), "The next Phrase round resets its local answer sequence")
+	await _settle()
+	check(paper.snapshot().keys.is_empty() and not paper.is_active(),
+		"Starting the next round clears the outgoing confetti")
+	_solve(view)
+	var next_round: Dictionary = paper.snapshot()
+	check(next_round.keys.size() == 1 and not answer_keys.has(next_round.keys[0]) and next_round.visible,
+		"The next round's first answer can celebrate even though its local answer ID starts over")
+	for interruption in ["home", "catalog", "background"]:
+		paper.advance(0.25)
+		var before: Dictionary = paper.snapshot()
+		if interruption == "home":
+			app._mode_heading_button.pressed.emit()
+		elif interruption == "catalog":
+			app.collection_button.pressed.emit()
+		else:
+			app.on_page_hidden()
+		paper.advance(1.0)
+		view.action_button.pressed.emit()
+		check(paper.snapshot().paused and not paper.snapshot().visible
+			and paper.snapshot().ages == before.ages and paper.snapshot().keys == before.keys,
+			"Answer confetti pauses behind " + interruption + " without accepting another submission")
+		if interruption == "home":
+			PlayerFixture.enter_mode(app, "phrase")
+		elif interruption == "catalog":
+			app._collection_back.pressed.emit()
+		else:
+			app.on_page_visible()
+		check(paper.snapshot().visible and not paper.snapshot().paused and paper.snapshot().keys == before.keys,
+			"Returning from " + interruption + " resumes the same answer confetti without restarting it")
+	app.set_reduced_motion(true)
+	check(not paper.is_active() and not paper.snapshot().visible,
+		"Enabling reduced motion clears an ongoing answer burst immediately")
+	check(app.new_round(175, false, "", "phrase"), "A reduced-motion Phrase round starts")
+	await _settle()
+	_solve(view)
+	check(view.game.completed == 1 and paper.snapshot().keys.is_empty() and not paper.is_active(),
+		"Reduced motion preserves correct-answer progress without animated paper")
+	app.set_reduced_motion(false)
+	check(not paper.is_active(), "Disabling reduced motion does not replay a previously accepted answer")
+	check(app.new_round(176, false, "", "phrase"), "A Phrase round starts before switching modes")
+	await _settle()
+	_solve(view)
+	check(paper.is_active(), "There is active answer confetti before changing game mode")
+	await _choose_mode(app, "match")
+	view.action_button.pressed.emit()
+	check(not paper.is_active() and paper.snapshot().keys.is_empty(),
+		"Switching game mode clears answer confetti and ignores stale Phrase controls")
+	app.set_process(true)
 
 
 func _check_celebration_gate(app, context: String) -> void:
