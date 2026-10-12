@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { MODES, openGame, openModeMenu, chooseMode, metrics, tap, enterGame, rendered,
+const { MODES, THEME_NAMES, openGame, openModeMenu, chooseMode, chooseTheme, metrics, tap, enterGame, rendered,
   visibleColorCount, libraryControl, activateLibraryControl, openRewards,
   activateGrowthControl, growthView, matchWords } = require('./game-ui.cjs');
 
@@ -59,7 +59,7 @@ async function swipeHome(page, testInfo) {
 
 for (const reducedMotion of ['reduce', 'no-preference']) {
   test(`the home screen is the entry point with reachable illustrated games (${reducedMotion})`, async ({ page, browserName }, testInfo) => {
-    test.setTimeout(180000);
+    test.setTimeout(240000);
     const errors = await openHome(page, { reducedMotion });
     expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryClose'),
       'The home screen has no dismissal that bypasses choosing a game').toBe(false);
@@ -85,7 +85,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       if (browserName === 'webkit' && testInfo.project.use.isMobile) {
         // Mobile WebKit has no wheel API. Tab through the real controls until
         // the companion at the beginning of the content brings its top back.
-        for (let step = 0; step < 18 && (await metrics(page)).library.scroll_offset > 0; step++) {
+        for (let step = 0; step < 28 && (await metrics(page)).library.scroll_offset > 0; step++) {
           await page.locator('#canvas').press('Tab');
           await rendered(page);
         }
@@ -98,7 +98,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       if (browserName === 'chromium' && reducedMotion === 'reduce' && size.width === 390 && size.height === 420) {
         await swipeHome(page, testInfo);
       }
-      for (const name of [...names, 'HomeCollection', 'LibrarySound', 'LibraryMotion']) {
+      for (const name of [...THEME_NAMES, ...names, 'HomeCollection', 'LibrarySound', 'LibraryMotion']) {
         const control = await libraryControl(page, name), bounds = await metrics(page);
         const [x, y, w, h] = control.rect;
         expect(control.disabled, `${name} is enabled`).toBe(false);
@@ -115,7 +115,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
 }
 
 test('every game is selected from home and choosing the current game continues its round', async ({ page }, testInfo) => {
-  test.setTimeout(180000);
+  test.setTimeout(240000);
   const errors = await openHome(page);
   for (const mode of MODES) {
     await chooseMode(page, mode);
@@ -149,6 +149,9 @@ test('every game is selected from home and choosing the current game continues i
   await openModeMenu(page);
   await expect.poll(async () => (await jellyState(page)).paused).toBe(true);
   const paused = await jellyState(page);
+  await chooseTheme(page, 5);
+  expect((await metrics(page)).library.visible, 'Choosing a Home theme keeps the game paused').toBe(true);
+  expect((await jellyState(page)).paused).toBe(true);
   await page.waitForTimeout(1100);
   expect((await jellyState(page)).spawn_elapsed, 'Falling word supply pauses on home').toBe(paused.spawn_elapsed);
   await chooseMode(page, 'word_jelly');
@@ -221,6 +224,9 @@ test('returning home releases the microphone until Voice Pop is selected again',
   const paused = await page.evaluate(() => ({ ...window.__homeSpeech }));
   expect(paused.stops).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  await chooseTheme(page, 4);
+  expect(await page.evaluate(() => window.__homeSpeech.starts), 'Choosing a Home theme keeps the microphone stopped').toBe(paused.starts);
+  expect(await page.evaluate(() => window.__homeSpeech.active)).toBe(false);
   await chooseMode(page, 'pop');
   await expect.poll(() => page.evaluate(() => window.__homeSpeech.starts)).toBe(paused.starts + 1);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');

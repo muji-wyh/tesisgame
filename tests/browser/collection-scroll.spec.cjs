@@ -1,99 +1,77 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, collectionBounds, openRewards, enterGame, rendered } = require('./game-ui.cjs');
-
-function railClip(bounds, name) {
-  const c = collectionBounds(bounds);
-  return { x: bounds.x + c.x * bounds.scale, y: bounds.y + c[`${name}Top`] * bounds.scale,
-    width: c.width * bounds.scale, height: c[`${name}Height`] * bounds.scale };
-}
+const { metrics, worldControl, enterGame, rendered } = require('./game-ui.cjs');
 
 async function savedState(page) {
   return page.evaluate(() => ({ status: document.getElementById('game-status').textContent,
     growth: localStorage.getItem('growWithPip.growth.v1'), medals: localStorage.getItem('wordBuddies.medalProgress'),
+    presentation: localStorage.getItem('pipAndWords.presentation.v1'),
     theme: document.querySelector('meta[name="theme-color"]').content }));
 }
 
-async function horizontalShift(page, before, after) {
-  return page.evaluate(async sources => {
-    const images = await Promise.all(sources.map(async source => {
-      const image = new Image(); image.src = 'data:image/png;base64,' + source; await image.decode();
-      const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
-      const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
-      return context.getImageData(0, 0, canvas.width, canvas.height);
-    }));
-    const [original, moved] = images;
-    let best = { pixels: 0, error: Infinity };
-    for (let shift = 0; shift <= 80; shift++) {
-      let error = 0;
-      for (let y = 6; y < original.height - 6; y += 2) for (let x = 6; x < original.width - 90; x += 2) {
-        const a = (y * original.width + x + shift) * 4, b = (y * moved.width + x) * 4;
-        for (let c = 0; c < 3; c++) error += Math.abs(original.data[a + c] - moved.data[b + c]);
-      }
-      if (error < best.error) best = { pixels: shift, error };
-    }
-    return best;
-  }, [before, after].map(png => png.toString('base64')));
+async function themeDragOrigin(page) {
+  const rect = await worldControl(page, 5), bounds = await metrics(page);
+  return { bounds, point: { x: bounds.x + (rect.x + rect.width / 2) * bounds.scale,
+    y: bounds.y + (rect.y + rect.height / 2) * bounds.scale } };
 }
 
-for (const ratio of [1, 2, 3]) test.describe(`horizontal growth rails at DPR ${ratio}`, () => {
+for (const ratio of [1, 2, 3]) test.describe(`Home theme scrolling at DPR ${ratio}`, () => {
   test.use({ viewport: { width: 390, height: 650 }, deviceScaleFactor: ratio, hasTouch: true, reducedMotion: 'reduce' });
-  test('theme rail tracks finger pixels without changing the world or moving the page', async ({ page, browserName }, testInfo) => {
+  test('dragging a theme follows the finger without choosing it or moving the page', async ({ page, browserName }, testInfo) => {
     test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
-    await page.goto('/'); await enterGame(page); await openRewards(page);
-    const bounds = await metrics(page), clip = railClip(bounds, 'theme');
-    const start = { x: clip.x + 240, y: clip.y + clip.height / 2 };
+    await page.goto('/'); await enterGame(page, { home: true });
+    const { bounds, point } = await themeDragOrigin(page);
     const saved = await savedState(page), client = await page.context().newCDPSession(page), measurements = [];
     try {
-      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
       await rendered(page);
-      const before = await page.screenshot({ clip, scale: 'css' });
+      const initial = (await metrics(page)).library.scroll_offset;
       for (const displacement of [20, 40, 60, 30]) {
-        await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x: start.x - displacement, y: start.y }] });
+        await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x: point.x, y: point.y - displacement }] });
         await rendered(page);
-        const measured = await horizontalShift(page, before, await page.screenshot({ clip, scale: 'css' }));
-        measurements.push({ finger: displacement, content: measured.pixels });
-        expect(Math.abs(measured.pixels - displacement), JSON.stringify(measurements)).toBeLessThanOrEqual(2);
+        const measured = ((await metrics(page)).library.scroll_offset - initial) * bounds.scale;
+        measurements.push({ finger: displacement, content: measured });
+        expect(Math.abs(measured - displacement), JSON.stringify(measurements)).toBeLessThanOrEqual(2);
       }
     } finally {
       await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await client.detach();
     }
     expect(await savedState(page)).toEqual(saved);
+    expect((await metrics(page)).library.visible).toBe(true);
     expect(await page.evaluate(() => [scrollX, scrollY])).toEqual([0, 0]);
-    await testInfo.attach('horizontal-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
-    await page.screenshot({ path: testInfo.outputPath('growth-after-theme-swipe.png'), scale: 'css' });
+    await testInfo.attach('home-theme-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
+    await page.screenshot({ path: testInfo.outputPath('home-after-theme-swipe.png'), scale: 'css' });
   });
 });
 
-for (const input of ['mouse', 'touch']) for (const name of ['theme']) {
-  test(`${input} ${name} rail swipe leaves the growth header fixed without activation`, async ({ page, browserName }, testInfo) => {
+for (const input of ['mouse', 'touch']) {
+  test(`${input} swiping a Home theme leaves the header fixed without activation`, async ({ page, browserName }, testInfo) => {
     test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
     await page.setViewportSize({ width: 390, height: 650 }); await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/'); await enterGame(page); await openRewards(page);
-    const bounds = await metrics(page), c = collectionBounds(bounds), clip = railClip(bounds, name);
-    const stationaryClip = { x: bounds.x + c.x * bounds.scale, y: bounds.y + c.padding * bounds.scale,
-      width: c.width * bounds.scale, height: (c.top + 36 - c.padding) * bounds.scale };
-    const start = { x: clip.x + 240, y: clip.y + clip.height / 2 }, saved = await savedState(page);
+    await page.goto('/'); await enterGame(page, { home: true });
+    const { bounds, point } = await themeDragOrigin(page), saved = await savedState(page);
+    const [, top] = bounds.library.viewport_rect;
+    const headerClip = { x: bounds.x, y: bounds.y, width: bounds.width * bounds.scale, height: top * bounds.scale };
     const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
     try {
-      if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...start }] });
-      else { await page.mouse.move(start.x, start.y); await page.mouse.down(); }
+      if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
+      else { await page.mouse.move(point.x, point.y); await page.mouse.down(); }
       await rendered(page);
-      const before = await page.screenshot({ clip, scale: 'css' });
-      const stationary = await page.screenshot({ clip: stationaryClip, scale: 'css' });
+      const initial = (await metrics(page)).library.scroll_offset;
+      const header = await page.screenshot({ clip: headerClip, scale: 'css' });
       for (let step = 1; step <= 5; step++) {
-        const point = { x: start.x - step * 12, y: start.y };
-        if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...point }] });
-        else await page.mouse.move(point.x, point.y);
+        const moved = { x: point.x, y: point.y - step * 12 };
+        if (client) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...moved }] });
+        else await page.mouse.move(moved.x, moved.y);
         await rendered(page);
       }
-      expect((await horizontalShift(page, before, await page.screenshot({ clip, scale: 'css' }))).pixels).toBeGreaterThanOrEqual(58);
-      expect((await page.screenshot({ clip: stationaryClip, scale: 'css' })).equals(stationary), 'The growth header stays fixed.').toBe(true);
-
+      expect(((await metrics(page)).library.scroll_offset - initial) * bounds.scale).toBeGreaterThanOrEqual(58);
+      expect((await page.screenshot({ clip: headerClip, scale: 'css' })).equals(header), 'The Home header stays fixed.').toBe(true);
     } finally {
       if (client) { await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await client.detach(); }
       else await page.mouse.up();
     }
     expect(await savedState(page)).toEqual(saved);
-    await page.screenshot({ path: testInfo.outputPath(`${name}-${input}-swipe.png`), scale: 'css' });
+    expect((await metrics(page)).library.visible).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`home-theme-${input}-swipe.png`), scale: 'css' });
   });
 }

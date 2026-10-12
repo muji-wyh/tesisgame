@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
-  openRewards, collectionHeaderRect, worldControl, growthView,
+  openRewards, openModeMenu, collectionHeaderRect, worldControl, growthView,
   contentBounds, pipHeaderRect
 } = require('./game-ui.cjs');
 
@@ -70,7 +70,7 @@ async function foregroundDifference(page, first, second, firstColor, secondColor
 test('all eight theme choices give Pip different visible outfits in the header and growth notebook', async ({ page }, testInfo) => {
   // Eight full wardrobe captures need enough time on software WebGL runners.
   test.setTimeout(240000);
-  // Keep the growth catalogue and world choices in one visual artifact.
+  // Give the growth catalogue room for a full wardrobe comparison.
   await page.setViewportSize({ width: 390, height: 1560 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   expect(THEME_IDS).toEqual(['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']);
@@ -115,10 +115,10 @@ test('all eight theme choices give Pip different visible outfits in the header a
   expect(errors).toEqual([]);
 });
 
-test('all eight themes are reachable in the 320 by 568 rail and survive touch and reload', async ({ page }, testInfo) => {
+test('all eight themes are reachable on 320 by 568 Home and survive touch and reload', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
-  await openRewards(page);
+  await openModeMenu(page);
   const originalMedals = await record(page, MEDAL_KEY);
   const bounds = await metrics(page), viewport = page.viewportSize();
   for (const [index, theme] of THEME_IDS.entries()) {
@@ -134,7 +134,7 @@ test('all eight themes are reachable in the 320 by 568 rail and survive touch an
     const world = await worldControl(page, index);
     await tap(page, world.x + world.width / 2, world.y + world.height / 2);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-    expect((await growthView(page)).visible).toBe(true);
+    expect((await metrics(page)).library.visible).toBe(true);
     expect(JSON.parse(await record(page)).preferred_theme).toBe(THEME_IDS[index]);
     await rendered(page);
     await page.screenshot({ path: testInfo.outputPath(`wardrobe-${THEME_IDS[index]}-320.png`), scale: 'css' });

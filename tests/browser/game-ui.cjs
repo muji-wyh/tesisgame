@@ -83,12 +83,17 @@ async function chooseMode(page, name, options = {}) {
 
 async function chooseTheme(page, index) {
   if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
-  await openRewards(page);
+  const previous = (await metrics(page)).library;
+  if ((await growthView(page)).visible) {
+    await activateGrowthControl(page, 'GrowthBack');
+    await expect.poll(async () => (await growthView(page)).visible).toBe(false);
+  }
+  await openModeMenu(page);
   const world = await worldControl(page, index);
   await tap(page, world.x + world.width / 2, world.y + world.height / 2);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
-  await activateGrowthControl(page, 'GrowthBack');
-  await expect.poll(async () => (await growthView(page)).visible).toBe(false);
+  await expect.poll(async () => (await metrics(page)).library?.theme_id).toBe(THEME_IDS[index]);
+  if (!previous?.visible && previous?.current) await chooseMode(page, previous.current);
 }
 
 function contentBounds(bounds) {
@@ -197,7 +202,10 @@ function collectionHeaderRect(bounds, section) {
 
 function worldIconRect(bounds, index) {
   if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
-  return growthRect(bounds, THEME_NAMES[index]);
+  const item = bounds.library?.controls?.find(control => control.name === THEME_NAMES[index] && control.visible);
+  if (!bounds.library?.visible || !item) throw new Error(`Open the home screen before locating ${THEME_NAMES[index]}.`);
+  const [x, y, width, height] = item.rect;
+  return { x, y, width, height };
 }
 
 async function ageControl(page, id) {
@@ -208,7 +216,7 @@ async function ageControl(page, id) {
 
 async function worldControl(page, index) {
   if (!Number.isInteger(index) || index < 0 || index >= THEME_IDS.length) throw new Error(`Unknown world index: ${index}`);
-  const item = await growthControl(page, THEME_NAMES[index]);
+  const item = await libraryControl(page, THEME_NAMES[index]);
   const [x, y, width, height] = item.rect;
   return { x, y, width, height };
 }

@@ -61,38 +61,58 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	app.choose_mode("match")
+	app._request_hint()
+	app.cards[app.model.hint_ids[0]].pressed.emit()
+	var round_id: String = app._round_id
 	var cards: Array = app.model.cards.duplicate(true)
-	app._show_collection()
+	var selected: String = app.model.selected_id
+	var hints: int = app.model.hints_remaining
+	var growth: Dictionary = app.growth.snapshot().duplicate(true)
+	app._show_mode_menu()
+	await settle()
+	check(app.theme_buttons.size() == 8 and app.theme_buttons.all(func(button: Button) -> bool:
+		return app._mode_panel.is_ancestor_of(button)), "All world choices belong to Home")
+	var style_id: int = app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id()
+	app._refresh()
+	check(app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id() == style_id,
+		"An unchanged gameplay refresh reuses the Home theme styles")
+	for retired in ["WorldChoices", "WorldScroll", "NextWorld"]:
+		check(app.find_child(retired, true, false) == null, "The old collection theme control is removed: " + retired)
 	for theme_index in [4, 1]:
-		await settle()
 		var button: Button = app.theme_buttons[theme_index]
 		button.grab_focus()
 		await settle()
-		var scroll: int = app._world_scroll.scroll_horizontal
+		var scroll: int = app._mode_panel.scroll.scroll_vertical
 		button.pressed.emit()
 		await settle()
-		check(app.collection_page.visible and app._age_catalog.is_visible_in_tree(),
-			"Choosing a theme keeps the growth catalog open")
-		check(app._world_scroll.scroll_horizontal == scroll and button.has_focus(),
-			"Theme selection preserves scroll and control focus")
-		check(app.model.cards == cards and app.model.hints_remaining == 3,
-			"The current game is not reset by a theme choice")
-		if not app.collection_page.visible:
-			app._show_collection()
+		check(app._mode_menu_open() and not app.collection_page.visible,
+			"Choosing a theme keeps Home open")
+		check(app._mode_panel.scroll.scroll_vertical == scroll and button.has_focus(),
+			"Theme selection preserves Home scroll and control focus")
+		check(app.model.theme_id == app.Model.THEMES[theme_index]
+			and app._mode_panel.snapshot().theme_id == app.model.theme_id and button.button_pressed,
+			"Home identifies and applies the selected theme immediately")
+		check(app._round_id == round_id and app.model.cards == cards and app.model.selected_id == selected
+			and app.model.hints_remaining == hints and app.growth.snapshot() == growth,
+			"A Home theme choice preserves the exact round, selection, hints and growth")
 	var save_path: String = app._presentation.path
 	app._presentation.path = directory + "/missing/presentation.cfg"
 	app.theme_buttons[5].pressed.emit()
 	await settle()
-	var notice: Label = app.get("_world_save_notice")
-	check(app._journey_save_failed and notice != null and notice.is_visible_in_tree(),
-		"A theme save failure stays visibly recoverable in the open page")
+	var notice: Label = app._mode_panel._theme_save_notice
+	check(app._journey_save_failed and notice.is_visible_in_tree() and app._mode_panel.snapshot().theme_save_failed,
+		"A theme save failure remains visibly recoverable on Home")
 	app._presentation.path = save_path
 	app.theme_buttons[5].pressed.emit()
 	await settle()
-	check(not app._journey_save_failed and app.collection_page.visible
-		and (notice == null or not notice.visible),
-		"Selecting the same theme retries persistence without leaving the page")
-	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(960, 720)]:
+	check(not app._journey_save_failed and app._mode_menu_open() and not notice.visible,
+		"Selecting the same Home theme retries persistence without leaving the page")
+	var reloaded = load("res://scripts/presentation_preferences.gd").new()
+	reloaded.path = save_path
+	reloaded.load_preferences(false)
+	check(reloaded.preferred_theme == "space", "A Home theme choice survives preference reload")
+	for dimensions in [Vector2i(320, 320), Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(960, 720)]:
 		root.size = dimensions
 		await settle()
 		var scale: float = app.Style.ui_scale(app)
@@ -101,15 +121,18 @@ func _run() -> void:
 			await settle()
 			var surface: StyleBox = button.get_theme_stylebox("normal")
 			check(button.size.x * scale >= 44 and button.size.y * scale >= 44,
-				"The theme buttons preserve accessible touch targets")
+				"Home theme buttons preserve accessible touch targets")
 			check((button.size - surface.get_minimum_size()).x * scale >= 24
-				and button.get_theme_constant("icon_max_width") * scale >= 30,
-				"Inner padding preserves visible theme artwork within its icon cap")
-			check(app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()), "Focus reveals theme choices in their horizontal strip")
-		check(app._world_scroll.get_global_rect().position.y >= app._age_catalog.get_global_rect().end.y
-			and app.collection_page.get_global_rect().grow(1).encloses(app._world_scroll.get_global_rect()),
-			"Theme choices stay below the word catalog inside the page at every width")
-	app._hide_collection()
+				and button.get_theme_constant("icon_max_width") * scale >= 24,
+				"Inner padding preserves visible theme artwork")
+			check(app._mode_panel.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
+				"Focus fully reveals each Home theme choice")
+	app.choose_mode("match")
+	await settle()
+	check(app.model.theme_id == "space" and app._round_id == round_id and app.model.cards == cards
+		and app.model.selected_id == selected and app.model.hints_remaining == hints and app.growth.snapshot() == growth,
+		"Resuming Match applies the Home theme without replacing its partial round")
+	await _check_home_only_controls(app)
 	await _check_treasure_themes(app)
 	app.queue_free()
 	await process_frame
@@ -118,6 +141,52 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Theme and treasure: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _shoulder(right: bool = true) -> void:
+	for down in [true, false]:
+		var event := InputEventJoypadButton.new()
+		event.button_index = JOY_BUTTON_RIGHT_SHOULDER if right else JOY_BUTTON_LEFT_SHOULDER
+		event.pressed = down
+		root.push_input(event, true)
+		await process_frame
+	await settle()
+
+
+func _check_home_only_controls(app) -> void:
+	var theme: String = app.model.theme_id
+	for context in ["gameplay", "collection"]:
+		if context == "collection":
+			app._show_collection()
+		await settle()
+		check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+			"Theme choices are hidden during " + context)
+		app.theme_buttons[0].pressed.emit()
+		await _shoulder()
+		check(app.model.theme_id == theme, "Stale theme events and shoulder shortcuts cannot change themes during " + context)
+	app._hide_collection()
+	app._show_mode_menu()
+	await settle()
+	await _shoulder()
+	var next: String = app.Model.THEMES[posmod(app.Model.THEMES.find(theme) + 1, app.Model.THEMES.size())]
+	check(app.model.theme_id == next and app._mode_panel.snapshot().theme_id == next,
+		"Controller shoulder switches the theme on Home")
+	app.on_page_hidden()
+	app.theme_buttons[0].pressed.emit()
+	app._cycle_theme(1)
+	check(app.model.theme_id == next, "Background Home rejects stale theme controls")
+	app.on_page_visible()
+	app._mode_panel.collection_requested.emit()
+	await settle()
+	app.theme_buttons[0].pressed.emit()
+	await _shoulder()
+	check(app.collection_page.visible and app.model.theme_id == next,
+		"A collection opened from Home cannot switch the covered theme")
+	app._hide_collection()
+	await settle()
+	check(app._mode_menu_open(), "Collection Back returns to the Home theme selector")
+	app.choose_mode("match")
+	await settle()
 
 
 func _check_loading_theme(directory: String) -> void:
@@ -183,6 +252,7 @@ func _check_treasure_themes(app) -> void:
 	if treasure == null:
 		return
 	var data = load("res://scripts/game_data.gd")
+	app.choose_theme("spring")
 	check(app.new_round(732, false, "", "match"), "The treasure-world fixture starts a real Match round")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
@@ -199,14 +269,15 @@ func _check_treasure_themes(app) -> void:
 		"Five real matches enter the themed treasure result with an unopened chest")
 	check(treasure.mouse_filter == Control.MOUSE_FILTER_IGNORE and treasure.focus_mode == Control.FOCUS_NONE,
 		"The world scenery never captures chest pointer input or keyboard focus")
+	var chest_theme: String = app.JellyRewardProgress.theme_for_tier(1)
 	var counts_before: Dictionary = app.medal_progress.counts.duplicate(true)
 	for theme_id in data.THEMES:
 		app.choose_theme(theme_id)
 		await settle()
 		_check_treasure_palette(treasure, data.theme(theme_id), "before opening")
-		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == "spring",
-			"The earned Spring chest is preserved in the selected " + theme_id + " world")
-		check(app.medal_progress.counts == counts_before and app.model.reward_theme == "spring",
+		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == chest_theme,
+			"The earned tier-one chest is preserved in the selected " + theme_id + " world")
+		check(app.medal_progress.counts == counts_before and app.model.reward_theme == chest_theme,
 			"Viewing the " + theme_id + " treasure world cannot claim or replace the frozen reward")
 	app.choose_theme("spring")
 	await settle()
@@ -231,9 +302,9 @@ func _check_treasure_themes(app) -> void:
 	var earned_id: String = app.model.reward_id
 	var earned_counts: Dictionary = counts_before.duplicate(true)
 	earned_counts["spring-1"] = int(earned_counts.get("spring-1", 0)) + 1
-	check(app.model.chest_state == "opened" and app.model.reward_theme == "spring" and earned_id == "spring-1"
+	check(app.model.chest_state == "opened" and app.model.reward_theme == chest_theme and earned_id == "spring-1"
 		and app.medal_progress.counts == earned_counts,
-		"A full hold through the scenery opens the Spring chest and saves exactly its first medal piece")
+		"A full hold through the scenery opens the tier-one chest and saves exactly its earned Spring medal piece")
 	var saved_bytes := FileAccess.get_file_as_string(app.medal_progress._save_path)
 	var pending: Dictionary = app._pending_fragment.duplicate(true)
 	for theme_id in data.THEMES:
@@ -241,8 +312,8 @@ func _check_treasure_themes(app) -> void:
 		await settle()
 		_check_treasure_palette(treasure, data.theme(theme_id), "after opening a Spring chest")
 		check(app.model.phase == "won" and app.model.chest_state == "opened" and app.chest.mode == "opened"
-			and app.chest.theme_id == "spring" and app.model.reward_theme == "spring" and app.model.reward_id == earned_id,
-			"Changing the scene to " + theme_id + " preserves the already earned Spring chest and reward")
+			and app.chest.theme_id == chest_theme and app.model.reward_theme == chest_theme and app.model.reward_id == earned_id,
+			"Changing the scene to " + theme_id + " preserves the already earned chest appearance and Spring reward")
 		check(app.medal_progress.counts == earned_counts and app._pending_fragment == pending
 			and FileAccess.get_file_as_string(app.medal_progress._save_path) == saved_bytes,
 			"Changing the opened result to " + theme_id + " cannot rewrite progress or add another piece")

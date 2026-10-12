@@ -5,6 +5,7 @@ var checks := 0
 var failures := 0
 var chosen := ""
 var collection_visits := 0
+var theme_chosen := ""
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -25,6 +26,10 @@ func _run() -> void:
 	root.add_child(library)
 	library.mode_requested.connect(func(id: String) -> void: chosen = id)
 	library.collection_requested.connect(func() -> void: collection_visits += 1)
+	library.theme_requested.connect(func(id: String) -> void: theme_chosen = id)
+	library.configure_theme("ocean", false, false)
+	check(library.theme_buttons.size() == 8 and library.theme_buttons[4].button_pressed
+		and library.snapshot().theme_id == "ocean", "Home offers eight themes and identifies the selected world")
 	library.configure("", false, true)
 	check(library.buttons.size() == 6, "Home offers all six supported games")
 	check(not library.buttons.any(func(button: Button) -> bool: return button.button_pressed),
@@ -51,6 +56,15 @@ func _run() -> void:
 		var bounds := Rect2(Vector2.ZERO, dimensions)
 		check(bounds.grow(1).encloses(library.get_global_rect()) and library.size.is_equal_approx(dimensions),
 			"%s: Home fills the viewport without overflowing" % dimensions)
+		for index in range(library.theme_buttons.size()):
+			var button: Button = library.theme_buttons[index]
+			button.grab_focus()
+			await settle()
+			check(button.size.x >= 44 and button.size.y >= 44
+				and library.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
+				"%s: focused theme %s remains fully reachable" % [dimensions, button.name])
+			button.pressed.emit()
+			check(theme_chosen == library.Model.THEMES[index], "Each Home theme requests its own world")
 		for tile: Dictionary in library._tiles:
 			library.ensure_mode_visible(str(tile.entry.id))
 			await settle()

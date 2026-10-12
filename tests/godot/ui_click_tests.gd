@@ -69,22 +69,21 @@ func _run() -> void:
 
 
 func _check_library(app) -> void:
-	_click(app, app._mode_heading_button, "The header game menu")
-	check(app._mode_menu_open(), "The library opens through its real header action")
+	app.choose_mode("match")
+	_click(app, app._mode_heading_button, "The header Home button")
+	check(app._mode_menu_open(), "Home opens through its real header action")
 	_click(app, app._mode_panel.motion_button, "The motion setting")
-	_click(app, app._mode_panel.close_button, "The library Back button")
-	_click(app, app.duck, "Pip acting as the game-menu button")
+	_click(app, app.theme_buttons[1], "The Home theme selector")
 	var count: int = app.audio.click_count
 	var cancel := InputEventAction.new()
 	cancel.action = "ui_cancel"
 	cancel.pressed = true
 	app._input(cancel)
-	check(not app._mode_menu_open() and app.audio.click_count == count + 1,
-		"Escape dismisses the library with exactly one click")
+	check(app._mode_menu_open() and app.audio.click_count == count,
+		"Escape cannot dismiss Home or add an unrelated UI click")
 	app._show_mode_menu()
-	check(app.audio.click_count == count + 1, "Programmatic menu changes do not add UI sounds")
+	check(app.audio.click_count == count, "Programmatic Home changes do not add UI sounds")
 	_check_backdrop(app)
-	app._show_mode_menu()
 	UiClick.bind_button(app._mode_buttons[1])
 	UiClick.bind_button(app._mode_buttons[1])
 	await create_timer(0.12).timeout
@@ -104,7 +103,6 @@ func _check_library(app) -> void:
 	app._mode_panel.motion_button.pressed.emit()
 	check(app.audio.click_count == count, "Other settings remain silent while muted")
 	_click(app, app._mode_panel.sound_button, "Switching sound back on")
-	app._hide_mode_menu()
 	app.choose_mode("match")
 	await process_frame
 
@@ -117,22 +115,22 @@ func _check_backdrop(app) -> void:
 	press.position = Vector2(4, 4)
 	var release := press.duplicate() as InputEventMouseButton
 	release.pressed = false
-	app._mode_menu_input(press)
+	root.push_input(press, true)
 	release.canceled = true
-	app._mode_menu_input(release)
+	root.push_input(release, true)
 	check(app._mode_menu_open() and app.audio.click_count == count, "Canceled backdrop presses stay silent")
 	release.canceled = false
-	app._mode_menu_input(press)
+	root.push_input(press, true)
 	var motion := InputEventMouseMotion.new()
 	motion.position = Vector2(4, 70)
-	app._mode_menu_input(motion)
-	app._mode_menu_input(release)
+	root.push_input(motion, true)
+	root.push_input(release, true)
 	check(app._mode_menu_open() and app.audio.click_count == count, "Backdrop drags do not dismiss or click")
-	app._mode_menu_input(press)
-	app._mode_menu_input(release)
-	check(not app._mode_menu_open() and app.audio.click_count == count + 1, "A completed backdrop tap clicks once")
-	app._mode_menu_input(release)
-	check(app.audio.click_count == count + 1, "Duplicate release events cannot add clicks")
+	root.push_input(press, true)
+	root.push_input(release, true)
+	check(app._mode_menu_open() and app.audio.click_count == count, "A completed Home background tap stays on Home without a UI click")
+	root.push_input(release, true)
+	check(app.audio.click_count == count, "Duplicate Home background releases cannot add clicks")
 	for touch_first: bool in [false, true]:
 		app._show_mode_menu()
 		count = app.audio.click_count
@@ -148,9 +146,9 @@ func _check_backdrop(app) -> void:
 					event.device = InputEvent.DEVICE_ID_EMULATION
 				event.pressed = down
 				event.position = Vector2(4, 4)
-				app._mode_menu_input(event)
-		check(not app._mode_menu_open() and app.audio.click_count == count + 1,
-			"Paired touch and emulated mouse events dismiss with one click: touch-first=%s" % touch_first)
+				root.push_input(event, true)
+		check(app._mode_menu_open() and app.audio.click_count == count,
+			"Paired Home background touches stay on Home without a click: touch-first=%s" % touch_first)
 
 
 func _check_growth_navigation(app) -> void:
@@ -158,7 +156,6 @@ func _check_growth_navigation(app) -> void:
 	_click(app, app._age_buttons["4"], "A preview age selector")
 	check(app.growth.level == 0 and app.growth.age == 0, "Previewing a future tier cannot unlock it")
 	_click(app, app._age_buttons["3"], "The current vocabulary age selector")
-	_click(app, app.theme_buttons[1], "The world selector")
 	var count: int = app.audio.click_count
 	app._collection_multi_touch = true
 	app._age_buttons["4"].pressed.emit()
@@ -177,7 +174,8 @@ func _check_growth_navigation(app) -> void:
 	count = app.audio.click_count
 	app._controller_accept()
 	check(app._mode_menu_open() and app.audio.click_count == count + 1, "Controller Accept follows the same menu click")
-	app._controller_back()
+	_click(app, app.theme_buttons[2], "The Home theme selector after a collection visit")
+	app.choose_mode("match")
 
 
 func _check_gameplay_exclusions_and_results(app) -> void:
@@ -188,7 +186,7 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	app._controller_back()
 	app.hint_button.pressed.emit()
 	check(app.audio.click_count == count, "Match cards, deselection and hints keep their gameplay sounds only")
-	app.choose_mode("memory")
+	PlayerFixture.enter_mode(app, "memory")
 	app._memory.card_buttons[0].pressed.emit()
 	app._memory.study_button.button_down.emit()
 	app._memory.study_button.button_up.emit()
@@ -222,7 +220,7 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 		"New adventure does not cancel its click request while rebuilding the board")
 	await create_timer(0.2).timeout
 	check(completions.size() == 1, "New adventure lets its click reach a natural finish")
-	app.choose_mode("pop")
+	PlayerFixture.enter_mode(app, "pop")
 	app._pop.set_process(false)
 	app._on_voice_state([false, false, "Microphone is unavailable."])
 	_click(app, app._pop._gate_back, "The Voice Pop Back action")

@@ -50,8 +50,8 @@ func _run() -> void:
 	check(not properties.has("_match_caption"), "Match has no separate Find 3 pairs caption")
 	check(not app._new_adventure_button.is_visible_in_tree(), "The active board has no result action")
 	app._show_collection()
-	check(app._age_catalog.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-		"More opens Pip with every world choice available")
+	check(app._age_catalog.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+		"The collection shows vocabulary while theme choices stay on Home")
 	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)
 	check(words.size() == 5, "The scene starts with five matchable words")

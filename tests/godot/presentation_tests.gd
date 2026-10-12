@@ -62,8 +62,11 @@ func _run() -> void:
 		for frame in range(8):
 			await process_frame
 		check(library.size.x <= dimensions.x - 23 and library.size.y <= dimensions.y - 23, "Library fits %s: actual %s" % [dimensions, library.size])
-		for button in library.buttons + [library.sound_button, library.motion_button, library.close_button]:
-			check(library.get_global_rect().grow(1).encloses(button.get_global_rect()) and button.size.y >= 44, "All choices and settings remain reachable at " + str(dimensions))
+		for button in library.buttons + library.theme_buttons + [library.sound_button, library.motion_button, library.collection_button]:
+			library.scroll.ensure_control_visible(button)
+			for frame in range(4):
+				await process_frame
+			check(library.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()) and button.size.y >= 44, "All Home choices and settings remain reachable at " + str(dimensions))
 	library.queue_free()
 	DirAccess.remove_absolute(preferences.path)
 	DirAccess.remove_absolute(directory)

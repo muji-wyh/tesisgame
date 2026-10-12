@@ -878,11 +878,11 @@ func _test_scene() -> void:
 		"All eight themes remain available")
 	if has_property(app, "theme_buttons"):
 		check(app.theme_buttons.all(func(button: Button) -> bool:
-			return button.text.is_empty() and button.tooltip_text == button.name and button.get("accessibility_name") == button.name),
-			"Icon-only world choices retain their exact names in tooltips and accessibility")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return app._world_choices.is_ancestor_of(button))
-			and not app._world_choices.is_visible_in_tree(),
-			"World choices live in More instead of competing with the playfield")
+			return button.text.is_empty() and button.tooltip_text == button.name and str(button.get("accessibility_name")).begins_with(str(button.name) + ", ")),
+			"Icon-only world choices retain their names and selected state in accessibility")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return app._mode_panel.is_ancestor_of(button))
+			and not app._mode_menu_open(),
+			"World choices live on Home instead of competing with the playfield")
 	var theme_style_id: int = app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id()
 	var mode_style_id: int = app._mode_buttons[0].get_theme_stylebox("normal").get_instance_id()
 	app._refresh()
@@ -919,9 +919,8 @@ func _test_scene() -> void:
 			"Opening growth announces the current learning level")
 		check(app.collection_button.focus_mode == Control.FOCUS_NONE,
 			"Opening rewards removes underlying controls from keyboard focus")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree())
-			or app._compact_world.is_visible_in_tree(),
-			"Opening growth exposes the world rail or its compact cycling control")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+			"Opening growth does not expose Home theme controls")
 		var original_theme: String = app.model.theme_id
 		app.choose_theme("ocean")
 		check(app._age_catalog._palette.id == "ocean",
@@ -1027,12 +1026,17 @@ func _test_scene() -> void:
 	var theme_before_controller: String = app.model.theme_id
 	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
 	await process_frame
+	check(app.model.theme_id == theme_before_controller, "Controller shoulders cannot switch themes during gameplay")
+	app._show_mode_menu()
+	joy_tap(JOY_BUTTON_RIGHT_SHOULDER)
+	await process_frame
 	check(app.model.theme_id != theme_before_controller and app.model.cards == cards_before_controller,
-		"Controller RB cycles season without restarting the round")
+		"Controller RB cycles the Home theme without restarting the round")
 	joy_tap(JOY_BUTTON_LEFT_SHOULDER)
 	await process_frame
 	check(app.model.theme_id == theme_before_controller and app.model.cards == cards_before_controller,
-		"Controller LB cycles season back without restarting the round")
+		"Controller LB cycles the Home theme back without restarting the round")
+	app.choose_mode("match")
 	joy_tap(JOY_BUTTON_Y)
 	await process_frame
 	check(app.collection_page.visible and app._collection_back.has_focus(),

@@ -1,7 +1,7 @@
 # Gameplay reference
 
 **Grow with Pip** is an English vocabulary game with Match, Memory, Phrase Builder,
-single-player Voice Pop, Jelly Match and Jelly Words. It starts with a playable Match board. There are no
+single-player Voice Pop, Jelly Match and Jelly Words. It starts on Home, where players choose a game. There are no
 accounts, usernames, identity avatars, leaderboards or Pip's room.
 
 ## Growing together
@@ -24,9 +24,11 @@ includes all words in each cohort, their 0-2 practice streaks or Mastered labels
 pronunciation and short meanings. Future cohorts are clearly previews: browsing
 them cannot change the game's earned level or age.
 
-The notebook also offers eight worlds. On short screens a header icon cycles
-worlds; on larger screens an illustrated horizontal strip offers direct choices.
-Changing worlds preserves the current round. Back returns to the same game.
+Home offers eight illustrated theme choices above the game cards, arranged in
+one row on wide screens and two rows on phones. The selected theme is highlighted
+and saved automatically. Theme switching is available only on Home, including
+controller shoulder shortcuts. Select the current game to continue the same round
+with the new theme; saved treasure batches retain their original theme.
 
 See [growth rules and persistence](growth-system.md) and the
 [curriculum research](vocabulary/growth-curriculum.md) for the complete mapping.

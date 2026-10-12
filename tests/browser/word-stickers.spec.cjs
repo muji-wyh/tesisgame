@@ -51,7 +51,7 @@ test('Match card taps pronounce and Match no longer creates runtime word sticker
   expect(errors).toEqual([]);
 });
 
-test('saved word sticker records survive More, world choices and reload', async ({ page }, testInfo) => {
+test('saved word sticker records survive the library, Home themes and reload', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await page.addInitScript(({ key }) => {
     if (!localStorage.getItem(key)) localStorage.setItem(key, '[playroom]\nversion=1\ntoy="toy-ball"\nbackdrop="backdrop-home"\nfavorite=""\n\n[stickers]\nword_ids=["cat", "apple", "rocket", "bell"]\ndisplay_word_id="cat"\n');
@@ -60,8 +60,8 @@ test('saved word sticker records survive More, world choices and reload', async 
   const saved = await record(page);
   expect(saved).toEqual({ ids: ['cat', 'apple', 'rocket', 'bell'], displayed: 'cat' });
   await openRewards(page);
-  await expect(page.locator('#game-status')).toContainText('Swipe the age choices at the top or the worlds and toys at the bottom');
-  await page.screenshot({ path: testInfo.outputPath('saved-stickers-worlds-320.png'), scale: 'css' });
+  await expect(page.locator('#game-status')).toContainText('correct answers in a row master a word');
+  await page.screenshot({ path: testInfo.outputPath('saved-stickers-library-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   await chooseTheme(page, 5);

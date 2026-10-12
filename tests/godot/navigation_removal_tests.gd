@@ -33,6 +33,8 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	app.choose_mode("match")
+	await settle()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app._mode_buttons[0].button_pressed,
 		"Match is selected and playable on entry")
 	check(not app.has_method("_replay")
@@ -77,30 +79,31 @@ func _run() -> void:
 		"The independent level-and-age word catalog replaces the retired Pip room")
 	for retired in ["_start_gift_adventure", "_show_leaderboard", "_select_room_item"]:
 		check(not app.has_method(retired), "Retired navigation cannot be invoked: " + retired)
-	check(app._world_choices.is_visible_in_tree() and app._world_scroll.is_ancestor_of(app._world_grid),
-		"The world choices are directly available below learning progress")
+	check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+		"Learning progress has no theme choices")
+	app._hide_collection()
+	app._show_mode_menu()
+	await settle()
 	for width in [320, 768]:
 		root.size = Vector2i(width, 1024)
 		await settle()
-		check(app._world_grid is HBoxContainer, "Theme choices keep a single horizontal row without shrinking their targets")
 		for index in range(app.theme_buttons.size()):
 			var button: Button = app.theme_buttons[index]
 			var scale: float = app.Style.ui_scale(app)
 			button.grab_focus()
 			await settle()
-			check(button.is_visible_in_tree() and button.size.x * scale >= 44 and button.size.x * scale < 46
-				and button.size.y * scale >= 44 and button.size.y * scale < 46
-				and app._world_scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
-				"Focus reveals each full-size world choice within its own strip")
+			check(button.is_visible_in_tree() and button.size.x * scale >= 44 and button.size.y * scale >= 44
+				and app._mode_panel.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
+				"Focus reveals each full-size Home theme choice")
 			check(button.text.is_empty() and button.tooltip_text == app.Data.theme(app.model.THEMES[index]).name,
-				"Compact world icons retain their full names")
+				"Home theme icons retain their full names")
 	var cards: Array = app.model.cards.duplicate(true)
 	var hints: int = app.model.hints_remaining
 	app.theme_buttons[4].pressed.emit()
-	check(app.collection_page.visible and app._age_catalog.is_visible_in_tree() and app.model.theme_id == "ocean"
+	check(app._mode_menu_open() and app.model.theme_id == "ocean"
 		and app.model.cards == cards and app.model.hints_remaining == hints,
-		"A direct world choice keeps the page open and preserves the current game")
-	app._hide_collection()
+		"A Home theme choice keeps the page open and preserves the current game")
+	app.choose_mode("match")
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != before_words,
 		"New adventure starts a fresh Match board")

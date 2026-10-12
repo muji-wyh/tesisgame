@@ -5,8 +5,11 @@ signal mode_requested(id: String)
 signal sound_toggled
 signal motion_toggled
 signal collection_requested
+signal theme_requested(id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
+const Data = preload("res://scripts/game_data.gd")
+const Model = preload("res://scripts/game_model.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const DuckMascot = preload("res://scripts/duck_mascot.gd")
 const CoinCounter = preload("res://scripts/coin_counter.gd")
@@ -23,6 +26,7 @@ const CATALOG := [
 var heading: Label
 var grid: GridContainer
 var buttons: Array[Button] = []
+var theme_buttons: Array[Button] = []
 var sound_button: Button
 var motion_button: Button
 var collection_button: Button
@@ -37,6 +41,11 @@ var _hero: Control
 var _intro: Label
 var _footer: HBoxContainer
 var _credit: Label
+var _theme_choices: VBoxContainer
+var _theme_grid: GridContainer
+var _theme_heading: Label
+var _theme_save_notice: Label
+var _theme_id := "spring"
 var _tiles: Array[Dictionary] = []
 var _current := ""
 var _factor := 1.0
@@ -87,6 +96,7 @@ func _init() -> void:
 	_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_intro.add_theme_color_override("font_color", Style.MUTED)
 	_hero.add_child(_intro)
+	_build_theme_choices()
 	grid = GridContainer.new()
 	grid.name = "ModeOptions"
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -118,6 +128,86 @@ func _init() -> void:
 	_credit.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_credit)
 	visibility_changed.connect(_sync_pip_visibility)
+
+
+func _build_theme_choices() -> void:
+	_theme_choices = VBoxContainer.new()
+	_theme_choices.name = "HomeThemes"
+	_body.add_child(_theme_choices)
+	_theme_heading = Style.label("Theme · Spring", 13)
+	_theme_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_theme_heading.add_theme_color_override("font_color", Style.MUTED)
+	_theme_choices.add_child(_theme_heading)
+	_theme_grid = GridContainer.new()
+	_theme_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_theme_choices.add_child(_theme_grid)
+	for id: String in Model.THEMES:
+		var palette: Dictionary = Data.theme(id)
+		var button := Button.new()
+		button.name = palette.name
+		button.icon = load(palette.symbol)
+		button.tooltip_text = palette.name
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.expand_icon = true
+		button.toggle_mode = true
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		UiClick.bind_button(button)
+		button.pressed.connect(func() -> void: theme_requested.emit(id))
+		_theme_grid.add_child(button)
+		theme_buttons.append(button)
+	_theme_save_notice = Style.label("Changes not saved. Tap a theme to retry.", 12)
+	_theme_save_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_theme_save_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_theme_save_notice.add_theme_color_override("font_color", Style.WRONG.darkened(0.15))
+	_theme_save_notice.hide()
+	_theme_choices.add_child(_theme_save_notice)
+
+
+func configure_theme(id: String, disabled: bool, save_failed: bool) -> void:
+	var changed: bool = _theme_id != id
+	_theme_id = id
+	_theme_heading.text = "Theme · " + str(Data.theme(id).name)
+	_theme_save_notice.visible = save_failed
+	for index in range(theme_buttons.size()):
+		var button: Button = theme_buttons[index]
+		var selected: bool = Model.THEMES[index] == id
+		button.button_pressed = selected
+		button.disabled = disabled
+		button.set("accessibility_name", str(button.name) + (", selected theme" if selected else ", choose theme"))
+	if changed:
+		_style_surface()
+
+
+func _style_surface() -> void:
+	var surface := Style.box(Style.PAPER.lerp(Data.theme(_theme_id).background, 0.16), Color.TRANSPARENT, 0, 0)
+	surface.set_content_margin_all(0)
+	add_theme_stylebox_override("panel", surface)
+
+
+func _style_theme_choices() -> void:
+	var narrow: bool = _available.x * _factor < 600
+	_theme_grid.columns = 4 if narrow else 8
+	_theme_choices.add_theme_constant_override("separation", ceili(6.0 / _factor))
+	_theme_grid.add_theme_constant_override("h_separation", ceili(8.0 / _factor))
+	_theme_grid.add_theme_constant_override("v_separation", ceili(6.0 / _factor))
+	_theme_heading.add_theme_font_size_override("font_size", ceili(13.0 / _factor))
+	_theme_save_notice.add_theme_font_size_override("font_size", ceili(12.0 / _factor))
+	for index in range(theme_buttons.size()):
+		var button: Button = theme_buttons[index]
+		var palette: Dictionary = Data.theme(Model.THEMES[index])
+		button.custom_minimum_size = Vector2(56, 44) / _factor
+		button.add_theme_constant_override("icon_max_width", ceili(28.0 / _factor))
+		for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+			var selected: bool = state in ["pressed", "hover_pressed"]
+			var surface := Style.box(palette.background if selected else Style.PAPER.lightened(0.5),
+				palette.accent if selected else Style.EDGE, ceili(12.0 / _factor), ceili((2.0 if selected else 1.0) / _factor))
+			if state in ["hover", "hover_pressed"]:
+				surface.bg_color = palette.background
+			surface.set_content_margin_all(4.0 / _factor)
+			button.add_theme_stylebox_override(state, surface)
+		var focus := Style.box(Color.TRANSPARENT, Style.INK, ceili(12.0 / _factor), ceili(2.0 / _factor))
+		focus.set_expand_margin_all(-3.0 / _factor)
+		button.add_theme_stylebox_override("focus", focus)
 
 
 func _ready() -> void:
@@ -221,9 +311,7 @@ func fit(available: Vector2, factor: float) -> void:
 	var content_x: float = (available.x - content_width) * 0.5
 	var top_height: float = (44.0 if short else 48.0) / _factor
 	var top_y: float = (8.0 if short else 12.0) / _factor
-	var surface := Style.box(Style.PAPER, Color.TRANSPARENT, 0, 0)
-	surface.set_content_margin_all(0)
-	add_theme_stylebox_override("panel", surface)
+	_style_surface()
 	custom_minimum_size = Vector2.ZERO
 	size = available
 	_top.position = Vector2(content_x, top_y)
@@ -239,6 +327,7 @@ func fit(available: Vector2, factor: float) -> void:
 	scroll.size = Vector2(content_width, maxf(1.0, available.y - scroll_top - edge))
 	_body.add_theme_constant_override("separation", ceili((12.0 if not wide else 16.0) / _factor))
 	_hero.custom_minimum_size = Vector2(0, (76.0 if short else 112.0 if wide else 104.0) / _factor)
+	_style_theme_choices()
 	grid.columns = 3 if wide else 2
 	grid.add_theme_constant_override("h_separation", ceili((14.0 if wide else 10.0) / _factor))
 	grid.add_theme_constant_override("v_separation", ceili((14.0 if wide else 10.0) / _factor))
@@ -340,12 +429,13 @@ func _layout_tile(tile: Dictionary) -> void:
 func snapshot() -> Dictionary:
 	var controls: Array = []
 	var viewport: Rect2 = scroll.get_global_rect()
-	for button: Button in buttons + [collection_button, sound_button, motion_button]:
+	for button: Button in theme_buttons + buttons + [collection_button, sound_button, motion_button]:
 		var rect: Rect2 = button.get_global_rect()
 		controls.append({"name": str(button.name), "rect": _rect_values(rect), "disabled": button.disabled,
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
-			"focused": button.has_focus(), "visible_rect": _rect_values(viewport.intersection(rect))})
+			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
 	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls,
+		"theme_id": _theme_id, "theme_save_failed": _theme_save_notice.visible,
 		"rect": _rect_values(get_global_rect()), "scroll_rect": _rect_values(viewport), "viewport_rect": _rect_values(viewport),
 		"scroll_offset": scroll.scroll_vertical, "scrollable": scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page,
 		"content_height": _body.size.y, "coins": coin_counter.target, "pip_age": pip.growth_age}

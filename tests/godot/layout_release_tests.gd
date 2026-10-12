@@ -69,20 +69,8 @@ func _run() -> void:
 		app._refresh()
 		app._show_collection()
 		await settle()
-		if app._world_choices.is_visible_in_tree():
-			app.theme_buttons[0].grab_focus()
-			app._move_focus(Vector2.RIGHT)
-			check(root.gui_get_focus_owner() == app.theme_buttons[1],
-				"Controller Right traverses the visible world strip at " + str(dimensions))
-		else:
-			check(app._compact_world.is_visible_in_tree() and app._valid_focus(app._compact_world),
-				"Short layouts expose the compact world control instead of the hidden strip")
-			var next_theme: String = app.Model.THEMES[posmod(app.Model.THEMES.find(app.model.theme_id) + 1, app.Model.THEMES.size())]
-			var cards_before: Array = app.model.cards.duplicate(true)
-			app._compact_world.grab_focus()
-			app._controller_accept()
-			check(app.model.theme_id == next_theme and app.model.cards == cards_before,
-				"Controller activation cycles the compact world control without replacing the round")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+			"Collection layouts never expose a theme shortcut at " + str(dimensions))
 		var scale: float = app.Style.ui_scale(app)
 		var back_height: float = app._collection_back.size.y * scale
 		check(back_height >= 44 and back_height <= 46, "More keeps its compact Back target at " + str(dimensions))
@@ -93,6 +81,17 @@ func _run() -> void:
 		check(absf(app._collection_back.size.y * scale - back_height) <= 1,
 			"Relayout does not change the room's Back target height")
 		app._hide_collection()
+		app._show_mode_menu()
+		await settle()
+		app.theme_buttons[0].grab_focus()
+		await settle()
+		app._move_focus(Vector2.RIGHT)
+		await settle()
+		check(root.gui_get_focus_owner() == app.theme_buttons[1],
+			"Controller Right traverses Home themes at " + str(dimensions))
+		check(app._mode_panel.scroll.get_global_rect().grow(1).encloses(app.theme_buttons[1].get_global_rect()),
+			"Controller focus reveals its complete Home theme target")
+		app._hide_mode_menu()
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

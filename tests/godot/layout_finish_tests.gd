@@ -33,10 +33,10 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	app.choose_mode("match")
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
 	await settle()
-	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y, 40),
-		"The header centers its actions in a 56px row")
+	check(is_equal_approx(app.collection_button.get_global_rect().get_center().y - app._content_margins.global_position.y, 40),
+		"The bounded game area centers its header actions in a 56px row")
 	check(app._header_duck_slot.get_global_rect().encloses(app._growth_button.get_global_rect())
 		and app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
 		"Pip's compact header has no retained Memory counters")
@@ -49,27 +49,16 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_title.text == "Lv0 · Baby Pip" and app.theme_buttons.size() == 8
-		and app._world_scroll.is_ancestor_of(app._world_grid),
-		"Growth keeps a single level-and-age title plus a persistent World strip")
-	check(not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name in ["_world_title", "_world_note"]),
-		"The shared strip has no retained World heading or tagline fields")
-	var css_scale: float = app.Style.ui_scale(app)
-	check(app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y
-		and app._age_catalog.get_global_rect().end.y <= app._world_scroll.global_position.y,
-		"Age choices precede the word catalog and world settings follow it")
-	check(app._world_grid is HBoxContainer and app._world_grid.get_theme_constant("separation") == ceili(6 / css_scale),
-		"Eight World icons form one row with six CSS-pixel gaps")
+	check(app._collection_title.text == "Lv0 · Baby Pip"
+		and app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+		"Growth keeps its level-and-age title without theme settings")
+	check(app.find_child("WorldChoices", true, false) == null and app.find_child("NextWorld", true, false) == null,
+		"The collection has no old world strip or compact cycle control")
+	check(app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y,
+		"Age choices precede the word catalog")
 	check(app.find_child("WordStickerBook", true, false) == null, "The Words page is removed")
 	check(app._collection_back.text.is_empty() and is_equal_approx(app._collection_back.size.x, app._collection_back.size.y),
 		"Rewards has a square Back icon")
-	check(app.theme_buttons.all(func(button: Button) -> bool:
-		return button.is_visible_in_tree() and button.icon != null and button.tooltip_text == button.name and button.get("accessibility_name") == button.name),
-		"World icons have clear native tooltips and accessible names")
-	for button in app.theme_buttons:
-		check(button.text.is_empty() and button.size.is_equal_approx(Vector2.ONE * (44 / css_scale))
-			and button.get_theme_constant("icon_max_width") == ceili(30 / css_scale),
-			"Each named World icon has a 44 CSS-pixel square touch target and 30 CSS-pixel artwork")
 	check(not app.has_method("_show_reward_section") and app.find_child("Rewards_medals", true, false) == null,
 		"Obsolete collection routes and Medals navigation are removed")
 	check(app._age_catalog.is_visible_in_tree() and app.find_child("PipRoom", true, false) == null,
@@ -77,8 +66,8 @@ func _run() -> void:
 	app._hide_collection()
 	await settle()
 	check(is_equal_approx(app.grid.global_position.y * app.Style.ui_scale(app), game_top),
-		"Adding the More strip does not move the game's header or playfield")
-	app.choose_mode("memory")
+		"Visiting the catalog does not move the game's header or playfield")
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "memory")
 	await settle()
 	check(not app._memory.status_label.is_visible_in_tree(), "Memory's redundant instruction line is hidden")
 	var rows: Dictionary = {}
@@ -87,10 +76,10 @@ func _run() -> void:
 		rows[y] = int(rows.get(y, 0)) + 1
 	check(rows.values().all(func(count: int) -> bool: return count == rows.values()[0])
 		and rows.values()[0] in [2, 5], "Every Memory row has the same number of cards")
-	app.choose_mode("match")
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
 	root.size = Vector2i(768, 1024)
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 132,
+	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y - app._content_margins.global_position.y <= 132,
 		"A wide viewport uses one compact header row")
 	root.size = Vector2i(390, 844)
 	await settle()

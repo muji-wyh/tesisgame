@@ -114,8 +114,8 @@ func _run() -> void:
 	await _test_voice_layout(app)
 	app._show_collection()
 	await settle()
-	check(app._compact_world.is_visible_in_tree() and not app._world_choices.is_visible_in_tree(),
-		"Short landscape notebooks retain the compact world selector without crowding the word catalog")
+	check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+		"Short landscape notebooks keep all theme choices on Home")
 	app._hide_collection()
 	root.size = Vector2i(960, 720)
 	app.size = Vector2(960, 720)
@@ -129,22 +129,21 @@ func _run() -> void:
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
 	var progress_before: Array = [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes]
 	check(not selected.is_empty(), "The world-change fixture contains a real selected card")
+	app._show_mode_menu()
 	for world_id in ["ocean", "space"]:
-		if not app.collection_page.visible:
-			app._show_collection()
 		await settle()
-		check(app.theme_buttons.size() == 8 and app._world_scroll.is_ancestor_of(app._world_grid),
-			"World choices stay in their independent horizontal strip")
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()), "All eight worlds remain selectable")
-		app._world_grid.get_node(app.Data.theme(world_id).name).pressed.emit()
+		check(app.theme_buttons.size() == 8 and app.theme_buttons.all(func(button: Button) -> bool:
+			return app._mode_panel.is_ancestor_of(button) and button.is_visible_in_tree()),
+			"All eight world choices belong to Home")
+		app.theme_buttons[app.Model.THEMES.find(world_id)].pressed.emit()
 		await settle()
-		check(app.model.theme_id == world_id and app.collection_page.visible and app._age_catalog.is_visible_in_tree()
-			and app._presentation.preferred_theme == world_id,
-			"Choosing a world saves the preference and keeps the growth catalog open")
+		check(app.model.theme_id == world_id and app._mode_menu_open() and app._presentation.preferred_theme == world_id,
+			"Choosing a world saves the preference and keeps Home open")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
 			and app.model.hints_remaining == hints_remaining and app.model.lesson_words == lesson_before
 			and [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes] == progress_before,
-			"Changing a world preserves the exact round, cards, selection, and hints")
+			"Changing a world on Home preserves the exact round, cards, selection, and hints")
+	app.choose_mode("match")
 	root.size = Vector2i(480, 900)
 	app.size = Vector2(480, 900)
 	if not app.collection_page.visible:
@@ -163,23 +162,8 @@ func _run() -> void:
 			and is_equal_approx(app._collection_back.size.y, ceilf(44 / scale)),
 			"More uses a compact Back icon without losing its target size at %s: size=%s scale=%s minimum=%s header=%s" % [
 				dimensions, app._collection_back.size, scale, app._collection_back.get_combined_minimum_size(), app._collection_header.size])
-		check(app.theme_buttons.all(func(button: Button) -> bool: return button.is_visible_in_tree()),
-			"World choices remain available below the growth catalogue")
-		check(app._world_grid is HBoxContainer, "World choices remain in one horizontally scrollable row at every width")
-		check(app._world_grid.get_theme_constant("separation") == ceili(6 / scale),
-			"The World strip uses six CSS-pixel gaps with logical-pixel rounding")
-		for index in range(app.theme_buttons.size()):
-			var button: Button = app.theme_buttons[index]
-			var palette: Dictionary = app.Data.theme(app.model.THEMES[index])
-			check(button.text.is_empty() and button.tooltip_text == palette.name
-				and button.get("accessibility_name") == palette.name and button.icon != null
-				and button.icon_alignment == HORIZONTAL_ALIGNMENT_CENTER,
-				"Every World icon retains its exact tooltip and accessible name")
-			check(button.size.is_equal_approx(Vector2.ONE * (44 / scale))
-				and is_equal_approx(button.global_position.y, app.theme_buttons[0].global_position.y),
-				"Every World icon keeps a 44 CSS-pixel square touch target in one row")
-			check(button.get_theme_constant("icon_max_width") == ceili(30 / scale),
-				"World artwork uses a 30 CSS-pixel icon cap")
+		check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+			"World choices remain outside the growth catalogue")
 	app._hide_collection()
 	app._progress_ready = false
 	app._save_error = true

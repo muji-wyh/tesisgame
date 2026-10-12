@@ -127,10 +127,6 @@ var _header_spacer: Control
 var _toolbar: HBoxContainer
 var _main_column: VBoxContainer
 var _collection_margins: MarginContainer
-var _world_choices: VBoxContainer
-var _world_grid: HBoxContainer
-var _world_scroll: ReviewScroll
-var _world_save_notice: Label
 var _age_choices: VBoxContainer
 var _age_row: HBoxContainer
 var _age_scroll: ReviewScroll
@@ -286,7 +282,6 @@ var growth := GrowthState.new()
 var _growth_button: GrowthBadge
 var _growth_bar: ProgressBar
 var _growth_summary: Label
-var _compact_world: Button
 var _growth_save_failed: bool = false
 var _catalog_age: int = 3
 var _memory_attempt: int = 0
@@ -921,6 +916,8 @@ func _build_mode_menu() -> void:
 	_mode_menu.add_child(_mode_panel)
 	_mode_row = _mode_panel.grid
 	_mode_buttons = _mode_panel.buttons
+	theme_buttons = _mode_panel.theme_buttons
+	_mode_panel.theme_requested.connect(_choose_world)
 	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
 	_mode_panel.collection_requested.connect(_show_collection)
 	_mode_panel.sound_toggled.connect(_toggle_library_sound)
@@ -1100,10 +1097,6 @@ func _build_collection_shell() -> void:
 	_collection_back.tooltip_text = "Back to game"
 	UiClick.bind_button(_collection_back)
 	_collection_back.pressed.connect(_back_from_collection)
-	_compact_world = Button.new()
-	_compact_world.name = "NextWorld"
-	_compact_world.pressed.connect(_cycle_theme.bind(1))
-	_collection_header.add_child(_compact_world)
 	_collection_header.add_child(_collection_back)
 	_growth_summary = Style.label("", 15)
 	_growth_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1116,7 +1109,6 @@ func _build_collection_shell() -> void:
 		if _can_browse_collection():
 			vocabulary_loader.request_age(_catalog_age))
 	_collection_column.add_child(_age_catalog)
-	_build_world_choices()
 	collection_page.hide()
 
 
@@ -1203,48 +1195,13 @@ func _build_collection() -> void:
 	_layout_collection()
 
 
-func _build_world_choices() -> void:
-	theme_buttons.clear()
-	_active_palette.clear()
-	_world_choices = VBoxContainer.new()
-	_world_choices.name = "WorldChoices"
-	_collection_column.add_child(_world_choices)
-	_world_scroll = ReviewScroll.new()
-	_world_scroll.name = "WorldScroll"
-	_world_scroll.interaction_allowed = _can_browse_collection
-	_world_choices.add_child(_world_scroll)
-	var worlds := HBoxContainer.new()
-	_world_grid = worlds
-	worlds.alignment = BoxContainer.ALIGNMENT_CENTER
-	worlds.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_world_scroll.add_child(worlds)
-	for id in Model.THEMES:
-		var button := Button.new()
-		var palette: Dictionary = Data.theme(id)
-		button.name = palette.name
-		button.icon = load(palette.symbol)
-		button.tooltip_text = palette.name
-		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 48)
-		button.toggle_mode = true
-		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		_set_accessibility_name(button, palette.name)
-		UiClick.bind_button(button)
-		button.pressed.connect(_choose_world.bind(id))
-		button.focus_entered.connect(_ensure_collection_focus_visible.bind(button))
-		worlds.add_child(button)
-		theme_buttons.append(button)
-	_world_save_notice = Style.label("Changes not saved. Tap a theme to retry.", 13)
-	_world_save_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_world_save_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_world_save_notice.add_theme_color_override("font_color", Style.WRONG.darkened(0.15))
-	_world_save_notice.hide()
-	_world_choices.add_child(_world_save_notice)
+func _can_choose_world() -> bool:
+	return _mode_menu_open() and not _page_hidden and not collection_page.visible \
+		and not _speech_debug_active and not _vocabulary_prompt.visible
 
 
 func _choose_world(id: String) -> void:
-	if not _can_browse_collection():
+	if not _can_choose_world():
 		return
 	if model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
@@ -1272,7 +1229,7 @@ func _refresh_collection() -> void:
 
 func _collection_rails() -> Array[ReviewScroll]:
 	var rails: Array[ReviewScroll] = []
-	for rail in [_age_scroll, _world_scroll]:
+	for rail in [_age_scroll]:
 		if is_instance_valid(rail):
 			rails.append(rail)
 	return rails
@@ -2207,12 +2164,8 @@ func _refresh() -> void:
 	_background.color = Style.PAPER.lerp(palette.background, 0.16)
 	if theme_changed:
 		collection_page.add_theme_stylebox_override("panel", Style.box(_background.color, Color.TRANSPARENT, 0, 0))
-	for index in range(theme_buttons.size()):
-		var button: Button = theme_buttons[index]
-		button.button_pressed = Model.THEMES[index] == model.theme_id
-		button.disabled = model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty())
-		if theme_changed:
-			Style.button(button, Data.theme(Model.THEMES[index]).accent)
+	_mode_panel.configure_theme(model.theme_id,
+		model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()), _journey_save_failed)
 	var mode_changed: bool = theme_changed or _styled_mode_id != _mode_id
 	for index in range(_mode_buttons.size()):
 		var button: Button = _mode_buttons[index]
@@ -2254,8 +2207,6 @@ func _refresh() -> void:
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
 	_storage_retry_button.tooltip_text = coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error
 	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed or not coin_wallet.ready or not coin_wallet.error.is_empty())
-	_world_save_notice.visible = _journey_save_failed
-	_world_save_notice.tooltip_text = growth.error if _journey_save_failed else ""
 	_refresh_growth()
 	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
 		_stop_voice()
@@ -2775,14 +2726,6 @@ func _layout_collection() -> void:
 	var compact: bool = size.y * scale < 500
 	_growth_summary.visible = not compact
 	_age_notice.visible = not compact
-	_world_choices.visible = not compact
-	_compact_world.visible = compact
-	_compact_world.icon = load(Data.theme(model.theme_id).symbol)
-	_compact_world.expand_icon = true
-	_compact_world.tooltip_text = "World: " + str(Data.theme(model.theme_id).name) + ". Tap for the next world."
-	Style.square_icon_button(_compact_world, Style.GOOD)
-	_compact_world.custom_minimum_size = Vector2(42, 42) / scale
-	_compact_world.add_theme_constant_override("icon_max_width", ceili(28 / scale))
 	_age_catalog.meaning_label.visible = not compact or _age_catalog.meaning_label.text != "Tap a word to hear it."
 	var padding: int = ceili((8 if compact else 14) / scale)
 	for edge in ["left", "right"]:
@@ -2801,12 +2744,6 @@ func _layout_collection() -> void:
 		button.custom_minimum_size = Vector2(48, 42) / scale
 		button.add_theme_font_size_override("font_size", ceili(14 / scale))
 	Style.square_icon_button(_collection_back, Style.GOOD)
-	_world_scroll.custom_minimum_size.y = ceilf(44 / scale)
-	_world_grid.add_theme_constant_override("separation", ceili(6 / scale))
-	for button in theme_buttons:
-		Style.square_icon_button(button, Style.GOOD)
-		button.custom_minimum_size = Vector2(44, 44) / scale
-		button.add_theme_constant_override("icon_max_width", ceili(30 / scale))
 
 
 func _style_result_actions(accent: Color) -> void:
@@ -2954,6 +2891,8 @@ func choose_theme(id: String) -> void:
 		_finish_chest_drag()
 	_preferred_theme = id
 	_save_journey()
+	if _mode_menu_open():
+		_announce_status(str(Data.theme(id).name) + " theme selected." + (" Changes not saved. Tap a theme to retry." if _journey_save_failed else ""))
 	if collection_page.visible:
 		_refresh_collection()
 		_announce_collection_state()
@@ -3307,7 +3246,7 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_cancel"):
 			get_viewport().set_input_as_handled()
 			return
-		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]:
+		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START]:
 			get_viewport().set_input_as_handled()
 			return
 	# Handle mapped controller events before GUI defaults can activate or move focus.
@@ -3502,6 +3441,8 @@ func _toggle_collection() -> void:
 
 
 func _cycle_theme(step: int) -> void:
+	if not _can_choose_world():
+		return
 	if model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	var index: int = Model.THEMES.find(model.theme_id)
@@ -4326,7 +4267,7 @@ func _hide_collection() -> void:
 func _announce_collection_state() -> void:
 	var announcement := _collection_title.text + ". " + _growth_summary.text + " " + _age_notice.text
 	if _journey_save_failed:
-		announcement += " " + _world_save_notice.text
+		announcement += " Theme preference not saved. Return Home to retry."
 	_announce_status(announcement)
 
 

@@ -191,7 +191,7 @@ func _check_home_touch_gestures(app) -> void:
 		root.gui_release_focus()
 		scroll.scroll_vertical = 0
 		await settle()
-		var card: Button = _choice(app, "pop")
+		var card: Button = _choice(app, "match")
 		var visible_card: Rect2 = card.get_global_rect().intersection(scroll.get_global_rect())
 		check(visible_card.size.y > 20 and visible_card.size.y < card.size.y,
 			"The compact Home swipe begins on a partially clipped game card")
