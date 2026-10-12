@@ -26,6 +26,7 @@ const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
 const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
+const WordJelly = preload("res://scripts/word_jelly.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
@@ -36,7 +37,7 @@ const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
-const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "phrase": "Phrase Builder", "jelly": "Jelly Match"}
+const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "phrase": "Phrase Builder", "jelly": "Jelly Match", "word_jelly": "Jelly Words"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
 const VOICE_MATCH_SECONDS: float = 1.0
@@ -184,6 +185,8 @@ var _pop_reward_saved: bool = false
 var _pop_reward_theme: String = ""
 var _pop_settling: bool = false
 var _jelly: JellyMatch
+var _word_jelly: WordJelly
+var _word_jelly_credits: Dictionary = {}
 var _jelly_rewards: PopRewardRoom
 var _jelly_rewards_shown: bool = false
 var jelly_reward_save_path: String = "user://jelly-rewards-v1.cfg"
@@ -719,17 +722,41 @@ func _build_controls() -> void:
 	_jelly = JellyMatch.new()
 	_jelly.name = "JellyMatch"
 	_jelly.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_jelly.interaction_allowed = _jelly_interaction_allowed
-	_jelly.word_requested.connect(_jelly_hear)
-	_jelly.audio_requested.connect(_jelly_audio)
-	_jelly.word_attempted.connect(_jelly_growth_answer)
-	_jelly.round_finished.connect(_jelly_finished)
-	_jelly.chests_requested.connect(_show_jelly_rewards)
-	_jelly.replay_requested.connect(_replay_jelly)
-	_jelly.changed.connect(_publish_jelly)
+	_jelly.interaction_allowed = func() -> bool: return _mode_id == "jelly" and _jelly_interaction_allowed()
+	_jelly.word_requested.connect(_jelly_hear.bind("jelly"))
+	_jelly.audio_requested.connect(_jelly_audio.bind("jelly"))
+	_jelly.word_attempted.connect(_jelly_growth_answer.bind("jelly"))
+	_jelly.round_finished.connect(_jelly_finished.bind("jelly"))
+	_jelly.chests_requested.connect(func() -> void:
+		if _mode_id == "jelly":
+			_show_jelly_rewards())
+	_jelly.replay_requested.connect(func() -> void:
+		if _mode_id == "jelly":
+			_replay_jelly())
+	_jelly.changed.connect(_publish_jelly.bind("jelly"))
 	_jelly.hide()
 	column.add_child(_jelly)
 	_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("jelly"))
+	_word_jelly = WordJelly.new()
+	_word_jelly.name = "JellyWords"
+	_word_jelly.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_word_jelly.interaction_allowed = func() -> bool: return _mode_id == "word_jelly" and _jelly_interaction_allowed()
+	_word_jelly.credit_collection = _credit_word_jelly
+	_word_jelly.collected.connect(_word_jelly_collected)
+	_word_jelly.word_requested.connect(_jelly_hear.bind("word_jelly"))
+	_word_jelly.audio_requested.connect(_jelly_audio.bind("word_jelly"))
+	_word_jelly.word_attempted.connect(_jelly_growth_answer.bind("word_jelly"))
+	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
+	_word_jelly.chests_requested.connect(func() -> void:
+		if _mode_id == "word_jelly":
+			_show_jelly_rewards())
+	_word_jelly.replay_requested.connect(func() -> void:
+		if _mode_id == "word_jelly":
+			_replay_jelly())
+	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
+	_word_jelly.hide()
+	column.add_child(_word_jelly)
+	_word_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("word_jelly"))
 	_jelly_rewards = PopRewardRoom.new()
 	_jelly_rewards.credit_coins = _credit_coins
 	_jelly_rewards.coins_released.connect(_present_room_coins)
@@ -739,12 +766,12 @@ func _build_controls() -> void:
 	_jelly_rewards.allow_repeated_themes = true
 	_jelly_rewards.page_size = 3
 	_jelly_rewards.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_jelly_rewards.interaction_allowed = func() -> bool: return _jelly_rewards_shown and _mode_id == "jelly" and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+	_jelly_rewards.interaction_allowed = func() -> bool: return _jelly_rewards_shown and _is_jelly_mode() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	_jelly_rewards.exit_requested.connect(_hide_jelly_rewards)
 	_jelly_rewards.replay_requested.connect(_replay_jelly)
 	_jelly_rewards.chest_audio_requested.connect(_pop_chest_audio)
 	_jelly_rewards.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
-		if _jelly_rewards_shown and _mode_id == "jelly" and not _page_hidden and not collection_page.visible and not _mode_menu_open():
+		if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 			audio.chest_cue(theme_id, cue, step))
 	_jelly_rewards.changed.connect(_publish_jelly_rewards)
 	_jelly_rewards.hide()
@@ -1314,7 +1341,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_pop_reward():
 		return false
-	if resume_jelly_treasure and _mode_id == "jelly" and next_mode in ["", "jelly"] and _jelly_rewards.has_pending():
+	if resume_jelly_treasure and _is_jelly_mode() and (next_mode.is_empty() or next_mode == _mode_id) and _jelly_rewards.has_pending():
 		_hide_mode_menu(false, false)
 		_stop_round_celebration()
 		_show_jelly_rewards()
@@ -1339,6 +1366,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pop_rewards_shown = false
 	_controller_holding_pop_chest = false
 	_jelly.stop()
+	_word_jelly.stop()
+	_word_jelly_credits.clear()
 	_jelly_rewards.pause()
 	_jelly_rewards_shown = false
 	_jelly_rewards.set_result_context({})
@@ -1367,6 +1396,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_show_error(model.error)
 		return false
 	_round_id = GrowthState.make_round_id()
+	if _mode_id == "word_jelly":
+		_round_id = "word_jelly:" + _round_id
 	_clear_reward_confetti()
 	_pair_words.clear()
 	_pair_proposed_pair = model.chest_reward_pair
@@ -1410,10 +1441,10 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		if _pop_rewards.has_pending():
 			_pop_rewards.configure_saved(data.chests, reduced_motion)
 			_pop_rewards_shown = true
-	if _mode_id == "jelly":
-		if not _jelly.configure(_learning_words(), growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
+	if _is_jelly_mode():
+		if not _active_jelly().configure(_learning_words(), growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
-			_show_error(_jelly.game.error)
+			_show_error(_active_jelly().game.error)
 			return false
 		if resume_jelly_treasure and _jelly_rewards.has_pending():
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
@@ -1460,8 +1491,16 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_pop.retry_button.text = "Play again"
 
 
+func _is_jelly_mode() -> bool:
+	return _mode_id in ["jelly", "word_jelly"]
+
+
+func _active_jelly():
+	return _word_jelly if _mode_id == "word_jelly" else _jelly
+
+
 func _jelly_interaction_allowed() -> bool:
-	return _mode_id == "jelly" and not _jelly_rewards_shown and not _round_celebration_active() \
+	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
 		and not _rebuilding and not _page_hidden and not _speech_debug_active \
 		and not collection_page.visible and not _mode_menu_open()
 
@@ -1470,23 +1509,24 @@ func _sync_jelly() -> void:
 	if not is_instance_valid(_jelly):
 		return
 	var allowed: bool = _jelly_interaction_allowed()
-	_jelly.pause(not allowed)
-	_jelly_backdrop.visible = _mode_id == "jelly" and (_jelly.visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
+	_jelly.pause(not allowed or _mode_id != "jelly")
+	_word_jelly.pause(not allowed or _mode_id != "word_jelly")
+	_jelly_backdrop.visible = _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
 	if not allowed:
 		audio.stop_jelly_sounds()
-	if _jelly_rewards_shown and _mode_id == "jelly" and not _page_hidden and not collection_page.visible and not _mode_menu_open():
+	if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 		_jelly_rewards.resume()
-	_publish_jelly(_jelly.snapshot())
+	_publish_jelly(_active_jelly().snapshot())
 
 
-func _jelly_hear(word: Dictionary) -> void:
-	if _jelly_interaction_allowed():
+func _jelly_hear(word: Dictionary, source_mode: String = "") -> void:
+	if (source_mode.is_empty() or source_mode == _mode_id) and _jelly_interaction_allowed():
 		audio.interact(model.theme_id)
 		audio.say("res://" + str(word.audio))
 
 
-func _jelly_audio(cue: String) -> void:
-	if not _jelly_interaction_allowed():
+func _jelly_audio(cue: String, source_mode: String = "") -> void:
+	if (not source_mode.is_empty() and source_mode != _mode_id) or not _jelly_interaction_allowed():
 		return
 	if cue == "danger_end":
 		audio.stop_jelly_danger()
@@ -1498,13 +1538,43 @@ func _jelly_audio(cue: String) -> void:
 		audio.play_jelly_cue(cue)
 
 
-func _jelly_growth_answer(id: String, words: Array[String], correct: bool) -> void:
-	if _jelly_interaction_allowed():
+func _jelly_growth_answer(id: String, words: Array[String], correct: bool, source_mode: String = "") -> void:
+	if (source_mode.is_empty() or source_mode == _mode_id) and _jelly_interaction_allowed():
 		_record_growth(id, words, correct)
 
 
-func _jelly_finished(result: Dictionary) -> void:
-	if _mode_id != "jelly" or not _round_result.is_empty():
+func _credit_word_jelly(event_id: String, amount: int) -> Dictionary:
+	if _mode_id != "word_jelly" or not _jelly_interaction_allowed() or event_id.is_empty() \
+		or amount <= 0 or amount % CoinWallet.COINS_PER_TIER != 0:
+		return {"ok": false, "duplicate": false, "amount": 0, "error": "This word cannot be collected yet."}
+	var receipt: String = _round_id + ":" + event_id
+	var credit: Dictionary = _credit_coins(receipt, int(amount / CoinWallet.COINS_PER_TIER))
+	if bool(credit.get("ok", false)):
+		# Keep the first committed result until the view finishes removing the tile.
+		# An idempotent retry must not replace its pending visual amount with zero.
+		if not _word_jelly_credits.has(event_id):
+			_word_jelly_credits[event_id] = credit
+	else:
+		_refresh()
+	return credit
+
+
+func _word_jelly_collected(event_id: String, _word: Dictionary, _amount: int, _fragments: int, origin: Vector2) -> void:
+	if _mode_id != "word_jelly" or not _word_jelly_credits.has(event_id):
+		return
+	var reward: Dictionary = _word_jelly_credits[event_id]
+	_word_jelly_credits.erase(event_id)
+	if not _page_hidden and not collection_page.visible and not _mode_menu_open():
+		_coin_flight.reduced_motion = reduced_motion
+		_coin_flight.present(_round_id + ":" + event_id, reward, origin)
+	else:
+		_coin_flight.sync(coin_wallet.balance)
+	if int(reward.get("amount", 0)) > 0:
+		_announce_status("Word collected. %d coins. Total: %d coins." % [reward.amount, coin_wallet.balance])
+
+
+func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
+	if (not source_mode.is_empty() and source_mode != _mode_id) or not _is_jelly_mode() or not _round_result.is_empty():
 		return
 	_round_result = result.duplicate(true)
 	var tier: int = int(result.get("chest_tier", 0))
@@ -1525,7 +1595,7 @@ func _jelly_finished(result: Dictionary) -> void:
 
 
 func _show_jelly_result() -> void:
-	_jelly.result_reveal()
+	_active_jelly().result_reveal()
 	if int(_round_result.get("chest_count", 0)) > 0 or _jelly_rewards.has_pending():
 		_show_jelly_rewards()
 
@@ -1547,11 +1617,11 @@ func _save_jelly_round_reward() -> bool:
 
 
 func _settle_jelly_round() -> bool:
-	if _mode_id != "jelly" or not is_instance_valid(_jelly):
+	if not _is_jelly_mode() or not is_instance_valid(_active_jelly()):
 		return true
 	_jelly_settling = true
-	_jelly.cancel_input()
-	_jelly.game.finish_round()
+	_active_jelly().cancel_input()
+	_active_jelly().game.finish_round()
 	_jelly_settling = false
 	var reward_saved: bool = _save_jelly_round_reward()
 	if not reward_saved or _jelly_rewards._save_failed or _jelly_rewards._unsaved_index >= 0:
@@ -1564,7 +1634,7 @@ func _settle_jelly_round() -> bool:
 
 
 func _replay_jelly() -> void:
-	if _mode_id != "jelly" or _jelly.game.phase != "finished" or _rebuilding \
+	if not _is_jelly_mode() or _active_jelly().game.phase != "finished" or _rebuilding \
 			or _round_celebration_active() or _page_hidden or _speech_debug_active \
 			or collection_page.visible or _mode_menu_open():
 		return
@@ -1574,20 +1644,20 @@ func _replay_jelly() -> void:
 		_announce_status("Your coins are waiting to be saved. Choose Retry save, then Play again.")
 		return
 	_coin_flight.sync(coin_wallet.balance)
-	if new_round(-1, false, "", "jelly", "", false):
+	if new_round(-1, false, "", _mode_id, "", false):
 		audio.interact(model.theme_id)
 		_default_focus().grab_focus()
 
 
 func _show_jelly_rewards() -> void:
-	if _mode_id != "jelly" or _round_celebration_active() or collection_page.visible or _page_hidden:
+	if not _is_jelly_mode() or _round_celebration_active() or collection_page.visible or _page_hidden:
 		return
 	if int(_round_result.get("chest_count", 0)) > 0:
 		_save_jelly_round_reward()
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
-	_jelly_rewards.set_result_context(_round_result if _jelly.game.phase == "finished" else {})
-	_jelly.cancel_input()
+	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {})
+	_active_jelly().cancel_input()
 	audio.halt()
 	_jelly_rewards_shown = true
 	_refresh()
@@ -1599,8 +1669,8 @@ func _hide_jelly_rewards() -> void:
 	_jelly_rewards.pause()
 	_controller_holding_jelly_chest = false
 	_jelly_rewards_shown = false
-	if _jelly.game.phase == "finished" and not _round_result.is_empty():
-		_jelly.result_reveal()
+	if _active_jelly().game.phase == "finished" and not _round_result.is_empty():
+		_active_jelly().result_reveal()
 		_refresh()
 	else:
 		# A restored reward batch precedes a fresh board.
@@ -1612,11 +1682,12 @@ func _hide_jelly_rewards() -> void:
 	_default_focus().grab_focus()
 
 
-func _publish_jelly(state: Dictionary) -> void:
-	if _host == null:
+func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
+	if _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
 	var value: Dictionary = state.duplicate(true)
-	value["visible"] = _mode_id == "jelly" and _jelly.is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+	value["mode"] = _mode_id
 	value["round_id"] = _round_id
 	_host.jellyStatus(JSON.stringify(value))
 
@@ -1624,7 +1695,8 @@ func _publish_jelly(state: Dictionary) -> void:
 func _publish_jelly_rewards(state: Dictionary) -> void:
 	if _host != null:
 		var value: Dictionary = state.duplicate(true)
-		value["visible"] = _mode_id == "jelly" and _jelly_rewards_shown and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+		value["visible"] = _is_jelly_mode() and _jelly_rewards_shown and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+		value["mode"] = _mode_id
 		_host.jellyRewardStatus(JSON.stringify(value))
 
 
@@ -1803,7 +1875,7 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 		audio.stop_chest_charge()
 	elif action == "finish":
 		audio.finish_chest_motion()
-	elif ((_mode_id == "pop" and _pop_rewards_shown) or (_mode_id == "jelly" and _jelly_rewards_shown)) and not _page_hidden and not collection_page.visible:
+	elif ((_mode_id == "pop" and _pop_rewards_shown) or (_is_jelly_mode() and _jelly_rewards_shown)) and not _page_hidden and not collection_page.visible:
 		match action:
 			"prepare":
 				audio.interact(theme_id)
@@ -1849,9 +1921,9 @@ func _request_reward_confetti(round_id: String, mode: String, tier: int) -> void
 
 
 func _fragment_confetti_requested(mode: String) -> void:
-	if mode != _mode_id or mode not in ["jelly", "pop"]:
+	if mode != _mode_id or mode not in ["jelly", "word_jelly", "pop"]:
 		return
-	var presentation: Dictionary = _jelly._reward_presentation.snapshot() if mode == "jelly" else _pop._reward_presentation.snapshot()
+	var presentation: Dictionary = _active_jelly()._reward_presentation.snapshot() if mode in ["jelly", "word_jelly"] else _pop._reward_presentation.snapshot()
 	_request_reward_confetti(_round_id, mode, int(presentation.get("tier", 0)))
 
 
@@ -1886,16 +1958,16 @@ func _begin_round_celebration(chest_count: int) -> void:
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
-	var score: int = int(_round_result.get("score", 0)) if _mode_id in ["pop", "jelly"] else -1
-	var theme_id: String = _jelly_reward_theme if _mode_id == "jelly" else _pop_reward_theme if _mode_id == "pop" else model.theme_id
+	var score: int = int(_round_result.get("score", 0)) if _mode_id in ["pop", "jelly", "word_jelly"] else -1
+	var theme_id: String = _jelly_reward_theme if _is_jelly_mode() else _pop_reward_theme if _mode_id == "pop" else model.theme_id
 	if _mode_id in ["match", "memory"] and not model.reward_theme.is_empty():
 		theme_id = model.reward_theme
-	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id in ["pop", "jelly"] else 0
-	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly"], score, chest_tier, _mode_id in ["match", "memory"] and model.chest_earned)
+	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id in ["pop", "jelly", "word_jelly"] else 0
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly", "word_jelly"], score, chest_tier, _mode_id in ["match", "memory"] and model.chest_earned)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
-		_announce_status(_jelly_result_summary() if _mode_id in ["pop", "jelly"] else \
+		_announce_status(_jelly_result_summary() if _mode_id in ["pop", "jelly", "word_jelly"] else \
 			"Every word matched!" if chest_count == 0 else "You did it! Pip is celebrating. You earned a treasure chest!")
 	_sync_round_celebration()
 	_publish_round_celebration()
@@ -1951,12 +2023,12 @@ func _on_round_celebration_finished(round_id: String) -> void:
 		return
 	audio.stop_round_celebration()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
-	if _mode_id in ["pop", "jelly"]:
+	if _mode_id in ["pop", "jelly", "word_jelly"]:
 		_stop_round_celebration()
-		if _mode_id == "jelly":
+		if _is_jelly_mode():
 			_show_jelly_result()
 		_refresh()
-		_announce_status(_jelly_result_summary() if _mode_id == "jelly" else "Round complete. View your results or open your earned chests.")
+		_announce_status(_jelly_result_summary() if _is_jelly_mode() else "Round complete. View your results or open your earned chests.")
 	else:
 		_announce_status("You earned a treasure chest! Choose Open chest." if model.chest_earned else "Every word matched! Choose Play again.")
 	var target: Control = _default_focus()
@@ -1966,7 +2038,7 @@ func _on_round_celebration_finished(round_id: String) -> void:
 
 
 func _accept_round_chest(round_id: String) -> void:
-	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id in ["pop", "jelly"]:
+	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id in ["pop", "jelly", "word_jelly"]:
 		return
 	_play_ui_click()
 	if _mode_id in ["match", "memory"] and not model.chest_earned:
@@ -2157,7 +2229,7 @@ func _refresh() -> void:
 		_active_palette = Data.theme(model.theme_id)
 		audio.prepare_chest(model.theme_id)
 		# Multi-chest modes keep the theme of their already saved reward batch.
-		if _round_celebration_active() and not _mode_id in ["pop", "jelly"]:
+		if _round_celebration_active() and not _mode_id in ["pop", "jelly", "word_jelly"]:
 			_round_celebration.apply_theme(model.reward_theme if not model.reward_theme.is_empty() else model.theme_id, data.chests)
 	var palette: Dictionary = _active_palette
 	_background.color = Style.PAPER.lerp(palette.background, 0.16)
@@ -2184,9 +2256,10 @@ func _refresh() -> void:
 		_phrase.apply_theme(palette, model.theme_id)
 		_pop.apply_theme(palette, data.chests)
 		var jelly_palette: Dictionary = palette
-		if _mode_id == "jelly" and _jelly.game.phase == "finished" and not _jelly_reward_theme.is_empty():
+		if _is_jelly_mode() and _active_jelly().game.phase == "finished" and not _jelly_reward_theme.is_empty():
 			jelly_palette = Data.theme(_jelly_reward_theme)
 		_jelly.apply_theme(jelly_palette, data.chests)
+		_word_jelly.apply_theme(jelly_palette, data.chests)
 		Style.square_icon_button(hint_button, palette.accent)
 		Style.square_icon_button(_collection_back, palette.accent)
 		Style.button(_storage_retry_button, palette.accent)
@@ -2225,8 +2298,11 @@ func _refresh() -> void:
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_pop.set_pending_chests(_pop_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
 	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
-	_jelly_rewards.visible = playing and _mode_id == "jelly" and not collection_page.visible and _jelly_rewards_shown
-	_jelly.set_pending_chests(_jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
+	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
+	_jelly_rewards.visible = playing and _is_jelly_mode() and not collection_page.visible and _jelly_rewards_shown
+	var pending_jelly_chests: int = _jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size()
+	_jelly.set_pending_chests(pending_jelly_chests)
+	_word_jelly.set_pending_chests(pending_jelly_chests)
 	_sync_jelly()
 	_message.hide()
 	_outcome.visible = not playing and not celebrating
@@ -2249,6 +2325,8 @@ func _refresh() -> void:
 		_message.text = "Voice Pop. Say the flying words. Start with %d seconds." % ceili(VoicePop.PopModel.DURATION)
 	elif playing and _mode_id == "jelly":
 		_message.text = "Drag a picture onto its word. Make room for the falling jellies!"
+	elif playing and _mode_id == "word_jelly":
+		_message.text = "Join word pieces. Tap a complete word to collect coins and treasure fragments."
 	var won: bool = model.phase == "won"
 	var earned_chest: bool = won and model.chest_earned
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
@@ -2512,7 +2590,7 @@ func _layout() -> void:
 
 func _short_game_header() -> bool:
 	var height: float = size.y * Style.ui_scale(self)
-	return (_mode_id == "jelly" and height <= 440) or (_mode_id in ["match", "memory"] and height <= 360)
+	return (_is_jelly_mode() and height <= 440) or (_mode_id in ["match", "memory"] and height <= 360)
 
 
 func _stacked_game_header() -> bool:
@@ -2907,6 +2985,7 @@ func set_reduced_motion(value: bool) -> void:
 	_pop.set_reduced_motion(value)
 	_pop_rewards.set_reduced_motion(value)
 	_jelly.set_reduced_motion(value)
+	_word_jelly.set_reduced_motion(value)
 	_jelly_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_phrase.set_reduced_motion(value)
@@ -3117,6 +3196,7 @@ func on_page_hidden() -> void:
 	if is_instance_valid(_jelly_rewards):
 		_jelly_rewards.pause()
 		_jelly.pause(true)
+		_word_jelly.pause(true)
 	if _speech_debug_active:
 		_page_hidden = true
 		audio.halt()
@@ -3352,7 +3432,7 @@ func _sync_controller_accept_startup() -> void:
 
 func _controller_accept() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
-	if _jelly_rewards_shown and _mode_id == "jelly" and _valid_focus(focused) and _jelly_rewards.is_chest_control(focused):
+	if _jelly_rewards_shown and _is_jelly_mode() and _valid_focus(focused) and _jelly_rewards.is_chest_control(focused):
 		_controller_holding_jelly_chest = true
 		_jelly_rewards.begin_hold(focused)
 		return
@@ -3399,11 +3479,11 @@ func _controller_back() -> void:
 	elif _voice_mode:
 		_play_ui_click()
 		_stop_voice()
-	elif _mode_id == "jelly":
+	elif _is_jelly_mode():
 		if _jelly_rewards_shown and _jelly_rewards._result_context.is_empty():
 			_jelly_rewards._back.pressed.emit()
 		else:
-			_jelly.cancel_input()
+			_active_jelly().cancel_input()
 			_show_mode_menu()
 	elif _mode_id == "pop":
 		if _pop_rewards_shown:
@@ -3545,13 +3625,13 @@ func _default_focus() -> Control:
 			if _valid_focus(control):
 				return control
 		return collection_button
-	if _mode_id == "jelly":
+	if _is_jelly_mode():
 		if _jelly_rewards_shown:
 			for control in _jelly_rewards.navigation_controls():
 				if _valid_focus(control):
 					return control
 			return collection_button
-		var jelly_focus: Control = _jelly.default_focus()
+		var jelly_focus: Control = _active_jelly().default_focus()
 		return jelly_focus if _valid_focus(jelly_focus) else collection_button
 	if model.phase == "won":
 		if _valid_focus(chest_button):
@@ -3618,6 +3698,7 @@ func _show_error(message: String) -> void:
 	_phrase.hide()
 	_pop.hide()
 	_jelly.hide()
+	_word_jelly.hide()
 	_outcome.hide()
 	_match_playfield.show()
 	grid.hide()
@@ -3650,7 +3731,8 @@ func _connect_browser() -> void:
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
 		_memory.release_peek_pointer(int(arguments[0]), bool(arguments[1]))
 		_phrase.release_pointer(int(arguments[0]))
-		_jelly.release_pointer(int(arguments[0])))
+		_jelly.release_pointer(int(arguments[0]))
+		_word_jelly.release_pointer(int(arguments[0])))
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback, _pointer_release_callback)
 	_host.presentationSettings(reduced_motion, audio.muted)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
@@ -3751,6 +3833,7 @@ func _open_speech_debug() -> bool:
 	_sync_round_celebration()
 	_pause_phrase()
 	_jelly.pause(true)
+	_word_jelly.pause(true)
 	_jelly_rewards.pause()
 	audio.set_speech_debug_mix(1.0)
 	# Freeze gameplay, controller input and timers while real sound assets
@@ -3794,6 +3877,7 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 	_pop_rewards.cancel_input()
 	_jelly_rewards.cancel_input()
 	_jelly.cancel_input()
+	_word_jelly.cancel_input()
 	duck.note_activity()
 	_pop.cancel_result_input()
 	_memory.end_peek()
@@ -4193,6 +4277,7 @@ func _show_collection() -> void:
 		_pop.pause()
 	_pop_rewards.pause()
 	_jelly.pause(true)
+	_word_jelly.pause(true)
 	_jelly_rewards.pause()
 	audio.stop_jelly_sounds()
 	audio.stop_voice()
@@ -4292,8 +4377,8 @@ func _update_duck() -> void:
 	var active_phase: String = _memory.memory.phase if _mode_id == "memory" else model.phase
 	if _mode_id == "pop":
 		active_phase = _pop.game.phase
-	elif _mode_id == "jelly":
-		active_phase = _jelly.game.phase
+	elif _is_jelly_mode():
+		active_phase = _active_jelly().game.phase
 	var quiet_phase: bool = in_collection or active_phase in ["waiting", "matching"] \
 		or (_mode_id == "pop" and active_phase in ["ready", "paused"])
 	var microphone_busy: bool = _pop_speech_active or (_mode_id == "pop"

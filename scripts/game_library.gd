@@ -13,7 +13,8 @@ const CATALOG := [
 	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/images/ui/modes/rainbow.svg", "tint": Color("#f2e9d8")},
 	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/images/ui/modes/rocket.svg", "tint": Color("#e3eef1")},
 	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen to Pip.\nBuild a little phrase.", "detail": "3 PHRASES · KEEP TRYING", "art": "res://assets/images/mascots/pip.svg", "tint": Color("#f5ebce")},
-	{"id": "jelly", "title": "Jelly Match", "copy": "Drag a match.\nMake a little room!", "detail": "FALLING WORDS · TREASURE", "art": "res://assets/images/jelly-match/gel-mint.png", "tint": Color("#e1efea")}
+	{"id": "jelly", "title": "Jelly Match", "copy": "Drag a match.\nMake a little room!", "detail": "FALLING WORDS · TREASURE", "art": "res://assets/images/jelly-match/gel-mint.png", "tint": Color("#e1efea")},
+	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join little pieces.\nGrow a bigger word!", "detail": "BUILD WORDS · COLLECT COINS", "art": "res://assets/images/jelly-match/gel-lilac.png", "tint": Color("#eee5f4")}
 ]
 
 var heading: Label
@@ -134,10 +135,10 @@ func fit(available: Vector2, factor: float) -> void:
 	_factor = factor
 	var css := available * factor
 	var wide: bool = css.x >= 800
-	var compact_grid: bool = not wide and (css.x >= 440 or css.y < 440)
+	var compact_grid: bool = not wide
 	var short: bool = css.y < (560 if wide else 700)
 	var tiny: bool = css.y < 380
-	grid.columns = 5 if wide else 2 if compact_grid else 1
+	grid.columns = 3 if wide else 2
 	var padding: float = (12.0 if tiny else 16.0 if short or not wide else 28.0) / factor
 	var surface := Style.box(Style.PAPER, Style.EDGE, ceili(24 / factor), 1)
 	surface.set_content_margin_all(padding)
@@ -161,7 +162,7 @@ func fit(available: Vector2, factor: float) -> void:
 		Style.action_button(button, Style.GOOD)
 		button.custom_minimum_size = Vector2(0, 44 / factor)
 		button.add_theme_font_size_override("font_size", ceili(13 / factor))
-	var tile_height: float = (124.0 if tiny else 148.0 if short else 218.0) if wide else (50.0 if tiny else 64.0 if css.y < 500 else 90.0 if short else 164.0) if compact_grid else (60.0 if css.y < 600 else 76.0 if short else 108.0)
+	var tile_height: float = (50.0 if tiny else 76.0 if short else 180.0) if wide else (50.0 if tiny else 64.0 if css.y < 500 else 90.0 if short else 164.0)
 	for tile: Dictionary in _tiles:
 		tile.button.custom_minimum_size = Vector2(0, tile_height / factor)
 		for state in ["normal", "hover", "pressed", "hover_pressed"]:

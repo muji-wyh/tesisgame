@@ -45,7 +45,7 @@ func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
 func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, extent_b: Vector2, unit: float,
 		progress: float, compression: float, release: float, opacity: float) -> void:
 	stage = "release" if progress >= 2.0 / 3.0 else "compress" if progress >= 0.57 else "hold" if progress >= 0.52 else "union" if progress >= 0.12 else "contact"
-	var bounds := Rect2(a, Vector2.ZERO).expand(b).grow(unit * 1.35)
+	var bounds := Rect2(a - extent_a * 0.5, extent_a).merge(Rect2(b - extent_b * 0.5, extent_b)).grow(unit * 0.85)
 	position = bounds.position
 	size = bounds.size
 	_paint.size = size

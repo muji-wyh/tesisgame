@@ -895,7 +895,7 @@ func _process(delta: float) -> void:
 		_publish()
 	if generation == _generation and _can_play() and game.full_elapsed < 0.0 and _landing_cooldown <= 0.0:
 		for cell: Dictionary in game.cells:
-			var contact: float = Motion.contact_at(cell)
+			var contact: float = _landing_contact_at(cell)
 			if float(previous_ages.get(int(cell.id), 0.0)) < contact and float(cell.age) >= contact:
 				# Adjacent bodies land as one quiet group, never a stack of impacts.
 				_landing_cooldown = 0.12
@@ -903,6 +903,9 @@ func _process(delta: float) -> void:
 				break
 	if generation == _generation:
 		_sound_contact()
+
+func _landing_contact_at(cell: Dictionary) -> float:
+	return Motion.contact_at(cell)
 
 func _reward_pickup_ready() -> bool:
 	if _loot_meter.is_filling():

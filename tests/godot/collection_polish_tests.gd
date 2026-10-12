@@ -33,7 +33,7 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly"],
+	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly", "word_jelly"],
 		"The game offers Match, Memory, Voice Pop, Phrase Builder, and Jelly Match in that order")
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
 		"Entering the game opens the Match board")

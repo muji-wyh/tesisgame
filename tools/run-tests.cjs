@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 const groups = {
   vocabulary: { godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests'], node: ['vocabulary-loader', 'vocabulary-packs'] },
   jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
+  'word-jelly': { godot: ['word_jelly_model_tests', 'word_jelly_view_tests', 'word_jelly_flow_tests', 'coin_wallet_tests', 'game_library_tests'] },
   growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [
@@ -26,7 +27,7 @@ const groups = {
   },
   flow: {
     godot: [
-      'steady_match_tests', 'layout_tests', 'three_mode_tests', 'layout_finish_tests',
+      'steady_match_tests', 'layout_tests', 'three_mode_tests', 'game_library_tests', 'layout_finish_tests',
       'collection_polish_tests', 'navigation_removal_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
       'presentation_tests', 'playful_words_tests'
     ]

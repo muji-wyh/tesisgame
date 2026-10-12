@@ -1,7 +1,7 @@
 # Gameplay reference
 
-**Grow with Pip** is an English vocabulary game with Match, Memory, Phrase Builder
-and single-player Voice Pop. It starts with a playable Match board. There are no
+**Grow with Pip** is an English vocabulary game with Match, Memory, Phrase Builder,
+single-player Voice Pop, Jelly Match and Jelly Words. It starts with a playable Match board. There are no
 accounts, usernames, identity avatars, leaderboards or Pip's room.
 
 ## Growing together
@@ -87,6 +87,25 @@ Voice Pop saves its chest batch at the round end. A batch of one, two or three
 chests receives the shared celebration before the complete results appear.
 A zero-chest round goes directly to results. Chest thresholds and durable claims
 are described in [Voice Pop treasure](voice-pop-treasure.md).
+
+## Jelly Words
+
+Join letter chunks on a six-column board. Dragging `ca` onto `t` makes `cat`:
+the dragged chunk comes first. Both bodies flow into one larger jelly, which
+stays on the board and can join another piece. Larger bodies and long text wrap
+across rows when needed.
+
+An exact word from the current learning-age vocabulary reveals its picture and
+a warm rim. Tap that word to collect it for 50 coins per original chunk: a
+two-part word earns 100 coins, and a three-part word earns 150. Merging alone
+does not grant coins or mastery. Failed coin saves preserve the word for retry;
+repeated input cannot award the same collection twice.
+
+Chest fragments remain attached when either jelly is merged. Two marked pieces
+produce two visible markers, and collecting the complete word banks all of its
+fragments. Chest creation and upgrades use the shared enlarged, rotating reveal,
+light accents and paper confetti. The game menu, page hiding and word notebook
+pause play; the existing Jelly reward room stores earned chests.
 
 ## Pip and completion
 

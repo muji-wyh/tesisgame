@@ -26,7 +26,7 @@ test('the illustrated library fits, preserves play, and switches every game', as
     }, { message: 'The native header finishes resizing before its menu target is tapped' }).toBeLessThanOrEqual(1);
     await openModeMenu(page);
     expect((await metrics(page)).library.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
-      'The library exposes all five supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop', 'Mode_phrase', 'Mode_jelly']);
+      'The library exposes all six supported games').toEqual(['Mode_match', 'Mode_memory', 'Mode_pop', 'Mode_phrase', 'Mode_jelly', 'Mode_word_jelly']);
     await expect.poll(async () => {
       const bounds = await metrics(page);
       return bounds.library.controls.every(({ rect: [x, y, w, h] }) => x >= 0 && y >= 0 && x + w <= bounds.width + 1 && y + h <= bounds.height + 1 && h * bounds.scale >= 43);
@@ -43,7 +43,7 @@ test('the illustrated library fits, preserves play, and switches every game', as
     await activate(page, 'LibraryClose');
     await expect(page.locator('#game-status')).toContainText('Game mode menu closed');
   }
-  for (const mode of ['memory', 'pop', 'phrase', 'jelly', 'match']) {
+  for (const mode of ['memory', 'pop', 'phrase', 'jelly', 'word_jelly', 'match']) {
     await chooseMode(page, mode);
     await openModeMenu(page);
     expect((await metrics(page)).library.current).toBe(mode);

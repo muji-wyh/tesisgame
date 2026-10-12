@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const THEME_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const THEME_COLORS = ['#effbef', '#fff4df', '#fff2e5', '#eef5ff', '#e7f8fa', '#f1edfb', '#f0f8e7', '#fff0f7'];
 const THEME_NAMES = THEME_IDS.map(id => id[0].toUpperCase() + id.slice(1));
-const MODES = ['match', 'memory', 'pop', 'phrase', 'jelly'];
+const MODES = ['match', 'memory', 'pop', 'phrase', 'jelly', 'word_jelly'];
 
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
@@ -26,7 +26,7 @@ function uiScale(bounds) {
 
 function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
-  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop, phrase or jelly.`);
+  if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop, phrase, jelly or word_jelly.`);
   const control = bounds.library?.controls?.find(item => item.name === `Mode_${name}`);
   if (!control) throw new Error(`Open the game library before locating ${name}.`);
   const [x, y, width, height] = control.rect;
@@ -61,7 +61,7 @@ async function chooseTheme(page, index) {
 
 function contentBounds(bounds) {
   const scale = uiScale(bounds), mode = bounds.library?.current, height = bounds.height * scale;
-  const shortHeader = (mode === 'jelly' && height <= 440) || (['match', 'memory'].includes(mode) && height <= 360);
+  const shortHeader = (['jelly', 'word_jelly'].includes(mode) && height <= 440) || (['match', 'memory'].includes(mode) && height <= 360);
   const padding = Math.ceil((shortHeader ? 4 : 12) / scale);
   const gap = Math.ceil((shortHeader || bounds.width * scale < 360 ? 4 : 8) / scale);
   const stackedHeader = bounds.width * scale < 520 || (bounds.width * scale < 600 && !shortHeader);

@@ -30,7 +30,7 @@ Experience levels and Pip's age are independent:
 | Lv90 | 1,292 |
 | Lv99 | 1,550 |
 
-The three-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across all five modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or select a higher gameplay cohort.
+The three-answer threshold is the requested game rule, not a research-validated learning assessment. Progress is shared across all six modes and saved independently from treasure claiming. The notebook labels future cohorts as previews; browsing or replaying pronunciation cannot grant mastery or select a higher gameplay cohort.
 
 The gameplay header separates Pip's age from learning experience. A static Baby or Age label sits beside Pip on wide screens and below Pip on narrow screens; Pip's accessible description includes the same earned age. The right-hand growth button contains only the earned Lv and a recessed green progress track. The count inside the track shows new unique words earned toward the next experience level. Narrow and short screens retain a 44-pixel-tall token with an 8-pixel track. Pip still opens the game menu, and the growth control opens the notebook for the next age cohort to complete. The notebook title separates earned Lv and Pip age; its summary explains the next Lv target and current cohort completion.
 
@@ -43,6 +43,7 @@ The Lv bar measures first-time word mastery, not partial practice streaks or cur
 | Phrase Builder | Every unique target word | Target words plus selected wrong words | Dragging, reordering, incomplete checks, replay, unused distractors |
 | Voice Pop | A successfully spoken live target | Explicit final wrong answer attributed to a live target | Silence, expiry, unbound or failed recognition, pause, exit |
 | Jelly Match | A successfully merged word-picture pair | Both words in a deliberately submitted mismatched pair | Tapping, cancelled drags, waiting, falling blocks |
+| Jelly Words | Collecting a complete current-age word, once per collection | None; joining pieces is exploratory | Merging, tapping incomplete words, cancelled drags, waiting, falling blocks |
 
 Match and Memory share the pictured word selection. It shuffles within mastery priority, favors current unmastered words, avoids repeating the previous board when possible, and checks picture/speech ambiguity. Phrase selection prioritizes unmastered words; every contextual word has a phrase reachable no later than its own stage. Contextual words have no invented illustration and participate through phrases. Word tiles retain authentic images wherever one is available.
 

@@ -154,7 +154,7 @@ test('accessible help describes the current controls rather than the removed mot
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /Choose Match, Memory, Voice Pop, Phrase Builder, or Jelly Match\./);
+  assert.match(help, /Choose Match, Memory, Voice Pop, Phrase Builder, Jelly Match, or Jelly Words\./);
   assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
   assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
     'Retired adventure progress stays on the device and is neither read nor erased');

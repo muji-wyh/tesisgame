@@ -41,7 +41,7 @@ func _run() -> void:
 	if view.memory.cards.size() != 10:
 		await _finish(app, directory)
 		return
-	check(view.is_visible_in_tree() and app._mode_buttons.size() == 5 and app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly"],
+	check(view.is_visible_in_tree() and app._mode_buttons.size() == 6 and app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly", "word_jelly"],
 		"Memory remains available alongside Match, Voice Pop, Phrase Builder and Jelly Match")
 	check(view.study_button.get_parent() == app._toolbar and view._board.position == Vector2.ZERO and view._board.size == view.size,
 		"Root owns the eye while Memory cards fill their entire assigned view")
