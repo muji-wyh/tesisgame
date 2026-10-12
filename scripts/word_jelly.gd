@@ -19,6 +19,7 @@ var _keyboard_source: int = -1
 var _palette := Palette.new()
 var _palette_indices: Dictionary = {}
 var _palette_cache: Dictionary = {}
+var _arrival_origins: Dictionary = {}
 
 func _init() -> void:
 	super()
@@ -56,6 +57,7 @@ func stop() -> void:
 	_palette.clear()
 	_palette_indices.clear()
 	_palette_cache.clear()
+	_arrival_origins.clear()
 
 func cancel_input() -> void:
 	_keyboard_source = -1
@@ -277,6 +279,17 @@ func _refresh_palette() -> void:
 func _sync_tiles() -> void:
 	if not _configured:
 		return
+	# The old preview still owns the departing IDs until this sync completes.
+	# Keep the slot rather than screen pixels so a paused resize stays coherent.
+	for cell: Dictionary in game.cells:
+		if bool(cell.get("arrival", false)) and not _tiles.has(int(cell.id)):
+			for index in range(_preview_tiles.size()):
+				var preview: WordTile = _preview_tiles[index]
+				if preview.tile_id == int(cell.id):
+					_arrival_origins[int(cell.id)] = {"slot": index,
+						"pressure": float(preview._gel.get_shader_parameter("preview_pressure")),
+						"sway": float(preview._gel.get_shader_parameter("preview_sway"))}
+					break
 	_refresh_palette()
 	var live: Dictionary = {}
 	for cell: Dictionary in game.cells:
@@ -297,6 +310,7 @@ func _sync_tiles() -> void:
 			_snapbacks.erase(id)
 			_rest_rects.erase(id)
 			_reflow.erase(id)
+			_arrival_origins.erase(id)
 	_refresh_marks()
 	_sync_positions()
 	_refresh_controls()
@@ -304,6 +318,18 @@ func _sync_tiles() -> void:
 func _tile_rect(cell: Dictionary) -> Rect2:
 	return Rect2(_board.position + Vector2(int(cell.get("column", 0)), int(cell.get("row", 0))) * _pitch + Vector2.ONE * _gap * 0.5,
 		Vector2(int(cell.get("width", 1)), int(cell.get("height", 1))) * _pitch - Vector2.ONE * _gap)
+
+func _arrival_rect(cell: Dictionary) -> Rect2:
+	var origin: Dictionary = _arrival_origins.get(int(cell.id), {})
+	if not origin.is_empty():
+		var slot: int = int(origin.slot)
+		return Rect2(_preview_origins[slot], _preview_tiles[slot].size)
+	var rect: Rect2 = _tile_rect(cell)
+	rect.position.y = _board.position.y - _pitch + _gap * 0.5
+	return rect
+
+func _arrival_delay(cell: Dictionary) -> float:
+	return float(cell.get("arrival_delay", float(cell.get("arrival_index", 0)) * WordModel.ARRIVAL_STAGGER))
 
 func _sync_positions() -> void:
 	for cell: Dictionary in game.cells:
@@ -326,9 +352,33 @@ func _sync_positions() -> void:
 		var dragging: bool = id == _source and _dragging
 		tile.z_index = 40 if dragging else 1
 		var stretch: Vector2 = Vector2.ONE
+		var compression: float = 0.0
+		var arrival: bool = bool(cell.get("arrival", false)) and not game.is_settled(cell)
+		var shadow_visible: bool = true
+		tile.set_preview_pressure(0.0, 0.0)
 		if not dragging:
 			tile.position = rect.position
-			if _snapbacks.has(id) and not reduced_motion:
+			if arrival and not reduced_motion:
+				var source: Rect2 = _arrival_rect(cell)
+				var age: float = maxf(0.0, float(cell.age) - _arrival_delay(cell))
+				var contact: float = WordModel.arrival_contact_at(cell) - _arrival_delay(cell)
+				var fall: float = clampf(age / contact, 0.0, 1.0)
+				# Establish the lane near the rim; the body then accelerates vertically.
+				var align: float = smoothstep(0.0, minf(0.28, contact * 0.45), age)
+				tile.size = source.size.lerp(rect.size, align)
+				tile.position = Vector2(lerpf(source.get_center().x, rect.get_center().x, align) - tile.size.x * 0.5,
+					lerpf(source.position.y, rect.position.y, fall * fall))
+				var moving: Dictionary = cell.duplicate()
+				moving.age = age
+				var pose: Dictionary = Motion.sample(moving)
+				stretch = pose.stretch
+				compression = float(pose.compression)
+				var source_pose: Dictionary = _arrival_origins.get(id, {})
+				var release: float = 1.0 - smoothstep(0.0, 0.12, age)
+				tile.set_preview_pressure(float(source_pose.get("pressure", 0.0)) * release, float(source_pose.get("sway", 0.0)) * release)
+				shadow_visible = align >= 1.0
+				tile.z_index = 3
+			elif _snapbacks.has(id) and not reduced_motion:
 				var p: float = clampf(float(_snapbacks[id].elapsed) / 0.24, 0.0, 1.0)
 				tile.position = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
 			elif _reflow.has(id) and not reduced_motion:
@@ -344,13 +394,11 @@ func _sync_positions() -> void:
 					_reflow.erase(id)
 			elif bool(cell.get("settling", false)) and not reduced_motion:
 				var p: float = clampf(float(cell.age) / WordModel.SETTLE_SECONDS, 0.0, 1.0)
-				var lift: float = (1.0 - p) * (1.0 - p) * _pitch * 0.8 if bool(cell.get("arrival", false)) else 0.0
-				tile.position.y -= lift
 				var bounce: float = sin(p * PI) * (1.0 - p) * 0.14
 				stretch = Vector2(1.0 + bounce, 1.0 - bounce)
 		tile.deform(0.0, 0.0, DRAG_STRETCH if dragging and not reduced_motion else stretch)
-		var support_lift: float = maxf(0.0, rect.position.y - tile.position.y) if bool(cell.get("falling", false)) else 0.0
-		tile.set_support(6.0 / Style.ui_scale(self) if dragging else support_lift)
+		var support_lift: float = maxf(0.0, rect.position.y - tile.position.y) if arrival or bool(cell.get("falling", false)) else 0.0
+		tile.set_support(6.0 / Style.ui_scale(self) if dragging else support_lift, compression, shadow_visible)
 	if _dragging:
 		var target: int = _drag_target()
 		if target != _target:
@@ -360,9 +408,14 @@ func _sync_positions() -> void:
 	_refresh_contact()
 
 func _sync_preview() -> void:
+	var refill: float = 1.0
+	if not reduced_motion:
+		for cell: Dictionary in game.cells:
+			if bool(cell.get("arrival", false)) and _arrival_origins.has(int(cell.id)):
+				refill = minf(refill, (float(cell.age) - _arrival_delay(cell) - 0.18) / 0.18)
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
-		preview.visible = _configured and not _result_visible and index < game.upcoming.size()
+		preview.visible = _configured and not _result_visible and index < game.upcoming.size() and refill > 0.0
 		if not preview.visible:
 			continue
 		var item: Dictionary = game.upcoming[index]
@@ -371,6 +424,7 @@ func _sync_preview() -> void:
 		_apply_palette(preview, int(item.id))
 		var pose: Dictionary = _preview_pose(index)
 		preview.position = _preview_origins[index]
+		preview.modulate.a = clampf(refill, 0.0, 1.0)
 		preview.deform(0.0, 0.0)
 		preview.set_preview_pressure(float(pose.pressure), float(pose.sway))
 
@@ -578,6 +632,8 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 	_refresh_hud()
 
 func _landing_contact_at(cell: Dictionary) -> float:
+	if bool(cell.get("arrival", false)):
+		return WordModel.arrival_contact_at(cell)
 	return WordModel.SETTLE_SECONDS * (0.70 if bool(cell.get("falling", false)) else 1.0)
 
 func _refresh_hud() -> void:
@@ -607,9 +663,10 @@ func _layout() -> void:
 	_compact_hud = wide
 	var edge: float = 8.0 / s
 	var side: float = minf(144.0 / s, size.x * 0.18) if wide else 0.0
-	var available: Vector2 = Vector2(size.x - 2.0 * (edge + side), size.y - (edge * 2.0 if wide else 136.0 / s))
+	var feed_height: float = 64.0 / s if wide else 78.0 / s
+	var available: Vector2 = Vector2(size.x - 2.0 * (edge + side), size.y - (feed_height + edge if wide else 136.0 / s))
 	_pitch = maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, available.y / WordModel.ROWS), 78.0 / s))
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, edge if wide else 78.0 / s), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -631,18 +688,17 @@ func _layout() -> void:
 	_loot_detail.size = Vector2(meter_edge + 16.0 / s, 16.0 / s)
 	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_loot_detail.add_theme_font_size_override("font_size", ceili(10.0 / s))
-	var preview_width: float = minf(144.0 / s, maxf(30.0 / s, size.x - _board.end.x - edge * 2.0)) if wide else size.x - 88.0 / s - edge
-	var columns: int = 2 if wide else WordModel.UPCOMING_COUNT
+	var preview_width: float = minf(size.x - edge * 2.0, maxf(_board.size.x, 240.0 / s)) if wide else size.x - 88.0 / s - edge
+	var columns: int = WordModel.UPCOMING_COUNT
 	var padding: float = 5.0 / s
 	var preview_size: float = minf(48.0 / s, (preview_width - padding * 2.0) / columns)
-	var rows: int = ceili(float(WordModel.UPCOMING_COUNT) / columns)
-	_preview_rect = Rect2(Vector2(_board.end.x + edge, _board.position.y) if wide else Vector2(80.0 / s, 0), Vector2(preview_width, preview_size * rows + padding * 2.0))
+	_preview_rect = Rect2(Vector2((size.x - preview_width) * 0.5, 0) if wide else Vector2(80.0 / s, 0), Vector2(preview_width, preview_size + padding * 2.0))
 	drop_button.position = _preview_rect.position
 	drop_button.size = _preview_rect.size
 	_style_drop_button()
 	for index in range(_preview_tiles.size()):
 		_preview_tiles[index].size = Vector2.ONE * preview_size
-		_preview_origins[index] = _preview_rect.position + Vector2((preview_width - preview_size * columns) * 0.5 + (index % columns) * preview_size, padding + floorf(float(index) / columns) * preview_size)
+		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * preview_width / columns - preview_size * 0.5, padding)
 	_style_finish_button()
 	finish_button.size = Vector2(minf(108.0 / s, hud_width) if wide else 108.0 / s, 42.0 / s)
 	finish_button.position = Vector2(_loot_meter.position.x, _board.end.y - finish_button.size.y) if wide else Vector2(_board.end.x - finish_button.size.x, _board.end.y + edge)

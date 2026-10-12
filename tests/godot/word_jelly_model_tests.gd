@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Model = preload("res://scripts/word_jelly_model.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 var checks: int = 0
 var failures: int = 0
 
@@ -56,6 +57,13 @@ func _run() -> void:
 	_test_independent_operations()
 	_test_lifecycle_reentry()
 	_test_supply_and_determinism()
+	_test_arrival_timing()
+	_test_arrival_readiness_and_pause()
+	_test_arrival_automatic_timing()
+	_test_arrival_full_board_determinism()
+	_test_arrival_reachable_lanes()
+	_test_arrival_reserved_lanes()
+	_test_arrival_same_lane_spacing()
 	print("Word Jelly model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -1047,7 +1055,7 @@ func _test_split_sibling_support() -> void:
 	_board(model, ["na", "ba"])
 	var parent: Dictionary = _merge(model, 1000, 1001)
 	_constrain_split_board(model, int(parent.id), Vector2i(2, 2),
-		[Vector2i(2, 3), Vector2i(2, 4), Vector2i(2, 5), Vector2i(2, 6), Vector2i(2, 7)])
+		[Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 3), Vector2i(2, 4), Vector2i(2, 5), Vector2i(2, 6), Vector2i(2, 7)])
 	check(model.split(int(parent.id)), "two split children can settle together in a single-column opening")
 	var children: Array = model.fusions[0].results.duplicate(true)
 	check(children[0].column == 2 and children[1].column == 2
@@ -1164,7 +1172,7 @@ func _test_growth_after_split() -> void:
 	check(model.split(int(parent.id)), "wrapped parent can restore two full-size four-part bodies")
 	var children: Array = model.fusions[0].results.duplicate(true)
 	model.step(Model.SPLIT_SECONDS)
-	check(model._has_free_cell() and model._growth_pending and _footprint(model.cell(neighbor_id)) == original_neighbor,
+	check(model._occupied().size() < Model.CAPACITY and model._growth_pending and _footprint(model.cell(neighbor_id)) == original_neighbor,
 		"split releases wrapped padding and schedules growth without moving neighbors at handover")
 	for child: Dictionary in children:
 		check(_footprint(model.cell(int(child.id))) == _footprint(child), "wrapped split commits each frozen child endpoint")
@@ -1405,3 +1413,222 @@ func _test_supply_and_determinism() -> void:
 		check(whole.cells[index].id == sliced.cells[index].id and whole.cells[index].text == sliced.cells[index].text,
 			"time slicing preserves tile identity and text")
 	_assert_board(whole, "automatic supply")
+
+
+func _arrival_ids(model) -> Array[int]:
+	var ids: Array[int] = []
+	for tile: Dictionary in model.upcoming:
+		ids.append(int(tile.id))
+	return ids
+
+
+func _test_arrival_timing() -> void:
+	var initial = _model([_word("cat")])
+	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the twelve-root opening")
+	for tile: Dictionary in initial.cells:
+		check(initial.is_settled(tile) and not bool(tile.arrival) and is_equal_approx(Model.settle_duration(tile), Model.SETTLE_SECONDS),
+			"opening roots remain settled with the ordinary recovery clock")
+	for row in range(Model.ROWS):
+		var model = _model([_word("cat")])
+		model.cells.clear()
+		_fill_rows(model, row + 1, Model.ROWS - 1)
+		var incoming: Array[int] = _arrival_ids(model)
+		check(model.drop_now(incoming[0]), "each supported row accepts a manual arrival batch")
+		var previous_contact: float = -1.0
+		for index in range(incoming.size()):
+			var tile: Dictionary = model.cell(incoming[index])
+			var stagger: float = float(index) * Model.ARRIVAL_STAGGER
+			var expected_contact: float = stagger + sqrt(2.0 * float(row + 1) / Motion.ARRIVAL_GRAVITY)
+			check(tile.row == row and tile.column == index and tile.falling_rows == row + 1,
+				"arrival distance spans the whole well from one row above the board")
+			check(tile.arrival_index == index and bool(tile.arrival) and bool(tile.settling) and tile.age == 0.0,
+				"batch roots retain their ordered delay and start on the shared model clock")
+			check(is_equal_approx(Model.arrival_contact_at(tile), expected_contact),
+				"arrival contact follows board-scaled acceleration and batch stagger")
+			check(is_equal_approx(Model.settle_duration(tile), expected_contact + Motion.COMPRESSION_SECONDS + Motion.REBOUND_SECONDS + Motion.RECOVERY_SECONDS),
+				"arrival input readiness includes planted compression and complete recovery")
+			check(Model.arrival_contact_at(tile) > previous_contact, "equal-height roots contact in a gentle stagger")
+			previous_contact = Model.arrival_contact_at(tile)
+		_assert_board(model, "arrival row %d" % row)
+
+
+func _test_arrival_readiness_and_pause() -> void:
+	var model = _model([_word("cat")])
+	var incoming: Array[int] = _arrival_ids(model)
+	var target_id: int = int(model.cells[0].id)
+	check(model.drop_now(incoming[0]), "arrival readiness fixture releases its committed preview")
+	var first_contact: float = Model.arrival_contact_at(model.cell(incoming[0]))
+	var first_ready: float = Model.settle_duration(model.cell(incoming[0]))
+	var last_ready: float = Model.settle_duration(model.cell(incoming.back()))
+	model.step(first_contact)
+	check(not model.is_settled(model.cell(incoming[0])) and bool(model.cell(incoming[0]).settling),
+		"touching support does not enable a jelly while it is still compressing")
+	check(model.try_merge(incoming[0], target_id) == "ignored" and model.try_merge(target_id, incoming[0]) == "ignored",
+		"a falling or recovering root cannot be used as a merge source or target")
+	check(not model.can_drop_now() and not model.drop_now(), "a new batch cannot overlap the current arrival recovery")
+	var frozen: Dictionary = model.snapshot()
+	model.set_paused(true)
+	model.step(5.0)
+	check(model.cells == frozen.cells and model.upcoming == frozen.upcoming and model.spawn_elapsed == frozen.spawn_elapsed,
+		"pause freezes arrival positions, stagger ages, and the next supply clock")
+	model.set_paused(false)
+	model.step(first_ready - first_contact - 0.001)
+	check(not model.is_settled(model.cell(incoming[0])) and not model.can_drop_now(), "input remains blocked until the final recovery millisecond")
+	model.step(0.001)
+	check(model.is_settled(model.cell(incoming[0])) and not bool(model.cell(incoming[0]).settling), "first root becomes ready at its own exact recovery boundary")
+	check(not model.is_settled(model.cell(incoming.back())) and not model.can_drop_now(), "the last staggered root retains its later readiness deadline")
+	model.step(last_ready - first_ready)
+	check(model.can_drop_now(), "supply releases again only after the complete batch is ready")
+	for id in incoming:
+		check(model.is_settled(model.cell(id)) and not bool(model.cell(id).settling), "each arrived root completes its settling flag and readiness together")
+	check(model.try_merge(incoming[0], target_id) == "merged", "an arrived root can merge after recovery")
+	model.step(Model.FUSION_SECONDS)
+	var merged: Dictionary = model.cells.back()
+	check(not bool(merged.arrival) and is_equal_approx(Model.settle_duration(merged), Model.SETTLE_SECONDS),
+		"merging an arrived root restores the ordinary merge recovery duration")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.is_settled(model.cell(int(merged.id))), "merge recovery remains independent of the prior long arrival clock")
+
+
+func _test_arrival_automatic_timing() -> void:
+	var manual := Model.new()
+	var automatic := Model.new()
+	manual.configure([_word("cat")], 3, 7)
+	automatic.configure([_word("cat")], 3, 7)
+	var incoming: Array[int] = _arrival_ids(manual)
+	manual.drop_now(incoming[0])
+	automatic.step(Model.INITIAL_SPAWN_INTERVAL - 0.001)
+	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES, "natural descent preserves the twenty-second initial supply interval")
+	automatic.step(0.001)
+	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "automatic supply starts one six-root batch at its existing deadline")
+	for id in incoming:
+		check(manual.cell(id) == automatic.cell(id), "manual and automatic arrival share identities, placement, delays, and clocks")
+	var latest_ready: float = Model.settle_duration(automatic.cell(incoming.back()))
+	automatic.step(latest_ready)
+	check(automatic.can_drop_now() and is_equal_approx(automatic.spawn_elapsed, latest_ready), "descent does not pause or restart the next automatic supply timer")
+	check(is_equal_approx(automatic.spawn_interval, 20.0) and is_equal_approx(Model.MIN_SPAWN_INTERVAL, 16.0),
+		"arrival polish retains the established relaxed supply pacing")
+
+
+func _test_arrival_full_board_determinism() -> void:
+	var whole = _model([_word("cat")])
+	var sliced = _model([_word("cat")])
+	for model in [whole, sliced]:
+		model.cells.clear()
+		_fill_rows(model, 1, Model.ROWS - 1)
+		check(model.drop_now(), "last open row accepts a batch before full-board danger")
+	var latest_ready: float = Model.settle_duration(whole.cells.back())
+	whole.step(latest_ready - 0.001)
+	check(whole.full_elapsed < 0.0 and whole.phase == "playing", "danger waits for the last staggered arrival to finish recovering")
+	whole.step(0.001)
+	check(is_zero_approx(whole.full_elapsed), "full-board danger starts exactly when the final arrival becomes ready")
+	whole.step(1.5)
+	var duration: float = latest_ready + 1.5
+	var elapsed: float = 0.0
+	while elapsed + Model.EPSILON < duration:
+		var delta: float = minf(0.013, duration - elapsed)
+		sliced.step(delta)
+		elapsed += delta
+	check(is_equal_approx(whole.full_elapsed, sliced.full_elapsed) and is_equal_approx(whole.full_elapsed, 1.5),
+		"coarse and fine frame slices start the danger clock at the same arrival boundary")
+	for index in range(whole.cells.size()):
+		var a: Dictionary = whole.cells[index]
+		var b: Dictionary = sliced.cells[index]
+		check(a.id == b.id and a.column == b.column and a.row == b.row and a.settling == b.settling and is_equal_approx(a.age, b.age),
+			"arrival frame slicing preserves placement, readiness, and elapsed ages")
+	_assert_board(whole, "full-board arrival")
+
+
+func _test_arrival_reachable_lanes() -> void:
+	var model = _model([_word("cat")])
+	model.cells.clear()
+	for column in range(Model.COLUMNS):
+		model.cells.append(_placed_tile(1000 + column, "x", column, 4))
+	var incoming: Array[int] = _arrival_ids(model)
+	check(model.drop_now(), "supply can land on a raised roof without filling enclosed holes")
+	for index in range(incoming.size()):
+		var tile: Dictionary = model.cell(incoming[index])
+		check(tile.column == index and tile.row == 3 and tile.falling_rows == 4,
+			"a new root stops at the first existing support in its vertical entry lane")
+	_assert_board(model, "arrivals above a raised roof")
+	model = _model([_word("cat")])
+	model.cells.clear()
+	for column in range(Model.COLUMNS):
+		model.cells.append(_placed_tile(1000 + column, "cat" if column == 0 else "x", column, 0,
+			2 if column == 0 else 1, 0, _word("cat") if column == 0 else {}))
+	model.cells[0].width = 1
+	var preview: Array = model.upcoming.duplicate(true)
+	var generated: int = model.generated_tiles
+	check(model._occupied().size() < Model.CAPACITY and not model.can_drop_now() and not model.drop_now(),
+		"enclosed empty cells cannot admit roots through a completely sealed entry")
+	model.step(1.0)
+	check(is_equal_approx(model.full_elapsed, 1.0) and model.generated_tiles == generated and model.upcoming == preview,
+		"a sealed roof advances danger without consuming or repeatedly respawning the preview")
+	check(model.collect(1000), "a valid roof word can reopen the entry")
+	model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
+	check(model.full_elapsed < 0.0 and model.can_drop_now(), "collecting the roof resets danger and reopens reachable entry lanes")
+	check(model.drop_now(int(preview[0].id)), "the unchanged preview can enter after the roof is cleared")
+	_assert_board(model, "reopened entry after collection")
+
+
+func _test_arrival_reserved_lanes() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "ca", 0, 0), _placed_tile(1001, "t", 2, 3)])
+	for column in range(2, Model.COLUMNS):
+		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
+	check(model.try_merge(1000, 1001) == "merged", "arrival reservation fixture commits a wide future word")
+	var reserved: Dictionary = model.fusions[0].result.duplicate(true)
+	check(reserved.column == 1 and reserved.row == 3 and reserved.width == 2,
+		"future word reserves its neighboring entry lane before the visual merge finishes")
+	var incoming: Array[int] = _arrival_ids(model)
+	check(model.drop_now(), "remaining entry space accepts arrivals during a merge")
+	for index in range(incoming.size()):
+		var tile: Dictionary = model.cell(incoming[index])
+		if index < 3:
+			check(not tile.is_empty() and tile.column == 1 and tile.row == 2 - index,
+				"roots stack above the reserved result instead of crossing its future footprint")
+		else:
+			check(tile.is_empty(), "a partial batch stops when every entry lane is sealed")
+	check(not model.can_drop_now() and model.upcoming[0].id == incoming[3],
+		"unreleased roots stay committed at the front of the preview after a partial batch")
+	_assert_reservations(model, "arrival respects a future word roof")
+	_assert_board(model, "partial arrival into a reserved lane")
+
+
+func _test_arrival_same_lane_spacing() -> void:
+	var model = _model([_word("cat")])
+	model.cells.clear()
+	for column in range(Model.COLUMNS - 1):
+		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
+	var incoming: Array[int] = _arrival_ids(model)
+	check(model.drop_now(), "one deep open entry lane can admit a complete batch")
+	var clearance: float = sqrt(2.0 / Motion.ARRIVAL_GRAVITY)
+	for index in range(incoming.size()):
+		var tile: Dictionary = model.cell(incoming[index])
+		check(tile.column == Model.COLUMNS - 1 and tile.row == Model.ROWS - 1 - index,
+			"the only reachable lane stacks new roots from the floor upward")
+		check(is_equal_approx(Model.arrival_delay(tile), float(index) * clearance),
+			"repeated use of one lane gives the preceding root a full row of headroom")
+		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
+			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
+			"contact and input readiness use the stored lane delay")
+	for sample_index in range(160):
+		var elapsed: float = float(sample_index) * 0.025
+		var previous_y: float = INF
+		for id in incoming:
+			var tile: Dictionary = model.cell(id)
+			var age: float = elapsed - Model.arrival_delay(tile)
+			if age < 0.0:
+				continue
+			tile.age = age
+			var y: float = float(tile.row) - float(Motion.sample(tile).lift_rows)
+			check(y + 1.0 <= previous_y + Model.EPSILON, "same-lane arrivals keep one full row between visible bodies throughout descent")
+			previous_y = y
+	var last_ready: float = Model.settle_duration(model.cell(incoming.back()))
+	model.step(last_ready - 0.001)
+	check(not model.can_drop_now() and not model.is_settled(model.cell(incoming.back())),
+		"long lane stagger remains part of the authoritative input lock")
+	model.step(0.001)
+	check(model.can_drop_now() and model.is_settled(model.cell(incoming.back())),
+		"the next supply unlocks after the last same-lane root recovers")
+	_assert_board(model, "same-lane arrival settlement")

@@ -74,6 +74,7 @@ func _run() -> void:
 	_check_reduced_motion(view)
 	_check_wallet_failure(view)
 	_check_keyboard(view)
+	_check_arrival_packet(view)
 	_check_arrival_land_timing(view)
 	_check_danger_ends_when_collecting(view)
 	_check_danger_ends_when_merge_frees_space(view)
@@ -143,6 +144,12 @@ func _check_opening_and_bounds(view) -> void:
 		var state: Dictionary = view.snapshot()
 		check(state.columns == 6 and state.rows == 8 and state.tiles.size() == 12, "opening contains twelve settled roots in six columns")
 		check(state.preview.slots.size() == 6 and state.preview.enabled, "six upcoming roots have a working manual drop")
+		check(view._preview_rect.end.y <= view._board.position.y,
+			"the whole supply tray sits above the well in portrait and landscape")
+		for index in range(1, view._preview_tiles.size()):
+			check(is_equal_approx(view._preview_tiles[index].position.y, view._preview_tiles[0].position.y)
+				and view._preview_tiles[index].position.x > view._preview_tiles[index - 1].position.x,
+				"all six upcoming bodies form one horizontal row above the well")
 		check(view._board.position.x >= 0 and view._board.position.y >= 0 and view._board.end.x <= dimensions.x + 0.1
 			and view._board.end.y <= dimensions.y + 0.1, "board fits portrait and landscape bounds")
 		for tile: Dictionary in state.tiles:
@@ -1021,6 +1028,94 @@ func _check_keyboard(view) -> void:
 	check(payouts.size() == 1 and view.game.collected_coins == 100, "keyboard activation can collect a valid merged word")
 
 
+func _check_arrival_packet(view) -> void:
+	for reduced: bool in [false, true]:
+		for automatic: bool in [false, true]:
+			for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700)]:
+				view.size = dimensions
+				_reset(view, reduced)
+				var packet: Array = view.game.upcoming.duplicate(true)
+				var origins: Dictionary = {}
+				var colors: Dictionary = {}
+				for preview in view._preview_tiles:
+					origins[preview.tile_id] = preview.get_rect()
+					colors[preview.tile_id] = preview.palette_index
+				if automatic:
+					view.game.spawn_elapsed = view.game.spawn_interval - 0.001
+					_advance(view, 0.001)
+				else:
+					view._drop_next(int(packet[0].id))
+				check(view.game.cells.size() == 18, "manual and timed release each commit the six preview bodies")
+				var first_id: int = int(packet[0].id)
+				var last_id: int = int(packet[-1].id)
+				var first_contact: float = Model.arrival_contact_at(view.game.cell(first_id))
+				var final_ready: float = 0.0
+				for index in range(packet.size()):
+					var id: int = int(packet[index].id)
+					var cell: Dictionary = view.game.cell(id)
+					check(not cell.is_empty() and bool(cell.arrival) and not view.game.is_settled(cell),
+						"every preview ID survives release and remains unavailable through its arrival")
+					check(int(cell.arrival_index) == index, "the wave preserves the original preview order")
+					check(cell.text == packet[index].text and cell.fragments == packet[index].fragments
+						and view._tiles[id]._label.text == packet[index].text,
+						"falling roots retain their exact letters and carried chest fragments")
+					check(view._tiles[id].palette_index == colors[id], "preview partner colors survive handover into the falling bodies")
+					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[id]
+					check(view._tiles[id].get_rect().is_equal_approx(expected),
+						"release starts at the visible preview rectangle, or lands directly with reduced motion")
+					view._activate(id)
+					check(view._keyboard_source == -1 and view.game.fusions.is_empty(),
+						"keyboard activation cannot take an arriving body before its recovery completes")
+					final_ready = maxf(final_ready, Model.settle_duration(cell))
+				_advance(view, 0.02)
+				if not reduced:
+					check(view._tiles[first_id].get_rect().get_center().y > Rect2(origins[first_id]).get_center().y,
+						"the first preview body immediately begins descending under gravity")
+					check(view._tiles[last_id].get_rect().is_equal_approx(origins[last_id]),
+						"the final preview body waits its short stagger before entering the well")
+				var paused_rect: Rect2 = view._tiles[first_id].get_rect()
+				var paused_age: float = float(view.game.cell(first_id).age)
+				view.pause(true)
+				_advance(view, 0.6)
+				check(view._tiles[first_id].get_rect().is_equal_approx(paused_rect)
+					and is_equal_approx(float(view.game.cell(first_id).age), paused_age),
+					"pausing preserves the airborne body and its authoritative arrival time")
+				view.pause(false)
+				var previous_y: float = Rect2(origins[first_id]).get_center().y
+				var previous_travel: float = 0.0
+				for fraction: float in [0.25, 0.5, 0.75]:
+					_advance(view, first_contact * fraction - float(view.game.cell(first_id).age))
+					var body: Rect2 = view._tiles[first_id].get_rect()
+					if not reduced:
+						var travel: float = body.get_center().y - previous_y
+						check(travel > previous_travel and body.get_center().y < view._tile_rect(view.game.cell(first_id)).get_center().y,
+							"equal time slices cover increasing distance while the body is visibly airborne")
+						previous_travel = travel
+						previous_y = body.get_center().y
+					else:
+						check(body.is_equal_approx(view._tile_rect(view.game.cell(first_id))),
+							"reduced motion leaves the arriving body stationary on its reserved support")
+					check(not view.game.is_settled(view.game.cell(first_id)), "an airborne or recovering body is not ready for play")
+				var resize_age: float = float(view.game.cell(first_id).age)
+				view.size = Vector2(700, 470) if dimensions.x < dimensions.y else Vector2(390, 700)
+				view._layout()
+				check(is_equal_approx(float(view.game.cell(first_id).age), resize_age), "resize never rewinds the arrival timeline")
+				var resized_body: Rect2 = view._tiles[first_id].get_rect()
+				var resized_target: Rect2 = view._tile_rect(view.game.cell(first_id))
+				check(resized_body.get_center().y <= resized_target.get_center().y
+					and view._tiles[first_id]._label.text == packet[0].text,
+					"resize keeps the same visible letters on a coherent route to the new well")
+				_advance(view, final_ready + 0.001 - float(view.game.cell(first_id).age))
+				for original: Dictionary in packet:
+					var id: int = int(original.id)
+					check(view.game.is_settled(view.game.cell(id))
+						and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(view.game.cell(id))),
+						"every supplied jelly finishes planted exactly on its reserved board cell")
+				check(view.game.generated_tiles == 18 and view.game.merged_count == 0 and payouts.is_empty(),
+					"arrival, pause and resize preserve the supply and reward ledgers")
+	view.size = Vector2(1000, 720)
+
+
 func _check_arrival_land_timing(view) -> void:
 	for reduced: bool in [false, true]:
 		for row: int in [0, Model.ROWS - 1]:
@@ -1030,24 +1125,33 @@ func _check_arrival_land_timing(view) -> void:
 			arriving.row = row
 			arriving.age = 0.0
 			arriving.arrival = true
+			arriving.arrival_index = 5 if row == 0 else 0
 			arriving.settling = true
-			arriving.falling_rows = Model.ROWS - row
+			arriving.falling_rows = row + 1
 			view._rest_rects.clear()
 			view._reflow.clear()
 			view._sync_positions()
-			_advance(view, Model.SETTLE_SECONDS - 0.001)
+			var contact: float = Model.arrival_contact_at(arriving)
+			var ready: float = Model.settle_duration(arriving)
+			_advance(view, contact - 0.001)
 			check(cues.count("land") == 0 and not view.game.is_settled(view.game.cell(ids[0])),
-				"an arriving root stays silent just before its visual settling boundary")
+				"an arriving root stays silent until its painted body reaches support")
 			view.pause(true)
 			_advance(view, 0.5)
 			check(cues.count("land") == 0 and not view.game.is_settled(view.game.cell(ids[0])),
 				"pausing just before contact cannot advance or emit the landing cue")
 			view.pause(false)
 			_advance(view, 0.002)
-			check(cues.count("land") == 1 and view.game.is_settled(view.game.cell(ids[0])),
-				"landing sounds at the Word Jelly settling boundary for every arrival row and motion preference")
+			check(cues.count("land") == 1 and not view.game.is_settled(view.game.cell(ids[0])),
+				"landing sounds at physical contact before the planted recovery completes")
 			check(view._tiles[ids[0]].get_rect().is_equal_approx(view._tile_rect(view.game.cell(ids[0]))),
-				"the arrival body is visually at rest when its landing cue plays")
+				"the arrival body reaches its board rectangle when its landing cue plays")
+			_advance(view, ready - float(view.game.cell(ids[0]).age) - 0.001)
+			view._activate(ids[0])
+			check(not view.game.is_settled(view.game.cell(ids[0])) and view._keyboard_source == -1,
+				"the planted squash and rebound remain input locked until recovery finishes")
+			_advance(view, 0.002)
+			check(view.game.is_settled(view.game.cell(ids[0])), "the body becomes playable exactly after its landing recovery")
 			_advance(view, 1.5)
 			check(cues.count("land") == 1, "the inherited falling-row timeline cannot replay a late impact")
 
@@ -1092,6 +1196,8 @@ func _check_danger_ends_when_collecting(view) -> void:
 func _check_danger_ends_when_merge_frees_space(view) -> void:
 	_reset(view)
 	var ids: Array[int] = _install(view, ["cater", "pillar"], [], [4, 4])
+	# The source must reopen the roof; an internal cavity cannot receive a fall.
+	view.game.cells[0].row = 0
 	_fill_well(view)
 	view._activate(ids[0])
 	view._activate(ids[1])
@@ -1101,7 +1207,7 @@ func _check_danger_ends_when_merge_frees_space(view) -> void:
 		"the active merge keeps danger until its input footprints are replaced")
 	_advance(view, 0.002)
 	check(cues.count("danger_end") == 1 and view.game.full_elapsed < 0.0 and view.game._has_free_cell(),
-		"a merge that frees board space stops the warning at its completion boundary")
+		"a merge that reopens the top entrance stops the warning at its completion boundary")
 	check(payouts.is_empty(), "merge danger relief never pays coins before collection")
 	_advance(view, 0.6)
 	check(cues.count("danger") == 1 and cues.count("danger_end") == 1,

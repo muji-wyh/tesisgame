@@ -152,6 +152,112 @@ function expectSupportedChild(state, child) {
   }
 }
 
+async function observeArrival(page, before) {
+  await page.evaluate(before => {
+    window.wordJellyArrivalObserver?.disconnect();
+    const status = document.getElementById('game-status');
+    const wanted = new Set(before.upcoming.map(tile => tile.id));
+    window.wordJellyArrivalTimeline = [];
+    window.wordJellyArrivalFrame = null;
+    let capturePending = false;
+    const source = before.preview.slots.find(slot => slot.id === before.upcoming[0].id);
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const tracked = state.tiles?.filter(tile => wanted.has(tile.id)) || [];
+      if (!tracked.length) return;
+      window.wordJellyArrivalTimeline.push(tracked.map(tile => ({ ...tile, time: performance.now() })));
+      const first = tracked.find(tile => tile.id === source.id);
+      const boardPitch = state.board_rect[3] / state.rows;
+      const targetY = state.board_rect[1] + (first?.row + 0.5) * boardPitch;
+      const sourceY = source.rect[1] + source.rect[3] / 2;
+      const progress = first && (first.rect[1] + first.rect[3] / 2 - sourceY) / (targetY - sourceY);
+      if (!capturePending && first && !first.settled && progress > 0.20 && progress < 0.72) {
+        capturePending = true;
+        // Keep the simulation running while the real intermediate frame is encoded.
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => { window.wordJellyArrivalFrame = reader.result.split(',')[1]; };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
+    };
+    window.wordJellyArrivalObserver = new MutationObserver(record);
+    window.wordJellyArrivalObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  }, before);
+}
+
+async function verifyArrival(page, info, before, label) {
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return before.upcoming.every(root => state.tiles.some(tile => tile.id === root.id && tile.settled));
+  }, { timeout: Math.ceil(before.spawn_interval * 1000) + 12000,
+    message: `${label} supply visibly descends and finishes its planted recovery` }).toBe(true);
+  const after = await jelly(page);
+  const timeline = await page.evaluate(() => window.wordJellyArrivalTimeline);
+  for (const root of before.upcoming) {
+    const source = before.preview.slots.find(slot => slot.id === root.id);
+    const target = after.tiles.find(tile => tile.id === root.id);
+    const frames = timeline.flatMap(frame => frame.filter(tile => tile.id === root.id));
+    const sourceY = source.rect[1] + source.rect[3] / 2;
+    const destinationY = target.rect[1] + target.rect[3] / 2;
+    const descent = frames.filter(tile => !tile.settled && tile.rect[1] + tile.rect[3] / 2 < destinationY - 0.1);
+    expect(descent.length, `${label}: ${root.text} is visible in several airborne frames`).toBeGreaterThanOrEqual(3);
+    expect(descent[0].rect[1] + descent[0].rect[3] / 2,
+      `${label}: ${root.text} begins at its source tray instead of appearing near its landing cell`)
+      .toBeLessThan(sourceY + (destinationY - sourceY) * 0.12);
+    let previousY = sourceY - 0.1;
+    for (const tile of descent) {
+      const centerY = tile.rect[1] + tile.rect[3] / 2;
+      expect(centerY, `${label}: ${root.text} travels continuously downward`).toBeGreaterThanOrEqual(previousY - 0.1);
+      expect(tile.text).toBe(root.text);
+      expect(tile.fragments).toBe(root.fragments);
+      expect(tile.palette_index, `${label}: the body retains its preview partner color`).toBe(source.palette_index);
+      expect(tile.fragment_badges).toBe(root.fragments);
+      previousY = centerY;
+    }
+    const moving = descent.filter(tile => tile.rect[1] + tile.rect[3] / 2 > sourceY + 0.5);
+    const unique = moving.filter((tile, index) => index === 0 || tile.age > moving[index - 1].age + 0.001);
+    if (unique.length >= 4) {
+      const speed = (a, b) => ((b.rect[1] + b.rect[3] / 2) - (a.rect[1] + a.rect[3] / 2)) / (b.age - a.age);
+      expect(speed(unique.at(-2), unique.at(-1)), `${label}: gravity accelerates the falling ${root.text}`)
+        .toBeGreaterThan(speed(unique[0], unique[1]));
+    }
+    expect(target.text).toBe(root.text);
+    expect(target.fragments).toBe(root.fragments);
+    expectSupportedChild(after, target);
+  }
+  expect(after.generated_tiles).toBe(before.generated_tiles + 6);
+  expect(after.merged_count).toBe(before.merged_count);
+  expect(after.cleared_pairs).toBe(before.cleared_pairs);
+  expect(after.collected_coins).toBe(before.collected_coins);
+  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyArrivalFrame)),
+    { message: 'The actual browser captures the jellies between the tray and their support' }).toBe(true);
+  const encoded = await page.evaluate(() => window.wordJellyArrivalFrame);
+  fs.writeFileSync(info.outputPath(`word-jelly-${label}-falling-midpoint.png`), Buffer.from(encoded, 'base64'));
+  await capture(page, info, `word-jelly-${label}-landed`);
+  await page.evaluate(() => window.wordJellyArrivalObserver.disconnect());
+}
+
+test('manual and automatic preview packets naturally fall into the well', async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = await startWordJelly(page), manual = await jelly(page);
+  expect(manual.preview.slots.filter(slot => slot.visible)).toHaveLength(6);
+  expect(manual.preview.rect[1] + manual.preview.rect[3], 'The supply tray is above the well on every layout')
+    .toBeLessThanOrEqual(manual.board_rect[1]);
+  expect(new Set(manual.preview.slots.map(slot => Math.round(slot.rect[1]))).size,
+    'All six visible previews share one horizontal row').toBe(1);
+  await capture(page, info, 'word-jelly-supply-before-release');
+  await observeArrival(page, manual);
+  await pressRect(page, manual.preview.rect);
+  await verifyArrival(page, info, manual, 'manual-supply');
+  const automatic = await jelly(page);
+  await observeArrival(page, automatic);
+  await verifyArrival(page, info, automatic, 'automatic-supply');
+  expect(errors).toEqual([]);
+});
+
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
   const words = new Map(vocabulary.filter(word => word.min_age === 3).map(word => [normalize(word.text), word]));

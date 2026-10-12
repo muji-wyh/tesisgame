@@ -115,7 +115,13 @@ stays intact until there is room.
 
 Automatic batches start 20 seconds apart. Each collected word shortens the
 interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can
-still release the next batch early.
+still release the next batch early. The preview sits above the well: each jelly
+leaves its visible slot, accelerates down its lane and compresses briefly on
+contact before becoming playable. A small stagger separates the releases;
+successive arrivals in one lane keep enough spacing to avoid overlap. Arrivals
+stop at the first support reachable from above, never inside an enclosed hole.
+Sealing every entrance starts the existing full-well countdown. Reduced motion
+places incoming bodies directly on their supports with the same readiness clock.
 
 An exact word from the current learning-age vocabulary reveals its picture and
 a warm rim. Tap that word to collect it for 50 coins per original chunk: a

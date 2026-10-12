@@ -13,6 +13,7 @@ signal chest_milestone(previous_tier: int, new_tier: int)
 signal finished(result: Dictionary)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 const COLUMNS: int = 6
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
@@ -20,6 +21,7 @@ const INITIAL_SETTLED_TILES: int = 12
 const DROP_COUNT: int = 6
 const UPCOMING_COUNT: int = 6
 const SETTLE_SECONDS: float = 0.36
+const ARRIVAL_STAGGER: float = 0.045
 const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
@@ -260,7 +262,7 @@ func step(delta: float) -> void:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		for tile in cells:
 			tile.age = float(tile.age) + consumed
-			tile.settling = float(tile.age) + EPSILON < SETTLE_SECONDS
+			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
 		for active in fusions:
 			active.elapsed = float(active.elapsed) + consumed
 		if danger_running:
@@ -350,7 +352,21 @@ func is_fusing(tile_id: int) -> bool:
 
 
 func is_settled(tile: Dictionary) -> bool:
-	return not tile.is_empty() and float(tile.get("age", 0.0)) + EPSILON >= SETTLE_SECONDS
+	return not tile.is_empty() and float(tile.get("age", 0.0)) + EPSILON >= settle_duration(tile)
+
+
+static func arrival_contact_at(tile: Dictionary) -> float:
+	return arrival_delay(tile) + Motion.contact_at(tile)
+
+
+static func arrival_delay(tile: Dictionary) -> float:
+	return maxf(0.0, float(tile.get("arrival_delay", float(tile.get("arrival_index", 0)) * ARRIVAL_STAGGER)))
+
+
+static func settle_duration(tile: Dictionary) -> float:
+	if bool(tile.get("arrival", false)):
+		return arrival_delay(tile) + Motion.ready_at(tile)
+	return SETTLE_SECONDS
 
 
 func is_valid_word(tile: Dictionary) -> bool:
@@ -445,7 +461,8 @@ func _new_tile(text: String, mass: int, fragments: int) -> Dictionary:
 		"fragments": fragments, "chest": fragments > 0,
 		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "root",
 		"column": 0, "row": ROWS - size.y, "width": size.x, "height": size.y,
-		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "falling": false, "falling_rows": 0
+		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "arrival_index": 0, "arrival_delay": 0.0,
+		"falling": false, "falling_rows": 0
 	}
 	_next_tile_id += 1
 	return tile
@@ -477,15 +494,24 @@ func _build_supply() -> void:
 
 
 func _spawn_drop() -> void:
+	var column_delays: Dictionary = {}
 	for index in range(DROP_COUNT):
-		if not _spawn_tile(true):
+		if not _spawn_tile(true, index):
 			break
+		var tile: Dictionary = cells.back()
+		var column: int = int(tile.column)
+		if column_delays.has(column):
+			# Give the preceding root at least one row of clearance before the
+			# next root starts down the same entry lane.
+			tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]) + sqrt(2.0 / Motion.ARRIVAL_GRAVITY))
+		column_delays[column] = float(tile.arrival_delay)
 
 
-func _spawn_tile(arrival: bool) -> bool:
+func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	if upcoming.is_empty():
 		return false
-	var position: Vector2i = _free_position(_occupied(), 1, 1)
+	var occupied: Dictionary = _occupied()
+	var position: Vector2i = _arrival_position(occupied) if arrival else _free_position(occupied, 1, 1)
 	if position.x < 0:
 		return false
 	var tile: Dictionary = upcoming.pop_front()
@@ -494,7 +520,9 @@ func _spawn_tile(arrival: bool) -> bool:
 	tile.age = 0.0 if arrival else SETTLE_SECONDS
 	tile.settling = arrival
 	tile.arrival = arrival
-	tile.falling_rows = ROWS - position.y if arrival else 0
+	tile.arrival_index = arrival_index if arrival else 0
+	tile.arrival_delay = float(arrival_index) * ARRIVAL_STAGGER if arrival else 0.0
+	tile.falling_rows = position.y + 1 if arrival else 0
 	cells.append(tile)
 	generated_tiles += 1
 	_fill_upcoming()
@@ -876,20 +904,32 @@ func _free_position(occupied: Dictionary, width: int, height: int) -> Vector2i:
 
 
 func _has_free_cell() -> bool:
-	return _occupied().size() < CAPACITY
+	return _arrival_position(_occupied()).x >= 0
+
+
+func _arrival_position(occupied: Dictionary) -> Vector2i:
+	var position := Vector2i(-1, -1)
+	for column in range(COLUMNS):
+		var row: int = 0
+		while row < ROWS and not occupied.has(row * COLUMNS + column):
+			row += 1
+		var landing_row: int = row - 1
+		if landing_row > position.y:
+			position = Vector2i(column, landing_row)
+	return position
 
 
 func _settling_remaining() -> float:
 	var remaining: float = 0.0
 	for tile in cells:
-		remaining = maxf(remaining, SETTLE_SECONDS - float(tile.age))
+		remaining = maxf(remaining, settle_duration(tile) - float(tile.age))
 	return maxf(0.0, remaining)
 
 
 func _next_settlement() -> float:
 	var boundary: float = INF
 	for tile: Dictionary in cells:
-		var remaining: float = SETTLE_SECONDS - float(tile.age)
+		var remaining: float = settle_duration(tile) - float(tile.age)
 		if remaining > EPSILON:
 			boundary = minf(boundary, remaining)
 	return 0.0 if is_inf(boundary) else boundary
