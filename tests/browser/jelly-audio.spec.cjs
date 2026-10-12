@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, metrics, tap, rendered } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 
 const CLIPS = {
@@ -18,12 +18,7 @@ test.use({ deviceScaleFactor: 1,
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
 
 async function libraryControl(page, name) {
-  const control = (await metrics(page)).library.controls.find(item => item.name === name);
-  expect(control, `${name} is present in the game library`).toBeTruthy();
-  expect(control.disabled).toBe(false);
-  const [x, y, width, height] = control.rect;
-  await tap(page, x + width / 2, y + height / 2);
-  await rendered(page);
+  await activateLibraryControl(page, name);
 }
 
 async function settledBoard(page) {
@@ -143,7 +138,7 @@ async function muteInMenu(page, muted) {
   const isMuted = () => page.evaluate(() => Boolean(JSON.parse(localStorage.getItem('pipAndWords.presentation.v1') || '{}').muted));
   if (await isMuted() !== muted) await libraryControl(page, 'LibrarySound');
   await expect.poll(isMuted).toBe(muted);
-  await libraryControl(page, 'LibraryClose');
+  await chooseMode(page, 'jelly');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
 }
 
@@ -301,7 +296,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
       'No pronunciation or gameplay source keeps playing beneath the menu').toEqual([]);
 
     const resumeFrom = await playbackIndex(page);
-    await libraryControl(page, 'LibraryClose');
+    await chooseMode(page, 'jelly');
     evidence.resumedClear = await audibleRecording(page, resumeFrom, CLIPS.clear);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(paused.cleared_pairs + 1);
     const resumed = await playbacksSince(page, resumeFrom);

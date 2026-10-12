@@ -49,8 +49,8 @@ func _run() -> void:
 	await _choose_mode(app, "phrase")
 	var view = app._phrase
 	_check_first_candidate_row(view)
-	check(app._mode_id == "phrase" and app.MODES.has("phrase") and app._mode_buttons.size() == 5,
-		"The library launches Phrase Builder alongside all four other modes")
+	check(app._mode_id == "phrase" and app.MODES.has("phrase") and app._mode_buttons.size() == 6,
+		"Home launches Phrase Builder alongside all five other modes")
 	check(view.is_visible_in_tree() and not app.grid.visible and not app._memory.visible and not app._pop.visible,
 		"Phrase Builder owns the visible playfield")
 	check(view.game.questions.size() == 3 and view.game.phase == "building" and view.game.completed == 0,
@@ -308,7 +308,7 @@ func _check_celebration_interruptions(app) -> void:
 			"A stale Pip completion cannot advance the covered phrase behind " + interruption)
 		view.pip.gameplay_reaction_finished.disconnect(record)
 		if interruption == "menu":
-			app._mode_panel.close_button.pressed.emit()
+			PlayerFixture.enter_mode(app, "phrase")
 		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		elif interruption == "background":
@@ -508,7 +508,7 @@ func _check_drag_interruptions(app, method: String) -> void:
 		await _pointer_button(end, false, method)
 		check(view.game.snapshot() == before, method + " late release cannot commit behind " + interruption)
 		if interruption == "menu":
-			app._mode_panel.close_button.pressed.emit()
+			PlayerFixture.enter_mode(app, "phrase")
 		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		elif interruption == "background":
@@ -676,7 +676,7 @@ func _check_interruptions(app) -> void:
 		check(view.game.snapshot() == before and not app.audio.voice.playing and app.model.phase != "won",
 			"Covered phrase controls and stale audio callbacks cannot mutate the game behind " + interruption)
 		if interruption == "menu":
-			app._mode_panel.close_button.pressed.emit()
+			PlayerFixture.enter_mode(app, "phrase")
 		elif interruption == "growth":
 			app._collection_back.pressed.emit()
 		else:
@@ -691,7 +691,7 @@ func _check_muted_help(app) -> void:
 	var view = app._phrase
 	app._mode_heading_button.pressed.emit()
 	app._mode_panel.sound_button.pressed.emit()
-	app._mode_panel.close_button.pressed.emit()
+	PlayerFixture.enter_mode(app, "phrase")
 	await _settle()
 	check(app.audio.muted and view.snapshot().prompt_text_visible and view.listen_button.is_visible_in_tree()
 		and view.listen_button._caption.text == view.game.current_question().text,
@@ -700,7 +700,7 @@ func _check_muted_help(app) -> void:
 	check(not app.audio.voice.playing, "Listen respects the shared sound-off setting")
 	app._mode_heading_button.pressed.emit()
 	app._mode_panel.sound_button.pressed.emit()
-	app._mode_panel.close_button.pressed.emit()
+	PlayerFixture.enter_mode(app, "phrase")
 	await _settle()
 	check(not app.audio.muted and not app.audio.voice.playing, "Unmuting does not replay old instructions")
 
@@ -1043,7 +1043,8 @@ func _check_button_text_fit(button: Button, context: String) -> void:
 
 
 func _choose_mode(app, id: String) -> void:
-	app._mode_heading_button.pressed.emit()
+	if not app._mode_menu_open():
+		app._mode_heading_button.pressed.emit()
 	var button := app._mode_panel.find_child("Mode_" + id, true, false) as Button
 	check(app._mode_menu_open() and button != null, "The game library exposes " + id)
 	if button != null:

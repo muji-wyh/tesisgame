@@ -118,13 +118,13 @@ async function expectHeaderBadge(page) {
     'Pip and growth share one centered companion cluster').toBeLessThanOrEqual(2);
   expect(pip.x + pip.width).toBeLessThan(x);
   const targets = [layout.pip, ...layout.controls.filter(item => item.visible &&
-    ['GrowthProgressButton', 'ChooseGame', 'Voice', 'Hint', 'StudyGarden'].includes(item.name))];
+    ['GrowthProgressButton', 'Home', 'Voice', 'Hint', 'StudyGarden'].includes(item.name))];
   const wallet = layout.controls.find(item => item.name === 'CoinBalance');
   const overlaps = (a, b) => a[0] < b[0] + b[2] - 0.5 && a[0] + a[2] > b[0] + 0.5 &&
     a[1] < b[1] + b[3] - 0.5 && a[1] + a[3] > b[1] + 0.5;
   expect(wallet.visible).toBe(true);
   expect(wallet.rect[0]).toBeGreaterThan(x + width);
-  expect(layout.controls.find(item => item.name === 'ChooseGame').visible, 'Mode selection stays visible on narrow screens').toBe(true);
+  expect(layout.controls.find(item => item.name === 'Home').visible, 'The Home action stays visible on narrow screens').toBe(true);
   for (const [index, target] of targets.entries()) {
     expect(target.rect[2] * bounds.scale).toBeGreaterThanOrEqual(43.5);
     expect(target.rect[3] * bounds.scale).toBeGreaterThanOrEqual(43.5);
@@ -152,7 +152,7 @@ test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete no
     layout.pip.rect[1] + layout.pip.rect[3]);
   const rewardStripHeight = bounds.height * bounds.scale <= 440 ? 34 : 46;
   const actionsBottom = Math.max(headerBottom, ...layout.controls.filter(item => item.visible &&
-    ['ChooseGame', 'Voice', 'Hint', 'StudyGarden'].includes(item.name)).map(item => item.rect[1] + item.rect[3]));
+    ['Home', 'Voice', 'Hint', 'StudyGarden'].includes(item.name)).map(item => item.rect[1] + item.rect[3]));
   expect((layout.board.rect[1] - actionsBottom) * bounds.scale - rewardStripHeight,
     'The board follows the header and chest feedback strip without an extra growth row').toBeLessThanOrEqual(20);
   await page.screenshot({ path: info.outputPath('growth-board.png'), scale: 'css' });

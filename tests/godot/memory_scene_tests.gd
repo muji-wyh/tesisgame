@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -23,6 +25,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var progress_script = app.medal_progress.get_script()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await process_frame
@@ -31,7 +34,7 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	app.choose_theme("spring")
 	var lesson: Array = app.model.lesson_words.duplicate(true)
-	app.choose_mode("memory")
+	PlayerFixture.enter_mode(app, "memory")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 	await process_frame
@@ -66,8 +69,8 @@ func _run() -> void:
 	view.card_buttons[0].grab_focus()
 	app._controller_accept()
 	check(view.memory.selected_indices == [0], "Xbox A reveals the focused Memory card")
-	app.choose_mode("memory")
-	check(view.memory.selected_indices == [0] and view.memory.cards == board, "Clicking the active tab retains the attempt")
+	PlayerFixture.enter_mode(app, "memory")
+	check(view.memory.selected_indices == [0] and view.memory.cards == board, "Selecting the current Home card retains the attempt")
 	app.on_page_hidden()
 	app.set_reduced_motion(false)
 	app.set_reduced_motion(true)
@@ -194,11 +197,11 @@ func _run() -> void:
 	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
 		"The internal Memory fixture reset preserves its mode, lesson, and world")
 	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")
-	app.choose_mode("match")
+	PlayerFixture.enter_mode(app, "match")
 	view.round_finished.emit(true, lesson)
 	check(app.model.phase != "won" and view.memory.phase == "stopped", "Leaving Memory blocks stale completion")
 	for mode in ["match", "memory", "pop", "phrase"]:
-		app.choose_mode(mode)
+		PlayerFixture.enter_mode(app, mode)
 		if mode == "pop":
 			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "The " + mode + " mode remains reachable with the same shared lesson")
@@ -222,8 +225,8 @@ func _finish(app, directory: String) -> void:
 func _check_feedback_shortcut_focus(app) -> void:
 	for correct in [false, true]:
 		for action in ["card", "study"]:
-			app.choose_mode("match")
-			app.choose_mode("memory")
+			PlayerFixture.enter_mode(app, "match")
+			PlayerFixture.enter_mode(app, "memory")
 			await process_frame
 			await process_frame
 			var view = app._memory
@@ -295,8 +298,8 @@ func _check_host_layout(app) -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(480, 480)]:
 		root.size = dimensions
-		app.choose_mode("match")
-		app.choose_mode("memory")
+		PlayerFixture.enter_mode(app, "match")
+		PlayerFixture.enter_mode(app, "memory")
 		for frame in range(4):
 			await process_frame
 		var view = app._memory
@@ -322,8 +325,8 @@ func _capture_scenes(app) -> void:
 	app.choose_theme("spring")
 	for dimensions in [Vector2i(480, 480), Vector2i(480, 900)]:
 		root.size = dimensions
-		app.choose_mode("match")
-		app.choose_mode("memory")
+		PlayerFixture.enter_mode(app, "match")
+		PlayerFixture.enter_mode(app, "memory")
 		await process_frame
 		await process_frame
 		var view = app._memory

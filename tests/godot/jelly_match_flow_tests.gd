@@ -106,6 +106,7 @@ func _run() -> void:
 	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	check(app.new_round(51, false, "", "jelly"), "A real Jelly round starts through GameUI")
 	app._jelly.set_process(false)
@@ -248,13 +249,13 @@ func _run() -> void:
 	app._jelly.set_process(false)
 	game = app._jelly.game
 	earn_fragments(app._jelly, 4)
-	app.choose_mode("memory")
+	Fixture.enter_mode(app, "memory")
 	check(not app._jelly_backdrop.visible, "Switching games removes the Jelly-only scenery")
 	check(app._mode_id == "memory" and app._jelly_rewards.has_pending(), "Switching modes settles earned Jelly loot without replaying celebration")
 	var saved_growth: Dictionary = app.growth.snapshot().streaks.duplicate()
 	app._jelly.word_attempted.emit("stale", [word_id] as Array[String], true)
 	check(app.growth.snapshot().streaks == saved_growth, "A hidden Jelly callback cannot affect the new round")
-	app.choose_mode("jelly")
+	Fixture.enter_mode(app, "jelly")
 	check(app._jelly_rewards_shown and app._jelly.game.paused, "Returning to Jelly resumes its saved chest before gameplay")
 	for viewport_size in [Vector2i(390, 844), Vector2i(844, 390), Vector2i(320, 320), Vector2i(1366, 768)]:
 		root.size = viewport_size
@@ -289,6 +290,7 @@ func _tap_growth_checks(directory: String) -> void:
 	app._presentation.path = directory + "/tap-presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	check(app.new_round(51, false, "", "jelly"), "Tap regression starts a real Jelly round")
 	var view = app._jelly
@@ -351,8 +353,9 @@ func _warning_audio_flow(directory: String) -> void:
 	app._presentation.path = directory + "/warning-presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(false)
-	app.choose_mode("jelly")
+	Fixture.enter_mode(app, "jelly")
 	app._jelly.set_process(false)
 	await settle()
 	var game = app._jelly.game
@@ -406,12 +409,12 @@ func _warning_audio_flow(directory: String) -> void:
 	check(_jelly_cue_playing(app.audio, "danger"), "Refilling the rescued board starts a fresh audible warning")
 	game.finish_round()
 	check(game.phase == "finished" and not _jelly_cue_playing(app.audio), "Finishing stops the active warning through GameUI")
-	app.choose_mode("memory")
-	app.choose_mode("jelly")
+	Fixture.enter_mode(app, "memory")
+	Fixture.enter_mode(app, "jelly")
 	app._jelly.set_process(false)
 	fill_board(app._jelly.game)
 	check(_jelly_cue_playing(app.audio, "danger"), "A replacement Jelly round owns a new warning")
-	app.choose_mode("memory")
+	Fixture.enter_mode(app, "memory")
 	check(app._mode_id == "memory" and not _jelly_cue_playing(app.audio), "Switching modes stops the previous Jelly warning")
 	app.audio.halt()
 	app.queue_free()
@@ -426,6 +429,7 @@ func _upgraded_reward_checks(directory: String) -> void:
 	app._presentation.path = directory + "/upgraded-presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app.new_round(104, false, "", "jelly"), "An upgraded reward round starts through GameUI")
@@ -488,6 +492,7 @@ func _reward_conflict_checks(directory: String) -> void:
 	app._presentation.path = directory + "/conflict-presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	var external := RewardState.new(app.jelly_reward_save_path)
@@ -534,7 +539,7 @@ func _reward_conflict_checks(directory: String) -> void:
 				"A zero-loot follow-up reports its own totals without offering already collected treasure")
 		else:
 			check(app.new_round(93, false, "", next_mode) and app._mode_id == "memory", "Mode exit is safe once the combined reward is durable")
-			app.choose_mode("jelly")
+			Fixture.enter_mode(app, "jelly")
 			check(app._jelly_rewards_shown, "Returning restores all retained treasure")
 			app._jelly.set_process(false)
 			check(app._jelly_rewards_shown and room.snapshot().chest_count == 2, "Both saved chests remain reachable after a mode switch")
@@ -564,6 +569,7 @@ func _replay_reward_checks(directory: String) -> void:
 	app._presentation.path = directory + "/replay-presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app.new_round(91, false, "", "jelly"), "Consecutive reward rounds start")

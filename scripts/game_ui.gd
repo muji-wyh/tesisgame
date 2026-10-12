@@ -152,6 +152,8 @@ var _voice_style_scale: float = -1.0
 var _voice_space: Control
 var _voice_mode: bool = false
 var _mode_id: String = "match"
+var _has_entered_game: bool = false
+var _collection_from_home: bool = false
 var _mode_row: GridContainer
 var _mode_buttons: Array[Button] = []
 var _mode_menu: Control
@@ -164,9 +166,6 @@ var _mode_menu_focus_modes: Dictionary = {}
 var _mode_menu_resume_voice: bool = false
 var _mode_menu_resume_pop: bool = false
 var _mode_menu_pointer: int = -2
-var _mode_menu_origin := Vector2.ZERO
-var _mode_menu_dragged: bool = false
-var _mode_menu_mouse_emulated: bool = false
 var _memory: MemoryGarden
 var _round_celebration: RoundCelebration
 var _celebration_seen_id: String = ""
@@ -357,6 +356,7 @@ func _finish_vocabulary_boot() -> void:
 	if not _vocabulary_booting:
 		return
 	_vocabulary_booting = false
+	_show_mode_menu()
 	if _host != null:
 		get_tree().paused = true
 		_loading_finished_callback = JavaScriptBridge.create_callback(_on_loading_finished)
@@ -367,6 +367,7 @@ func _finish_vocabulary_boot() -> void:
 func _build_vocabulary_prompt() -> void:
 	_vocabulary_prompt = Panel.new()
 	_vocabulary_prompt.name = "VocabularyLoading"
+	_vocabulary_prompt.z_index = 200
 	_vocabulary_prompt.process_mode = Node.PROCESS_MODE_ALWAYS
 	_vocabulary_prompt.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_vocabulary_prompt.add_theme_stylebox_override("panel", Style.box(Color("f4f6f1"), Color.TRANSPARENT, 0, 0))
@@ -572,8 +573,10 @@ func _build_controls() -> void:
 	_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_header_spacer)
 	_mode_heading_button = Button.new()
-	_mode_heading_button.name = "ChooseGame"
-	_mode_heading_button.tooltip_text = "Choose a game, adjust sound or motion"
+	_mode_heading_button.name = "Home"
+	_mode_heading_button.tooltip_text = "Home"
+	_mode_heading_button.icon = preload("res://assets/images/ui/home.webp")
+	_mode_heading_button.expand_icon = true
 	_mode_heading_button.pressed.connect(_toggle_mode_menu)
 	_header_spacer.add_child(_mode_heading_button)
 	_coin_counter = CoinCounter.new()
@@ -581,7 +584,7 @@ func _build_controls() -> void:
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_heading = Style.label("Match", 22)
 	_mode_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_mode_heading_button.add_child(_mode_heading)
+	_header_spacer.add_child(_mode_heading)
 	_toolbar = HBoxContainer.new()
 	_toolbar.alignment = BoxContainer.ALIGNMENT_END
 	_toolbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -687,7 +690,7 @@ func _build_controls() -> void:
 	_pop.interaction_allowed = func() -> bool: return not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	_pop.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_pop.request_listening.connect(_start_pop_listening)
-	_pop.exit_requested.connect(func() -> void: choose_mode("match"))
+	_pop.exit_requested.connect(_show_mode_menu)
 	_pop.hit.connect(_pop_hit)
 	_pop.launched.connect(_pop_launched)
 	_pop.missed.connect(_pop_missed)
@@ -894,11 +897,9 @@ func _build_controls() -> void:
 
 func _build_mode_menu() -> void:
 	_mode_menu = Control.new()
-	_mode_menu.name = "GameModeMenu"
-	# The library also covers Pip when compact layouts reach the header.
+	_mode_menu.name = "HomeScreen"
 	_mode_menu.z_index = 100
 	_mode_menu.mouse_filter = Control.MOUSE_FILTER_STOP
-	_mode_menu.gui_input.connect(_mode_menu_input)
 	add_child(_mode_menu)
 	_mode_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_menu.hide()
@@ -910,11 +911,14 @@ func _build_mode_menu() -> void:
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_mode_panel = GameLibrary.new()
 	_mode_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_mode_panel.scroll.interaction_allowed = func() -> bool:
+		return _mode_menu_open() and not _page_hidden and not collection_page.visible \
+			and not (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible)
 	_mode_menu.add_child(_mode_panel)
 	_mode_row = _mode_panel.grid
 	_mode_buttons = _mode_panel.buttons
 	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
-	_mode_panel.dismissed.connect(_hide_mode_menu)
+	_mode_panel.collection_requested.connect(_show_collection)
 	_mode_panel.sound_toggled.connect(_toggle_library_sound)
 	_mode_panel.motion_toggled.connect(_toggle_library_motion)
 
@@ -939,7 +943,7 @@ func _toggle_library_motion() -> void:
 
 
 func _save_presentation() -> void:
-	_mode_panel.configure(_mode_id, audio.muted, reduced_motion)
+	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted, reduced_motion)
 	if _host != null:
 		_host.presentationSettings(reduced_motion, audio.muted)
 	var saved: bool = _presentation.save_preferences()
@@ -952,10 +956,7 @@ func _mode_menu_open() -> bool:
 
 func _toggle_mode_menu() -> void:
 	var was_open: bool = _mode_menu_open()
-	if _mode_menu_open():
-		_hide_mode_menu()
-	else:
-		_show_mode_menu()
+	_show_mode_menu()
 	if was_open != _mode_menu_open():
 		_play_ui_click()
 
@@ -973,7 +974,7 @@ func _play_ui_click(source: Control = null) -> void:
 
 func _show_mode_menu() -> void:
 	if _mode_menu_open() or _page_hidden or collection_page.visible \
-		or (not model.phase in ["waiting", "matching", "feedback"] and not _round_celebration_active() and not _pair_reward_revealing() and not _pair_save_failed) or model.chest_state == "opening" \
+		or model.chest_state == "opening" \
 		or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_mode_menu_resume_voice = _voice_mode
@@ -983,6 +984,12 @@ func _show_mode_menu() -> void:
 	# Speech ownership can outlive a denied/failed microphone. Resume only a
 	# recognizer that was listening or connecting when the menu interrupted it.
 	_mode_menu_resume_pop = _mode_id == "pop" and (_pop._listening or _pop._pending or _pop._reconnecting)
+	if not _stop_pop_listening():
+		if _mode_menu_resume_voice and _host != null:
+			_host.resumeSpeechFromMenu()
+		_mode_menu_resume_voice = false
+		_mode_menu_resume_pop = false
+		return
 	_mode_menu.show()
 	_coin_flight.sync(coin_wallet.balance)
 	_sync_round_celebration()
@@ -1001,7 +1008,6 @@ func _show_mode_menu() -> void:
 		if _pop.game.phase in ["running", "finished"] or _mode_menu_resume_pop:
 			_pop.pause()
 		_pop_rewards.pause()
-		_stop_pop_listening()
 		audio.stop_pop_sounds()
 	feedback_timer.paused = true
 	_memory.pause(true)
@@ -1014,13 +1020,14 @@ func _show_mode_menu() -> void:
 	_mode_menu_focus_modes.clear()
 	for node in find_children("*", "Control", true, false):
 		var control := node as Control
-		if not _mode_menu.is_ancestor_of(control):
+		if not _mode_menu.is_ancestor_of(control) and not _vocabulary_prompt.is_ancestor_of(control):
 			_mode_menu_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
 	_fit_mode_buttons()
 	_update_duck()
 	_default_focus().grab_focus()
-	_announce_status("Game mode. %s is selected. Choose a game, or press Back to return." % MODES[_mode_id])
+	_restore_mode_music()
+	_announce_status("Home. Choose a game to play." + (" Select %s to continue your round." % MODES[_mode_id] if _has_entered_game else ""))
 
 
 func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> void:
@@ -1056,56 +1063,14 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 	_update_duck()
 	if resume_game and not audio.muted and not audio.active:
 		_restore_mode_music()
-	if restore_focus and _valid_focus(duck):
-		duck.grab_focus()
 	if restore_focus:
-		_announce_status("%s. Game mode menu closed." % MODES[_mode_id])
+		_default_focus().grab_focus()
+	if restore_focus:
+		_announce_status("%s. Let's play." % MODES[_mode_id])
 
 
 func _choose_mode_from_menu(id: String) -> void:
-	if not _mode_menu_open() or not MODES.has(id):
-		return
-	if id == _mode_id:
-		_hide_mode_menu()
-		return
-	_hide_mode_menu(false, false)
 	choose_mode(id)
-
-
-func _mode_menu_input(event: InputEvent) -> void:
-	# A backdrop tap is an action; drags, canceled presses, and synthesized
-	# duplicate mouse releases must not dismiss the menu or play another cue.
-	if event is InputEventMouseMotion and _mode_menu_pointer == -1:
-		_mode_menu_dragged = _mode_menu_dragged or event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) > 8
-		return
-	if event is InputEventScreenDrag and event.index == _mode_menu_pointer:
-		_mode_menu_dragged = _mode_menu_dragged or event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) > 8
-		return
-	if not event is InputEventScreenTouch and not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
-		return
-	var pointer: int = event.index if event is InputEventScreenTouch else -1
-	if event.pressed:
-		if _mode_menu_pointer == -2:
-			_mode_menu_pointer = pointer
-			_mode_menu_origin = event.position
-			_mode_menu_dragged = false
-			_mode_menu_mouse_emulated = event is InputEventMouseButton and event.device == InputEvent.DEVICE_ID_EMULATION
-		elif _mode_menu_pointer == -1 and _mode_menu_mouse_emulated and pointer >= 0 \
-			and event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) <= 8:
-			# Some browsers deliver the emulated mouse press before its touch.
-			# Transfer ownership to that touch, retaining its release blocker.
-			_mode_menu_pointer = pointer
-		elif pointer != -1:
-			_mode_menu_dragged = true
-		return
-	if pointer != _mode_menu_pointer:
-		return
-	var tapped: bool = not event.canceled and not _mode_menu_dragged \
-		and event.position.distance_to(_mode_menu_origin) * Style.ui_scale(self) <= 8
-	_mode_menu_pointer = -2
-	_mode_menu.accept_event()
-	if tapped:
-		_mode_panel.close_button.pressed.emit()
 
 
 func _build_collection_shell() -> void:
@@ -1455,12 +1420,18 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 
 
 func choose_mode(id: String) -> void:
-	if not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
+	if not _mode_menu_open() or _page_hidden or not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
-	_hide_mode_menu(false, id == _mode_id)
-	if id == _mode_id and model.phase in ["waiting", "matching", "feedback"]:
+	_has_entered_game = true
+	if id == _mode_id:
+		_hide_mode_menu(false, true)
 		_refresh()
+		_default_focus().grab_focus()
+		if id != "pop" and not _voice_mode:
+			audio.interact(model.theme_id)
 		return
+	# A failed reward settlement must expose the current game's save retry.
+	_hide_mode_menu(false, false)
 	if new_round(-1, true, "", id):
 		_default_focus().grab_focus()
 		if id == "pop":
@@ -1674,7 +1645,7 @@ func _hide_jelly_rewards() -> void:
 	else:
 		# A restored reward batch precedes a fresh board.
 		if _jelly_rewards.has_pending():
-			choose_mode("match")
+			_show_mode_menu()
 		else:
 			_refresh()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
@@ -1851,7 +1822,7 @@ func _hide_pop_rewards() -> void:
 	_controller_holding_pop_chest = false
 	_pop_rewards_shown = false
 	if _pop.game.phase != "finished" or _round_result.is_empty():
-		choose_mode("match")
+		_show_mode_menu()
 	else:
 		_refresh()
 		_default_focus().grab_focus()
@@ -1861,7 +1832,7 @@ func _hide_pop_rewards() -> void:
 func _publish_pop_rewards(snapshot: Dictionary) -> void:
 	if _host != null:
 		var status: Dictionary = snapshot.duplicate(true)
-		status["visible"] = _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _page_hidden
+		status["visible"] = _pop_rewards_shown and _mode_id == "pop" and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 		_host.popRewardStatus(JSON.stringify(status))
 
 
@@ -2552,6 +2523,10 @@ func _continue_match() -> void:
 func _refresh_controller_focus() -> void:
 	if not _controller_mode or collection_page.visible:
 		return
+	if _mode_menu_open():
+		if not _valid_focus(get_viewport().gui_get_focus_owner()):
+			_default_focus().grab_focus()
+		return
 	if _round_celebration_active():
 		if not _valid_focus(get_viewport().gui_get_focus_owner()):
 			var target: Control = _default_focus()
@@ -2663,12 +2638,19 @@ func _fit_mode_buttons() -> void:
 	Style.quiet_button(_mode_heading_button, accent, 0)
 	_mode_heading_button.focus_mode = heading_focus
 	_mode_heading_button.custom_minimum_size = Vector2.ZERO
-	_mode_heading_button.set("accessibility_name", str(MODES[_mode_id]) + ". Choose a game")
-	_mode_heading.text = str(MODES[_mode_id]) + "  ›"
+	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var surface := _mode_heading_button.get_theme_stylebox(state) as StyleBoxFlat
+		surface.set_content_margin_all(6.0 / css_scale)
+		surface.set_corner_radius_all(ceili(12.0 / css_scale))
+	_mode_heading_button.set("accessibility_name", "Home. Return home to choose a game")
+	_mode_heading_button.add_theme_constant_override("icon_max_width", ceili(28 / css_scale))
+	_mode_heading.text = str(MODES[_mode_id])
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
-	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_layout_game_heading()
-	_mode_panel.configure(_mode_id, audio.muted if audio != null else false, reduced_motion)
+	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted if audio != null else false, reduced_motion)
+	_mode_panel.set_growth_age(growth.age)
+	_mode_panel.coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
+	_mode_panel.set_home_coins(coin_wallet.balance)
 	_layout_mode_menu()
 	_layout_mode_menu.call_deferred()
 	for button in [hint_button, _memory.study_button]:
@@ -2714,15 +2696,15 @@ func _layout_game_heading() -> void:
 	var left: float = 0.0 if stacked else profile_width + gap
 	_header_spacer.position = Vector2(left, 44.0 / scale if stacked else 0.0)
 	_header_spacer.size = Vector2(maxf(0.0, right - left), row)
-	var width: float = minf(_header_spacer.size.x, maxf(72.0 / scale, _mode_heading.get_minimum_size().x + 24.0 / scale))
-	var centered: float = _header.size.x * 0.5 - left - width * 0.5
 	_mode_heading_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	_mode_heading_button.size = Vector2(width, 44.0 / scale)
-	_mode_heading_button.position = Vector2(0.0 if stacked else clampf(centered, 0.0, maxf(0.0, _header_spacer.size.x - width)), (row - 44.0 / scale) * 0.5)
+	_mode_heading_button.size = Vector2.ONE * 44.0 / scale
+	_mode_heading_button.position = Vector2(0, (row - 44.0 / scale) * 0.5)
+	_mode_heading_button.show()
+	_mode_heading.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	_mode_heading.position = Vector2(50.0 / scale, 0)
+	_mode_heading.size = Vector2(maxf(0, _header_spacer.size.x - 50.0 / scale), row)
+	_mode_heading.clip_text = true
 	_mode_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if stacked else HORIZONTAL_ALIGNMENT_CENTER
-	_mode_heading.offset_left = 8.0 / scale if stacked else 0.0
-	_mode_heading_button.visible = width >= 44.0 / scale and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
-	_mode_heading.offset_bottom = 0.0
 
 
 func _layout_coin_counter() -> void:
@@ -2734,9 +2716,8 @@ func _layout_coin_counter() -> void:
 
 func _layout_mode_menu() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	var edge: float = ceilf(12 / css_scale)
-	_mode_panel.fit(size - Vector2.ONE * edge * 2, css_scale)
-	_mode_panel.position = (size - _mode_panel.size) * 0.5
+	_mode_panel.fit(size, css_scale)
+	_mode_panel.position = Vector2.ZERO
 	_publish_library.call_deferred()
 
 
@@ -3186,7 +3167,10 @@ func on_page_hidden() -> void:
 	_reward_confetti.set_paused(true)
 	_coin_flight.sync(coin_wallet.balance)
 	audio.stop_ui_click()
-	_hide_mode_menu(false, false)
+	_mode_menu_resume_voice = false
+	_mode_menu_resume_pop = false
+	_mode_panel.pip.set_idle_paused(true)
+	_mode_panel.scroll.cancel_drag()
 	if is_instance_valid(_pop_rewards):
 		_pop_rewards.pause()
 	if is_instance_valid(_jelly_rewards):
@@ -3241,13 +3225,14 @@ func on_page_visible() -> void:
 	_page_hidden = false
 	_resume_music_after_background = false
 	_sync_round_celebration()
-	if _pop_rewards_shown and not collection_page.visible:
+	if _pop_rewards_shown and not collection_page.visible and not _mode_menu_open():
 		_pop_rewards.resume()
 	chest.set_idle_paused(false)
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
-	feedback_timer.paused = collection_page.visible
-	_memory.pause(collection_page.visible)
+	_mode_panel.pip.set_idle_paused(false)
+	feedback_timer.paused = collection_page.visible or _mode_menu_open()
+	_memory.pause(collection_page.visible or _mode_menu_open())
 	_resume_phrase()
 	_sync_jelly()
 	if resume_music:
@@ -3257,7 +3242,7 @@ func on_page_visible() -> void:
 func _restore_mode_music() -> void:
 	if _page_hidden or _voice_mode or _pop_speech_active or (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible):
 		return
-	if _mode_id == "pop" and not collection_page.visible:
+	if _mode_id == "pop" and not collection_page.visible and not _mode_menu_open():
 		return
 	# Resume the current room's music only. Interrupted words, quacks and reward
 	# cues were cancelled on exit and must never replay when the page returns.
@@ -3308,7 +3293,6 @@ func _observe_activity(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if _mode_menu_open():
 		if event.is_action_pressed("ui_cancel"):
-			_mode_panel.close_button.pressed.emit()
 			get_viewport().set_input_as_handled()
 			return
 		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]:
@@ -3452,7 +3436,6 @@ func _controller_accept() -> void:
 
 func _controller_back() -> void:
 	if _mode_menu_open():
-		_mode_panel.close_button.pressed.emit()
 		return
 	if _controller_holding_jelly_chest:
 		_controller_holding_jelly_chest = false
@@ -3486,7 +3469,7 @@ func _controller_back() -> void:
 			_pop_rewards._back.pressed.emit()
 		else:
 			_play_ui_click()
-			choose_mode("match")
+			_show_mode_menu()
 	elif _mode_id == "match" and model.phase == "feedback":
 		_continue_match()
 	elif _mode_id == "memory":
@@ -3750,7 +3733,7 @@ func _dispatch_pop_speech(arguments: Array) -> void:
 
 func _accept_pop_speech(json: String) -> bool:
 	if _speech_debug_active or _mode_id != "pop" or not _pop_speech_active \
-		or collection_page.visible or _page_hidden:
+		or collection_page.visible or _page_hidden or _mode_menu_open():
 		return false
 	return _pop.receive_speech_event(json)
 
@@ -3863,6 +3846,8 @@ func _exit_tree() -> void:
 
 func _on_input_canceled(_arguments: Array = []) -> void:
 	_mode_menu_pointer = -2
+	if is_instance_valid(_mode_panel):
+		_mode_panel.scroll.cancel_drag()
 	_proactive_touches.clear()
 	_pointer_focus_active = false
 	_cancel_chest_hold()
@@ -3879,7 +3864,7 @@ func _on_input_canceled(_arguments: Array = []) -> void:
 
 
 func _toggle_voice() -> void:
-	if _mode_id != "match" or collection_page.visible:
+	if _mode_id != "match" or collection_page.visible or _mode_menu_open():
 		return
 	if _voice_mode:
 		_stop_voice()
@@ -4144,6 +4129,7 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 		_publish_round_celebration()
 		_publish_growth_view()
 		_publish_coins()
+		_publish_library()
 	_update_duck()
 	if Engine.get_process_frames() != _voice_match_origin_frame:
 		_advance_voice_match_feedback(delta)
@@ -4218,7 +4204,7 @@ func _new_adventure() -> void:
 		return
 	if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
 		return
-	if new_round(-1, false, "", "phrase" if _mode_id == "phrase" else "match"):
+	if new_round(-1, false, "", _mode_id):
 		_default_focus().grab_focus()
 		if _mode_id == "phrase":
 			_start_phrase_prompt()
@@ -4263,7 +4249,9 @@ func _show_collection() -> void:
 		or _pop._listening or _pop._pending or _pop._reconnecting or _pop.reward_presentation_active())
 	if not _stop_pop_listening():
 		return
+	_collection_from_home = _mode_menu_open()
 	_hide_mode_menu(false, false)
+	_collection_back.tooltip_text = "Back to home" if _collection_from_home else "Back to game"
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	if pause_pop:
 		_pop.pause()
@@ -4309,10 +4297,13 @@ func _hide_collection() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
 	_collection_focus_modes.clear()
-	feedback_timer.paused = _page_hidden
-	_memory.pause(_page_hidden)
+	if _collection_from_home:
+		_collection_from_home = false
+		_show_mode_menu()
+	feedback_timer.paused = _page_hidden or _mode_menu_open()
+	_memory.pause(_page_hidden or _mode_menu_open())
 	_refresh()
-	if _mode_id == "pop" and _pop_rewards_shown and not _page_hidden:
+	if _mode_id == "pop" and _pop_rewards_shown and not _page_hidden and not _mode_menu_open():
 		_pop_rewards.resume()
 	if _valid_focus(_focus_before_collection):
 		_focus_before_collection.grab_focus()
@@ -4359,7 +4350,7 @@ func _update_duck() -> void:
 		return
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
-	var visible_here: bool = not in_collection
+	var visible_here: bool = not in_collection and not _mode_menu_open()
 	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
@@ -4397,10 +4388,9 @@ func _update_duck() -> void:
 		duck.hide()
 		return
 	duck.compact = false
-	var opens_menu: bool = not in_collection and (model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active())
 	var pip_identity: String = "Pip" if _pip_age_description.is_empty() else "Pip · " + _pip_age_description
-	duck.tooltip_text = pip_identity + (". Change game mode" if opens_menu else ". Press for a new move!")
-	_set_accessibility_name(duck, pip_identity + (". Change game mode. Current mode: " + str(MODES[_mode_id]) if opens_menu else ". Press for a new move."))
+	duck.tooltip_text = pip_identity + ". Press for a new move!"
+	_set_accessibility_name(duck, pip_identity + ". Press for a new move.")
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
 	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
 	duck.size = rect.size
@@ -4427,10 +4417,7 @@ func _update_duck() -> void:
 
 
 func _play_duck() -> void:
-	if _page_hidden or not duck.is_visible_in_tree() or collection_page.visible:
-		return
-	if model.phase in ["waiting", "matching", "feedback"] or _round_celebration_active():
-		_toggle_mode_menu()
+	if _page_hidden or not duck.is_visible_in_tree() or collection_page.visible or _mode_menu_open():
 		return
 	if duck.is_manual_action_busy():
 		return
@@ -4601,7 +4588,7 @@ func _refresh_growth() -> void:
 	if not is_instance_valid(_growth_button):
 		return
 	var state: Dictionary = growth.snapshot()
-	for mascot in [duck, _phrase.pip, _round_celebration.pip]:
+	for mascot in [duck, _phrase.pip, _round_celebration.pip, _mode_panel.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)

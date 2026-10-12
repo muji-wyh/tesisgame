@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 const PopView = preload("res://scripts/voice_pop.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 
@@ -822,12 +824,13 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.size = Vector2i(390, 844)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
-	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup preserves Match without activating speech")
+	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup Home prepares Match without activating speech")
 	check(app.find_child("VoiceProfiles", true, false) == null, "More has no voice-user enrollment entry")
 	check(not app.collection_button.tooltip_text.contains("voice users"), "More describes only the available room settings")
 	var modes: Array[String] = ["match", "memory", "pop"]
@@ -837,14 +840,14 @@ func _run() -> void:
 		await settle()
 		var original_positions: Array[Vector2] = []
 		for mode in modes:
-			app.choose_mode(mode)
+			PlayerFixture.enter_mode(app, mode)
 			if mode == "pop":
 				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await settle()
 			var current_positions: Array[Vector2] = []
 			current_positions.append(app._header.global_position)
 			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
-				"Mode choices stay hidden until Pip is opened at %s in %s" % [dimensions, mode])
+				"Mode choices stay hidden until Home is opened at %s in %s" % [dimensions, mode])
 			if original_positions.is_empty():
 				original_positions = current_positions
 			else:
@@ -1024,14 +1027,14 @@ func _run() -> void:
 			"Play again returns to a fresh round that waits for microphone permission")
 		check(not view._results.visible and not bool(view.snapshot().results_hits.active),
 			"Replaying hides results and clears the previous hit celebration")
-		app.choose_mode("match")
+		PlayerFixture.enter_mode(app, "match")
 		check(not view.is_visible_in_tree() and view.snapshot().phase == "idle"
 			and not bool(view.snapshot().results_hits.active),
 			"Leaving Voice Pop retains no active result celebration")
 		view.set_process(true)
 	check(saw_scrollable_results, "Compact result layouts exercise scrolling with the scrollbar hidden")
 	app.growth.age = 0
-	app.choose_mode("pop")
+	PlayerFixture.enter_mode(app, "pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	check(app._pop.game._words.all(func(word: Dictionary) -> bool: return app.Data.word_age(word) <= app.growth.learning_age()),
 		"Voice Pop uses only unlocked vocabulary")

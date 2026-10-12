@@ -14,6 +14,12 @@ static func choose_pop_player(app) -> void:
 	app._start_pop_listening()
 
 
+static func enter_mode(app, id: String) -> void:
+	# Gameplay fixtures use the same guarded Home route as a player.
+	app._show_mode_menu()
+	app.choose_mode(id)
+
+
 static func reserve_pair_chest(app) -> void:
 	if app._mode_id not in ["match", "memory"]:
 		app.model.chest_earned = true

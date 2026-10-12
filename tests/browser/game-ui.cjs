@@ -16,7 +16,8 @@ async function metrics(page) {
 
 async function tap(page, x, y, bounds) {
   bounds ||= await metrics(page);
-  await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
+  if (page.touchscreen) await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
+  else await page.locator('#canvas').tap({ position: { x: x * bounds.scale, y: y * bounds.scale } });
 }
 
 function uiScale(bounds) {
@@ -28,25 +29,56 @@ function modeRect(bounds, name) {
   const index = MODES.indexOf(name);
   if (index < 0) throw new Error(`Unknown mode: ${name}. Use match, memory, pop, phrase, jelly or word_jelly.`);
   const control = bounds.library?.controls?.find(item => item.name === `Mode_${name}`);
-  if (!control) throw new Error(`Open the game library before locating ${name}.`);
+  if (!control) throw new Error(`Open the home screen before locating ${name}.`);
   const [x, y, width, height] = control.rect;
   return { x, y, width, height };
 }
 
 async function openModeMenu(page) {
   if (!(await metrics(page)).library?.visible) {
-    const pip = headerPoint(await metrics(page), 'pip');
-    await tap(page, pip.x, pip.y);
+    const home = headerPoint(await metrics(page), 'mode');
+    await tap(page, home.x, home.y);
   }
   await expect.poll(async () => (await metrics(page)).library?.visible).toBe(true);
   await rendered(page);
 }
 
+async function libraryControl(page, name) {
+  await expect.poll(async () => (await metrics(page)).library?.controls?.some(item => item.name === name),
+    { message: `${name} is available on the home screen` }).toBe(true);
+  const target = bounds => {
+    const state = bounds.library, item = state.controls.find(control => control.name === name);
+    if (!item || item.visible === false) return null;
+    const [left, top, width, height] = item.rect;
+    const [x, y, w, h] = state.viewport_rect || [0, 0, bounds.width, bounds.height];
+    const tolerance = 1 / bounds.scale;
+    return left >= x - tolerance && top >= y - tolerance && left + width <= x + w + tolerance && top + height <= y + h + tolerance ? item : null;
+  };
+  let item = target(await metrics(page));
+  if (item) return item;
+  for (let step = 0; step < 24; step++) {
+    await page.locator('#canvas').press('Tab');
+    await rendered(page);
+    item = target(await metrics(page));
+    if (item) return item;
+  }
+  throw new Error(`Could not reveal home control: ${name}`);
+}
+
+async function activateLibraryControl(page, name) {
+  const item = await libraryControl(page, name);
+  expect(item.disabled, `${name} is enabled`).toBe(false);
+  const [x, y, width, height] = item.rect;
+  await tap(page, x + width / 2, y + height / 2);
+  await rendered(page);
+}
+
 async function chooseMode(page, name, options = {}) {
   await openModeMenu(page);
-  const rect = modeRect(await metrics(page), name, options);
-  await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
-  await rendered(page);
+  modeRect(await metrics(page), name, options);
+  await activateLibraryControl(page, `Mode_${name}`);
+  await expect.poll(async () => (await metrics(page)).library?.visible).toBe(false);
+  await expect.poll(async () => (await metrics(page)).library?.current).toBe(name);
 }
 
 async function chooseTheme(page, index) {
@@ -179,7 +211,7 @@ async function worldControl(page, index) {
 }
 
 function headerIconRect(bounds, key = 'rewards') {
-  const name = { rewards: 'GrowthProgressButton', hint: 'Hint', voice: 'Voice', eye: 'StudyGarden', mode: 'ChooseGame' }[key];
+  const name = { rewards: 'GrowthProgressButton', hint: 'Hint', voice: 'Voice', eye: 'StudyGarden', mode: 'Home' }[key];
   if (!name) throw new Error(`Unknown header icon: ${key}`);
   return growthRect(bounds, name);
 }
@@ -207,7 +239,10 @@ function pipHeaderRect(bounds) {
 }
 
 async function openRewards(page) {
-  if (!(await growthView(page)).visible) await activateGrowthControl(page, 'GrowthProgressButton');
+  if (!(await growthView(page)).visible) {
+    if ((await metrics(page)).library?.visible) await activateLibraryControl(page, 'HomeCollection');
+    else await activateGrowthControl(page, 'GrowthProgressButton');
+  }
   await expect.poll(async () => (await growthView(page)).visible).toBe(true);
   await rendered(page);
 }
@@ -320,7 +355,7 @@ async function visibleColorCount(page, png) {
   }, png.toString('base64'));
 }
 
-async function enterGame(scope) {
+async function enterGame(scope, { home = false } = {}) {
   await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
   const enter = scope.locator('#enter-game');
   await expect(enter).toBeVisible();
@@ -329,6 +364,9 @@ async function enterGame(scope) {
   await enter.click();
   await expect(scope.locator('body')).toHaveAttribute('data-engine-ready', 'true');
   await expect(scope.locator('#status')).toBeHidden();
+  await expect.poll(async () => (await metrics(scope)).library?.visible,
+    { message: 'Entering the game opens the home screen before a mode is selected' }).toBe(true);
+  if (!home) await chooseMode(scope, 'match');
 }
 
 async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.' } = {}) {
@@ -462,7 +500,7 @@ function resultPoint(bounds, key) {
     y: content.top + height - inset - actionHeight / 2 };
 }
 
-module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, libraryControl, activateLibraryControl, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   openRewards, rewardState, growthView, growthState, seedGrowth, growthControl, activateGrowthControl, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount,
   celebrationState, acceptCelebration };

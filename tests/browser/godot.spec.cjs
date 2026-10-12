@@ -514,12 +514,9 @@ test('Pip follows the board and chest while growth preserves rewards without ext
     await expect(page.locator('#game-status')).toContainText('Pip says hello!');
   };
   const boardPip = headerPoint(await logicalMetrics(page), 'pip');
-  await tap(page, boardPip.x, boardPip.y);
-  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.');
+  await greet(boardPip);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.screenshot({ path: testInfo.outputPath('pip-board.png'), scale: 'css' });
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
   await chooseSeason(page, 0);
   await winWithTouch(page);
   await greet(headerPoint(await logicalMetrics(page), 'pip'));

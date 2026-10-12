@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const {
-  openGame, chooseMode, openModeMenu, openRewards, metrics, tap, rendered,
+  openGame, chooseMode, openModeMenu, openRewards, activateLibraryControl, metrics, tap, rendered,
   ageControl, collectionHeaderRect, growthView, seedGrowth, resultPoint, visibleColorCount, celebrationState, acceptCelebration
 } = require('./game-ui.cjs');
 const { observeOutputAudio, watchAudioRequests, expectRecording } = require('./bundled-audio.cjs');
@@ -151,12 +151,7 @@ async function solve(page) {
 }
 
 async function libraryAction(page, name) {
-  const state = (await metrics(page)).library;
-  const control = state.controls.find(item => item.name === name);
-  expect(control, `The library exposes ${name}`).toBeTruthy();
-  const [x, y, width, height] = control.rect;
-  await tap(page, x + width / 2, y + height / 2);
-  await rendered(page);
+  await activateLibraryControl(page, name);
 }
 
 async function roomBack(page) {
@@ -627,10 +622,10 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect(progress(await phraseState(page))).toEqual(progress(completion.finished));
   await capture(page, info, 'phrase-earned-chest-invitation');
   await openModeMenu(page);
-  await libraryAction(page, 'LibraryClose');
+  await chooseMode(page, 'phrase');
   await expect.poll(async () => (await celebrationState(page)).ready).toBe(true);
   expect((await celebrationState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
-  expect(progress(await phraseState(page)), 'Closing a menu preserves the ready invitation').toEqual(progress(completion.finished));
+  expect(progress(await phraseState(page)), 'Returning from home preserves the ready invitation').toEqual(progress(completion.finished));
   await acceptCelebration(page);
   await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
   await expect.poll(async () => (await phraseState(page)).visible).toBe(false);
@@ -673,7 +668,7 @@ test('Phrase Builder preserves its answer through overlays, mute, background and
   await expect.poll(async () => (await phraseState(page)).paused).toBe(true);
   expect(progress(await phraseState(page))).toEqual(selected);
   await libraryAction(page, 'LibrarySound');
-  await libraryAction(page, 'LibraryClose');
+  await chooseMode(page, 'phrase');
   await expect.poll(async () => (await phraseState(page)).paused).toBe(false);
   await expect.poll(async () => (await phraseState(page)).prompt_text_visible).toBe(true);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).muted)).toBe(true);

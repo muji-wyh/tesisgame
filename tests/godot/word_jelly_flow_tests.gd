@@ -62,6 +62,7 @@ func _run() -> void:
 	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
+	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app.new_round(405, false, "", "word_jelly"), "The new mode starts through the application route")
@@ -146,7 +147,7 @@ func _run() -> void:
 	view.advance_reward_presentation(1.4)
 	check(app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:2"), "The new chest tier launches its own single confetti burst")
 	var earned_round: String = app._round_id
-	app.choose_mode("jelly")
+	Fixture.enter_mode(app, "jelly")
 	await settle()
 	check(app._mode_id == "jelly" and app._jelly_rewards_shown and app._jelly_rewards.has_pending(), "Switching Jelly games preserves and opens the saved treasure room")
 	check(app._jelly_rewards.rewards.entries[0].tier == 2 and app._jelly_rewards.rewards.round_id == earned_round

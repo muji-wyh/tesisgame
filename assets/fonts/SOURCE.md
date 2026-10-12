@@ -29,3 +29,10 @@ The game library reuses acquired Twemoji cat, rainbow, and rocket artwork under
 the [existing CC BY 4.0 attribution](../avatars/ATTRIBUTION.md).
 The original vector files are reused without modification. These
 are integrated static illustrations; no character animation is claimed.
+
+The Home button uses `assets/images/ui/home.webp`, an unchanged copy of the
+integrated Microsoft Fluent Emoji house artwork. Microsoft Corporation created
+the 256px 3D image under the MIT license. Its original URL, pinned source revision,
+and license are recorded in [the word-library manifest](../../docs/assets/word-library.json)
+under `house`. This acquired, integrated static icon has no animation. A UI copy
+keeps navigation available independently of on-demand vocabulary packs.

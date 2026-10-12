@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, metrics, tap, rendered, celebrationState, visibleColorCount } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered, celebrationState, visibleColorCount } = require('./game-ui.cjs');
 
 const JELLY_REWARDS = 'growWithPip.jellyRewards.v1';
 const POP_REWARDS = 'wordBuddies.popRewards';
@@ -26,10 +26,7 @@ async function pressControl(page, control) {
 }
 
 async function libraryControl(page, name) {
-  const control = (await metrics(page)).library.controls.find(item => item.name === name);
-  expect(control, `${name} exists in the visible game library`).toBeTruthy();
-  expect(control.disabled).toBe(false);
-  await pressRect(page, control.rect);
+  await activateLibraryControl(page, name);
 }
 
 async function startJelly(page, options = {}) {
@@ -634,7 +631,7 @@ test.describe('manual jelly supply', () => {
         expect(paused.preview.control.disabled).toBe(true);
         await page.waitForTimeout(250);
         expect((await jelly(page)).generated_tiles).toBe(paused.generated_tiles);
-        await libraryControl(page, 'LibraryClose');
+        await chooseMode(page, 'jelly');
         await expect.poll(async () => (await jelly(page)).preview.enabled).toBe(true);
         await page.screenshot({ path: info.outputPath(`jelly-manual-${pointer}-settled.png`), scale: 'css' });
       } finally {
@@ -701,13 +698,13 @@ test('preview pressure builds through fusion and pauses only with the menu', asy
   const stillPaused = await jelly(page);
   expect(stillPaused.spawn_elapsed, 'The menu freezes the actual supply clock').toBe(paused.spawn_elapsed);
   expect(poses(stillPaused), 'Preview jellies retain their exact pose while paused').toEqual(poses(paused));
-  await libraryControl(page, 'LibraryClose');
+  await chooseMode(page, 'jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
     // Resuming near release can commit the batch and reset its clock before
     // the next published frame. Both outcomes prove the same clock resumed.
     return !state.paused && (state.spawn_elapsed > paused.spawn_elapsed || state.generated_tiles > paused.generated_tiles);
-  }, { timeout: 3000, intervals: [50], message: 'Closing the menu advances the supply clock or dispatches its pending batch' }).toBe(true);
+  }, { timeout: 3000, intervals: [50], message: 'Continuing Jelly Match advances the supply clock or dispatches its pending batch' }).toBe(true);
   const resumed = await jelly(page);
   expect(poses(resumed), 'Preview motion resumes with the dispatch clock').not.toEqual(poses(paused));
 
@@ -1149,14 +1146,13 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   const rescue = pair(paused, { chest: false });
   expect(rescue, 'The full paused board contains an unmarked rescue pair').toBeTruthy();
   const streak = (await growth(page)).streaks[rescue[0].word.id] || 0;
-  const bounds = await metrics(page), close = bounds.library.controls.find(item => item.name === 'LibraryClose');
-  expect(close?.disabled).toBe(false);
+  const bounds = await metrics(page);
   const from = center(rescue[0].rect, bounds), to = center(rescue[1].rect, bounds);
   await page.waitForTimeout(1200);
   const stillPaused = await jelly(page);
   expect(stillPaused.full_elapsed, 'The menu freezes the real danger clock').toBe(paused.full_elapsed);
   expect(stillPaused.generated_tiles).toBe(paused.generated_tiles);
-  await tap(page, close.rect[0] + close.rect[2] / 2, close.rect[1] + close.rect[3] / 2, bounds);
+  await chooseMode(page, 'jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.visible && !state.paused;

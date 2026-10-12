@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { enterGame, metrics, openModeMenu, tap, rendered, boardPoint, observeAudio } = require('./game-ui.cjs');
+const { enterGame, metrics, openModeMenu, chooseMode, activateLibraryControl, tap, rendered, boardPoint, observeAudio } = require('./game-ui.cjs');
 const { expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 
@@ -92,11 +92,7 @@ test('interface reference click plays once for loader mouse, touch, keys and con
 });
 
 async function activateLibrary(page, name) {
-  const control = (await metrics(page)).library.controls.find(value => value.name === name);
-  expect(control, `${name} is visible`).toBeTruthy();
-  const [x, y, width, height] = control.rect;
-  await tap(page, x + width / 2, y + height / 2);
-  await rendered(page);
+  await activateLibraryControl(page, name);
 }
 
 async function nativeClicks(page, from) {
@@ -117,9 +113,9 @@ test('native menus play the same click once, gameplay cards stay separate, and m
   await expectMediaClicks(page, 1);
   const evidence = [];
   for (const [name, action] of [
-    ['open library', () => openModeMenu(page)],
+    ['open home', () => openModeMenu(page)],
     ['change motion', () => activateLibrary(page, 'LibraryMotion')],
-    ['close library', () => activateLibrary(page, 'LibraryClose')]
+    ['continue Match', () => chooseMode(page, 'match')]
   ]) {
     const from = await page.evaluate(() => audioObservation.playbacks.length);
     await action();
@@ -140,7 +136,7 @@ test('native menus play the same click once, gameplay cards stay separate, and m
   await openModeMenu(page);
   await activateLibrary(page, 'LibrarySound');
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).muted)).toBe(true);
-  await activateLibrary(page, 'LibraryClose');
+  await chooseMode(page, 'match');
   await page.locator('#speech-debug-launch').click();
   await expect(page.locator('#speech-debug')).toBeVisible();
   await expectMediaClicks(page, 1);
@@ -148,7 +144,7 @@ test('native menus play the same click once, gameplay cards stay separate, and m
   await expect(page.locator('#speech-debug')).toBeHidden();
   await openModeMenu(page);
   await activateLibrary(page, 'LibrarySound');
-  await activateLibrary(page, 'LibraryClose');
+  await chooseMode(page, 'match');
   await page.locator('#speech-debug-launch').click();
   await expect(page.locator('#speech-debug')).toBeVisible();
   await expectMediaClicks(page, 2);

@@ -265,8 +265,7 @@ for (const mode of ['match', 'memory']) {
       await captureReadyLayouts(page, info, current);
     }
     await openModeMenu(page);
-    const close = (await metrics(page)).library.controls.find(control => control.name === 'LibraryClose');
-    await tap(page, close.rect[0] + close.rect[2] / 2, close.rect[1] + close.rect[3] / 2);
+    await chooseMode(page, mode);
     await expect.poll(async () => (await celebrationState(page)).ready).toBe(true);
     expect(await celebrationState(page)).toMatchObject({ round_id: readyId, ready: true,
       chest_count: current.chest_count, chest_visible: earned, action: { rect } });

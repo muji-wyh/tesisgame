@@ -104,14 +104,12 @@ async function expectStill(page, clip) {
 
 test('Pip gestures autonomously while the lesson stays unchanged and its button remains responsive', async ({ page }, testInfo) => {
   const errors = await openGame(page);
-  // Closing the library restores keyboard focus to Pip. Use that same focus
-  // owner in both lesson captures, rather than comparing a card's focus ring.
+  // Focus Pip for both lesson captures, so the later Pip tap does not remove
+  // a gameplay card's focus ring from the comparison.
   const initialPip = headerPoint(await metrics(page), 'pip');
   await tap(page, initialPip.x, initialPip.y);
-  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
-  await page.waitForTimeout(750); // Let the finite focus expression finish.
+  await expect(page.locator('#game-status')).toContainText('Pip says hello!');
+  await page.waitForTimeout(1800); // Let the manual gesture finish.
   await page.mouse.move(0, 0);
   // Changing the motion setting republishes the current lesson announcement.
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -144,16 +142,14 @@ test('Pip gestures autonomously while the lesson stays unchanged and its button 
 
   const pip = headerPoint(await metrics(page), 'pip');
   await tap(page, pip.x, pip.y);
-  await expect(page.locator('#game-status')).toContainText('Game mode. Match is selected.', { timeout: 2000 });
+  await expect(page.locator('#game-status')).toContainText('Pip says hello!', { timeout: 2000 });
   expect((await gameState(page)).saves).toEqual(state.saves);
   expect((await gameState(page)).selection).toEqual(state.selection);
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText('Game mode menu closed.');
   await rendered(page);
   expect((await capture(page, area.lesson)).equals(lesson), 'Clicking Pip does not advance the lesson.').toBe(true);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  // Let the menu-close focus feedback settle before checking the whole body.
+  // Let the manual gesture settle before checking the whole body.
   await page.waitForTimeout(1800);
   await expectStill(page, area.body);
   await page.screenshot({ path: testInfo.outputPath('pip-reduced-motion.png'), scale: 'css' });

@@ -353,7 +353,7 @@ func _build() -> void:
 	retry_button = _action("Start listening", true)
 	retry_button.name = "RetryListening"
 	retry_button.pressed.connect(func() -> void: request_listening.emit())
-	_gate_back = _action("Back")
+	_gate_back = _action("Home")
 	_gate_back.pressed.connect(_exit)
 	_gate_actions.add_child(retry_button)
 	_gate_actions.add_child(_gate_back)

@@ -31,8 +31,11 @@ func _run() -> void:
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
+	check(app._mode_menu_open(), "A fresh game starts on the dedicated homepage")
+	app.choose_mode("match")
+	await settle()
 	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly", "word_jelly"], "All six game modes are available")
-	check(app._mode_buttons.size() == 6, "Each supported mode has one popover choice")
+	check(app._mode_buttons.size() == 6, "Each supported mode has one Home card")
 	check(app.find_child("Mode_quest", true, false) == null
 		and app.find_child("TalkQuest", true, false) == null
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "_quest"),
@@ -51,12 +54,10 @@ func _run() -> void:
 		and app._growth_button.get_global_rect().encloses(app._growth_bar.get_global_rect()),
 		"The separate level-progress entry keeps a readable badge and a full touch target")
 	check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
-		"Gameplay keeps the mode choices inside Pip's closed popover")
+		"Gameplay keeps all mode choices on the separate homepage")
 	check(app.find_children("*", "Label", true, false).all(func(label: Label) -> bool:
 		return not label.is_visible_in_tree() or not label.text in ["Pip and Words", app.model.adventure_name]),
 		"The play screen has no redundant brand or topic headings")
-	app.choose_mode("match")
-	await settle()
 	check(app.find_child("MatchCorrection", true, false) == null, "Match has no correction footer")
 	check(app.grid.size.is_equal_approx(app._match_playfield.size), "The matching board uses the entire playfield")
 	var pairs: Array[String] = []
@@ -89,6 +90,7 @@ func _run() -> void:
 	app.on_page_visible()
 	await create_timer(0.8).timeout
 	check(app.model.phase == "waiting" and app.model.mistakes == 1, "A wrong pair clears automatically without resetting progress")
+	app._show_mode_menu()
 	app.choose_mode("memory")
 	await settle()
 	var memory_words: Array = app.model.lesson_words.duplicate(true)
