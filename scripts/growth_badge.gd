@@ -70,9 +70,8 @@ func fit(css_scale: float, use_compact: bool, tiny: bool = false, balance_space:
 	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	var focus := StyleBoxFlat.new()
-	focus.bg_color = Color.TRANSPARENT
-	focus.border_color = Style.GOOD
-	focus.border_width_bottom = maxi(1, roundi(2 / _scale))
+	focus.bg_color = Color(Style.GOOD, 0.10)
+	focus.set_corner_radius_all(ceili(8.0 / _scale))
 	add_theme_stylebox_override("focus", focus)
 	for key: String in ["background", "fill"]:
 		var fill: bool = key == "fill"
