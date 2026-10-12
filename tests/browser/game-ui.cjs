@@ -99,10 +99,13 @@ function contentBounds(bounds) {
   const stackedHeader = bounds.width * scale < 520 || (bounds.width * scale < 600 && !shortHeader);
   const header = Math.ceil((stackedHeader ? 88 : shortHeader ? 44 : 56) / scale), board = bounds.growth?.board;
   const inset = Math.max(Math.ceil(12 / scale), Math.round((bounds.width - 1040 / scale) / 2));
-  const x = board?.visible ? board.rect[0] : inset;
-  const width = board?.visible ? board.rect[2] : bounds.width - inset * 2;
-  const top = board?.visible ? board.rect[1] : padding + header + gap;
-  return { x, width, top, padding, gap, header };
+  const frame = bounds.growth?.game_area?.rect;
+  const x = board?.visible ? board.rect[0] : frame ? frame[0] + Math.ceil(12 / scale) : inset;
+  const width = board?.visible ? board.rect[2] : frame ? frame[2] - Math.ceil(12 / scale) * 2 : bounds.width - inset * 2;
+  const top = board?.visible ? board.rect[1] : (frame?.[1] || 0) + padding + header + gap;
+  const bottom = frame ? frame[1] + frame[3] - padding : bounds.height - padding;
+  const areaHeight = board?.visible ? board.rect[3] : bottom - top;
+  return { x, width, top, height: areaHeight, padding, gap, header };
 }
 
 function growthRect(bounds, name) {
@@ -383,10 +386,10 @@ async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expect
 }
 
 function boardPoint(bounds, index, { top: overrideTop } = {}) {
-  const { top: normalTop, x, width: areaWidth } = contentBounds(bounds);
+  const { top: normalTop, x, width: areaWidth, height } = contentBounds(bounds);
   const top = overrideTop === undefined ? normalTop : overrideTop;
   if (!Number.isFinite(top) || top < 0 || top >= bounds.height) throw new Error('Invalid Match playfield top.');
-  const areaHeight = bounds.height - top - contentBounds(bounds).padding;
+  const areaHeight = height - (top - normalTop);
   const scale = uiScale(bounds);
   const columns = wordBoardColumns(areaWidth, areaHeight, scale, 10, 10);
   const rows = 10 / columns;
@@ -448,8 +451,8 @@ function wordBoardColumns(width, height, scale, columnGap, rowGap) {
 }
 
 function memoryLayout(bounds) {
-  const { top, x, width, padding } = contentBounds(bounds), scale = uiScale(bounds);
-  const gap = Math.ceil(8 / scale), height = bounds.height - top - padding;
+  const { top, x, width, height } = contentBounds(bounds), scale = uiScale(bounds);
+  const gap = Math.ceil(8 / scale);
   const columns = wordBoardColumns(width, height, scale, gap, gap), rows = 10 / columns;
   return { top, x, width, height, boardTop: top, gap, columns,
     cardWidth: (width - gap * (columns - 1)) / columns,
@@ -490,8 +493,11 @@ async function withMemoryPeek(page, held) {
 
 function resultPoint(bounds, key) {
   if (!['chest', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
-  const content = contentBounds(bounds), scale = uiScale(bounds);
-  const height = bounds.height - content.padding - content.top;
+  const result = bounds.growth?.result;
+  const content = result?.visible
+    ? { x: result.rect[0], top: result.rect[1], width: result.rect[2], height: result.rect[3] }
+    : contentBounds({ ...bounds, growth: { ...bounds.growth, board: null } });
+  const scale = uiScale(bounds), height = content.height;
   if (key === 'chest') return { x: content.x + content.width / 2, y: content.top + height / 2 };
   const inset = Math.min(16 / scale, content.width / 4, height / 4);
   const actionWidth = Math.min((key === 'retry' ? 176 : 240) / scale, content.width - inset * 2);

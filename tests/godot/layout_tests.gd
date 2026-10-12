@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -28,7 +30,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	Fixture.install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -41,19 +43,39 @@ func _run() -> void:
 		"The gameplay header has no redundant title")
 	check(app._mode_buttons.size() == 6 and app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly", "word_jelly"],
 		"Pip's mode switch contains all six games")
-	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480)]:
+	for dimensions in [Vector2i(480, 480), Vector2i(480, 900), Vector2i(599, 900), Vector2i(600, 900), Vector2i(1040, 480), Vector2i(768, 1024), Vector2i(1473, 1175), Vector2i(1920, 1080)]:
 		root.size = dimensions
 		app.size = dimensions
 		for mode in ["match", "memory", "phrase"]:
-			app.choose_mode(mode)
+			Fixture.enter_mode(app, mode)
 			await settle()
+			check(app._mode_id == mode and not app._mode_menu_open(), "Layout checks enter %s through Home" % mode)
 			var view: Control = app._match_playfield if mode == "match" else app._memory if mode == "memory" else app._phrase
 			var css_scale: float = app.Style.ui_scale(app)
+			var game_area: Rect2 = app._content_margins.get_global_rect()
 			var play_top: int = 130 if mode in ["match", "memory"] else 76
 			if dimensions.x < 600:
 				play_top += 32
-			check(absf(view.get_global_rect().position.y * css_scale - play_top) <= 2,
-				"%s %s: the responsive header leaves play at %d CSS pixels: %s" % [dimensions, mode, play_top, view.get_global_rect()])
+			check(absf((view.get_global_rect().position.y - game_area.position.y) * css_scale - play_top) <= 2,
+				"%s %s: the responsive header leaves play %d CSS pixels below its game area: %s" % [dimensions, mode, play_top, view.get_global_rect()])
+			check(app.get_global_rect().grow(1).encloses(game_area) and game_area.grow(1).encloses(view.get_global_rect()),
+				"%s %s: the game area contains the playfield inside the viewport" % [dimensions, mode])
+			check(game_area.size.x * css_scale <= 1065,
+				"%s %s: the desktop game area has a bounded width" % [dimensions, mode])
+			if dimensions.x >= 720:
+				check(game_area.size.y * css_scale <= 801 and game_area.get_center().distance_to(app.get_global_rect().get_center()) * css_scale <= 1,
+					"%s %s: desktop gameplay stays centered within a bounded area" % [dimensions, mode])
+				if mode in ["match", "memory"]:
+					check(game_area.size.y * css_scale <= 143 + (game_area.size.x * css_scale - 24) * 0.5,
+						"%s %s: the card board cannot stretch with a tall browser" % [dimensions, mode])
+					if dimensions.y >= 1000:
+						var board_cards: Array = app.cards.values() if mode == "match" else app._memory.card_buttons
+						for card: Control in board_cards:
+							check(card.size.y <= card.size.x * 1.4 and card.size.x * css_scale >= 44 and card.size.y * css_scale >= 44,
+								"%s %s: cards retain compact proportions and usable targets" % [dimensions, mode])
+			else:
+				check(is_equal_approx(game_area.position.y, 0) and is_equal_approx(game_area.size.y, app.size.y),
+					"%s %s: narrow screens keep their full available play height" % [dimensions, mode])
 			check(app._header_duck_slot.get_global_rect().end.x <= app._toolbar.global_position.x,
 				"Pip and the action icons share the compact header without permanent mode tabs")
 			check(app.get_global_rect().grow(1).encloses(view.get_global_rect()), "%s %s: the playfield fits the screen" % [dimensions, mode])
@@ -98,7 +120,7 @@ func _run() -> void:
 	root.size = Vector2i(960, 720)
 	app.size = Vector2(960, 720)
 	await settle()
-	app.choose_mode("match")
+	Fixture.enter_mode(app, "match")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var cards: Array = app.model.cards.duplicate(true)
@@ -168,13 +190,14 @@ func _run() -> void:
 	app._progress_ready = true
 	app._save_error = false
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+	Fixture.earn_pair_chest(app)
 	app.model.phase = "won"
 	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
 	check(not app._mode_row.is_visible_in_tree(), "Results do not repeat gameplay navigation")
-	check(app._outcome.get_global_rect().position.y <= 100, "The result gets the space below one simple header")
+	check(app._outcome.get_global_rect().position.y - app._content_margins.global_position.y <= 100,
+		"The result gets the space below one simple header inside the game area")
 	var old_lesson: Array = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
 	await settle()
@@ -202,10 +225,10 @@ func _run() -> void:
 
 
 func _test_voice_layout(app) -> void:
-	app.choose_mode("match")
+	Fixture.enter_mode(app, "match")
 	var previous_scale_mode: int = root.content_scale_mode
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
-	for dimensions in [Vector2i(320, 568), Vector2i(360, 640), Vector2i(568, 320)]:
+	for dimensions in [Vector2i(1473, 1175), Vector2i(320, 568), Vector2i(360, 640), Vector2i(568, 320)]:
 		root.size = dimensions
 		app.size = dimensions
 		for voice_enabled in [false, true]:

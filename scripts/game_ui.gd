@@ -41,6 +41,8 @@ const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "phras
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
 const VOICE_MATCH_SECONDS: float = 1.0
+const GAME_AREA_MAX_SIZE := Vector2(1064, 800)
+const GAME_AREA_DESKTOP_WIDTH: float = 720.0
 
 class InputActivityObserver extends Node:
 	signal observed(event: InputEvent)
@@ -548,10 +550,12 @@ func _build_controls() -> void:
 	_jelly_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_jelly_backdrop.hide()
 	var margins := MarginContainer.new()
+	margins.name = "GameArea"
 	_content_margins = margins
 	margins.minimum_size_changed.connect(_fit_content.call_deferred)
+	margins.item_rect_changed.connect(_sync_voice_bounds.call_deferred)
 	add_child(margins)
-	margins.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margins.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	for edge in ["left", "top", "right", "bottom"]:
 		margins.add_theme_constant_override("margin_" + edge, 12)
 	var column := VBoxContainer.new()
@@ -2571,15 +2575,23 @@ func _stacked_game_header() -> bool:
 
 
 func _fit_content() -> void:
-	# Containers grow to transient child minima, but do not shrink back with anchors alone.
 	if _content_margins != null:
 		var scale: float = Style.ui_scale(self)
 		var short_header: bool = _short_game_header()
 		for edge in ["top", "bottom"]:
 			_content_margins.add_theme_constant_override("margin_" + edge, ceili((4 if short_header else 12) / scale))
 		for edge in ["left", "right"]:
-			_content_margins.add_theme_constant_override("margin_" + edge, maxi(ceili(12 / scale), roundi((size.x - 1040 / scale) * 0.5)))
-		_content_margins.size = size
+			_content_margins.add_theme_constant_override("margin_" + edge, ceili(12 / scale))
+		var area: Vector2 = size * scale
+		area.x = minf(area.x, GAME_AREA_MAX_SIZE.x)
+		if area.x >= GAME_AREA_DESKTOP_WIDTH:
+			area.y = minf(area.y, GAME_AREA_MAX_SIZE.y)
+			if _mode_id in ["match", "memory"]:
+				# Reserve the header and reward strip, then keep the two card rows proportional.
+				area.y = minf(area.y, 142.0 + (area.x - 24.0) * 0.5)
+		# Explicit sizing also lets containers shrink after transient child minima change.
+		_content_margins.size = area / scale
+		_content_margins.position = ((size - _content_margins.size) * 0.5).max(Vector2.ZERO)
 
 
 func _fit_grid() -> void:
@@ -4620,6 +4632,8 @@ func _publish_growth_view() -> void:
 	for control: Control in [_mode_heading_button, _voice_button, hint_button, _memory.study_button, _coin_counter, _storage_retry_button]:
 		controls.append(_growth_control(control))
 	var state := {"visible": collection_page.visible, "controls": controls}
+	state["game_area"] = _growth_control(_content_margins)
+	state["result"] = _growth_control(_outcome)
 	state["pip"] = _growth_control(duck)
 	state.pip["age"] = duck.growth_age
 	state.pip["action"] = duck._idle_action

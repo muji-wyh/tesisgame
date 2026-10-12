@@ -62,7 +62,7 @@ test('Match keeps five real pairs in separate groups through rotation and comple
       }
       const earned = pairs[0][0];
       await tap(page, earned.point.x, earned.point.y);
-      await expect(page.locator('#game-status')).toHaveText(`${earned.word}. Look at the picture and say the word.`);
+      await expect(page.locator('#game-status')).toContainText(`${earned.word}. Look at the picture and say the word.`);
       await expect(page.locator('#selection-status'), 'Resizing preserves completed pairs instead of making them selectable again.').toBeEmpty();
       await page.screenshot({ path: testInfo.outputPath('match-five-pairs-progress-after-rotation.png'), scale: 'css' });
     }

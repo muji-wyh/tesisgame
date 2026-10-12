@@ -153,13 +153,16 @@ async function openGame(page, api = 'standard') {
 async function metrics(page) {
   return page.locator('#canvas').evaluate(canvas => {
     const rect = canvas.getBoundingClientRect();
-    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+      library: JSON.parse(document.getElementById('game-status').dataset.library || '{}'),
+      growth: JSON.parse(document.getElementById('growth-status').dataset.view || '{}') };
   });
 }
 
 function cardPoint(bounds, index) {
   const scale = Math.min(bounds.width, bounds.height) / 480;
-  const point = boardPoint({ width: bounds.width / scale, height: bounds.height / scale, scale }, index);
+  const point = boardPoint({ width: bounds.width / scale, height: bounds.height / scale, scale,
+    library: bounds.library, growth: bounds.growth }, index);
   return { x: bounds.x + point.x * scale, y: bounds.y + point.y * scale };
 }
 async function discoverBoard(page) {
@@ -293,6 +296,38 @@ test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewpo
   })).toEqual([1, 'en-US', true, true]);
   if (browserName === 'chromium') {
     expect(await page.evaluate(() => window.speechFixture.instances[0].activationAtStart)).toBe(true);
+  }
+  if (viewport.width === 1366) {
+    await page.setViewportSize({ width: 800, height: 1100 });
+    await expect.poll(async () => {
+      const current = await logicalMetrics(page), area = current.growth.game_area.rect;
+      return Math.abs(area[1] * current.scale - (1100 - area[3] * current.scale) / 2);
+    }, { message: 'The bounded game area settles at the first tall viewport' }).toBeLessThanOrEqual(1);
+    await expect.poll(async () => {
+      const current = await logicalMetrics(page), speech = await page.locator('#speech-panel').boundingBox();
+      const boardTop = current.y + current.growth.board.rect[1] * current.scale;
+      return Math.abs(speech.y + speech.height + contentBounds(current).gap * current.scale - boardTop);
+    }, { message: 'The HTML speech panel aligns with the card board after resizing' }).toBeLessThanOrEqual(1);
+    const firstBounds = await logicalMetrics(page), firstPanel = await page.locator('#speech-panel').boundingBox();
+    const firstArea = firstBounds.growth.game_area.rect.map(value => value * firstBounds.scale);
+    await page.setViewportSize({ width: 800, height: 1300 });
+    await expect.poll(async () => {
+      const current = await logicalMetrics(page);
+      return Math.abs(current.growth.game_area.rect[1] * current.scale - firstArea[1] - 100);
+    }, { message: 'Only the game area origin moves when a capped desktop viewport grows taller' }).toBeLessThanOrEqual(1);
+    await expect.poll(async () => {
+      const current = await page.locator('#speech-panel').boundingBox();
+      return Math.abs(current.y - firstPanel.y - 100);
+    }, { message: 'Speech follows its game area by 100 CSS pixels without a local resize' }).toBeLessThanOrEqual(1);
+    const movedBounds = await logicalMetrics(page), movedPanel = await page.locator('#speech-panel').boundingBox();
+    const movedArea = movedBounds.growth.game_area.rect.map(value => value * movedBounds.scale);
+    for (const index of [0, 2, 3]) expect(Math.abs(movedArea[index] - firstArea[index])).toBeLessThanOrEqual(1);
+    for (const key of ['x', 'width', 'height']) expect(Math.abs(movedPanel[key] - firstPanel[key])).toBeLessThanOrEqual(1);
+    await expect(page.locator('#speech-panel')).toHaveAttribute('data-state', 'listening');
+    expect(await page.evaluate(() => window.speechFixture.starts)).toBe(1);
+    await page.setViewportSize(viewport);
+    await expect.poll(async () => Math.abs((await page.locator('#speech-panel').boundingBox()).y - panel.y),
+      { message: 'Speech returns to its original game area before keyboard controls are tested' }).toBeLessThanOrEqual(1);
   }
   await page.keyboard.press('Space');
   await expect(page.locator('#speech-panel')).toBeHidden();

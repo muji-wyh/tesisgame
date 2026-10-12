@@ -52,12 +52,13 @@ async function winMatch(page) {
 
 function sceneryClip(bounds) {
   const content = contentBounds(bounds);
+  const top = bounds.growth?.result?.visible ? bounds.growth.result.rect[1] : content.top;
   // Results omit the mode row. This left-edge patch fits all three configured
   // devices, below the theme badge and outside the central chest artwork. Keep
   // the crop independent of title wrapping and the result's changing height.
   return {
     x: Math.round(bounds.x + (content.x + 8) * bounds.scale),
-    y: Math.round(bounds.y + (content.padding + content.header + content.gap + 56) * bounds.scale),
+    y: Math.round(bounds.y + (top + 56) * bounds.scale),
     width: Math.round(42 * bounds.scale),
     height: Math.round(60 * bounds.scale)
   };

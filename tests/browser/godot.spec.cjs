@@ -35,19 +35,23 @@ async function ready(scope, renderFrames = true) {
 async function canvasMetrics(scope) {
   return scope.locator('#canvas').evaluate((canvas) => {
     const rect = canvas.getBoundingClientRect();
-    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+      library: JSON.parse(document.getElementById('game-status').dataset.library || '{}'),
+      growth: JSON.parse(document.getElementById('growth-status').dataset.view || '{}') };
   });
 }
 
 function cardPoint(metrics, index) {
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const point = boardPoint({ width: metrics.width / scale, height: metrics.height / scale, scale }, index);
+  const point = boardPoint({ width: metrics.width / scale, height: metrics.height / scale, scale,
+    library: metrics.library, growth: metrics.growth }, index);
   return { x: metrics.x + point.x * scale, y: metrics.y + point.y * scale };
 }
 
 function resultScreenPoint(metrics, key = 'chest') {
   const scale = Math.min(metrics.width, metrics.height) / 480;
-  const point = resultPoint({ width: metrics.width / scale, height: metrics.height / scale, scale }, key);
+  const point = resultPoint({ width: metrics.width / scale, height: metrics.height / scale, scale,
+    library: metrics.library, growth: metrics.growth }, key);
   return { x: metrics.x + point.x * scale, y: metrics.y + point.y * scale };
 }
 

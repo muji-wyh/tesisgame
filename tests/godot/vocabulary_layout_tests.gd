@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -49,7 +51,7 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	Fixture.install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
@@ -57,19 +59,25 @@ func _run() -> void:
 	var all_words: Array = app.data.words
 	var pictured_words: Array = all_words.filter(func(word: Dictionary) -> bool: return app.Data.supports_mode(word, "match"))
 	check(all_words.size() >= 1550 and pictured_words.size() >= 1250 and pictured_words.size() < all_words.size(), "The expanded curriculum retains at least 1,250 production picture cards plus contextual phrase words")
-	# Unlock the isolated layout fixture only; production gameplay still derives its level from mastery.
-	app.growth.age = 11
-	app._refresh_growth()
 	var representatives: Array = []
 	for age in range(3, 13):
 		var tier: Array = pictured_words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == age)
 		tier.sort_custom(func(first: Dictionary, second: Dictionary) -> bool: return first.text.length() > second.text.length())
 		representatives.append(tier[0])
-	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(480, 480), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768)]:
+	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(480, 480), Vector2i(844, 390), Vector2i(768, 1024), Vector2i(1366, 768), Vector2i(1473, 1175)]:
 		root.size = dimensions
 		await settle()
 		for word in representatives:
-			check(app.new_round(19, false, "", "match", word.id), "A lesson can render its longest age-cohort word: " + word.id)
+			# Render each representative in its own current-age lesson.
+			var learning_age: int = int(word.min_age)
+			app.growth.age = 0 if learning_age == 3 else learning_age - 1
+			app.vocabulary_loader.request_age(learning_age)
+			app._refresh_growth()
+			Fixture.enter_mode(app, "match")
+			var started: bool = app.new_round(19, false, "", "match", word.id)
+			check(started, "A lesson can render its longest age-cohort word: " + word.id)
+			if not started:
+				continue
 			await settle()
 			var card: Button = app.cards[word.id + ":word"]
 			if dimensions == Vector2i(480, 480):
@@ -78,7 +86,8 @@ func _run() -> void:
 			check(app._match_playfield.get_global_rect().grow(1).encloses(card.get_global_rect()), "Match keeps each new word inside its original board")
 			if word == representatives[0]:
 				check_catalog_labels(card, pictured_words, "Match", dimensions)
-			app.choose_mode("memory")
+			Fixture.enter_mode(app, "memory")
+			check(app._mode_id == "memory" and not app._mode_menu_open(), "Memory label checks enter through Home")
 			app._memory.begin_peek()
 			await settle()
 			if dimensions == Vector2i(480, 480):
