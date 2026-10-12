@@ -1860,7 +1860,7 @@ func _pair_confetti_requested(round_id: String) -> void:
 
 
 func _round_confetti_requested(round_id: String) -> void:
-	if not _round_celebration.is_active() or round_id != _round_celebration.current_round_id():
+	if _mode_id == "phrase" or not _round_celebration.is_active() or round_id != _round_celebration.current_round_id():
 		return
 	var state: Dictionary = _round_celebration.snapshot()
 	if int(state.chest_count) > 0:
@@ -1988,6 +1988,7 @@ func _accept_round_chest(round_id: String) -> void:
 func _phrase_completion_requested() -> void:
 	if not _phrase_interaction_allowed() or not _phrase.completion_pending:
 		return
+	_clear_reward_confetti()
 	_begin_round_celebration(1)
 	_refresh()
 

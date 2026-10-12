@@ -32,10 +32,12 @@ callbacks.
 leap and feet-first landing through 0.9 s, alternating steps and one wink through
 1.65 s, then a presenting gesture as the closed chest appears at 1.8 s. Pip
 settles by 2.4 s. The invitation keeps only subtle breathing and occasional
-blinking. Every earned chest also reveals full-screen paper from 1.8 to 3 s,
+blinking. Outside Phrase Builder, earned chests also reveal full-screen paper from 1.8 to 3 s,
 using the shared renderer and existing licensed atlas documented in
 [Jelly chest fragments](jelly-fragments.md). The burst ends independently of
-long pronunciation and never captures input. Reduced motion uses a static
+long pronunciation and never captures input. Phrase Builder clears its gameplay
+paper when this page opens and shows the entire invitation without confetti.
+Reduced motion uses a static
 happy pose with no moving halo or confetti.
 
 `GameUI` owns the round identity, interruptions and input gate. Match, Memory

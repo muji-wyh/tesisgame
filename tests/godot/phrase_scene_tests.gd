@@ -194,24 +194,64 @@ func _check_answer_confetti(app) -> void:
 	for question in range(3):
 		_solve(view)
 		var burst: Dictionary = paper.snapshot()
-		check(burst.active and burst.visible and not burst.paused and burst.keys.size() == question + 1,
-			"Correct Phrase answer %d launches its own visible confetti burst" % (question + 1))
-		check(burst.ages.size() == question + 1 and is_zero_approx(float(burst.ages.back())),
-			"Correct Phrase answer %d starts fresh paper while earlier paper can continue falling" % (question + 1))
-		answer_keys = burst.keys.duplicate()
+		if question < 2:
+			check(burst.active and burst.visible and not burst.paused and burst.keys.size() == question + 1,
+				"Correct Phrase answer %d launches its own visible confetti burst" % (question + 1))
+			check(burst.ages.size() == question + 1 and is_zero_approx(float(burst.ages.back())),
+				"Correct Phrase answer %d starts fresh paper while earlier paper can continue falling" % (question + 1))
+			answer_keys = burst.keys.duplicate()
+		else:
+			check(app._round_celebration.is_active() and not burst.active and not burst.visible
+				and burst.keys.is_empty() and burst.ages.is_empty(),
+				"The final answer enters the Phrase invitation with all earlier answer paper cleared")
 		for repeat in range(4):
 			view.action_button.pressed.emit()
-		check(paper.snapshot().keys == answer_keys and view.game.completed == question + 1,
+		check(paper.snapshot().keys == burst.keys and view.game.completed == question + 1,
 			"Rapid repeated Check answer callbacks cannot repeat answer %d or its confetti" % (question + 1))
 		if question < 2:
 			view.pip._process(view.pip.GAMEPLAY_HAPPY_SECONDS + 0.01)
 			view.action_button.pressed.emit()
 			check(paper.snapshot().keys == answer_keys and view.game.phase == "building",
 				"Continue keeps the current paper without launching another burst")
-	app._round_celebration.set_process(false)
-	app._round_celebration.advance(2.0)
-	check(paper.snapshot().keys.size() == 4,
-		"The final chest celebration retains its independent burst after all three answer celebrations")
+	var celebration = app._round_celebration
+	celebration.set_process(false)
+	celebration.set_narration_playing(true)
+	for delta in [0.25, 0.65, 0.9, 1.3]:
+		celebration.advance(delta)
+		_check_no_finale_confetti(paper, "The Phrase chest reveal keeps the invitation free of confetti")
+	for stage in ["revealing", "ready"]:
+		if stage == "ready":
+			app.audio.stop_voice()
+			celebration.set_narration_playing(false)
+			celebration.advance(celebration.DURATION + 0.1)
+			check(celebration.is_ready() and not celebration.action_button.disabled,
+				"The Phrase invitation becomes ready without needing a confetti celebration")
+		for interruption in ["home", "catalog", "background"]:
+			if interruption == "home":
+				app._mode_heading_button.pressed.emit()
+			elif interruption == "catalog":
+				app.collection_button.pressed.emit()
+			else:
+				app.on_page_hidden()
+			paper.advance(0.25)
+			_check_no_finale_confetti(paper, "The " + stage + " Phrase invitation stays clear behind " + interruption)
+			if interruption == "home":
+				PlayerFixture.enter_mode(app, "phrase")
+			elif interruption == "catalog":
+				app._collection_back.pressed.emit()
+			else:
+				app.on_page_visible()
+			celebration.set_process(false)
+			if stage == "revealing":
+				celebration.set_narration_playing(true)
+				celebration.advance(2.0)
+			paper.advance(0.25)
+			_check_no_finale_confetti(paper, "Returning to the " + stage + " Phrase invitation from " + interruption + " cannot restore old paper")
+	celebration.action_button.pressed.emit()
+	check(view.game.phase == "finished" and app.model.phase == "won" and not celebration.is_active(),
+		"The confetti-free Phrase invitation still opens the earned chest screen")
+	paper.advance(0.25)
+	_check_no_finale_confetti(paper, "Opening the chest screen cannot resume the cleared answer confetti")
 	check(app.new_round(174, false, "", "phrase"), "The next Phrase round resets its local answer sequence")
 	await _settle()
 	check(paper.snapshot().keys.is_empty() and not paper.is_active(),
@@ -261,6 +301,11 @@ func _check_answer_confetti(app) -> void:
 	check(not paper.is_active() and paper.snapshot().keys.is_empty(),
 		"Switching game mode clears answer confetti and ignores stale Phrase controls")
 	app.set_process(true)
+
+
+func _check_no_finale_confetti(paper, context: String) -> void:
+	var state: Dictionary = paper.snapshot()
+	check(not state.active and not state.visible and state.keys.is_empty() and state.ages.is_empty(), context)
 
 
 func _check_celebration_gate(app, context: String) -> void:
