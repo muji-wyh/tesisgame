@@ -23,8 +23,8 @@ const SETTLE_SECONDS: float = 0.36
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const INITIAL_SPAWN_INTERVAL: float = 14.0
-const MIN_SPAWN_INTERVAL: float = 10.0
+const INITIAL_SPAWN_INTERVAL: float = 20.0
+const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
@@ -521,7 +521,7 @@ func _complete_collection(completed: Dictionary) -> void:
 	chest_tier = int(reward.chest_tier)
 	chest_count = int(reward.chest_count)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
-	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - float(cleared_pairs) * 0.08)
+	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - float(cleared_pairs) * 0.04)
 	full_elapsed = -1.0
 	var generation: int = _generation
 	# Commit all rewards before callbacks. A callback may end or replace a round.

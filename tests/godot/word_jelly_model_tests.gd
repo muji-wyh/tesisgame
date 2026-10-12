@@ -458,8 +458,9 @@ func _test_supply_and_determinism() -> void:
 	var sliced := Model.new()
 	whole.configure(words, 3, 73)
 	sliced.configure(words, 3, 73)
-	whole.step(28.0)
-	for index in range(280):
+	var duration: float = Model.INITIAL_SPAWN_INTERVAL * 2.0
+	whole.step(duration)
+	for index in range(roundi(duration * 10.0)):
 		sliced.step(0.1)
 	check(whole.generated_tiles == sliced.generated_tiles and whole.cells.size() == sliced.cells.size(), "large and small time steps dispatch the same supply")
 	for index in range(whole.cells.size()):

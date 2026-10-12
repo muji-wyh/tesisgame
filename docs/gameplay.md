@@ -95,6 +95,10 @@ the dragged chunk comes first. Both bodies flow into one larger jelly, which
 stays on the board and can join another piece. Larger bodies and long text wrap
 across rows when needed.
 
+Automatic batches start 20 seconds apart. Each collected word shortens the
+interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can
+still release the next batch early.
+
 An exact word from the current learning-age vocabulary reveals its picture and
 a warm rim. Tap that word to collect it for 50 coins per original chunk: a
 two-part word earns 100 coins, and a three-part word earns 150. Merging alone
