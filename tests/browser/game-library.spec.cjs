@@ -144,7 +144,7 @@ test('every game is selected from home and choosing the current game continues i
   await chooseMode(page, 'word_jelly');
   await expect.poll(async () => {
     const state = await jellyState(page);
-    return state.mode === 'word_jelly' && state.tiles?.length >= 12 && state.tiles.every(tile => tile.settled);
+    return state.mode === 'word_jelly' && state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
   }).toBe(true);
   await openModeMenu(page);
   await expect.poll(async () => (await jellyState(page)).paused).toBe(true);

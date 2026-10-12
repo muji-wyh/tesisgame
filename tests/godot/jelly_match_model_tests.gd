@@ -163,7 +163,7 @@ func _test_configuration() -> void:
 	words.append(words[4].duplicate(true))
 	check(model.configure(words, 3, 19), "A pictured eligible curriculum starts Jelly Match")
 	check(model.phase == "playing" and model.cells.size() == INITIAL_COUNT,
-		"The initial board has only six settled tiles and no automatic arrivals")
+		"The initial board has three settled rows and no automatic arrivals")
 	check(model.generated_tiles == INITIAL_COUNT and model.spawn_interval == 10.0,
 		"Each opening four-tile drop leaves ten seconds to read and match")
 	var initial_ids: Array[String] = []
@@ -173,12 +173,16 @@ func _test_configuration() -> void:
 			initial_ids.append(str(cell.word.id))
 		check(cell.word.min_age <= 3 and not str(cell.word.image).is_empty(), "Only pictured age-appropriate words enter the board")
 		check(model.is_settled(cell) and not cell.arrival and cell.falling_rows == 0,
-			"The six starting tiles are ready without simultaneous falling")
+			"The starting tiles are ready without simultaneous falling")
 		initial_chests += 1 if cell.chest and not cell.arrival else 0
-	check(initial_ids.size() == 3 and model.cells.all(func(cell: Dictionary) -> bool:
-		return str(cell.word.id) in ["word-0", "word-1", "word-2", "word-3"]),
-		"The opening complete bag practises current unmastered words first")
-	check(initial_chests == 1, "The third initial pair contains exactly one chest")
+	check(initial_ids.size() == 6 and model.cells.slice(0, 6).all(func(cell: Dictionary) -> bool:
+		return int(cell.word._growth_priority) == 2)
+		and model.cells.filter(func(cell: Dictionary) -> bool: return int(cell.word._growth_priority) == 2).size() == 8,
+		"The two opening bags include all highest-priority words and practise them first")
+	check(initial_chests == 2, "Every third initial pair contains exactly one chest")
+	for row in range(Model.ROWS):
+		check(model.cells.filter(func(cell: Dictionary) -> bool: return int(cell.row) == row).size()
+			== (Model.COLUMNS if row >= Model.ROWS - 3 else 0), "Exactly the bottom three rows start full")
 	var second = Model.new()
 	second.configure(words, 3, 19)
 	check(model.snapshot() == second.snapshot(), "A fixed seed reproduces the complete initial board")
@@ -227,9 +231,10 @@ func _test_supply_and_gravity() -> void:
 		model.step(0.001)
 		check(model.cells.size() == INITIAL_COUNT + Model.DROP_COUNT and model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT,
 			"The ten-second boundary supplies exactly four tiles")
-		for drop_index in range(4):
+		var fill_drop_count: int = ceili(float(Model.CAPACITY - INITIAL_COUNT) / Model.DROP_COUNT)
+		for drop_index in range(1, fill_drop_count):
 			model.step(model.spawn_interval)
-			_assert_board(model, "Seed %d, drop %d" % [seed_value, drop_index + 2])
+			_assert_board(model, "Seed %d, drop %d" % [seed_value, drop_index + 1])
 		check(model.cells.size() == 24 and model.full_elapsed == -1.0,
 			"The final incoming batch does not begin danger before every tile lands")
 		var chest_tiles: int = 0
@@ -400,15 +405,20 @@ func _test_manual_drop_guards() -> void:
 
 func _test_manual_drop_partial_batch() -> void:
 	var model = Model.new()
-	var events: Dictionary = _observe(model)
 	model.configure(_vocabulary(), 3, 73)
-	model.step(4.0 * Model.INITIAL_SPAWN_INTERVAL + Model.SETTLE_SECONDS)
+	model.step(_danger_start_seconds())
+	var pair: Array[int] = _pair(model)
+	check(model.try_merge(pair[0], pair[1]) == "correct", "Clearing one pair creates a two-slot partial-drop fixture")
+	model.step(Model.FUSION_SECONDS)
+	model.step(_settle_remaining(model))
+	var events: Dictionary = _observe(model)
 	check(model.cells.size() == Model.CAPACITY - 2 and model.can_drop_now(),
 		"Two remaining board slots still allow a manual preview release")
 	var existing: Array = model.cells.duplicate(true)
 	var advertised: Array = model.upcoming.duplicate(true)
+	var generated_before: int = model.generated_tiles
 	check(model.drop_now(), "Manual release can consume only the prefix that fits on a nearly full board")
-	check(model.cells.size() == Model.CAPACITY and model.generated_tiles == Model.CAPACITY
+	check(model.cells.size() == Model.CAPACITY and model.generated_tiles == generated_before + 2
 		and model.cells.slice(0, existing.size()) == existing and model.full_elapsed == -1.0,
 		"A partial manual batch preserves existing tiles and waits for landing before danger")
 	for index in range(2):
@@ -1102,7 +1112,7 @@ func _test_full_board_timeout() -> void:
 	model.configure(_vocabulary(), 3, 9)
 	model.step(_danger_start_seconds())
 	check(model.cells.size() == 24 and is_equal_approx(float(model.snapshot().full_remaining), 8.0),
-		"Four drops and the final batch's landing expose the full eight-second countdown")
+		"The filling drops and final batch's landing expose the full eight-second countdown")
 	check(events.cues == ["danger"], "A newly full board emits one warning at elapsed zero")
 	for second in range(7):
 		model.step(0.999)
@@ -1414,8 +1424,8 @@ func _test_overlapping_gravity_continuity() -> void:
 	var ids: Array[int] = []
 	for index in range(model.cells.size()):
 		var cell: Dictionary = model.cells[index]
-		cell.column = 0
-		cell.row = Model.ROWS - 1 - index
+		cell.column = floori(float(index) / Model.ROWS)
+		cell.row = Model.ROWS - 1 - index % Model.ROWS
 		cell.kind = "word" if index % 2 == 0 else "picture"
 		cell.age = Model.SETTLE_SECONDS
 		cell.falling_rows = 0

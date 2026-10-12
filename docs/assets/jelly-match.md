@@ -103,9 +103,10 @@ is independent of this motion.
 Only the painted body deforms; the learning picture, label and hit bounds retain
 their layout. Input becomes available after the same clock completes.
 
-Supply dispatches four tiles together. Six settled tiles provide the initial
-matching layout. The first automatic batch waits for the full ten-second
-interval; the upcoming area can still release it immediately on request.
+Supply dispatches four tiles together. Twelve settled tiles fill the bottom
+three rows of the initial matching layout. The first automatic batch waits for
+the full ten-second interval; the upcoming area can still release it immediately
+on request.
 Each cleared pair shortens the interval by 0.05 seconds, down to a six-second
 minimum after 80 pairs. This leaves nine seconds at 20 pairs and 7.5 seconds at
 50 pairs. New rounds and replays receive the same opening interval. Four committed upcoming

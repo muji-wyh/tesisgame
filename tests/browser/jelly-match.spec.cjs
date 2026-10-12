@@ -35,7 +35,7 @@ async function startJelly(page, options = {}) {
   await libraryControl(page, 'Mode_jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles?.length >= 6 &&
+    return state.visible && state.phase === 'playing' && state.tiles?.length >= 12 &&
       state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Jelly board starts with settled word and picture tiles' }).toBe(true);
   return errors;
@@ -44,9 +44,15 @@ async function startJelly(page, options = {}) {
 test('opening and replay wait for the first batch while manual release stays available', async ({ page }, info) => {
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const opening = await jelly(page);
-  expect(opening.generated_tiles).toBe(6);
-  expect(opening.tiles).toHaveLength(6);
+  expect(opening.generated_tiles).toBe(12);
+  expect(opening.tiles).toHaveLength(12);
   expect(opening.tiles.every(tile => tile.settled)).toBe(true);
+  expect([...new Set(opening.tiles.map(tile => tile.row))].sort((a, b) => a - b),
+    'The opening occupies exactly the three bottom rows').toEqual([3, 4, 5]);
+  for (const row of [3, 4, 5]) {
+    expect(opening.tiles.filter(tile => tile.row === row).map(tile => tile.column).sort((a, b) => a - b),
+      'Every opening row fills all four columns').toEqual([0, 1, 2, 3]);
+  }
   expect(opening.upcoming).toHaveLength(4);
   expect(opening.preview.enabled).toBe(true);
   expect(opening.spawn_interval).toBe(10);
@@ -65,33 +71,34 @@ test('opening and replay wait for the first batch while manual release stays ava
     record();
   });
   await expect.poll(async () => (await jelly(page)).generated_tiles,
-    { timeout: 14000, intervals: [50], message: 'The opening batch waits for its ordinary ten-second interval' }).toBe(10);
+    { timeout: 14000, intervals: [50], message: 'The opening batch waits for its ordinary ten-second interval' }).toBe(16);
   const frames = await page.evaluate(() => {
     window.jellyOpeningObserver.disconnect();
     return window.jellyOpeningFrames;
   });
-  const waiting = frames.filter(frame => frame.generated === 6);
+  const waiting = frames.filter(frame => frame.generated === 12);
   expect(waiting.length).toBeGreaterThan(3);
-  expect(Math.max(...waiting.map(frame => frame.elapsed)), 'The six starters remain until the end of the opening interval')
+  expect(Math.max(...waiting.map(frame => frame.elapsed)), 'The three starting rows remain until the end of the opening interval')
     .toBeGreaterThan(9.5);
   const arrived = await jelly(page);
-  expect(arrived.tiles.slice(6).map(tile => tile.id)).toEqual(advertised);
+  expect(arrived.tiles.slice(12).map(tile => tile.id)).toEqual(advertised);
   await pressControl(page, arrived.finish);
   await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
   const result = await jelly(page);
   await pressControl(page, result.result.replay);
   await expect.poll(async () => (await jelly(page)).round_id).not.toBe(opening.round_id);
   const replay = await jelly(page);
-  expect(replay.generated_tiles, 'Replay also starts without an automatic batch').toBe(6);
+  expect(replay.generated_tiles, 'Replay also starts with three settled rows and no automatic batch').toBe(12);
   expect(replay.tiles.every(tile => tile.settled)).toBe(true);
-  expect(replay.spawn_elapsed).toBeLessThan(2);
+  expect(replay.spawn_elapsed, 'Replay is still waiting for its first ordinary supply interval').toBeLessThan(replay.spawn_interval);
   expect(replay.preview.enabled).toBe(true);
   const manual = replay.upcoming.map(tile => tile.id);
   await pressRect(page, replay.preview.rect);
-  await expect.poll(async () => (await jelly(page)).generated_tiles).toBe(10);
+  await expect.poll(async () => (await jelly(page)).generated_tiles).toBe(16);
   const released = await jelly(page);
-  expect(released.tiles.slice(6).map(tile => tile.id)).toEqual(manual);
-  expect(released.spawn_elapsed, 'An early manual release starts a fresh supply interval').toBeLessThan(2);
+  expect(released.tiles.slice(12).map(tile => tile.id)).toEqual(manual);
+  expect(released.spawn_elapsed, 'Manual release leaves the next batch waiting for its ordinary supply interval')
+    .toBeLessThan(released.spawn_interval);
   expect(errors).toEqual([]);
 });
 
@@ -403,7 +410,7 @@ async function focusTile(page, tileId) {
   throw new Error(`Keyboard navigation could not focus Jelly tile ${tileId}.`);
 }
 
-test('four previews predict simultaneous batches and the final partial batch with stable landing ghosts', async ({ page }, info) => {
+test('four previews predict simultaneous batches through a full board with stable landing ghosts', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await openModeMenu(page);
@@ -421,7 +428,7 @@ test('four previews predict simultaneous batches and the final partial batch wit
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.generated_tiles === 24 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 55000, intervals: [100], message: 'Real four-tile dispatches fill the last two spaces with a partial batch' }).toBe(true);
+  }, { timeout: 55000, intervals: [100], message: 'Three real four-tile dispatches fill the remaining three rows' }).toBe(true);
   const timeline = await page.evaluate(() => window.jellySupplyTimeline);
   await info.attach('jelly-batch-supply.json', { body: Buffer.from(JSON.stringify(timeline, null, 2)), contentType: 'application/json' });
   const records = timeline.filter(entry => entry.upcoming.length === 4);
@@ -444,7 +451,7 @@ test('four previews predict simultaneous batches and the final partial batch wit
     arrivals.push({ ids: added.map(tile => tile.id), at: current.at });
   }
   expect(arrivals.length).toBeGreaterThanOrEqual(3);
-  expect(arrivals.at(-1).ids, 'The board has room for exactly two tiles in its final batch').toHaveLength(2);
+  expect(arrivals.at(-1).ids, 'The final full batch fills the last four spaces').toHaveLength(4);
   for (const batch of arrivals.slice(0, 2)) for (const id of batch.ids) {
     const flight = records.filter(entry => entry.at >= batch.at && entry.ghosts.some(ghost => ghost.visible && ghost.id === id));
     const visibleFlight = flight.filter(entry => {
@@ -490,7 +497,7 @@ test('four previews predict simultaneous batches and the final partial batch wit
     expect(landed.ghosts.some(ghost => ghost.visible && ghost.id === id), 'This ghost disappears after contact').toBe(false);
   }
   expectPreviewLayout(await jelly(page), await metrics(page));
-  await page.screenshot({ path: info.outputPath('jelly-four-previews-final-partial-batch.png'), scale: 'css' });
+  await page.screenshot({ path: info.outputPath('jelly-four-previews-final-batch.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
 
@@ -1067,7 +1074,7 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.round_id !== firstResult.round_id && state.visible && state.phase === 'playing' &&
-      state.tiles.length === 6 && state.tiles.every(tile => tile.settled) && !state.result.visible;
+      state.tiles.length === 12 && state.tiles.every(tile => tile.settled) && !state.result.visible;
   }, { timeout: 10000, message: 'Play again immediately creates a playable fresh board' }).toBe(true);
   const replay = await jelly(page);
   expect((await treasure(page)).visible, 'Unopened rewards do not interrupt replay').toBe(false);
@@ -1211,7 +1218,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(arrivals.length, 'Natural batch arrivals establish the real ten-second cadence').toBeGreaterThanOrEqual(3);
   for (let index = 1; index < arrivals.length; index++) {
     expect(arrivals[index].generated - arrivals[index - 1].generated,
-      'Dispatches add four tiles until only two board cells remain').toBe(index === arrivals.length - 1 ? 2 : 4);
+      'Each natural dispatch adds one full row of four tiles').toBe(4);
   }
   for (const interval of intervals) expect(interval, 'Idle batch arrivals leave reading and matching time').toBeGreaterThanOrEqual(9.5);
   expect(errors).toEqual([]);

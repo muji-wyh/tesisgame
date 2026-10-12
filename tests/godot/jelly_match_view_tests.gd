@@ -96,9 +96,20 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
-func _reset(view, reduced: bool = false, settled: bool = true) -> void:
+func _reset(view, reduced: bool = false, settled: bool = true, stack_heights: Array = []) -> void:
 	check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "Jelly Match configures with the current curriculum")
 	view.set_process(false)
+	if not stack_heights.is_empty():
+		# Model a partially cleared board explicitly for unequal landing heights.
+		var count: int = 0
+		for column in range(view.game.COLUMNS):
+			for height in range(int(stack_heights[column])):
+				var cell: Dictionary = view.game.cells[count]
+				cell.column = column
+				cell.row = view.game.ROWS - height - 1
+				count += 1
+		view.game.cells.resize(count)
+		view.game.generated_tiles = count
 	# These presentation fixtures observe a batch released by the player.
 	view.game.drop_now()
 	if settled:
@@ -116,21 +127,21 @@ func _check_opening(view) -> void:
 	for reduced in [false, true]:
 		check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "A new round configures without a forced opening drop")
 		view.set_process(false)
-		check(view.game.cells.size() == 6 and _arrivals(view).is_empty() and view._ghosts.is_empty(),
+		check(view.game.cells.size() == 12 and _arrivals(view).is_empty() and view._ghosts.is_empty(),
 			"The opening shows only settled starters without falling bodies or landing projections")
 		check(view.snapshot().preview.slots.size() == 4 and not view.drop_button.disabled,
 			"All four upcoming tiles remain available for an optional immediate release")
 		_advance(view, 2.0)
 		view.pause(true)
 		_advance(view, 10.0)
-		check(view.game.cells.size() == 6 and is_equal_approx(view.game.spawn_elapsed, 2.0),
+		check(view.game.cells.size() == 12 and is_equal_approx(view.game.spawn_elapsed, 2.0),
 			"Pausing the opening preserves the remaining reading time")
 		view.pause(false)
 		_advance(view, 7.99)
-		check(view.game.cells.size() == 6 and _arrivals(view).is_empty(),
+		check(view.game.cells.size() == 12 and _arrivals(view).is_empty(),
 			"The opening has no automatic arrivals before the complete ten seconds")
 		_advance(view, 0.02)
-		check(_arrivals(view).size() == 4 and view.game.cells.size() == 10,
+		check(_arrivals(view).size() == 4 and view.game.cells.size() == 16,
 			"The first automatic batch uses the normal visible four-tile descent")
 
 
@@ -447,7 +458,8 @@ func _check_preview_lifecycle_gates(view) -> void:
 			"hidden":
 				view.hide()
 			"full":
-				view.game.step(4.0 * view.game.spawn_interval)
+				var fill_drop_count: int = ceili(float(view.game.CAPACITY - view.game.cells.size()) / view.game.DROP_COUNT)
+				view.game.step(float(fill_drop_count) * view.game.spawn_interval - view.game.spawn_elapsed)
 				view._sync_tiles()
 				view._refresh_hud()
 				check(view.game.cells.size() == view.game.CAPACITY and view.game.phase == "playing",
@@ -649,7 +661,7 @@ func _check_preview_motion(view) -> void:
 
 
 func _check_drop_projection(view) -> void:
-	_reset(view, false, false)
+	_reset(view, false, false, [2, 2, 4, 4])
 	var incoming: Array[Dictionary] = _arrivals(view)
 	check(incoming.size() == 4 and view.snapshot().landing_ghosts.size() == 4 and view._ghosts.size() == 4,
 		"Four simultaneous arrivals each receive their own destination projection")
@@ -764,11 +776,8 @@ func _check_landing_presentation(view) -> void:
 
 
 func _check_landing_audio_groups(view) -> void:
-	for skipped_drops in [0, 2]:
-		_reset(view, false, false)
-		if skipped_drops > 0:
-			view.game.step(float(skipped_drops) * view.game.spawn_interval)
-			view._sync_tiles()
+	for stack_heights in [[1, 1, 2, 2], [2, 2, 4, 4]]:
+		_reset(view, false, false, stack_heights)
 		var incoming: Array[Dictionary] = _arrivals(view)
 		check(incoming.size() == 4, "The landing-audio fixture observes one complete airborne batch")
 		if incoming.is_empty():
@@ -782,9 +791,9 @@ func _check_landing_audio_groups(view) -> void:
 		_advance(view, Motion.ready_at(incoming[-1]) + 0.001, 1.0 / 240.0)
 		check(cues.count("land") == _landing_groups(incoming),
 			"Faster contacts emit one cue for each natural impact group without one cue per tile")
-		if skipped_drops == 0:
+		if int(stack_heights[0]) == 1:
 			check(cues.count("land") == 1 and last_contact - first_contact < 0.12,
-				"The first batch's closely spaced impacts combine into one grounded landing cue")
+				"A batch's closely spaced impacts combine into one grounded landing cue")
 		else:
 			check(cues.count("land") == 2 and last_contact - first_contact > 0.12,
 				"Contacts beyond the grouping window retain both distinct landing cues")

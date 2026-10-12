@@ -11,8 +11,9 @@ the [woodland environment](jelly-environment.md), and the
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
 | Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. Existing clear combines rubberduck and Aeva CC0 recordings; exact provenance in the Jelly Match records | Contact fires on first painted-body contact, merge on commitment, and the unchanged clear cue on collection release. No new recording or processing. |
 
-The six-column board uses letter chunks that concatenate in drag-source then
-drop-target order. Only an exact word in the selected learning-age dictionary is
+The six-column board starts with eighteen settled chunks in three full bottom
+rows. Letter chunks concatenate in drag-source then drop-target order. Only an
+exact word in the selected learning-age dictionary is
 collectible. Its picture and warm gel rim indicate readiness without adding a
 floating instruction label. Each original chunk adds mass and 50 coins; merging
 preserves all fragment markers, while tapping the complete word collects them.

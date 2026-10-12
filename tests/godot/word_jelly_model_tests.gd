@@ -188,7 +188,10 @@ func _test_configuration() -> void:
 	var words: Array = [_word("cat"), _word(" CAT ", 3, "duplicate-spelling"), _word("dog", 3, "cat"),
 		_word("rocket", 6), {"id": "missing-media", "text": "test", "min_age": 3}]
 	check(model.configure(words, 3, 1), "eligible pictured words configure")
-	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with twelve parts")
+	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with eighteen parts")
+	for row in range(Model.ROWS):
+		check(model.cells.filter(func(tile: Dictionary) -> bool: return int(tile.row) == row).size()
+			== (Model.COLUMNS if row >= Model.ROWS - 3 else 0), "Exactly the bottom three rows start full")
 	check(model.upcoming.size() == 6 and Model.COLUMNS == 6, "six columns and previews")
 	for tile in model.cells:
 		check(str(tile.text) in ["ca", "t"], "duplicate IDs, duplicate spelling, other ages, and incomplete media are omitted")
@@ -1424,7 +1427,7 @@ func _arrival_ids(model) -> Array[int]:
 
 func _test_arrival_timing() -> void:
 	var initial = _model([_word("cat")])
-	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the twelve-root opening")
+	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the three-row opening")
 	for tile: Dictionary in initial.cells:
 		check(initial.is_settled(tile) and not bool(tile.arrival) and is_equal_approx(Model.settle_duration(tile), Model.SETTLE_SECONDS),
 			"opening roots remain settled with the ordinary recovery clock")

@@ -145,7 +145,7 @@ func _check_opening_and_bounds(view) -> void:
 		view.size = dimensions
 		_reset(view)
 		var state: Dictionary = view.snapshot()
-		check(state.columns == 6 and state.rows == 8 and state.tiles.size() == 12, "opening contains twelve settled roots in six columns")
+		check(state.columns == 6 and state.rows == 8 and state.tiles.size() == 18, "opening contains three full rows of six settled roots")
 		check(state.preview.slots.size() == 6 and state.preview.enabled, "six upcoming roots have a working manual drop")
 		check(view._preview_rect.end.y <= view._board.position.y,
 			"the whole supply tray sits above the well in portrait and landscape")
@@ -1156,7 +1156,7 @@ func _check_arrival_packet(view) -> void:
 					_advance(view, 0.001)
 				else:
 					view._drop_next(int(packet[0].id))
-				check(view.game.cells.size() == 18, "manual and timed release each commit the six preview bodies")
+				check(view.game.cells.size() == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "manual and timed release each commit the six preview bodies")
 				var first_id: int = int(packet[0].id)
 				var last_id: int = int(packet[-1].id)
 				var first_contact: float = Model.arrival_contact_at(view.game.cell(first_id))
@@ -1222,7 +1222,7 @@ func _check_arrival_packet(view) -> void:
 					check(view.game.is_settled(view.game.cell(id))
 						and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(view.game.cell(id))),
 						"every supplied jelly finishes planted exactly on its reserved board cell")
-				check(view.game.generated_tiles == 18 and view.game.merged_count == 0 and payouts.is_empty(),
+				check(view.game.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and view.game.merged_count == 0 and payouts.is_empty(),
 					"arrival, pause and resize preserve the supply and reward ledgers")
 	view.size = Vector2(1000, 720)
 

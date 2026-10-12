@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, metrics, tap, rendered, enterGame, observeAudio } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio } = require('./game-ui.cjs');
 const { recordingTiming } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
@@ -29,12 +29,12 @@ async function startWordJelly(page, { age = 3, reducedMotion = 'no-preference' }
   const control = (await metrics(page)).library.controls.find(item => item.name === 'Mode_word_jelly');
   expect(control, 'Word Jelly appears in the ordinary game library').toBeTruthy();
   expect(control.disabled).toBe(false);
-  await pressRect(page, control.rect);
+  await chooseMode(page, 'word_jelly');
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
-      state.tiles?.length >= 12 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 20000, message: 'The real Word Jelly board opens with twelve settled roots' }).toBe(true);
+      state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
+  }, { timeout: 20000, message: 'The real Word Jelly board opens with three rows of settled roots' }).toBe(true);
   return errors;
 }
 
@@ -416,8 +416,15 @@ test('word pair colors distinguish exact completion targets and preserve source 
 
 test('six columns build a pictured word and a deliberate tap credits its coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
-  expect(opening.tiles).toHaveLength(12);
+  expect(opening.tiles).toHaveLength(18);
   expect(opening.columns).toBe(6);
+  const startingRows = [opening.rows - 3, opening.rows - 2, opening.rows - 1];
+  expect([...new Set(opening.tiles.map(tile => tile.row))].sort((a, b) => a - b),
+    'The opening occupies exactly the three bottom rows').toEqual(startingRows);
+  for (const row of startingRows) {
+    expect(opening.tiles.filter(tile => tile.row === row).map(tile => tile.column).sort((a, b) => a - b),
+      'Every opening row fills all six columns').toEqual([0, 1, 2, 3, 4, 5]);
+  }
   expect([...new Set(opening.tiles.map(tile => tile.column))].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5]);
   expect(new Set(opening.tiles.map(tile => Math.round(tile.rect[0]))).size,
     'All six columns occupy distinct rendered horizontal positions').toBe(6);
@@ -447,7 +454,7 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   const stillPaused = await jelly(page);
   expect(stillPaused.spawn_elapsed, 'The word supply clock pauses behind the menu').toBe(paused.spawn_elapsed);
   expect(stillPaused.tiles.map(tile => tile.id)).toEqual(paused.tiles.map(tile => tile.id));
-  await page.keyboard.press('Escape');
+  await chooseMode(page, 'word_jelly');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
   await expect.poll(async () => (await jelly(page)).visible).toBe(true);
   const before = await jelly(page);
