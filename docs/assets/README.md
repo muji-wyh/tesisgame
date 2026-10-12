@@ -13,7 +13,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Asset art direction](art-direction.md) | Required sourced artwork, inspection, license records, and honest integration status |
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
 | [Ava speech](ava-voice.md) | Approved voice profile, all 1,888 word, phrase and prompt recordings, generation, and source hashes |
-| [Pip growth](pip-growth.md) | Eleven storybook appearances, age-specific actions and ten character voice recordings |
+| [Pip growth](pip-growth.md) | Eleven storybook appearances, age-specific actions and ten character recordings retained for the separate art preview |
 | [Complete animated vocabulary library](word-library.md) | All 1,285 pictured words: eight articulated Blender clips, 1,277 illustration motions, source rights, reproduction and local review; 265 words remain context-only |
 | [Articulated teaching clips](lv3-motion-studies.md) | Eight cheerful action performances, Blender authoring, frame checks and the local comparison gallery |
 | [Growth vocabulary artwork](growth-vocabulary.md) | 35 new sourced pictures and contextual vocabulary without invented images |
@@ -27,7 +27,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |
 | [Fruit-slice audio](voice-pop-random-slices.md) | Second-choice hit bank and unchanged source hashes |
 | [Single-slice audio](voice-pop-sfx.md) | Earlier hit fallback and source-pack licensing |
-| [Pip sounds](pip-sounds.md) | Current calls and source CC0 attribution |
+| [Pip sounds](pip-sounds.md) | Pregame loading-toy calls, silent gameplay reactions and source CC0 attribution |
 | [Pip dance](pip-dance.md) | Atlas geometry and original-art derivation |
 | [Jungle and Candy audio](jungle-candy-audio.md) | Retained arrival effects, superseded music and greetings, and retired opening-clip provenance |
 | [Unity artwork](unity-art.md) | Optional local image import, licenses, and tracked fallbacks |

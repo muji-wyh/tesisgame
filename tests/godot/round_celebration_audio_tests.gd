@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 const Audio = preload("res://scripts/game_audio.gd")
 const CUE_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
@@ -80,7 +82,7 @@ func _check_independent_presentation() -> void:
 	check(audio._playback_requests[audio.effect] == effect_request
 		and audio._playback_requests[audio.pair_feedback] == answer_request,
 		"Celebration does not replace a card effect or the final correct-answer acknowledgement")
-	check(audio.pip_reaction == null and not audio.voice.playing
+	check(not PipAudio.has_pip_resources(audio) and not audio.voice.playing
 		and audio._pop_slice_rng.state == pop_random,
 		"Celebration introduces no quack or narration and consumes no gameplay sound randomness")
 	check(_chest_state(audio) == original_chest_state and audio._chest_players.is_empty(),
@@ -228,7 +230,7 @@ func _check_missing_recording() -> void:
 		audio.play_round_celebration_cue("missing", cue)
 	check(_playing(audio) == 0 and audio._round_celebration_seen.size() == 3,
 		"Unavailable recordings leave cue progress intact without adding a generated sound or retry queue")
-	check(audio._chest_players.is_empty() and audio.pip_reaction == null,
+	check(audio._chest_players.is_empty() and not PipAudio.has_pip_resources(audio),
 		"Missing celebration audio does not fall back to a chest save cue or a quack")
 	audio.stop_round_celebration()
 	check(audio._round_celebration_id.is_empty() and is_equal_approx(audio.music.volume_db, linear_to_db(0.12)),

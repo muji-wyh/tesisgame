@@ -84,11 +84,13 @@ synthesis scripts are recorded in the manifest; no audio editing is applied.
 Match, Memory, Voice Pop, Phrase Builder, and the vocabulary library play bundled
 pronunciations through `GameAudio.say`. Phrase Builder plays its 330 whole-phrase
 clips and individual word pronunciations without spoken guide narration.
-Eight world greetings use the same profile. Match no longer includes spoken
+The eight retained world greetings use the same profile but no longer play when
+changing themes. Match no longer includes spoken
 wrong-answer feedback or a loss prompt. Gameplay
 never asks the operating system to choose a different speaking voice.
 
-Pip's duck calls, music, chest sounds, and other nonverbal sound effects remain
+Pip's gameplay reactions are visual only. The original duck calls remain in the
+pregame loading toy; music, chest sounds, and other nonverbal effects retain
 their existing recordings. All speech stays in the startup game pack, so
 playback does not download speech or contact the synthesis service. Godot keeps
 the existing compressed audio import settings without changing speech pitch or speed.

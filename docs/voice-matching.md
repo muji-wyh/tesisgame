@@ -125,10 +125,13 @@ recognition. Count a valid homophone as correct. A different-word or silence
 control can be selected before starting to measure unwanted target hits.
 
 Repeat the same pass with **Normal**, **Reduced · 35%**, and **Silent** sound
-levels. The first two use real launch, slice, miss, and Match answer assets on a
-fixed schedule. Miss uses the sourced wrong sound in Match and Memory, and the
-missed-word Pip call in Voice Pop. Match uses the sourced right sound. The reduced setting changes only these diagnostic
-channels; it is not a new production-volume default. Stop listening before
+levels. The first two use real launch, slice, and Match answer assets on a
+fixed schedule. Miss uses the sourced wrong sound in Match and Memory and is
+silent in Voice Pop, matching its visual-only Pip reaction. Match uses the
+sourced right sound. Pip's duck calls and theme welcomes do not play during
+gameplay; educational word and phrase pronunciations remain available.
+The reduced setting changes only these diagnostic channels; it is not a new
+production-volume default. Stop listening before
 changing the condition. Also compare device speakers with headphones at the
 same distance and device volume. Record the device/OS version and adult/child
 speaker category in **Test details**; do not enter player names.

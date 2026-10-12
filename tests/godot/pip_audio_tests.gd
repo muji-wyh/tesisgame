@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -67,7 +69,7 @@ func _check_click_routes() -> void:
 		before = _voice_requests(app)
 		app.duck.pressed.emit()
 		check(app.duck.is_manual_action_busy() and not app.audio.voice.playing
-			and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing) and _voice_requests(app) == before,
+			and not PipAudio.has_pip_resources(app.audio) and _voice_requests(app) == before,
 			mode + " result Pip keeps its visual trick without a quack")
 		app.duck.settle()
 	app._mode_id = original_mode
@@ -98,6 +100,7 @@ func _check_click_routes() -> void:
 	app.model.phase = playing_phase
 	app._refresh()
 	check(app.audio.get_children() == players, "All native Pip click routes keep the same audio players")
+	check(not PipAudio.has_pip_resources(app.audio), "No companion click or lifecycle route loads a Pip recording")
 	check(_progress(app) == progress, "Pip interactions leave lesson cards, rewards and learning progress unchanged")
 	check(_saved_files(directory) == saved, "Pip greetings do not write or alter any saved progress")
 	app.audio.halt()

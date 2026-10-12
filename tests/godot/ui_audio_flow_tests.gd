@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -22,6 +24,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(true)
+	_check_theme_audio(app)
 	_check_match_prompt_audio(app)
 	_check_memory_prompt_audio(app)
 	app.choose_mode("memory")
@@ -457,6 +460,17 @@ func _observe_match_tap(app, notices: Array[Dictionary], id: String) -> void:
 	app.cards[id].pressed.emit()
 
 
+func _check_theme_audio(app) -> void:
+	app.audio.set_muted(false)
+	for theme: String in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
+		app.choose_theme(theme)
+		check(app.model.theme_id == theme and app.audio.music.playing
+			and app.audio.music.stream.data == load("res://assets/audio/bgm/" + theme + ".wav").data,
+			"Choosing " + theme + " retains the world's background music")
+		check(not app.audio.voice.playing and not PipAudio.has_pip_resources(app.audio),
+			"Choosing " + theme + " does not load or play Pip's welcome narration")
+
+
 func _check_speech_debug(app) -> void:
 	app.new_round(97, true, "", "pop")
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
@@ -473,12 +487,18 @@ func _check_speech_debug(app) -> void:
 	check(app._on_speech_debug(["open"]) and app._on_speech_debug(["mix", 0.35]),
 		"Repeated open is idempotent and the paused scene accepts the audio comparison")
 	for cue: String in ["launch", "slice", "miss", "match"]:
+		app._on_speech_debug(["cue", "stop"])
 		check(app._on_speech_debug(["cue", cue]), "The diagnostic bridge accepts the real " + cue + " cue")
+		if cue == "miss":
+			check(app.audio.get_children().all(func(player: Node) -> bool:
+				return not player is AudioStreamPlayer or not player.playing)
+				and not PipAudio.has_pip_resources(app.audio),
+				"The Voice Pop miss diagnostic stays silent without loading a Pip recording")
+			continue
 		var player: AudioStreamPlayer
 		match cue:
 			"launch": player = app.audio.pop_launch
 			"slice": player = app.audio.last_pop_player()
-			"miss": player = app.audio.pip_reaction
 			"match": player = app.audio.pair_feedback
 		check(player.playing and app.audio.can_process(),
 			"The diagnostic " + cue + " remains playable while the scene is paused")
@@ -490,7 +510,7 @@ func _check_speech_debug(app) -> void:
 		"Elapsed diagnostic time and stale native callbacks cannot advance or score the paused game")
 	check(app._on_speech_debug(["cue", "stop"]) and app._speech_debug_active and paused
 		and not app.audio.pop_launch.playing and not app.audio.pair_feedback.playing
-		and not app.audio.pip_reaction.playing,
+		and not PipAudio.has_pip_resources(app.audio),
 		"Stopping diagnostic cues keeps gameplay paused without retaining audio tails")
 	check(not app._on_speech_debug(["mix", 0.2]) and not app._on_speech_debug(["cue", "reward"]),
 		"The bridge rejects unknown mixes and non-diagnostic sounds")
@@ -508,11 +528,11 @@ func _check_speech_debug(app) -> void:
 	check(app._on_speech_debug(["open"]), "Match can enter the same diagnostic pause")
 	app._on_speech_debug(["mix", 0.35])
 	app._on_speech_debug(["cue", "miss"])
-	check(app.audio.pair_feedback.playing and not app.audio.pip_reaction.playing
+	check(app.audio.pair_feedback.playing and not PipAudio.has_pip_resources(app.audio)
 		and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
 		"Match diagnostics use the supplied wrong effect without a Pip quack")
 	app.on_page_hidden()
-	check(paused and app._speech_debug_active and not app.audio.pip_reaction.playing
+	check(paused and app._speech_debug_active and not PipAudio.has_pip_resources(app.audio)
 		and not app.audio.pair_feedback.playing and is_equal_approx(app.audio._speech_debug_mix, 1.0)
 		and not app._on_speech_debug(["cue", "launch"]),
 		"Backgrounding silences diagnostics and keeps the pause until microphone stop is confirmed")

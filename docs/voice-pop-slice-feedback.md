@@ -43,9 +43,10 @@ unchanged. Normal recognition rollover lets a newly earned cut finish; an
 actual microphone error, menu visit, or background transition clears it.
 
 Pip keeps the happy jump on a successful Voice Pop hit, while the blade and cut
-recording supplies the hit sound. Hits do not play Pip's happy call. Missed
-targets retain Pip's sad animation and call; Match and Memory feedback are
-unchanged.
+recording supplies the hit sound. Missed targets retain Pip's sad animation.
+Both reactions are silent: gameplay no longer plays Pip's duck calls or theme
+welcome narration. Word and phrase pronunciations, launch and slice sounds,
+music, and ordinary answer and reward effects retain their existing behavior.
 
 See [audio provenance and reproduction](assets/voice-pop-reference-audio.md)
 and the [sample manifest](assets/voice-pop-reference-audio.json).

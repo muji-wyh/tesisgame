@@ -2,10 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording } = require('./bundled-audio.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, pipHeaderRect, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
+  contentBounds, headerPoint, headerIconRect, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -534,29 +534,34 @@ test('Pip follows the board and chest while growth preserves rewards without ext
   expect(errors).toEqual([]);
 });
 
-test('Pip speaks with bundled prompt playback while offline', async ({ page, context }) => {
+test('world changes keep bundled music audible offline without Pip welcome narration', async ({ page, context }) => {
   const errors = watchErrors(page), requests = watchAudioRequests(page);
   await installGamepad(page);
-  await observeOutputAudio(page, { trackSourceLifecycle: true });
+  await observeOutputAudio(page, { trackSourceLifecycle: true, fingerprintBuffers: true });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
   test.skip(!await page.evaluate(() => window.audioObservation.available), 'This WebKit runtime has no audio output.');
-  const bounds = await canvasMetrics(page);
-  const scale = Math.min(bounds.width, bounds.height) / 480;
-  const pip = pipHeaderRect(await logicalMetrics(page)), unit = pip.width / 54;
-  const beak = { x: bounds.x + (pip.x + 16 * unit) * scale, y: bounds.y + (pip.y + 26 * unit) * scale,
-    width: 32 * unit * scale, height: 15 * unit * scale };
-  const resting = await page.screenshot({ clip: beak, scale: 'css' });
   await context.setOffline(true);
   try {
     await page.evaluate(() => window.gamepadFixture.connect());
-    for (let index = 0; index < 8; index++) await pressGamepad(page, 5);
-    const theme = await page.locator('html').getAttribute('data-pip-theme');
-    await expectRecording(page, 0, 'assets/audio/voice/' + theme + '-theme.wav');
-    await expectOutputEnergy(page);
-    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(resting)).toBe(false);
-    await expect.poll(async () => (await page.screenshot({ clip: beak, scale: 'css' })).equals(resting)).toBe(true);
+    for (let index = 0; index < 8; index++) {
+      const previousTheme = await page.locator('html').getAttribute('data-pip-theme');
+      const before = await page.evaluate(() => window.audioObservation.playbacks.length);
+      await pressGamepad(page, 5);
+      await expect(page.locator('html')).not.toHaveAttribute('data-pip-theme', previousTheme);
+      const theme = await page.locator('html').getAttribute('data-pip-theme');
+      await expectRecording(page, before, 'assets/audio/bgm/' + theme + '.wav', { active: true });
+      const click = await expectRecording(page, before, 'assets/imported-audio/ui-click/select.wav');
+      expect(click.fingerprint).toBeTruthy();
+      expect(click.peak, 'Interface feedback contains real audible PCM').toBeGreaterThan(0.01);
+      await expectOutputEnergy(page);
+      const allowed = ['assets/audio/bgm/' + theme + '.wav', 'assets/imported-audio/ui-click/select.wav'].map(recordingTiming);
+      const played = await page.evaluate(from => window.audioObservation.playbacks.slice(from), before);
+      expect(played.every(sound => allowed.some(timing =>
+        Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate)),
+      'Each world change plays only its bundled music and interface click, without a Pip welcome or other narration.').toBe(true);
+    }
     expect(requests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {

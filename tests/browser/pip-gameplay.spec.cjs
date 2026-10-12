@@ -79,6 +79,10 @@ for (const mode of ['match', 'memory']) {
       }
     }
     if (mode === 'memory') await expect(page.locator('#game-status')).toContainText('1 of 5 pairs grown. 2 attempts.');
+    if (audioAvailable) {
+      const playbacks = await page.evaluate(() => audioObservation.playbacks);
+      expect(playbacks.filter(isDuckCall), 'Entering the mode, revealing cards and resolving outcomes never plays any Pip recording.').toEqual([]);
+    }
     await info.attach(`${mode}-pip-gameplay-audio.json`, { body: JSON.stringify({ audioAvailable, evidence }), contentType: 'application/json' });
     expect(errors).toEqual([]);
   });

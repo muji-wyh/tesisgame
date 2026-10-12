@@ -79,16 +79,9 @@ function expectLaunch(sound) {
   expect(sound.peak, 'The launch recording contains audible PCM').toBeGreaterThan(0.01);
 }
 
-const pipReactions = {
-  happy: { duration: waveDuration('assets/audio/pip/duck_double_01_bouncy.wav'), playbackRate: 1.12 },
-  sad: { duration: waveDuration('assets/audio/pip/duck_quack_innocent_deep_short_04.wav'), playbackRate: 0.8 }
-};
-
-function isPipReaction(sound, emotion) {
-  const expected = pipReactions[emotion];
-  return Math.abs(sound.duration - expected.duration) <= 1 / sound.sampleRate &&
-    Math.abs(sound.playbackRate - expected.playbackRate) < 0.001;
-}
+const pipRecordings = require('../../docs/assets/pip-sounds.json').assets.map(asset => recordingTiming(asset.file));
+const isPipCall = sound => pipRecordings.some(timing =>
+  Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
 
 function isHitSlice(sound) {
   return sound.playbackRate === 1 && expectedSlices.some(asset => Math.abs(asset.seconds - sound.duration) <= 1 / sound.sampleRate);
@@ -98,12 +91,25 @@ function expectResultSaveCue(sounds) {
   expect(sounds, 'A zero-chest result remains quiet without profile-score submission').toEqual([]);
 }
 
-function expectPipReaction(sound, emotion) {
-  expect(isPipReaction(sound, emotion), `The ${emotion} call uses its real Pip recording and expressive pitch`).toBe(true);
-  expect(sound.contextState).toBe('running');
-  expect(sound.loop).toBe(false);
-  expect(sound.fingerprint).toBeTruthy();
-  expect(sound.peak, 'Pip feedback contains real audible PCM').toBeGreaterThan(0.01);
+function expectSilentPipRound(sounds, hits, fragmentCount) {
+  const launches = sounds.filter(isLaunch), slices = sounds.filter(isHitSlice);
+  const fragmentTiming = recordingTiming('assets/imported-audio/ui-click/select.wav');
+  const fragmentCues = sounds.filter(sound => Math.abs(sound.duration - fragmentTiming.seconds) <=
+    fragmentTiming.importAllowance + 1 / sound.sampleRate);
+  expect(slices, 'Only accepted hits play slice sounds.').toHaveLength(hits);
+  slices.forEach(expectHitSlice);
+  expect(sounds.filter(isPipCall), 'Successful hits and falling targets never play a Pip recording.').toEqual([]);
+  expect(launches.length, 'Fresh targets retain launch cues throughout the complete round.').toBeGreaterThan(hits);
+  launches.forEach(expectLaunch);
+  expect(fragmentCues, 'Each earned fragment retains its ordinary collection cue.').toHaveLength(fragmentCount);
+  for (const sound of fragmentCues) {
+    expect(sound.fingerprint).toBeTruthy();
+    expect(sound.peak).toBeGreaterThan(0.01);
+    expect(sound.playbackRate).toBe(1);
+    expect(sound.contextState).toBe('running');
+  }
+  expect(sounds.length, 'Live gameplay contains only launches, hit slices and earned fragment cues, with no Pip vocal calls, prompts or BGM.')
+    .toBe(hits + launches.length + fragmentCues.length);
 }
 
 async function installSpeech(page, { automatic = true, available = true, phraseHints = false,
@@ -1418,6 +1424,71 @@ bundledAudioTest('three words in one utterance keep all slice tails and backgrou
   await info.attach('triple-slice-audio.json', { body: JSON.stringify({ triple, stopped }), contentType: 'application/json' });
 });
 
+bundledAudioTest('Voice Pop keeps Pip silent through hits, misses and word review while preserving game sounds', async ({ page, browserName }, info) => {
+  bundledAudioTest.setTimeout(150000);
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
+  const errors = await open(page);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(audioAvailable, 'Chromium must exercise the real audio output.').toBe(true);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const firstWord = await popOne(page, { interim: true });
+  const firstHit = await state(page);
+  await page.evaluate(word => window.__popSpeech.instances.at(-1).emit(word, true), firstWord);
+  await page.waitForTimeout(300);
+  expect((await state(page)).hits, 'Finalizing an accepted word never scores it twice.').toBe(firstHit.hits);
+  expect((await state(page)).score).toBe(firstHit.score);
+  await popOne(page);
+  const scored = await state(page);
+  expect(scored.hits).toBe(2);
+  expect(scored.score).toBeGreaterThan(0);
+  // Leave the remaining targets untouched so real misses run through the same audio path.
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 60000 });
+  const round = await state(page);
+  expect(round.hits).toBe(2);
+  expect(round.score).toBe(scored.score);
+  expect(round.remaining).toBe(0);
+  const fragmentCount = await page.locator('#pop-status').evaluate(element => Number(element.dataset.fragmentCount));
+  const runningSounds = await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
+  if (audioAvailable) expectSilentPipRound(runningSounds, 2, fragmentCount);
+  else expect(runningSounds).toEqual([]);
+  expect(await page.evaluate(() => window.__popSpeech.spoken), 'Pip adds no system speech during gameplay.').toEqual([]);
+
+  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ total: 2, active: false });
+  const beforeReview = await page.evaluate(() => window.audioObservation.playbacks.length);
+  // Capture on the browser clock so a short word's audio survives slow runner round-trips.
+  if (audioAvailable) await page.evaluate(() => {
+    window.__pipReviewOutput = [];
+    window.__pipReviewOutputTimer = setInterval(() => window.__pipReviewOutput.push(...audioOutputObservation.read()), 16);
+  });
+  try {
+    const reviewed = await resultAction(page, /^Hear_/);
+    const recording = catalog.find(word => word.id === reviewed.name.slice(5))?.audio;
+    expect(recording, 'The result still offers the real vocabulary pronunciation.').toBeTruthy();
+    if (audioAvailable) {
+      const voice = await expectRecording(page, beforeReview, recording);
+      expect(voice.playbackRate).toBe(1);
+      await expect.poll(() => page.evaluate(voice => Math.max(0, ...window.__pipReviewOutput
+        .filter(sample => sample.time >= voice.scheduledAt + 0.1 && sample.time < voice.scheduledAt + voice.duration)
+        .map(sample => sample.rms)), voice), {
+        message: 'The vocabulary recording renders audible output after the short interface click has ended.'
+      }).toBeGreaterThan(0.00001);
+    }
+  } finally {
+    if (audioAvailable) await page.evaluate(() => clearInterval(window.__pipReviewOutputTimer));
+  }
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished');
+  expect((await state(page)).hits).toBe(round.hits);
+  expect((await state(page)).score).toBe(round.score);
+  const reviewSounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeReview);
+  expect(reviewSounds.filter(isPipCall), 'Word review never adds a Pip vocal reaction.').toEqual([]);
+  await info.attach('pip-silent-full-round-audio.json', {
+    body: JSON.stringify({ audioAvailable, hits: round.hits, score: round.score, fragmentCount, runningSounds, reviewSounds,
+      reviewOutput: audioAvailable ? await page.evaluate(() => window.__pipReviewOutput) : [] }),
+    contentType: 'application/json'
+  });
+  expect(errors).toEqual([]);
+});
+
 test('a spoken interim word pops once and finishes with animated HITS and simple word results', async ({ page, browserName }, info) => {
   // Includes a real 50-second round plus earned time, result animation and word replay.
   // Keep each response deadline strict while allowing the complete workflow.
@@ -1435,7 +1506,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   const runningSounds = () => page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'running'));
   const runningSoundCount = async () => (await runningSounds()).length;
   const hitSlices = async () => (await runningSounds()).filter(isHitSlice);
-  const happyCalls = async () => (await runningSounds()).filter(sound => isPipReaction(sound, 'happy'));
+  const pipCalls = async () => (await runningSounds()).filter(isPipCall);
   const initialSounds = await runningSounds();
   if (audioAvailable) {
     expect(initialSounds.length, 'The first target has a launch cue').toBeGreaterThan(0);
@@ -1445,7 +1516,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   const word = await popOne(page, { interim: true });
   if (audioAvailable) {
     await expect.poll(async () => (await hitSlices()).length, { message: 'A spoken hit immediately plays exactly one fruit slice.' }).toBe(1);
-    expect((await happyCalls()).length, 'Pip celebrates a Voice Pop hit visually without adding a happy call.').toBe(0);
+    expect(await pipCalls(), 'Pip celebrates a Voice Pop hit visually without adding a vocal call.').toEqual([]);
     expectHitSlice((await hitSlices())[0]);
   }
   await page.screenshot({ path: info.outputPath('hit-burst.png') });
@@ -1455,12 +1526,12 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect((await state(page)).hits).toBe(hits);
   if (audioAvailable) {
     expect((await hitSlices()).length, 'Finalizing the same recognition cannot replay the slice.').toBe(1);
-    expect((await happyCalls()).length, 'Finalizing the same recognition cannot add a happy call.').toBe(0);
+    expect(await pipCalls(), 'Finalizing the same recognition cannot add a Pip vocal call.').toEqual([]);
   }
   const secondWord = await popOne(page);
   if (audioAvailable) {
     await expect.poll(async () => (await hitSlices()).length).toBe(2);
-    expect((await happyCalls()).length, 'Repeated Voice Pop hits retain slicing audio without happy calls.').toBe(0);
+    expect(await pipCalls(), 'Repeated Voice Pop hits retain slicing audio without Pip vocal calls.').toEqual([]);
     const slices = await hitSlices();
     slices.forEach(expectHitSlice);
     if (expectedSlices.length > 1) {
@@ -1473,16 +1544,9 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect(after.score).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 60000 });
   if (audioAvailable) {
-    const all = await runningSounds(), sadCalls = all.filter(sound => isPipReaction(sound, 'sad'));
-    const launches = all.filter(isLaunch);
-    expect((await hitSlices()).length, 'Only the two real hits play slice sounds.').toBe(2);
-    expect((await happyCalls()).length, 'No Voice Pop hit produces a happy call during the complete round.').toBe(0);
-    expect(sadCalls.length, 'Letting targets fall produces sad calls.').toBeGreaterThan(0);
-    sadCalls.forEach(sound => expectPipReaction(sound, 'sad'));
-    expect(launches.length, 'Fresh targets continue receiving launch cues throughout the round.').toBeGreaterThan(2);
-    launches.forEach(expectLaunch);
-    expect(all.length, 'Live gameplay contains only launches, hit slices and sad miss calls, with no happy calls, prompts or BGM.')
-      .toBe(2 + sadCalls.length + launches.length);
+    const all = await runningSounds();
+    const fragmentCount = await page.locator('#pop-status').evaluate(element => Number(element.dataset.fragmentCount));
+    expectSilentPipRound(all, 2, fragmentCount);
   } else {
     expect(await runningSoundCount()).toBe(0);
   }

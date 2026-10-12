@@ -32,7 +32,7 @@ func _check_debug_mix() -> void:
 	root.add_child(audio)
 	audio.interact("spring", false)
 	check(audio.set_speech_debug_mix(0.35), "The diagnostic reduced mix is accepted")
-	for cue: String in ["launch", "slice", "match", "miss"]:
+	for cue: String in ["launch", "slice", "match"]:
 		var player: AudioStreamPlayer
 		var gain: float
 		match cue:
@@ -48,10 +48,6 @@ func _check_debug_mix() -> void:
 				audio.play_pair_feedback(true)
 				player = audio.pair_feedback
 				gain = 0.48
-			"miss":
-				audio.play_pip_reaction(false)
-				player = audio.pip_reaction
-				gain = 0.54
 		check(player.playing and is_equal_approx(db_to_linear(player.volume_db), gain * 0.35),
 			"The reduced diagnostic " + cue + " uses its actual cue and scaled gain: playing=%s gain=%s" % [
 				player.playing, db_to_linear(player.volume_db)])
@@ -65,20 +61,17 @@ func _check_debug_mix() -> void:
 	audio.cue("pop-launch")
 	audio.cue("pop-slice")
 	audio.play_pair_feedback(true)
-	audio.play_pip_reaction(false)
 	check(not audio.pop_launch.playing and audio.last_pop_player() == null
-		and not audio.pair_feedback.playing and not audio.pip_reaction.playing,
+		and not audio.pair_feedback.playing,
 		"The silent mix stops current tails and starts no competing audio")
 	check(audio.set_speech_debug_mix(1.0), "Ending diagnostics restores the authored mix")
 	audio.cue("pop-launch")
 	audio.cue("pop-slice")
 	audio.play_pair_feedback(true)
-	audio.play_pip_reaction(true)
 	check(is_equal_approx(db_to_linear(audio.pop_launch.volume_db), 0.16)
 		and is_equal_approx(db_to_linear(audio.last_pop_player().volume_db), 0.24)
-		and is_equal_approx(db_to_linear(audio.pair_feedback.volume_db), 0.48)
-		and is_equal_approx(db_to_linear(audio.pip_reaction.volume_db), 0.68),
-		"Normal launch, slice, Match and Pip playback regain their original volume")
+		and is_equal_approx(db_to_linear(audio.pair_feedback.volume_db), 0.48),
+		"Normal launch, slice and Match playback regain their original volume")
 	audio.queue_free()
 	await process_frame
 

@@ -138,11 +138,6 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired Match sound is still bundled: " + path)
 			failures += 1
-	for path in load("res://scripts/game_audio.gd").PIP_REACTION_PATHS.values():
-		var greeting: AudioStream = load(path) if ResourceLoader.exists(path) else null
-		if greeting == null or greeting.get_length() < 0.1 or greeting.get_length() > 0.6:
-			printerr("A Pip greeting is missing or invalid in the startup pack: " + path)
-			failures += 1
 	if required.has("--require-pop-slices"):
 		required.remove_at(required.find("--require-pop-slices"))
 		var paths: Array = load("res://scripts/game_audio.gd").POP_SLICE_PATHS

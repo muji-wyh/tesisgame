@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 class BrowserStorage:
 	extends RefCounted
 	var fail_read: bool = false
@@ -99,9 +101,9 @@ func _check_audio_recovery(app) -> void:
 		app.audio.interact(app.model.theme_id)
 		app.audio.cue("select")
 		app.audio.say("res://" + app.data.words[0].audio)
-		app.audio.play_pip_reaction(true)
-		check(app.audio.music.playing and app.audio.voice.playing and app.audio.pip_reaction.playing,
-			location + " starts with real background music, a word and a Pip call")
+		check(app.audio.music.playing and app.audio.voice.playing and app.audio.effect.playing
+			and not PipAudio.has_pip_resources(app.audio),
+			location + " starts with real background music, a word and a selection effect while Pip stays silent")
 		app.on_page_hidden()
 		app.on_page_hidden()
 		check(not app.audio.active and not app.audio.music.playing and not app.audio.voice.playing,
@@ -110,7 +112,7 @@ func _check_audio_recovery(app) -> void:
 		check(app.audio.active and app.audio.music.playing and app.audio.current_theme == app.model.theme_id,
 			location + " resumes its current background music without a refresh")
 		check(not app.audio.voice.playing and not app.audio.effect.playing
-			and not app.audio.pip_reaction.playing,
+			and not PipAudio.has_pip_resources(app.audio),
 			location + " cannot replay cancelled words, reports, effects or Pip calls")
 		var request: int = app.audio._playback_requests.get(app.audio.music, 0)
 		app.on_page_visible()

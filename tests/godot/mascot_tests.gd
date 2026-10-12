@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 var checks: int = 0
 var failures: int = 0
 
@@ -91,7 +93,7 @@ func _run() -> void:
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and (app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3,
 			"Playing with the result companion never changes earned game progress")
-		check(not app.audio.voice.playing and (app.audio.pip_reaction == null or not app.audio.pip_reaction.playing),
+		check(not app.audio.voice.playing and not PipAudio.has_pip_resources(app.audio),
 			"Match result Pip performs its visual trick without a duck sound")
 		check(app.duck._idle_action in app.duck.age_actions(), "The result companion performs its age-specific greeting")
 		app.audio.halt()

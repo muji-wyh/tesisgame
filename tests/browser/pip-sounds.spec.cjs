@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const { recordingTiming } = require('./bundled-audio.cjs');
 const { openGame, enterGame, metrics, headerPoint, openRewards, growthView, activateGrowthControl, observeAudio,
-  tap, rendered, discoverMatchCards, boardPoint, acceptCelebration } = require('./game-ui.cjs');
+  tap, rendered, discoverMatchCards, boardPoint, celebrationState, acceptCelebration } = require('./game-ui.cjs');
 
 function hash(source) {
   let value = 2166136261;
@@ -159,19 +160,27 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    if (index === pairs.length - 1) await expect.poll(async () => (await celebrationState(page)).active).toBe(true);
+    else await expect(page.locator('#game-status')).toContainText('Find 5 word');
   }
   await acceptCelebration(page);
   await rendered(page);
 }
 
 async function greetings(page) {
-  // Voice Pop reactions reuse these recordings at a different pitch.
-  return page.evaluate(durations => audioObservation.playbacks.filter(sound => !sound.loop && sound.playbackRate === 1 &&
+  // Native gameplay must never reuse any loading greeting, at any pitch.
+  return page.evaluate(durations => audioObservation.playbacks.filter(sound => !sound.loop &&
     durations.some(duration => Math.abs(sound.duration - duration) <= 2 / sound.sampleRate)), samples.map(sample => sample.duration));
 }
 
 for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip and growth navigation stay quiet with motion ${reducedMotion}`, async ({ page, browserName }, testInfo) => {
+  // Include card discovery, a full win, the chest celebration and four gestures.
+  // Individual response assertions keep their normal ten-second deadlines.
+  test.setTimeout(150000);
+  // This test needs the earned-chest result surface, which has Pip's manual gestures.
+  // Two saved dry rounds make that result deterministic through the normal pity rule.
+  await page.addInitScript(() => localStorage.setItem('wordBuddies.medalProgress',
+    '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n'));
   await observeAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion });
   const available = await page.evaluate(() => audioObservation.available);
@@ -179,6 +188,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip 
   if (!available) testInfo.annotations.push({ type: 'audio capability', description: 'This WebKit runtime has no AudioContext; native direct input and progress checks still run, audible assertions are unavailable.' });
   await winMatch(page);
   const original = await saves(page), bounds = await metrics(page), companion = headerPoint(bounds, 'pip');
+  const musicTiming = recordingTiming('assets/audio/bgm/' + await page.locator('html').getAttribute('data-pip-theme') + '.wav');
   const screen = point => ({ x: bounds.x + point.x * bounds.scale, y: bounds.y + point.y * bounds.scale });
   const click = (point, count = 1) => {
     const { x, y } = screen(point);
@@ -196,8 +206,10 @@ for (const reducedMotion of ['reduce', 'no-preference']) test(`Match result Pip 
       await page.waitForTimeout(Math.max(0, 1920 - (Date.now() - startedAt)));
     }
     await rendered(page);
-    expect(await page.evaluate(from => audioObservation.playbacks.slice(from).filter(sound => !sound.loop), before),
-      'Match result gestures remain silent and never queue a later call.').toEqual([]);
+    const played = await page.evaluate(from => audioObservation.playbacks.slice(from), before);
+    expect(played.every(sound => sound.playbackRate === 1 &&
+      Math.abs(sound.duration - musicTiming.seconds) <= musicTiming.importAllowance + 1 / sound.sampleRate),
+    'Match result gestures add no voices or effects; only the current background recording may continue.').toBe(true);
   }
   expect(await greetings(page), 'Match gameplay and results do not play any Pip greeting.').toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('pip-silent-match-results.png'), scale: 'css' });

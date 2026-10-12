@@ -1010,7 +1010,6 @@ func _show_mode_menu() -> void:
 	_sync_jelly()
 	_hint_link.set_paused(true)
 	audio.stop_voice()
-	audio.stop_pip_reaction()
 	duck.settle()
 	_mode_menu_focus_modes.clear()
 	for node in find_children("*", "Control", true, false):
@@ -1753,8 +1752,6 @@ func _react_to_gameplay(correct: bool) -> void:
 	if collection_page.visible or _page_hidden:
 		return
 	duck.react_gameplay(correct)
-	if _mode_id == "pop" and not _voice_mode:
-		audio.play_pip_reaction(correct)
 
 
 func _pop_hear(word: Dictionary) -> void:
@@ -2970,7 +2967,6 @@ func choose_theme(id: String) -> void:
 	duck.react("happy")
 	if not _voice_mode and not _pop_speech_active:
 		audio.interact(model.theme_id)
-		audio.cue("", model.theme_id + "-theme")
 
 
 func set_reduced_motion(value: bool) -> void:
@@ -3789,16 +3785,13 @@ func _on_speech_debug(arguments: Array) -> bool:
 	if arguments[1] == "stop":
 		audio.stop_pop_sounds()
 		audio.stop_pair_feedback()
-		audio.stop_pip_reaction()
 		return true
 	audio.interact(model.theme_id, false)
 	match arguments[1]:
 		"launch": audio.cue("pop-launch")
 		"slice": audio.cue("pop-slice")
 		"miss":
-			if _mode_id == "pop":
-				audio.play_pip_reaction(false)
-			else:
+			if _mode_id != "pop":
 				audio.play_pair_feedback(false)
 		"match": audio.play_pair_feedback(true)
 	return true
@@ -3921,7 +3914,6 @@ func _on_voice_state(arguments: Array) -> void:
 		if not bool(arguments[1]) and not _pop._reconnecting:
 			audio.stop_jelly_sounds()
 			audio.stop_pop_sounds()
-			audio.stop_pip_reaction()
 			duck.settle()
 		return
 	var enabled: bool = bool(arguments[0])
@@ -4282,7 +4274,6 @@ func _show_collection() -> void:
 	audio.stop_jelly_sounds()
 	audio.stop_voice()
 	audio.stop_pop_sounds()
-	audio.stop_pip_reaction()
 	duck.settle()
 	_stop_voice()
 	feedback_timer.paused = true

@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+
 var checks: int = 0
 var failures: int = 0
 var missed_batches: Array[int] = []
@@ -35,6 +37,7 @@ func _run() -> void:
 	await _check_match_voice_final_tail(app)
 	await _check_match_audio_tail(app)
 	_check_memory(app)
+	_check_phrase(app)
 	_check_pop(app)
 	_check_preferences(app)
 	_check_lifecycle(app)
@@ -108,13 +111,13 @@ func _phrase_answer(app) -> void:
 	view.action_button.pressed.emit()
 
 
-func _reaction_playing(app) -> bool:
-	return app.audio.pip_reaction != null and app.audio.pip_reaction.playing
+func _pip_audio_loaded(app) -> bool:
+	return PipAudio.has_pip_resources(app.audio)
 
 
-func _expect_reaction(app, correct: bool, context: String, voiced: bool = true) -> void:
+func _expect_reaction(app, correct: bool, context: String) -> void:
 	check(app.duck._gameplay_reaction == ("happy" if correct else "sad"), context + " gives Pip the matching emotion")
-	check(_reaction_playing(app) == voiced, context + (" plays a dedicated duck call" if voiced else " keeps Pip's reaction silent"))
+	check(not _pip_audio_loaded(app), context + " keeps Pip silent without loading companion recordings")
 	check(app.duck.visible and app.duck.size.x > 0.0, context + " keeps Pip visible in the game header")
 
 
@@ -123,12 +126,12 @@ func _check_match(app) -> void:
 		_start(app, "match")
 		var first: Dictionary = _match_word(app)
 		app.cards[first.id].pressed.emit()
-		check(app.duck._gameplay_reaction.is_empty() and not _reaction_playing(app),
+		check(app.duck._gameplay_reaction.is_empty() and not _pip_audio_loaded(app),
 			"Selecting only one Match card never judges an unfinished answer")
 		app._controller_back()
 		var word: Dictionary = _match_answer(app, correct)
 		var context: String = "A correct Match pair" if correct else "A wrong Match pair"
-		_expect_reaction(app, correct, context, false)
+		_expect_reaction(app, correct, context)
 		check((app.model.matched_ids.size() / 2) == (1 if correct else 0) and app.model.mistakes == (0 if correct else 1),
 			context + " changes the existing score exactly once")
 		if correct:
@@ -148,7 +151,7 @@ func _check_memory(app) -> void:
 		_start(app, "memory")
 		var word: Dictionary = _memory_answer(app, correct)
 		var context: String = "A correct Memory pair" if correct else "A wrong Memory pair"
-		_expect_reaction(app, correct, context, false)
+		_expect_reaction(app, correct, context)
 		check(app._memory.memory.attempts == 1 and app._memory.memory.mistakes == (0 if correct else 1)
 			and app._memory.memory.matched_word_ids.size() == (1 if correct else 0),
 			context + " preserves the original pair scoring")
@@ -159,17 +162,29 @@ func _check_memory(app) -> void:
 			context + " survives the regular header refresh")
 
 
+func _check_phrase(app) -> void:
+	_start(app, "phrase")
+	var view = app._phrase
+	_phrase_answer(app)
+	check(view.game.completed == 1 and view.pip._gameplay_reaction == "happy"
+		and not _pip_audio_loaded(app),
+		"A complete Phrase Builder answer preserves Pip's happy expression without a companion recording")
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + view.game.current_question().audio)
+		and app.audio.pair_feedback.playing,
+		"A complete phrase retains its educational pronunciation and correct-answer effect")
+
+
 func _check_pop(app) -> void:
 	_start(app, "pop")
 	var view = app._pop
 	var batches_before: int = missed_batches.size()
 	view.receive_transcript("unrelated gobbledygook")
 	check(view.game.hits == 0 and view.game.misses == 0 and missed_batches.size() == batches_before
-		and app.duck._gameplay_reaction.is_empty() and not _reaction_playing(app),
+		and app.duck._gameplay_reaction.is_empty() and not _pip_audio_loaded(app),
 		"Unrecognized speech never creates a missed target, sad face, or duck call")
 	var word: Dictionary = view.game.targets[0].word
 	view.receive_transcript(word.text)
-	_expect_reaction(app, true, "A spoken Voice Pop hit", false)
+	_expect_reaction(app, true, "A spoken Voice Pop hit")
 	check(view.game.hits == 1 and view.game.score == 10 and view.game.misses == 0,
 		"A spoken hit keeps the established score and combo rules")
 	check(app.audio.last_pop_player() != null and app.audio.last_pop_player().playing
@@ -183,7 +198,7 @@ func _check_pop(app) -> void:
 	check(app.audio.last_pop_player() == slice_player and app.audio._pop_slice_rng.state == slice_rng,
 		"A repeated transcript cannot play another slice or consume its random choice")
 	app._on_voice_state([true, false, "Listening paused. Continuing..."])
-	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and not _reaction_playing(app)
+	check(view._reconnecting and app.duck._gameplay_reaction == "happy" and not _pip_audio_loaded(app)
 		and slice_player.playing,
 		"Normal speech-recognizer rollover does not cut off a just-earned celebration or slice tail")
 	app._on_voice_state([true, true, "Listening."])
@@ -197,7 +212,7 @@ func _check_pop(app) -> void:
 		and missed_batches.back() == view.game.misses,
 		"One slow frame emits one response carrying the actual count of expired targets")
 	check(not app.audio.music.playing and not app.audio.voice.playing,
-		"A missed target's call keeps listening free of music and spoken prompts")
+		"A missed target keeps listening free of music and spoken prompts")
 	view._advance_game(0.0)
 	check(missed_batches.size() == batches_before + 1, "Redrawing the same expiry batch cannot repeat sadness")
 
@@ -219,14 +234,14 @@ func _check_preferences(app) -> void:
 		check(mascot._gameplay_reaction == "happy" and mascot.scale == Vector2.ONE
 			and is_zero_approx(mascot.rotation),
 			"Muted reduced-motion " + mode + " still shows the successful emotion without moving the input target")
-		check(not _reaction_playing(app) and not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.pair_feedback.playing
+		check(not _pip_audio_loaded(app) and not app.audio.voice.playing and not app.audio.effect.playing and not app.audio.pair_feedback.playing
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
-			"Muted " + mode + " suppresses the call and existing effects")
+			"Muted " + mode + " keeps Pip silent and suppresses ordinary effects")
 		var completed: int = app._pop.game.hits if mode == "pop" else app._memory.memory.matched_word_ids.size() if mode == "memory" else app._phrase.game.completed if mode == "phrase" else app.model.matched_ids.size() / 2
 		check(completed == 1,
 			"Accessibility settings do not change " + mode + " scoring")
 		app.audio.set_muted(false)
-		check(not _reaction_playing(app), "Unmuting " + mode + " does not replay the suppressed call")
+		check(not _pip_audio_loaded(app), "Unmuting " + mode + " does not load companion recordings")
 		app.set_reduced_motion(false)
 
 
@@ -236,25 +251,23 @@ func _check_lifecycle(app) -> void:
 		var view = app._pop
 		view._advance_game(6.0)
 		_expect_reaction(app, false, transition + " after a missed word")
-		var missed_call: AudioStream = app.audio.pip_reaction.stream
 		view.receive_transcript(view.game.targets[0].word.text)
 		var before: Array = [view.game.hits, view.game.misses, missed_batches.size()]
-		check(_reaction_playing(app) and app.audio.pip_reaction.stream == missed_call
-			and is_equal_approx(app.audio.pip_reaction.pitch_scale, 0.8)
+		check(not _pip_audio_loaded(app)
 			and app.duck._gameplay_reaction == "happy" and app.audio.last_pop_player().playing,
-			transition + " begins during a celebrating hit without replacing the missed word's call")
+			transition + " begins during a celebrating hit with its slice effect and a silent Pip")
 		match transition:
 			"speech_pause": app._on_voice_state([true, false, "Speech network error. Tap Retry."])
 			"home": app._show_collection()
 			"hidden": app.on_page_hidden()
 			"new_round": app.new_round(85, true)
 			"mode_exit": app.choose_mode("memory")
-		check(not _reaction_playing(app) and app.duck._gameplay_reaction.is_empty()
+		check(not _pip_audio_loaded(app) and app.duck._gameplay_reaction.is_empty()
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
-			transition + " clears the active call and emotion immediately")
+			transition + " clears the slice effect and emotion while Pip remains silent")
 		check(missed_batches.size() == before[2], transition + " never classifies a cleared target as missed")
 		view._advance_game(view.game.remaining)
-		check(missed_batches.size() == before[2] and not _reaction_playing(app),
+		check(missed_batches.size() == before[2] and not _pip_audio_loaded(app),
 			transition + " prevents late simulation work from restarting feedback")
 		if transition in ["speech_pause", "home", "hidden"]:
 			check(view.game.hits == before[0] and view.game.misses == before[1],
@@ -263,7 +276,7 @@ func _check_lifecycle(app) -> void:
 			app._hide_collection()
 		elif transition == "hidden":
 			app.on_page_visible()
-		check(not _reaction_playing(app)
+		check(not _pip_audio_loaded(app)
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			transition + " does not replay old feedback on return")
 
@@ -284,7 +297,7 @@ func _check_pair_audio() -> void:
 			and is_equal_approx(audio.pair_feedback.pitch_scale, 1.0)
 			and is_equal_approx(db_to_linear(audio.pair_feedback.volume_db), audio.PAIR_FEEDBACK_GAIN),
 			"Pair feedback plays its supplied clip at the authored pitch and bounded gain")
-		check(not audio.voice.playing and audio.pip_reaction == null and audio.get_children() == players,
+		check(not audio.voice.playing and not PipAudio.has_pip_resources(audio) and audio.get_children() == players,
 			"Pair feedback adds no spoken prompt, quack or dynamically allocated player")
 		audio.halt(true)
 		check(audio.pair_feedback.playing, "Speech rollover preserves the current answer effect")
@@ -342,7 +355,7 @@ func _check_match_voice_answers(app) -> void:
 		_match_answer(app, correct)
 		check(app.model.phase == "feedback" and app.audio.pair_feedback.playing
 			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[correct])
-			and not app.audio.voice.playing and not _reaction_playing(app) and not app.audio.music.playing,
+			and not app.audio.voice.playing and not _pip_audio_loaded(app) and not app.audio.music.playing,
 			"A tapped answer while listening plays its supplied effect without speech or quacks")
 		var request: int = app.audio._playback_requests.get(app.audio.pair_feedback, 0)
 		app._on_voice_state([true, false, "Listening paused. Continuing..."])

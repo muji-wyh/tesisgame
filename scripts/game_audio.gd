@@ -56,10 +56,6 @@ const POP_SLICE_PATHS := [
 	"res://assets/imported-audio/pop-slices/peach.wav",
 	"res://assets/imported-audio/pop-slices/coconut.wav",
 ]
-const PIP_REACTION_PATHS := {
-	true: "res://assets/audio/pip/duck_double_01_bouncy.wav",
-	false: "res://assets/audio/pip/duck_quack_innocent_deep_short_04.wav",
-}
 const ChestSoundBank = preload("res://scripts/chest_sound_bank.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
 const CHEST_EVENT_CHANNELS := 3
@@ -69,7 +65,6 @@ signal status_changed(message: String)
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
-var pip_reaction: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
 var pair_feedback: AudioStreamPlayer
 var ui_click: AudioStreamPlayer
@@ -89,7 +84,6 @@ var _pop_next_player: int = 0
 var _pop_last_player: AudioStreamPlayer
 var _pop_launch_path: String = POP_LAUNCH_FALLBACK
 var _speech_debug_mix: float = 1.0
-var _pip_reaction_gain: float = 0.68
 var _chest_charge_active: bool = false
 var _chest_charge_progress: float = -1.0
 var _chest_tension_progress: float = -1.0
@@ -396,24 +390,6 @@ func _next_pop_slice() -> String:
 	return _last_pop_slice_path
 
 
-func play_pip_reaction(correct: bool) -> void:
-	_play_pip_call(PIP_REACTION_PATHS[correct],
-		1.12 if correct else 0.80, 0.68 if correct else 0.54)
-
-
-func _play_pip_call(path: String, pitch: float, gain: float) -> void:
-	if muted or not active or not available or _speech_debug_mix <= 0.0:
-		return
-	if pip_reaction == null:
-		pip_reaction = _player(0.68)
-	# Gameplay feelings have their own short, nonverbal voice. They cannot
-	# replace a card's pronunciation or its answer cue.
-	pip_reaction.pitch_scale = pitch
-	_pip_reaction_gain = gain
-	pip_reaction.volume_db = linear_to_db(_pip_reaction_gain * _speech_debug_mix)
-	_play(pip_reaction, path)
-
-
 func set_speech_debug_mix(value: float) -> bool:
 	if value not in [0.0, 0.35, 1.0]:
 		return false
@@ -428,20 +404,11 @@ func set_speech_debug_mix(value: float) -> bool:
 		pair_feedback.volume_db = linear_to_db(maxf(0.0001, PAIR_FEEDBACK_GAIN * value))
 	if ui_click != null:
 		ui_click.volume_db = linear_to_db(maxf(0.0001, UI_CLICK_GAIN * value))
-	if pip_reaction != null:
-		pip_reaction.volume_db = linear_to_db(maxf(0.0001, _pip_reaction_gain * value))
 	if value == 0.0:
 		stop_ui_click()
 		stop_pop_sounds()
 		stop_pair_feedback()
-		stop_pip_reaction()
 	return true
-
-
-func stop_pip_reaction() -> void:
-	if pip_reaction != null:
-		_stop(pip_reaction)
-		pip_reaction.stream = null
 
 
 func prepare_chest(theme_id: String) -> void:
@@ -837,7 +804,6 @@ func halt(keep_pair_feedback: bool = false) -> void:
 		stop_pair_feedback()
 	stop_pop_sounds()
 	stop_jelly_sounds()
-	stop_pip_reaction()
 	stop_round_celebration()
 	stop_chest_performance()
 	if music != null:

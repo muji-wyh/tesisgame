@@ -15,11 +15,14 @@ Both identify the underlying recording as [WavJunction.com, Freesound 456770](ht
 Loading-page greetings are embedded in the HTML so they work before Godot loads.
 All three recordings remain active in that browser loading-page pool. Consecutive
 loading-page greetings use different clips and busy taps are ignored without
-queuing another call. The native generic greeting pool and its random-selection
-state were removed with Pip's room. Voice Pop retains the first and third clips
-on its separate happy and sad reaction channel. Voice Pop hits retain Pip's celebration motion
-but omit his happy call; missed targets retain the sad call. Match and Memory
-keep visual Pip reactions without duck calls, including their result screens. The old result
-high-five and spoken report are retired. Growth-stage voice previews use their
-documented Ava recordings. Ordinary word pronunciation and quiet growth gestures
-retain their existing audio behavior.
+queuing another call. Loading-page sounds stop when gameplay begins.
+
+Pip's gameplay reactions are visual only across all modes, including Voice Pop
+hits and misses, growth actions, and result-screen interactions. The native
+duck-call channel and theme welcome narration are removed. Educational word
+and phrase pronunciations, music, and ordinary interaction and reward effects
+remain available. The old result high-five and spoken report are also retired.
+
+The original duck recordings remain for the pregame loading toy and source
+history. Growth-stage voice recordings remain available in the separate art
+preview with their documented Ava profile; they do not play during gameplay.
