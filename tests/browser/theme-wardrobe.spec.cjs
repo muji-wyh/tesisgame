@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
-  THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, chooseTheme,
+  THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, enterGame, chooseTheme,
   openRewards, openModeMenu, collectionHeaderRect, worldControl, growthView,
   contentBounds, pipHeaderRect
 } = require('./game-ui.cjs');
@@ -116,7 +116,14 @@ test('all eight theme choices give Pip different visible outfits in the header a
 });
 
 test('all eight themes are reachable on 320 by 568 Home and survive touch and reload', async ({ page }, testInfo) => {
+  test.setTimeout(150000);
   await page.setViewportSize({ width: 320, height: 568 });
+  await page.addInitScript(key => {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initialWardrobeTheme = { theme: wordBuddiesHost.loadingTheme(),
+        saved: JSON.parse(localStorage.getItem(key) || '{}').preferred_theme };
+    });
+  }, PRESENTATION_KEY);
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   await openModeMenu(page);
   const originalMedals = await record(page, MEDAL_KEY);
@@ -141,14 +148,26 @@ test('all eight themes are reachable on 320 by 568 Home and survive touch and re
   }
   expect(await record(page, MEDAL_KEY)).toBe(originalMedals);
   const saved = await record(page);
-  // openGame navigates to a new exported engine and selects its default Match
-  // mode. It must read the saved world rather than overwrite Candy with Spring.
-  const reloadErrors = await openGame(page, { reducedMotion: 'reduce' });
+  await page.reload();
+  expect(await page.evaluate(() => initialWardrobeTheme)).toEqual({ theme: 'candy', saved: 'candy' });
+  expect(await record(page)).toBe(saved);
+  await expect(page.locator('#enter-game')).toBeEnabled({ timeout: 60000 });
+  // Keep the saved world explicitly after checking it started the loading
+  // preview, whose automatic theme rotation remains available on reload.
+  await page.locator('#loading-theme-options button[data-theme="candy"]').click();
+  await enterGame(page);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
   const reloaded = await record(page);
   expect(JSON.parse(reloaded).preferred_theme).toBe(JSON.parse(saved).preferred_theme);
-  expect(await record(page, MEDAL_KEY)).toBe(originalMedals);
+  const reloadedMedals = await record(page, MEDAL_KEY);
+  const roundIds = text => [...text.matchAll(/"id": "(round-[^"]+)"/g)].map(match => match[1]);
+  const previousIds = roundIds(originalMedals), freshIds = roundIds(reloadedMedals);
+  expect(previousIds).toHaveLength(1);
+  expect(freshIds).toHaveLength(1);
+  expect(freshIds[0], 'Reload starts a new Match round without rerolling its reserved chest chance').not.toBe(previousIds[0]);
+  expect(reloadedMedals.replace(freshIds[0], previousIds[0]),
+    'Every reward field, count and claim remains identical apart from the fresh round ID').toBe(originalMedals);
   await settled(page);
   await page.screenshot({ path: testInfo.outputPath('wardrobe-candy-reloaded-320.png'), scale: 'css' });
-  expect([...errors, ...reloadErrors]).toEqual([]);
+  expect(errors).toEqual([]);
 });

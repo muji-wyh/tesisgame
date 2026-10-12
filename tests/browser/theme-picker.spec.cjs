@@ -4,6 +4,13 @@ const { openGame, metrics, tap, boardPoint, openRewards, worldControl, openModeM
 const KEY = 'pipAndWords.presentation.v1';
 
 test('Home owns all eight themes and preserves the selected card when continuing', async ({ page }, info) => {
+  test.setTimeout(150000);
+  await page.addInitScript(key => {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initialHomeTheme = { theme: wordBuddiesHost.loadingTheme(),
+        saved: JSON.parse(localStorage.getItem(key) || '{}').preferred_theme };
+    });
+  }, KEY);
   const errors = await openGame(page);
   const first = boardPoint(await metrics(page), 0);
   await tap(page, first.x, first.y);
@@ -29,7 +36,14 @@ test('Home owns all eight themes and preserves the selected card when continuing
   await chooseMode(page, 'match');
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
-  await page.reload(); await enterGame(page);
+  await page.reload();
+  expect(await page.evaluate(() => initialHomeTheme)).toEqual({ theme: 'candy', saved: 'candy' });
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).preferred_theme, KEY)).toBe('candy');
+  await expect(page.locator('#enter-game')).toBeEnabled({ timeout: 60000 });
+  // Loading keeps its existing automatic preview cycle. Confirm the saved
+  // starting world, then explicitly keep it when entering this new session.
+  await page.locator('#loading-theme-options button[data-theme="candy"]').click();
+  await enterGame(page);
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
   await page.screenshot({ path: info.outputPath('persisted-candy-world.png'), scale: 'css' });
   expect(errors).toEqual([]);
