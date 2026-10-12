@@ -42,13 +42,14 @@ function center(rect, bounds) {
     y: bounds.y + (rect[1] + rect[3] / 2) * bounds.scale };
 }
 
-function rootsForWord(state, age, count, markedOnly = false) {
+function rootsForWord(state, age, count, markedOnly = false, invalidReverse = false) {
   const words = new Map(vocabulary.filter(word => word.min_age === age).map(word => [normalize(word.text), word]));
   const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
   for (const first of roots) for (const second of roots) {
     if (first.id === second.id) continue;
     const prefix = first.text + second.text;
-    if (count === 2 && words.has(normalize(prefix)) && (!markedOnly || first.fragments + second.fragments > 0))
+    if (count === 2 && words.has(normalize(prefix)) && (!markedOnly || first.fragments + second.fragments > 0) &&
+      (!invalidReverse || !words.has(normalize(second.text + first.text))))
       return { roots: [first, second], word: words.get(normalize(prefix)) };
     if (count !== 3) continue;
     for (const third of roots) {
@@ -60,10 +61,10 @@ function rootsForWord(state, age, count, markedOnly = false) {
   return null;
 }
 
-async function availableWord(page, age, count) {
+async function availableWord(page, age, count, { markedOnly = false, invalidReverse = false } = {}) {
   for (let attempt = 0; attempt < 4; attempt++) {
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
-    const state = await jelly(page), found = rootsForWord(state, age, count);
+    const state = await jelly(page), found = rootsForWord(state, age, count, markedOnly, invalidReverse);
     if (found) return found;
     expect(state.preview.enabled, 'The ordinary preview can supply another complete word packet').toBe(true);
     await pressRect(page, state.preview.rect);
@@ -194,6 +195,75 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   await page.reload();
   await enterGame(page);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
+  expect(errors).toEqual([]);
+});
+
+test('an incorrect merged word splits into its original parts and can be corrected for one reward', async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = await startWordJelly(page);
+  const { roots, word } = await availableWord(page, 3, 2, { markedOnly: true, invalidReverse: true });
+  const startingWallet = await wallet(page);
+  const incorrect = await merge(page, roots[1].id, roots[0].id);
+  expect(incorrect.mass).toBe(2);
+  expect(incorrect.word).toEqual({});
+  expect(incorrect.picture_visible).toBe(false);
+  expect(incorrect.fragment_badges).toBe(roots[0].fragments + roots[1].fragments);
+  await capture(page, info, 'word-jelly-incorrect-merged-word');
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.wordJellySplitTimeline = [];
+    window.wordJellySplitFrame = null;
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const split = state.fusions?.find(fusion => fusion.operation === 'split');
+      if (!split) return;
+      window.wordJellySplitTimeline.push({ elapsed: split.elapsed, duration: split.duration,
+        parent: split.a_id, children: split.results.map(child => child.id) });
+      if (!window.wordJellySplitFrame && split.elapsed >= split.duration * 0.45 && split.elapsed < split.duration * 0.8)
+        window.wordJellySplitFrame = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+    };
+    new MutationObserver(record).observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  const before = await jelly(page);
+  await pressRect(page, incorrect.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.tiles.some(tile => tile.id === incorrect.id) &&
+      roots.every(root => state.tiles.some(tile => tile.id === root.id && tile.visible && tile.settled));
+  }, { message: 'Tapping an incorrect merge restores its two original roots after separation' }).toBe(true);
+  const restored = await jelly(page), bounds = await metrics(page);
+  expect(new Set(restored.tiles.map(tile => tile.id)).size, 'No split can duplicate a child identity').toBe(restored.tiles.length);
+  for (const root of roots) {
+    const child = restored.tiles.find(tile => tile.id === root.id);
+    expect({ text: child.text, mass: child.mass, fragments: child.fragments })
+      .toEqual({ text: root.text, mass: root.mass, fragments: root.fragments });
+    expect(child.fragment_badges).toBe(root.fragments);
+    expectInside(child.rect, bounds);
+  }
+  for (const original of before.tiles.filter(tile => tile.id !== incorrect.id)) {
+    const unchanged = restored.tiles.find(tile => tile.id === original.id);
+    expect([unchanged.column, unchanged.row], 'Splitting leaves unrelated occupied cells in place')
+      .toEqual([original.column, original.row]);
+  }
+  expect(restored.cleared_pairs).toBe(before.cleared_pairs);
+  expect(restored.fragment_count).toBe(before.fragment_count);
+  expect(restored.collected_coins).toBe(before.collected_coins);
+  expect((await wallet(page)).balance, 'Splitting an incorrect word cannot pay coins').toBe(startingWallet.balance);
+  const animation = await page.evaluate(() => ({ timeline: window.wordJellySplitTimeline, frame: window.wordJellySplitFrame }));
+  expect(new Set(animation.timeline.map(frame => frame.elapsed)).size, 'Split advances through distinct separation poses').toBeGreaterThan(2);
+  expect(animation.frame, 'The real split has a rendered midpoint').toBeTruthy();
+  fs.writeFileSync(info.outputPath('word-jelly-split-midpoint.png'), Buffer.from(animation.frame, 'base64'));
+  await capture(page, info, 'word-jelly-restored-original-parts');
+  const corrected = await merge(page, roots[0].id, roots[1].id);
+  expect(corrected.word.id).toBe(word.id);
+  expect(corrected.picture_visible).toBe(true);
+  expect(corrected.fragments).toBe(roots[0].fragments + roots[1].fragments);
+  await capture(page, info, 'word-jelly-corrected-pictured-word');
+  await pressRect(page, corrected.rect);
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
+  expect((await jelly(page)).fragment_count).toBe(before.fragment_count + corrected.fragments);
+  expect((await jelly(page)).tiles.some(tile => tile.id === corrected.id || roots.some(root => root.id === tile.id))).toBe(false);
   expect(errors).toEqual([]);
 });
 

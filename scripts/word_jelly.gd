@@ -54,11 +54,39 @@ func cancel_input() -> void:
 	_keyboard_source = -1
 	super.cancel_input()
 
+func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
+	super.apply_theme(theme, chests)
+	for fusion: Dictionary in game.fusions:
+		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
+		if visual.is_empty():
+			continue
+		_configure_tile(visual.merged, fusion.result if str(fusion.operation) == "merge" else fusion.a)
+		for index in range(visual.get("parts", []).size()):
+			_configure_tile(visual.parts[index], fusion.results[index])
+	_refresh_fusion()
+
+func _apply_chest_texture(texture: Texture2D) -> void:
+	super._apply_chest_texture(texture)
+	for visual: Dictionary in _fusion_visuals.values():
+		visual.merged.set_chest_texture(texture)
+		for part: WordTile in visual.get("parts", []):
+			part.set_chest_texture(texture)
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _keyboard_source >= 0:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
+	if event is InputEventKey and event.shift_pressed and event.is_action_pressed("ui_accept") and not event.echo:
+		if _can_play() and _pointer == NO_POINTER:
+			var focused: Control = get_viewport().gui_get_focus_owner()
+			for id in _tiles:
+				if _tiles[id] == focused and _settled(_cell(int(id))):
+					_keyboard_source = -1 if _keyboard_source == int(id) else int(id)
+					_refresh_marks()
+					_publish()
+					get_viewport().set_input_as_handled()
+					return
 	super._input(event)
 
 func _press(pointer: int, global_point: Vector2) -> bool:
@@ -98,7 +126,7 @@ func _release(global_point: Vector2) -> void:
 		and point.distance_to(_press_point) * Style.ui_scale(self) <= 7.0 and _tile_at(point) == source
 	super._release(global_point)
 	if valid_tap:
-		_collect(source)
+		_tap_tile(source)
 
 func _activate(id: int) -> void:
 	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)):
@@ -109,10 +137,38 @@ func _activate(id: int) -> void:
 		_merge(source, id, _tiles[source].position)
 	elif game.is_valid_word(_cell(id)):
 		_collect(id)
+	elif game.can_split(_cell(id)):
+		_split(id)
 	else:
 		_keyboard_source = -1 if _keyboard_source == id else id
 		_refresh_marks()
 		_publish()
+
+func _tap_tile(id: int) -> void:
+	if game.is_valid_word(_cell(id)):
+		_collect(id)
+	elif game.can_split(_cell(id)):
+		_split(id)
+
+func _split(id: int) -> void:
+	if not _can_play() or not _settled(_cell(id)) or not game.can_split(_cell(id)):
+		return
+	var generation: int = _generation
+	var accepted: bool = game.split(id)
+	if generation != _generation or not _can_play():
+		return
+	_keyboard_source = -1
+	if accepted:
+		_snapbacks.erase(id)
+		_rejection.clear()
+	else:
+		# A full well cannot hold two separate bodies. Keep the word intact and
+		# answer the tap with the established elastic feedback, without a label.
+		_rejection = {"a": id, "b": -1, "elapsed": 0.0, "direction": Vector2.RIGHT, "split": true}
+	_sync_tiles()
+	_refresh_fusion()
+	_refresh_hud()
+	_publish()
 
 func _collect(id: int) -> void:
 	if not _can_play() or not game.is_valid_word(_cell(id)):
@@ -276,6 +332,10 @@ func navigation_controls() -> Array[Control]:
 
 func _contact_state() -> Dictionary:
 	var state := {"kind": "none", "source": -1, "target": -1, "strength": 0.0, "direction": Vector2.ZERO}
+	if bool(_rejection.get("split", false)):
+		state.merge({"kind": "mismatch", "source": int(_rejection.a),
+			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": Vector2.RIGHT}, true)
+		return state
 	if not _can_play() or not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
 		return state
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
@@ -286,21 +346,40 @@ func _contact_state() -> Dictionary:
 func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	var id: String = str(fusion.attempt_id)
 	if not _fusion_visuals.has(id):
+		var splitting: bool = str(fusion.operation) == "split"
 		var art := FusionArt.new()
 		art.z_index = 25
 		add_child(art)
 		art.configure(SURFACES, int(fusion.a.get("skin", fusion.a_id)), int(fusion.b.get("skin", fusion.b_id)), _surfaces[posmod(int(fusion.b_id), _surfaces.size())])
+		var parts: Array[WordTile] = []
+		if splitting:
+			for child: Dictionary in fusion.results:
+				var part := WordTile.new()
+				part.focus_mode = Control.FOCUS_NONE
+				part.disabled = true
+				part.z_index = 30
+				add_child(part)
+				_configure_tile(part, child)
+				parts.append(part)
+			art.configure(SURFACES, int(fusion.results[0].get("skin", fusion.results[0].id)),
+				int(fusion.results[1].get("skin", fusion.results[1].id)), parts[1]._surface.texture)
 		var merged := WordTile.new()
 		merged.focus_mode = Control.FOCUS_NONE
 		merged.disabled = true
 		merged.z_index = 30
 		add_child(merged)
-		_configure_tile(merged, fusion.a if str(fusion.operation) == "collect" else fusion.result)
-		_fusion_visuals[id] = {"art": art, "merged": merged,
+		_configure_tile(merged, fusion.result if str(fusion.operation) == "merge" else fusion.a)
+		_fusion_visuals[id] = {"art": art, "merged": merged, "parts": parts,
 			"start": _tile_rect(fusion.a).get_center(), "direction": Vector2.RIGHT,
 			"origin_a": _tile_rect(fusion.a).get_center(), "origin_b": _tile_rect(fusion.b).get_center(),
 			"stretch_a": Vector2.ONE, "stretch_b": Vector2.ONE}
 	return _fusion_visuals[id]
+
+func _remove_fusion_visual(id: String) -> void:
+	for part: WordTile in _fusion_visuals[id].get("parts", []):
+		part.hide()
+		part.queue_free()
+	super._remove_fusion_visual(id)
 
 func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	var merged: WordTile = visual.merged
@@ -310,6 +389,9 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	for id in [int(fusion.a_id), int(fusion.b_id)]:
 		if _tiles.has(id):
 			_tiles[id].hide()
+	if str(fusion.operation) == "split":
+		_pose_split(fusion, visual, p)
+		return
 	if collecting:
 		art.hide()
 		var rect: Rect2 = _tile_rect(fusion.a)
@@ -345,8 +427,48 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
 	merged.show()
 
+func _pose_split(fusion: Dictionary, visual: Dictionary, p: float) -> void:
+	var parent_rect: Rect2 = _tile_rect(fusion.a)
+	var merged: WordTile = visual.merged
+	var separation: float = smoothstep(0.12, 0.86, p)
+	var handover: float = smoothstep(0.68, 0.95, p)
+	var parent_opacity: float = 1.0 - smoothstep(0.08, 0.38, p)
+	merged.size = parent_rect.size
+	merged.position = parent_rect.position
+	merged.modulate.a = parent_opacity
+	merged._surface.visible = reduced_motion
+	merged.deform(0.0, 0.0, Vector2.ONE)
+	merged.show()
+	var centers: Array[Vector2] = []
+	var extents: Array[Vector2] = []
+	for index in range(visual.parts.size()):
+		var part: WordTile = visual.parts[index]
+		var rect: Rect2 = _tile_rect(fusion.results[index])
+		var center: Vector2 = rect.get_center() if reduced_motion else parent_rect.get_center().lerp(rect.get_center(), separation)
+		var extent: Vector2 = rect.size if reduced_motion else parent_rect.size.lerp(rect.size, separation)
+		var recoil: float = sin(clampf((p - 0.65) / 0.35, 0.0, 1.0) * TAU) * (1.0 - p) * 0.12
+		var stretch := Vector2.ONE if reduced_motion else Vector2(1.0 + recoil, 1.0 - recoil)
+		part.size = extent
+		part.position = center - extent * 0.5
+		part.modulate.a = smoothstep(0.25, 0.62, p)
+		part._surface.visible = reduced_motion or handover > 0.0
+		part._surface.modulate.a = 1.0 if reduced_motion else handover
+		part.deform(0.0, 0.0, stretch)
+		part.show()
+		centers.append(center)
+		extents.append(extent * stretch)
+	if reduced_motion:
+		visual.art.hide()
+	else:
+		# Reverse the existing painted liquid union: a waist forms, then the two
+		# original skins pull apart and hand over at their reserved destinations.
+		visual.art.pose(centers[0], centers[1], parent_rect.get_center(), extents[0], extents[1],
+			_pitch, (1.0 - separation) * 0.54, 0.0, 0.0, 1.0 - handover)
+		visual.art.stage = "split"
+
 func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
-	_cue("danger_end")
+	if game._has_free_cell():
+		_cue("danger_end")
 	if str(fusion.get("operation", "")) == "merge" and not reduced_motion:
 		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
 		if not visual.is_empty():
@@ -448,4 +570,10 @@ func snapshot() -> Dictionary:
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
 		item["fragment_badges"] = tile.visible_fragment_badges()
 		item["coins"] = WordModel.coins_for_tile(item)
+		item["splittable"] = game.can_split(item)
+	for effect: Dictionary in state.fusion_effects:
+		var visual: Dictionary = _fusion_visuals[str(effect.attempt_id)]
+		effect["parts"] = []
+		for part: WordTile in visual.get("parts", []):
+			effect.parts.append({"id": part.tile_id, "rect": _rect(part.get_global_rect()), "visible": part.is_visible_in_tree()})
 	return state

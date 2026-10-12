@@ -96,6 +96,12 @@ stays near the drop target and can join another piece. Merging and collecting
 leave the other jellies in place. Larger bodies and long text wrap across rows
 when needed; crowded bodies expand into available space without sinking.
 
+Tap a merged jelly that is not a current vocabulary word to undo its last merge.
+Its two previous bodies separate nearby with their original chunks, pictures,
+colors and chest fragments. An invalid merged part can be split again. Splitting
+earns no coins or learning credit. If the well cannot fit two bodies, the jelly
+gives a brief elastic response and stays intact until there is room.
+
 Automatic batches start 20 seconds apart. Each collected word shortens the
 interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can
 still release the next batch early.

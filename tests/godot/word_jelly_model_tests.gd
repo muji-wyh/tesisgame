@@ -30,6 +30,15 @@ func _run() -> void:
 	_test_fusion_reservations()
 	_test_deferred_growth()
 	_test_growth_after_settlement()
+	_test_splitting()
+	_test_nested_splits()
+	_test_split_placement()
+	_test_split_reservations()
+	_test_growth_after_split()
+	_test_split_determinism()
+	_test_split_wallet_history()
+	_test_split_lifecycle()
+	_test_split_danger()
 	_test_full_board()
 	_test_independent_operations()
 	_test_lifecycle_reentry()
@@ -96,15 +105,15 @@ func _fill_rows(model, first_row: int, last_row: int) -> void:
 func _assert_reservations(model, label: String) -> void:
 	var results: Array[Rect2i] = []
 	for active: Dictionary in model.fusions:
-		if str(active.operation) != "merge":
-			continue
-		var footprint: Rect2i = _footprint(active.result)
-		for previous: Rect2i in results:
-			check(not footprint.intersects(previous), label + ": independent future footprints never overlap")
-		for tile: Dictionary in model.cells:
-			if int(tile.id) not in [int(active.a_id), int(active.b_id)]:
-				check(not footprint.intersects(_footprint(tile)), label + ": live neighbors cannot occupy a reserved destination")
-		results.append(footprint)
+		var destinations: Array = [active.result] if str(active.operation) == "merge" else active.get("results", [])
+		for destination: Dictionary in destinations:
+			var footprint: Rect2i = _footprint(destination)
+			for previous: Rect2i in results:
+				check(not footprint.intersects(previous), label + ": independent future footprints never overlap")
+			for tile: Dictionary in model.cells:
+				if int(tile.id) not in [int(active.a_id), int(active.b_id)]:
+					check(not footprint.intersects(_footprint(tile)), label + ": live neighbors cannot occupy a reserved destination")
+			results.append(footprint)
 
 
 func _merge(model, source: int, target: int) -> Dictionary:
@@ -544,6 +553,352 @@ func _test_growth_after_settlement() -> void:
 		and final_states[0].coins == final_states[1].coins and final_states[0].fragments == final_states[1].fragments
 		and final_states[0].mass == final_states[1].mass and final_states[0].text == final_states[1].text,
 		"whole and sliced frames agree on restored placement, readiness, words, and rewards")
+
+
+func _test_splitting() -> void:
+	var model = _model([_word("cat")])
+	_board(model, ["t", "ca", "x"], [2, 3, 1])
+	model.cells[0].skin = 2
+	model.cells[1].skin = 5
+	var originals: Array = model.cells.duplicate(true)
+	check(not model.can_split(originals[0]) and not model.split(1000), "a single root cannot split")
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	var id: int = int(parent.id)
+	check(model.can_split(parent) and not model.split(id), "invalid history is discoverable but waits for its merge to settle")
+	model.step(Model.SETTLE_SECONDS)
+	model.set_paused(true)
+	check(not model.split(id), "a paused round cannot begin a split")
+	model.set_paused(false)
+	var events: Dictionary = _observe(model)
+	var payments: Array = []
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		payments.append([receipt, coins])
+		return {"ok": true}
+	var next_id: int = model._next_tile_id
+	var interval: float = model.spawn_interval
+	check(model.split(id), "an invalid merged jelly can undo its last merge")
+	var active: Dictionary = model.fusions[0].duplicate(true)
+	check(active.operation == "split" and active.a_id == id and active.b_id == id
+		and active.a == active.b and active.result.is_empty() and active.word.is_empty(), "split payload reserves one parent and exposes no collectible result")
+	check(active.results.size() == 2 and active.results[0].id == 1000 and active.results[1].id == 1001,
+		"split destinations keep the exact source-target order and original identities")
+	check(not model.split(id) and model.try_merge(id, 1002) == "ignored", "an active split cannot start twice or participate in a merge")
+	check(not model.snapshot().cells[0].has("children"), "public tile snapshots do not contain recursive ancestry")
+	_assert_reservations(model, "split reservation")
+	model.step(Model.SPLIT_SECONDS - 0.01)
+	check(not model.cell(id).is_empty() and model.cell(1000).is_empty() and events.completed.is_empty(), "children do not commit before the split animation ends")
+	model.set_paused(true)
+	var paused: Dictionary = model.snapshot()
+	model.step(5.0)
+	check(model.snapshot() == paused, "pause freezes the entire split and supply timeline")
+	model.set_paused(false)
+	model.step(0.01)
+	check(model.cell(id).is_empty() and model.cells.size() == 3 and not model._merge_history.has(id), "split replaces only its parent and removes its consumed history entry")
+	for index in range(2):
+		var child: Dictionary = model.cell(int(originals[index].id))
+		for key in ["id", "text", "mass", "parts_count", "fragments", "chest", "word", "kind", "skin"]:
+			check(child[key] == originals[index][key], "split preserves each child's " + str(key))
+		check(_footprint(child) == _footprint(active.results[index]), "restored body lands at its frozen split endpoint")
+		check(not model.is_settled(child) and bool(child.settling), "restored body settles before accepting new input")
+	check(_footprint(model.cell(1002)) == _footprint(originals[2]), "splitting never moves an unrelated jelly")
+	check(model._next_tile_id == next_id and model.merged_count == 1 and model.spawn_interval == interval,
+		"undo does not allocate new tiles or change merge totals or difficulty")
+	check(model.cleared_pairs == 0 and model.collected_coins == 0 and model.fragment_count == 0
+		and model.chest_count == 0 and model.chest_tier == 0 and payments.is_empty(), "split earns no score, wallet payment, fragments, or chest rewards")
+	check(events.completed.size() == 1 and events.completed[0].fragments == 0 and events.cues == ["release"]
+		and events.collections.is_empty() and events.attempts.is_empty() and events.milestones.is_empty(), "split emits one silent-reward completion and no collection or disappearance events")
+	_assert_board(model, "basic split")
+	model.credit_collection = Callable()
+
+
+func _test_nested_splits() -> void:
+	var model = _model([_word("cat")])
+	_board(model, ["ca", "t", "er", "x"], [1, 2, 3, 4])
+	var word: Dictionary = _merge(model, 1000, 1001)
+	var inner: Dictionary = _merge(model, int(word.id), 1002)
+	var outer: Dictionary = _merge(model, int(inner.id), 1003)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(outer.id)), "nested invalid merge can split once")
+	model.step(Model.SPLIT_SECONDS)
+	check(model.can_split(model.cell(int(inner.id))) and model.cell(1003).fragments == 4,
+		"outer undo restores its invalid child history and separate root fragments")
+	check(not model.split(int(inner.id)), "nested undo waits for restored children to settle")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(inner.id)), "the restored invalid child can split again")
+	model.step(Model.SPLIT_SECONDS)
+	var restored: Dictionary = model.cell(int(word.id))
+	check(restored.word == word.word and restored.kind == "word" and restored.text == "cat" and restored.fragments == 3,
+		"nested undo recovers the valid child's exact word image, text, and fragments")
+	check(not model.can_split(restored) and not model.split(int(restored.id)), "a valid restored word stays collectible rather than splittable")
+	check(model._merge_history.size() == 1 and model._merge_history.has(int(word.id)), "undo erases only the two consumed parent histories")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.collect(int(restored.id)), "a restored valid word collects normally")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.collected_coins == 100 and model.fragment_count == 3 and model.cells.size() == 2,
+		"restored word awards only its own mass and fragments")
+	check(model._merge_history.is_empty(), "terminal collection prunes the restored word's ancestry")
+	_assert_board(model, "nested undo")
+
+
+func _constrain_split_board(model, parent_id: int, origin: Vector2i, gaps: Array[Vector2i]) -> void:
+	var parent: Dictionary = model.cell(parent_id)
+	parent.column = origin.x
+	parent.row = origin.y
+	parent.width = 1
+	parent.height = 1
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent])
+	for row in range(Model.ROWS):
+		for column in range(Model.COLUMNS):
+			var position := Vector2i(column, row)
+			if position != origin and not position in gaps:
+				model.cells.append(_placed_tile(3000 + row * Model.COLUMNS + column, "x", column, row))
+
+
+func _test_split_placement() -> void:
+	var model = _model()
+	_board(model, ["a", "b", "c"])
+	var sibling: Dictionary = _merge(model, 1001, 1002)
+	var parent: Dictionary = _merge(model, 1000, int(sibling.id))
+	_constrain_split_board(model, int(parent.id), Vector2i(2, 3), [Vector2i(3, 3), Vector2i(0, 3)])
+	check(model.split(int(parent.id)), "joint search finds a full-size pair in a corridor plus singleton")
+	var planned: Array = model.fusions[0].results.duplicate(true)
+	check(_footprint(planned[0]) == Rect2i(0, 3, 1, 1) and _footprint(planned[1]) == Rect2i(2, 3, 2, 1),
+		"small child yields the nearby corridor to its larger sibling instead of forcing unnecessary compression")
+	var neighbors: Array = model.cells.slice(1).duplicate(true)
+	_assert_reservations(model, "joint split placement")
+	model.step(Model.SPLIT_SECONDS)
+	for neighbor: Dictionary in neighbors:
+		check(_footprint(model.cell(int(neighbor.id))) == _footprint(neighbor), "crowded split does not repack any unrelated neighbor")
+	_assert_board(model, "joint split completion")
+	model = _model()
+	var a: Dictionary = _placed_tile(1000, "a", 0, 7, 4, 2)
+	var b: Dictionary = _placed_tile(1001, "b", 5, 7, 3, 3)
+	a.width = 2
+	b.width = 1
+	model.cells.assign([a, b])
+	parent = _merge(model, 1000, 1001)
+	_constrain_split_board(model, int(parent.id), Vector2i(2, 3), [Vector2i(3, 3), Vector2i(5, 3)])
+	check(model.split(int(parent.id)), "prior saved footprints remain available when preferred sizes cannot fit")
+	planned = model.fusions[0].results.duplicate(true)
+	check(planned[0].width == 2 and planned[1].width == 1 and planned[0].mass == 4 and planned[1].mass == 3,
+		"saved-footprint fallback retains full child mass instead of unnecessarily compressing both to one cell")
+	model.step(Model.SPLIT_SECONDS)
+	_assert_board(model, "saved split footprints")
+	model = _model()
+	model.cells.assign([_placed_tile(1000, "a", 0, 7, 2, 2), _placed_tile(1001, "b", 2, 7, 3, 3)])
+	parent = _merge(model, 1000, 1001)
+	_constrain_split_board(model, int(parent.id), Vector2i(0, 0), [Vector2i(5, 7)])
+	check(model.split(int(parent.id)), "split searches below a top-row parent when only a distant cell is free")
+	planned = model.fusions[0].results.duplicate(true)
+	check(planned[0].width == 1 and planned[1].width == 1 and planned[0].height == 1 and planned[1].height == 1,
+		"two isolated cells allow the final one-cell compression fallback")
+	check(planned[0].mass == 2 and planned[1].mass == 3 and planned[0].fragments == 2 and planned[1].fragments == 3,
+		"extreme compression keeps each child's separate mass and fragments")
+	model.step(Model.SPLIT_SECONDS)
+	_assert_board(model, "isolated split footprints")
+	model = _model()
+	_board(model, ["a", "b"])
+	parent = _merge(model, 1000, 1001)
+	_constrain_split_board(model, int(parent.id), Vector2i(0, 0), [])
+	var before: Dictionary = model.snapshot()
+	var history: Dictionary = model._merge_history.duplicate(true)
+	var receipts: Dictionary = model._collection_event_ids.duplicate(true)
+	var next_event: int = model._next_event_id
+	var next_tile: int = model._next_tile_id
+	check(model.can_split(model.cell(int(parent.id))) and not model.split(int(parent.id)), "a crowded semantic split refuses when two child cells cannot fit")
+	check(model.snapshot() == before and model._merge_history == history and model._collection_event_ids == receipts
+		and model._next_event_id == next_event and model._next_tile_id == next_tile, "rejected split is atomic across board, clocks, rewards, ancestry, receipts, and ID allocation")
+	_assert_board(model, "rejected split")
+
+
+func _test_split_reservations() -> void:
+	var model = _model()
+	_board(model, ["a", "b", "c", "d", "e", "f"])
+	var a: Dictionary = _merge(model, 1000, 1001)
+	var b: Dictionary = _merge(model, 1002, 1003)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(a.id)) and model.split(int(b.id)), "disjoint parents can split concurrently")
+	var destinations: Array = model.fusions[0].results.duplicate(true)
+	destinations.append_array(model.fusions[1].results.duplicate(true))
+	check(model.try_merge(1004, 1005) == "merged", "another pair can merge during two splits")
+	_assert_reservations(model, "split and merge reservations")
+	var incoming: Array = model.upcoming.duplicate(true)
+	check(model.drop_now(), "new roots can enter unreserved space during a split")
+	for preview: Dictionary in incoming:
+		var arrived: Dictionary = model.cell(int(preview.id))
+		for child: Dictionary in destinations:
+			check(not _footprint(arrived).intersects(_footprint(child)), "incoming root cannot claim a reserved split destination")
+	_assert_reservations(model, "split reservations after a drop")
+	model.step(Model.SPLIT_SECONDS)
+	check(model.fusions.size() == 1 and model.fusions[0].operation == "merge", "both splits can finish while an independent merge remains reserved")
+	for child: Dictionary in destinations:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "concurrent split completion uses its own frozen destination")
+	_assert_reservations(model, "remaining merge after split completion")
+	model.step(Model.FUSION_SECONDS - Model.SPLIT_SECONDS)
+	_assert_board(model, "concurrent split merge and drop")
+
+
+func _test_growth_after_split() -> void:
+	var model = _model()
+	model.cells.assign([_placed_tile(1000, "a", 0, 2, 4), _placed_tile(1001, "b", 0, 3, 4)])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	parent.column = 0
+	parent.row = 2
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent])
+	_fill_rows(model, 0, Model.ROWS - 1)
+	var neighbor_id: int = -1
+	for tile: Dictionary in model.cells:
+		if tile.column == 5 and tile.row == 4:
+			tile.mass = 2
+			tile.parts_count = 2
+			neighbor_id = int(tile.id)
+	check(neighbor_id >= 0 and not model._has_free_cell(), "wrapped split growth fixture begins fully occupied")
+	var original_neighbor: Rect2i = _footprint(model.cell(neighbor_id))
+	check(model.split(int(parent.id)), "wrapped parent can restore two full-size four-part bodies")
+	var children: Array = model.fusions[0].results.duplicate(true)
+	model.step(Model.SPLIT_SECONDS)
+	check(model._has_free_cell() and model._growth_pending and _footprint(model.cell(neighbor_id)) == original_neighbor,
+		"split releases wrapped padding and schedules growth without moving neighbors at handover")
+	for child: Dictionary in children:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "wrapped split commits each frozen child endpoint")
+	model.step(Model.SETTLE_SECONDS - 0.001)
+	check(_footprint(model.cell(neighbor_id)) == original_neighbor, "compressed neighbor waits for both split children to finish settling")
+	model.step(0.001)
+	var grown: Dictionary = model.cell(neighbor_id)
+	check(grown.width == 2 and grown.height == 1 and not model.is_settled(grown),
+		"freed wrapped padding restores the compressed neighbor after split settlement")
+	for child: Dictionary in children:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "deferred growth never displaces either restored child")
+	_assert_board(model, "growth after wrapped split settlement")
+
+
+func _test_split_determinism() -> void:
+	var outcomes: Array[Dictionary] = []
+	for sliced: bool in [false, true]:
+		var model = _model()
+		_board(model, ["a", "b", "c", "d"])
+		var a: Dictionary = _merge(model, 1000, 1001)
+		var b: Dictionary = _merge(model, 1002, 1003)
+		model.step(Model.SETTLE_SECONDS)
+		model.split(int(a.id))
+		model.split(int(b.id))
+		var duration: float = Model.SPLIT_SECONDS + Model.SETTLE_SECONDS
+		for index in range(81 if sliced else 1):
+			model.step(duration / (81.0 if sliced else 1.0))
+		outcomes.append(model.snapshot())
+	check(outcomes[0].fusions.is_empty() and outcomes[1].fusions.is_empty(), "whole and sliced frames complete simultaneous splits")
+	for index in range(outcomes[0].cells.size()):
+		var a: Dictionary = outcomes[0].cells[index]
+		var b: Dictionary = outcomes[1].cells[index]
+		check(a.id == b.id and a.text == b.text and a.mass == b.mass and a.fragments == b.fragments
+			and _footprint(a) == _footprint(b) and is_equal_approx(float(a.age), float(b.age)) and a.settling == b.settling,
+			"time slicing preserves split identity, placement, content, fragments, and readiness")
+
+
+func _test_split_wallet_history() -> void:
+	var model = _model([_word("cat"), _word("dog")])
+	_board(model, ["ca", "t", "er", "do", "g"])
+	var cat: Dictionary = _merge(model, 1000, 1001)
+	var dog: Dictionary = _merge(model, 1003, 1004)
+	model.step(Model.SETTLE_SECONDS)
+	var calls: Array = []
+	var payment: Dictionary = {"ok": false}
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		calls.append([receipt, coins])
+		return payment.duplicate()
+	model.collect(int(cat.id))
+	model.collect(int(dog.id))
+	model.step(Model.COLLECT_SECONDS)
+	var cat_receipt: String = str(model._collection_event_ids[int(cat.id)])
+	var dog_receipt: String = str(model._collection_event_ids[int(dog.id)])
+	var parent: Dictionary = _merge(model, int(cat.id), 1002)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(parent.id)), "failed collection can merge and then undo without losing its child")
+	model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+	check(str(model._collection_event_ids[int(cat.id)]) == cat_receipt, "merge and split preserve the failed child's stable wallet receipt")
+	payment.ok = true
+	check(model.collect(int(cat.id)), "restored child can retry its failed reward")
+	model.step(Model.COLLECT_SECONDS)
+	check(calls.size() == 3 and calls[2] == [cat_receipt, 100] and model.collected_coins == 100,
+		"restored retry uses the original idempotent payment key and credits once")
+	check(not model._collection_event_ids.has(int(cat.id)) and str(model._collection_event_ids[int(dog.id)]) == dog_receipt
+		and model._merge_history.has(int(dog.id)), "collecting one restored tree retains the unrelated failed word and receipt")
+	model.credit_collection = Callable()
+	model = _model([_word("cat"), _word("caterpillar")])
+	_board(model, ["ca", "t", "er", "pillar"])
+	cat = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS)
+	model.credit_collection = func(_receipt: String, _coins: int) -> Dictionary: return {"ok": false}
+	model.collect(int(cat.id))
+	model.step(Model.COLLECT_SECONDS)
+	parent = _merge(model, int(cat.id), 1002)
+	var final_word: Dictionary = _merge(model, int(parent.id), 1003)
+	check(model._merge_history.size() == 3 and model._collection_event_ids.has(int(cat.id)), "merged tree retains nested histories and prior failed receipts until terminal collection")
+	model.credit_collection = Callable()
+	model.step(Model.SETTLE_SECONDS)
+	model.collect(int(final_word.id))
+	model.step(Model.COLLECT_SECONDS)
+	check(model._merge_history.is_empty() and model._collection_event_ids.is_empty() and model.collected_coins == 200,
+		"terminal collection prunes the entire consumed ancestry and descendant receipts without paying old children")
+
+
+func _test_split_lifecycle() -> void:
+	for replace_round: bool in [false, true]:
+		var model = _model()
+		_board(model, ["a", "b"])
+		var parent: Dictionary = _merge(model, 1000, 1001)
+		model.step(Model.SETTLE_SECONDS)
+		var events: Dictionary = _observe(model)
+		model.fusion_started.connect(func(_payload: Dictionary) -> void:
+			if replace_round:
+				model.configure([_word("cat")], 3, 13)
+			else:
+				model.finish_round(), CONNECT_ONE_SHOT)
+		check(model.split(int(parent.id)), "split start is acknowledged before lifecycle callback interrupts it")
+		check(model.fusions.is_empty() and events.cues.is_empty() and events.completed.is_empty(), "ending or replacing a round during split start suppresses stale animation and cues")
+		if replace_round:
+			check(model._merge_history.is_empty() and model._collection_event_ids.is_empty()
+				and model.cells.size() == Model.INITIAL_SETTLED_TILES, "configure clears every split history and receipt before creating the new round")
+		else:
+			model.step(100.0)
+			check(not model.cell(int(parent.id)).is_empty() and model.cell(1000).is_empty()
+				and model.finish_round().coins == 0, "cancelled split leaves its original parent intact and grants nothing")
+	var model = _model()
+	_board(model, ["a", "b"])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS)
+	model.fusion_completed.connect(func(_payload: Dictionary, awarded: int) -> void:
+		check(not model.cell(1000).is_empty() and not model.cell(1001).is_empty()
+			and model.cell(int(parent.id)).is_empty() and awarded == 0, "completion callbacks see both children atomically restored")
+		model.finish_round(), CONNECT_ONE_SHOT)
+	model.split(int(parent.id))
+	model.step(Model.SPLIT_SECONDS)
+	check(model.phase == "finished" and model.finish_round().coins == 0 and model.fusions.is_empty(), "ending inside split completion retains both children and no stale reward")
+
+
+func _test_split_danger() -> void:
+	var model = _model()
+	var pieces: Array[String] = []
+	for index in range(Model.CAPACITY):
+		pieces.append("a")
+	_board(model, pieces)
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS + 2.0)
+	var elapsed: float = model.full_elapsed
+	check(elapsed >= 2.0 and model.split(int(parent.id)), "full board permits undo while its existing danger deadline is running")
+	model.step(Model.SPLIT_SECONDS)
+	check(is_equal_approx(model.full_elapsed, elapsed + Model.SPLIT_SECONDS), "split cannot restart a full-board deadline when it frees no occupied cell")
+	model.step(Model.SETTLE_SECONDS)
+	elapsed = model.full_elapsed
+	check(model.try_merge(1000, 1001) == "merged", "restored roots can merge again while danger remains active")
+	model.step(Model.FUSION_SECONDS)
+	check(is_equal_approx(model.full_elapsed, elapsed + Model.FUSION_SECONDS), "merge after undo also preserves a full-board deadline without occupancy relief")
+	model.step(Model.FULL_SECONDS - model.full_elapsed)
+	check(model.phase == "finished", "repeated merge and undo cannot postpone a full board's expiry")
 
 
 func _test_full_board() -> void:
