@@ -60,6 +60,11 @@ func _run() -> void:
 	_check_edge_drag(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
+	_check_collect_button_growth(view)
+	_check_batch_collection(view)
+	_check_batch_chest_queue(view)
+	_check_batch_lifecycle(view)
+	_check_batch_wallet_failure(view)
 	_check_word_reveal(view)
 	_check_word_reveal_lifecycle(view)
 	_check_collection_stack_fall(view)
@@ -198,7 +203,7 @@ func _check_supply_layout(view) -> void:
 		check(absf(preview.get_center().x - column_center) < 0.01,
 			"preview %d is centered above its well column%s" % [index, context])
 	var regions: Dictionary = {"well": board, "supply tray": tray, "chest meter": view._loot_meter.get_rect(),
-		"Finish": view.finish_button.get_rect()}
+		"Finish": view.finish_button.get_rect(), "Collect words": view.collect_button.get_rect()}
 	if view._loot_detail.visible:
 		regions["chest detail"] = view._loot_detail.get_rect()
 		var detail_font: Font = view._loot_detail.get_theme_font("font")
@@ -219,6 +224,8 @@ func _check_supply_layout(view) -> void:
 	var s: float = Style.ui_scale(view)
 	check(tray.size.y * s >= 44.0 - 0.01 and view.finish_button.size.y * s >= 44.0 - 0.01,
 		"manual drop and Finish retain forty-four-pixel target heights" + context)
+	check(view.collect_button.size.y * s >= 44.0 - 0.01 and view.collect_button.size.x * s >= 44.0 - 0.01,
+		"batch collection retains a forty-four-pixel target in every layout" + context)
 
 
 func _check_preview_label_height(view) -> void:
@@ -335,6 +342,259 @@ func _check_collect_and_fragments(view) -> void:
 
 func _snapshot_rect(value: Array) -> Rect2:
 	return Rect2(float(value[0]), float(value[1]), float(value[2]), float(value[3]))
+
+
+func _install_batch_words(view, count: int, retain_others: bool = false) -> Array[int]:
+	view.game.cells.clear()
+	var ids: Array[int] = []
+	for index in range(count):
+		var tile: Dictionary = view.game._new_tile("cat", 2, index % 3)
+		tile.column = (index % 3) * 2
+		tile.row = Model.ROWS - 1 - floori(float(index) / 3.0)
+		view.game.cells.append(tile)
+		ids.append(int(tile.id))
+	if retain_others:
+		var invalid: Dictionary = view.game._new_tile("tc", 2, 2)
+		invalid.column = 0
+		invalid.row = Model.ROWS - 2
+		var single: Dictionary = view.game._new_tile("cat", 1, 1)
+		single.column = 2
+		single.row = Model.ROWS - 2
+		view.game.cells.append(invalid)
+		view.game.cells.append(single)
+	view._sync_tiles()
+	view._layout()
+	return ids
+
+
+func _check_collect_button_growth(view) -> void:
+	for dimensions: Vector2 in LAYOUT_SIZES:
+		view.size = dimensions
+		_reset(view)
+		var empty: Dictionary = view.snapshot().collect_button
+		var button_rect: Rect2 = view.collect_button.get_rect()
+		check(empty.visible and not empty.enabled and int(empty.count) == 0,
+			"the empty collect action remains discoverable but cannot start a batch")
+		check(not view.navigation_controls().has(view.collect_button),
+			"keyboard navigation skips the unavailable empty collect action")
+		var previous_scale: float = float(empty.visual_scale)
+		var previous_sparkles: int = int(empty.sparkle_count)
+		for count: int in [1, 3, 9]:
+			var previous_charge: float = float(view.snapshot().collect_button.charge)
+			_install_batch_words(view, count)
+			var changed: Dictionary = view.snapshot().collect_button
+			check(changed.enabled and int(changed.count) == count and float(changed.target_charge) == count,
+				"the action counts completed merged words and targets their accumulated strength")
+			check(view.navigation_controls().has(view.collect_button)
+				and not str(view.collect_button.get("accessibility_name")).is_empty(),
+				"a ready collect action has a keyboard destination and an accessible name")
+			check(is_equal_approx(float(changed.charge), previous_charge),
+				"a larger batch starts growing from the previous charge instead of snapping")
+			_advance(view, 0.12)
+			var growing: Dictionary = view.snapshot().collect_button
+			check(float(growing.charge) > previous_charge and float(growing.charge) < float(count),
+				"the charge visibly passes through intermediate strength after its count rises")
+			_advance(view, 2.0)
+			var charged: Dictionary = view.snapshot().collect_button
+			check(float(charged.visual_scale) > previous_scale and int(charged.sparkle_count) >= previous_sparkles,
+				"one, three and nine words produce progressively larger, richer collection artwork")
+			check(view.collect_button.get_rect().is_equal_approx(button_rect),
+				"growing artwork preserves the button hit target and neighboring layout")
+			_check_supply_layout(view)
+			previous_scale = float(charged.visual_scale)
+			previous_sparkles = int(charged.sparkle_count)
+	view.size = Vector2(1000, 720)
+	_reset(view, true)
+	var last: Dictionary = {}
+	var high_count_rect: Rect2 = view.collect_button.get_rect()
+	for count: int in [9, 15, 24]:
+		_install_batch_words(view, count)
+		var steady: Dictionary = view.snapshot().collect_button
+		_advance(view, 0.4)
+		var later: Dictionary = view.snapshot().collect_button
+		check(steady.reduced_motion and is_equal_approx(float(steady.charge), float(count))
+			and is_equal_approx(float(steady.visual_scale), float(later.visual_scale))
+			and is_equal_approx(float(steady.elapsed), float(later.elapsed)),
+			"reduced motion keeps the earned strength readable without pulsing or growth travel")
+		check(view.collect_button.get_rect().is_equal_approx(high_count_rect),
+			"nine through twenty-four completed words keep the same safe button footprint")
+		if not last.is_empty():
+			check(int(steady.coin_count) > int(last.coin_count) and int(steady.sparkle_count) > int(last.sparkle_count)
+				and float(steady.glow) > float(last.glow) and float(steady.rays) > float(last.rays),
+				"large batches continue gaining coin artwork, glints and stronger light beyond nine words")
+			check(is_equal_approx(float(steady.visual_scale), float(last.visual_scale)),
+				"high-count intensity grows through richer effects without crowding adjacent controls")
+		last = steady
+
+
+func _check_batch_collection(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		var ids: Array[int] = _install_batch_words(view, 3, true)
+		var retained: Array[int] = []
+		for tile: Dictionary in view.game.cells:
+			if not ids.has(int(tile.id)):
+				retained.append(int(tile.id))
+		var credits: Dictionary = {}
+		view.credit_collection = func(id: String, amount: int) -> Dictionary:
+			credits[id] = int(credits.get(id, 0)) + 1
+			check(amount == 100, "each batch member uses the ordinary merged-word coin calculation")
+			return {"ok": true}
+		view.collect_button.pressed.emit()
+		var started: Dictionary = view.snapshot()
+		check(started.collection_batch.active and int(started.collection_batch.total) == 3
+			and int(started.collection_batch.started) == 1 and not started.collect_button.enabled,
+			"one collect-button activation snapshots three valid merges and starts only the first")
+		check(not started.preview.enabled and not view.navigation_controls().has(view.collect_button)
+			and view.navigation_controls().has(view.finish_button),
+			"a running batch blocks more supply and collection while leaving Finish accessible")
+		view.collect_button.pressed.emit()
+		view._activate(ids[1])
+		check(not view._press(-1, _center(view, retained[0])),
+			"batch playback cannot start a competing drag or split")
+		check(view.game.fusions.size() == 1 and payouts.is_empty(),
+			"repeated button and tile activation cannot overlap the first collection")
+		var generated: int = int(view.game.generated_tiles)
+		view._drop_next(int(view.game.upcoming[0].id))
+		check(int(view.game.generated_tiles) == generated, "the manual drop shortcut obeys the running batch input gate")
+		var elapsed: float = 0.0
+		var previous_started: int = 1
+		var previous_completed: int = 0
+		var first_completion: float = -1.0
+		while elapsed < 5.0 and bool(view.snapshot().collection_batch.active):
+			_advance(view, 0.025)
+			elapsed += 0.025
+			var state: Dictionary = view.snapshot()
+			var now_started: int = int(state.collection_batch.started)
+			var now_completed: int = int(state.collection_batch.completed)
+			check(now_started >= previous_started and now_started <= previous_started + 1
+				and now_completed >= previous_completed and now_completed <= previous_completed + 1,
+				"batch members start and commit singly in monotonic order")
+			check(now_started - now_completed <= 1 and view.game.fusions.size() <= 1,
+				"the rhythmic queue never overlaps reward transactions or disappearance poses")
+			if now_completed == 1 and first_completion < 0.0:
+				first_completion = elapsed
+				check(now_started == 1, "the first committed word has a brief rest before the next begins")
+			previous_started = now_started
+			previous_completed = now_completed
+		var final: Dictionary = view.snapshot()
+		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
+			and int(final.collection_batch.started) == 3 and elapsed > 1.25,
+			"three words finish through a visible sequence instead of an instantaneous sweep")
+		check(payouts.size() == 3 and credits.size() == 3 and attempts.size() == 3,
+			"batch collection credits and records each captured word exactly once")
+		for times: int in credits.values():
+			check(times == 1, "each batch event reaches persistent credit only once")
+		check(view.game.collected_coins == 300 and view.game.fragment_count == 3 and cues.count("pop") == 3,
+			"all carried fragments, coins and three existing disappearance beats survive batch playback")
+		check(heard.size() == 1, "the final batch word speaks once after the short per-word sound rhythm")
+		for id: int in retained:
+			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
+		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
+			"collecting every completed merge returns the button to its empty state")
+		_advance(view, 2.0)
+		check(payouts.size() == 3 and view.game.collected_coins == 300,
+			"the completed batch cannot replay its rewards on later frames")
+
+
+func _check_batch_chest_queue(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		_install_batch_words(view, 9)
+		var confetti: Array[int] = []
+		var on_confetti: Callable = func() -> void: confetti.append(1)
+		view._reward_presentation.confetti_requested.connect(on_confetti)
+		view._collect_all()
+		var elapsed: float = 0.0
+		var queued_during_batch: bool = false
+		while elapsed < 8.0 and view.game.collection_batch_active():
+			_advance(view, 0.025)
+			elapsed += 0.025
+			var presentation: Dictionary = view.snapshot().reward_presentation
+			if view.game.chest_tier > 0:
+				queued_during_batch = queued_during_batch or bool(presentation.active)
+			if view.game.collection_batch_active():
+				check(not presentation.visible and confetti.is_empty(),
+					"earned chests queue behind batch collection instead of covering its remaining words")
+		check(queued_during_batch and not view.game.collection_batch_active()
+			and view.game.fragment_count == 9 and view.game.chest_tier == 2,
+			"all nine fragments and the second chest tier commit before queued celebration begins")
+		check(payouts.size() == 9 and view.game.collected_coins == 900,
+			"waiting chest artwork never delays or duplicates the nine authoritative coin rewards")
+		var kinds: Dictionary = {}
+		for tick in range(320):
+			_advance(view, 0.025)
+			var presentation: Dictionary = view.snapshot().reward_presentation
+			if presentation.visible:
+				kinds[str(presentation.kind)] = true
+		check(kinds.has("synthesis") and kinds.has("upgrade") and not view._reward_presentation.is_active(),
+			"the existing synthesis and upgrade performances both play after batch collection")
+		check(confetti.size() == (0 if reduced else 2),
+			"each queued chest releases one confetti celebration, with reduced motion respected")
+		check(payouts.size() == 9 and view.game.collected_coins == 900 and view.game.fragment_count == 9,
+			"queued chest flights and confetti remain presentation-only after all batch rewards")
+		view._reward_presentation.confetti_requested.disconnect(on_confetti)
+
+
+func _check_batch_lifecycle(view) -> void:
+	_reset(view)
+	_install_batch_words(view, 3)
+	view._collect_all()
+	_advance(view, 0.12)
+	view.pause(true)
+	var paused: Dictionary = view.snapshot()
+	_advance(view, 1.0)
+	var waiting: Dictionary = view.snapshot()
+	check(paused.collection_batch == waiting.collection_batch
+		and is_equal_approx(float(paused.collect_button.elapsed), float(waiting.collect_button.elapsed))
+		and is_equal_approx(float(paused.collect_button.charge), float(waiting.collect_button.charge))
+		and payouts.is_empty(), "pause freezes both the batch reward clock and the charge animation")
+	for dimensions: Vector2 in [Vector2(390, 700), Vector2(568, 320), Vector2(1000, 720)]:
+		view.size = dimensions
+		view._layout()
+		_check_supply_layout(view)
+		check(view.snapshot().collection_batch == paused.collection_batch,
+			"resizing the paused batch preserves its captured IDs and exact progress")
+	view.pause(false)
+	_advance(view, 3.0)
+	check(payouts.size() == 3 and not view.snapshot().collection_batch.active,
+		"resuming completes the original three-member batch once")
+	for action: String in ["stop", "finish", "configure"]:
+		_reset(view)
+		_install_batch_words(view, 3)
+		view._collect_all()
+		_advance(view, 0.10)
+		match action:
+			"stop": view.stop()
+			"finish": view._finish_round()
+			"configure": view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
+		_advance(view, 2.0)
+		check(not view.snapshot().collection_batch.active and payouts.is_empty(),
+			action + " discards unfinished batch work without a late credit")
+		check(not bool(view.snapshot().collect_button.active), action + " clears the running button presentation")
+		if action == "stop":
+			check(int(view.snapshot().collect_button.count) == 0 and is_zero_approx(float(view.snapshot().collect_button.target_charge)),
+				"leaving the mode resets button strength instead of recharging it from the discarded board")
+
+
+func _check_batch_wallet_failure(view) -> void:
+	_reset(view)
+	var ids: Array[int] = _install_batch_words(view, 3)
+	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": false}
+	view._collect_all()
+	_advance(view, 3.0)
+	check(not view.snapshot().collection_batch.active and payouts.is_empty() and view.game.collected_coins == 0,
+		"a rejected wallet write stops the batch without skipping ahead or issuing a reward")
+	for id: int in ids:
+		check(not view.game.cell(id).is_empty() and view._tiles[id].visible,
+			"wallet failure leaves every captured word and its fragments visible for retry")
+	check(view.snapshot().collect_button.enabled and int(view.snapshot().collect_button.count) == 3,
+		"failed persistence restores the full collectable count and a usable retry action")
+	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": true}
+	view.collect_button.pressed.emit()
+	_advance(view, 3.0)
+	check(payouts.size() == 3 and view.game.collected_coins == 300 and view.game.fragment_count == 3,
+		"retry after wallet recovery pays each remaining word and carried fragment exactly once")
 
 
 func _check_reveal_content(view, expected: Dictionary) -> void:

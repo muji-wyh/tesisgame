@@ -35,3 +35,31 @@ bodies directly at their reserved destinations. The six-column board, initial
 three rows, 20-to-16-second supply cadence, merge, split, and collection rules
 remain unchanged. This polish reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
+
+The Collect button snapshots all completed word jellies currently on the board.
+It collects them from the upper rows downward, alternating direction across
+rows, with a 0.64-second beat that gradually tightens to 0.48 seconds. Every
+third pickup leaves an extra 0.10-second breath. Each jelly squashes, lifts
+with alternating sideways drift, and clears through the ordinary wallet and
+fragment transaction. Invalid combinations remain available for splitting.
+The current batch finishes before another can begin; pause freezes its clock,
+leaving the round cancels queued pickups, and a failed wallet save stops the
+sequence with the uncollected words intact.
+
+The button reuses the inspected mint gel skin above and the gold coin from
+Kenneth Foldal Moe / Archanor VFX's acquired Toon FX 1.52 package, under the
+Standard Unity Asset Store EULA; conversion and acquisition details remain in
+`assets/coins/manifest.json`. The integrated portal glow, rays and sparkle
+textures retain the licenses and source records in the linked chest-fragment
+record. These are static source images; the growing coin stack, soft overshoot,
+rotating rays and staggered glints are animated in the game. No new asset was
+downloaded. Button strength follows the available word count and retains the
+batch's initial charge until completion. Reduced motion preserves the count,
+static material, stack and light accents without rocking, growth overshoot or
+twinkling. Earned chest celebrations queue until the collection rhythm finishes;
+their existing flight, upgrade and confetti then play through the shared system.
+
+The existing collection pop marks each pickup. Batch word pictures update with
+each word; only the final word plays its complete pronunciation, preventing
+rapid pickups from repeatedly cutting off speech. Individual word taps keep
+their existing picture and pronunciation behavior.

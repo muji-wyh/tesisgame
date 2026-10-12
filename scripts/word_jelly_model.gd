@@ -5,6 +5,7 @@ extends RefCounted
 signal changed
 signal word_attempted(attempt_id: String, word_ids: Array[String], correct: bool)
 signal fusion_started(payload: Dictionary)
+signal collection_started(payload: Dictionary)
 signal fusion_completed(payload: Dictionary, awarded: int)
 signal collected(event_id: String, word: Dictionary, coins: int, fragments: int)
 signal cue_requested(cue: String)
@@ -27,6 +28,10 @@ const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
+const BATCH_INITIAL_BEAT: float = 0.64
+const BATCH_MINIMUM_BEAT: float = 0.48
+const BATCH_BEAT_ACCELERATION: float = 0.025
+const BATCH_BREATH: float = 0.10
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
@@ -71,6 +76,16 @@ var _generation: int = 0
 var _growth_pending: bool = false
 var _gravity_pending: bool = false
 var _held_tile_id: int = -1
+var _collection_batch_active: bool = false
+var _collection_batch_ids: Array[int] = []
+var _collection_batch_cursor: int = 0
+var _collection_batch_started: int = 0
+var _collection_batch_completed: int = 0
+var _collection_batch_skipped: int = 0
+var _collection_batch_elapsed: float = 0.0
+var _collection_batch_next_in: float = 0.0
+var _collection_batch_event_id: String = ""
+var _collection_batch_serial: int = 0
 var _rng := RandomNumberGenerator.new()
 
 
@@ -106,6 +121,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_growth_pending = false
 	_gravity_pending = false
 	_held_tile_id = -1
+	_reset_collection_batch()
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
@@ -148,7 +164,7 @@ static func normalize_word(value: String) -> String:
 
 
 func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
-	if phase != "playing" or paused or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
+	if phase != "playing" or paused or collection_batch_active() or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
 	var a: Dictionary = cell(a_id)
 	var b: Dictionary = cell(b_id)
@@ -188,7 +204,7 @@ func can_split(tile: Dictionary) -> bool:
 
 
 func split(tile_id: int) -> bool:
-	if phase != "playing" or paused or is_fusing(tile_id):
+	if phase != "playing" or paused or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var parent: Dictionary = cell(tile_id)
 	if not is_settled(parent) or not can_split(parent):
@@ -214,6 +230,12 @@ func split(tile_id: int) -> bool:
 
 
 func collect(tile_id: int) -> bool:
+	if collection_batch_active():
+		return false
+	return _begin_collection(tile_id)
+
+
+func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if phase != "playing" or paused or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
@@ -227,14 +249,153 @@ func collect(tile_id: int) -> bool:
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
 		"coins": coins_for_tile(tile), "fragments": int(tile.fragments),
 		"elapsed": 0.0, "duration": COLLECT_SECONDS, "pop_at": POP_SECONDS,
-		"popped": false, "credited": false
+		"popped": false, "credited": false,
+		"batch": batch_index > 0, "batch_index": batch_index,
+		"batch_total": _collection_batch_ids.size() if batch_index > 0 else 0,
+		"batch_id": _collection_batch_serial if batch_index > 0 else 0
 	}
 	fusions.append(active)
+	if batch_index > 0:
+		_collection_batch_event_id = str(active.attempt_id)
+		_collection_batch_started += 1
+		_collection_batch_next_in = collection_batch_beat(_collection_batch_started)
 	var generation: int = _generation
 	fusion_started.emit(active.duplicate(true))
+	if _can_continue(generation) and _fusion_index(str(active.attempt_id)) >= 0:
+		collection_started.emit(active.duplicate(true))
 	if _can_continue(generation):
 		changed.emit()
 	return true
+
+
+func collectable_ids() -> Array[int]:
+	var candidates: Array[Dictionary] = []
+	if phase != "playing":
+		return []
+	for tile: Dictionary in cells:
+		if is_valid_word(tile) and not is_fusing(int(tile.id)) and int(tile.id) != _held_tile_id:
+			candidates.append(tile)
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if int(a.row) != int(b.row):
+			return int(a.row) < int(b.row)
+		return int(a.column) < int(b.column) if a.column != b.column else int(a.id) < int(b.id))
+	var ids: Array[int] = []
+	var row_ids: Array[int] = []
+	var last_row: int = -1
+	var reverse_row: bool = false
+	for tile: Dictionary in candidates:
+		if int(tile.row) != last_row and not row_ids.is_empty():
+			if reverse_row:
+				row_ids.reverse()
+			ids.append_array(row_ids)
+			row_ids.clear()
+			reverse_row = not reverse_row
+		last_row = int(tile.row)
+		row_ids.append(int(tile.id))
+	if reverse_row:
+		row_ids.reverse()
+	ids.append_array(row_ids)
+	return ids
+
+
+func collection_batch_active() -> bool:
+	return _collection_batch_active
+
+
+func collection_batch_snapshot() -> Dictionary:
+	return {
+		"active": collection_batch_active(), "total": _collection_batch_ids.size(),
+		"started": _collection_batch_started, "completed": _collection_batch_completed,
+		"skipped": _collection_batch_skipped,
+		"remaining": _collection_batch_ids.size() - _collection_batch_cursor + (1 if not _collection_batch_event_id.is_empty() else 0) if collection_batch_active() else 0,
+		"elapsed": _collection_batch_elapsed, "next_in": _collection_batch_next_in,
+		"ids": _collection_batch_ids.duplicate()
+	}
+
+
+func start_collection_batch() -> bool:
+	if phase != "playing" or paused or collection_batch_active() or _held_tile_id >= 0:
+		return false
+	var ids: Array[int] = collectable_ids()
+	if ids.is_empty():
+		return false
+	_reset_collection_batch()
+	_collection_batch_ids = ids
+	_collection_batch_active = true
+	var generation: int = _generation
+	_advance_collection_batch()
+	if generation == _generation:
+		changed.emit()
+	return true
+
+
+func cancel_collection_batch() -> void:
+	if not collection_batch_active():
+		return
+	_collection_batch_active = false
+	_collection_batch_next_in = 0.0
+	# An already-started collection keeps its normal transaction boundary.
+	changed.emit()
+
+
+static func collection_batch_beat(started: int) -> float:
+	var beat: float = maxf(BATCH_MINIMUM_BEAT, BATCH_INITIAL_BEAT - float(maxi(0, started - 1)) * BATCH_BEAT_ACCELERATION)
+	return beat + (BATCH_BREATH if started % 3 == 0 else 0.0)
+
+
+func _reset_collection_batch() -> void:
+	_collection_batch_active = false
+	_collection_batch_ids.clear()
+	_collection_batch_cursor = 0
+	_collection_batch_started = 0
+	_collection_batch_completed = 0
+	_collection_batch_skipped = 0
+	_collection_batch_elapsed = 0.0
+	_collection_batch_next_in = 0.0
+	_collection_batch_event_id = ""
+	_collection_batch_serial += 1
+
+
+func _advance_collection_batch() -> void:
+	if not collection_batch_active() or phase != "playing" or paused:
+		return
+	# A manual collection started before the button was pressed can finish,
+	# but the batch never overlaps two collection animations or transactions.
+	for active: Dictionary in fusions:
+		if str(active.operation) == "collect":
+			return
+	if _collection_batch_cursor >= _collection_batch_ids.size():
+		_collection_batch_active = false
+		_collection_batch_next_in = 0.0
+		return
+	if _collection_batch_next_in > EPSILON:
+		return
+	while _collection_batch_cursor < _collection_batch_ids.size():
+		var tile_id: int = _collection_batch_ids[_collection_batch_cursor]
+		var tile: Dictionary = cell(tile_id)
+		if tile.is_empty() or not is_valid_word(tile) or is_fusing(tile_id):
+			_collection_batch_cursor += 1
+			_collection_batch_skipped += 1
+			continue
+		if not is_settled(tile) or tile_id == _held_tile_id:
+			return
+		_collection_batch_cursor += 1
+		_begin_collection(tile_id, _collection_batch_cursor)
+		return
+	_collection_batch_active = false
+	_collection_batch_next_in = 0.0
+
+
+func _collection_batch_boundary() -> float:
+	if not collection_batch_active():
+		return INF
+	if _collection_batch_next_in > EPSILON:
+		return _collection_batch_next_in
+	if _collection_batch_cursor < _collection_batch_ids.size():
+		var tile: Dictionary = cell(_collection_batch_ids[_collection_batch_cursor])
+		if not tile.is_empty() and not is_settled(tile):
+			return maxf(0.0, settle_duration(tile) - float(tile.age))
+	return INF
 
 
 func step(delta: float) -> void:
@@ -244,7 +405,11 @@ func step(delta: float) -> void:
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
 		_resume_pending_motion()
+		_advance_collection_batch()
+		if not _can_continue(generation):
+			break
 		var consumed: float = remaining
+		consumed = minf(consumed, _collection_batch_boundary())
 		if _growth_pending and _settling_remaining() > EPSILON:
 			consumed = minf(consumed, _settling_remaining())
 		if _gravity_pending and _next_settlement() > EPSILON:
@@ -268,6 +433,9 @@ func step(delta: float) -> void:
 			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
 		for active in fusions:
 			active.elapsed = float(active.elapsed) + consumed
+		if collection_batch_active():
+			_collection_batch_elapsed += consumed
+			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
 		if danger_running:
 			full_elapsed += consumed
 		elif not full:
@@ -288,6 +456,9 @@ func step(delta: float) -> void:
 		if not _can_continue(generation):
 			break
 		_resume_pending_motion()
+		_advance_collection_batch()
+		if not _can_continue(generation):
+			break
 		if not _has_free_cell():
 			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 				full_elapsed = 0.0
@@ -317,6 +488,8 @@ func set_paused(value: bool) -> void:
 
 
 func set_held_tile(tile_id: int = -1) -> void:
+	if collection_batch_active() and tile_id >= 0:
+		return
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
 	if _held_tile_id == held_id:
 		return
@@ -326,7 +499,7 @@ func set_held_tile(tile_id: int = -1) -> void:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
+	return phase == "playing" and not paused and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -402,6 +575,8 @@ func snapshot() -> Dictionary:
 		"chest_count": chest_count, "generated_tiles": generated_tiles,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed, "full_elapsed": full_elapsed,
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
+		"collectable_ids": collectable_ids(),
+		"collection_batch": collection_batch_snapshot(),
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.merge(reward_progress(fragment_count), true)
@@ -412,6 +587,8 @@ func finish_round() -> Dictionary:
 	if phase == "finished":
 		return _result.duplicate(true)
 	var generation: int = _generation
+	_collection_batch_active = false
+	_collection_batch_next_in = 0.0
 	# A persistence callback may pause after accepting payment. That accepted
 	# transaction must enter the round result even when the player exits paused.
 	for pending in fusions.duplicate():
@@ -595,6 +772,8 @@ func _complete_operation(event_id: String) -> void:
 			if not response is Dictionary or not bool(response.get("ok", false)):
 				fusions.remove_at(_fusion_index(event_id))
 				error = "The coin reward could not be saved. Tap the word to try again."
+				_collection_batch_event_id = ""
+				cancel_collection_batch()
 				return
 			fusions[_fusion_index(event_id)].credited = true
 			completed.credited = true
@@ -703,6 +882,12 @@ func _complete_collection(completed: Dictionary) -> void:
 	chest_tier = int(reward.chest_tier)
 	chest_count = int(reward.chest_count)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
+	if bool(completed.get("batch", false)) and int(completed.get("batch_id", -1)) == _collection_batch_serial:
+		_collection_batch_completed += 1
+		_collection_batch_event_id = ""
+		if _collection_batch_cursor >= _collection_batch_ids.size():
+			_collection_batch_active = false
+			_collection_batch_next_in = 0.0
 	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - float(cleared_pairs) * 0.04)
 	full_elapsed = -1.0
 	var generation: int = _generation

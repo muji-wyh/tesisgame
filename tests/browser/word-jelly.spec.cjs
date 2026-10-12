@@ -165,7 +165,8 @@ function expectSupplyLayout(state, bounds) {
     expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + 0.5) * board[2] / 6)),
       `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
   }
-  const regions = [['well', board], ['supply tray', tray], ['chest meter', state.loot.progress.rect], ['Finish', state.finish.rect]];
+  const regions = [['well', board], ['supply tray', tray], ['chest meter', state.loot.progress.rect],
+    ['Finish', state.finish.rect], ['Collect words', state.collect_button.rect]];
   inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
   for (const [index, [label, rect]] of regions.entries()) {
     inside(rect, area, label);
@@ -177,6 +178,7 @@ function expectSupplyLayout(state, bounds) {
   }
   expect(tray[3] * scale, 'The supply tray retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
   expect(state.finish.rect[3] * scale, 'Finish retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
+  expect(state.collect_button.rect[3] * scale, 'Collect words retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
   const bottom = Math.max(board[1] + board[3], state.finish.rect[1] + state.finish.rect[3]);
   expect(Math.abs(bottom - (area[1] + area[3] - 12 / scale)), 'The game retains twelve-pixel bottom padding').toBeLessThan(tolerance);
 }
@@ -599,6 +601,119 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   await page.reload();
   await enterGame(page);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
+  expect(errors).toEqual([]);
+});
+
+test('collect button grows with completed words and collects a rhythmic batch once', async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = await startWordJelly(page), initial = await jelly(page), bounds = await metrics(page);
+  expect(initial.collect_button.visible).toBe(true);
+  expect(initial.collect_button.enabled).toBe(false);
+  expect(initial.collect_button.count).toBe(0);
+  expectSupplyLayout(initial, bounds);
+  await capture(page, info, 'word-jelly-collect-count-0');
+  const collectedIds = [];
+  const stages = [initial.collect_button];
+  for (let count = 1; count <= 3; count++) {
+    const { roots } = await availableWord(page, 3, 2, { markedOnly: count === 1 });
+    const merged = await merge(page, roots[0].id, roots[1].id);
+    collectedIds.push(merged.id);
+    await expect.poll(async () => (await jelly(page)).collect_button.count).toBe(count);
+    await expect.poll(async () => (await jelly(page)).collect_button.charge).toBeGreaterThan(count - 0.1);
+    const state = await jelly(page);
+    expect(state.collect_button.enabled).toBe(true);
+    expect(state.collect_button.rect, 'Accumulation grows artwork without moving its hit target').toEqual(initial.collect_button.rect);
+    if (count === 1 || count === 3) {
+      stages.push(state.collect_button);
+      await capture(page, info, `word-jelly-collect-count-${count}`);
+    }
+  }
+  expect(stages[1].visual_scale, 'One ready word charges the quiet empty control').toBeGreaterThan(stages[0].visual_scale);
+  expect(stages[2].visual_scale, 'Three words visibly grow the charged control').toBeGreaterThan(stages[1].visual_scale);
+  expect(stages[2].sparkle_count).toBeGreaterThanOrEqual(stages[1].sparkle_count);
+  const before = await jelly(page), startingWallet = await wallet(page);
+  const selected = before.tiles.filter(tile => collectedIds.includes(tile.id));
+  const retained = before.tiles.filter(tile => !collectedIds.includes(tile.id)).map(tile => tile.id);
+  const expectedCoins = selected.reduce((sum, tile) => sum + tile.coins, 0);
+  const expectedFragments = selected.reduce((sum, tile) => sum + tile.fragments, 0);
+  expect(expectedFragments, 'The ordinary-input batch includes a real carried treasure fragment').toBeGreaterThan(0);
+  await page.exposeFunction('saveWordJellyBatchFrame', (index, encoded) =>
+    fs.writeFileSync(info.outputPath(`word-jelly-batch-${index}.png`), Buffer.from(encoded, 'base64')));
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.wordJellyBatchTimeline = [];
+    window.wordJellyBatchCaptured = [];
+    const pending = new Set();
+    window.wordJellyBatchObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}'), batch = state.collection_batch;
+      if (!batch?.total) return;
+      window.wordJellyBatchTimeline.push({ ...batch, button: state.collect_button,
+        effects: state.fusion_effects, revealed: state.word_reveal, cleared: state.cleared_pairs,
+        collectedCoins: state.collected_coins, fragments: state.fragment_count, at: performance.now() });
+      if (!batch.active || !batch.started || pending.has(batch.started)) return;
+      const reveal = state.word_reveal;
+      if (!reveal?.visible || reveal.elapsed < 0.12 || reveal.content_alpha <= 0.9 || !state.fusion_effects?.length) return;
+      pending.add(batch.started);
+      const index = batch.started;
+      document.getElementById('canvas').toBlob(blob => {
+        if (!blob) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          window.wordJellyBatchCaptured.push(index);
+          window.saveWordJellyBatchFrame(index, reader.result.split(',')[1]);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/png');
+    });
+    window.wordJellyBatchObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  // Consecutive trusted presses exercise the disabled state during playback.
+  const point = center(before.collect_button.rect, bounds);
+  await page.touchscreen.tap(point.x, point.y);
+  await page.touchscreen.tap(point.x, point.y);
+  await expect.poll(async () => (await jelly(page)).collection_batch.completed,
+    { message: 'Every captured completed word is collected through the rhythmic queue' }).toBe(3);
+  await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + expectedCoins);
+  await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.length),
+    { message: 'Each staggered collection produces an actual rendered review frame' }).toBe(3);
+  const final = await jelly(page);
+  const timeline = await page.evaluate(() => {
+    window.wordJellyBatchObserver.disconnect();
+    return window.wordJellyBatchTimeline;
+  });
+  fs.writeFileSync(info.outputPath('word-jelly-batch-timeline.json'), JSON.stringify({ stages, timeline }, null, 2));
+  expect(timeline.length).toBeGreaterThan(3);
+  let previousStarted = 0, previousCompleted = 0;
+  for (const frame of timeline) {
+    expect(frame.total).toBe(3);
+    expect(frame.started).toBeGreaterThanOrEqual(previousStarted);
+    expect(frame.started - previousStarted, 'Render snapshots observe one new collection at a time').toBeLessThanOrEqual(1);
+    expect(frame.completed).toBeGreaterThanOrEqual(previousCompleted);
+    expect(frame.completed - previousCompleted, 'Coins settle one word at a time').toBeLessThanOrEqual(1);
+    expect(frame.started - frame.completed, 'The active disappearance never overlaps a second payout').toBeLessThanOrEqual(1);
+    if (frame.active) expect(frame.button.enabled).toBe(false);
+    previousStarted = frame.started;
+    previousCompleted = frame.completed;
+  }
+  const starts = [1, 2, 3].map(index => timeline.find(frame => frame.started === index));
+  expect(starts.every(Boolean), 'Every batch member has an individually observed beginning').toBe(true);
+  for (let index = 1; index < starts.length; index++) {
+    expect(starts[index].elapsed - starts[index - 1].elapsed,
+      'The stagger leaves a perceptible beat between neighboring collections').toBeGreaterThan(0.3);
+    expect(starts[index].elapsed - starts[index - 1].elapsed,
+      'A three-word sweep retains a brisk rhythm').toBeLessThan(1.2);
+  }
+  expect(final.cleared_pairs).toBe(before.cleared_pairs + 3);
+  expect(final.collected_coins).toBe(before.collected_coins + expectedCoins);
+  expect(final.fragment_count).toBe(before.fragment_count + expectedFragments);
+  expect(final.tiles.some(tile => collectedIds.includes(tile.id))).toBe(false);
+  for (const id of retained) expect(final.tiles.some(tile => tile.id === id), 'Batch collection preserves unfinished roots').toBe(true);
+  expect(final.collect_button.enabled).toBe(false);
+  expect(final.collect_button.count).toBe(0);
+  await capture(page, info, 'word-jelly-batch-completed');
+  await page.waitForTimeout(800);
+  expect((await wallet(page)).balance, 'Later presentation frames cannot repeat batch rewards').toBe(startingWallet.balance + expectedCoins);
   expect(errors).toEqual([]);
 });
 

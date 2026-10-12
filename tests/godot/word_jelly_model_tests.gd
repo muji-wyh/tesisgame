@@ -23,6 +23,13 @@ func _run() -> void:
 	_test_current_age_validation()
 	_test_repeated_merge_and_fragments()
 	_test_collection_timeline_and_pause()
+	_test_collection_batch_rhythm()
+	_test_collection_batch_candidates()
+	_test_collection_batch_settlement()
+	_test_collection_batch_pause_and_cancel()
+	_test_collection_batch_wallet()
+	_test_collection_batch_lifecycle()
+	_test_collection_batch_determinism()
 	_test_collection_gravity()
 	_test_gravity_partial_support()
 	_test_gravity_held_stack()
@@ -614,6 +621,268 @@ func _test_wallet_retry() -> void:
 	var finished: Dictionary = model.finish_round()
 	check(finished.coins == 100 and finished.words.size() == 1, "exit while a credited collection is paused includes the accepted transaction")
 	model.credit_collection = Callable()
+
+
+func _batch_board(model, count: int = 9) -> void:
+	model.cells.clear()
+	for index in range(count):
+		var row: int = Model.ROWS - ceili(float(count) / 3.0) + int(index / 3)
+		model.cells.append(_placed_tile(1000 + index, "cat", (index % 3) * 2, row, 2, 1, _word("cat")))
+
+
+func _observe_batch(model) -> Array:
+	var starts: Array = []
+	var observed: WeakRef = weakref(model)
+	model.collection_started.connect(func(payload: Dictionary) -> void:
+		var active_model: RefCounted = observed.get_ref()
+		starts.append({"id": int(payload.a_id), "batch": bool(payload.batch),
+			"index": int(payload.batch_index), "total": int(payload.batch_total),
+			"time": float(active_model.collection_batch_snapshot().elapsed),
+			"collections_running": active_model.fusions.filter(func(active: Dictionary) -> bool: return str(active.operation) == "collect").size()}))
+	return starts
+
+
+func _test_collection_batch_rhythm() -> void:
+	var model = _model([_word("cat")])
+	_batch_board(model)
+	var events: Dictionary = _observe(model)
+	var starts: Array = _observe_batch(model)
+	var expected_ids: Array[int] = [1000, 1001, 1002, 1005, 1004, 1003, 1006, 1007, 1008]
+	check(model.collectable_ids() == expected_ids, "batch candidates sweep upper rows first and alternate horizontal direction")
+	check(model.start_collection_batch(), "a batch snapshots every currently completed word")
+	check(not model.start_collection_batch(), "repeated button activation cannot duplicate a running batch")
+	check(starts.size() == 1 and is_zero_approx(float(starts[0].time)), "the first word responds immediately")
+	check(model.collection_batch_snapshot().remaining == 9, "remaining count includes the in-flight collection")
+	check(not model.collect(1001) and model.try_merge(1001, 1002) == "ignored", "batch words cannot be manually collected or merged during their reserved sequence")
+	check(not model.drop_now(), "manual drops do not interrupt a batch")
+	model.set_held_tile(1001)
+	check(model._held_tile_id == -1, "a batch cannot acquire a new drag anchor")
+	var expected_time: float = 0.0
+	for index in range(expected_ids.size()):
+		if index > 0:
+			var beat: float = Model.collection_batch_beat(index)
+			model.step(beat - 0.001)
+			check(starts.size() == index, "the next word waits for its beat")
+			model.step(0.001)
+			expected_time += beat
+		check(starts.size() == index + 1, "exact beat boundary starts one collection")
+		var start: Dictionary = starts[index]
+		check(start.id == expected_ids[index], "the captured spatial order is preserved across collection gravity")
+		check(start.batch and start.index == index + 1 and start.total == expected_ids.size(), "presentation receives stable batch index and total")
+		check(is_equal_approx(float(start.time), expected_time) and start.collections_running == 1,
+			"each rhythmic start occurs at its authoritative time with one collecting body")
+		check(model.collected_coins == index * 100, "only preceding completed transactions have earned coins")
+	model.step(Model.COLLECT_SECONDS)
+	check(not model.collection_batch_active() and model.cells.is_empty(), "the batch ends only after its final transaction completes")
+	check(model.collection_batch_snapshot().completed == 9 and model.collection_batch_snapshot().remaining == 0, "completed status accounts for every collected word")
+	check(model.collected_coins == 900 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
+	check(events.collections.size() == 9 and events.attempts.size() == 9 and events.cues.count("pop") == 9, "every word gets one collection, learning attempt and disappearance cue")
+	check(events.milestones == [[0, 1], [1, 2]], "batch fragments preserve normal chest unlock and upgrade milestones")
+	check(Model.collection_batch_beat(3) > Model.collection_batch_beat(2)
+		and Model.collection_batch_beat(7) < Model.collection_batch_beat(1), "triplet breathing gaps coexist with gentle acceleration")
+	var coin_total: int = model.collected_coins
+	model.step(1.0)
+	check(model.collected_coins == coin_total and not model.start_collection_batch(), "an empty batch has no repeat rewards")
+
+
+func _test_collection_batch_candidates() -> void:
+	var model = _model([_word("cat")])
+	_board(model, ["ca", "t", "x", "y"])
+	var invalid: Dictionary = _merge(model, 1002, 1003)
+	var valid: Dictionary = _merge(model, 1000, 1001)
+	check(model.collectable_ids() == [int(valid.id)], "only valid merged words are eligible, including their final wobble")
+	check(model.start_collection_batch() and model.fusions.is_empty(), "a just-merged word can queue while its finishing wobble settles")
+	check(not model.split(int(invalid.id)), "manual splitting waits while the batch is active")
+	# A later word is not silently added to the button's captured set.
+	model.cells.append(_placed_tile(9000, "cat", 0, 1, 2, 0, _word("cat")))
+	model.step(2.0)
+	check(model.cleared_pairs == 1 and not model.cell(9000).is_empty(), "the click collects only its original word IDs")
+	check(not model.cell(int(invalid.id)).is_empty() and model.can_split(model.cell(int(invalid.id))), "invalid merged words survive batch collection with their split history")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(invalid.id)), "normal invalid-word splitting resumes after the batch")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.set_held_tile(1000)
+	check(not 1000 in model.collectable_ids() and not model.start_collection_batch(), "a held word is excluded and a live drag cannot start batch collection")
+	model.set_held_tile()
+	var manual_payloads: Array = []
+	model.collection_started.connect(func(payload: Dictionary) -> void: manual_payloads.append(payload), CONNECT_ONE_SHOT)
+	check(model.collect(1000), "manual collection remains supported")
+	check(manual_payloads.size() == 1 and not bool(manual_payloads[0].batch)
+		and manual_payloads[0].batch_index == 0 and manual_payloads[0].batch_total == 0, "manual collection uses the shared presentation signal without batch metadata")
+	check(model.collectable_ids() == [1001, 1002], "already-collecting words are excluded from the new batch snapshot")
+	var starts: Array = _observe_batch(model)
+	check(model.start_collection_batch() and starts.is_empty(), "a manual collection already in flight finishes before the batch starts")
+	model.step(Model.COLLECT_SECONDS)
+	check(starts.size() == 1 and starts[0].id == 1001, "batch begins as soon as an earlier manual collection completes")
+	model.step(2.0)
+	check(model.cleared_pairs == 3 and model.collection_batch_snapshot().completed == 2, "preexisting manual rewards stay separate from batch accounting")
+
+
+func _test_collection_batch_settlement() -> void:
+	var model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.cells[0].age = 0.0
+	model.cells[0].settling = true
+	var starts: Array = _observe_batch(model)
+	model.start_collection_batch()
+	model.step(Model.SETTLE_SECONDS - 0.001)
+	check(starts.is_empty(), "batch waits for a selected word's physical settlement")
+	model.step(0.001)
+	check(starts.size() == 1 and is_equal_approx(float(starts[0].time), Model.SETTLE_SECONDS), "settlement boundary starts collection without a frame-dependent delay")
+	model.step(2.0)
+	check(model.cleared_pairs == 3, "an initially moving batch completes all captured words")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.start_collection_batch()
+	model.cells.remove_at(1)
+	model.step(2.0)
+	check(model.cleared_pairs == 2 and model.collection_batch_snapshot().skipped == 1 and not model.collection_batch_active(), "a vanished captured ID is skipped without blocking or awarding a missing word")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.spawn_interval = Model.INITIAL_SPAWN_INTERVAL
+	model.spawn_elapsed = Model.INITIAL_SPAWN_INTERVAL - 0.2
+	model.start_collection_batch()
+	model.step(0.21)
+	check(model.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and model.collection_batch_active(), "automatic arrival clocks continue normally during collection")
+	check(model.cells.any(func(tile: Dictionary) -> bool: return bool(tile.get("arrival", false))), "automatic drops retain their normal staggered arrival bodies")
+
+
+func _test_collection_batch_pause_and_cancel() -> void:
+	var model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.set_paused(true)
+	check(not model.start_collection_batch(), "paused play cannot begin a batch")
+	model.set_paused(false)
+	model.start_collection_batch()
+	model.step(0.25)
+	model.set_paused(true)
+	var before: Dictionary = model.snapshot()
+	model.step(8.0)
+	check(model.snapshot() == before, "pause freezes batch rhythm, current transaction and board clocks together")
+	model.set_paused(false)
+	model.step(0.17)
+	check(model.cleared_pairs == 1 and model.collection_batch_active(), "resume finishes the current collection at the preserved deadline")
+	model.cancel_collection_batch()
+	model.step(2.0)
+	check(model.cleared_pairs == 1 and model.cells.size() == 2 and not model.collection_batch_active(), "cancelling between beats releases uncollected words without awarding them")
+	check(model.start_collection_batch(), "remaining words can start a fresh batch after cancellation")
+	model.step(0.1)
+	model.cancel_collection_batch()
+	model.step(2.0)
+	check(model.cleared_pairs == 2 and model.cells.size() == 1, "cancelled queues let the one already-started transaction finish normally")
+	check(model.collect(1002), "the final uncollected word remains manually collectable")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cleared_pairs == 3, "manual collection after cancellation grants the remaining reward once")
+
+
+func _test_collection_batch_wallet() -> void:
+	var model = _model([_word("cat")])
+	_batch_board(model, 3)
+	var calls: Array = []
+	model.credit_collection = func(event_id: String, amount: int) -> Dictionary:
+		calls.append([event_id, amount])
+		return {"ok": calls.size() != 2}
+	model.start_collection_batch()
+	model.step(5.0)
+	check(calls.size() == 2 and model.cleared_pairs == 1 and model.collected_coins == 100, "wallet failure stops the batch at the failed word without subsequent payments")
+	check(not model.collection_batch_active() and model.cells.size() == 2 and not model.error.is_empty(), "failed and queued words remain available with a recoverable error")
+	check(model.collect(1001), "a failed batch word can retry through ordinary collection")
+	model.step(Model.COLLECT_SECONDS)
+	check(calls.size() == 3 and calls[1][0] == calls[2][0] and calls[2][1] == 100, "wallet retry keeps its original receipt and amount")
+	check(model.start_collection_batch(), "remaining unattempted word can be batch-collected after retry")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cleared_pairs == 3 and model.collected_coins == 300 and calls.size() == 4, "retry and new batch still award each captured word exactly once")
+	model.credit_collection = Callable()
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.credit_collection = func(_id: String, _amount: int) -> Dictionary:
+		model.configure([_word("cat")], 3, 7)
+		return {"ok": true}
+	model.start_collection_batch()
+	model.step(5.0)
+	check(model.cleared_pairs == 0 and model.fusions.is_empty() and model.collection_batch_snapshot().total == 0,
+		"round replacement inside wallet persistence cannot commit an old batch into the new round")
+	model.credit_collection = Callable()
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	var paused_calls: Array = []
+	model.credit_collection = func(event_id: String, amount: int) -> Dictionary:
+		paused_calls.append([event_id, amount])
+		if paused_calls.size() == 1:
+			model.set_paused(true)
+		return {"ok": true}
+	model.start_collection_batch()
+	model.step(3.0)
+	check(model.paused and paused_calls.size() == 1 and model.cleared_pairs == 0, "a wallet callback can pause an accepted batch transaction before its presentation commits")
+	model.set_paused(false)
+	model.step(3.0)
+	check(paused_calls.size() == 3 and model.cleared_pairs == 3 and model.collected_coins == 300, "resuming a credited batch does not repeat payment and continues its queue")
+	model.credit_collection = Callable()
+
+
+func _test_collection_batch_lifecycle() -> void:
+	var model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.start_collection_batch()
+	model.step(Model.COLLECT_SECONDS)
+	var result: Dictionary = model.finish_round()
+	model.step(5.0)
+	check(result.coins == 100 and model.cells.size() == 2 and not model.collection_batch_active(), "finishing a round cancels queued words and includes only committed collections")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.collection_started.connect(func(_payload: Dictionary) -> void:
+		model.configure([_word("cat")], 3, 7), CONNECT_ONE_SHOT)
+	model.start_collection_batch()
+	check(model.collection_batch_snapshot().total == 0 and model.fusions.is_empty() and model.cleared_pairs == 0, "reconfiguration inside collection presentation discards the old batch and operation")
+	_assert_board(model, "batch reconfigured from start")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.collected.connect(func(_id: String, _word_data: Dictionary, _coins: int, _fragments: int) -> void:
+		model.configure([_word("cat")], 3, 7), CONNECT_ONE_SHOT)
+	model.start_collection_batch()
+	model.step(5.0)
+	check(model.collection_batch_snapshot().total == 0 and model.cleared_pairs == 0 and model.generated_tiles == Model.INITIAL_SETTLED_TILES,
+		"reconfiguration during reward callback cannot start stale queued words or consume new-round time")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.collected.connect(func(_id: String, _word_data: Dictionary, _coins: int, _fragments: int) -> void:
+		model.cancel_collection_batch(), CONNECT_ONE_SHOT)
+	model.start_collection_batch()
+	model.step(5.0)
+	check(model.cleared_pairs == 1 and model.cells.size() == 2 and not model.collection_batch_active(), "cancelling from the reward callback cannot start a stale follow-on collection")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.credit_collection = func(_id: String, _amount: int) -> Dictionary:
+		model.set_paused(true)
+		return {"ok": true}
+	model.start_collection_batch()
+	model.step(Model.COLLECT_SECONDS)
+	result = model.finish_round()
+	check(result.coins == 100 and model.cleared_pairs == 1 and not model.collection_batch_active(), "exit while paused commits the accepted batch receipt and cancels all later words")
+	model.credit_collection = Callable()
+
+
+func _test_collection_batch_determinism() -> void:
+	var large = _model([_word("cat")])
+	var fine = _model([_word("cat")])
+	for model in [large, fine]:
+		_batch_board(model)
+	var large_starts: Array = _observe_batch(large)
+	var fine_starts: Array = _observe_batch(fine)
+	large.start_collection_batch()
+	fine.start_collection_batch()
+	large.step(6.0)
+	for index in range(600):
+		fine.step(0.01)
+	check(large_starts.size() == fine_starts.size(), "coarse and fine frames start the same batch collections")
+	for index in range(large_starts.size()):
+		check(large_starts[index].id == fine_starts[index].id
+			and is_equal_approx(float(large_starts[index].time), float(fine_starts[index].time)), "frame partitioning preserves batch order and exact rhythmic start time")
+	check(large.collected_coins == fine.collected_coins and large.fragment_count == fine.fragment_count and large.cells == fine.cells,
+		"coarse and fine batch stepping preserve identical board and rewards")
+	check(is_equal_approx(float(large.collection_batch_snapshot().elapsed), float(fine.collection_batch_snapshot().elapsed)), "batch duration stops at the final transaction regardless of frame size")
+	check(is_equal_approx(large.spawn_elapsed, fine.spawn_elapsed), "collection sequencing does not distort the automatic arrival clock")
 
 
 func _test_chests() -> void:

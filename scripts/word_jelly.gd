@@ -8,6 +8,8 @@ const WordModel = preload("res://scripts/word_jelly_model.gd")
 const WordTile = preload("res://scripts/word_jelly_tile.gd")
 const Palette = preload("res://scripts/word_jelly_palette.gd")
 const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
+const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
+const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 
 var credit_collection: Callable:
 	set(value):
@@ -22,6 +24,7 @@ var _palette_indices: Dictionary = {}
 var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
 var _word_reveal: WordReveal
+var collect_button: CollectButton
 
 func _init() -> void:
 	super()
@@ -32,6 +35,7 @@ func _init() -> void:
 	game.cue_requested.connect(_cue)
 	game.fusion_completed.connect(_fusion_completed)
 	game.collected.connect(_collected)
+	game.collection_started.connect(_collection_started)
 	game.chest_milestone.connect(_chest_milestone)
 	game.finished.connect(_finished)
 	for tile: Tile in _preview_tiles:
@@ -51,8 +55,16 @@ func _init() -> void:
 	drop_button.tooltip_text = "Drop the next word parts"
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
+	collect_button = CollectButton.new()
+	collect_button.name = "WordJellyCollectAll"
+	collect_button.pressed.connect(_collect_all)
+	collect_button.z_index = 5
+	add_child(collect_button)
 
 func stop() -> void:
+	game.cancel_collection_batch()
+	if collect_button != null:
+		collect_button.reset()
 	if _word_reveal != null:
 		_word_reveal.reset()
 	super.stop()
@@ -72,6 +84,7 @@ func pause(value: bool = true) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	_word_reveal.set_reduced_motion(value)
+	collect_button.set_reduced_motion(value)
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
@@ -108,6 +121,8 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 			part.set_chest_texture(texture)
 
 func _input(event: InputEvent) -> void:
+	if game.collection_batch_active():
+		return
 	if event.is_action_pressed("ui_cancel") and _keyboard_source >= 0:
 		cancel_input()
 		get_viewport().set_input_as_handled()
@@ -127,7 +142,7 @@ func _input(event: InputEvent) -> void:
 
 func _press(pointer: int, global_point: Vector2) -> bool:
 	# Roots have no pronunciation recording; a completed word keeps its audio.
-	if _pointer != NO_POINTER or not _can_play():
+	if _pointer != NO_POINTER or not _can_play() or game.collection_batch_active():
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
@@ -168,7 +183,7 @@ func _release(global_point: Vector2) -> void:
 	_sync_positions()
 
 func _activate(id: int) -> void:
-	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)):
+	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active():
 		return
 	if _keyboard_source >= 0 and _keyboard_source != id and _tiles.has(_keyboard_source):
 		var source: int = _keyboard_source
@@ -213,28 +228,47 @@ func _split(id: int) -> void:
 	_publish()
 
 func _collect(id: int) -> void:
-	if not _can_play() or not game.is_valid_word(_cell(id)):
+	if not _can_play() or game.collection_batch_active() or not game.is_valid_word(_cell(id)):
 		return
-	var word: Dictionary = _cell(id).word.duplicate(true)
-	var origin: Vector2 = _tiles[id].get_global_rect().get_center()
 	var generation: int = _generation
 	if not game.collect(id) or generation != _generation or not _can_play():
 		return
 	if _keyboard_source == id:
 		_keyboard_source = -1
 		game.set_held_tile(_source)
-	for fusion: Dictionary in game.fusions:
-		if str(fusion.operation) == "collect" and int(fusion.a_id) == id:
-			_collection_origins[str(fusion.attempt_id)] = origin
+	_refresh_controls()
+	_refresh_fusion()
+	_publish()
+
+func _collect_all() -> void:
+	if not _can_play() or _pointer != NO_POINTER or game.collection_batch_active():
+		return
+	cancel_input()
+	game.start_collection_batch()
+	_refresh_controls()
+	_refresh_fusion()
+	_publish()
+
+func _collection_started(fusion: Dictionary) -> void:
+	if not _can_play():
+		return
+	var id: int = int(fusion.a_id)
+	var origin: Vector2 = _tiles[id].get_global_rect().get_center() if _tiles.has(id) else get_global_transform() * _tile_rect(fusion.a).get_center()
+	_collection_origins[str(fusion.attempt_id)] = origin
+	var word: Dictionary = fusion.word
 	_word_reveal.set_reduced_motion(reduced_motion)
 	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD))
-	word_requested.emit(word)
+	# Keep the short collection pops on the beat. Only the last word receives
+	# a full reading so rapid pickups never repeatedly cut off pronunciation.
+	if not bool(fusion.get("batch", false)) or int(fusion.batch_index) == int(fusion.batch_total):
+		word_requested.emit(word)
 	_refresh_controls()
 	_refresh_fusion()
 	_publish()
 
 func _collected(event_id: String, word: Dictionary, coins: int, fragments: int) -> void:
 	_cue("danger_end")
+	collect_button.beat()
 	var origin: Vector2 = _collection_origins.get(event_id, get_global_rect().get_center())
 	_collection_origins.erase(event_id)
 	if fragments > 0 and not reduced_motion:
@@ -467,6 +501,7 @@ func _preview_pose(index: int) -> Dictionary:
 func _process(delta: float) -> void:
 	if _can_play() and delta <= 0.5:
 		_word_reveal.advance(delta)
+		collect_button.advance(delta)
 	var generation: int = _generation
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:
@@ -497,8 +532,10 @@ func navigation_controls() -> Array[Control]:
 	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return int(a.row) * WordModel.COLUMNS + int(a.column) < int(b.row) * WordModel.COLUMNS + int(b.column))
 	for cell: Dictionary in ordered:
-		if _settled(cell) and _tiles.has(int(cell.id)):
+		if _settled(cell) and _tiles.has(int(cell.id)) and not game.collection_batch_active():
 			controls.append(_tiles[int(cell.id)])
+	if not collect_button.disabled:
+		controls.append(collect_button)
 	if not drop_button.disabled:
 		controls.append(drop_button)
 	if not finish_button.disabled:
@@ -557,6 +594,10 @@ func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	return _fusion_visuals[id]
 
 func _remove_fusion_visual(id: String) -> void:
+	var glow: TextureRect = _fusion_visuals[id].get("collect_glow")
+	if glow != null:
+		glow.hide()
+		glow.queue_free()
 	for part: WordTile in _fusion_visuals[id].get("parts", []):
 		part.hide()
 		part.queue_free()
@@ -580,11 +621,29 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		merged.size = rect.size
 		merged.position = rect.position
 		merged.pivot_offset = rect.size * 0.5
+		merged.rotation = 0.0
 		merged._surface.show()
 		var charge: float = smoothstep(0.0, 0.42, p)
 		var release: float = smoothstep(0.42, 1.0, p)
 		merged.scale = Vector2.ONE if reduced_motion else Vector2(1.0 + charge * 0.12, 1.0 - charge * 0.12).lerp(Vector2.ONE * 0.18, release)
 		merged.modulate.a = 1.0 - release
+		if bool(fusion.get("batch", false)) and not reduced_motion:
+			var direction: float = -1.0 if int(fusion.batch_index) % 2 == 0 else 1.0
+			var lift: float = sin(release * PI * 0.5)
+			merged.position += Vector2(direction * _pitch * 0.28 * release, -_pitch * 0.72 * lift)
+			merged.rotation = direction * 0.12 * release
+			if not visual.has("collect_glow"):
+				var glow: TextureRect = _image(self)
+				glow.texture = COLLECTION_GLOW
+				glow.z_index = 29
+				visual["collect_glow"] = glow
+			var glow: TextureRect = visual.collect_glow
+			glow.size = Vector2.ONE * maxf(rect.size.y, _pitch) * (1.2 + release * 0.5)
+			glow.position = merged.position + rect.size * 0.5 - glow.size * 0.5
+			glow.modulate = Color("#fff0b0", sin(p * PI) * 0.6)
+			glow.show()
+		elif visual.has("collect_glow"):
+			visual.collect_glow.hide()
 		merged.show()
 		return
 	var target_size: Vector2 = _tile_rect(fusion.result).size
@@ -673,10 +732,37 @@ func _landing_contact_at(cell: Dictionary) -> float:
 
 func _refresh_hud() -> void:
 	super._refresh_hud()
+	_loot_detail.visible = _loot_detail.visible and _compact_hud
 	_notice.hide()
 	if not game.error.is_empty():
 		_notice.text = game.error
 		_notice.show()
+	_refresh_collect_button()
+
+func _refresh_controls() -> void:
+	super._refresh_controls()
+	if collect_button == null:
+		return
+	if game.collection_batch_active():
+		for tile: Tile in _tiles.values():
+			tile.disabled = true
+		drop_button.disabled = true
+	_refresh_collect_button()
+
+func _refresh_collect_button() -> void:
+	if collect_button == null:
+		return
+	var batch: Dictionary = game.collection_batch_snapshot()
+	var count: int = game.collectable_ids().size() if _configured else 0
+	collect_button.visible = _configured and game.phase == "playing" and not _result_visible
+	collect_button.disabled = not _can_play() or _pointer != NO_POINTER or bool(batch.active) or count == 0
+	collect_button.set_reduced_motion(reduced_motion)
+	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
+
+func _reward_pickup_ready() -> bool:
+	# Let the collection rhythm reach its final word before a queued chest
+	# takes the screen's focal position. Fragment credit remains immediate.
+	return not game.collection_batch_active() and super._reward_pickup_ready()
 
 func result_reveal() -> void:
 	_word_reveal.reset()
@@ -707,7 +793,7 @@ func _layout() -> void:
 	# Portrait tablets can have a side rail; narrow phones use a shared footer.
 	var side_hud: bool = (size.x - _pitch * WordModel.COLUMNS) * 0.5 >= edge + hud_gap + hud_width
 	_compact_hud = side_hud
-	var footer_height: float = 0.0 if side_hud else 44.0 / s + edge
+	var footer_height: float = 0.0 if side_hud else 52.0 / s + edge
 	available.y -= footer_height
 	_pitch = _fit_layout_pitch(available, s)
 	var preview_size: float = minf(48.0 / s, _pitch * 0.84)
@@ -726,10 +812,10 @@ func _layout() -> void:
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
-	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 260.0 / s))
+	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 308.0 / s))
 	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
 	var meter_edge: float = (60.0 if side_hud else 44.0) / s
-	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(hud_x, _board.end.y + edge)
+	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(hud_x, _board.end.y + edge + 8.0 / s)
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
@@ -745,8 +831,12 @@ func _layout() -> void:
 		_preview_tiles[index].size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * _pitch - preview_size * 0.5, (preview_height - preview_size) * 0.5)
 	_style_finish_button()
-	finish_button.size = Vector2(hud_width, 44.0 / s)
-	finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge)
+	finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
+	finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge + 8.0 / s)
+	if collect_button != null:
+		collect_button.set_ui_scale(s)
+		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - meter_edge - finish_button.size.x - 20.0 / s), 52.0 / s)
+		collect_button.position = Vector2(hud_x, finish_button.position.y - collect_button.size.y - 16.0 / s) if side_hud else Vector2(hud_x + meter_edge + (footer_width - meter_edge - finish_button.size.x - collect_button.size.x) * 0.5, _board.end.y + edge)
 	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(_board.position.x, maxf(0.0, group_top - 42.0 / s - edge))
 	_notice.size = Vector2(hud_width if side_hud else _board.size.x, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
@@ -777,6 +867,10 @@ func snapshot() -> Dictionary:
 	state["board_ratio"] = float(WordModel.COLUMNS) / WordModel.ROWS
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
+	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
+	if collect_button != null:
+		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
+	state.preview.enabled = state.preview.enabled and not game.collection_batch_active()
 	state.drag.selected = _keyboard_source
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
