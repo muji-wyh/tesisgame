@@ -33,6 +33,10 @@ func _run() -> void:
 	_test_splitting()
 	_test_nested_splits()
 	_test_split_placement()
+	_test_split_supported_destinations()
+	_test_split_vertical_landing_tie()
+	_test_split_sibling_support()
+	_test_split_concurrent_support()
 	_test_split_reservations()
 	_test_growth_after_split()
 	_test_split_determinism()
@@ -371,6 +375,10 @@ func _test_target_placement() -> void:
 	var planned: Dictionary = model.fusions[0].result.duplicate(true)
 	check(planned.row == 1 and planned.width == 2 and absf(float(planned.column) + 1.0 - 3.5) <= 0.5,
 		"the frozen footprint stays beside the upper target instead of returning to the floor")
+	var merge_obstacles: Dictionary = model._occupied()
+	check(int(planned.row) + int(planned.height) < Model.ROWS and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column))
+		and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column) + 1),
+		"split support rules do not make an unsupported upper merge sink toward the floor")
 	model.step(Model.FUSION_SECONDS)
 	var merged: Dictionary = model.cell(int(planned.id))
 	check(_footprint(merged) == _footprint(planned), "fusion handover commits the exact preannounced destination")
@@ -711,6 +719,130 @@ func _test_split_placement() -> void:
 	check(model.snapshot() == before and model._merge_history == history and model._collection_event_ids == receipts
 		and model._next_event_id == next_event and model._next_tile_id == next_tile, "rejected split is atomic across board, clocks, rewards, ancestry, receipts, and ID allocation")
 	_assert_board(model, "rejected split")
+
+
+func _test_split_supported_destinations() -> void:
+	var model = _model()
+	_board(model, ["na", "ba"], [1, 2])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	parent.column = 1
+	parent.row = 5
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent, _placed_tile(2000, "x", 1, 6),
+		_placed_tile(2001, "x", 1, 7), _placed_tile(2002, "x", 2, 7)])
+	var neighbors: Array = model.cells.slice(1).duplicate(true)
+	check(model.split(int(parent.id)), "a parent above a lower gap can split into two supported destinations")
+	var children: Array = model.fusions[0].results.duplicate(true)
+	check(_footprint(children[0]) == Rect2i(1, 5, 1, 1) and _footprint(children[1]) == Rect2i(2, 6, 1, 1),
+		"supported child stays near the parent while ba descends into the empty cell below its half")
+	check(children[0].text == "na" and children[1].text == "ba" and children[0].fragments == 1 and children[1].fragments == 2,
+		"lower destinations preserve both child identities and separate fragments")
+	_assert_reservations(model, "split above lower gap")
+	model.step(Model.SPLIT_SECONDS)
+	for child: Dictionary in children:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "gap-filling child lands at the frozen animation destination")
+	for neighbor: Dictionary in neighbors:
+		check(_footprint(model.cell(int(neighbor.id))) == _footprint(neighbor), "filling the split gap leaves every unrelated jelly fixed")
+	model.step(Model.SETTLE_SECONDS)
+	check(_footprint(model.cell(1001)) == Rect2i(2, 6, 1, 1), "ba stays supported after the split settlement finishes")
+	_assert_supported_tiles(model, [1000, 1001], "split above lower gap")
+	_assert_board(model, "supported split above lower gap")
+
+
+func _test_split_vertical_landing_tie() -> void:
+	var model = _model()
+	_board(model, ["na", "ba"])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	parent.column = 1
+	parent.row = 5
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent, _placed_tile(2000, "x", 1, 6), _placed_tile(2001, "x", 1, 7),
+		_placed_tile(2002, "x", 2, 7), _placed_tile(2003, "x", 3, 6), _placed_tile(2004, "x", 3, 7)])
+	check(model.split(int(parent.id)), "a split can choose between equally near lower and side support")
+	var children: Array = model.fusions[0].results.duplicate(true)
+	check(_footprint(children[0]) == Rect2i(1, 5, 1, 1) and _footprint(children[1]) == Rect2i(2, 6, 1, 1),
+		"ba descends into its own column instead of sidestepping onto equally near support to the right")
+	_assert_reservations(model, "vertical landing tie")
+	model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+	check(_footprint(model.cell(1001)) == Rect2i(2, 6, 1, 1), "vertical tie-break remains the frozen landing after animation and settlement")
+	_assert_supported_tiles(model, [1000, 1001], "vertical landing tie")
+	_assert_board(model, "vertical landing tie")
+
+
+func _test_split_sibling_support() -> void:
+	var model = _model()
+	_board(model, ["na", "ba"])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	_constrain_split_board(model, int(parent.id), Vector2i(2, 2),
+		[Vector2i(2, 3), Vector2i(2, 4), Vector2i(2, 5), Vector2i(2, 6), Vector2i(2, 7)])
+	check(model.split(int(parent.id)), "two split children can settle together in a single-column opening")
+	var children: Array = model.fusions[0].results.duplicate(true)
+	check(children[0].column == 2 and children[1].column == 2
+		and mini(int(children[0].row), int(children[1].row)) == 6 and maxi(int(children[0].row), int(children[1].row)) == 7,
+		"lower child rests on the floor and supports its sibling instead of both floating in the opening")
+	check(children[0].id == 1000 and children[1].id == 1001,
+		"vertical sibling support does not reorder the saved children")
+	_assert_reservations(model, "stacked sibling destinations")
+	var incoming: Array = model.upcoming.duplicate(true)
+	check(model.drop_now(), "supply can use space above a reserved supported sibling stack")
+	for preview: Dictionary in incoming:
+		var arrived: Dictionary = model.cell(int(preview.id))
+		if arrived.is_empty():
+			continue
+		for child: Dictionary in children:
+			check(not _footprint(arrived).intersects(_footprint(child)), "supply cannot take either supported sibling destination")
+	_assert_reservations(model, "supported sibling reservations after supply")
+	model.step(Model.SPLIT_SECONDS)
+	for child: Dictionary in children:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "concurrent supply does not change either frozen supported endpoint")
+	_assert_supported_tiles(model, [1000, 1001], "supported sibling stack")
+	_assert_board(model, "supported siblings after supply")
+
+
+func _assert_supported_tiles(model, tile_ids: Array[int], label: String) -> void:
+	for id: int in tile_ids:
+		var tile: Dictionary = model.cell(id)
+		var bottom: int = int(tile.row) + int(tile.height)
+		var supported: bool = bottom == Model.ROWS
+		var support_strip := Rect2i(int(tile.column), bottom, int(tile.width), 1)
+		for other: Dictionary in model.cells:
+			if int(other.id) != id and support_strip.intersects(_footprint(other)):
+				supported = true
+		check(supported, label + ": each restored child has actual floor or jelly support below its bottom edge")
+
+
+func _test_split_concurrent_support() -> void:
+	var model = _model()
+	_board(model, ["na", "ba", "te", "ra"])
+	var lower: Dictionary = _merge(model, 1000, 1001)
+	var upper: Dictionary = _merge(model, 1002, 1003)
+	for parent: Dictionary in [lower, upper]:
+		parent.column = 1
+		parent.row = 5 if int(parent.id) == int(lower.id) else 4
+		parent.age = Model.SETTLE_SECONDS
+		parent.settling = false
+	model.cells.assign([lower, upper, _placed_tile(2000, "x", 1, 6),
+		_placed_tile(2001, "x", 1, 7), _placed_tile(2002, "x", 2, 7)])
+	check(model.split(int(lower.id)) and model.split(int(upper.id)), "stacked parents can split concurrently with committed support reservations")
+	var lower_children: Array = model.fusions[0].results.duplicate(true)
+	var upper_children: Array = model.fusions[1].results.duplicate(true)
+	check(_footprint(lower_children[0]) == Rect2i(1, 5, 1, 1) and _footprint(lower_children[1]) == Rect2i(2, 6, 1, 1),
+		"lower split reserves the supported gap-filling pair")
+	check(upper_children[0].column == 1 and upper_children[1].column == 1
+		and mini(int(upper_children[0].row), int(upper_children[1].row)) == 3
+		and maxi(int(upper_children[0].row), int(upper_children[1].row)) == 4,
+		"upper split uses future child support instead of the lower parent's disappearing right half")
+	_assert_reservations(model, "concurrent supported split reservations")
+	model.step(Model.SPLIT_SECONDS)
+	for children: Array in [lower_children, upper_children]:
+		for child: Dictionary in children:
+			check(_footprint(model.cell(int(child.id))) == _footprint(child), "concurrent supported split retains every frozen endpoint at handover")
+	_assert_supported_tiles(model, [1000, 1001, 1002, 1003], "concurrent split completion")
+	_assert_board(model, "concurrent supported split completion")
+	model.step(Model.SETTLE_SECONDS)
+	_assert_supported_tiles(model, [1000, 1001, 1002, 1003], "concurrent split settlement")
 
 
 func _test_split_reservations() -> void:

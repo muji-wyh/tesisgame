@@ -140,6 +140,18 @@ function expectInside(rect, bounds) {
   expect(rect[1] + rect[3]).toBeLessThanOrEqual(bounds.height + 1);
 }
 
+function expectSupportedChild(state, child) {
+  const bottom = child.row + child.height;
+  const supported = bottom === state.rows || state.tiles.some(other => other.id !== child.id &&
+    other.row === bottom && other.column < child.column + child.width && other.column + other.width > child.column);
+  expect(supported, `Restored part ${child.text} touches the floor or an occupied footprint immediately below`).toBe(true);
+  for (const other of state.tiles.filter(tile => tile.id !== child.id)) {
+    const overlaps = child.column < other.column + other.width && child.column + child.width > other.column &&
+      child.row < other.row + other.height && child.row + child.height > other.row;
+    expect(overlaps, `Restored part ${child.text} cannot overlap jelly ${other.id}`).toBe(false);
+  }
+}
+
 test('six columns build a pictured word and a deliberate tap credits its coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   expect(opening.tiles).toHaveLength(12);
@@ -239,6 +251,7 @@ test('an incorrect merged word splits into its original parts and can be correct
       .toEqual({ text: root.text, mass: root.mass, fragments: root.fragments });
     expect(child.fragment_badges).toBe(root.fragments);
     expectInside(child.rect, bounds);
+    expectSupportedChild(restored, child);
   }
   for (const original of before.tiles.filter(tile => tile.id !== incorrect.id)) {
     const unchanged = restored.tiles.find(tile => tile.id === original.id);
@@ -264,6 +277,49 @@ test('an incorrect merged word splits into its original parts and can be correct
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
   expect((await jelly(page)).fragment_count).toBe(before.fragment_count + corrected.fragments);
   expect((await jelly(page)).tiles.some(tile => tile.id === corrected.id || roots.some(root => root.id === tile.id))).toBe(false);
+  expect(errors).toEqual([]);
+});
+
+test('splitting a raised incorrect merge places both original roots on solid support', async ({ page }, info) => {
+  const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
+  const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
+  const bottom = opening.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && tile.row === opening.rows - 1);
+  const upper = opening.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && tile.row === opening.rows - 2);
+  const candidates = bottom.flatMap(source => upper.map(target => ({ source, target })));
+  const pair = candidates.find(({ source, target }) => Math.abs(source.column - target.column) >= 2 &&
+    source.fragments + target.fragments > 0 && !words.has(normalize(source.text + target.text)));
+  expect(pair, 'The real starter board offers a marked, nonadjacent bottom-to-upper incorrect merge').toBeTruthy();
+  const { source, target } = pair;
+  const raised = await merge(page, source.id, target.id);
+  expect(raised.word).toEqual({});
+  expect(raised.row, 'The two-wide merge must remain raised above the crowded target row').toBeLessThan(target.row);
+  const beforeSplit = await jelly(page);
+  const lowerRow = raised.row + raised.height;
+  const hasHoleBelow = Array.from({ length: raised.width }, (_, offset) => raised.column + offset)
+    .some(column => !beforeSplit.tiles.some(tile => tile.id !== raised.id &&
+      tile.column <= column && tile.column + tile.width > column && tile.row <= lowerRow && tile.row + tile.height > lowerRow));
+  expect(hasHoleBelow, 'The raised parent straddles an empty cell left by the nonadjacent merge').toBe(true);
+  await capture(page, info, 'word-jelly-raised-parent-over-gap');
+  await pressRect(page, raised.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.tiles.some(tile => tile.id === raised.id) && [source, target].every(original =>
+      state.tiles.some(tile => tile.id === original.id && tile.settled && tile.visible));
+  }, { message: 'Splitting the raised parent restores two settled children with supported destinations' }).toBe(true);
+  const restored = await jelly(page), bounds = await metrics(page);
+  for (const original of [source, target]) {
+    const child = restored.tiles.find(tile => tile.id === original.id);
+    expect({ text: child.text, mass: child.mass, fragments: child.fragments })
+      .toEqual({ text: original.text, mass: original.mass, fragments: original.fragments });
+    expect(child.fragment_badges).toBe(original.fragments);
+    expectInside(child.rect, bounds);
+    expectSupportedChild(restored, child);
+  }
+  expect(new Set(restored.tiles.map(tile => tile.id)).size).toBe(restored.tiles.length);
+  expect(restored.fragment_count).toBe(beforeSplit.fragment_count);
+  expect(restored.collected_coins).toBe(beforeSplit.collected_coins);
+  expect((await wallet(page)).balance).toBe(startingWallet.balance);
+  await capture(page, info, 'word-jelly-split-children-on-support');
   expect(errors).toEqual([]);
 });
 

@@ -368,6 +368,7 @@ func _check_split_pointer_recovery(view) -> void:
 					and view._board.encloses(view._tiles[int(original.id)].get_rect()), "restored child artwork and all chest markers fit the board")
 				check(view._tiles[int(original.id)].get_rect().is_equal_approx(final_rects[int(original.id)]),
 					"the persistent child retains its split animation's final position and size")
+				check(_has_support(view.game.cells, restored), "a split child lands on the floor or another body without floating over an empty row")
 				check(not view.game.can_split(restored), "a restored single root cannot split further")
 			check(view._fusion_visuals.is_empty(), "split completion clears transient child artwork")
 			check(not view._tiles[fixture.ids[0]].get_rect().intersects(view._tiles[fixture.ids[1]].get_rect()),
@@ -386,6 +387,18 @@ func _check_split_pointer_recovery(view) -> void:
 			_advance(view, Model.COLLECT_SECONDS)
 			check(payouts.size() == 1 and payouts[0].amount == 100 and payouts[0].fragments == 3
 				and heard.size() == 1 and attempts.size() == 1, "correcting and collecting pays and teaches exactly once")
+
+
+func _has_support(cells: Array, child: Dictionary) -> bool:
+	var bottom: int = int(child.row) + int(child.height)
+	if bottom == Model.ROWS:
+		return true
+	for other: Dictionary in cells:
+		if int(other.id) != int(child.id) and int(other.row) == bottom \
+			and int(other.column) < int(child.column) + int(child.width) \
+			and int(other.column) + int(other.width) > int(child.column):
+			return true
+	return false
 
 
 func _check_split_cancel_and_pause(view) -> void:

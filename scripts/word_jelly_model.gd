@@ -689,10 +689,17 @@ func _split_placements(parent: Dictionary) -> Array[Dictionary]:
 	options.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return int(a.area) > int(b.area) if a.area != b.area else int(a.order) < int(b.order))
 	var occupied: Dictionary = _occupied([int(parent.id)])
+	var outgoing_ids: Array[int] = [int(parent.id)]
+	for active: Dictionary in fusions:
+		outgoing_ids.append(int(active.a_id))
+		outgoing_ids.append(int(active.b_id))
+	# Outgoing bodies still block placement, but only their reserved results
+	# can support a child after concurrent animations have completed.
+	var support_occupied: Dictionary = _occupied(outgoing_ids)
 	var center := Vector2(float(parent.column) + float(parent.width) * 0.5,
 		float(parent.row) + float(parent.height) * 0.5)
 	for option: Dictionary in options:
-		var positions: Array[Vector2i] = _split_pair(occupied, option.a, option.b, center)
+		var positions: Array[Vector2i] = _split_pair(occupied, support_occupied, option.a, option.b, center)
 		if positions.size() != 2:
 			continue
 		var results: Array[Dictionary] = []
@@ -712,25 +719,41 @@ func _split_placements(parent: Dictionary) -> Array[Dictionary]:
 	return []
 
 
-func _split_pair(occupied: Dictionary, size_a: Vector2i, size_b: Vector2i, center: Vector2) -> Array[Vector2i]:
+func _split_pair(occupied: Dictionary, support_occupied: Dictionary, size_a: Vector2i, size_b: Vector2i, center: Vector2) -> Array[Vector2i]:
 	var candidates_a: Array[Rect2i] = _split_candidates(occupied, size_a)
 	var candidates_b: Array[Rect2i] = _split_candidates(occupied, size_b)
 	var target_a: Vector2 = center - Vector2(float(size_b.x) * 0.5, 0.0)
 	var target_b: Vector2 = center + Vector2(float(size_a.x) * 0.5, 0.0)
 	var nearest: Array[Vector2i] = []
 	var distance: float = INF
+	var horizontal_distance: float = INF
 	# Search pairs together: a small child must not consume the only corridor
 	# that can fit its larger sibling. Every board row is available for undo.
 	for a: Rect2i in candidates_a:
-		var a_distance: float = target_a.distance_squared_to(Vector2(a.position) + Vector2(a.size) * 0.5)
+		var a_offset: Vector2 = Vector2(a.position) + Vector2(a.size) * 0.5 - target_a
 		for b: Rect2i in candidates_b:
 			if a.intersects(b):
 				continue
-			var candidate_distance: float = a_distance + target_b.distance_squared_to(Vector2(b.position) + Vector2(b.size) * 0.5)
-			if candidate_distance < distance:
+			if not _split_has_support(a, b, support_occupied) or not _split_has_support(b, a, support_occupied):
+				continue
+			var b_offset: Vector2 = Vector2(b.position) + Vector2(b.size) * 0.5 - target_b
+			var candidate_distance: float = a_offset.length_squared() + b_offset.length_squared()
+			var candidate_horizontal: float = a_offset.x * a_offset.x + b_offset.x * b_offset.x
+			# On equal travel, drop into a gap instead of hopping sideways.
+			if candidate_distance < distance or (is_equal_approx(candidate_distance, distance) and candidate_horizontal < horizontal_distance):
 				nearest.assign([a.position, b.position])
 				distance = candidate_distance
+				horizontal_distance = candidate_horizontal
 	return nearest
+
+
+func _split_has_support(body: Rect2i, sibling: Rect2i, occupied: Dictionary) -> bool:
+	if body.end.y == ROWS:
+		return true
+	for column in range(body.position.x, body.end.x):
+		if occupied.has(body.end.y * COLUMNS + column) or sibling.has_point(Vector2i(column, body.end.y)):
+			return true
+	return false
 
 
 func _split_candidates(occupied: Dictionary, size: Vector2i) -> Array[Rect2i]:
