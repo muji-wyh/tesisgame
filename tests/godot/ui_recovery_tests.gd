@@ -312,7 +312,8 @@ func _run() -> void:
 	check(app._result_retry_button.is_visible_in_tree() and app._result_retry_button.text == "Retry saving"
 		and not app._new_adventure_button.is_visible_in_tree() and app._default_focus() == app._result_retry_button,
 		"A failed result exposes only the focused save-retry action")
-	check(app._result_retry_button.tooltip_text == app.medal_progress.error, "Retry saving keeps the storage error available in its tooltip")
+	check(str(app._result_retry_button.get("accessibility_description")) == app.medal_progress.error
+		and app._result_retry_button.tooltip_text.is_empty(), "Retry saving keeps the storage error accessible without a hover popup")
 	app._result_retry_button.pressed.emit()
 	app.choose_mode("match")
 	app.new_round()

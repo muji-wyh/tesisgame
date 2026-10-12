@@ -52,8 +52,7 @@ func advance(delta: float) -> void:
 
 
 func _update_description() -> void:
-	tooltip_text = "%d coins" % target if available else "Coin balance unavailable. Retry saving."
-	set("accessibility_name", tooltip_text)
+	set("accessibility_name", "%d coins" % target if available else "Coin balance unavailable. Retry saving.")
 
 
 func icon_center() -> Vector2:

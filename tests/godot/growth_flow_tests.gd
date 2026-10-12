@@ -145,29 +145,30 @@ func _badge_states() -> void:
 	]
 	for state: Dictionary in states:
 		badge.configure(state)
+		var description: String = str(badge.get("accessibility_name"))
+		check(badge.tooltip_text.is_empty(), "Growth details remain accessible without a hover popup")
 		check(absf(badge.bar.value - float(state.level_progress) * 100.0) <= badge.bar.step * 0.5 + 0.0001,
 			"The badge fills only for mastered words, never partial practice evidence")
 		if bool(state.ready):
 			check(badge.level_label.text == state.label
 				and badge.count_label.text == ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.level_mastered, state.level_required]),
 				"Growth facts retain the exact earned level and new-word progress")
-			check(badge.tooltip_text.contains(state.label) and not badge.tooltip_text.contains(state.age_label)
-				and not badge.tooltip_text.contains("current age set") and badge.tooltip_text.contains("View your words")
-				and str(badge.get("accessibility_name")) == badge.tooltip_text,
+			check(description.contains(state.label) and not description.contains(state.age_label)
+				and not description.contains("current age set") and description.contains("View your words"),
 				"The Lv description retains the level target and notebook action without Pip age")
 			if int(state.level) < 99:
 				var next_level: String = "Lv%d" % (int(state.level) + 1)
-				check(badge.tooltip_text.contains("reach " + next_level),
+				check(description.contains("reach " + next_level),
 					"The earned level retains the correct next-stage target without crowding the badge")
 			else:
-				check(not badge.tooltip_text.contains("Lv100") and not badge.tooltip_text.contains("reach "),
+				check(not description.contains("Lv100") and not description.contains("reach "),
 					"The final stage offers word review without inventing a further level")
 				if bool(state.get("completed", false)):
-					check(badge.tooltip_text.contains("Maximum level reached"),
+					check(description.contains("Maximum level reached"),
 						"The completed final stage keeps its completion meaning accessible")
 		else:
 			check(badge.level_label.text == "Lv…" and badge.count_label.text == "Unavailable"
-				and badge.tooltip_text.contains("unavailable") and badge.bar.value == 0.0,
+				and description.contains("unavailable") and badge.bar.value == 0.0,
 				"Unreadable storage is shown as unavailable instead of a false starting level")
 		for footprint: Vector2 in [Vector2(168, 52), Vector2(68, 44), Vector2(52, 44)]:
 			var compact: bool = footprint.x < 168
@@ -227,8 +228,9 @@ func _badge_geometry(app, viewport_size: Vector2i, context: String) -> void:
 	check(rect.encloses(badge.level_label.get_global_rect()) and not badge.level_label.get_global_rect().intersects(app._growth_bar.get_global_rect()),
 		"%s keeps Lv and its progress track readable beside Pip" % context)
 	check(pip_rect.size.x >= 43.5 and pip_rect.size.y >= 43.5
-		and app.duck.tooltip_text.contains(app.growth.snapshot().age_label) and app.duck.tooltip_text.contains("Change game mode"),
-		"%s preserves Pip's reachable menu action and announces age with the character" % context)
+		and str(app.duck.get("accessibility_name")).contains(app.growth.snapshot().age_label)
+		and str(app.duck.get("accessibility_name")).contains("Press for a new move"),
+		"%s preserves Pip's reachable gesture action and announces age with the character" % context)
 	var targets: Array = [app.duck, badge, app._mode_heading_button, app._voice_button, app.hint_button, app._memory.study_button, app._storage_retry_button]
 	for index in range(targets.size()):
 		var target: Control = targets[index]

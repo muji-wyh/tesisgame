@@ -92,7 +92,7 @@ async function expectHeaderBadge(page) {
   expect(layout.pip?.visible).toBe(true);
   expect(layout.pip.age).toBe(state.age);
   expect(layout.pip.description).toContain(state.age_label);
-  expect(layout.pip.description).toContain('Change game mode');
+  expect(layout.pip.description).toContain('Press for a new move');
   expect(bar.visible).toBe(true);
   const [x, y, width, height] = badge.rect;
   const [barX, barY, barWidth, barHeight] = bar.rect;

@@ -44,7 +44,6 @@ func configure(phrase: Dictionary, show_text: bool, accent: Color) -> void:
 	_show_text = show_text and not _phrase_text.is_empty()
 	_accent = accent
 	_caption.text = _phrase_text if _show_text else "Tap to listen"
-	tooltip_text = "Hear the phrase again"
 	set("accessibility_name", "Listen: %s" % _phrase_text if _show_text else "Listen to the phrase")
 	_layout()
 	_update_activity()

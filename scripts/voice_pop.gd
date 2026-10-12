@@ -207,7 +207,7 @@ func set_pending_chests(count: int) -> void:
 		var total: int = maxi(_pending_chests, game.chest_count)
 		chests_button.text = "Open chests" if total > 1 else "Open chest"
 		chests_button.disabled = total == 0
-		chests_button.tooltip_text = "Open your saved treasure." if _pending_chests > 0 else "Collect 4 chest fragments to unlock a chest."
+		chests_button.set("accessibility_name", "Open your saved treasure." if _pending_chests > 0 else "Collect 4 chest fragments to unlock a chest.")
 		_layout()
 		_publish(true)
 
@@ -773,7 +773,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 			continue
 		var visible_text: String = str(control.text) if control is Button else ""
 		if visible_text.is_empty() and str(control.name).begins_with("Hear_"):
-			# Hover tooltips create descendant labels; they are not part of the word.
+			# Only the authored vocabulary text belongs in the review snapshot.
 			visible_text = str(control.get_meta("pop_word_text", ""))
 		actions.append({"name": str(control.name), "text": visible_text,
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
@@ -1745,7 +1745,7 @@ func _build_results(summary: Dictionary) -> void:
 	chests_button = _action("Open chests" if available > 1 else "Open chest", available > 0)
 	chests_button.name = "OpenChests"
 	chests_button.disabled = available == 0
-	chests_button.tooltip_text = "Collect 4 chest fragments to unlock a chest." if available == 0 else "Open your final upgraded chest."
+	chests_button.set("accessibility_name", "Collect 4 chest fragments to unlock a chest." if available == 0 else "Open your final upgraded chest.")
 	chests_button.pressed.connect(_open_chests)
 	chests_button.mouse_filter = Control.MOUSE_FILTER_PASS
 	chests_button.focus_entered.connect(func() -> void: _ensure_result_control(chests_button))
@@ -1885,7 +1885,7 @@ func _add_review(title: String, words: Array, color: Color) -> void:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size = Vector2(0, 66.0 / scale)
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = "Hear " + str(word.get("text", ""))
+		button.set("accessibility_name", "Hear " + str(word.get("text", "")))
 		button.set_meta("pop_word_text", str(word.get("text", "")))
 		for state in ["normal", "hover", "pressed"]:
 			button.add_theme_stylebox_override(state, Style.box(Color("#fffdf7") if state == "normal" else Color("#e8f1e5"), color.lightened(0.3), ceili(12.0 / scale), 1))

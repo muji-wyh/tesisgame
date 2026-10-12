@@ -138,7 +138,6 @@ func _update_accessibility() -> void:
 	elif _count == 0:
 		description = "Collect completed words. Merge letter jellies to make a word first"
 	set("accessibility_name", description)
-	tooltip_text = description
 
 
 func _sample() -> Dictionary:

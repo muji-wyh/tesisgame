@@ -102,7 +102,6 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	_label.text = str(word.text)
 	set("accessibility_name", "%s %s%s. Press to hear the word. Drag onto its matching partner." % [
 		"Picture of" if kind == "picture" else "Word", str(word.text), ". Treasure jelly" if _badge.visible else ""])
-	tooltip_text = str(word.text)
 	_layout()
 
 func set_marked(value: bool, picked: bool = false, enabled: bool = true, reduced: bool = false) -> void:

@@ -168,8 +168,7 @@ func _build() -> void:
 	study_button = IconButton.new()
 	study_button.name = "StudyGarden"
 	study_button.symbol = IconButton.Symbol.EYE
-	study_button.tooltip_text = "Hold to reveal all cards. Release to hide unmatched cards."
-	_name_control(study_button, study_button.tooltip_text)
+	_name_control(study_button, "Hold to reveal all cards. Release to hide unmatched cards.")
 	study_button.button_down.connect(begin_peek)
 	study_button.button_up.connect(end_peek)
 	study_button.gui_input.connect(_study_input)
@@ -465,7 +464,7 @@ func _refresh() -> void:
 		status_label.text = ("Word: " if first.kind == "word" else "Picture: ") + first.word.text
 	else:
 		status_label.text = "Find a pair."
-	status_label.tooltip_text = status_label.text
+	_name_control(status_label, status_label.text)
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
 		var card: Dictionary = memory.cards[index]
@@ -485,7 +484,6 @@ func _refresh() -> void:
 			label += ": " + card.word.text
 		if matched:
 			label += ". Planted."
-		button.tooltip_text = label
 		_name_control(button, label)
 	_layout()
 

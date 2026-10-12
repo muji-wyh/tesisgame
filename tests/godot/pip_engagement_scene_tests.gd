@@ -63,6 +63,8 @@ func _run() -> void:
 	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
 	root.add_child(app)
 	await settle()
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
+	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(false)
 	app.duck.settle()
@@ -103,15 +105,16 @@ func _run() -> void:
 	app._memory.memory.studying = false
 	app._voice_mode = true
 	check(not observe_idle(app, 20) and app.duck.is_visible_in_tree()
-		and app.duck.tooltip_text.ends_with(". Change game mode"),
-		"Voice input suppresses Pip's invitations while keeping its game-mode trigger available")
+		and app.duck.tooltip_text.is_empty()
+		and str(app.duck.get("accessibility_name")).ends_with(". Press for a new move."),
+		"Voice input suppresses Pip's invitations while keeping its accessible gesture available")
 	app._voice_mode = false
 	app._update_duck()
 	_test_pop_and_audio_gates(app)
 	app._duck_trick_index = 3
 	app._play_duck()
-	check(app._mode_menu_open() and not app.duck._growth_action_manual and app._duck_trick_index == 3,
-		"Header Pip opens the game-mode menu without advancing its companion trick cycle")
+	check(not app._mode_menu_open() and app.duck._growth_action_manual and app._duck_trick_index == 4,
+		"Header Pip plays the next gesture while keeping the current game open")
 	app._hide_mode_menu()
 	var playing_phase: String = app.model.phase
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
@@ -122,6 +125,7 @@ func _run() -> void:
 	app._layout()
 	await settle()
 	app.duck.settle()
+	app._duck_trick_index = 3
 	app._play_duck()
 	check(app.duck._idle_action in app.duck.age_actions(), "The result companion offers its age-specific action")
 	var manual_action: String = app.duck._idle_action
@@ -215,7 +219,7 @@ func viewport_touch(index: int, point: Vector2, pressed: bool, canceled: bool = 
 
 func _test_consumed_touches(app) -> void:
 	app._hide_collection()
-	app.choose_mode("memory")
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "memory")
 	app.set_reduced_motion(false)
 	await settle()
 	for cancel_first in [false, true]:

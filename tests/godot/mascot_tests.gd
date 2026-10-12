@@ -60,12 +60,14 @@ func _run() -> void:
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 		app._mode_id = "match"
 		preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
-		# Godot consumes Escape to dismiss a hovered tooltip before scene input.
 		# Keep this keyboard fixture independent of the inherited pointer position.
 		var pointer := InputEventMouseMotion.new()
 		pointer.position = Vector2(-100, -100)
 		Input.parse_input_event(pointer)
 		root.add_child(app)
+		await process_frame
+		await process_frame
+		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
 		await process_frame
 		await process_frame
 		app.audio.halt()
@@ -75,9 +77,9 @@ func _run() -> void:
 		var cards: Array = app.model.cards.duplicate(true)
 		app.duck.pressed.emit()
 		check(app.model.cards == cards and (app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3,
-			"Opening Pip's game-mode menu never changes game progress")
-		check(app._mode_menu_open() and not app.audio.voice.playing,
-			"The header Pip opens game modes without starting a companion trick or greeting")
+			"Playing Pip's gesture never changes game progress")
+		check(not app._mode_menu_open() and app.duck._growth_action_manual and not app.audio.voice.playing,
+			"The header Pip plays its silent gesture while keeping the current game open")
 		app._hide_mode_menu()
 		var playing_phase: String = app.model.phase
 		# Use a persisted chest reservation; chance outcomes have separate coverage.
@@ -145,15 +147,15 @@ func _run() -> void:
 		app._on_voice_state([true, true, "Listening"])
 		app._update_duck()
 		check(app.duck.is_visible_in_tree() and app.duck.get_parent() == app._header_duck_art_slot
-			and app.duck.tooltip_text.ends_with(". Change game mode")
-			and str(app.duck.get("accessibility_name")).ends_with(". Change game mode. Current mode: Match"),
-			"Match voice input retains the visible, named Pip header trigger for game modes")
+			and app.duck.tooltip_text.is_empty()
+			and str(app.duck.get("accessibility_name")).ends_with(". Press for a new move."),
+			"Match voice input retains the visible, named Pip gesture without a hover popup")
 		app._stop_voice()
 		app.audio.halt()
 		app._update_duck()
 		check(app.duck.is_visible_in_tree() and not app.duck.speaking
-			and app.duck.tooltip_text.ends_with(". Change game mode"),
-			"Leaving voice mode keeps the quiet Pip game-mode trigger available")
+			and str(app.duck.get("accessibility_name")).ends_with(". Press for a new move."),
+			"Leaving voice mode keeps Pip's quiet gesture available")
 		for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
 			root.size = dimensions
 			await process_frame

@@ -591,7 +591,8 @@ func _test_controls() -> void:
 	var words: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	var card = load("res://scripts/word_card.gd").new()
 	card.setup({"id": "apple:image", "kind": "image", "word": words[5]})
-	check(card.tooltip_text == "Picture: apple", "Picture descriptions do not assume a singular countable noun")
+	check(str(card.get("accessibility_name")) == "Picture: apple" and card.tooltip_text.is_empty(),
+		"Picture descriptions remain accessible without hover popups or assuming a singular countable noun")
 	check(not (card.match_mark is Label), "Matched cards use native badge artwork, not missing-font checkmark glyphs")
 	check(not card.match_mark.visible, "Unmatched cards do not display a success badge")
 	card.refresh(load("res://scripts/game_data.gd").theme("spring"), false, true, false, false)
@@ -734,7 +735,7 @@ func _test_play_improvements(app) -> void:
 		await process_frame
 		var third_hint: Array = app.model.hint_ids.duplicate()
 		check(app.model.hints_remaining == 0 and app.hint_button.count == 0 and app.hint_button.disabled
-			and app.hint_button.tooltip_text.begins_with("No hints left"),
+			and str(app.hint_button.get("accessibility_name")).begins_with("No hints left"),
 			"Xbox X consumes the shared third hint and disables the button")
 		if app.model.selected_id != third_hint[0]:
 			app.cards[third_hint[0]].pressed.emit()
@@ -878,7 +879,7 @@ func _test_scene() -> void:
 		"All eight themes remain available")
 	if has_property(app, "theme_buttons"):
 		check(app.theme_buttons.all(func(button: Button) -> bool:
-			return button.text.is_empty() and button.tooltip_text == button.name and str(button.get("accessibility_name")).begins_with(str(button.name) + ", ")),
+			return button.text.is_empty() and button.tooltip_text.is_empty() and str(button.get("accessibility_name")).begins_with(str(button.name) + ", ")),
 			"Icon-only world choices retain their names and selected state in accessibility")
 		check(app.theme_buttons.all(func(button: Button) -> bool: return app._mode_panel.is_ancestor_of(button))
 			and not app._mode_menu_open(),

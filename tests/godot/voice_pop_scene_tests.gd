@@ -215,8 +215,9 @@ func check_result_contents(view, summary: Dictionary) -> void:
 	check(view._review_buttons.size() == listed_words.size(), "Every recorded word remains available in its result list")
 	for button in view._review_buttons:
 		var word_labels: Array = button.find_children("*", "Label", true, false)
-		check(word_labels.size() == 1 and str(word_labels[0].text) == str(button.tooltip_text).trim_prefix("Hear "),
-			"A review card shows its word once without a hidden count label")
+		check(word_labels.size() == 1 and str(word_labels[0].text) == str(button.accessibility_name).trim_prefix("Hear ")
+			and button.tooltip_text.is_empty(),
+			"A review card shows its word once and keeps playback accessible without a hover popup")
 	if not summary.hit_words.is_empty():
 		check(Array(labels).any(func(text: String) -> bool: return text.begins_with("Words you popped")),
 			"Successful words retain their group caption")
@@ -832,7 +833,8 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	check(app._mode_id == "match" and not app._pop.is_visible_in_tree(), "Startup Home prepares Match without activating speech")
 	check(app.find_child("VoiceProfiles", true, false) == null, "More has no voice-user enrollment entry")
-	check(not app.collection_button.tooltip_text.contains("voice users"), "More describes only the available room settings")
+	check(app.collection_button.tooltip_text.is_empty() and not app.collection_button.accessibility_name.contains("voice users"),
+		"More keeps current room settings accessible without a hover popup")
 	var modes: Array[String] = ["match", "memory", "pop"]
 	var saw_scrollable_results: bool = false
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(679, 900), Vector2i(680, 900), Vector2i(844, 390), Vector2i(1366, 768)]:

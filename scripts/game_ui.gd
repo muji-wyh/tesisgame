@@ -573,7 +573,7 @@ func _build_controls() -> void:
 	header.add_child(_header_spacer)
 	_mode_heading_button = Button.new()
 	_mode_heading_button.name = "Home"
-	_mode_heading_button.tooltip_text = "Home"
+	_set_accessibility_name(_mode_heading_button, "Home. Return home to choose a game")
 	_mode_heading_button.icon = preload("res://assets/images/ui/home.webp")
 	_mode_heading_button.expand_icon = true
 	_mode_heading_button.pressed.connect(_toggle_mode_menu)
@@ -599,8 +599,7 @@ func _build_controls() -> void:
 	hint_button = Icons.new()
 	hint_button.name = "Hint"
 	hint_button.symbol = Icons.Symbol.HINT
-	hint_button.tooltip_text = "Three hints per round (Xbox X)"
-	_set_accessibility_name(hint_button, "Hint: three per round")
+	_set_accessibility_name(hint_button, "Hint: three per round (Xbox X)")
 	hint_button.pressed.connect(_request_hint)
 	_toolbar.add_child(hint_button)
 	_growth_button = GrowthBadge.new()
@@ -806,7 +805,6 @@ func _build_controls() -> void:
 	chest.cue_requested.connect(_on_chest_cue)
 	chest_button = Button.new()
 	chest_button.text = ""
-	chest_button.tooltip_text = "Open the treasure chest"
 	_set_accessibility_name(chest_button, "Open the treasure chest")
 	chest_button.focus_mode = Control.FOCUS_ALL
 	chest_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1094,7 +1092,7 @@ func _build_collection_shell() -> void:
 	_collection_back = Icons.new()
 	_collection_back.name = "GrowthBack"
 	_collection_back.symbol = Icons.Symbol.BACK
-	_collection_back.tooltip_text = "Back to game"
+	_set_accessibility_name(_collection_back, "Back to game")
 	UiClick.bind_button(_collection_back)
 	_collection_back.pressed.connect(_back_from_collection)
 	_collection_header.add_child(_collection_back)
@@ -1183,7 +1181,7 @@ func _back_from_collection() -> void:
 func _refresh_age_choices() -> void:
 	for id in _age_buttons:
 		_age_buttons[id].set_pressed_no_signal(int(id) == _catalog_age)
-		_age_buttons[id].tooltip_text = "Preview: complete the previous age's words to unlock" if int(id) > growth.learning_age() else "Review this age's words"
+		_age_buttons[id].set("accessibility_description", "Preview: complete the previous age's words to unlock" if int(id) > growth.learning_age() else "Review this age's words")
 	_age_notice.text = "Preview only. Complete your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "%d correct answers in a row master a word. A mistake resets that word; earned Lv and age stay." % GrowthState.MASTERY_STREAK
 	if _growth_save_failed:
 		_age_notice.text = "Learning progress could not be saved. Return to the game and choose Retry saving."
@@ -2193,19 +2191,19 @@ func _refresh() -> void:
 		_styled_mode_id = _mode_id
 	_voice_button.disabled = not growth.ready or _host == null or not bool(_host.speechAvailable())
 	_voice_button.focus_mode = Control.FOCUS_NONE if _voice_button.disabled else Control.FOCUS_ALL
-	_voice_button.tooltip_text = "Voice on: click to stop" if _voice_mode else "Voice: click to listen. Browser speech may process audio remotely."
+	var voice_description: String = "Voice on: click to stop" if _voice_mode else "Voice: click to listen. Browser speech may process audio remotely."
 	if _voice_button.disabled:
-		_voice_button.tooltip_text = "Voice input is unavailable in this browser. You can still tap cards."
-	_set_accessibility_name(_voice_button, _voice_button.tooltip_text)
+		voice_description = "Voice input is unavailable in this browser. You can still tap cards."
+	_set_accessibility_name(_voice_button, voice_description)
 	_voice_button.button_pressed = _voice_mode
 	_voice_button.engaged = _voice_listening
 	_style_voice_button()
 	_result_retry_button.visible = _save_error
-	_result_retry_button.tooltip_text = medal_progress.error if _save_error else ""
+	_result_retry_button.set("accessibility_description", medal_progress.error if _save_error else "")
 	var playing: bool = model.phase in ["waiting", "matching", "feedback"] or pair_revealing or (_pair_save_failed and _mode_id in ["match", "memory"])
 	_storage_retry_button.add_theme_font_size_override("font_size", 16)
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
-	_storage_retry_button.tooltip_text = coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error
+	_storage_retry_button.set("accessibility_description", coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error)
 	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed or not coin_wallet.ready or not coin_wallet.error.is_empty())
 	_refresh_growth()
 	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
@@ -2267,8 +2265,7 @@ func _refresh() -> void:
 	chest.visible = earned_chest
 	chest_button.visible = earned_chest
 	chest_button.disabled = not earned_chest or model.chest_state == "opened" or chest.opening_committed() or _save_error
-	chest_button.tooltip_text = "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest"
-	_set_accessibility_name(chest_button, chest_button.tooltip_text)
+	_set_accessibility_name(chest_button, "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest")
 	_stage.add_theme_stylebox_override("panel", Style.box(palette.background, palette.accent.lightened(0.5), 26, 2))
 	if won:
 		var reward_id: String = JellyRewardProgress.theme_for_tier(1) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
@@ -2792,17 +2789,18 @@ func _refresh_hint() -> void:
 	hint_button.disabled = not _can_request_hint()
 	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
 	hint_button.count = model.hints_remaining
+	var description: String
 	if model.hints_remaining <= 0:
-		hint_button.tooltip_text = "No hints left. Start a new round for three more."
+		description = "No hints left. Start a new round for three more."
 	elif model.phase == "won" or model.matched_ids.size() == model.cards.size():
-		hint_button.tooltip_text = "Round finished. View your result."
+		description = "Round finished. View your result."
 	elif _voice_mode and model.phase == "feedback":
-		hint_button.tooltip_text = "Finishing voice matches. Hints will be available afterward."
+		description = "Finishing voice matches. Hints will be available afterward."
 	elif not model.hint_ids.is_empty():
-		hint_button.tooltip_text = "Hint active. Follow the electric link between the two matching cards."
+		description = "Hint active. Follow the electric link between the two matching cards."
 	else:
-		hint_button.tooltip_text = "%d %s left (Xbox X)" % [model.hints_remaining, "hint" if model.hints_remaining == 1 else "hints"]
-	_set_accessibility_name(hint_button, hint_button.tooltip_text)
+		description = "%d %s left (Xbox X)" % [model.hints_remaining, "hint" if model.hints_remaining == 1 else "hints"]
+	_set_accessibility_name(hint_button, description)
 
 
 func _request_hint() -> void:
@@ -4204,7 +4202,7 @@ func _show_collection() -> void:
 		return
 	_collection_from_home = _mode_menu_open()
 	_hide_mode_menu(false, false)
-	_collection_back.tooltip_text = "Back to home" if _collection_from_home else "Back to game"
+	_set_accessibility_name(_collection_back, "Back to home" if _collection_from_home else "Back to game")
 	_focus_before_collection = get_viewport().gui_get_focus_owner()
 	if pause_pop:
 		_pop.pause()
@@ -4342,7 +4340,6 @@ func _update_duck() -> void:
 		return
 	duck.compact = false
 	var pip_identity: String = "Pip" if _pip_age_description.is_empty() else "Pip · " + _pip_age_description
-	duck.tooltip_text = pip_identity + ". Press for a new move!"
 	_set_accessibility_name(duck, pip_identity + ". Press for a new move.")
 	duck.position = parent.get_global_transform().affine_inverse() * rect.position
 	duck.custom_minimum_size = Vector2(72, 72).min(rect.size) if in_collection else Vector2.ZERO
@@ -4605,7 +4602,7 @@ func _growth_control(control: Control) -> Dictionary:
 		"focused": control.has_focus(),
 		"disabled": control.disabled if control is BaseButton else false,
 		"text": control.text if control is Button or control is Label else "",
-		"description": control.tooltip_text,
+		"description": str(control.get("accessibility_name")),
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
 	if control is Range:
 		result["value"] = control.value

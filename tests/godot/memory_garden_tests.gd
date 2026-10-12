@@ -60,7 +60,9 @@ func _run() -> void:
 	check(view.controls().size() == 11 and view.controls().has(view.study_button), "Keyboard navigation includes ten cards and the eye")
 	check(view.study_button.text.is_empty() and view.study_button.symbol == view.study_button.Symbol.EYE,
 		"The sole reveal control is a drawn eye without toggle text")
-	check(view.study_button.tooltip_text == "Hold to reveal all cards. Release to hide unmatched cards.", "The eye explains that release only hides unmatched cards")
+	check(view.study_button.tooltip_text.is_empty()
+		and view.study_button.accessibility_name == "Hold to reveal all cards. Release to hide unmatched cards.",
+		"The eye retains accessible hold instructions without a hover popup")
 	check(view.find_child("MemoryFeedback", true, false) == null and view.find_child("MemoryReviewHint", true, false) == null,
 		"No correction footer or reserved hint area exists")
 	check(view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
@@ -364,8 +366,8 @@ func _check_resting_faces(view) -> void:
 				for child in back.find_children("*", "Label", true, false):
 					text += child.text + " "
 				check(kind in text and str(index + 1) in text, "Backs keep their kind and stable position number")
-		check(card.tooltip_text == label and card.name == "MemoryCard%d" % (index + 1),
-			"Resting card labels name only visible fronts and preserve kind and position")
+		check(card.tooltip_text.is_empty() and card.name == "MemoryCard%d" % (index + 1),
+			"Resting cards preserve their position without exposing hover popups")
 		for property in card.get_property_list():
 			if property.name == "accessibility_name":
 				check(card.get("accessibility_name") == label, "Accessibility names follow the same revealed and concealed card state")

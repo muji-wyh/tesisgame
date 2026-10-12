@@ -52,7 +52,6 @@ func _init() -> void:
 		_preview_tiles.append(tile)
 		_preview_origins.append(Vector2.ZERO)
 	drop_button.set("accessibility_name", "Drop the next word parts")
-	drop_button.tooltip_text = "Drop the next word parts"
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
 	collect_button = CollectButton.new()

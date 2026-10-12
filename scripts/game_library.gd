@@ -146,7 +146,7 @@ func _build_theme_choices() -> void:
 		var button := Button.new()
 		button.name = palette.name
 		button.icon = load(palette.symbol)
-		button.tooltip_text = palette.name
+		button.set("accessibility_name", str(palette.name) + ", choose theme")
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.expand_icon = true
 		button.toggle_mode = true
@@ -212,7 +212,6 @@ func _style_theme_choices() -> void:
 
 func _ready() -> void:
 	pip.name = "HomePip"
-	pip.tooltip_text = ""
 	pip.set("accessibility_name", "Pip. Play a friendly gesture")
 	_sync_pip_visibility()
 	fit(_available, _factor)

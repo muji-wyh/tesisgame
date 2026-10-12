@@ -91,7 +91,8 @@ func _ready() -> void:
 	name = "Pip"
 	custom_minimum_size = Vector2(72, 72)
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	tooltip_text = "Pip the duck. Press for a hello!"
+	if str(get("accessibility_name")).is_empty():
+		set("accessibility_name", "Pip the duck. Press for a hello!")
 	for style_name in ["normal", "hover", "pressed", "disabled"]:
 		add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 	add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.INK, 18, 2))

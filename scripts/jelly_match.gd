@@ -114,7 +114,6 @@ func _init() -> void:
 	drop_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	drop_button.focus_mode = Control.FOCUS_ALL
 	drop_button.set("accessibility_name", "Drop the next jellies")
-	drop_button.tooltip_text = "Drop the next jellies"
 	drop_button.pressed.connect(_drop_next)
 	add_child(drop_button)
 	for index in range(JellyMatchModel.UPCOMING_COUNT):
@@ -150,7 +149,7 @@ func _init() -> void:
 	finish_button.name = "JellyFinish"
 	finish_button.text = "Finish"
 	finish_button.expand_icon = true
-	finish_button.tooltip_text = "Finish this round and see your score"
+	finish_button.set("accessibility_name", "Finish this round and see your score")
 	UiClick.bind_button(finish_button)
 	finish_button.pressed.connect(_finish_round)
 	add_child(finish_button)

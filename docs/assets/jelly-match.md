@@ -135,7 +135,7 @@ deadline wins. Finish cancels unfinished pairs without crediting them, while
 retaining completed scores, learning attempts and fragments. Gravity responds to
 each completed pair immediately, including when other fusions are still active.
 
-The control has the accessible name and tooltip `Drop the next jellies`, while
+The control has the accessible name `Drop the next jellies` without a hover popup, while
 the visible layout retains its four previews without a `Next` label or progress
 bar. Keyboard and controller users can focus the whole area and activate it.
 The individual preview tiles remain decorative and cannot be dragged or matched.

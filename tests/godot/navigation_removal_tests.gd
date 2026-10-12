@@ -95,8 +95,9 @@ func _run() -> void:
 			check(button.is_visible_in_tree() and button.size.x * scale >= 44 and button.size.y * scale >= 44
 				and app._mode_panel.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
 				"Focus reveals each full-size Home theme choice")
-			check(button.text.is_empty() and button.tooltip_text == app.Data.theme(app.model.THEMES[index]).name,
-				"Home theme icons retain their full names")
+			check(button.text.is_empty() and button.tooltip_text.is_empty()
+				and str(button.get("accessibility_name")).begins_with(app.Data.theme(app.model.THEMES[index]).name + ", "),
+				"Home theme icons retain accessible names without hover popups")
 	var cards: Array = app.model.cards.duplicate(true)
 	var hints: int = app.model.hints_remaining
 	app.theme_buttons[4].pressed.emit()

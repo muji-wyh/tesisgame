@@ -35,7 +35,7 @@ func check_no_collectible_presentation(app, phase: String) -> void:
 		phase + " has no collectible art, assembly piece or toolbar flight")
 	check(not (app._title.text + " " + app._caption.text).to_lower().contains("medal")
 		and not (app._title.text + " " + app._caption.text).to_lower().contains("piece")
-		and not app.chest_button.tooltip_text.to_lower().contains("piece"),
+		and not str(app.chest_button.get("accessibility_name")).to_lower().contains("piece"),
 		phase + " does not advertise the retired collectible presentation")
 
 

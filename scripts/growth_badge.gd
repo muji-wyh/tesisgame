@@ -50,8 +50,7 @@ func configure(state: Dictionary) -> void:
 		description += " Maximum level reached."
 	else:
 		description += " Master %d new %s to reach Lv%d." % [state.get("level_remaining", 1), "word" if state.get("level_remaining", 1) == 1 else "words", level + 1]
-	tooltip_text = description + " View your words."
-	set("accessibility_name", tooltip_text)
+	set("accessibility_name", description + " View your words.")
 	bar.set("accessibility_name", description)
 	_style_type()
 	_layout()

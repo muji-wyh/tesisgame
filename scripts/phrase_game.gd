@@ -776,8 +776,7 @@ func _refresh() -> void:
 	for control in [listen_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
 		control.visible = not completion_pending
 	_progress.value = game.completed
-	_progress.tooltip_text = "%d of 3 phrases complete" % game.completed
-	_progress.set("accessibility_name", _progress.tooltip_text)
+	_progress.set("accessibility_name", "%d of 3 phrases complete" % game.completed)
 	_progress_caption.text = "%d / 3" % mini(game.question_index + 1, 3)
 	_feedback.text = "Well done!" if correct else "Try again." if wrong else "Drag words onto the line."
 	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -796,8 +795,8 @@ func _refresh() -> void:
 		WordArt.bind(button.icon, button)
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
-		button.tooltip_text = "Drag to reorder or tap to return " + button.text if occupied else "Place a word on the answer line"
-		button.set("accessibility_name", "Word %d: %s" % [index + 1, button.text] if occupied else "Empty answer position %d" % (index + 1))
+		button.set("accessibility_name", "Word %d: %s. Drag to reorder or press to return this word." % [index + 1, button.text]
+			if occupied else "Empty answer position %d. Place a word on the answer line." % (index + 1))
 	listen_button.disabled = _paused or completion_pending or question.is_empty() or game.phase == "finished"
 	listen_button.configure(question, _muted or correct, accent)
 	listen_button.set_paused(_paused)
@@ -825,7 +824,6 @@ func _rebuild_buttons() -> void:
 		button.expand_icon = true
 		button.reparent(_bank_content)
 		button.focus_entered.connect(scroll_bank_to.bind(index))
-		button.tooltip_text = "Drag or tap to add " + button.text
 		button.mouse_default_cursor_shape = Control.CURSOR_DRAG
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.set("accessibility_name", button.text + ". Drag or press to add this word.")

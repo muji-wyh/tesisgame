@@ -97,7 +97,7 @@ func _ready() -> void:
 func setup(value: Dictionary) -> void:
 	card_data = value
 	name = value.id.replace(":", "_")
-	tooltip_text = value.word.text if value.kind == "word" else "Picture: " + value.word.text
+	set("accessibility_name", value.word.text if value.kind == "word" else "Picture: " + value.word.text)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	custom_minimum_size = Vector2(72, 72)
