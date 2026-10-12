@@ -8,6 +8,8 @@ const Feel = preload("res://scripts/chest_feel.gd")
 const OPEN_SECONDS: float = Feel.OPEN_SECONDS
 const OPEN_SWAY_SECONDS: float = 6.0
 const CHARGE_STEPS: int = 3
+const CROWN_COLORS: Array[Color] = [Color("#ff7189"), Color("#ffb354"), Color("#f5dc66"),
+	Color("#73d99b"), Color("#66d5e6"), Color("#799ff2"), Color("#bd8bea")]
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
@@ -432,37 +434,36 @@ func _draw_charge() -> void:
 		return
 	var pulse: float = _pulse_strength()
 	var crest: float = _crown_crest()
-	var gold: Color = _release_color.lightened(0.30)
-	var energy: Color = _charge_color.lerp(_release_color, smoothstep(0.2, 1.0, progress))
+	var frontier: Color = _crown_color(progress).lightened(0.35)
 	# A recessed casing gives the rail weight. Its light grows continuously;
 	# only the small accent follows the same delivered beats as the body/audio.
 	_draw_crown_arc(0.0, 1.0, Color(Color("#152332"), 0.50 * alpha), 14.0 * pixel, Vector2(0, 2.0 * pixel))
-	_draw_crown_arc(0.0, 1.0, Color(_charge_color.darkened(0.72), 0.92 * alpha), 12.0 * pixel)
-	_draw_crown_arc(0.0, 1.0, Color(_charge_color.lightened(0.30), 0.32 * alpha), 8.0 * pixel)
-	_draw_crown_arc(0.0, 1.0, Color(_charge_color.darkened(0.60), 0.90 * alpha), 5.0 * pixel)
+	_draw_crown_arc(0.0, 1.0, Color(Color("#354554"), 0.92 * alpha), 12.0 * pixel)
+	_draw_crown_arc(0.0, 1.0, Color(Color("#b5c8d5"), 0.32 * alpha), 8.0 * pixel)
+	_draw_crown_arc(0.0, 1.0, Color(Color("#253444"), 0.90 * alpha), 5.0 * pixel)
 	if progress > 0.0:
-		_draw_crown_arc(0.0, progress, Color(energy, (0.16 + progress * 0.16 + pulse * 0.05) * alpha), 22.0 * pixel)
-		_draw_crown_arc(0.0, progress, Color(energy, 0.38 * alpha), 13.0 * pixel)
-		_draw_crown_arc(0.0, progress, Color(energy, alpha), 8.0 * pixel)
-		_draw_crown_arc(0.0, progress, Color(gold, 0.88 * alpha), 4.0 * pixel)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.92 * alpha), 1.5 * pixel)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, (0.16 + progress * 0.16 + pulse * 0.05) * alpha), 22.0 * pixel, Vector2.ZERO, true)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.38 * alpha), 13.0 * pixel, Vector2.ZERO, true)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, alpha), 8.0 * pixel, Vector2.ZERO, true)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.26 * alpha), 3.0 * pixel)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.65 * alpha), 1.0 * pixel)
 	for streak in _crown_streaks():
-		_draw_crown_arc(streak.x, streak.y, Color(gold, 0.70 * alpha), 9.0 * pixel)
+		_draw_crown_arc(streak.x, streak.y, Color(Color.WHITE, 0.70 * alpha), 9.0 * pixel, Vector2.ZERO, true)
 		_draw_crown_arc(lerpf(streak.x, streak.y, 0.45), streak.y, Color(Color.WHITE, alpha), 4.0 * pixel)
 	if crest > 0.0:
 		# A single completed-rail crest merges into the cavity's release light.
-		_draw_crown_arc(0.0, 1.0, Color(gold, crest * 0.32 * alpha), 28.0 * pixel)
+		_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, crest * 0.32 * alpha), 28.0 * pixel, Vector2.ZERO, true)
 		_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, crest * alpha), 7.0 * pixel)
 	if not reduced_motion and not releasing and progress > 0.0:
 		# This comet is the earned progress frontier, never an independent timer.
 		for trail in range(5):
 			var end: float = maxf(0.0, progress - float(trail) * 0.009)
 			_draw_crown_arc(maxf(0.0, end - 0.009), end,
-				Color(gold, (0.8 - float(trail) * 0.13) * alpha), (7.0 - float(trail)) * pixel)
+				Color(frontier, (0.8 - float(trail) * 0.13) * alpha), (7.0 - float(trail)) * pixel)
 		var tip: Vector2 = _crown_point(progress)
 		var halo: float = (12.0 + pulse) * pixel
 		_charge.draw_texture_rect(CHARGE_GLOW, Rect2(tip - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
-			Color(gold, (0.70 + progress * 0.30) * alpha))
+			Color(frontier, (0.70 + progress * 0.30) * alpha))
 		_charge.draw_circle(tip, 4.0 * pixel, Color(Color.WHITE, alpha))
 		_draw_charge_star(tip, (7.0 + pulse) * pixel, Color(Color.WHITE, alpha))
 	for index in range(CHARGE_STEPS):
@@ -471,9 +472,11 @@ func _draw_charge() -> void:
 		var beat: float = _crown_milestone_strength(index)
 		var position: Vector2 = _crown_star_position(index)
 		var radius: float = _crown_star_radius()
+		var energy: Color = _crown_color((float(index) + 0.5) / CHARGE_STEPS)
+		var gold: Color = energy.lightened(0.50)
 		_charge.draw_circle(position + Vector2(0, 1.5 * pixel), radius * 1.50, Color(Color("#152332"), 0.55 * alpha))
-		_charge.draw_circle(position, radius * 1.40, Color(energy, (0.95 if lit else 0.45) * alpha))
-		_charge.draw_circle(position, radius * 1.16, Color(_charge_color.darkened(0.78), 0.98 * alpha))
+		_charge.draw_circle(position, radius * 1.40, Color(energy if lit else Color("#94a8b6"), (0.95 if lit else 0.45) * alpha))
+		_charge.draw_circle(position, radius * 1.16, Color(energy.darkened(0.72) if lit else Color("#253444"), 0.98 * alpha))
 		if lit:
 			var halo: float = radius * 1.80
 			_charge.draw_texture_rect(CHARGE_GLOW, Rect2(position - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
@@ -486,7 +489,7 @@ func _draw_charge() -> void:
 				var direction := Vector2.from_angle(float(spark) * TAU / 6.0 - PI * 0.5)
 				var point: Vector2 = position + direction * radius * lerpf(1.20, 1.72, expansion)
 				_charge.draw_line(point - direction * 3.0 * pixel * beat, point,
-					Color(_charge_spark, beat * alpha), 1.5 * pixel, true)
+					Color(gold, beat * alpha), 1.5 * pixel, true)
 		_draw_charge_star(position, radius * (0.87 + beat * 0.20), Color(gold if lit else Color.WHITE, alpha if lit else 0.50 * alpha))
 
 
@@ -537,7 +540,13 @@ func _crown_point(progress: float) -> Vector2:
 	return _charge_center + Vector2.from_angle(lerpf(start, end, part - segment)) * _charge_radius
 
 
-func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset: Vector2 = Vector2.ZERO) -> void:
+func _crown_color(progress: float) -> Color:
+	var position: float = clampf(progress, 0.0, 1.0) * (CROWN_COLORS.size() - 1)
+	var index: int = mini(floori(position), CROWN_COLORS.size() - 2)
+	return CROWN_COLORS[index].lerp(CROWN_COLORS[index + 1], position - index)
+
+
+func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset: Vector2 = Vector2.ZERO, rainbow: bool = false) -> void:
 	# Every decorative stroke is clipped to its earned interval and the gaps.
 	for index in range(CHARGE_STEPS):
 		var start: float = maxf(0.0, from * CHARGE_STEPS - index)
@@ -551,7 +560,15 @@ func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset:
 		if offset != Vector2.ZERO:
 			for point in range(points.size()):
 				points[point] += offset
-		_charge.draw_polyline(points, color, width, true)
+		if rainbow:
+			var colors := PackedColorArray()
+			for point in range(points.size()):
+				# Sample the complete rail so partial fills and segment gaps never shift its hues.
+				var progress: float = (index + lerpf(start, end, float(point) / (points.size() - 1))) / CHARGE_STEPS
+				colors.append(_crown_color(progress) * color)
+			_charge.draw_polyline_colors(points, colors, width, true)
+		else:
+			_charge.draw_polyline(points, color, width, true)
 
 
 func _crown_star_position(index: int) -> Vector2:

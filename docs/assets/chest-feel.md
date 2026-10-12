@@ -45,6 +45,12 @@ A new hold interrupts that return and starts from zero.
 
 The three stars follow elapsed time up to the lid-release beat. The progress
 arc follows it until the final held pose, then completes on release.
+The filled rail carries a fixed coral-to-violet rainbow along the complete arc,
+with a neutral recessed track for the unfilled portion. Its frontier and earned
+stars take their color from their position on that rainbow. Thin white highlights
+preserve the color at phone size; existing flow, milestone and release timing
+remain unchanged. This is a color treatment of the existing code-drawn progress
+interface and reuses the integrated portal glow; no new artwork is acquired.
 There is no visible phase or percentage label; semantic progress remains
 available to screen readers. The first star lights just
 before the initial hold ends and remains lit as the opening phase begins. Five
