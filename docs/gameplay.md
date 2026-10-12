@@ -92,13 +92,23 @@ are described in [Voice Pop treasure](voice-pop-treasure.md).
 
 Join letter chunks on a six-column board. Dragging `ca` onto `t` makes `cat`:
 the dragged chunk comes first. Both bodies flow into one larger jelly, which
-stays near the drop target and can join another piece. Merging and collecting
-leave the other jellies in place. Larger bodies and long text wrap across rows
-when needed; crowded bodies expand into available space without sinking.
+stays near the drop target and can join another piece. Collecting a supporting
+word makes the unsupported stack fall vertically into the gap, with a brief
+soft landing. Held bodies and active merges or splits finish before their
+deferred fall. Larger bodies and long text wrap across rows when needed;
+ordinary merges keep their target height.
+
+At rest, exact-word partners share a painted color, including partners in the
+upcoming preview. Other pairs use different hues. Picking up a chunk updates
+the color hints: every target that completes a current-age word in the dragged
+order shares its color. This also handles chunks with several correct partners,
+such as `ca` with either `t` or `n`. Partial three-part builds get a matching
+color when one further jelly can finish the word. Color does not restrict merges.
 
 Tap a merged jelly that is not a current vocabulary word to undo its last merge.
 Its two previous bodies separate nearby onto supporting jellies or the floor,
-with their original chunks, pictures, colors and chest fragments. An invalid
+with their original chunks, pictures and chest fragments, and refreshed pairing
+colors. An invalid
 merged part can be split again. Splitting earns no coins or learning credit.
 If the well cannot fit two bodies, the jelly gives a brief elastic response and
 stays intact until there is room.

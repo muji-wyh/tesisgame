@@ -7,6 +7,11 @@ var _fragment_badges: Array[TextureRect] = []
 var _fragment_texture: Texture2D
 var _fragment_overflow: Label
 var _unit: float = 60.0
+var palette_index: int = -1
+
+func set_palette(index: int, hue: float) -> void:
+	palette_index = index
+	_gel.set_shader_parameter("palette_hue", hue)
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
 	valid_word = not cell.get("word", {}).is_empty() and int(cell.get("mass", 1)) > 1

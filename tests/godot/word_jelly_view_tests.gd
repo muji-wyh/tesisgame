@@ -57,6 +57,13 @@ func _run() -> void:
 	_check_edge_drag(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
+	_check_collection_stack_fall(view)
+	_check_release_after_support_collection(view)
+	_check_coarse_frame_collection_landing(view)
+	_check_word_pair_colors(view)
+	_check_partial_word_colors(view)
+	_check_fusion_palette_handover(view)
+	_check_crowded_palette_separation(view)
 	_check_split_pointer_recovery(view)
 	_check_split_cancel_and_pause(view)
 	_check_split_keyboard_and_nested_merge(view)
@@ -256,6 +263,367 @@ func _check_collect_and_fragments(view) -> void:
 	check(payouts[0].amount == 100 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
 		"coin and fragment flight origin matches the tapped merged jelly")
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
+
+
+func _check_collection_stack_fall(view) -> void:
+	for reduced: bool in [false, true]:
+		for pointer: int in [-1, 7]:
+			_reset(view, reduced)
+			view.game.cells.clear()
+			var support: Dictionary = view.game._new_tile("cat", 2, 1)
+			support.column = 1
+			support.row = 7
+			var lower: Dictionary = view.game._new_tile("ca", 1, 1)
+			lower.column = 1
+			lower.row = 6
+			var upper: Dictionary = view.game._new_tile("t", 1, 0)
+			upper.column = 1
+			upper.row = 5
+			var neighbor: Dictionary = view.game._new_tile("stay", 1, 0)
+			neighbor.column = 4
+			neighbor.row = 7
+			view.game.cells.assign([support, lower, upper, neighbor])
+			view._sync_tiles()
+			view._layout()
+			var origins: Dictionary = {}
+			var source_rows: Dictionary = {int(lower.id): int(lower.row), int(upper.id): int(upper.row)}
+			for tile: Dictionary in [lower, upper, neighbor]:
+				origins[int(tile.id)] = view._tiles[int(tile.id)].get_rect()
+			var center: Vector2 = _center(view, int(support.id))
+			check(view._press(pointer, center), "mouse and touch can collect the word supporting a stack")
+			view._release(center)
+			_advance(view, Model.COLLECT_SECONDS - 0.001)
+			for tile: Dictionary in [lower, upper]:
+				check(view._tiles[int(tile.id)].get_rect().is_equal_approx(origins[int(tile.id)]),
+					"a stack stays still until its lower word has actually disappeared")
+			_advance(view, 0.002)
+			check(view.game.cell(int(support.id)).is_empty() and payouts.size() == 1 and payouts[0].amount == 100,
+				"successful support collection starts gravity after exactly one coin payment")
+			for tile: Dictionary in [lower, upper]:
+				var falling: Dictionary = view.game.cell(int(tile.id))
+				check(int(falling.column) == 1 and int(falling.row) == int(source_rows[int(tile.id)]) + 1,
+					"the whole stack drops one row in its original column")
+				check(bool(falling.get("falling", false)) and int(falling.falling_rows) == 1 and not view._settled(falling),
+					"falling stack bodies keep input locked until landing")
+				var body: Control = view._tiles[int(tile.id)]
+				if reduced:
+					check(body.get_rect().is_equal_approx(view._tile_rect(falling)) and body.scale == Vector2.ONE,
+						"reduced motion places the supported stack directly at its steady destination")
+				else:
+					check(body.position.y < view._tile_rect(falling).position.y,
+						"normal motion begins the fall above the new resting position")
+				check(not view._press(pointer, body.get_global_rect().get_center()),
+					"a moving body cannot be picked up at its rendered position")
+				view.cancel_input()
+			_advance(view, Model.SETTLE_SECONDS * 0.45)
+			for tile: Dictionary in [lower, upper]:
+				var falling: Dictionary = view.game.cell(int(tile.id))
+				var body: Control = view._tiles[int(tile.id)]
+				if not reduced:
+					check(body.position.y > Rect2(origins[int(tile.id)]).position.y
+						and body.position.y < view._tile_rect(falling).position.y,
+						"normal gravity renders an intermediate descent instead of teleporting the stack")
+			view.pause(true)
+			var paused_rect: Rect2 = view._tiles[int(lower.id)].get_rect()
+			var paused_age: float = float(view.game.cell(int(lower.id)).age)
+			_advance(view, 0.5)
+			check(view._tiles[int(lower.id)].get_rect().is_equal_approx(paused_rect)
+				and is_equal_approx(float(view.game.cell(int(lower.id)).age), paused_age),
+				"pause freezes collection gravity at the visible intermediate pose")
+			view.pause(false)
+			_advance(view, Model.SETTLE_SECONDS * 0.70 - paused_age - 0.001)
+			check(cues.count("land") == 0, "the falling stack stays silent until its shared contact pose")
+			_advance(view, 0.002)
+			check(cues.count("land") == 1
+				and view._tiles[int(lower.id)].get_rect().is_equal_approx(view._tile_rect(view.game.cell(int(lower.id)))),
+				"the stack plays one grouped landing cue as its bodies first touch their destinations")
+			_advance(view, Model.SETTLE_SECONDS)
+			for tile: Dictionary in [lower, upper]:
+				var landed: Dictionary = view.game.cell(int(tile.id))
+				check(view._settled(landed) and _has_support(view.game.cells, landed),
+					"each restored stack body becomes interactive only on a supported landing")
+				check(view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(landed)),
+					"the landed artwork and its hit target share the exact final rectangle")
+			check(view._tiles[int(lower.id)].visible_fragment_badges() == 1 and view.game.fragment_count == 1,
+				"gravity carries the upper fragment without collecting it with the removed support")
+			check(view._tiles[int(neighbor.id)].get_rect().is_equal_approx(origins[int(neighbor.id)]),
+				"an already grounded neighbor remains visually stationary")
+			check(cues.count("land") == 1, "the end of the squash cannot replay a second gravity impact")
+			check(view._press(pointer, _center(view, int(lower.id))), "the landed stack accepts ordinary input again")
+			view.cancel_input()
+
+
+func _check_release_after_support_collection(view) -> void:
+	_reset(view)
+	view.game.cells.clear()
+	var support: Dictionary = view.game._new_tile("cat", 2, 0)
+	support.column = 1
+	support.row = Model.ROWS - 1
+	var upper: Dictionary = view.game._new_tile("ca", 1, 1)
+	upper.column = 1
+	upper.row = Model.ROWS - 2
+	view.game.cells.assign([support, upper])
+	view._sync_tiles()
+	view._layout()
+	view._activate(int(support.id))
+	check(view._press(-1, _center(view, int(upper.id))), "an upper root can be held while its lower support is collecting")
+	var empty_point: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 4.5, view._pitch * 3.5))
+	view._move(empty_point)
+	_advance(view, Model.COLLECT_SECONDS + 0.01)
+	check(view.game.cell(int(support.id)).is_empty() and int(view.game.cell(int(upper.id)).row) == Model.ROWS - 2,
+		"the removed support defers gravity until the player's held upper root is released")
+	check(view._target == -1, "the held-root continuity fixture releases over actual empty space")
+	view._release(empty_point)
+	var target: Vector2 = view._tile_rect(view.game.cell(int(upper.id))).position
+	var previous_distance: float = view._tiles[int(upper.id)].position.distance_to(target)
+	var backwards: bool = false
+	for frame in range(42):
+		_advance(view, 0.01)
+		var distance: float = view._tiles[int(upper.id)].position.distance_to(target)
+		backwards = backwards or distance > previous_distance + 0.01
+		previous_distance = distance
+	check(not backwards, "releasing into deferred gravity approaches the landing continuously without a snapback-to-fall rewind")
+	check(int(view.game.cell(int(upper.id)).row) == Model.ROWS - 1 and previous_distance < 0.01
+		and view._settled(view.game.cell(int(upper.id))), "the released upper root finishes at the floor with its hit target and input ready")
+	check(view._tiles[int(upper.id)].visible_fragment_badges() == 1 and view.game.fragment_count == 0,
+		"releasing a held root after support collection retains its uncollected fragment")
+
+
+func _check_coarse_frame_collection_landing(view) -> void:
+	_reset(view)
+	view.game.cells.clear()
+	var support: Dictionary = view.game._new_tile("cat", 2, 0)
+	support.column = 1
+	support.row = Model.ROWS - 1
+	var upper: Dictionary = view.game._new_tile("ca", 1, 0)
+	upper.column = 1
+	upper.row = Model.ROWS - 2
+	view.game.cells.assign([support, upper])
+	view._sync_tiles()
+	view._layout()
+	view._activate(int(support.id))
+	_advance(view, Model.COLLECT_SECONDS - 0.10)
+	check(cues.count("land") == 0, "the coarse-frame fixture has not played an early landing")
+	view._process(0.49)
+	check(view.game.cell(int(support.id)).is_empty() and view._settled(view.game.cell(int(upper.id)))
+		and view._tiles[int(upper.id)].get_rect().is_equal_approx(view._tile_rect(view.game.cell(int(upper.id)))),
+		"one delayed frame can complete collection and the full fall without leaving the view behind")
+	check(cues.count("land") == 1, "a delayed frame crossing both removal and contact still emits one landing cue")
+	_advance(view, 0.4)
+	check(cues.count("land") == 1, "later frames cannot replay the coarse-frame landing")
+
+
+func _palette_item(view, id: int) -> Dictionary:
+	for item: Dictionary in view.snapshot().tiles:
+		if int(item.id) == id:
+			return item
+	return {}
+
+
+func _check_word_pair_colors(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	for text: String in ["can", "dog"]:
+		var word: Dictionary = original_words[0].duplicate(true)
+		word.id = "view-fixture-" + text
+		word.text = text
+		words.append(word)
+	_reset(view)
+	view.game.cells.clear()
+	var ids: Dictionary = {}
+	for text: String in ["ca", "t", "n", "c", "at", "d", "og", "x"]:
+		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		tile.column = ids.size() % Model.COLUMNS
+		tile.row = Model.ROWS - 1 - floori(float(ids.size()) / Model.COLUMNS)
+		ids[text] = int(tile.id)
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	var resting: Dictionary = view.snapshot()
+	for tile: Dictionary in resting.tiles:
+		check(int(tile.get("palette_index", -1)) >= 0 and float(tile.get("palette_hue", -1.0)) >= 0.0,
+			"word roots expose the palette actually used by their painted gel")
+		check(is_equal_approx(float(tile.get("palette_hue", -1.0)),
+			float(view._tiles[int(tile.id)]._gel.get_shader_parameter("palette_hue"))),
+			"color diagnostics match the rendered shader rather than only model metadata")
+		for other: Dictionary in resting.tiles:
+			if int(tile.id) >= int(other.id) or tile.get("palette_index", -1) != other.get("palette_index", -2):
+				continue
+			check(view.game._word_lookup.has(str(tile.text) + str(other.text))
+				or view.game._word_lookup.has(str(other.text) + str(tile.text)),
+				"every shared resting color names an exact current-vocabulary completion")
+	check(_palette_item(view, ids.d).get("palette_index", -1) == _palette_item(view, ids.og).get("palette_index", -2),
+		"an unambiguous word pair shares a color at rest")
+	var isolated_palette: int = int(_palette_item(view, ids.x).get("palette_index", -1))
+	for text: String in ["ca", "t", "n", "c", "at", "d", "og"]:
+		check(int(_palette_item(view, ids[text]).get("palette_index", -2)) != isolated_palette,
+			"an unrelated root cannot reuse a word pair's hint color")
+	for keyboard: bool in [false, true]:
+		if keyboard:
+			view._activate(ids.ca)
+		else:
+			check(view._press(-1, _center(view, ids.ca)), "pressing a source previews its compatible completion colors")
+		var source: Dictionary = _palette_item(view, ids.ca)
+		for text: String in ["t", "n"]:
+			check(_palette_item(view, ids[text]).get("palette_index", -1) == source.get("palette_index", -2)
+				and is_equal_approx(float(_palette_item(view, ids[text]).get("palette_hue", -1.0)), float(source.get("palette_hue", -2.0))),
+				"pointer and keyboard selection highlight every exact ordered completion with the source hue")
+		for text: String in ["c", "at", "d", "og", "x"]:
+			check(_palette_item(view, ids[text]).get("palette_index", -1) != source.get("palette_index", -2),
+				"an invalid completion stays visually distinct from the selected source")
+		view.cancel_input()
+		if keyboard:
+			view._activate(ids.t)
+		else:
+			view._press(-1, _center(view, ids.t))
+		check(_palette_item(view, ids.t).get("palette_index", -1) != _palette_item(view, ids.ca).get("palette_index", -1),
+			"a reversed-only word partner does not suggest an invalid source-then-target merge")
+		view.cancel_input()
+	view.apply_theme(Data.theme("autumn"), data.chests)
+	for tile: Dictionary in resting.tiles:
+		check(_palette_item(view, int(tile.id)).get("palette_index", -1) == tile.get("palette_index", -2),
+			"changing the surrounding theme preserves established word-pair hints")
+	for index in range(view._preview_tiles.size()):
+		var slot: Dictionary = view.snapshot().preview.slots[index]
+		check(int(slot.get("palette_index", -1)) >= 0
+			and is_equal_approx(float(slot.get("palette_hue", -1.0)), float(view._preview_tiles[index]._gel.get_shader_parameter("palette_hue"))),
+			"upcoming parts publish the same hint hue that their actual gel renders")
+	words = original_words
+
+
+func _check_partial_word_colors(view) -> void:
+	_reset(view)
+	view.game.cells.clear()
+	var ids: Array[int] = []
+	for text: String in ["cate", "rpil", "lar"]:
+		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		tile.column = ids.size() * 2
+		tile.row = Model.ROWS - 1
+		ids.append(int(tile.id))
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	for first in range(ids.size()):
+		for second in range(first + 1, ids.size()):
+			check(_palette_item(view, ids[first]).get("palette_index", -1)
+				!= _palette_item(view, ids[second]).get("palette_index", -1),
+				"incomplete prefixes of a three-part word do not pretend to be exact word pairs")
+	_drag(view, ids[0], ids[1])
+	var partial_id: int = _merged_id(view)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	check(view.game.cell(partial_id).text == "caterpil" and not view.game.is_valid_word(view.game.cell(partial_id)),
+		"the first two chunks form an actual incomplete persistent word")
+	check(_palette_item(view, partial_id).get("palette_index", -1) == _palette_item(view, ids[2]).get("palette_index", -2),
+		"a merged partial word shares a hint color with the remaining exact completion")
+	_drag(view, partial_id, ids[2])
+	var completed_id: int = _merged_id(view)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	check(view.game.cell(completed_id).text == "caterpillar" and view._tiles[completed_id]._picture.is_visible_in_tree(),
+		"following the partial-word color hint produces its pictured vocabulary word")
+
+
+func _hue_distance(first: float, second: float) -> float:
+	return absf(fposmod(first - second + 0.5, 1.0) - 0.5)
+
+
+func _check_fusion_palette_handover(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	var bat: Dictionary = original_words[0].duplicate(true)
+	bat.id = "view-fixture-bat"
+	bat.text = "bat"
+	words.append(bat)
+	_reset(view)
+	view.game.cells.clear()
+	var ids: Dictionary = {}
+	for text: String in ["a", "t", "c", "b"]:
+		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		tile.column = ids.size()
+		tile.row = Model.ROWS - 1
+		ids[text] = int(tile.id)
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	_drag(view, ids.a, ids.t)
+	var pending: Dictionary = view.game.fusions[0]
+	var visual: Dictionary = view._fusion_visuals[str(pending.attempt_id)]
+	var input_colors: Array[int] = [visual.palette_a, visual.palette_b]
+	for id: int in view._palette_indices:
+		check(not int(view._palette_indices[id]) in input_colors,
+			"visible liquid input colors stay reserved while other live and upcoming bodies are recolored")
+	var alternate: int = ids.b if view._tiles[ids.b].palette_index != visual.merged.palette_index else ids.c
+	check(view._press(-1, _center(view, alternate)), "another live prefix can be selected while an unrelated merge animates")
+	_advance(view, Model.FUSION_SECONDS * 0.83)
+	check(visual.merged.palette_index == view._tiles[alternate].palette_index,
+		"the animated future result adopts the selected prefix's newly relevant completion hue")
+	check(_hue_distance(float(visual.art._gel.get_shader_parameter("palette_hue_b")),
+		float(visual.merged._gel.get_shader_parameter("palette_hue"))) < 0.00001,
+		"liquid paint reaches the current result hue before the solid skin handover")
+	_advance(view, Model.FUSION_SECONDS * 0.18 + Model.SETTLE_SECONDS)
+	var partial_id: int = int(pending.result.id)
+	check(view._tiles[partial_id].palette_index == view._tiles[alternate].palette_index,
+		"the persistent merged body's color agrees with the active completion hint after handover")
+	view.cancel_input()
+	words = original_words
+	_reset(view)
+	var fixture: Dictionary = _invalid_merge(view)
+	var prefixes: Array[int] = []
+	for column in range(2):
+		var prefix: Dictionary = view.game._new_tile("ca", 1, 0)
+		prefix.column = column
+		prefix.row = Model.ROWS - 1
+		prefixes.append(int(prefix.id))
+		view.game.cells.append(prefix)
+	view._sync_tiles()
+	view._activate(fixture.id)
+	var split: Dictionary = view.game.fusions[0]
+	visual = view._fusion_visuals[str(split.attempt_id)]
+	var parent_hue: float = float(visual.merged._gel.get_shader_parameter("palette_hue"))
+	for parameter: String in ["palette_hue_a", "palette_hue_b"]:
+		check(_hue_distance(float(visual.art._gel.get_shader_parameter(parameter)), parent_hue) < 0.00001,
+			"both separating lobes start with the actual unsplit parent's color")
+	var suffix_index: int = 0 if str(split.results[0].text) == "t" else 1
+	var suffix = visual.parts[suffix_index]
+	alternate = prefixes[1] if view._tiles[prefixes[1]].palette_index != suffix.palette_index else prefixes[0]
+	check(view._press(-1, _center(view, alternate)), "a live matching prefix can be selected during a split")
+	_advance(view, Model.SPLIT_SECONDS * 0.5)
+	check(suffix.palette_index == view._tiles[alternate].palette_index,
+		"a split child refreshes its material when a live prefix changes its completion hint")
+	var target_hue: float = float(suffix._gel.get_shader_parameter("palette_hue"))
+	var parameter: String = "palette_hue_a" if suffix_index == 0 else "palette_hue_b"
+	var midway: float = float(visual.art._gel.get_shader_parameter(parameter))
+	check(_hue_distance(midway, parent_hue) > 0.00001 and _hue_distance(midway, target_hue) > 0.00001,
+		"the split color transitions visibly between parent paint and the child's current hint")
+	_advance(view, Model.SPLIT_SECONDS * 0.40)
+	check(_hue_distance(float(visual.art._gel.get_shader_parameter(parameter)), target_hue) < 0.00001,
+		"the separated liquid lobe reaches its child skin's hue before handover")
+	_advance(view, Model.SPLIT_SECONDS * 0.11 + Model.SETTLE_SECONDS)
+	check(view._tiles[int(split.results[suffix_index].id)].palette_index == view._tiles[alternate].palette_index,
+		"the restored child keeps the active completion color when its temporary split skin disappears")
+	view.cancel_input()
+
+
+func _check_crowded_palette_separation(view) -> void:
+	_reset(view)
+	view.game.cells.clear()
+	for index in range(18):
+		var tile: Dictionary = view.game._new_tile("unpaired%d" % index, 1, 0)
+		tile.column = index % Model.COLUMNS
+		tile.row = Model.ROWS - 1 - floori(float(index) / Model.COLUMNS)
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	var state: Dictionary = view.snapshot()
+	var extended: bool = false
+	for tile: Dictionary in state.tiles:
+		extended = extended or int(tile.palette_index) >= 12
+		check(float(tile.palette_hue) >= 0.0 and float(tile.palette_hue) < 1.0,
+			"a crowded board keeps every actual shader hue inside its color range")
+		for other: Dictionary in state.tiles:
+			if int(other.id) <= int(tile.id):
+				continue
+			check(int(tile.palette_index) != int(other.palette_index)
+				and _hue_distance(float(tile.palette_hue), float(other.palette_hue)) >= 0.01,
+				"more than twelve unrelated roots retain measurably separated rendered hues")
+	check(extended, "the crowded fixture exercises colors beyond the initial twelve-color palette")
 
 
 func _check_merge_handover_stability(view) -> void:

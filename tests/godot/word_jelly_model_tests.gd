@@ -22,6 +22,15 @@ func _run() -> void:
 	_test_current_age_validation()
 	_test_repeated_merge_and_fragments()
 	_test_collection_timeline_and_pause()
+	_test_collection_gravity()
+	_test_gravity_partial_support()
+	_test_gravity_held_stack()
+	_test_gravity_reserved_operations()
+	_test_gravity_simultaneous_collections()
+	_test_gravity_settlement_determinism()
+	_test_growth_after_gravity()
+	_test_gravity_wallet_failure()
+	_test_gravity_lifecycle()
 	_test_wallet_retry()
 	_test_chests()
 	_test_packing_and_growth()
@@ -283,6 +292,267 @@ func _test_collection_timeline_and_pause() -> void:
 	check(model.snapshot() == snapshot, "invalid time steps cannot corrupt model state")
 
 
+func _gravity_tower():
+	var model = _model([_word("cat")])
+	model.cells.assign([
+		_placed_tile(1000, "cat", 1, 7, 2, 4, _word("cat")),
+		_placed_tile(1001, "ca", 1, 6, 1, 2),
+		_placed_tile(1002, "t", 1, 5, 1, 1),
+		_placed_tile(1003, "x", 5, 7)
+	])
+	model.cells[1].skin = 3
+	return model
+
+
+func _test_collection_gravity() -> void:
+	var model = _gravity_tower()
+	var events: Dictionary = _observe(model)
+	var lower: Dictionary = model.cell(1001)
+	var upper: Dictionary = model.cell(1002)
+	check(model.collect(1000), "a lower word can be collected beneath a stack")
+	model.step(Model.COLLECT_SECONDS - 0.001)
+	check(model.cell(1001).row == 6 and model.cell(1002).row == 5 and model.collected_coins == 0,
+		"disappearing support stays reserved until its payment commits")
+	model.step(0.001)
+	check(model.cell(1001).row == 7 and model.cell(1002).row == 6
+		and model.cell(1001).column == 1 and model.cell(1002).column == 1,
+		"successful collection moves the entire unsupported stack down in its original column")
+	for original: Dictionary in [lower, upper]:
+		var tile: Dictionary = model.cell(int(original.id))
+		check(tile.text == original.text and tile.mass == original.mass and tile.fragments == original.fragments
+			and tile.word == original.word, "falling preserves body identity, word content, mass, and carried fragments")
+		check(bool(tile.falling) and tile.falling_rows == 1 and tile.age == 0.0 and bool(tile.settling) and not bool(tile.arrival),
+			"falling publishes a fresh settlement and exact vertical travel for the view")
+	check(model.cell(1001).skin == 3 and _footprint(model.cell(1003)) == Rect2i(5, 7, 1, 1),
+		"collection gravity preserves skins and already-supported neighboring bodies")
+	check(model.try_merge(1001, 1002) == "ignored" and not model.can_drop_now(), "falling bodies and supply wait until their landing finishes")
+	check(model.collected_coins == 100 and model.fragment_count == 4 and model.chest_tier == 1
+		and events.collections.size() == 1 and events.attempts.size() == 1 and events.milestones == [[0, 1]],
+		"falling leaves the original word's single coin, fragment, learning, and chest payout unchanged")
+	model.set_paused(true)
+	var before: Dictionary = model.snapshot()
+	model.step(20.0)
+	check(model.snapshot() == before, "pause freezes an in-progress collection fall")
+	model.set_paused(false)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.is_settled(model.cell(1001)) and model.is_settled(model.cell(1002)) and not model._gravity_pending,
+		"landing returns both children to play and clears finished gravity work")
+	check(bool(model.cell(1001).falling) and model.cell(1001).falling_rows == 1,
+		"landing keeps its last fall provenance so the view cannot emit a second impact cue")
+	_assert_supported_tiles(model, [1001, 1002], "collected stack")
+	_assert_board(model, "collected stack")
+
+
+func _test_gravity_partial_support() -> void:
+	for mass: int in [3, 7]:
+		var model = _model([_word("cat")])
+		var body: Dictionary = _placed_tile(1001, "wide", 2 if mass == 3 else 0, 0, mass, 3)
+		model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")), body])
+		for row in range(4, Model.ROWS):
+			model.cells.append(_placed_tile(2000 + row, "x", 4, row))
+		model.collect(1000)
+		model.step(Model.COLLECT_SECONDS)
+		var landed: Dictionary = model.cell(1001)
+		check(landed.row == 4 - int(body.height) and landed.column == body.column
+			and landed.width == body.width and landed.height == body.height,
+			"wide or tall bodies stop at their first partial support instead of jumping to a lower gap")
+		check(landed.falling_rows == landed.row and landed.mass == mass and landed.fragments == 3,
+			"multirow falls retain exact travel, wrapped size, mass, and fragments")
+		_assert_supported_tiles(model, [1001], "partial support")
+		_assert_board(model, "partial support")
+
+
+func _test_gravity_held_stack() -> void:
+	var model = _gravity_tower()
+	model.set_held_tile(1001)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1001).row == 6 and model.cell(1002).row == 5 and model._gravity_pending,
+		"a held body keeps its anchor and supports the upper stack while gravity is pending")
+	model.set_paused(true)
+	model.set_held_tile(-1)
+	check(model.cell(1001).row == 6 and model.cell(1002).row == 5 and model._gravity_pending,
+		"releasing a held body while paused only clears the hold and retains pending motion")
+	model.set_paused(false)
+	check(model.cell(1001).row == 7 and model.cell(1002).row == 6
+		and model.cell(1001).age == 0.0 and model.cell(1002).age == 0.0,
+		"resume settles the released support first and the upper stack in the same pass")
+	_assert_board(model, "released held stack")
+	model = _model([_word("cat")])
+	var compressed: Dictionary = _placed_tile(1001, "large", 1, 6, 2)
+	compressed.width = 1
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")), compressed])
+	model.set_held_tile(1001)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(_footprint(model.cell(1001)) == Rect2i(1, 6, 1, 1), "collection cannot resize or shift a held compressed body during growth restoration")
+	model.set_held_tile(-1)
+	check(model.cell(1001).width == 2 and model.cell(1001).row == 6 and not model.is_settled(model.cell(1001)),
+		"released compressed body first finishes its reserved growth pose")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.cell(1001).row == 7 and bool(model.cell(1001).falling), "deferred gravity resumes after the released body's growth settles")
+	_assert_board(model, "released compressed body")
+
+
+func _test_gravity_reserved_operations() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
+		_placed_tile(1001, "a", 0, 6), _placed_tile(1002, "b", 1, 6), _placed_tile(1003, "x", 0, 4)])
+	check(model.try_merge(1001, 1002) == "merged" and model.collect(1000), "a lower collection can overlap an upper merge")
+	var destination: Dictionary = model.fusions[0].result.duplicate(true)
+	model.step(Model.COLLECT_SECONDS)
+	check(_footprint(model.cell(1001)) == Rect2i(0, 6, 1, 1) and _footprint(model.cell(1002)) == Rect2i(1, 6, 1, 1),
+		"pending gravity never moves the live inputs of an active merge")
+	check(model.cell(1003).row == 5, "an independent falling body stops above the active merge reservation")
+	_assert_reservations(model, "gravity beside active merge")
+	model.step(Model.FUSION_SECONDS - Model.COLLECT_SECONDS)
+	check(_footprint(model.cell(int(destination.id))) == _footprint(destination), "merge handover still commits its frozen target even with pending gravity")
+	model.step(Model.SETTLE_SECONDS - 0.001)
+	check(_footprint(model.cell(int(destination.id))) == _footprint(destination), "merged target finishes its landing before collection gravity can move it")
+	model.step(0.001)
+	check(model.cell(int(destination.id)).row == 7 and model.cell(1003).row == 6
+		and bool(model.cell(int(destination.id)).falling), "deferred collection gravity settles the merged body and the stack above it afterward")
+	_assert_board(model, "gravity after reserved merge")
+	model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
+		_placed_tile(1001, "a", 0, 6, 1, 1), _placed_tile(1002, "b", 1, 6, 1, 2)])
+	var parent: Dictionary = _merge(model, 1001, 1002)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(parent.id)) and model.collect(1000), "a collection can begin beneath already reserved split children")
+	var children: Array = model.fusions[0].results.duplicate(true)
+	model.step(Model.COLLECT_SECONDS)
+	check(not model.cell(int(parent.id)).is_empty(), "collection keeps the active split parent in its frozen pose")
+	_assert_reservations(model, "gravity beside active split")
+	model.step(Model.SPLIT_SECONDS - Model.COLLECT_SECONDS)
+	for child: Dictionary in children:
+		check(_footprint(model.cell(int(child.id))) == _footprint(child), "split children commit their announced endpoints before deferred falling")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.cell(1001).row == 7 and model.cell(1002).row == 7
+		and model.cell(1001).fragments == 1 and model.cell(1002).fragments == 2,
+		"split children settle into the subsequently cleared support gap with their fragments intact")
+	_assert_board(model, "gravity after reserved split")
+
+
+func _test_gravity_simultaneous_collections() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 1, _word("cat")),
+		_placed_tile(1001, "cat", 0, 6, 2, 2, _word("cat")), _placed_tile(1002, "x", 0, 5)])
+	check(model.collect(1000) and model.collect(1001), "two stacked valid words can collect at one timestamp")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1002).row == 7 and model.cell(1002).falling_rows == 2 and model.cell(1002).age == 0.0,
+		"simultaneous removals produce one complete fall instead of an unnecessary stop at the first empty row")
+	check(model.collected_coins == 200 and model.fragment_count == 3 and model.cleared_pairs == 2,
+		"batched stack settlement preserves both independent collection rewards")
+	_assert_board(model, "simultaneous collection gravity")
+
+
+func _test_gravity_settlement_determinism() -> void:
+	var states: Array[Dictionary] = []
+	for sliced: bool in [false, true]:
+		var model = _gravity_tower()
+		model.set_held_tile(1001)
+		model.collect(1000)
+		model.step(Model.COLLECT_SECONDS)
+		for tile: Dictionary in model.cells:
+			if int(tile.id) == 1001 or int(tile.id) == 1003:
+				tile.age = Model.SETTLE_SECONDS - (0.1 if int(tile.id) == 1001 else 0.3)
+				tile.settling = true
+		model.set_held_tile(-1)
+		for index in range(5 if sliced else 1):
+			model.step(0.05 if sliced else 0.25)
+		check(model.cell(1001).row == 7 and model.cell(1002).row == 6
+			and is_equal_approx(float(model.cell(1001).age), 0.15),
+			"gravity starts at the first eligible body's boundary while another body is still settling")
+		states.append(model.snapshot())
+	for index in range(states[0].cells.size()):
+		var whole: Dictionary = states[0].cells[index]
+		var sliced: Dictionary = states[1].cells[index]
+		check(whole.id == sliced.id and _footprint(whole) == _footprint(sliced)
+			and is_equal_approx(float(whole.age), float(sliced.age)) and whole.settling == sliced.settling
+			and whole.get("falling", false) == sliced.get("falling", false) and whole.falling_rows == sliced.falling_rows,
+			"coarse and fine frames agree on fall destinations, clocks, readiness, and motion metadata")
+	check(states[0].collected_coins == states[1].collected_coins and states[0].score == states[1].score,
+		"gravity time slicing cannot alter collected rewards")
+
+
+func _test_growth_after_gravity() -> void:
+	var model = _model([_word("cat")])
+	var compressed: Dictionary = _placed_tile(1001, "chunk", 0, 5, 2, 2)
+	compressed.width = 1
+	model.cells.assign([_placed_tile(1000, "cat", 1, 7, 2, 0, _word("cat")), compressed,
+		_placed_tile(1002, "x", 0, 6), _placed_tile(1003, "x", 0, 7)])
+	_fill_rows(model, 0, 5)
+	var held_id: int = -1
+	for tile: Dictionary in model.cells:
+		if tile.column == 1 and tile.row == 4:
+			held_id = int(tile.id)
+	model.set_held_tile(held_id)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1001).width == 1 and model.cell(1001).row == 5 and model._growth_pending,
+		"a growth attempt blocked before gravity is retried after falling vacates a neighboring cell")
+	model.step(Model.SETTLE_SECONDS)
+	check(_footprint(model.cell(1001)) == Rect2i(0, 5, 2, 1) and model.cell(1001).fragments == 2
+		and not model.is_settled(model.cell(1001)), "space released by falling restores a compressed body's full size after landing")
+	check(model.cell(held_id).row == 4, "growth retry keeps the held support's logical anchor unchanged")
+	model.set_held_tile(-1)
+	_assert_board(model, "growth after gravity")
+
+
+func _test_gravity_wallet_failure() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 1, _word("cat")),
+		_placed_tile(1001, "cat", 0, 6, 2, 2, _word("cat")), _placed_tile(1002, "x", 0, 5)])
+	var calls: Array = []
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		calls.append([receipt, coins])
+		return {"ok": calls.size() != 2}
+	model.collect(1000)
+	model.collect(1001)
+	model.step(Model.COLLECT_SECONDS)
+	var retry_id: String = str(model._collection_event_ids[1001])
+	check(model.collected_coins == 100 and model.cell(1001).row == 7 and model.cell(1002).row == 6,
+		"failed upper payment retains its word and releases its reservation for gravity from the successful lower collection")
+	check(not model.collect(1001), "retained failed word waits for its fall to land before a payment retry")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.collect(1001), "failed word remains collectible after landing")
+	model.step(Model.COLLECT_SECONDS)
+	check(calls.size() == 3 and calls[2] == [retry_id, 100] and model.collected_coins == 200
+		and model.fragment_count == 3 and model.cell(1002).row == 7,
+		"falling preserves the failed word's idempotent receipt and retry pays exactly once")
+	model.credit_collection = Callable()
+	model = _gravity_tower()
+	model.credit_collection = func(_receipt: String, _coins: int) -> Dictionary: return {"ok": false}
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1001).row == 6 and model.cell(1002).row == 5 and not model._gravity_pending,
+		"a failed collection alone neither removes support nor initiates gravity")
+	model.credit_collection = Callable()
+
+
+func _test_gravity_lifecycle() -> void:
+	var model = _gravity_tower()
+	model.set_held_tile(1001)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	model.finish_round()
+	var before: Dictionary = model.snapshot()
+	model.set_held_tile(-1)
+	model.step(100.0)
+	check(model.snapshot() == before, "ending a round prevents deferred held-stack gravity from mutating the finished board")
+	model.configure([_word("cat")], 3, 13)
+	check(not model._gravity_pending and model._held_tile_id == -1,
+		"configuration clears pending collection gravity and stale held ownership")
+	model = _gravity_tower()
+	model.collected.connect(func(_id: String, _word_data: Dictionary, _coins: int, _fragments: int) -> void:
+		model.configure([_word("cat")], 3, 14), CONNECT_ONE_SHOT)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cells.size() == Model.INITIAL_SETTLED_TILES and model.collected_coins == 0 and not model._gravity_pending,
+		"reconfiguration in a reward callback cannot apply old collection gravity to the new round")
+	_assert_board(model, "reconfigured gravity lifecycle")
+
+
 func _test_wallet_retry() -> void:
 	var model = _model([_word("cat")])
 	_board(model, ["ca", "t"])
@@ -388,8 +658,9 @@ func _test_target_placement() -> void:
 	model.cells.append(_placed_tile(1003, "cat", 0, 7, 2, 0, _word("cat")))
 	check(model.collect(1003), "a lower word can be collected underneath the upper merge")
 	model.step(Model.COLLECT_SECONDS)
-	check(_footprint(model.cell(int(planned.id))) == _footprint(planned) and _footprint(model.cell(1002)) == neighbor,
-		"collecting a lower word leaves all remaining anchors in place")
+	check(model.cell(int(planned.id)).column == planned.column and model.cell(int(planned.id)).row == Model.ROWS - 1
+		and model.cell(1002).column == neighbor.position.x and model.cell(1002).row == Model.ROWS - 1,
+		"collecting a lower word settles unsupported anchors vertically without changing their columns")
 	_assert_board(model, "stable target placement")
 	model = _model([_word("cat")])
 	model.cells.assign([_placed_tile(1000, "ca", 0, 7, 4, 2), _placed_tile(1001, "t", 5, 1, 1, 3)])
@@ -498,12 +769,12 @@ func _test_deferred_growth() -> void:
 	check(model.collect(1003), "the second neighboring word frees the remaining growth space")
 	model.step(Model.COLLECT_SECONDS)
 	merged = model.cell(merged_id)
-	check(merged.width == 6 and merged.height == 2 and merged.mass == 8,
-		"collecting enough neighboring words restores a compressed jelly to its preferred wrapped size")
+	check(merged.width == 4 and merged.height == 1 and merged.row == Model.ROWS - 1 and merged.mass == 8,
+		"gravity preserves legal compression when settled neighbors occupy the preferred wrapped footprint")
 	check(merged.fragments == 5 and merged.text == "cat" and merged.word.id == "cat",
 		"restored growth keeps the exact merged word and carried fragments")
-	check(not model.is_settled(merged) and bool(merged.settling), "restored growth reserves its settlement window")
-	_assert_board(model, "restored growth")
+	check(model.is_settled(merged) and not bool(merged.settling), "an unmoved compressed body does not restart settlement after another collection")
+	_assert_board(model, "gravity-constrained growth")
 	var first_layout: Array[Dictionary] = model.cells.duplicate(true)
 	model._restore_growth()
 	check(model.cells == first_layout, "restoring unchanged footprints is stable and does not restart settlement")
@@ -550,17 +821,17 @@ func _test_growth_after_settlement() -> void:
 		check(model.cell(id).width == 4, "compressed body remains unchanged just before its settlement boundary")
 		model.step(0.002)
 		merged = model.cell(id)
-		check(merged.width == 6 and merged.height == 2 and merged.column == 0 and merged.row == 6,
-			"settlement completion retries local growth into the newly cleared rows")
+		check(merged.width == 4 and merged.height == 1 and merged.column == 0 and merged.row == 7,
+			"settlement completion lets the deferred merged body fall into the newly cleared lower row")
 		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 400,
-			"automatic expansion reserves fresh settlement and preserves its full reward")
-		_assert_board(model, "deferred growth after settlement")
+			"deferred falling reserves fresh settlement and preserves the full compressed reward")
+		_assert_board(model, "deferred falling after settlement")
 		final_states.append({"rect": _footprint(merged), "age": float(merged.age), "coins": model.collected_coins,
 			"fragments": model.fragment_count, "mass": int(merged.mass), "text": str(merged.text)})
 	check(final_states[0].rect == final_states[1].rect and is_equal_approx(final_states[0].age, final_states[1].age)
 		and final_states[0].coins == final_states[1].coins and final_states[0].fragments == final_states[1].fragments
 		and final_states[0].mass == final_states[1].mass and final_states[0].text == final_states[1].text,
-		"whole and sliced frames agree on restored placement, readiness, words, and rewards")
+		"whole and sliced frames agree on deferred falling placement, readiness, words, and rewards")
 
 
 func _test_splitting() -> void:

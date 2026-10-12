@@ -12,7 +12,17 @@ uniform float rim_uv = 0.025;
 uniform vec2 contact_direction = vec2(0.0);
 uniform float contact_strength = 0.0;
 uniform bool contact_match = false;
+uniform float palette_hue = -1.0;
 varying vec4 gel_modulate;
+
+vec3 palette(vec3 paint) {
+	if (palette_hue < 0.0) { return paint; }
+	float high = max(max(paint.r, paint.g), paint.b);
+	float low = min(min(paint.r, paint.g), paint.b);
+	vec3 hue = clamp(abs(fract(vec3(palette_hue) + vec3(0.0, 2.0 / 3.0, 1.0 / 3.0)) * 6.0 - 3.0) - 1.0, 0.0, 1.0);
+	// Retain every acquired highlight, shaded contour and alpha edge.
+	return mix(vec3(low), vec3(high), hue);
+}
 
 void vertex() {
 	gel_modulate = COLOR;
@@ -33,6 +43,7 @@ void fragment() {
 	float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
 	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
 	vec4 gel = texture(TEXTURE, clamp(sample_uv, vec2(0.0), vec2(1.0)));
+	gel.rgb = palette(gel.rgb);
 	float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
 	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);
 	if (rim_strength > 0.0) {

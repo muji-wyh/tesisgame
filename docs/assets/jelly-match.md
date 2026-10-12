@@ -7,6 +7,15 @@ learning content. The appearance comes from a production illustration; animation
 deforms that illustration rather than replacing it with flat geometry.
 The playfield now sits in a sourced [woodland environment](jelly-environment.md).
 
+Jelly Words reuses the acquired coral skin and its signed-distance material.
+A per-instance shader hue preserves the original highlights, shaded contours
+and alpha while identifying exact-word partners. Idle pairs have distinct hues;
+selecting a chunk recolors its ordered word completions to the same hue. Both
+fusion lobes, split children and the upcoming preview use the same palette.
+The default shader hue is disabled in Jelly Match, preserving its four skins.
+This is a runtime color adaptation of the integrated CC0 artwork below, with
+no new asset acquisition or baked animation.
+
 ## Sources and acquired material
 
 | Material | Creator and original source | License and status | Available animation |

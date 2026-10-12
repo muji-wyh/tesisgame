@@ -13,6 +13,16 @@ uniform float flow = 0.0;
 uniform float mixing = 0.0;
 uniform float charge = 0.0;
 uniform float opacity = 1.0;
+uniform float palette_hue_a = -1.0;
+uniform float palette_hue_b = -1.0;
+
+vec3 palette(vec3 paint, float hue_value) {
+	if (hue_value < 0.0) { return paint; }
+	float high = max(max(paint.r, paint.g), paint.b);
+	float low = min(min(paint.r, paint.g), paint.b);
+	vec3 hue = clamp(abs(fract(vec3(hue_value) + vec3(0.0, 2.0 / 3.0, 1.0 / 3.0)) * 6.0 - 3.0) - 1.0, 0.0, 1.0);
+	return mix(vec3(low), vec3(high), hue);
+}
 
 vec2 body_uv(vec2 point, vec4 body) {
 	vec2 uv = (point - body.xy) / body.zw + vec2(0.5);
@@ -45,6 +55,8 @@ void fragment() {
 	}
 	vec3 a = texture(material_a, clamp(body_uv(point, body_a), vec2(0.0), vec2(1.0))).rgb;
 	vec3 b = texture(material_b, clamp(body_uv(point, body_b), vec2(0.0), vec2(1.0))).rgb;
+	a = palette(a, palette_hue_a);
+	b = palette(b, palette_hue_b);
 	// Paint flows across the connected neck and settles into the destination
 	// skin, so the finished body does not retain a hard two-color seam.
 	vec3 paint = mix(b, a, field.y * (1.0 - mixing));

@@ -152,6 +152,161 @@ function expectSupportedChild(state, child) {
   }
 }
 
+test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
+  const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
+  const words = new Map(vocabulary.filter(word => word.min_age === 3).map(word => [normalize(word.text), word]));
+  const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1)
+    .sort((a, b) => a.column - b.column);
+  let roots;
+  for (const count of [2, 3]) {
+    for (let start = 0; start <= floor.length - count; start++) {
+      const packet = floor.slice(start, start + count);
+      if (packet.every((tile, index) => tile.column === packet[0].column + index) &&
+        words.has(normalize(packet.map(tile => tile.text).join('')))) {
+        roots = packet;
+        break;
+      }
+    }
+    if (roots) break;
+  }
+  expect(roots, 'The first ordinary supply packet contains a complete adjacent floor word').toBeTruthy();
+  let completed = await merge(page, roots[0].id, roots[1].id);
+  for (const root of roots.slice(2)) completed = await merge(page, completed.id, root.id);
+  expect(completed.word.id).toBe(words.get(normalize(roots.map(tile => tile.text).join(''))).id);
+  expect(completed.row, 'The completed floor word remains underneath the initial upper row').toBe(opening.rows - 1);
+  const before = await jelly(page);
+  const stack = before.tiles.filter(tile => tile.row + tile.height === completed.row &&
+    tile.column >= completed.column && tile.column + tile.width <= completed.column + completed.width);
+  expect(stack.length, 'The real floor word supports multiple upper jellies').toBeGreaterThanOrEqual(2);
+  await page.evaluate(stack => {
+    const status = document.getElementById('game-status');
+    window.wordJellyGravityTimeline = [];
+    window.wordJellyGravityFrame = null;
+    let capturePending = false;
+    const descentPositions = new Set();
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const tracked = state.tiles?.filter(tile => stack.some(original => original.id === tile.id)) || [];
+      window.wordJellyGravityTimeline.push(tracked.map(tile => ({ id: tile.id, row: tile.row,
+        y: tile.rect[1], settled: tile.settled, falling: tile.falling, age: tile.age, time: performance.now() })));
+      const first = tracked.find(tile => tile.id === stack[0].id);
+      if (first?.falling && !first.settled && first.rect[1] > stack[0].rect[1] &&
+        first.rect[1] < stack[0].rect[1] + state.board_rect[3] / state.rows)
+        descentPositions.add(first.rect[1]);
+      if (!capturePending && descentPositions.size > 1) {
+        capturePending = true;
+        // Encoding a full device-resolution PNG synchronously can stall the short fall on WebKit.
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => { window.wordJellyGravityFrame = reader.result.split(',')[1]; };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
+    };
+    new MutationObserver(record).observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  }, stack);
+  await capture(page, info, 'word-jelly-supported-stack-before-collection');
+  await pressRect(page, completed.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.cleared_pairs === before.cleared_pairs + 1 && stack.every(original => {
+      const tile = state.tiles.find(tile => tile.id === original.id);
+      return tile?.settled && tile.row === original.row + 1;
+    });
+  }, { message: 'Removing the lower word lets every supported upper jelly settle one row lower' }).toBe(true);
+  const after = await jelly(page), bounds = await metrics(page);
+  for (const original of stack) {
+    const landed = after.tiles.find(tile => tile.id === original.id);
+    expect([landed.column, landed.row]).toEqual([original.column, original.row + 1]);
+    expect({ text: landed.text, mass: landed.mass, fragments: landed.fragments })
+      .toEqual({ text: original.text, mass: original.mass, fragments: original.fragments });
+    expect(landed.fragment_badges).toBe(original.fragments);
+    expect(landed.rect[1]).toBeGreaterThan(original.rect[1]);
+    expectSupportedChild(after, landed);
+    expectInside(landed.rect, bounds);
+  }
+  for (const grounded of before.tiles.filter(tile => tile.id !== completed.id && tile.row + tile.height === before.rows)) {
+    const unchanged = after.tiles.find(tile => tile.id === grounded.id);
+    expect([unchanged.column, unchanged.row], 'Gravity leaves an already grounded neighbor in place')
+      .toEqual([grounded.column, grounded.row]);
+  }
+  const timeline = await page.evaluate(() => window.wordJellyGravityTimeline);
+  await info.attach('word-jelly-gravity-timeline.json', { body: JSON.stringify(timeline, null, 2), contentType: 'application/json' });
+  const original = stack[0], landed = after.tiles.find(tile => tile.id === original.id);
+  const descent = timeline.flat().filter(tile => tile.id === original.id && !tile.settled &&
+    tile.y > original.rect[1] && tile.y < landed.rect[1]);
+  expect(new Set(descent.map(tile => tile.y)).size, 'Collection gravity has multiple visible descent positions').toBeGreaterThan(1);
+  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyGravityFrame)),
+    { message: 'The asynchronous intermediate-frame capture finishes without stalling the descent' }).toBe(true);
+  const frame = await page.evaluate(() => window.wordJellyGravityFrame);
+  fs.writeFileSync(info.outputPath('word-jelly-stack-falling-midpoint.png'), Buffer.from(frame, 'base64'));
+  await capture(page, info, 'word-jelly-stack-landed-after-collection');
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.mass * 50);
+  expect(after.collected_coins).toBe(before.collected_coins + completed.mass * 50);
+  expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
+  expect(errors).toEqual([]);
+});
+
+test('word pair colors distinguish exact completion targets and preserve source order', async ({ page }, info) => {
+  const errors = await startWordJelly(page), opening = await jelly(page);
+  const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
+  const roots = opening.tiles.filter(tile => tile.mass === 1 && tile.settled && tile.visible);
+  const pair = roots.flatMap(source => roots.map(target => ({ source, target }))).find(({ source, target }) =>
+    source.id !== target.id && source.palette_index === target.palette_index &&
+    words.has(normalize(source.text + target.text)) && !words.has(normalize(target.text + source.text)));
+  expect(pair, 'The real board provides a shared-color word pair with an unambiguous spelling order').toBeTruthy();
+  for (const tile of roots) {
+    expect(tile.palette_index).toBeGreaterThanOrEqual(0);
+    expect(tile.palette_hue).toBeGreaterThanOrEqual(0);
+    for (const other of roots.filter(other => other.id > tile.id && other.palette_index === tile.palette_index))
+      expect(words.has(normalize(tile.text + other.text)) || words.has(normalize(other.text + tile.text)),
+        'An unrelated pair cannot share a resting hint color').toBe(true);
+  }
+  for (const slot of opening.preview.slots.filter(slot => slot.visible)) {
+    expect(slot.palette_index, 'Upcoming roots render an assigned word-pair color').toBeGreaterThanOrEqual(0);
+    expect(slot.palette_hue).toBeGreaterThanOrEqual(0);
+  }
+  await capture(page, info, 'word-jelly-distinct-word-pair-colors');
+  const bounds = await metrics(page), point = center(pair.source.rect, bounds);
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await jelly(page)).drag.source).toBe(pair.source.id);
+    const selected = await jelly(page), source = selected.tiles.find(tile => tile.id === pair.source.id);
+    const validTargets = selected.tiles.filter(tile => tile.id !== source.id && words.has(normalize(source.text + tile.text)));
+    expect(validTargets.length).toBeGreaterThan(0);
+    for (const target of validTargets) {
+      expect(target.palette_index).toBe(source.palette_index);
+      expect(target.palette_hue).toBeCloseTo(source.palette_hue, 5);
+    }
+    for (const target of selected.tiles.filter(tile => tile.id !== source.id && !words.has(normalize(source.text + tile.text))))
+      expect(target.palette_index, 'Every invalid ordered target differs from the held source').not.toBe(source.palette_index);
+    await capture(page, info, 'word-jelly-compatible-target-colors');
+  } finally {
+    await page.mouse.up();
+  }
+  const reverse = center(pair.target.rect, bounds);
+  await page.mouse.move(reverse.x, reverse.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await jelly(page)).drag.source).toBe(pair.target.id);
+    const selected = await jelly(page);
+    expect(selected.tiles.find(tile => tile.id === pair.source.id).palette_index,
+      'Selecting the suffix does not falsely advertise the reversed word as a completion')
+      .not.toBe(selected.tiles.find(tile => tile.id === pair.target.id).palette_index);
+  } finally {
+    await page.mouse.up();
+  }
+  const completed = await merge(page, pair.source.id, pair.target.id);
+  expect(words.has(normalize(completed.text))).toBe(true);
+  expect(completed.picture_visible).toBe(true);
+  expect(completed.palette_index).toBeGreaterThanOrEqual(0);
+  await capture(page, info, 'word-jelly-color-guided-completed-word');
+  expect(errors).toEqual([]);
+});
+
 test('six columns build a pictured word and a deliberate tap credits its coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   expect(opening.tiles).toHaveLength(12);

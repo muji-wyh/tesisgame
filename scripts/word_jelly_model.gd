@@ -65,6 +65,8 @@ var _collection_event_ids: Dictionary = {}
 var _merge_history: Dictionary = {}
 var _generation: int = 0
 var _growth_pending: bool = false
+var _gravity_pending: bool = false
+var _held_tile_id: int = -1
 var _rng := RandomNumberGenerator.new()
 
 
@@ -97,6 +99,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_next_tile_id = 1
 	_next_event_id = 1
 	_growth_pending = false
+	_gravity_pending = false
+	_held_tile_id = -1
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
@@ -234,9 +238,12 @@ func step(delta: float) -> void:
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
+		_resume_pending_motion()
 		var consumed: float = remaining
 		if _growth_pending and _settling_remaining() > EPSILON:
 			consumed = minf(consumed, _settling_remaining())
+		if _gravity_pending and _next_settlement() > EPSILON:
+			consumed = minf(consumed, _next_settlement())
 		for active in fusions:
 			var boundary: float = float(active.duration)
 			if str(active.operation) == "collect" and not bool(active.popped):
@@ -275,8 +282,7 @@ func step(delta: float) -> void:
 				_complete_operation(str(active.attempt_id))
 		if not _can_continue(generation):
 			break
-		if _growth_pending and _settling_remaining() <= EPSILON:
-			_restore_growth()
+		_resume_pending_motion()
 		if not _has_free_cell():
 			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 				full_elapsed = 0.0
@@ -300,7 +306,18 @@ func step(delta: float) -> void:
 func set_paused(value: bool) -> void:
 	if paused != value:
 		paused = value
+		if not paused:
+			_resume_pending_motion()
 		changed.emit()
+
+
+func set_held_tile(tile_id: int = -1) -> void:
+	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
+	if _held_tile_id == held_id:
+		return
+	_held_tile_id = held_id
+	_resume_pending_motion()
+	changed.emit()
 
 
 func can_drop_now() -> bool:
@@ -428,7 +445,7 @@ func _new_tile(text: String, mass: int, fragments: int) -> Dictionary:
 		"fragments": fragments, "chest": fragments > 0,
 		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "root",
 		"column": 0, "row": ROWS - size.y, "width": size.x, "height": size.y,
-		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "falling_rows": 0
+		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "falling": false, "falling_rows": 0
 	}
 	_next_tile_id += 1
 	return tile
@@ -528,8 +545,11 @@ func _complete_merge(completed: Dictionary) -> void:
 	result.age = 0.0
 	result.settling = true
 	result.arrival = false
+	result.falling = false
 	result.falling_rows = 0
 	cells.append(result)
+	if _held_tile_id in [int(a.id), int(b.id)]:
+		_held_tile_id = -1
 	# Keep ancestry outside public tile snapshots, so repeated merges do not
 	# recursively duplicate the entire tree on every frame or animation event.
 	_merge_history[int(result.id)] = [completed.a.duplicate(true), completed.b.duplicate(true)]
@@ -558,8 +578,11 @@ func _complete_split(completed: Dictionary) -> void:
 		restored.age = 0.0
 		restored.settling = true
 		restored.arrival = false
+		restored.falling = false
 		restored.falling_rows = 0
 		cells.append(restored)
+	if _held_tile_id == parent_id:
+		_held_tile_id = -1
 	_merge_history.erase(parent_id)
 	_collection_event_ids.erase(parent_id)
 	# Wrapped parents may release padding cells. Reconsider compressed neighbors
@@ -589,8 +612,13 @@ func _complete_collection(completed: Dictionary) -> void:
 	if index < 0:
 		return
 	cells.remove_at(index)
+	if _held_tile_id == int(completed.a_id):
+		_held_tile_id = -1
 	_discard_history(int(completed.a_id))
 	_restore_growth()
+	# Wait until all operations at this timestamp finish before moving the stack.
+	# Failed payments leave their body in place and never initiate gravity.
+	_gravity_pending = true
 	var coins: int = int(completed.coins)
 	var awarded: int = int(completed.fragments)
 	cleared_pairs += 1
@@ -626,8 +654,8 @@ func _complete_collection(completed: Dictionary) -> void:
 
 
 func _restore_growth(excluded_id: int = -1) -> void:
-	# Removing a body leaves a hole, not a collapsing stack. Only compressed
-	# bodies may expand into newly available space; every other anchor stays put.
+	# Growth can reuse nearby space without moving ordinary neighbors. A
+	# successful collection separately schedules vertical stack settlement.
 	_growth_pending = false
 	for tile in cells:
 		var extent: Vector2i = _preferred_size(int(tile.mass))
@@ -635,7 +663,7 @@ func _restore_growth(excluded_id: int = -1) -> void:
 			continue
 		if is_fusing(int(tile.id)):
 			continue
-		if int(tile.id) == excluded_id or not is_settled(tile):
+		if int(tile.id) == excluded_id or int(tile.id) == _held_tile_id or not is_settled(tile):
 			# Another collection may free space during this body's final wobble.
 			_growth_pending = true
 			continue
@@ -649,7 +677,50 @@ func _restore_growth(excluded_id: int = -1) -> void:
 		tile.age = 0.0
 		tile.settling = true
 		tile.arrival = false
+		tile.falling = false
 		tile.falling_rows = 0
+
+
+func _resume_pending_motion() -> void:
+	if phase != "playing" or paused:
+		return
+	if _growth_pending and _settling_remaining() <= EPSILON:
+		_restore_growth()
+	if _gravity_pending:
+		_settle_collected_stack()
+
+
+func _settle_collected_stack() -> void:
+	_gravity_pending = false
+	var ordered: Array[Dictionary] = cells.duplicate()
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var bottom_a: int = int(a.row) + int(a.height)
+		var bottom_b: int = int(b.row) + int(b.height)
+		if bottom_a != bottom_b:
+			return bottom_a > bottom_b
+		if a.column != b.column:
+			return int(a.column) < int(b.column)
+		return int(a.id) < int(b.id))
+	for tile: Dictionary in ordered:
+		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or not is_settled(tile):
+			# Keep frozen fusion endpoints and held anchors intact. A later
+			# operation or settlement boundary retries the collection's gravity.
+			_gravity_pending = true
+			continue
+		var occupied: Dictionary = _occupied([int(tile.id)])
+		var row: int = int(tile.row)
+		while row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
+			row += 1
+		if row == int(tile.row):
+			continue
+		tile.falling_rows = row - int(tile.row)
+		tile.row = row
+		tile.age = 0.0
+		tile.settling = true
+		tile.arrival = false
+		tile.falling = true
+		_gravity_pending = true
+		_growth_pending = true
 
 
 func _occupied(excluded_ids: Array[int] = []) -> Dictionary:
@@ -713,6 +784,7 @@ func _split_placements(parent: Dictionary) -> Array[Dictionary]:
 			child.age = 0.0
 			child.settling = true
 			child.arrival = false
+			child.falling = false
 			child.falling_rows = 0
 			results.append(child)
 		return results
@@ -812,6 +884,15 @@ func _settling_remaining() -> float:
 	for tile in cells:
 		remaining = maxf(remaining, SETTLE_SECONDS - float(tile.age))
 	return maxf(0.0, remaining)
+
+
+func _next_settlement() -> float:
+	var boundary: float = INF
+	for tile: Dictionary in cells:
+		var remaining: float = SETTLE_SECONDS - float(tile.age)
+		if remaining > EPSILON:
+			boundary = minf(boundary, remaining)
+	return 0.0 if is_inf(boundary) else boundary
 
 
 func _index_for_id(tile_id: int) -> int:
