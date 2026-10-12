@@ -2599,7 +2599,7 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_layout_game_heading()
 	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted if audio != null else false, reduced_motion)
-	_mode_panel.set_growth_age(growth.age)
+	_mode_panel.configure_growth(growth.snapshot())
 	_mode_panel.coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	_mode_panel.set_home_coins(coin_wallet.balance)
 	_layout_mode_menu()
@@ -4533,7 +4533,8 @@ func _refresh_growth() -> void:
 	if not is_instance_valid(_growth_button):
 		return
 	var state: Dictionary = growth.snapshot()
-	for mascot in [duck, _phrase.pip, _round_celebration.pip, _mode_panel.pip]:
+	_mode_panel.configure_growth(state)
+	for mascot in [duck, _phrase.pip, _round_celebration.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)

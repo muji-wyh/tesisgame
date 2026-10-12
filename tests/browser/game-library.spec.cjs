@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const { MODES, THEME_NAMES, openGame, openModeMenu, chooseMode, chooseTheme, metrics, tap, enterGame, rendered,
   visibleColorCount, libraryControl, activateLibraryControl, openRewards,
-  activateGrowthControl, growthView, matchWords } = require('./game-ui.cjs');
+  activateGrowthControl, growthView, matchWords, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
 
 async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   const errors = [];
@@ -28,6 +28,47 @@ async function captureHome(page, testInfo, name) {
 }
 
 const jellyState = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+
+test('Home grows alongside Pip when a word is mastered and after reloading', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
+  const cohort = require('../../words.json').filter(word => word.min_age === 3);
+  await page.addInitScript(streaks => {
+    if (sessionStorage.getItem('home-growth-seeded')) return;
+    localStorage.setItem('growWithPip.growth.v1', `[growth]\nversion=3\nlevel=0\nage=0\nstreaks=${JSON.stringify(streaks)}\nmastered_words=[]\nreceipts=[]\n`);
+    sessionStorage.setItem('home-growth-seeded', 'true');
+  }, Object.fromEntries(cohort.map(word => [word.id, 2])));
+  const errors = await openHome(page);
+  const initial = (await metrics(page)).library;
+  expect(initial.hero.ready).toBe(true);
+  expect(initial.hero.mastered).toBe(0);
+  expect(initial.hero.total).toBe(cohort.length);
+  expect(initial.hero.progress).toBe(0);
+  expect(initial.hero.next_age).toBe(3);
+  expect(initial.pip_age).toBe(0);
+  await captureHome(page, testInfo, 'home-grow-together');
+
+  await chooseMode(page, 'match');
+  const cards = await discoverMatchCards(page);
+  for (const card of cards.filter(card => card.word === cards[0].word)) {
+    const point = boardPoint(await metrics(page), card.index);
+    await tap(page, point.x, point.y);
+  }
+  await expect.poll(() => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot).mastered)).toBe(1);
+  await openModeMenu(page);
+  const earned = (await metrics(page)).library;
+  expect(earned.hero.mastered).toBe(1);
+  expect(earned.hero.progress).toBeCloseTo(1 / cohort.length, 5);
+  expect(earned.pip_age, 'One mastered word advances the journey without prematurely changing Pip').toBe(0);
+  expect(earned.hero.next_age).toBe(3);
+
+  await page.reload();
+  await enterGame(page, { home: true });
+  const restored = (await metrics(page)).library;
+  expect(restored.hero.mastered).toBe(1);
+  expect(restored.hero.progress).toBeCloseTo(earned.hero.progress, 5);
+  expect(restored.hero.next_age).toBe(3);
+  expect(errors).toEqual([]);
+});
 
 async function swipeHome(page, testInfo) {
   const bounds = await metrics(page), home = bounds.library;

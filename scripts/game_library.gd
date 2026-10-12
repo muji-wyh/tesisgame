@@ -1,5 +1,5 @@
 extends PanelContainer
-## The game's home: a quiet companion and six clear places to play.
+## Grow alongside Pip, then choose one of six places to practise.
 
 signal mode_requested(id: String)
 signal sound_toggled
@@ -37,6 +37,15 @@ var _brand: Label
 var _body: VBoxContainer
 var _hero: Control
 var _intro: Label
+var _pip_caption: Label
+var _journey: Panel
+var _journey_heading: Label
+var _journey_count: Label
+var _journey_bar: ProgressBar
+var _next_pip: TextureRect
+var _next_label: Label
+var _growth: Dictionary = {}
+var _next_age: int = -1
 var _footer: HBoxContainer
 var _credit: Label
 var _theme_choices: VBoxContainer
@@ -87,19 +96,24 @@ func _init() -> void:
 	pip.name = "HomePip"
 	pip.pressed.connect(func() -> void: pip.perform_growth_action())
 	_hero.add_child(pip)
-	heading = Style.label("Let's play!", 38)
+	_pip_caption = Style.label("Your Pip", 12)
+	_pip_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pip_caption.add_theme_color_override("font_color", Style.MUTED)
+	_hero.add_child(_pip_caption)
+	heading = Style.label("Let's grow\ntogether.", 42)
 	_hero.add_child(heading)
-	_intro = Style.label("Pick a game and grow with Pip.", 15)
+	_intro = Style.label("Every new word helps Pip grow.", 15)
 	_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_intro.add_theme_color_override("font_color", Style.MUTED)
 	_hero.add_child(_intro)
-	_build_theme_choices()
+	_build_growth_journey()
 	grid = GridContainer.new()
 	grid.name = "ModeOptions"
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_body.add_child(grid)
 	for entry: Dictionary in CATALOG:
 		_add_game_card(entry)
+	_build_theme_choices()
 	_footer = HBoxContainer.new()
 	_body.add_child(_footer)
 	collection_button = Button.new()
@@ -120,6 +134,76 @@ func _init() -> void:
 	_credit.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_credit)
 	visibility_changed.connect(_sync_pip_visibility)
+
+
+func _build_growth_journey() -> void:
+	_journey = Panel.new()
+	_journey.name = "HomeGrowthJourney"
+	_journey.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hero.add_child(_journey)
+	_journey_heading = Style.label("Pip's next chapter", 15)
+	_journey.add_child(_journey_heading)
+	_journey_count = Style.label("", 13)
+	_journey_count.add_theme_color_override("font_color", Style.MUTED)
+	_journey.add_child(_journey_count)
+	_journey_bar = ProgressBar.new()
+	_journey_bar.name = "HomeGrowthProgress"
+	_journey_bar.show_percentage = false
+	_journey_bar.step = 0.0
+	_journey_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_journey.add_child(_journey_bar)
+	var gradient := Gradient.new()
+	gradient.colors = PackedColorArray([Color("#ee887c"), Color("#efb354"), Color("#e7cd60"),
+		Color("#7ebd8f"), Color("#69b9cf"), Color("#9b91cf")])
+	gradient.offsets = PackedFloat32Array([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.width = 256
+	texture.height = 12
+	texture.fill_from = Vector2.ZERO
+	texture.fill_to = Vector2.RIGHT
+	var fill := StyleBoxTexture.new()
+	fill.texture = texture
+	fill.set_content_margin_all(0)
+	_journey_bar.add_theme_stylebox_override("fill", fill)
+	_next_pip = TextureRect.new()
+	_next_pip.name = "NextPip"
+	_next_pip.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_next_pip.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_next_pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_journey.add_child(_next_pip)
+	_next_label = Style.label("Next", 11)
+	_next_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_next_label.add_theme_color_override("font_color", Style.MUTED)
+	_journey.add_child(_next_label)
+	configure_growth({})
+
+
+func configure_growth(state: Dictionary) -> void:
+	_growth = state
+	set_growth_age(int(state.get("age", 0)))
+	var ready: bool = state.get("ready", false)
+	var completed: bool = state.get("completed", false)
+	var next_age: int = int(state.get("learning_age", 3)) if ready and not completed else -1
+	if next_age != _next_age:
+		_next_age = next_age
+		_next_pip.texture = _portrait(load("res://assets/images/mascots/growth/pip-lv%d.png" % next_age)) if next_age >= 3 else null
+	_next_pip.visible = next_age >= 3
+	_next_label.visible = _next_pip.visible
+	_journey_bar.visible = ready
+	_journey_bar.value = (1.0 if completed else float(state.get("progress", 0.0))) * 100.0 if ready else 0.0
+	if not ready:
+		_journey_heading.text = "Our learning journey"
+		_journey_count.text = "Progress is unavailable."
+	elif completed:
+		_journey_heading.text = "Look how far we've grown!"
+		_journey_count.text = "%d words learned together" % int(state.get("lifetime_mastered", 0))
+	else:
+		_journey_heading.text = "Pip's next chapter"
+		_journey_count.text = "%d / %d words mastered" % [state.get("mastered", 0), state.get("total", 0)]
+	_journey_bar.set("accessibility_name", _journey_count.text + (". Help Pip reach the next growth stage." if next_age >= 3 else "."))
+	_next_pip.set("accessibility_name", "Pip's next growth stage, age %d" % next_age if next_age >= 3 else "")
+	_layout_hero()
 
 
 func _build_theme_choices() -> void:
@@ -316,7 +400,6 @@ func fit(available: Vector2, factor: float) -> void:
 	scroll.position = Vector2(content_x, scroll_top)
 	scroll.size = Vector2(content_width, maxf(1.0, available.y - scroll_top - edge))
 	_body.add_theme_constant_override("separation", ceili((12.0 if not wide else 16.0) / _factor))
-	_hero.custom_minimum_size = Vector2(0, (76.0 if short else 112.0 if wide else 104.0) / _factor)
 	_style_theme_choices()
 	grid.columns = 3 if wide else 2
 	grid.add_theme_constant_override("h_separation", ceili((14.0 if wide else 10.0) / _factor))
@@ -371,23 +454,54 @@ func _layout_hero() -> void:
 		return
 	var wide: bool = _available.x * _factor >= 800
 	var short: bool = _available.y * _factor < 540
-	var art_side: float = (76.0 if short else 112.0 if wide else 104.0) / _factor
-	var gap: float = (22.0 if wide else 10.0) / _factor
-	var group_width: float = minf(_hero.size.x, (640.0 if wide else 430.0) / _factor)
+	var art_side: float = ((112.0 if short else 184.0) if wide else (100.0 if short else 120.0)) / _factor
+	var gap: float = (28.0 if wide else 12.0) / _factor
+	var group_width: float = minf(_hero.size.x, (840.0 if wide else 460.0) / _factor)
 	var left: float = (_hero.size.x - group_width) * 0.5
-	pip.position = Vector2(left, 0)
+	var text_x: float = left + art_side + gap
+	var text_width: float = maxf(1.0, group_width - art_side - gap)
+	heading.add_theme_font_size_override("font_size", ceili((28.0 if short or not wide else 42.0) / _factor))
+	var title_height: float = heading.get_minimum_size().y
+	heading.position = Vector2(text_x, 0)
+	heading.size = Vector2(text_width, title_height)
+	_intro.add_theme_font_size_override("font_size", ceili((13.0 if short or not wide else 15.0) / _factor))
+	_intro.position = Vector2(text_x, title_height + 4.0 / _factor)
+	_intro.size = Vector2(text_width, (24.0 if wide else 42.0) / _factor)
+	var journey_height: float = (84.0 if short else 88.0) / _factor
+	var intro_end: float = _intro.position.y + _intro.size.y
+	var journey_y: float = (intro_end if wide else maxf(intro_end, art_side + 20.0 / _factor)) + 12.0 / _factor
+	var hero_height: float = maxf(journey_y + journey_height, art_side + 20.0 / _factor)
+	_hero.custom_minimum_size = Vector2(0, hero_height)
+	pip.position = Vector2(left, maxf(0, (hero_height - art_side - 20.0 / _factor) * 0.5) if wide else 0)
 	pip.custom_minimum_size = Vector2.ZERO
 	pip.size = Vector2.ONE * art_side
-	var text_x: float = left + art_side + gap
-	var text_width: float = maxf(1.0, _hero.size.x - text_x)
-	var title_height: float = (36.0 if short else 48.0) / _factor
-	var text_top: float = (art_side - title_height - 36.0 / _factor) * 0.5
-	heading.position = Vector2(text_x, maxf(0.0, text_top))
-	heading.size = Vector2(text_width, title_height)
-	heading.add_theme_font_size_override("font_size", ceili((28.0 if short or not wide else 38.0) / _factor))
-	_intro.position = Vector2(text_x, heading.position.y + title_height)
-	_intro.size = Vector2(text_width, 36.0 / _factor)
-	_intro.add_theme_font_size_override("font_size", ceili((12.0 if short else 14.0) / _factor))
+	_pip_caption.position = pip.position + Vector2(0, art_side - 2.0 / _factor)
+	_pip_caption.size = Vector2(art_side, 20.0 / _factor)
+	_pip_caption.add_theme_font_size_override("font_size", ceili(12.0 / _factor))
+	_journey.position = Vector2(text_x if wide else left, journey_y)
+	_journey.size = Vector2(text_width if wide else group_width, journey_height)
+	var surface := Style.box(Color("#fffdf6"), Color("#e3e5d5"), ceili(16.0 / _factor), maxi(1, roundi(1.0 / _factor)))
+	surface.set_content_margin_all(0)
+	_journey.add_theme_stylebox_override("panel", surface)
+	var pad: float = 14.0 / _factor
+	var portrait_side: float = 64.0 / _factor
+	var copy_width: float = _journey.size.x - pad * 2.0 - (portrait_side + 12.0 / _factor if _next_pip.visible else 0.0)
+	_journey_heading.position = Vector2(pad, 9.0 / _factor)
+	_journey_heading.size = Vector2(copy_width, 22.0 / _factor)
+	_journey_heading.add_theme_font_size_override("font_size", ceili(15.0 / _factor))
+	_journey_count.position = Vector2(pad, 31.0 / _factor)
+	_journey_count.size = Vector2(copy_width, 20.0 / _factor)
+	_journey_count.add_theme_font_size_override("font_size", ceili(13.0 / _factor))
+	_journey_bar.position = Vector2(pad, 61.0 / _factor)
+	_journey_bar.size = Vector2(copy_width, 10.0 / _factor)
+	var track := Style.box(Color("#e7e9db"), Color.TRANSPARENT, ceili(5.0 / _factor), 0)
+	track.set_content_margin_all(0)
+	_journey_bar.add_theme_stylebox_override("background", track)
+	_next_pip.position = Vector2(_journey.size.x - pad - portrait_side, 3.0 / _factor)
+	_next_pip.size = Vector2.ONE * portrait_side
+	_next_label.position = _next_pip.position + Vector2(0, portrait_side - 1.0 / _factor)
+	_next_label.size = Vector2(portrait_side, 18.0 / _factor)
+	_next_label.add_theme_font_size_override("font_size", ceili(11.0 / _factor))
 
 
 func _layout_tile(tile: Dictionary) -> void:
@@ -423,6 +537,12 @@ func snapshot() -> Dictionary:
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
 	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls,
+		"hero": {"title": heading.text, "intro": _intro.text, "ready": _growth.get("ready", false),
+			"completed": _growth.get("completed", false), "mastered": _growth.get("mastered", 0), "total": _growth.get("total", 0),
+			"progress": _journey_bar.value / 100.0, "next_age": _next_age, "rect": _rect_values(_hero.get_global_rect()),
+			"pip_rect": _rect_values(pip.get_global_rect()), "title_rect": _rect_values(heading.get_global_rect()),
+			"intro_rect": _rect_values(_intro.get_global_rect()), "journey_rect": _rect_values(_journey.get_global_rect()),
+			"next_pip_rect": _rect_values(_next_pip.get_global_rect())},
 		"theme_id": _theme_id, "theme_save_failed": _theme_save_notice.visible,
 		"rect": _rect_values(get_global_rect()), "scroll_rect": _rect_values(viewport), "viewport_rect": _rect_values(viewport),
 		"scroll_offset": scroll.scroll_vertical, "scrollable": scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page,

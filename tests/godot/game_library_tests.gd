@@ -20,6 +20,58 @@ func settle() -> void:
 	for frame in range(5):
 		await process_frame
 
+func check_label_fits(label: Label, context: String) -> void:
+	check(label.get_minimum_size().y <= label.size.y + 1.0,
+		context + ": all text lines fit vertically")
+	if label.autowrap_mode == TextServer.AUTOWRAP_OFF:
+		var font: Font = label.get_theme_font("font")
+		var font_size: int = label.get_theme_font_size("font_size")
+		for line: String in label.text.split("\n"):
+			check(font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x + 1.0,
+				context + ": each text line fits horizontally")
+
+func check_growth_states(library: Library) -> void:
+	var baby := {"ready": true, "completed": false, "age": 0, "learning_age": 3,
+		"mastered": 0, "total": 60, "progress": 0.0, "lifetime_mastered": 0}
+	library.configure_growth(baby)
+	check(library.pip.growth_age == 0 and library.snapshot().hero.next_age == 3,
+		"A new learner sees Baby Pip and the first earned appearance ahead")
+	check(library._next_pip.visible and library._journey_bar.visible
+		and is_zero_approx(library._journey_bar.value),
+		"A new learner starts with an empty growth track and a visible destination")
+	var growing := {"ready": true, "completed": false, "age": 6, "learning_age": 7,
+		"mastered": 12, "total": 70, "progress": 12.0 / 70.0,
+		"level_progress": 0.95, "lifetime_mastered": 165}
+	library.configure_growth(growing)
+	check(library.pip.growth_age == 6 and library.snapshot().hero.next_age == 7,
+		"The growth journey pairs the earned Pip with the current learning destination")
+	check(absf(library._journey_bar.value - 1200.0 / 70.0) <= 0.01,
+		"The journey uses age mastery rather than independent experience-level progress")
+	check(library._journey_count.text.contains("12") and library._journey_count.text.contains("70"),
+		"The visible growth count reflects the current vocabulary cohort")
+	var next_texture := library._next_pip.texture as AtlasTexture
+	check(next_texture != null and next_texture.atlas.resource_path.ends_with("pip-lv7.png"),
+		"The destination preview uses the actual next Pip appearance")
+	var completed := {"ready": true, "completed": true, "age": 12, "learning_age": 12,
+		"mastered": 180, "total": 200, "progress": 0.9, "lifetime_mastered": 1550}
+	library.configure_growth(completed)
+	check(library.pip.growth_age == 12 and library.snapshot().hero.next_age == -1
+		and not library._next_pip.visible and not library._next_label.visible,
+		"A completed journey never promises an unavailable next age")
+	check(is_equal_approx(library._journey_bar.value, 100.0)
+		and library._journey_count.text.contains("1550"),
+		"Completion celebrates permanent growth and lifetime learning after a later missed word")
+	library.configure_growth({"ready": false, "completed": false, "age": 0})
+	check(not library._journey_bar.visible and not library._next_pip.visible
+		and library.snapshot().hero.next_age == -1,
+		"Unavailable saved progress cannot claim an empty or completed growth target")
+	check(library._journey_count.text.to_lower().contains("unavailable"),
+		"Unavailable saved progress has a readable recovery state")
+	library.configure_growth(growing)
+	check(library._journey_bar.visible and library._next_pip.visible
+		and library._next_label.visible and library.snapshot().hero.ready,
+		"Recovered progress restores the real growth journey")
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var library := Library.new()
@@ -48,6 +100,7 @@ func _run() -> void:
 	library.set_growth_age(6)
 	library.set_home_coins(123)
 	check(library.pip.growth_age == 6, "Home uses the player's current Pip age")
+	check_growth_states(library)
 	library.collection_button.pressed.emit()
 	check(collection_visits == 1, "Home requests the collection once")
 	for dimensions: Vector2 in [Vector2(320, 320), Vector2(390, 420), Vector2(390, 600), Vector2(390, 844), Vector2(844, 390), Vector2(1280, 800)]:
@@ -60,6 +113,18 @@ func _run() -> void:
 		var bounds := Rect2(Vector2.ZERO, dimensions)
 		check(bounds.grow(1).encloses(library.get_global_rect()) and library.size.is_equal_approx(dimensions),
 			"%s: Home fills the viewport without overflowing" % dimensions)
+		var hero_bounds: Rect2 = library._hero.get_global_rect()
+		for child: Control in [library.pip, library.heading, library._intro, library._journey]:
+			check(hero_bounds.grow(1).encloses(child.get_global_rect()),
+				"%s: the growth hero contains %s" % [dimensions, child.name])
+		check(not library.pip.get_global_rect().intersects(library.heading.get_global_rect()),
+			"%s: the companion does not cover the growth headline" % dimensions)
+		check(not library.heading.get_global_rect().intersects(library._intro.get_global_rect()),
+			"%s: the growth headline and explanation have separate space" % dimensions)
+		check(not library._intro.get_global_rect().intersects(library._journey.get_global_rect()),
+			"%s: the growth explanation and progress have separate space" % dimensions)
+		for label: Label in [library.heading, library._intro, library._journey_heading, library._journey_count, library._next_label]:
+			check_label_fits(label, "%s: %s" % [dimensions, label.name])
 		for index in range(library.theme_buttons.size()):
 			var button: Button = library.theme_buttons[index]
 			button.grab_focus()
@@ -99,7 +164,7 @@ func _run() -> void:
 	root.size = Vector2i(640, 400)
 	library.fit(Vector2(640, 400), 2.0)
 	await settle()
-	check(library.pip.size.is_equal_approx(Vector2(56, 56))
+	check(library.pip.size.is_equal_approx(Vector2(92, 92))
 		and library.pip.get_global_rect().end.x < library.heading.get_global_rect().position.x,
 		"A scaled Home portrait keeps its authored CSS size and clear separation from the welcome text")
 	library.queue_free()

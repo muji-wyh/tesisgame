@@ -26,7 +26,13 @@ all its words are reachable without page controls, and nearby pictures load as
 the player scrolls. Future cohorts are clearly previews: browsing them cannot
 change the game's earned level or age.
 
-Home offers eight illustrated theme choices above the game cards, arranged in
+Home leads with a larger, age-specific Pip and a shared-growth welcome. Its
+journey shows the current vocabulary cohort's mastered words and the next Pip
+appearance, independently of mastery levels. Completing all growth stages turns
+the journey into a recap without promising another appearance. The six games
+follow this welcome; theme and sound choices remain secondary.
+
+Home offers eight illustrated theme choices below the game cards, arranged in
 one row on wide screens and two rows on phones. The selected theme is highlighted
 and saved automatically. Theme switching is available only on Home, including
 controller shoulder shortcuts. Select the current game to continue the same round
