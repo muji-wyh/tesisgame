@@ -1,6 +1,6 @@
 'use strict';
 
-// Catalog the sculpted Blender age models while preserving the approved voice repertoire.
+// Catalog the authored age artwork while preserving the approved voice repertoire.
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
@@ -132,6 +132,12 @@ const stages = [BABY_STAGE, ...STAGES].map(([age, id, name, action, actionLabel,
   const voiceId = `pip-growth-${age === 0 ? 'sprout' : id}`;
   if (!voiceIds.includes(voiceId)) voiceIds.push(voiceId);
   const model = JSON.parse(fs.readFileSync(path.join(ROOT, `build/pip-models/${age}/model.json`), 'utf8'));
+  const storybook = model.style === 'storybook';
+  if (storybook && (typeof model.artSource !== 'string' || !model.artSource.trim())) {
+    throw new Error(`Age ${age}: storybook artwork must identify its authoring source.`);
+  }
+  const artSource = storybook ? model.artSource : 'tools/pip-growth/render.py';
+  const frameOffsetY = Number.isFinite(model.frameOffsetY) ? model.frameOffsetY : 3;
   const stem = age === 0 ? 'pip-baby' : `pip-lv${age}`;
   const sheetPaths = {}, previewPaths = {};
   for (const [kind, suffix] of [['regular', ''], ['idle', '-idle'], ['parts', '-parts'], ['expressions', '-expressions'], ['expressionHeads', '-expression-heads']]) {
@@ -146,18 +152,25 @@ const stages = [BABY_STAGE, ...STAGES].map(([age, id, name, action, actionLabel,
   }
   return {
     age, label: age === 0 ? 'Baby' : age === 12 ? 'Age 12+' : `Age ${age}`, id, name, description: DESIGNS[age],
-    accent, background, compositionStatus: 'integrated-sculpted-age-model',
-    source: { model: 'tools/pip-growth/render.py', assembly: 'tools/pip-growth/assemble.py', form: model.form, frameOffsetY: 3, render: 'Blender 5.2 Cycles; transparent orthographic layers; 360 px cells' },
+    accent, background, compositionStatus: storybook ? 'integrated-storybook-age-artwork' : 'integrated-sculpted-age-model',
+    source: {
+      model: artSource, assembly: 'tools/pip-growth/assemble.py', form: model.form, frameOffsetY,
+      render: storybook ? model.render || 'Project-authored storybook vectors; transparent articulated layers; 360 px cells' : 'Blender 5.2 Cycles; transparent orthographic layers; 360 px cells'
+    },
     art: sheetPaths, previewArt: previewPaths,
-    motionPivots: model.motionPivots.map(([x, y]) => [x, y + 3]), shadowRadius: model.shadowRadius,
+    motionPivots: model.motionPivots.map(([x, y]) => [x, y + frameOffsetY]), shadowRadius: model.shadowRadius,
     actions: [...actions], newAction: { id: action, label: actionLabel },
     voices: [...voiceIds], newVoice: { id: voiceId, text, path: `assets/audio/pip-growth/${age === 0 ? 'sprout' : id}.mp3`, previewPath: `audio/${age === 0 ? 'sprout' : id}.mp3` }
   };
 });
+const storybookStages = stages.filter(stage => stage.compositionStatus === 'integrated-storybook-age-artwork');
+const allStorybook = storybookStages.length === stages.length;
+const mixedArtwork = storybookStages.length > 0 && !allStorybook;
 const catalog = {
-  schemaVersion: 3, title: 'Grow with Pip', status: 'Integrated sculpted age models with a local interactive review',
-  description: 'Eleven authored Blender duck models express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.',
-  artSource: 'tools/pip-growth/render.py',
+  schemaVersion: 3, title: 'Grow with Pip',
+  status: allStorybook ? 'Integrated storybook age artwork with a local interactive review' : mixedArtwork ? 'Integrated age artwork with a local interactive review' : 'Integrated sculpted age models with a local interactive review',
+  description: `${allStorybook ? 'Eleven storybook duck illustrations adapted from the original project Pip vectors' : mixedArtwork ? 'Eleven authored duck characters' : 'Eleven authored Blender duck models'} express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.`,
+  artSource: allStorybook ? stages[0].source.model : 'tools/pip-growth/render.py',
   designReference: 'assets/images/mascots/pip-dance-parts.svg',
   expressions: ['neutral', 'listening', 'thinking', 'delighted', 'proud', 'encourage', 'surprised', 'sleepy', 'wink', 'blink'],
   voice: { provider: 'Microsoft Edge TTS', clientVersion: '7.2.8', profile: PROFILE, postprocessing: 'none', autoplay: false, scope: 'Explicit preview playback or age-growth recognition; never gameplay guidance.' },

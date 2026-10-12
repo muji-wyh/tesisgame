@@ -12,7 +12,7 @@ const CATALOG := [
 	{"id": "match", "title": "Match", "copy": "Connect pictures\nand words.", "detail": "5 PAIRS", "art": "res://assets/images/ui/modes/cat.svg", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Turn a card.\nFind its friend.", "detail": "NO TIMER", "art": "res://assets/images/ui/modes/rainbow.svg", "tint": Color("#f2e9d8")},
 	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nWatch it pop!", "detail": "50 SECONDS · MIC", "art": "res://assets/images/ui/modes/rocket.svg", "tint": Color("#e3eef1")},
-	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen to Pip.\nBuild a little phrase.", "detail": "3 PHRASES · KEEP TRYING", "art": "res://assets/images/mascots/pip.svg", "tint": Color("#f5ebce")},
+	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen to Pip.\nBuild a little phrase.", "detail": "3 PHRASES · KEEP TRYING", "art": "res://assets/images/mascots/growth/pip-baby.png", "tint": Color("#f5ebce")},
 	{"id": "jelly", "title": "Jelly Match", "copy": "Drag a match.\nMake a little room!", "detail": "FALLING WORDS · TREASURE", "art": "res://assets/images/jelly-match/gel-mint.png", "tint": Color("#e1efea")},
 	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join little pieces.\nGrow a bigger word!", "detail": "BUILD WORDS · COLLECT COINS", "art": "res://assets/images/jelly-match/gel-lilac.png", "tint": Color("#eee5f4")}
 ]

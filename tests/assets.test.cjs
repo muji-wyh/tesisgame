@@ -54,7 +54,7 @@ test('Pip greetings preserve the three selected WAVs in the repository', () => {
   }
 });
 
-test('the duck mascot has four original reusable poses and is embedded for the web loader', () => {
+test('the original duck poses remain available and the web loader embeds the storybook mascot', () => {
   const filename = path.join(root, 'assets', 'images', 'mascots', 'pip.svg');
   assert.ok(fs.existsSync(filename), 'The original Pip sprite sheet is missing');
   const svg = fs.readFileSync(filename, 'utf8');
@@ -66,7 +66,9 @@ test('the duck mascot has four original reusable poses and is embedded for the w
   const { inlineMascot } = require('../tools/prepare-godot.cjs');
   assert.equal(typeof inlineMascot, 'function');
   const embedded = inlineMascot('url("$PIP_MASCOT_URI")');
-  assert.equal(embedded, `url("data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}")`);
+  const storybook = fs.readFileSync(path.join(root, 'assets/images/mascots/storybook/pip.svg'));
+  assert.match(storybook.toString(), /viewBox="0 0 480 120"/);
+  assert.equal(embedded, `url("data:image/svg+xml;base64,${storybook.toString('base64')}")`);
   const idle = fs.readFileSync(path.join(root, 'assets/images/mascots/pip-idle-actions.svg'), 'utf8');
   assert.match(idle, /viewBox="0 0 480 120"/);
   for (const pose of ['look-left', 'look-right', 'stretch', 'preen']) {
@@ -129,6 +131,10 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   ];
   const rewardImports = new Set(rewardTextures.map(texture => path.join(root, texture.path + '.import')));
   assert.equal(rewardImports.size, 3);
+  const pipCatalog = JSON.parse(fs.readFileSync(path.join(root, 'data/pip-growth-stages.json'), 'utf8'));
+  const pipImports = new Set(pipCatalog.stages.flatMap(stage => Object.values(stage.art)
+    .map(file => path.join(root, file + '.import'))));
+  assert.equal(pipImports.size, 55, 'Every growth age preserves all five lossless articulated atlases.');
   for (const filename of textureImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     // The fusion shader reads signed distances from alpha; lossy compression would distort its surface.
@@ -136,13 +142,13 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/fix_alpha_border=false$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
-    } else if (rewardImports.has(filename)) {
+    } else if (rewardImports.has(filename) || pipImports.has(filename)) {
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
     } else {
       assert.match(metadata, /^compress\/mode=1$/m, filename);
     }
-    assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
+    if (!pipImports.has(filename)) assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
     assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
   }

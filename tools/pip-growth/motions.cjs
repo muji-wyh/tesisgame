@@ -1,6 +1,6 @@
 'use strict';
 
-// Authored poses for the six existing Blender layers, in 120-unit atlas space.
+// Authored poses for Pip's six articulated artwork layers, in 120-unit atlas space.
 // Each beat has a physical purpose; holds repeat a pose instead of oscillating forever.
 const fs = require('node:fs');
 const path = require('node:path');

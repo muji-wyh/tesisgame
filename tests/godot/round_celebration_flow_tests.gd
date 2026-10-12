@@ -61,6 +61,9 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	# Keep the real main scene and superclass behavior; only the unavailable
 	# native microphone failure is injected at its existing boundary.
+	# Script replacement reruns member initializers before _ready can parent the
+	# first loader. Release that unused Node before replacing its only reference.
+	app.vocabulary_loader.free()
 	app.set_script(StopFailureApp)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"

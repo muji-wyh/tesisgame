@@ -46,15 +46,15 @@ test('every expression has both a clothed full pose and a matching clothed head 
   }
 });
 
-test('the loader embeds all eight costumes with complete articulated limbs and matching speech art', () => {
+test('the loader embeds all eight storybook costumes with complete articulated limbs and matching speech art', () => {
   const shell = inlineMascot(fs.readFileSync(path.join(root, 'web/shell.html'), 'utf8'));
-  assert.doesNotMatch(shell, /\$PIP_(?:MASCOT_URI|WARDROBE_JSON)/);
+  assert.doesNotMatch(shell, /\$PIP_(?:MASCOT_URI|WARDROBE_JSON|LOADING_ART)/);
   const wardrobe = JSON.parse(shell.match(/const pipWardrobe = (\{[^\r\n]+\});/)[1]);
   assert.deepEqual(Object.keys(wardrobe), THEMES);
   const heads = new Set(), bodies = new Set();
   for (const theme of THEMES) {
     const { sprite, parts } = wardrobe[theme];
-    const expected = fs.readFileSync(path.join(root, 'assets/images/mascots/outfits', `pip-${theme}.svg`));
+    const expected = fs.readFileSync(path.join(root, 'assets/images/mascots/storybook', `pip-${theme}.svg`));
     assert.deepEqual(Buffer.from(sprite.split(',')[1], 'base64'), expected);
     assert.deepEqual(Object.keys(parts), ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']);
     for (const markup of Object.values(parts)) {
@@ -65,10 +65,16 @@ test('the loader embeds all eight costumes with complete articulated limbs and m
         assert.ok(depth >= 0, 'No limb may close its parent dance group');
       }
       assert.equal(depth, 0, 'Nested limb transforms must remain balanced');
-      assert.doesNotMatch(markup, /translate\((?:120|240|360|480|600)\s/);
+      const definitions = new Set([...markup.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
+      for (const [, id] of markup.matchAll(/url\(#([^)]+)\)/g)) {
+        assert.ok(definitions.has(id), `Embedded material ${id} must stay inside its limb.`);
+      }
+      assert.doesNotMatch(markup, /translate\((?:240|360|480|600)\s/);
     }
     heads.add(parts.head); bodies.add(parts.body);
   }
   assert.equal(heads.size, 8);
   assert.equal(bodies.size, 8);
+  assert.equal((shell.match(/id="loading-pip-(?:body|head|left-wing|right-wing|left-foot|right-foot)"/g) || []).length, 6,
+    'The initial loading frame uses the same six storybook layers before scripts run.');
 });

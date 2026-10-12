@@ -13,7 +13,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Asset art direction](art-direction.md) | Required sourced artwork, inspection, license records, and honest integration status |
 | [Vocabulary and generated media](generated-media.md) | Vocabulary schema, recorded pronunciation, wardrobe generation, chest imports, and music sources |
 | [Ava speech](ava-voice.md) | Approved voice profile, all 1,888 word, phrase and prompt recordings, generation, and source hashes |
-| [Pip growth](pip-growth.md) | Ten appearances, cumulative actions and ten character voice recordings |
+| [Pip growth](pip-growth.md) | Eleven storybook appearances, age-specific actions and ten character voice recordings |
 | [Complete animated vocabulary library](word-library.md) | All 1,285 pictured words: eight articulated Blender clips, 1,277 illustration motions, source rights, reproduction and local review; 265 words remain context-only |
 | [Articulated teaching clips](lv3-motion-studies.md) | Eight cheerful action performances, Blender authoring, frame checks and the local comparison gallery |
 | [Growth vocabulary artwork](growth-vocabulary.md) | 35 new sourced pictures and contextual vocabulary without invented images |

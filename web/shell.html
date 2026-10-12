@@ -121,12 +121,12 @@
     #loading-duck:focus-visible { outline-offset: 0; }
     #loading-duck svg { display: block; width: 100%; height: 100%; pointer-events: none;
       transform: translateX(-16px); }
-    #loading-pip-body { transform-origin: 61px 98px; }
-    #loading-pip-head { transform-origin: 61px 72px; }
-    #loading-pip-left-wing { transform-origin: 33px 78px; }
-    #loading-pip-right-wing { transform-origin: 88px 78px; }
-    #loading-pip-left-foot { transform-origin: 40px 103px; }
-    #loading-pip-right-foot { transform-origin: 80px 103px; }
+    #loading-pip-body { transform-origin: 60px 104px; }
+    #loading-pip-head { transform-origin: 60px 69px; }
+    #loading-pip-left-wing { transform-origin: 41px 76px; }
+    #loading-pip-right-wing { transform-origin: 79px 76px; }
+    #loading-pip-left-foot { transform-origin: 48px 106px; }
+    #loading-pip-right-foot { transform-origin: 72px 106px; }
     #loading-duck .pip-shy-cheeks, #loading-duck .pip-bonk-stars { opacity: 0; }
     #loading-duck[data-pose="shy"] .pip-shy-cheeks { opacity: .8; }
     #loading-duck[data-pose="bonk"] .pip-bonk-stars { opacity: 1; }
@@ -468,28 +468,8 @@
               <button id="loading-duck" type="button" aria-label="Dance with Pip the duck" aria-describedby="loading-hint" data-activity="idle" data-pose="idle" data-queued="0">
                 <svg viewBox="-14 -40 148 168" aria-hidden="true">
                   <g stroke="#785D3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <ellipse cx="61" cy="114" rx="39" ry="5" fill="#65708A" opacity=".14" stroke="none"/>
-                    <g id="loading-pip-left-foot"><path d="M39 99Q24 104 24 110Q34 116 50 109L51 98" fill="#F3AE65"/></g>
-                    <g id="loading-pip-right-foot"><path d="M72 100L71 110Q87 117 99 111Q96 104 82 100" fill="#F3AE65"/></g>
-                    <g id="loading-pip-body">
-                      <path d="M32 69Q18 78 25 97Q33 111 61 110Q93 112 99 91Q104 71 86 65Z" fill="#F6D36E"/>
-                      <path d="M45 94Q59 100 75 95" fill="none" stroke="#FFEDA9" stroke-width="5"/>
-                    </g>
-                    <g id="loading-pip-head">
-                      <path d="M23 39Q21 12 54 13Q88 8 98 39Q106 65 88 79Q65 94 40 82Q18 74 23 39Z" fill="#FFE68E"/>
-                      <path d="M54 14Q43 4 52 4Q65 5 64 15M61 12Q69 4 72 9" fill="#FFE68E"/>
-                      <path d="M32 29Q38 26 44 29M72 27Q79 26 84 30" fill="none" stroke-width="2"/>
-                      <ellipse cx="42" cy="46" rx="12" ry="15" fill="#FFFEF4" stroke-width="2.5"/>
-                      <ellipse cx="77" cy="44" rx="11" ry="14" fill="#FFFEF4" stroke-width="2.5"/>
-                      <g fill="#4E473E" stroke="none"><circle cx="47" cy="49" r="3.5"/><circle cx="73" cy="47" r="3.3"/></g>
-                      <g fill="#FFF" stroke="none"><circle cx="48" cy="47" r="1"/><circle cx="74" cy="45" r="1"/></g>
-                      <g fill="#F3B39B" opacity=".65" stroke="none"><ellipse cx="31" cy="62" rx="7" ry="4"/><ellipse cx="91" cy="59" rx="7" ry="4"/></g>
-                      <path d="M39 63Q49 57 62 59Q77 55 87 62Q93 68 83 75Q62 82 40 73Q34 69 39 63Z" fill="#F5B06D"/>
-                      <path d="M40 68Q61 74 84 66" fill="none" stroke="#AD793E" stroke-width="2"/>
-                      <g fill="#B37C40" stroke="none"><circle cx="56" cy="63" r="1.3"/><circle cx="69" cy="62" r="1.3"/></g>
-                    </g>
-                    <g id="loading-pip-left-wing"><path d="M33 76Q15 71 12 85Q13 98 32 98Q40 88 33 76" fill="#FFDE7F"/></g>
-                    <g id="loading-pip-right-wing"><path d="M88 75Q106 72 109 85Q110 98 91 98Q82 88 88 75" fill="#FFDE7F"/></g>
+                    <ellipse cx="60" cy="114" rx="28" ry="4" fill="#65708A" opacity=".14" stroke="none"/>
+                    $PIP_LOADING_ART
                   </g>
                 </svg>
               </button>
@@ -665,7 +645,7 @@
         loadingDuck.dataset.theme = theme;
         for (const [part, element] of Object.entries(danceParts)) element.innerHTML = outfit.parts[part];
         danceParts.head.insertAdjacentHTML('beforeend',
-          '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="31" cy="62" rx="8" ry="5"/><ellipse cx="91" cy="59" rx="8" ry="5"/></g>' +
+          '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="40" cy="55" rx="5.5" ry="3.5"/><ellipse cx="80" cy="55" rx="5.5" ry="3.5"/></g>' +
           '<g class="pip-bonk-stars" fill="#FFD979" stroke="#B88535" stroke-width="1.5"><path d="m10 20 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/><path d="m109 12 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/></g>');
       }
       const themePicker = document.getElementById('loading-themes');
@@ -1143,10 +1123,10 @@
           head: `translate(${n(-follow * 1.8)}px, ${n(bend * 3 - bounce * 1.5)}px) rotate(${n(-follow * 4)}deg)`,
           'left-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(left * 108 - amount * 22 - follow * 3)}deg)`,
           'right-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(-right * 108 + amount * 22 - follow * 3)}deg)`,
-          // Rotate around each outside toe (24,110 / 99,111), never slide or
+          // Rotate around each outside toe (38,114 / 82,114), never slide or
           // lift the whole foot. Only the heel opposite the weight rises.
-          'left-foot': `translate(-16px, 7px) rotate(${n(-Math.max(hips, 0) * 5 - right * 2)}deg) translate(16px, -7px)`,
-          'right-foot': `translate(19px, 8px) rotate(${n(Math.max(-hips, 0) * 5 + left * 2)}deg) translate(-19px, -8px)`
+          'left-foot': `translate(-10px, 8px) rotate(${n(-Math.max(hips, 0) * 5 - right * 2)}deg) translate(10px, -8px)`,
+          'right-foot': `translate(10px, 8px) rotate(${n(Math.max(-hips, 0) * 5 + left * 2)}deg) translate(-10px, -8px)`
         };
       }
 

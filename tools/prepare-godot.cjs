@@ -18,7 +18,7 @@ function inlineMascot(html) {
     html = html.replaceAll('$VOCABULARY_LOADER_JS', () => loader.replaceAll('</script', '<\\/script'));
   }
   if (!html.includes('$PIP_MASCOT_URI')) throw new Error('The web shell is missing the Pip mascot placeholder.');
-  const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'mascots', 'pip.svg'));
+  const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'mascots', 'storybook', 'pip.svg'));
   html = html.replaceAll('$PIP_MASCOT_URI', `data:image/svg+xml;base64,${svg.toString('base64')}`);
   if (html.includes('$UI_CLICK_URI')) {
     const { bytes } = require('./ui-click-audio.cjs').readUiClickAudio(root);
@@ -34,15 +34,18 @@ function inlineMascot(html) {
       .map(filename => `data:audio/wav;base64,${fs.readFileSync(path.join(root, 'assets', 'audio', 'pip', filename)).toString('base64')}`);
     html = html.replaceAll('$PIP_SOUNDS_JSON', JSON.stringify(sounds));
   }
-  if (!html.includes('$PIP_WARDROBE_JSON')) return html;
+  if (!html.includes('$PIP_WARDROBE_JSON') && !html.includes('$PIP_LOADING_ART')) return html;
   const partNames = ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'];
   const outfits = Object.fromEntries(['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'].map(theme => {
-    const directory = path.join(root, 'assets/images/mascots/outfits');
+    const directory = path.join(root, 'assets/images/mascots/storybook');
     const sprite = fs.readFileSync(path.join(directory, `pip-${theme}.svg`));
     const parts = danceFrames(fs.readFileSync(path.join(directory, `pip-${theme}-parts.svg`), 'utf8'));
     return [theme, { sprite: `data:image/svg+xml;base64,${sprite.toString('base64')}`,
       parts: Object.fromEntries(partNames.map((name, index) => [name, parts[index]])) }];
   }));
+  const loadingArt = ['left-foot', 'right-foot', 'body', 'head', 'left-wing', 'right-wing']
+    .map(name => `<g id="loading-pip-${name}">${outfits.spring.parts[name]}</g>`).join('');
+  html = html.replaceAll('$PIP_LOADING_ART', () => loadingArt);
   return html.replaceAll('$PIP_WARDROBE_JSON', JSON.stringify(outfits).replaceAll('<', '\\u003c'));
 }
 

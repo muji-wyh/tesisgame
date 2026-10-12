@@ -1,4 +1,4 @@
-"""Assemble the reviewed Blender layers into the existing 120-unit mascot rig."""
+"""Assemble reviewed illustration layers into the existing 120-unit mascot rig."""
 import argparse
 import json
 from pathlib import Path
@@ -24,7 +24,7 @@ def contact(files, target):
     font = ImageFont.truetype(str(ROOT/'assets/fonts/Nunito-800.ttf'), 17)
     small = ImageFont.truetype(str(ROOT/'assets/fonts/Nunito-600.ttf'), 13)
     draw.text((30,22),'Pip grows up',font=ImageFont.truetype(str(ROOT/'assets/fonts/Nunito-800.ttf'),30),fill='#344e4b')
-    draw.text((30,62),'Blender character models / actual 44 px and 56 px header sizes',font=small,fill='#677672')
+    draw.text((30,62),'Storybook character artwork / actual 44 px and 56 px header sizes',font=small,fill='#677672')
     for index,(age,file) in enumerate(files):
         x, y = 24+(index%6)*234, 100+(index//6)*347
         draw.rounded_rectangle((x,y,x+220,y+332),radius=20,fill='#fffdf6',outline='#e4dfd1',width=1)

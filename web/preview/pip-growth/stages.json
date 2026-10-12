@@ -1,9 +1,9 @@
 {
   "schemaVersion": 3,
   "title": "Grow with Pip",
-  "status": "Integrated sculpted age models with a local interactive review",
-  "description": "Eleven authored Blender duck models express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.",
-  "artSource": "tools/pip-growth/render.py",
+  "status": "Integrated storybook age artwork with a local interactive review",
+  "description": "Eleven storybook duck illustrations adapted from the original project Pip vectors express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.",
+  "artSource": "tools/pip-growth/storybook.cjs",
   "designReference": "assets/images/mascots/pip-dance-parts.svg",
   "expressions": [
     "neutral",
@@ -39,20 +39,20 @@
       "description": "A cream duckling sitting in a broken eggshell, with a huge round face, downy curl and tiny feet.",
       "accent": "#b7824e",
       "background": "#fbefdc",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.32,
-          "cheekWidth": 0.71,
-          "headHeight": 1.3,
-          "shoulder": 1.22,
-          "hem": 0.23,
-          "torsoWidth": 0.52
+          "headWidth": 64,
+          "headHeight": 56,
+          "headCenter": 49,
+          "shoulder": 75,
+          "hem": 105,
+          "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-baby.png",
@@ -71,30 +71,30 @@
       "motionPivots": [
         [
           60,
-          101.66666666666666
+          106
         ],
         [
           60,
-          77
+          75
         ],
         [
-          47.52,
-          79.66666666666666
+          40,
+          81
         ],
         [
-          72.48,
-          79.66666666666666
+          80,
+          81
         ],
         [
-          52.666666666666664,
-          106
+          48,
+          108
         ],
         [
-          67.33333333333333,
-          106
+          72,
+          108
         ]
       ],
-      "shadowRadius": 25.8,
+      "shadowRadius": 29,
       "actions": [
         "wave"
       ],
@@ -120,20 +120,20 @@
       "description": "A wobbly toddler with a turquoise bib, soft play shorts, a double curl and close-set feet.",
       "accent": "#3c8771",
       "background": "#eaf3e7",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.4,
-          "cheekWidth": 0.68,
-          "headHeight": 1.24,
-          "shoulder": 1.31,
-          "hem": 0.26,
-          "torsoWidth": 0.52
+          "headWidth": 62,
+          "headHeight": 54,
+          "headCenter": 44,
+          "shoulder": 70,
+          "hem": 103,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv3.png",
@@ -152,30 +152,30 @@
       "motionPivots": [
         [
           60,
-          100.66666666666667
+          104
         ],
         [
           60,
-          72.33333333333334
+          69
         ],
         [
-          47.52,
-          76.66666666666666
+          41,
+          76
         ],
         [
-          72.48,
-          76.66666666666666
+          79,
+          76
         ],
         [
-          52.666666666666664,
-          105
+          48,
+          106
         ],
         [
-          67.33333333333333,
-          105
+          72,
+          106
         ]
       ],
-      "shadowRadius": 25.8,
+      "shadowRadius": 28,
       "actions": [
         "wave"
       ],
@@ -201,20 +201,20 @@
       "description": "A preschool helper in blue overalls and a broad sun visor, with short helping wings.",
       "accent": "#4d7954",
       "background": "#ecf2db",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.47,
-          "cheekWidth": 0.65,
-          "headHeight": 1.18,
-          "shoulder": 1.4,
-          "hem": 0.28,
-          "torsoWidth": 0.51
+          "headWidth": 59,
+          "headHeight": 52,
+          "headCenter": 42,
+          "shoulder": 67,
+          "hem": 101,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv4.png",
@@ -233,30 +233,30 @@
       "motionPivots": [
         [
           60,
-          100
+          102
         ],
         [
           60,
-          68
+          66
         ],
         [
-          47.760000000000005,
-          73.66666666666667
+          41,
+          73
         ],
         [
-          72.24,
-          73.66666666666667
+          79,
+          73
         ],
         [
-          51.666666666666664,
-          104.33333333333333
+          47,
+          104
         ],
         [
-          68.33333333333333,
-          104.33333333333333
+          73,
+          104
         ]
       ],
-      "shadowRadius": 25.4,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look"
@@ -284,20 +284,20 @@
       "description": "A playful kindergartener in a golden rain hood, roomy coat and tall green rain boots.",
       "accent": "#9c6c2d",
       "background": "#fbefcb",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.54,
-          "cheekWidth": 0.62,
-          "headHeight": 1.13,
-          "shoulder": 1.5,
-          "hem": 0.3,
-          "torsoWidth": 0.51
+          "headWidth": 57,
+          "headHeight": 51,
+          "headCenter": 41,
+          "shoulder": 66,
+          "hem": 100,
+          "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv5.png",
@@ -316,30 +316,30 @@
       "motionPivots": [
         [
           60,
-          99.33333333333334
+          101
         ],
         [
           60,
-          64
+          64.5
         ],
         [
-          47.760000000000005,
-          70.33333333333333
+          40,
+          72
         ],
         [
-          72.24,
-          70.33333333333333
+          80,
+          72
         ],
         [
-          51.666666666666664,
-          103.66666666666667
+          47,
+          103
         ],
         [
-          68.33333333333333,
-          103.66666666666667
+          73,
+          103
         ]
       ],
-      "shadowRadius": 25.4,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -369,20 +369,20 @@
       "description": "A first-school companion with an oversized turquoise backpack and coral cardigan, standing newly upright.",
       "accent": "#a55867",
       "background": "#f9e6e5",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.64,
-          "cheekWidth": 0.59,
-          "headHeight": 1.06,
-          "shoulder": 1.66,
-          "hem": 0.34,
-          "torsoWidth": 0.5
+          "headWidth": 56,
+          "headHeight": 50,
+          "headCenter": 40,
+          "shoulder": 64,
+          "hem": 100,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv6.png",
@@ -401,30 +401,30 @@
       "motionPivots": [
         [
           60,
-          98
+          101
         ],
         [
           60,
-          58.33333333333333
+          63
         ],
         [
-          48,
-          65
+          41,
+          70
         ],
         [
-          72,
-          65
+          79,
+          70
         ],
         [
-          51.666666666666664,
-          102.33333333333333
+          47,
+          103
         ],
         [
-          68.33333333333333,
-          102.33333333333333
+          73,
+          103
         ]
       ],
-      "shadowRadius": 25,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -456,20 +456,20 @@
       "description": "An active schoolchild in a green sports shirt, white headband and sneakers, with longer wings.",
       "accent": "#657e44",
       "background": "#edf1dc",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.69,
-          "cheekWidth": 0.575,
-          "headHeight": 1.025,
-          "shoulder": 1.73,
-          "hem": 0.37,
-          "torsoWidth": 0.5
+          "headWidth": 54,
+          "headHeight": 48,
+          "headCenter": 39,
+          "shoulder": 62,
+          "hem": 99,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv7.png",
@@ -488,30 +488,30 @@
       "motionPivots": [
         [
           60,
-          97.00000000000001
+          100
         ],
         [
           60,
-          55.5
+          61
         ],
         [
-          48,
-          62.66666666666667
+          41,
+          68
         ],
         [
-          72,
-          62.66666666666667
+          79,
+          68
         ],
         [
-          50.666666666666664,
-          101.33333333333333
+          47,
+          102
         ],
         [
-          69.33333333333333,
-          101.33333333333333
+          73,
+          102
         ]
       ],
-      "shadowRadius": 25,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -545,20 +545,20 @@
       "description": "An independent schoolchild in a roomy violet hoodie, with a broad hood and kangaroo pocket.",
       "accent": "#36857e",
       "background": "#e2f1ed",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.75,
-          "cheekWidth": 0.555,
-          "headHeight": 0.99,
-          "shoulder": 1.82,
-          "hem": 0.4,
-          "torsoWidth": 0.505
+          "headWidth": 54,
+          "headHeight": 48,
+          "headCenter": 38,
+          "shoulder": 61,
+          "hem": 100,
+          "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv8.png",
@@ -577,30 +577,30 @@
       "motionPivots": [
         [
           60,
-          96
+          101
         ],
         [
           60,
-          52.33333333333333
+          60
         ],
         [
-          47.88,
-          59.666666666666664
+          40,
+          67
         ],
         [
-          72.12,
-          59.666666666666664
+          80,
+          67
         ],
         [
-          50.666666666666664,
-          100.33333333333333
+          47,
+          103
         ],
         [
-          69.33333333333333,
-          100.33333333333333
+          73,
+          103
         ]
       ],
-      "shadowRadius": 25.2,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -636,20 +636,20 @@
       "description": "A curious maker with round blue glasses, denim overalls and a swept feather crest.",
       "accent": "#627d9b",
       "background": "#e8edf6",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.8,
-          "cheekWidth": 0.54,
-          "headHeight": 0.97,
-          "shoulder": 1.88,
-          "hem": 0.43,
-          "torsoWidth": 0.49
+          "headWidth": 52,
+          "headHeight": 46,
+          "headCenter": 38,
+          "shoulder": 61,
+          "hem": 99,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv9.png",
@@ -668,30 +668,30 @@
       "motionPivots": [
         [
           60,
-          95
+          100
         ],
         [
           60,
-          50.00000000000001
+          59
         ],
         [
-          48.24,
-          57.66666666666667
+          41,
+          67
         ],
         [
-          71.76,
-          57.66666666666667
+          79,
+          67
         ],
         [
-          50.666666666666664,
-          99.33333333333334
+          47,
+          102
         ],
         [
-          69.33333333333333,
-          99.33333333333334
+          73,
+          102
         ]
       ],
-      "shadowRadius": 24.6,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -729,20 +729,20 @@
       "description": "An adventurous older child in a backward blue cap, an open overshirt and canvas sneakers.",
       "accent": "#8e7946",
       "background": "#f3ecd8",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.84,
-          "cheekWidth": 0.525,
-          "headHeight": 0.94,
-          "shoulder": 1.94,
-          "hem": 0.46,
-          "torsoWidth": 0.485
+          "headWidth": 52,
+          "headHeight": 46,
+          "headCenter": 37,
+          "shoulder": 60,
+          "hem": 99,
+          "torsoWidth": 44
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv10.png",
@@ -761,30 +761,30 @@
       "motionPivots": [
         [
           60,
-          94
+          100
         ],
         [
           60,
-          47.66666666666667
+          58
         ],
         [
-          48.36,
-          55.666666666666664
+          42,
+          66
         ],
         [
-          71.64,
-          55.666666666666664
+          78,
+          66
         ],
         [
-          50.666666666666664,
-          98.33333333333334
+          47,
+          102
         ],
         [
-          69.33333333333333,
-          98.33333333333334
+          73,
+          102
         ]
       ],
-      "shadowRadius": 24.4,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -824,20 +824,20 @@
       "description": "A confident preteen in a warm varsity jacket, headphones around the neck and a taller stance.",
       "accent": "#4e7897",
       "background": "#e6eff5",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.89,
-          "cheekWidth": 0.51,
-          "headHeight": 0.92,
-          "shoulder": 2,
-          "hem": 0.49,
-          "torsoWidth": 0.49
+          "headWidth": 51,
+          "headHeight": 45,
+          "headCenter": 37,
+          "shoulder": 59,
+          "hem": 99,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv11.png",
@@ -856,30 +856,30 @@
       "motionPivots": [
         [
           60,
-          93
+          100
         ],
         [
           60,
-          45.333333333333336
+          57.5
         ],
         [
-          48.24,
-          53.666666666666664
+          41,
+          65
         ],
         [
-          71.76,
-          53.666666666666664
+          79,
+          65
         ],
         [
-          50.666666666666664,
-          97.33333333333333
+          47,
+          102
         ],
         [
-          69.33333333333333,
-          97.33333333333333
+          73,
+          102
         ]
       ],
-      "shadowRadius": 24.6,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
@@ -921,20 +921,20 @@
       "description": "A composed young guide with a small swept-feather head, long teal jacket, messenger bag and longer legs.",
       "accent": "#456f65",
       "background": "#e5eee2",
-      "compositionStatus": "integrated-sculpted-age-model",
+      "compositionStatus": "integrated-storybook-age-artwork",
       "source": {
-        "model": "tools/pip-growth/render.py",
+        "model": "tools/pip-growth/storybook.cjs",
         "assembly": "tools/pip-growth/assemble.py",
         "form": {
-          "crown": 2.92,
-          "cheekWidth": 0.49,
-          "headHeight": 0.9,
-          "shoulder": 2.05,
-          "hem": 0.52,
-          "torsoWidth": 0.47
+          "headWidth": 51,
+          "headHeight": 45,
+          "headCenter": 36,
+          "shoulder": 58,
+          "hem": 99,
+          "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Blender 5.2 Cycles; transparent orthographic layers; 360 px cells"
+        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv12.png",
@@ -953,30 +953,30 @@
       "motionPivots": [
         [
           60,
-          91.99999999999999
+          100
         ],
         [
           60,
-          43.66666666666668
+          56.5
         ],
         [
-          48.72,
-          52.00000000000001
+          41,
+          64
         ],
         [
-          71.28,
-          52.00000000000001
+          79,
+          64
         ],
         [
-          50.666666666666664,
-          96.33333333333331
+          47,
+          102
         ],
         [
-          69.33333333333333,
-          96.33333333333331
+          73,
+          102
         ]
       ],
-      "shadowRadius": 23.799999999999997,
+      "shadowRadius": 28,
       "actions": [
         "wave",
         "look",
