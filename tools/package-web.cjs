@@ -29,7 +29,7 @@ function compressWebAsset(bytes, candidates = []) {
 
 function importedAudio(root, source) {
   const metadata = fs.readFileSync(path.join(root, ...`${source}.import`.split('/')), 'utf8');
-  const imported = metadata.match(/^path="(res:\/\/\.godot\/imported\/[^"/\\]+\.sample)"$/m)?.[1];
+  const imported = metadata.match(/^path="(res:\/\/\.godot\/imported\/[^"/\\]+\.(?:sample|oggvorbisstr))"$/m)?.[1];
   if (!imported) throw new Error(`Import ${source} before packaging required audio.`);
   const bytes = fs.readFileSync(path.join(root, ...imported.slice(6).split('/')));
   if (!['RSRC', 'RSCC'].includes(bytes.subarray(0, 4).toString('ascii'))) {
@@ -156,6 +156,7 @@ function collectRequiredAudio(root) {
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/coins/collect.wav',
+    'assets/audio/jelly-finish/ready.ogg',
     ...['clear', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),

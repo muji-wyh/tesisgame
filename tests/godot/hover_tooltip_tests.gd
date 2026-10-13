@@ -161,7 +161,7 @@ func _jellies(app) -> void:
 				view.collect_button.set_state(state[0], state[1], state[2], state[3])
 				named([view.collect_button], "Jelly Words collection state")
 				scan(app, "Jelly Words collection update")
-		view.finish_button.pressed.emit()
+		view.finish_button.accessibility_requested.emit()
 		check(app._finish_confirmation_open(), mode + " finish action asks for confirmation")
 		named([app._finish_confirmation.keep_playing_button, app._finish_confirmation.finish_button], mode + " finish confirmation")
 		scan(app, mode + " finish confirmation")

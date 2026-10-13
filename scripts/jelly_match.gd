@@ -14,6 +14,7 @@ signal changed(state: Dictionary)
 
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
 const Tile = preload("res://scripts/jelly_tile.gd")
+const FinishButton = preload("res://scripts/jelly_finish_button.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const FusionArt = preload("res://scripts/jelly_fusion.gd")
 const Style = preload("res://scripts/ui_style.gd")
@@ -36,7 +37,7 @@ var interaction_allowed: Callable
 var reduced_motion: bool = false
 var replay_button: Button
 var chests_button: Button
-var finish_button: Button
+var finish_button: FinishButton
 var drop_button: Button
 
 var _configured: bool = false
@@ -152,13 +153,13 @@ func _init() -> void:
 	_reward_presentation.cue_requested.connect(_reward_cue)
 	chests_button = _button("Open chests", "JellyOpenChests", _open_chests)
 	replay_button = _button("Play again", "JellyReplay", _replay)
-	finish_button = Button.new()
+	finish_button = FinishButton.new()
 	finish_button.name = "JellyFinish"
-	finish_button.text = "Finish"
-	finish_button.expand_icon = true
-	finish_button.set("accessibility_name", "Finish this round. Opens confirmation.")
-	UiClick.bind_button(finish_button)
-	finish_button.pressed.connect(_request_finish)
+	finish_button.accessibility_requested.connect(_request_finish)
+	finish_button.finish_committed.connect(_finish_round)
+	finish_button.threshold_reached.connect(_finish_pull_ready)
+	finish_button.pull_started.connect(_finish_pull_changed)
+	finish_button.pull_canceled.connect(_finish_pull_changed)
 	add_child(finish_button)
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
@@ -166,6 +167,7 @@ func _init() -> void:
 	game.fusion_completed.connect(_fusion_completed)
 	game.chest_milestone.connect(_chest_milestone)
 	game.finished.connect(_finished)
+	resized.connect(func() -> void: finish_button.cancel_pull(true))
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 
@@ -352,6 +354,7 @@ func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
 	reduced_motion = value
+	_style_finish_button()
 	_chest_tap.clear()
 	_reward_presentation.reduced_motion = value
 	_reward_presentation._sync()
@@ -419,6 +422,8 @@ func stop() -> void:
 	_publish()
 
 func cancel_input() -> void:
+	if is_instance_valid(finish_button):
+		finish_button.cancel_pull(true)
 	_chest_tap.clear()
 	_contact_cue_target = -1
 	_pointer = NO_POINTER
@@ -440,6 +445,7 @@ func cancel_input() -> void:
 	_publish()
 
 func release_pointer(pointer: int) -> void:
+	finish_button.release_pointer(pointer)
 	# The host may report pointer-up before Godot receives its normal drop event.
 	# Only cancel a gesture still owned by the same contact after that event runs.
 	_cancel_missing_release.call_deferred(pointer, _gesture_serial)
@@ -467,7 +473,7 @@ func _can_play() -> bool:
 	return _allowed() and game.phase == "playing" and not _result_visible
 
 func _can_tap_chest() -> bool:
-	return _can_play() and _pointer == NO_POINTER and not _reward_presentation.is_active()
+	return _can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and not _reward_presentation.is_active()
 
 func _tap_chest() -> void:
 	if not _can_tap_chest() or _chest_tap.is_active():
@@ -485,6 +491,8 @@ func _sync_chest_tap() -> void:
 	_loot_icon.visible = shown and not _chest_tap.is_active()
 
 func _input(event: InputEvent) -> void:
+	if _finish_is_pulling():
+		return
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
 		cancel_input()
 		get_viewport().set_input_as_handled()
@@ -525,7 +533,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _press(pointer: int, global_point: Vector2) -> bool:
-	if _pointer != NO_POINTER or not _can_play():
+	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling():
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
@@ -648,7 +656,7 @@ func _release_empty_space(source: int, from: Vector2) -> void:
 	audio_requested.emit("release")
 
 func _drop_next(expected_first_id: int = -1) -> void:
-	if not _can_play() or _pointer != NO_POINTER:
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
 	var generation: int = _generation
 	if not game.drop_now(expected_first_id):
@@ -665,7 +673,7 @@ func _drop_next(expected_first_id: int = -1) -> void:
 func _activate(id: int) -> void:
 	# Keyboard/controller activation is pronunciation only. Pointer presses
 	# already read the word; only a completed drag can submit a pair.
-	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)):
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or not _settled(_cell(id)):
 		return
 	var generation: int = _generation
 	word_requested.emit(_cell(id).word.duplicate(true))
@@ -931,12 +939,18 @@ func _process(delta: float) -> void:
 				_cache_chest_image(str(id), cache)
 				cache.art.set_idle_paused(true)
 				cache.viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	finish_button.set_hint_allowed(_finish_hint_allowed())
 	if not _allowed() or delta > 0.5:
 		_chest_tap.clear()
 		_sync_chest_tap()
 		_refresh_danger()
-		if _pointer != NO_POINTER:
+		if _pointer != NO_POINTER or _finish_is_pulling():
 			cancel_input()
+		return
+	# Pulling Finish owns this interaction, including the falling-board clock.
+	# Its elastic return advances independently so an early release resumes play.
+	if _finish_is_pulling():
+		_publish()
 		return
 	var generation: int = _generation
 	var previous_ages: Dictionary = {}
@@ -1196,12 +1210,27 @@ func _finished(result: Dictionary) -> void:
 	round_finished.emit(result.duplicate(true))
 	_publish()
 
+func _finish_is_pulling() -> bool:
+	return is_instance_valid(finish_button) and finish_button.is_pulling()
+
+func _finish_hint_allowed() -> bool:
+	return _can_play() and _pointer == NO_POINTER and not _reward_presentation.is_active() and not _chest_tap.is_active()
+
+func _finish_pull_changed() -> void:
+	_refresh_controls()
+	_publish()
+
+func _finish_pull_ready() -> void:
+	if _can_play() and _finish_is_pulling():
+		audio_requested.emit("finish_ready")
+		_publish()
+
 func _request_finish() -> void:
-	if _can_play() and _pointer == NO_POINTER:
+	if _can_play() and _pointer == NO_POINTER and not _finish_is_pulling():
 		finish_requested.emit()
 
 func _finish_round() -> void:
-	if not _can_play() or _pointer != NO_POINTER:
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
 	cancel_input()
 	game.finish_round()
@@ -1285,7 +1314,7 @@ func _refresh_controls() -> void:
 	_refresh_danger()
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
-			_tiles[int(cell.id)].disabled = not _can_play() or not _settled(cell)
+			_tiles[int(cell.id)].disabled = not _can_play() or _finish_is_pulling() or not _settled(cell)
 	chests_button.visible = _result_visible and maxi(game.chest_count, _pending_chests) > 0
 	replay_button.visible = _result_visible
 	chests_button.disabled = not _allowed() or _result_transition
@@ -1294,7 +1323,7 @@ func _refresh_controls() -> void:
 		_configured and game.phase == "playing" and not _result_visible
 	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
-	drop_button.disabled = not _can_play() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
+	drop_button.disabled = not _can_play() or _finish_is_pulling() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
 	if drop_button.disabled:
 		_set_preview_pressed(false)
 
@@ -1346,38 +1375,7 @@ func _set_preview_pressed(value: bool, force: bool = false) -> void:
 	drop_button.add_theme_stylebox_override("normal", drop_button.get_theme_stylebox("pressed" if value else "disabled"))
 
 func _style_finish_button() -> void:
-	var s: float = Style.ui_scale(self)
-	var hosted: bool = finish_button.get_parent() != self
-	var compact: bool = _compact_hud or hosted
-	var ink := Color("#514731")
-	Style.action_button(finish_button, ink)
-	finish_button.icon = null if _compact_hud and not hosted else preload("res://assets/images/ui/finish-flag.svg")
-	finish_button.custom_minimum_size = Vector2(84.0 if hosted else 0.0, 44.0) / s
-	finish_button.add_theme_font_size_override("font_size", ceili((12.0 if compact else 14.0) / s))
-	finish_button.add_theme_constant_override("icon_max_width", ceili((16.0 if compact else 20.0) / s))
-	finish_button.add_theme_constant_override("h_separation", ceili((4.0 if compact else 6.0) / s))
-	var fills := {"normal": Color("#fff5dc"), "hover": Color("#fff9e9"),
-		"pressed": Color("#efdfbb"), "disabled": Color("#e7e9dc")}
-	for state: String in fills:
-		var pressed: bool = state == "pressed"
-		var inactive: bool = state == "disabled"
-		var surface := Style.box(fills[state], Color("#c5b489") if not inactive else Color("#ced4c7"), ceili(22.0 / s), maxi(1, roundi(1.0 / s)))
-		surface.border_width_bottom = maxi(1, roundi((1.0 if pressed or inactive else 3.0) / s))
-		surface.shadow_color = Color("#294834", 0.0 if pressed or inactive else 0.12)
-		surface.shadow_size = ceili(3.0 / s)
-		surface.shadow_offset = Vector2(0, 2.0 / s)
-		surface.content_margin_left = (6.0 if compact else 12.0) / s
-		surface.content_margin_right = surface.content_margin_left
-		surface.content_margin_top = (10.0 if pressed else 7.0) / s
-		surface.content_margin_bottom = (4.0 if pressed else 7.0) / s
-		finish_button.add_theme_stylebox_override(state, surface)
-	var focus := Style.box(Color.TRANSPARENT, Style.GOOD, ceili(25.0 / s), maxi(2, roundi(2.0 / s)))
-	focus.set_expand_margin_all(3.0 / s)
-	finish_button.add_theme_stylebox_override("focus", focus)
-	for state: String in ["normal", "hover", "focus", "pressed", "hover_pressed", "disabled"]:
-		var color: Color = Color("#8a927e") if state == "disabled" else ink
-		finish_button.add_theme_color_override("font_color" if state == "normal" else "font_%s_color" % state, color)
-		finish_button.add_theme_color_override("icon_%s_color" % state, color)
+	finish_button.configure(_theme.get("accent", Style.GOOD), Style.ui_scale(self), reduced_motion)
 
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
@@ -1393,7 +1391,7 @@ func _layout() -> void:
 	var edge: float = (4.0 if short_board else 8.0) / scale_factor
 	var wide: bool = short_board or size.x > size.y * 1.18
 	_compact_hud = wide and size.x * scale_factor <= 400.0
-	var side_space: float = minf(164.0 / scale_factor, size.x * 0.20) if wide else 0.0
+	var side_space: float = maxf(84.0 / scale_factor + edge, minf(164.0 / scale_factor, size.x * 0.20)) if wide else 0.0
 	var available_height: float = size.y - edge * 2.0 if wide else size.y - 150.0 / scale_factor
 	var available_width: float = size.x - edge * 2.0 - side_space * 2.0
 	var board_height: float = maxf(60.0, minf(minf(available_height, available_width * 1.5), 684.0 / scale_factor))
@@ -1648,6 +1646,8 @@ func snapshot() -> Dictionary:
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
 		"open": _control(chests_button), "replay": _control(replay_button)}
 	result["finish"] = _control(finish_button)
+	result["finish"]["pull"] = finish_button.snapshot()
+	result["finish"]["focused"] = finish_button.has_focus()
 	result["notice"] = _notice.text
 	result["danger"] = danger_feedback()
 	return result

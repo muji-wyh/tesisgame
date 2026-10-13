@@ -185,6 +185,8 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 			part.set_chest_texture(texture)
 
 func _input(event: InputEvent) -> void:
+	if _finish_is_pulling():
+		return
 	if game.collection_batch_active() or game.powerup_active():
 		return
 	if event.is_action_pressed("ui_cancel") and _keyboard_source >= 0:
@@ -206,7 +208,7 @@ func _input(event: InputEvent) -> void:
 
 func _press(pointer: int, global_point: Vector2) -> bool:
 	# Roots have no pronunciation recording; a completed word keeps its audio.
-	if _pointer != NO_POINTER or not _can_play() or game.collection_batch_active() or game.powerup_active():
+	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
@@ -308,7 +310,7 @@ func _refresh_placement() -> void:
 	_placement_tile.show()
 
 func _activate(id: int) -> void:
-	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
 		return
 	_rejection.clear()
 	if _keyboard_source >= 0 and _keyboard_source != id and _tiles.has(_keyboard_source):
@@ -333,7 +335,7 @@ func _tap_tile(id: int) -> void:
 		_split(id)
 
 func _split(id: int) -> void:
-	if not _can_play() or not _settled(_cell(id)) or not game.can_split(_cell(id)):
+	if not _can_play() or _finish_is_pulling() or not _settled(_cell(id)) or not game.can_split(_cell(id)):
 		return
 	var generation: int = _generation
 	var accepted: bool = game.split(id)
@@ -354,7 +356,7 @@ func _split(id: int) -> void:
 	_publish()
 
 func _collect(id: int) -> void:
-	if not _can_play() or game.collection_batch_active() or not game.is_valid_word(_cell(id)):
+	if not _can_play() or _finish_is_pulling() or game.collection_batch_active() or not game.is_valid_word(_cell(id)):
 		return
 	var generation: int = _generation
 	if not game.collect(id) or generation != _generation or not _can_play():
@@ -367,7 +369,7 @@ func _collect(id: int) -> void:
 	_publish()
 
 func _collect_all() -> void:
-	if not _can_play() or _pointer != NO_POINTER or game.collection_batch_active():
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or game.collection_batch_active():
 		return
 	cancel_input()
 	game.start_collection_batch()
@@ -612,7 +614,7 @@ func _sync_positions() -> void:
 	_pose_powerup()
 
 func _activate_powerup(kind: String) -> void:
-	if not _can_play() or _pointer != NO_POINTER or _keyboard_source >= 0 or game.powerup_active():
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or _keyboard_source >= 0 or game.powerup_active():
 		return
 	game.activate_powerup(kind)
 	_refresh_controls()
@@ -739,6 +741,9 @@ func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
 
 func _process(delta: float) -> void:
+	if _finish_is_pulling():
+		super._process(delta)
+		return
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
@@ -1045,6 +1050,16 @@ func _refresh_hud() -> void:
 		_layout.call_deferred()
 	_refresh_collect_button()
 
+func _finish_hint_allowed() -> bool:
+	return super._finish_hint_allowed() and not game.collection_batch_active() and not game.powerup_active() and _keyboard_source < 0
+
+func _finish_pull_changed() -> void:
+	if _finish_is_pulling():
+		_keyboard_source = -1
+		game.set_held_tile()
+		_refresh_marks()
+	super._finish_pull_changed()
+
 func _can_tap_chest() -> bool:
 	return not game.collection_batch_active() and not game.powerup_active() and super._can_tap_chest()
 
@@ -1064,7 +1079,7 @@ func _refresh_powerup_buttons() -> void:
 	for kind: String in powerup_buttons:
 		var button: PowerupButton = powerup_buttons[kind]
 		button.visible = _configured and game.phase == "playing" and not _result_visible
-		button.set_availability(_can_play() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
+		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
 			balance >= int(WordModel.POWERUP_PRICES[kind]), game.powerup_active())
 
 func _refresh_collect_button() -> void:
@@ -1073,7 +1088,7 @@ func _refresh_collect_button() -> void:
 	var batch: Dictionary = game.collection_batch_snapshot()
 	var count: int = game.collectable_ids().size() if _configured else 0
 	collect_button.visible = _configured and game.phase == "playing" and not _result_visible
-	collect_button.disabled = not _can_play() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
+	collect_button.disabled = not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
 

@@ -218,7 +218,7 @@ func check_application(mode: String) -> void:
 	app.choose_mode(mode)
 	await check_advances(backdrop, mode + " returning from nested navigation")
 
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open() and view.game.phase == "playing", mode + ": Finish asks before ending the round")
 	await check_frozen(backdrop, mode + " finish confirmation")
 	app._finish_confirmation.finish_button.pressed.emit()

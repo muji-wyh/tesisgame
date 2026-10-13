@@ -168,7 +168,7 @@ function referenceBankFixture(t, populated = true) {
   const manifestPath = path.join(directory, 'docs/assets/voice-pop-reference-audio.json');
   const writeImport = source => {
     const sourcePath = path.join(directory, source);
-    const imported = `.godot/imported/${path.basename(source)}-fixture.sample`;
+    const imported = `.godot/imported/${path.basename(source)}-fixture.${source.endsWith(".ogg") ? "oggvorbisstr" : "sample"}`;
     fs.mkdirSync(path.dirname(sourcePath), { recursive: true });
     fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
     fs.writeFileSync(`${sourcePath}.import`, `[remap]\npath="res://${imported}"\n`);
@@ -222,6 +222,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   fixture.writeImport('assets/audio/coins/collect.wav');
+  fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
   for (const cue of ['clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
@@ -235,8 +236,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 416);
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction)\//.test(asset.source)).length, 5,
+  assert.equal(required.length, 417);
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),

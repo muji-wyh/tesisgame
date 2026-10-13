@@ -25,18 +25,17 @@ async function pressControl(page, control) {
   await pressRect(page, control.rect);
 }
 
-async function confirmFinish(page) {
-  await expect.poll(async () => (await jelly(page)).finish_confirmation?.visible,
-    { message: 'Manual Finish asks for an explicit decision before ending the round' }).toBe(true);
-  const state = await jelly(page);
-  expect(state.phase, 'The round remains open while the player decides').toBe('playing');
-  expect(state.paused, 'The Finish decision pauses gameplay').toBe(true);
-  await pressControl(page, state.finish_confirmation.confirm);
-}
-
 async function finishRound(page, control) {
-  await pressControl(page, control || (await jelly(page)).finish);
-  await confirmFinish(page);
+  const state = await jelly(page), bounds = await metrics(page);
+  control ||= state.finish;
+  expect(control.visible && !control.disabled, 'Finish is available for a deliberate pull').toBe(true);
+  const from = center(control.rect, bounds);
+  const distance = state.finish.pull.threshold * bounds.scale + 10;
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(from.x, from.y + distance, { steps: 4 });
+  await page.mouse.up();
+  await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
 }
 
 async function libraryControl(page, name) {
@@ -117,96 +116,123 @@ test('opening and replay wait for the first batch while manual release stays ava
 });
 
 for (const mode of ['jelly', 'word_jelly']) {
-  test(`${mode} Finish defaults to continuing and pauses behind its confirmation`, async ({ page }, info) => {
-    const errors = await openGame(page, { reducedMotion: 'no-preference' });
-    await chooseMode(page, mode);
-    await expect.poll(async () => {
-      const state = await jelly(page);
-      return state.mode === mode && state.visible && state.phase === 'playing' &&
-        state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
-    }).toBe(true);
-    const before = await jelly(page);
-    await pressControl(page, before.finish);
-    await expect.poll(async () => (await jelly(page)).finish_confirmation?.visible).toBe(true);
-    const paused = await jelly(page);
-    expect(paused.phase).toBe('playing');
-    expect(paused.paused).toBe(true);
-    expect(paused.result.visible).toBe(false);
-    await page.waitForTimeout(350);
-    const still = await jelly(page);
-    expect(still.spawn_elapsed, 'The supply timer cannot advance during the decision').toBe(paused.spawn_elapsed);
-    expect(still.generated_tiles).toBe(paused.generated_tiles);
-    expect(still.round_id).toBe(before.round_id);
+  for (const pointer of ['mouse', 'touch']) {
+    test(`${mode} pull Finish ${pointer} arms only downward, springs back, and cancels safely`, async ({ page }, info) => {
+      test.setTimeout(150000);
+      test.skip(pointer === 'touch' && info.project.use.browserName !== 'chromium',
+        'Real multi-event touch injection uses Chromium; mouse and native touch coverage remain available.');
+      const errors = await openGame(page, { reducedMotion: 'no-preference' });
+      await chooseMode(page, mode);
+      await expect.poll(async () => {
+        const state = await jelly(page);
+        return state.mode === mode && state.visible && state.phase === 'playing' &&
+          state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+      }).toBe(true);
+      const before = await jelly(page);
+      await pressControl(page, before.finish);
+      expect((await jelly(page)).finish_confirmation.visible, 'An ordinary tap never opens a pointer dialog').toBe(false);
+      expect((await jelly(page)).phase).toBe('playing');
+      const session = pointer === 'touch' ? await page.context().newCDPSession(page) : null;
+      const points = point => [{ x: point.x, y: point.y, id: 0, radiusX: 6, radiusY: 6, force: 1 }];
+      let from, distance;
+      const begin = async () => {
+        const state = await jelly(page), bounds = await metrics(page);
+        from = center(state.finish.rect, bounds);
+        distance = state.finish.pull.threshold * bounds.scale;
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(from) });
+        else { await page.mouse.move(from.x, from.y); await page.mouse.down(); }
+      };
+      const move = async (factor, sideways = 0) => {
+        const point = { x: from.x + sideways * distance, y: from.y + factor * distance };
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(point) });
+        else await page.mouse.move(point.x, point.y, { steps: 3 });
+        await rendered(page);
+      };
+      const release = async () => {
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        else await page.mouse.up();
+        await rendered(page);
+      };
+      const expectPlaying = async message => {
+        const state = await jelly(page);
+        expect(state.phase, message).toBe('playing');
+        expect(state.round_id).toBe(before.round_id);
+        expect(state.finish_confirmation.visible).toBe(false);
+        expect(state.drag.active, 'Finish never hands its gesture to a board jelly').toBe(false);
+      };
+      try {
+        await begin();
+        await move(0.45);
+        const partial = await jelly(page);
+        expect(partial.finish.pull.pulling).toBe(true);
+        expect(partial.finish.pull.armed).toBe(false);
+        expect(partial.finish.pull.progress).toBeGreaterThan(0.25);
+        expect(partial.finish.pull.visual_pull, 'The surface follows the held pointer').toBeGreaterThan(0);
+        await page.waitForTimeout(140);
+        expect((await jelly(page)).spawn_elapsed, 'The falling-board clock pauses while Finish owns the pointer')
+          .toBe(partial.spawn_elapsed);
+        await release();
+        await expectPlaying('A short pull springs back without ending the game');
+        await expect.poll(async () => (await jelly(page)).finish.pull.returning,
+          { message: 'The canceled jelly settles back into its header target' }).toBe(false);
+        expect((await jelly(page)).finish.pull.visual_pull).toBeLessThan(0.5);
 
-    const home = headerPoint(await metrics(page), 'mode');
-    await tap(page, home.x, home.y);
-    await rendered(page);
-    expect((await metrics(page)).library.visible, 'The modal blocks the underlying Home control').toBe(false);
-    expect((await jelly(page)).finish_confirmation.visible).toBe(true);
-    await page.screenshot({ path: info.outputPath(`${mode}-finish-confirmation.png`), scale: 'css' });
+        await begin();
+        await move(-0.2, -1);
+        expect((await jelly(page)).finish.pull.armed, 'Upward or sideways motion cannot arm Finish').toBe(false);
+        await release();
+        await expectPlaying('Dragging in the wrong direction cannot finish');
 
-    // Exercise the host cancellation bridge followed by Godot's ordinary release.
-    const confirmPoint = center(paused.finish_confirmation.confirm.rect, await metrics(page));
-    await page.mouse.move(confirmPoint.x, confirmPoint.y);
-    await page.mouse.down();
-    await page.locator('#canvas').dispatchEvent('touchcancel', { touches: [], targetTouches: [], changedTouches: [] });
-    await page.mouse.up();
-    await rendered(page);
-    expect((await jelly(page)).phase, 'A canceled held Finish cannot commit on release').toBe('playing');
-    expect((await jelly(page)).finish_confirmation.visible).toBe(true);
+        await begin();
+        await move(1.15);
+        await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
+        expect((await jelly(page)).finish.pull.glow, 'Arming makes the pulled surface glow').toBe(true);
+        await page.screenshot({ path: info.outputPath(`${mode}-finish-${pointer}-armed.png`), scale: 'css' });
+        await move(0.35);
+        expect((await jelly(page)).finish.pull.armed, 'Pulling back below the threshold disarms Finish').toBe(false);
+        await release();
+        await expectPlaying('A withdrawn pull cannot finish');
 
-    // Use the ordinary visibility bridge, then attempt the explicit action while hidden.
-    await page.evaluate(() => {
-      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-      document.dispatchEvent(new Event('visibilitychange'));
+        await begin();
+        await move(1.15);
+        await page.locator('#canvas').dispatchEvent('touchcancel', { touches: [], targetTouches: [], changedTouches: [] });
+        await release();
+        await expectPlaying('Host cancellation invalidates an armed gesture before its translated release');
+
+        await begin();
+        await move(1.15);
+        await page.evaluate(() => {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+          document.dispatchEvent(new Event('visibilitychange'));
+          delete document.hidden;
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+        await release();
+        await expectPlaying('Backgrounding cannot revive a held Finish after returning');
+
+        await begin();
+        await move(1.15);
+        const viewport = page.viewportSize();
+        await page.setViewportSize({ width: viewport.width - 12, height: viewport.height });
+        await release();
+        await expectPlaying('Resizing cancels a pull instead of committing against stale geometry');
+        await page.setViewportSize(viewport);
+
+        await begin();
+        await move(1.15);
+        expect((await jelly(page)).phase, 'Arming waits for release').toBe('playing');
+        await release();
+        await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
+        await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+        expect((await jelly(page)).finish_confirmation.visible, 'A deliberate armed release goes directly to results').toBe(false);
+        expect((await jelly(page)).round_id).toBe(before.round_id);
+        expect((await jelly(page)).score).toBe(before.score);
+      } finally {
+        if (session) await session.detach();
+      }
+      expect(errors).toEqual([]);
     });
-    try {
-      await expect.poll(async () => (await jelly(page)).visible).toBe(false);
-      await pressRect(page, paused.finish_confirmation.confirm.rect);
-      expect((await jelly(page)).phase, 'A hidden page cannot confirm the round').toBe('playing');
-    } finally {
-      await page.evaluate(() => {
-        delete document.hidden;
-        document.dispatchEvent(new Event('visibilitychange'));
-      });
-    }
-    await expect.poll(async () => (await jelly(page)).visible).toBe(true);
-    expect((await jelly(page)).paused, 'Foregrounding leaves the open decision paused').toBe(true);
-    expect((await jelly(page)).finish_confirmation.visible).toBe(true);
-
-    // Returning before release must not revive a press interrupted by backgrounding.
-    await page.mouse.move(confirmPoint.x, confirmPoint.y);
-    await page.mouse.down();
-    await page.evaluate(() => {
-      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-      document.dispatchEvent(new Event('visibilitychange'));
-      delete document.hidden;
-      document.dispatchEvent(new Event('visibilitychange'));
-    });
-    await page.mouse.up();
-    await rendered(page);
-    expect((await jelly(page)).phase, 'A backgrounded held Finish cannot commit after returning').toBe('playing');
-    expect((await jelly(page)).finish_confirmation.visible).toBe(true);
-    await pressControl(page, (await jelly(page)).finish_confirmation.keep_playing);
-    await expect.poll(async () => {
-      const state = await jelly(page);
-      return !state.finish_confirmation.visible && !state.paused && state.spawn_elapsed > paused.spawn_elapsed;
-    }).toBe(true);
-    expect((await jelly(page)).round_id, 'Continue resumes the same round').toBe(before.round_id);
-
-    await pressControl(page, (await jelly(page)).finish);
-    await expect.poll(async () => (await jelly(page)).finish_confirmation?.visible).toBe(true);
-    await page.keyboard.press('Enter');
-    await expect.poll(async () => (await jelly(page)).finish_confirmation?.visible,
-      { message: 'Enter activates the safe Continue playing default' }).toBe(false);
-    expect((await jelly(page)).phase).toBe('playing');
-    await finishRound(page);
-    await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
-    await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
-    expect((await jelly(page)).round_id).toBe(before.round_id);
-    expect((await jelly(page)).score).toBe(before.score);
-    expect(errors).toEqual([]);
-  });
+  }
 }
 
 function pair(state, { chest = null } = {}) {
@@ -1037,10 +1063,12 @@ test('Finish remains available during fusion and settles only completed pairs', 
   await page.mouse.down();
   await page.mouse.move(to.x, to.y, { steps: 2 });
   await page.mouse.up();
-  // Press immediately, then inspect the recorded state. Reading status and
+  // Pull immediately, then inspect the recorded state. Reading status and
   // geometry between gestures can outlast the real animation under tracing.
-  await page.mouse.click(finish.x, finish.y);
-  await confirmFinish(page);
+  await page.mouse.move(finish.x, finish.y);
+  await page.mouse.down();
+  await page.mouse.move(finish.x, finish.y + before.finish.pull.threshold * bounds.scale + 10);
+  await page.mouse.up();
   await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
   const timeline = await page.evaluate(() => window.jellyObservedTimeline);
   expect(timeline.some(frame => frame.fusion && !frame.finishDisabled && frame.cleared === before.cleared_pairs),

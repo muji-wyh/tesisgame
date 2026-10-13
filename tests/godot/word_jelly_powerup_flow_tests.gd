@@ -258,7 +258,7 @@ func _check_lifecycle(app) -> void:
 	check(not game.paused and game.powerup_snapshot() == paused and app.coin_wallet.balance == before - 1500
 		and view._powerup_effects.is_visible_in_tree(),
 		"Returning from Home resumes the same already-paid automatic drag")
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open() and game.paused, "Finish confirmation can pause a paid automatic sequence")
 	view._process(0.40)
 	check(game.powerup_snapshot() == paused, "An open Finish confirmation cannot advance paid motion")
@@ -273,7 +273,7 @@ func _check_lifecycle(app) -> void:
 	before = app.coin_wallet.balance
 	view.powerup_buttons.fragments.pressed.emit()
 	var total: int = int(game.powerup_snapshot().total)
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open(), "Finish confirms before ending a purchased fragment flight")
 	app._finish_confirmation.finish_button.pressed.emit()
 	check(game.phase == "finished" and not game.powerup_active() and _carried_fragments(game) == total

@@ -116,8 +116,11 @@ func _run() -> void:
 		check(view._header_chest_host.is_visible_in_tree() and view.finish_button.is_visible_in_tree(),
 			mode + " restores its hosted controls when gameplay resumes")
 		await tap(view.finish_button)
+		check(not app._finish_confirmation_open() and view.game.phase == "playing",
+			mode + " a simple header Finish tap cannot end a round or open a pointer dialog")
+		view.finish_button.accessibility_requested.emit()
 		check(app._finish_confirmation_open() and view.game.phase == "playing",
-			mode + " real header Finish still requires confirmation")
+			mode + " keyboard Finish retains an accessible confirmation")
 		app._finish_confirmation.keep_playing_button.pressed.emit()
 		await settle()
 		check(not app._finish_confirmation_open() and view._header_chest_host.is_visible_in_tree(),

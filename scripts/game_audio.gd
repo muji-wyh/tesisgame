@@ -23,6 +23,7 @@ const COIN_CHANNELS := 4
 const COIN_GAIN := 0.60
 const COIN_SPEECH_DB := -6.0
 const JELLY_PATHS := {
+	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
@@ -35,6 +36,7 @@ const JELLY_PATHS := {
 	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
 }
 const JELLY_GAINS := {
+	"finish_ready": 0.40,
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"fragment": 0.30, "assemble": 0.28,

@@ -131,7 +131,7 @@ func finish_result(app, tier: int) -> void:
 	var fragments: int = 0 if tier == 0 else 4 + (tier - 1) * 5
 	earn_fragments(app._jelly, fragments)
 	var score: int = app._jelly.game.score()
-	app._jelly.finish_button.pressed.emit()
+	app._jelly.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open() and app._jelly.game.phase == "playing",
 		"The real Finish control pauses before committing its result")
 	app._finish_confirmation.finish_button.pressed.emit()

@@ -54,7 +54,7 @@ func fresh_round(app, mode: String) -> void:
 
 func open_dialog(app, context: String) -> void:
 	var view = app._active_jelly()
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open() and view.game.phase == "playing" and view.game.paused
 		and app._round_result.is_empty() and not app._jelly_interaction_allowed(),
 		context + ": Finish pauses for a choice without committing a result")
@@ -95,7 +95,7 @@ func check_navigation(app, mode: String) -> void:
 	var saved: Dictionary = view.game.snapshot()
 	view.game.step(30.0)
 	view.drop_button.pressed.emit()
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	app._request_jelly_finish(mode)
 	app._show_mode_menu()
 	app._show_collection()
@@ -240,7 +240,7 @@ func check_fusion(app, mode: String) -> void:
 	open_dialog(app, mode + " confirmed fusion")
 	app._finish_confirmation.finish_button.pressed.emit()
 	app._finish_confirmation.finish_button.pressed.emit()
-	view.finish_button.pressed.emit()
+	view.finish_button.accessibility_requested.emit()
 	check(view.game.phase == "finished" and not app._finish_confirmation_open() and completions.size() == 1,
 		mode + ": an explicit confirmation commits exactly one result")
 	check(int(app._round_result.cleared_pairs) == 0 and int(app._round_result.fragment_count) == 0,

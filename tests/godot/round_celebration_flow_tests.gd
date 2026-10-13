@@ -450,7 +450,7 @@ func check_jelly_confetti_owner(app) -> void:
 	check(not app._jelly._reward_presentation.is_active() and app._reward_confetti.is_active()
 		and app._reward_confetti.snapshot().ages[0] >= 3.0,
 		"Jelly paper keeps falling after the chest has returned to its HUD anchor")
-	app._jelly.finish_button.pressed.emit()
+	app._jelly.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open() and app._jelly.game.phase == "playing",
 		"A Finish request does not prematurely commit the round result")
 	app._finish_confirmation.finish_button.pressed.emit()

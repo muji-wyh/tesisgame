@@ -48,7 +48,7 @@ func _exercise() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
 	audio.interact("spring")
-	for cue in ["pick", "release", "land", "contact", "merge", "pop", "danger", "reward"]:
+	for cue in ["pick", "release", "land", "contact", "merge", "pop", "danger", "reward", "finish_ready"]:
 		audio.play_jelly_cue(cue)
 		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
 		check(player.stream != null and player.stream.resource_path == Audio.JELLY_PATHS[cue], "The %s cue uses its production recording" % cue)
