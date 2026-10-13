@@ -28,7 +28,8 @@ The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
-1,500 coins and moves matching bodies into their targets one at a time, leaving
+2,000 coins and launches a random eligible Jelly every 200 ms, dragging it into
+its matching target over 300 ms. Consecutive flights briefly overlap, leaving
 the completed words on the board for ordinary collection. Treasure costs 500
 coins and delivers a random total of two to eight carried fragments to the current
 board, preferring bodies without fragments. Payment is persisted before either

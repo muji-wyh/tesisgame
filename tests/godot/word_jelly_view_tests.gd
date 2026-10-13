@@ -58,6 +58,7 @@ func _run() -> void:
 	_check_opening_and_bounds(view)
 	_check_paused_resize(view)
 	_check_powerup_paused_resize(view)
+	_check_concurrent_powerup_resize(view)
 	await _check_long_word_label_visibility(view)
 	_check_root_tap(view)
 	_check_edge_drag(view)
@@ -363,6 +364,83 @@ func _check_powerup_paused_resize(view) -> void:
 			check(not view.game.powerup_active() and view.game.cells.size() == 1 and str(view.game.cells[0].text) == "cat"
 				and int(view.game.merged_count) == 1 and purchases.size() == 1 and payouts.is_empty(),
 				"responsive pause and resume finish one purchased merge without double payment or automatic collection")
+	view.purchase_powerup = Callable()
+	view.size = Vector2(1000, 720)
+
+
+func _check_concurrent_powerup_resize(view) -> void:
+	var purchases: Array[Dictionary] = []
+	view.purchase_powerup = func(receipt: String, kind: String, price: int) -> Dictionary:
+		purchases.append({"receipt": receipt, "kind": kind, "price": price})
+		return {"ok": true}
+	for reduced: bool in [false, true]:
+		view.size = Vector2(1000, 720)
+		_reset(view, reduced)
+		purchases.clear()
+		var ids: Array[int] = _install(view, ["ca", "t", "ca", "t"], [1, 2, 3, 4])
+		for index in range(ids.size()):
+			var tile: Dictionary = view.game.cells[view.game._index_for_id(ids[index])]
+			tile.column = [0, 3, 1, 4][index]
+			tile.row = Model.ROWS - 1
+		view._sync_tiles()
+		view._layout()
+		view._activate_powerup("auto_merge")
+		_advance(view, 0.25)
+		var moving: Dictionary = view.game.powerup_snapshot()
+		check(moving.drags.size() == 2 and view.game.fusions.is_empty(),
+			"native view displays two distinct paid drags between the 200 ms launch and 300 ms contact")
+		for drag: Dictionary in moving.drags:
+			var from: Vector2 = view._tile_rect(drag.source).get_center()
+			var to: Vector2 = view._tile_rect(drag.target).get_center()
+			var center: Vector2 = view._tiles[int(drag.source_id)].get_rect().get_center()
+			check(center.x > minf(from.x, to.x) and center.x < maxf(from.x, to.x),
+				"every active source body is rendered in transit instead of snapping a second drag to its cell")
+			if reduced:
+				check(center.is_equal_approx(from.lerp(to, float(drag.elapsed) / Model.POWERUP_DRAG_SECONDS)),
+					"each reduced-motion source uses its own direct interpolation and elapsed time")
+		view.pause(true)
+		var frozen: Dictionary = view.game.powerup_snapshot()
+		for dimensions: Vector2 in [Vector2(390, 844), Vector2(568, 320)]:
+			view.size = dimensions
+			view._layout()
+			var bounds := Rect2(Vector2.ZERO, view.size).grow(0.01)
+			check(view.game.powerup_snapshot() == frozen, "portrait and landscape resize preserve both paused drag clocks")
+			var centers: Dictionary = {}
+			for drag: Dictionary in frozen.drags:
+				var body = view._tiles[int(drag.source_id)]
+				centers[int(drag.source_id)] = body.get_rect().get_center()
+				check(bounds.encloses(body.get_rect()), "each concurrent drag relocates into the resized viewport")
+				if reduced:
+					var from: Vector2 = view._tile_rect(drag.source).get_center()
+					var to: Vector2 = view._tile_rect(drag.target).get_center()
+					check(body.get_rect().get_center().is_equal_approx(from.lerp(to, float(drag.elapsed) / Model.POWERUP_DRAG_SECONDS)),
+						"resizing recalculates both direct transfers against their own new endpoints")
+			view._process(0.5)
+			check(view.game.powerup_snapshot() == frozen, "paused processing advances neither concurrent drag nor launch cadence")
+			for id: int in centers:
+				check(view._tiles[id].get_rect().get_center().is_equal_approx(centers[id]),
+					"both paused source bodies stay at their resized visual positions")
+		var second: Dictionary = frozen.drags[1]
+		view.pause(false)
+		_advance(view, 0.05)
+		var after_contact: Dictionary = view.game.powerup_snapshot()
+		check(view.game.fusions.size() == 1 and after_contact.drags.size() == 1
+			and int(after_contact.drags[0].source_id) == int(second.source_id)
+			and is_equal_approx(float(after_contact.drags[0].elapsed), 0.1),
+			"resuming hands off the first contact while keeping the second travel clock continuous")
+		var before: Vector2 = view._tiles[int(second.source_id)].get_rect().get_center()
+		_advance(view, 0.025)
+		check(view._tiles[int(second.source_id)].get_rect().get_center().distance_to(before) > 0.1,
+			"the second source continues moving while the resized first fusion is painted")
+		_advance(view, 2.0)
+		var fragments: int = 0
+		for tile: Dictionary in view.game.cells:
+			fragments += int(tile.fragments)
+		check(not view.game.powerup_active() and view.game.collectable_ids().size() == 2
+			and int(view.game.merged_count) == 2 and fragments == 10
+			and purchases.size() == 1 and int(purchases[0].price) == 2000
+			and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
+			"concurrent responsive travel finishes two words with all fragments and one debit, awaiting manual collection")
 	view.purchase_powerup = Callable()
 	view.size = Vector2(1000, 720)
 

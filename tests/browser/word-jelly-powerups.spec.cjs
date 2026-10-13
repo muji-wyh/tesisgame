@@ -10,7 +10,9 @@ const WRONG = 'assets/imported-audio/pair-feedback/wrong.wav';
 const RIGHT = 'assets/imported-audio/pair-feedback/right.wav';
 const FRAGMENT = 'assets/imported-audio/chest-reference/step-detail.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
-const prices = { auto_merge: 1500, fragments: 500 };
+const prices = { auto_merge: 2000, fragments: 500 };
+const AUTO_MERGE_BEAT = 0.2;
+const AUTO_MERGE_DRAG = 0.3;
 const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => word.text.trim().toLowerCase()));
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
@@ -49,6 +51,16 @@ async function start(page, info, balance) {
 
 async function pressRect(page, rect) {
   await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2);
+}
+
+async function readyPowerup(page, kind) {
+  let state;
+  await expect.poll(async () => {
+    state = await jelly(page);
+    // Leave time for the browser-driver tap before the next supply temporarily disables purchases.
+    return state.powerup_buttons[kind].enabled && state.spawn_interval - state.spawn_elapsed > 4;
+  }, { message: `${kind} is ready with enough time before the next supply drop` }).toBe(true);
+  return state;
 }
 
 async function capture(page, info, name) {
@@ -99,11 +111,11 @@ function expectLayout(state, bounds, affordable) {
   }
 }
 
-async function beginTrace(page, label) {
-  await page.evaluate(label => {
+async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
+  await page.evaluate(({ label, pauseOnOverlap }) => {
     window.wordJellyPowerupObserver?.disconnect();
     const status = document.getElementById('game-status');
-    const evidence = window.wordJellyPowerupEvidence = { label, timeline: [], frames: {}, pending: [] };
+    const evidence = window.wordJellyPowerupEvidence = { label, timeline: [], frames: {}, pending: [], pausedOnOverlap: false };
     const capture = name => {
       if (evidence.frames[name] || evidence.pending.includes(name)) return;
       evidence.pending.push(name);
@@ -133,15 +145,22 @@ async function beginTrace(page, label) {
       if (powerup.active && powerup.kind === 'fragments' && powerup.elapsed > 0.08 && powerup.elapsed < 0.35 && state.powerup_effect_count > 0)
         capture('fragment-flight');
       if (powerup.kind === 'fragments' && powerup.completed > 0 && state.powerup_effect_count >= 5) capture('fragment-arrival');
-      if (powerup.active && powerup.stage === 'drag' && powerup.elapsed / powerup.duration > 0.2 && powerup.elapsed / powerup.duration < 0.8)
+      const drags = powerup.drags || [];
+      if (powerup.active && drags.some(drag => drag.elapsed / drag.duration > 0.2 && drag.elapsed / drag.duration < 0.8))
         capture('auto-midpoint');
-      if (powerup.active && powerup.kind === 'auto_merge' && state.fusions?.length > 1)
+      if (powerup.active && powerup.kind === 'auto_merge' && drags.length > 1)
         capture('auto-overlap');
+      if (pauseOnOverlap && !evidence.pausedOnOverlap && powerup.active && drags.length > 1) {
+        // Hide at the overlap itself so browser-driver latency cannot miss the short transfer.
+        evidence.pausedOnOverlap = true;
+        Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+        document.dispatchEvent(new Event('visibilitychange'));
+      }
     };
     window.wordJellyPowerupObserver = new MutationObserver(record);
     window.wordJellyPowerupObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
     record();
-  }, label);
+  }, { label, pauseOnOverlap });
 }
 
 async function retainTrace(page, info, label, expectedFrames) {
@@ -162,23 +181,53 @@ function recordingCount(sounds, relative) {
   return sounds.filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
 }
 
-test('Auto merge transfers pairs on the 80 ms beat while earlier fusions remain visible', async ({ page }, info) => {
+function expectAutoMergeTimeline(evidence, completed) {
+  const frames = evidence.timeline.filter(frame => !frame.paused && frame.powerup.kind === 'auto_merge' && frame.powerup.drags?.length);
+  expect(frames.length, 'The browser renders the automatic transfers').toBeGreaterThan(1);
+  const launches = new Map();
+  for (const frame of frames) {
+    const reserved = new Set();
+    for (const drag of frame.powerup.drags) {
+      expect(drag.duration, 'Every jelly has its own 300 ms transfer').toBeCloseTo(AUTO_MERGE_DRAG, 6);
+      expect(drag.elapsed).toBeGreaterThanOrEqual(0);
+      expect(drag.elapsed).toBeLessThanOrEqual(AUTO_MERGE_DRAG + 0.00001);
+      expect(drag.started_at).toBeGreaterThanOrEqual(0);
+      expect(drag.source_id).not.toBe(drag.target_id);
+      expect(words.has((drag.source.text + drag.target.text).trim().toLowerCase()),
+        'Each randomly selected source has a valid forward target').toBe(true);
+      for (const id of [drag.source_id, drag.target_id]) {
+        expect(reserved.has(id), 'Concurrent drags cannot reserve the same jelly').toBe(false);
+        reserved.add(id);
+      }
+      launches.set(`${drag.started_at}:${drag.source_id}:${drag.target_id}`, drag);
+    }
+  }
+  const ordered = [...launches.values()].sort((a, b) => a.started_at - b.started_at);
+  expect(ordered.length, 'Every completed pair was shown in transit').toBe(completed);
+  expect(ordered.length).toBeGreaterThan(1);
+  expect(ordered[1].started_at - ordered[0].started_at,
+    'The next eligible pair starts on the 200 ms beat before the first arrives').toBeCloseTo(AUTO_MERGE_BEAT, 5);
+  for (let index = 1; index < ordered.length; index++)
+    expect(ordered[index].started_at - ordered[index - 1].started_at,
+      'Dependency waits cannot turn into a burst of catch-up launches').toBeGreaterThanOrEqual(AUTO_MERGE_BEAT - 0.00001);
+  expect(frames.some(frame => frame.powerup.drags.length > 1), 'The 300 ms drags visibly overlap on the 200 ms launch rhythm').toBe(true);
+  expect(frames.some(frame => frame.fusions.length > 0), 'An earlier liquid union can continue while another jelly travels').toBe(true);
+  return { frames, launches: ordered };
+}
+
+test('Auto merge launches eligible pairs every 200 ms with overlapping 300 ms transfers', async ({ page }, info) => {
   const { errors } = await start(page, info, 5000);
   const before = await jelly(page), saved = await savedGrowth(page);
-  await beginTrace(page, 'auto-merge-80ms');
+  await beginTrace(page, 'auto-merge-200ms');
   await pressRect(page, before.powerup_buttons.auto_merge.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(3500);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(3000);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete';
   }, { timeout: 20000 }).toBe(true);
   const after = await jelly(page);
-  const evidence = await retainTrace(page, info, 'auto-merge-80ms', ['auto-midpoint', 'auto-overlap']);
-  const moving = evidence.timeline.filter(frame => frame.powerup.stage === 'drag');
-  expect(moving.length, 'The browser renders the automatic transfer').toBeGreaterThan(0);
-  for (const frame of moving) expect(frame.powerup.duration).toBeCloseTo(0.08, 6);
-  expect(evidence.timeline.some(frame => frame.fusions.length > 1),
-    'Earlier liquid unions remain visible as subsequent pairs arrive').toBe(true);
+  const evidence = await retainTrace(page, info, 'auto-merge-200ms', ['auto-midpoint', 'auto-overlap']);
+  expectAutoMergeTimeline(evidence, after.powerup.completed);
   expect(after.powerup.completed).toBeGreaterThan(1);
   expect(after.powerup.total).toBe(after.powerup.completed);
   expect(after.merged_count - before.merged_count).toBe(after.powerup.completed);
@@ -187,8 +236,12 @@ test('Auto merge transfers pairs on the 80 ms beat while earlier fusions remain 
   expect(fragmentTotal(after)).toBe(fragmentTotal(before));
   expect(await savedGrowth(page)).toBe(saved);
   const persisted = await storedWallet(page);
-  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-1500]);
-  await capture(page, info, 'auto-merge-80ms-complete');
+  expect(persisted.balance).toBe(3000);
+  const debits = Object.entries(persisted.receipts).filter(([, amount]) => amount < 0);
+  expect(debits).toHaveLength(1);
+  expect(debits[0][0].endsWith(`:${after.powerup.receipt_id}`)).toBe(true);
+  expect(debits[0][1]).toBe(-2000);
+  await capture(page, info, 'auto-merge-200ms-complete');
   expect(errors).toEqual([]);
 });
 
@@ -200,8 +253,9 @@ test('powerup prices stay visible and unaffordable purchases give feedback witho
   await capture(page, info, 'word-jelly-powerups-idle-zero-coins');
   const audioEvidence = { reducedMotion, audioAvailable, trials: [] };
   for (const kind of Object.keys(prices)) {
-    const before = await jelly(page), from = await playbackIndex(page);
+    const from = await playbackIndex(page);
     await beginTrace(page, `negative-${kind}`);
+    const before = await readyPowerup(page, kind);
     await pressRect(page, before.powerup_buttons[kind].rect);
     await expect.poll(async () => (await jelly(page)).powerup_buttons[kind].feedback_serial).toBe(before.powerup_buttons[kind].feedback_serial + 1);
     await expect.poll(async () => (await jelly(page)).powerup_buttons[kind].feedback_active).toBe(false);
@@ -237,8 +291,7 @@ test('powerup prices stay visible and unaffordable purchases give feedback witho
   await activateLibraryControl(page, 'LibrarySound');
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).muted)).toBe(true);
   await chooseMode(page, 'word_jelly');
-  await expect.poll(async () => (await jelly(page)).powerup_buttons.fragments.enabled).toBe(true);
-  const beforeMuted = await jelly(page), mutedFrom = await playbackIndex(page);
+  const beforeMuted = await readyPowerup(page, 'fragments'), mutedFrom = await playbackIndex(page);
   await pressRect(page, beforeMuted.powerup_buttons.fragments.rect);
   await expect.poll(async () => (await jelly(page)).powerup_buttons.fragments.feedback_serial)
     .toBe(beforeMuted.powerup_buttons.fragments.feedback_serial + 1);
@@ -307,40 +360,48 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   await expect.poll(async () => (await jelly(page)).powerup_buttons.auto_merge.enabled).toBe(true);
   const beforeAuto = await jelly(page), autoAudioFrom = await playbackIndex(page);
   expect(forwardPairs(beforeAuto).length).toBeGreaterThan(0);
-  await beginTrace(page, 'auto-merge');
+  await beginTrace(page, 'auto-merge', { pauseOnOverlap: true });
   await pressRect(page, beforeAuto.powerup_buttons.auto_merge.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(3000);
-  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyPowerupEvidence.frames['auto-midpoint']))).toBe(true);
-  await openModeMenu(page);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(2500);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
-  const paused = await jelly(page);
-  expect(paused.powerup.active, 'A paid multi-pair operation remains pending while Home is open').toBe(true);
-  await page.waitForTimeout(350);
-  expect((await jelly(page)).powerup).toEqual(paused.powerup);
-  expect((await wallet(page)).balance).toBe(3000);
-  await chooseMode(page, 'word_jelly');
+  const paused = await jelly(page), pausedWallet = await storedWallet(page);
+  try {
+    expect(paused.powerup.active, 'A paid multi-pair operation remains pending while the tab is hidden').toBe(true);
+    expect(paused.powerup.drags.length, 'The visibility change interrupts concurrent transfers').toBeGreaterThan(1);
+    await page.waitForTimeout(350);
+    const stillPaused = await jelly(page);
+    expect(stillPaused.powerup, 'Each transfer and the next-launch clock remain frozen').toEqual(paused.powerup);
+    expect(stillPaused.fusions).toEqual(paused.fusions);
+    expect(stillPaused.spawn_elapsed).toBe(paused.spawn_elapsed);
+    expect(stillPaused.generated_tiles).toBe(paused.generated_tiles);
+    expect(await storedWallet(page), 'Pausing never repeats the purchase').toEqual(pausedWallet);
+  } finally {
+    await page.evaluate(() => {
+      delete document.hidden;
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+  }
   await expect.poll(async () => {
     const state = await jelly(page);
     return !state.paused && state.powerup.kind === 'auto_merge' && !state.powerup.active &&
       state.powerup.stage === 'complete' && state.tiles.every(tile => tile.settled);
   }, { timeout: 45000 }).toBe(true);
   const afterAuto = await jelly(page);
-  const autoEvidence = await retainTrace(page, info, 'word-jelly-auto-merge', ['auto-midpoint']);
-  const dragFrames = autoEvidence.timeline.filter(frame => frame.powerup.stage === 'drag' && !frame.paused);
-  expect(dragFrames.length).toBeGreaterThan(1);
-  const firstSource = dragFrames[0].powerup.source_id;
-  const firstTarget = dragFrames[0].powerup.target_id;
+  const autoEvidence = await retainTrace(page, info, 'word-jelly-auto-merge', ['auto-midpoint', 'auto-overlap']);
+  expect(autoEvidence.pausedOnOverlap).toBe(true);
+  const { frames: dragFrames, launches } = expectAutoMergeTimeline(autoEvidence, afterAuto.powerup.completed);
+  const firstSource = launches[0].source_id;
+  const firstTarget = launches[0].target_id;
   const original = beforeAuto.tiles.find(tile => tile.id === firstSource);
   const target = beforeAuto.tiles.find(tile => tile.id === firstTarget);
   const distance = (a, b) => Math.hypot(a[0] + a[2] / 2 - b[0] - b[2] / 2, a[1] + a[3] / 2 - b[1] - b[3] / 2);
-  const travel = dragFrames.filter(frame => frame.powerup.source_id === firstSource &&
-    frame.powerup.elapsed / frame.powerup.duration > 0.2 && frame.powerup.elapsed / frame.powerup.duration < 0.8);
+  const travel = dragFrames.filter(frame => frame.powerup.drags.some(drag => drag.source_id === firstSource &&
+    drag.elapsed / drag.duration > 0.2 && drag.elapsed / drag.duration < 0.8));
   expect(travel.some(frame => {
     const moving = frame.tiles.find(tile => tile.id === firstSource);
     return moving?.visible && distance(moving.rect, original.rect) > 0.5 && distance(moving.rect, target.rect) > 0.5 &&
       distance(moving.rect, target.rect) < distance(original.rect, target.rect);
   }), 'The actual source jelly moves between its original slot and the target, rather than only drawing a trail').toBe(true);
-  for (const frame of dragFrames) expect(words.has((frame.powerup.source.text + frame.powerup.target.text).trim().toLowerCase())).toBe(true);
   expect(forwardPairs(afterAuto), 'Auto merge leaves no available forward dictionary pair').toEqual([]);
   expect(afterAuto.merged_count - beforeAuto.merged_count).toBe(afterAuto.powerup.completed);
   expect(afterAuto.powerup.completed).toBeGreaterThan(0);
@@ -354,8 +415,13 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     expect(frame.chest_tier).toBe(opening.chest_tier);
   }
   const savedAuto = await storedWallet(page);
-  expect(savedAuto.balance).toBe(3000);
-  expect(Object.values(savedAuto.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-1500, -500]);
+  expect(savedAuto.balance).toBe(2500);
+  expect(savedAuto, 'Resuming completes the existing purchase without another debit').toEqual(pausedWallet);
+  const autoDebits = Object.entries(savedAuto.receipts).filter(([id]) => !Object.hasOwn(savedFragments.receipts, id));
+  expect(autoDebits).toHaveLength(1);
+  expect(autoDebits[0][0].endsWith(`:${afterAuto.powerup.receipt_id}`)).toBe(true);
+  expect(autoDebits[0][1]).toBe(-2000);
+  expect(Object.values(savedAuto.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-2000, -500]);
   const completed = afterAuto.tiles.filter(tile => tile.mass > 1 && tile.word?.id);
   expect(completed.length).toBeGreaterThan(0);
   for (const tile of completed) {
@@ -374,12 +440,12 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   const earnedFragments = completed.reduce((sum, tile) => sum + tile.fragments, 0);
   await pressRect(page, (await jelly(page)).collect_button.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + completed.length);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(3000 + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(2500 + earnedCoins);
   expect((await jelly(page)).fragment_count).toBe(opening.fragment_count + earnedFragments);
   await expect.poll(() => savedGrowth(page)).not.toBe(growth);
   const finalSave = await storedWallet(page);
-  expect(finalSave.balance).toBe(3000 + earnedCoins);
-  expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-1500, -500]);
+  expect(finalSave.balance).toBe(2500 + earnedCoins);
+  expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-2000, -500]);
   fs.writeFileSync(info.outputPath('word-jelly-powerups-paid-audio.json'), JSON.stringify(audioEvidence, null, 2));
   fs.writeFileSync(info.outputPath('word-jelly-powerups-wallet.json'), JSON.stringify({ savedFragments, savedAuto, finalSave }, null, 2));
   expect(errors).toEqual([]);

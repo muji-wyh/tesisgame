@@ -39,9 +39,9 @@ const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
-const POWERUP_PRICES: Dictionary = {"auto_merge": 1500, "fragments": 500}
-const POWERUP_MERGE_BEAT_SECONDS: float = 0.08
-const POWERUP_DRAG_SECONDS: float = POWERUP_MERGE_BEAT_SECONDS
+const POWERUP_PRICES: Dictionary = {"auto_merge": 2000, "fragments": 500}
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.2
+const POWERUP_DRAG_SECONDS: float = 0.3
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
 const POWERUP_FRAGMENT_STAGGER: float = 0.18
 const POWERUP_FRAGMENT_RECOVERY: float = 0.35
@@ -198,7 +198,8 @@ func powerup_snapshot() -> Dictionary:
 	return _powerup.duplicate(true) if not _powerup.is_empty() else {
 		"active": false, "kind": "", "receipt_id": "", "stage": "", "elapsed": 0.0,
 		"duration": 0.0, "source_id": -1, "target_id": -1, "source": {}, "target": {},
-		"completed": 0, "total": 0, "arrivals": [], "clock": 0.0, "started_at": 0.0}
+		"completed": 0, "total": 0, "arrivals": [], "drags": [], "clock": 0.0,
+		"started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
 
 
 func can_activate_powerup(kind: String) -> bool:
@@ -234,8 +235,8 @@ func activate_powerup(kind: String) -> bool:
 		_powerup_ids.append(int(tile.id))
 	_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
 		"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
-		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [],
-		"clock": 0.0, "started_at": 0.0, "contact_played": false, "contact_pending": false}
+		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
+		"clock": 0.0, "started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
 	if kind == "fragments":
 		_prepare_powerup_fragments()
 	# The paid obligation exists before any user callback may pause or leave.
@@ -289,7 +290,8 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 		and str(_powerup.get("receipt_id", "")) == receipt_id
 
 
-func _powerup_pair(captured_only: bool = true) -> Array[int]:
+func _powerup_pair(captured_only: bool = true, random_source: bool = false) -> Array[int]:
+	var candidates: Array = []
 	for source: Dictionary in cells:
 		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source) \
 			or is_fusing(int(source.id)) or _reserved_for_powerup(int(source.id)):
@@ -299,14 +301,44 @@ func _powerup_pair(captured_only: bool = true) -> Array[int]:
 				or is_fusing(int(target.id)) or _reserved_for_powerup(int(target.id)):
 				continue
 			if _word_lookup.has(normalize_word(str(source.text) + str(target.text))):
-				return [int(source.id), int(target.id)]
-	return []
+				if not random_source:
+					return [int(source.id), int(target.id)]
+				# Each eligible source appears once, regardless of how many targets
+				# it can use. Availability checks never consume the seeded RNG.
+				candidates.append([int(source.id), int(target.id)])
+				break
+	var pair: Array[int] = []
+	if not candidates.is_empty():
+		pair.assign(candidates[_rng.randi_range(0, candidates.size() - 1)])
+	return pair
 
 
 func _reserved_for_powerup(tile_id: int) -> bool:
-	return bool(_powerup.get("active", false)) and str(_powerup.get("kind", "")) == "auto_merge" \
-		and (str(_powerup.get("stage", "")) == "drag" or bool(_powerup.get("contact_pending", false))) \
-		and tile_id in [int(_powerup.source_id), int(_powerup.target_id)]
+	if not bool(_powerup.get("active", false)) or str(_powerup.get("kind", "")) != "auto_merge":
+		return false
+	for drag: Dictionary in _powerup.drags:
+		if tile_id in [int(drag.source_id), int(drag.target_id)]:
+			return true
+	return false
+
+
+func _sync_powerup_drag() -> void:
+	# Legacy consumers follow the oldest drag; the full array owns every live
+	# reservation and keeps each overlapping journey on its independent clock.
+	if not _powerup.drags.is_empty():
+		var drag: Dictionary = _powerup.drags[0]
+		_powerup.stage = "drag"
+		for key: String in ["source_id", "target_id", "source", "target", "elapsed", "duration", "started_at", "contact_played", "contact_pending"]:
+			_powerup[key] = drag[key]
+		_held_tile_id = int(drag.source_id)
+	else:
+		_powerup.source_id = -1
+		_powerup.target_id = -1
+		_powerup.source = {}
+		_powerup.target = {}
+		_powerup.contact_played = false
+		_powerup.contact_pending = false
+		_held_tile_id = -1
 
 
 func _prepare_powerup_fragments() -> void:
@@ -354,33 +386,56 @@ func _advance_powerup() -> void:
 		if float(_powerup.elapsed) + EPSILON >= float(_powerup.duration):
 			_complete_powerup()
 		return
-	var stage: String = str(_powerup.stage)
-	if stage == "drag" or bool(_powerup.contact_pending):
-		if stage == "drag" and float(_powerup.elapsed) + EPSILON < POWERUP_DRAG_SECONDS:
-			return
+	for drag: Dictionary in _powerup.drags.duplicate():
+		if float(drag.elapsed) + EPSILON < float(drag.duration):
+			continue
 		# Keep both endpoints reserved if an audio callback pauses the round.
 		# Resume the same arrival without replaying its contact cue.
-		if not bool(_powerup.contact_played):
-			_powerup.stage = "fusion"
-			_powerup.elapsed = 0.0
-			_powerup.duration = FUSION_SECONDS
-			_powerup.contact_pending = true
-			_powerup.contact_played = true
+		if not bool(drag.contact_played):
+			drag.contact_pending = true
+			drag.contact_played = true
+			_sync_powerup_drag()
 			cue_requested.emit("contact")
 			if not _same_powerup(generation, receipt_id) or paused:
 				return
-		_powerup.contact_pending = false
-		_powerup.stage = "ready"
+		# A callback can drain this same paid obligation. Do not commit an
+		# arrival again after that nested advance already transferred it.
+		if not _powerup.drags.has(drag):
+			continue
+		drag.contact_pending = false
+		_powerup.drags.erase(drag)
+		_powerup.stage = "fusion"
+		_sync_powerup_drag()
 		_powerup_committing = true
-		try_merge(int(_powerup.source_id), int(_powerup.target_id), true)
+		try_merge(int(drag.source_id), int(drag.target_id), true)
 		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-	# Independent stable pairs can start on the next 80 ms beat while earlier
-	# fusions keep their full elastic animation. Only unavailable pairs wait.
-	var pair: Array[int] = _powerup_pair()
+	# Launches and arrivals have separate boundaries: a new 300 ms journey
+	# begins every 200 ms while earlier drags and fusions remain in flight.
+	var launch_ready: bool = float(_powerup.clock) + EPSILON >= float(_powerup.next_launch_at)
+	var pair: Array[int] = _powerup_pair(true, launch_ready)
+	if not pair.is_empty() and launch_ready:
+		var drag: Dictionary = {"source_id": pair[0], "target_id": pair[1],
+			"source": cell(pair[0]), "target": cell(pair[1]), "elapsed": 0.0,
+			"duration": POWERUP_DRAG_SECONDS, "started_at": float(_powerup.clock),
+			"contact_played": false, "contact_pending": false}
+		_powerup.drags.append(drag)
+		_powerup.next_launch_at = float(_powerup.clock) + POWERUP_MERGE_BEAT_SECONDS
+		_powerup.total = int(_powerup.total) + 1
+		_sync_powerup_drag()
+		var payload: Dictionary = powerup_snapshot()
+		# The event identifies the new launch even when an older drag still
+		# represents the snapshot. Consumers can animate all entries in drags.
+		payload.merge(drag.duplicate(true), true)
+		powerup_drag_started.emit(payload)
+		if _same_powerup(generation, receipt_id) and not paused:
+			cue_requested.emit("pick")
+		return
+	_sync_powerup_drag()
+	if not _powerup.drags.is_empty():
+		return
 	if pair.is_empty():
-		_held_tile_id = -1
 		if not fusions.is_empty():
 			_powerup.stage = "fusion"
 			_powerup.elapsed = float(fusions[0].elapsed)
@@ -394,21 +449,11 @@ func _advance_powerup() -> void:
 			return
 		_complete_powerup()
 		return
-	_powerup.stage = "drag"
+	# A newly available pair can wait for the remaining beat. Missed beats
+	# never accumulate: the next deadline is based on the actual launch time.
+	_powerup.stage = "ready"
 	_powerup.elapsed = 0.0
-	_powerup.duration = POWERUP_DRAG_SECONDS
-	_powerup.started_at = float(_powerup.clock)
-	_powerup.contact_played = false
-	_powerup.contact_pending = false
-	_powerup.source_id = pair[0]
-	_powerup.target_id = pair[1]
-	_powerup.source = cell(pair[0])
-	_powerup.target = cell(pair[1])
-	_powerup.total = int(_powerup.total) + 1
-	_held_tile_id = pair[0]
-	powerup_drag_started.emit(powerup_snapshot())
-	if _same_powerup(generation, receipt_id) and not paused:
-		cue_requested.emit("pick")
+	_powerup.duration = maxf(0.0, float(_powerup.next_launch_at) - float(_powerup.clock))
 
 
 func _powerup_boundary() -> float:
@@ -419,11 +464,16 @@ func _powerup_boundary() -> float:
 			if not bool(arrival.arrived):
 				return maxf(0.0, float(arrival.at) - float(_powerup.elapsed))
 		return maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
-	if str(_powerup.stage) == "drag":
-		return maxf(0.0, POWERUP_DRAG_SECONDS - float(_powerup.elapsed))
-	if _next_settlement() > EPSILON:
-		return _next_settlement()
-	return INF
+	var boundary: float = INF
+	for drag: Dictionary in _powerup.drags:
+		boundary = minf(boundary, maxf(0.0, float(drag.duration) - float(drag.elapsed)))
+	var launch_in: float = float(_powerup.next_launch_at) - float(_powerup.clock)
+	if launch_in > EPSILON:
+		boundary = minf(boundary, launch_in)
+	var settlement: float = _next_settlement()
+	if settlement > EPSILON:
+		boundary = minf(boundary, settlement)
+	return boundary
 
 
 func _complete_powerup() -> void:
@@ -433,6 +483,9 @@ func _complete_powerup() -> void:
 	_powerup.target_id = -1
 	_powerup.source = {}
 	_powerup.target = {}
+	_powerup.drags.clear()
+	_powerup.contact_played = false
+	_powerup.contact_pending = false
 	_held_tile_id = -1
 	_powerup_ids.clear()
 
@@ -756,6 +809,10 @@ func step(delta: float) -> void:
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
+			if str(_powerup.kind) == "auto_merge":
+				for drag: Dictionary in _powerup.drags:
+					drag.elapsed = minf(float(drag.duration), float(drag.elapsed) + consumed)
+				_sync_powerup_drag()
 		if collection_batch_active():
 			_collection_batch_elapsed += consumed
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
@@ -1318,7 +1375,7 @@ func _complete_merge(completed: Dictionary) -> void:
 		_powerup_ids.erase(int(b.id))
 		_powerup_ids.append(int(result.id))
 		_powerup.completed = int(_powerup.completed) + 1
-		if str(_powerup.stage) != "drag":
+		if _powerup.drags.is_empty():
 			_powerup.stage = "settling"
 			_powerup.elapsed = 0.0
 			_powerup.duration = SETTLE_SECONDS

@@ -2,6 +2,7 @@ extends Button
 ## A stable purchase target. The owner advances and pauses its feedback clock.
 
 const Style = preload("res://scripts/ui_style.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
 const CHEST = preload("res://assets/chests/royal/closed.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
@@ -12,7 +13,7 @@ const FAILURE_SECONDS: float = 0.42
 const REDUCED_SECONDS: float = 0.32
 
 var _kind: String = "auto_merge"
-var _price: int = 1500
+var _price: int = Model.POWERUP_PRICES.auto_merge
 var _available: bool = true
 var _affordable: bool = false
 var _busy: bool = false
@@ -49,7 +50,7 @@ func _init() -> void:
 	for event: Signal in [focus_entered, focus_exited, mouse_entered, mouse_exited, button_down, button_up]:
 		event.connect(queue_redraw)
 	set_ui_scale(1.0)
-	configure("auto_merge", 1500, false)
+	configure("auto_merge", Model.POWERUP_PRICES.auto_merge, false)
 
 
 func configure(kind: String, price: int, reduced_motion: bool) -> void:

@@ -93,6 +93,7 @@ func _run() -> void:
 	_test_powerup_payment_atomicity()
 	_test_powerup_auto_timeline()
 	_test_powerup_auto_rhythm()
+	_test_powerup_auto_random_sources()
 	_test_powerup_auto_completion_during_drag()
 	_test_powerup_auto_chain()
 	_test_powerup_manual_guards()
@@ -315,7 +316,7 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 1500, "fragments": 500},
+	check(Model.POWERUP_PRICES == {"auto_merge": 2000, "fragments": 500},
 		"paid powers have their advertised fixed coin prices")
 	for kind: String in ["auto_merge", "fragments"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
@@ -430,16 +431,20 @@ func _test_powerup_auto_timeline() -> void:
 		"the drag exposes both intact endpoint bodies for its presentation")
 	active.source.text = "changed snapshot"
 	active.target.fragments = 999
-	check(model.powerup_snapshot().source.text == "ca" and model.cell(1000).fragments == 2,
+	active.drags[0].source.text = "changed nested snapshot"
+	active.drags[0].target.fragments = 888
+	check(model.powerup_snapshot().source.text == "ca" and model.powerup_snapshot().drags[0].source.text == "ca"
+		and model.cell(1000).fragments == 2,
 		"presentation snapshots cannot mutate the captured power or live bodies")
-	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.08), "automatic drags use the requested 80 ms beat")
-	model.step(0.079)
+	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.3), "each automatic drag lasts the requested 300 ms")
+	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.2), "independent automatic launches use a 200 ms beat")
+	model.step(0.299)
 	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
-		"both bodies remain separate for the complete first 79 ms of the paid drag")
+		"both bodies remain separate for the complete first 299 ms of the paid drag")
 	model.step(0.001)
 	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
 		and model.fusions[0].a_id == 1001 and model.fusions[0].b_id == 1000,
-		"80 ms starts the normal fusion using the advertised ordered endpoints")
+		"300 ms starts the normal fusion using the advertised ordered endpoints")
 	model.step(Model.FUSION_SECONDS - 0.001)
 	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps the ordinary full fusion duration")
 	model.step(0.001)
@@ -466,42 +471,109 @@ func _test_powerup_auto_rhythm() -> void:
 	var regular_events: Dictionary = _observe(model)
 	check(model.activate_powerup("auto_merge") and events.drags.size() == 1,
 		"the first automatic source starts immediately after its saved purchase")
+	model.step(0.199)
+	check(events.drags.size() == 1 and model.fusions.is_empty(), "the second launch cannot run before 200 ms")
+	model.step(0.001)
+	check(events.drags.size() == 2 and model.powerup_snapshot().drags.size() == 2 and model.fusions.is_empty(),
+		"at 200 ms two independent source bodies travel simultaneously before either union")
+	model.step(0.099)
+	check(model.fusions.is_empty() and model.powerup_snapshot().drags.size() == 2,
+		"concurrent sources retain their separate 300 ms travel windows")
+	model.step(0.001)
+	check(model.fusions.size() == 1 and model.powerup_snapshot().drags.size() == 1
+		and is_equal_approx(float(model.powerup_snapshot().drags[0].elapsed), 0.1),
+		"the first contact at 300 ms leaves the second source's clock and reservation intact")
+	model.step(0.099)
+	check(events.drags.size() == 2, "the third source waits for its 400 ms launch boundary")
+	model.step(0.001)
+	check(events.drags.size() == 3 and model.powerup_snapshot().drags.size() == 2 and model.fusions.size() == 1,
+		"the 400 ms launch overlaps the second drag and the first ordinary fusion")
+	for drag: Dictionary in model.powerup_snapshot().drags:
+		check(model.cell(int(drag.source_id)).text == drag.source.text
+			and model.cell(int(drag.source_id)).fragments == drag.source.fragments
+			and model.cell(int(drag.target_id)).text == drag.target.text
+			and model.cell(int(drag.target_id)).fragments == drag.target.fragments,
+			"moving source and target bodies remain intact until their own contact")
+		check(str(drag.source.text) + str(drag.target.text) in ["cat", "dog", "sun"],
+			"every concurrent launch preserves forward dictionary spelling")
+	model.step(0.099)
+	check(model.fusions.size() == 1, "the second union cannot start before 500 ms")
+	model.step(0.001)
+	check(model.fusions.size() == 2 and model.powerup_snapshot().drags.size() == 1,
+		"the second source reaches its own target at 500 ms")
+	model.step(0.199)
+	check(model.fusions.size() == 2, "the third union cannot start before 700 ms")
+	model.step(0.001)
+	check(model.fusions.size() == 3 and model.powerup_snapshot().drags.is_empty() and model.merged_count == 0,
+		"three 300 ms drags hand over to ordinary overlapping fusions without early completed words")
 	var reserved: Dictionary = {}
-	for beat in range(3):
-		var drag: Dictionary = events.drags.back()
+	for index in range(events.drags.size()):
+		var drag: Dictionary = events.drags[index]
+		check(is_equal_approx(float(drag.started_at), index * 0.2),
+			"independent random sources launch exactly at 0, 200, and 400 ms")
 		for id: int in [int(drag.source_id), int(drag.target_id)]:
 			check(not reserved.has(id), "an in-flight automatic endpoint cannot be reserved by another pair")
 			reserved[id] = true
-		model.step(0.079)
-		check(model.fusions.size() == beat and events.drags.size() == beat + 1,
-			"the next automatic contact cannot run before its 80 ms beat")
-		model.step(0.001)
-		check(model.fusions.size() == beat + 1 and model.merged_count == 0,
-			"each 80 ms beat starts another liquid fusion while earlier unions remain visible")
-		check(events.drags.size() == mini(3, beat + 2),
-			"independent sources launch exactly at 0, 80, and 160 ms without waiting for prior fusion")
-		_assert_reservations(model, "automatic 80 ms beat")
+	_assert_reservations(model, "concurrent automatic drags")
 	check(reserved.size() == 6 and payments.size() == 1,
 		"one purchase schedules the three independent pairs exactly once")
-	model.step(Model.FUSION_SECONDS - 0.16 - 0.001)
+	model.step(Model.FUSION_SECONDS - 0.4 - 0.001)
 	check(model.merged_count == 0 and regular_events.completed.is_empty(),
-		"the faster launch rhythm preserves the full first fusion animation")
+		"overlapping source travel preserves the full first fusion animation")
 	for beat in range(3):
 		model.step(0.001)
 		check(model.merged_count == beat + 1 and regular_events.completed.size() == beat + 1,
-			"completed words arrive on the same 80 ms rhythm as their independent launches")
+			"completed words arrive on the same 200 ms rhythm as their independent launches")
 		if beat < 2:
-			model.step(0.079)
+			model.step(0.199)
 			check(model.merged_count == beat + 1,
-				"the next completed word cannot appear before its own 80 ms boundary")
+				"the next completed word cannot appear before its own 200 ms boundary")
 	model.finish_powerup(true)
 	check(not model.powerup_active() and model.fusions.is_empty() and model.collectable_ids().size() == 3,
 		"all overlapping automatic unions settle into three manually collectable words")
 	check(_board_fragments(model) == 21 and model.collected_coins == 0 and model.fragment_count == 0
 		and regular_events.collections.is_empty() and regular_events.attempts.is_empty(),
-		"the fast automatic rhythm preserves carried treasure and never automatically collects or credits learning")
-	_assert_board(model, "automatic 80 ms final board")
+		"the concurrent automatic rhythm preserves carried treasure and never automatically collects or credits learning")
+	_assert_board(model, "concurrent automatic final board")
 	model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_random_sources() -> void:
+	var source_orders: Dictionary = {}
+	for seed_value in range(1, 17):
+		var models: Array = [_model([_word("cat"), _word("dog"), _word("sun")]),
+			_model([_word("cat"), _word("dog"), _word("sun")])]
+		var orders: Array = []
+		for copy_index in range(models.size()):
+			var model = models[copy_index]
+			_board(model, ["ca", "t", "do", "g", "su", "n"])
+			model._rng.seed = seed_value
+			_accept_powerup_payments(model)
+			var events: Dictionary = _observe_powerups(model)
+			var rng_before: int = model._rng.state
+			for query in range(8):
+				check(model.can_activate_powerup("auto_merge"), "eligibility can inspect multiple valid random sources")
+				model.powerup_snapshot()
+			check(model._rng.state == rng_before, "eligibility and presentation reads do not consume a random selection")
+			check(model.activate_powerup("auto_merge"), "each seeded source-order fixture accepts its purchase")
+			if copy_index == 0:
+				model.step(4.0)
+			else:
+				for frame in range(400):
+					model.step(0.01)
+			var order: Array[int] = []
+			for drag: Dictionary in events.drags:
+				order.append(int(drag.source_id))
+				check(str(drag.source.text) + str(drag.target.text) in ["cat", "dog", "sun"],
+					"random selection never launches a reversed or invalid word")
+			check(order.size() == 3 and model.collectable_ids().size() == 3 and not model.powerup_active(),
+				"each random ordering exhausts all three independent pairs")
+			orders.append(order)
+			model.purchase_powerup = Callable()
+		check(orders[0] == orders[1] and _approximately_equal_state(_rejection_state(models[0]), _rejection_state(models[1])),
+			"the same seed reproduces source selection and final state under coarse and fine frames")
+		source_orders[str(orders[0])] = true
+	check(source_orders.size() > 1, "different seeds vary automatic source order instead of always traversing the board")
 
 
 func _test_powerup_auto_completion_during_drag() -> void:
@@ -513,18 +585,22 @@ func _test_powerup_auto_completion_during_drag() -> void:
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	check(model.activate_powerup("auto_merge"), "a larger board starts one paid automatic stream")
-	model.step(0.83)
-	var held: Dictionary = model.powerup_snapshot()
-	check(events.drags.size() == 11 and held.stage == "drag" and is_equal_approx(float(held.elapsed), 0.03),
-		"the eleventh source is already moving before the first liquid union completes")
+	var first_completion: float = Model.POWERUP_DRAG_SECONDS + Model.FUSION_SECONDS
+	model.step(first_completion - 0.01)
+	var active: Dictionary = model.powerup_snapshot()
+	var held: Dictionary = active.drags.back()
+	check(events.drags.size() == 6 and active.stage == "drag" and active.drags.size() == 2
+		and is_equal_approx(float(held.started_at), 1.0),
+		"the sixth source is already moving alongside the fifth before the first liquid union completes")
 	model.step(0.02)
-	var continued: Dictionary = model.powerup_snapshot()
-	check(model.merged_count == 1 and continued.stage == "drag" and continued.source_id == held.source_id
-		and continued.target_id == held.target_id and is_equal_approx(float(continued.elapsed), 0.05),
-		"an older fusion completing mid-drag cannot replace the current endpoints or reset its 80 ms clock")
-	model.step(0.03)
-	check(events.drags.size() == 12 and model.powerup_snapshot().stage == "drag",
-		"the next source still starts at 880 ms despite an earlier completion between beats")
+	var continued: Array = model.powerup_snapshot().drags.filter(func(drag: Dictionary) -> bool:
+		return int(drag.source_id) == int(held.source_id))
+	check(model.merged_count == 1 and model.powerup_snapshot().stage == "drag" and continued.size() == 1
+		and continued[0].target_id == held.target_id and is_equal_approx(float(continued[0].elapsed), float(held.elapsed) + 0.02),
+		"an older fusion completing mid-drag cannot replace another pair's endpoints or reset its 300 ms clock")
+	model.step(1.2 - first_completion - 0.01)
+	check(events.drags.size() == 7 and is_equal_approx(float(events.drags.back().started_at), 1.2),
+		"the seventh source still starts at 1200 ms despite an earlier completion between beats")
 	model.finish_powerup(true)
 	check(not model.powerup_active() and model.merged_count == 12 and model.collectable_ids().size() == 12
 		and payments.size() == 1 and model.collected_coins == 0,
@@ -693,10 +769,12 @@ func _test_powerup_pause_and_clocks() -> void:
 		var generated: int = model.generated_tiles
 		var upcoming: Array = model.upcoming.duplicate(true)
 		check(model.activate_powerup(kind), "paid sequence starts near the automatic supply deadline")
-		model.step(0.10)
+		model.step(0.25)
 		model.set_paused(true)
 		var before: Dictionary = model.snapshot()
 		var active: Dictionary = model.powerup_snapshot()
+		if kind == "auto_merge":
+			check(active.drags.size() == 2, "pause coverage freezes two simultaneously moving sources")
 		model.step(50.0)
 		check(model.snapshot() == before and model.powerup_snapshot() == active,
 			"pause freezes paid sequence, board motion, and supply at the exact same point")
@@ -775,7 +853,7 @@ func _test_powerup_determinism() -> void:
 
 func _test_powerup_finish_and_lifecycle() -> void:
 	for kind: String in ["auto_merge", "fragments"]:
-		for progress: float in [0.0, 0.20, 0.60, 1.20]:
+		for progress: float in [0.0, 0.20, 0.25, 0.60, 1.20]:
 			var model = _powerup_model(kind)
 			var payments: Array = _accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
@@ -900,7 +978,9 @@ func _test_powerup_presentation_reentry() -> void:
 			if cue != "contact" or handled.contact:
 				return
 			handled.contact = true
-			check(model.powerup_snapshot().stage == "fusion" and model.fusions.is_empty(),
+			var pending: Array = model.powerup_snapshot().drags.filter(func(drag: Dictionary) -> bool:
+				return bool(drag.contact_pending))
+			check(pending.size() == 1 and bool(pending[0].contact_played) and model.fusions.is_empty(),
 				"the contact cue can interrupt after the announced handover but before the merge commits")
 			if action == "pause":
 				model.set_paused(true)

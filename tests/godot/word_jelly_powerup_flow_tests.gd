@@ -116,7 +116,7 @@ func _check_auto_merge(app) -> void:
 	view.powerup_buttons.auto_merge.pressed.emit()
 	var state: Dictionary = game.powerup_snapshot()
 	check(state.active and state.kind == "auto_merge" and state.stage == "drag"
-		and app.coin_wallet.balance == before - 1500 and app.coin_wallet._receipts.size() == receipts + 1,
+		and app.coin_wallet.balance == before - 2000 and app.coin_wallet._receipts.size() == receipts + 1,
 		"The Auto merge button durably pays once before starting a visible automatic drag")
 	check(cues.count("powerup_success") == 1 and purchases == [{"kind": "auto_merge", "success": true}]
 		and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true]),
@@ -125,7 +125,7 @@ func _check_auto_merge(app) -> void:
 		"The automatic sequence reserves all three gameplay action buttons")
 	view.powerup_buttons.auto_merge.pressed.emit()
 	view.powerup_buttons.fragments.pressed.emit()
-	check(app.coin_wallet.balance == before - 1500 and app.coin_wallet._receipts.size() == receipts + 1,
+	check(app.coin_wallet.balance == before - 2000 and app.coin_wallet._receipts.size() == receipts + 1,
 		"Repeated button signals during a paid sequence cannot buy another action")
 	var from: Vector2 = view._tile_rect(state.source).get_center()
 	var to: Vector2 = view._tile_rect(state.target).get_center()
@@ -135,14 +135,30 @@ func _check_auto_merge(app) -> void:
 		and halfway.x > minf(from.x, to.x) and halfway.x < maxf(from.x, to.x)
 		and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
 		"The source jelly travels through an intermediate position with light effects before union")
-	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
-	var following: Dictionary = game.powerup_snapshot()
-	check(game.fusions.size() == 1 and following.stage == "drag" and int(following.source_id) != int(state.source_id)
-		and not game.is_fusing(int(following.source_id)) and not game.is_fusing(int(following.target_id)),
-		"At 80 ms the next independent source starts while the first liquid union continues")
+	view._process(0.10)
+	var concurrent: Dictionary = game.powerup_snapshot()
+	check(concurrent.drags.size() == 2 and game.fusions.is_empty(),
+		"At 250 ms two automatic sources travel simultaneously before the first contact")
+	var following: Dictionary = concurrent.drags.back()
+	check(int(following.source_id) != int(state.source_id) and int(following.target_id) != int(state.target_id)
+		and is_equal_approx(float(following.elapsed), 0.05),
+		"The second random source receives its own reserved pair and starts at 200 ms")
 	var next_from: Vector2 = view._tile_rect(following.source).get_center()
 	var next_to: Vector2 = view._tile_rect(following.target).get_center()
-	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
+	for drag: Dictionary in concurrent.drags:
+		var origin: Vector2 = view._tile_rect(drag.source).get_center()
+		var target: Vector2 = view._tile_rect(drag.target).get_center()
+		var body: Vector2 = view._tiles[int(drag.source_id)].get_rect().get_center()
+		check(body.distance_to(origin) > 0.1 and body.distance_to(target) > 0.1
+			and body.x > minf(origin.x, target.x) and body.x < maxf(origin.x, target.x),
+			"Each concurrent source is painted at its own intermediate travel position")
+	view._process(0.05)
+	var after_contact: Dictionary = game.powerup_snapshot()
+	check(game.fusions.size() == 1 and after_contact.drags.size() == 1
+		and int(after_contact.drags[0].source_id) == int(following.source_id)
+		and is_equal_approx(float(after_contact.drags[0].elapsed), 0.1),
+		"At 300 ms only the first source contacts while the second keeps its existing motion clock")
+	view._process(0.05)
 	var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
 	check(game.fusions.size() == 1 and next_halfway.distance_to(next_from) > 2.0
 		and next_halfway.distance_to(next_to) > 2.0 and view._powerup_effects.stamps.size() > 0,
@@ -151,14 +167,14 @@ func _check_auto_merge(app) -> void:
 	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2,
 		"One automatic purchase completes each available forward word pair on the captured board")
 	check(game.collected_coins == 0 and game.fragment_count == 0 and game.cleared_pairs == 0
-		and app.coin_wallet.balance == before - 1500 and app.growth.snapshot().streaks == growth
+		and app.coin_wallet.balance == before - 2000 and app.growth.snapshot().streaks == growth
 		and not app._coin_flight.snapshot().active and not app.audio.voice.playing,
 		"Automatic merging leaves words for manual collection without rewards, mastery, coin flights, or narration")
 	check(not view.collect_button.disabled and not view.powerup_buttons.fragments.disabled,
 		"The three-action area returns control after the paid sequence")
-	var duplicate: Dictionary = app._purchase_word_jelly_powerup(str(state.receipt_id), "auto_merge", 1500)
+	var duplicate: Dictionary = app._purchase_word_jelly_powerup(str(state.receipt_id), "auto_merge", 2000)
 	check(bool(duplicate.ok) and bool(duplicate.duplicate) and int(duplicate.amount) == 0
-		and app.coin_wallet.balance == before - 1500 and app.coin_wallet._receipts.size() == receipts + 1,
+		and app.coin_wallet.balance == before - 2000 and app.coin_wallet._receipts.size() == receipts + 1,
 		"Repeating an already-paid application callback preserves the exact wallet balance and receipt count")
 	check(app._status_announcement.contains("already processed") and not app._status_announcement.contains("purchased for")
 		and purchases.size() == 1 and cues.count("powerup_success") == 1 and not game.powerup_active(),
@@ -253,13 +269,14 @@ func _check_fragment_coarse_frame(app) -> void:
 
 
 func _check_lifecycle(app) -> void:
-	await _prepare(app, 1)
+	await _prepare(app, 2)
 	var view = app._word_jelly
 	var game = view.game
 	var before: int = app.coin_wallet.balance
 	view.powerup_buttons.auto_merge.pressed.emit()
-	view._process(0.10)
+	view._process(0.25)
 	var paused: Dictionary = game.powerup_snapshot()
+	check(paused.drags.size() == 2, "Home interruption covers both concurrently moving paid sources")
 	app._show_mode_menu()
 	view._process(0.40)
 	check(game.paused and game.powerup_snapshot() == paused, "Home freezes the paid automatic drag clock")
@@ -267,7 +284,7 @@ func _check_lifecycle(app) -> void:
 	check(not app.audio.pair_feedback.playing, "Home stops purchase feedback audio")
 	app._hide_mode_menu()
 	view.set_process(false)
-	check(not game.paused and game.powerup_snapshot() == paused and app.coin_wallet.balance == before - 1500
+	check(not game.paused and game.powerup_snapshot() == paused and app.coin_wallet.balance == before - 2000
 		and view._powerup_effects.is_visible_in_tree(),
 		"Returning from Home resumes the same already-paid automatic drag")
 	view.finish_button.accessibility_requested.emit()
@@ -278,7 +295,7 @@ func _check_lifecycle(app) -> void:
 	view.set_process(false)
 	check(not game.paused and game.powerup_snapshot() == paused, "Cancelling Finish resumes the original powerup rather than purchasing again")
 	_drain(view)
-	check(app.coin_wallet.balance == before - 1500 and cues.count("powerup_success") == 1,
+	check(app.coin_wallet.balance == before - 2000 and cues.count("powerup_success") == 1,
 		"Home and Finish interruptions do not replay purchase feedback or charge again")
 	await _prepare(app, 1)
 	game = view.game
@@ -309,7 +326,7 @@ func _check_preferences(app) -> void:
 	check(not app.audio.pair_feedback.playing and not app.audio.voice.playing,
 		"Muted powerups retain visual feedback while positive feedback and narration remain silent")
 	_drain(view)
-	check(view.game.collectable_ids().size() == 1 and app.coin_wallet.balance == before - 1500,
+	check(view.game.collectable_ids().size() == 1 and app.coin_wallet.balance == before - 2000,
 		"Mute and reduced motion preserve the automatic action and exact purchase amount")
 	view.powerup_buttons.fragments.pressed.emit()
 	_drain(view)
@@ -344,7 +361,7 @@ func _check_responsive_actions(app) -> void:
 				"Powerups and Collect remain separate from the board, supply, chest, and Finish" + context)
 			for previous in range(index):
 				check(not bounds.intersects(buttons[previous].get_global_rect()), "The three action targets never overlap" + context)
-		check(view.powerup_buttons.auto_merge.snapshot().get("price", 0) == 1500
+		check(view.powerup_buttons.auto_merge.snapshot().get("price", 0) == 2000
 			and view.powerup_buttons.fragments.snapshot().get("price", 0) == 500,
 			"Responsive powerup buttons retain their exact visible price metadata" + context)
 

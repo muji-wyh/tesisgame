@@ -2,7 +2,7 @@
 
 The Auto merge and Treasure purchase controls share the game's quiet rounded
 interface framing. Their artwork stays separate from the stable touch target,
-title, and coin price. Auto merge costs 1500 coins; Treasure costs 500 coins.
+title, and coin price. Auto merge costs 2000 coins; Treasure costs 500 coins.
 The latter uses the same current chest texture as the jelly fragment markers.
 
 ## Artwork and acquisition
@@ -50,6 +50,16 @@ user-supplied provenance and unspecified source license remain unchanged. No
 new extraction, source audio claim, or CC0 attribution is applied to them.
 The source recording, processing and embedded-game limits remain documented in
 [answer feedback sounds](pair-feedback-audio.md).
+
+Auto merge randomly selects an eligible source Jelly on each 200 ms beat and
+finds a matching target, starting immediately after purchase. Each drag lasts
+300 ms, so consecutive flights overlap briefly. Every moving source and its
+target stay reserved until contact; later beats can use other available pairs.
+If only moving or settling pairs remain, the operation waits for an eligible
+pair without compressing missed beats. The existing arcing motion, gentle
+stretch, target glow, and sparkle trail follow each flight's own clock. Contact
+starts the liquid merge and its cue at the destination. Completed words remain
+on the board until the player collects them.
 
 Automatic movement reuses the ordinary pick, contact, and merge cues. Treasure
 flights reuse the existing current chest texture, `portal_glow.png`, and

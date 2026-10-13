@@ -675,14 +675,16 @@ func _pose_powerup() -> void:
 	var state: Dictionary = game.powerup_snapshot()
 	var stamps: Array[Dictionary] = []
 	var unit: float = maxf(8.0, _pitch)
-	if bool(state.get("active", false)) and str(state.get("stage", "")) == "drag":
-		var source: Dictionary = state.get("source", {})
-		var target: Dictionary = state.get("target", {})
-		var id: int = int(state.get("source_id", -1))
-		if not source.is_empty() and not target.is_empty() and _tiles.has(id):
+	if bool(state.get("active", false)) and str(state.get("kind", "")) == "auto_merge":
+		for drag: Dictionary in state.get("drags", []):
+			var source: Dictionary = drag.get("source", {})
+			var target: Dictionary = drag.get("target", {})
+			var id: int = int(drag.get("source_id", -1))
+			if source.is_empty() or target.is_empty() or not _tiles.has(id):
+				continue
 			var from: Rect2 = _tile_rect(source)
 			var to: Vector2 = _tile_rect(target).get_center()
-			var t: float = clampf(float(state.elapsed) / maxf(0.01, float(state.duration)), 0.0, 1.0)
+			var t: float = clampf(float(drag.elapsed) / maxf(0.01, float(drag.duration)), 0.0, 1.0)
 			var p: float = t if reduced_motion else smoothstep(0.0, 1.0, t)
 			var lift: float = 0.0 if reduced_motion else sin(p * PI) * minf(unit * 0.65, from.get_center().distance_to(to) * 0.18)
 			var tile: WordTile = _tiles[id]
