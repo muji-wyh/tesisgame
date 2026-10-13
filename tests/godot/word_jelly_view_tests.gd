@@ -76,6 +76,7 @@ func _run() -> void:
 	_check_word_reveal(view)
 	_check_word_reveal_lifecycle(view)
 	_check_collection_stack_fall(view)
+	_check_dragged_support_fall(view)
 	_check_release_after_support_collection(view)
 	_check_coarse_frame_collection_landing(view)
 	_check_word_pair_colors(view)
@@ -317,7 +318,7 @@ func _check_powerup_paused_resize(view) -> void:
 			purchases.clear()
 			_install(view, ["ca", "t"])
 			view._activate_powerup("auto_merge")
-			_advance(view, 0.17 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + 0.15)
+			_advance(view, Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + 0.15)
 			check(view.game.powerup_snapshot().stage == stage,
 				"responsive powerup coverage reaches the paid " + stage + " stage")
 			view.pause(true)
@@ -335,7 +336,7 @@ func _check_powerup_paused_resize(view) -> void:
 				check(body.get_rect().get_center().is_equal_approx(before) and view.game.powerup_snapshot() == frozen,
 					"paused responsive drag neither moves nor advances its paid clock")
 				view.pause(false)
-				_advance(view, 0.04)
+				_advance(view, Model.POWERUP_DRAG_SECONDS * 0.25)
 				check(body.get_rect().get_center().distance_to(before) > 0.1,
 					"resuming a resized automatic drag continues its existing travel")
 			else:
@@ -1236,6 +1237,84 @@ func _check_collection_stack_fall(view) -> void:
 			check(cues.count("land") == 1, "the end of the squash cannot replay a second gravity impact")
 			check(view._press(pointer, _center(view, int(lower.id))), "the landed stack accepts ordinary input again")
 			view.cancel_input()
+
+
+func _check_dragged_support_fall(view) -> void:
+	for reduced: bool in [false, true]:
+		for pointer: int in [-1, 7]:
+			for interruption: String in ["cancel", "pointer_cancel", "outside", "pause", "focus"]:
+				_reset(view, reduced)
+				view.game.cells.clear()
+				var support: Dictionary = view.game._new_tile("hat", 2, 2)
+				var lower: Dictionary = view.game._new_tile("nose", 2, 1)
+				var upper: Dictionary = view.game._new_tile("shoe", 2, 0)
+				for index in range(3):
+					var tile: Dictionary = [support, lower, upper][index]
+					tile.column = 1
+					tile.row = Model.ROWS - 1 - index
+					view.game.cells.append(tile)
+				view._sync_tiles()
+				view._layout()
+				var source: int = int(support.id)
+				var origin: Vector2 = _center(view, source)
+				var lower_origin: Vector2 = view._tiles[int(lower.id)].position
+				var upper_origin: Vector2 = view._tiles[int(upper.id)].position
+				var destination: Vector2 = _placement_point(view, support, 4, 3)
+				_pointer_event(view, pointer, "down", origin)
+				_pointer_event(view, pointer, "move", origin + Vector2(3.0 / Style.ui_scale(view), 0.0))
+				_advance(view, 0.1)
+				check(not view._dragging and not view.game.is_lifted(source)
+					and view._tiles[int(lower.id)].position.is_equal_approx(lower_origin),
+					"pressing a support or moving below the drag threshold leaves its stack supported")
+				_pointer_event(view, pointer, "move", destination)
+				check(view._dragging and view.game.is_lifted(source) and view._source == source,
+					"mouse and touch lift the source only when actual dragging begins")
+				check(int(lower.row) == Model.ROWS - 1 and int(upper.row) == Model.ROWS - 2
+					and bool(lower.get("falling", false)) and bool(upper.get("falling", false)),
+					"dragging hat away starts both nose and shoe falling before pointer release")
+				var held_position: Vector2 = view._tiles[source].position
+				_advance(view, Model.SETTLE_SECONDS * 0.45)
+				if reduced:
+					check(view._tiles[int(lower.id)].position.is_equal_approx(view._tile_rect(lower).position),
+						"reduced motion places the unsupported word at its new supported destination")
+				else:
+					check(view._tiles[int(lower.id)].position.y > lower_origin.y
+						and view._tiles[int(lower.id)].position.y < view._tile_rect(lower).position.y
+						and view._tiles[int(upper.id)].position.y > upper_origin.y,
+						"the painted stack descends through an intermediate pose while the pointer stays down")
+				_advance(view, Model.SETTLE_SECONDS)
+				check(view._source == source and view._dragging
+					and view._tiles[source].position.is_equal_approx(held_position),
+					"falling neighbors cannot move or release the jelly following the pointer")
+				check(view._settled(lower) and view._settled(upper)
+					and view._tiles[int(lower.id)].get_rect().is_equal_approx(view._tile_rect(lower))
+					and view._tiles[int(upper.id)].get_rect().is_equal_approx(view._tile_rect(upper)),
+					"both upper words finish their fall while the lower support remains held")
+				check(cues.count("land") == 1 and payouts.is_empty() and attempts.is_empty(),
+					"support loss produces one landing cue without collection or reward events")
+				match interruption:
+					"cancel": view.cancel_input()
+					"pointer_cancel": _pointer_event(view, pointer, "up", destination, true)
+					"outside": _pointer_event(view, pointer, "up", view.get_global_transform() * (view._board.end + Vector2(100.0, 0.0)))
+					"pause":
+						view.pause(true)
+						view.pause(false)
+					"focus": view._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+				_advance(view, Model.SETTLE_SECONDS * 3.0)
+				check(not view.game.is_lifted(source) and view._source == -1 and not view._dragging,
+					"%s clears the lifted source and pointer ownership" % interruption)
+				for tile: Dictionary in view.game.cells:
+					check(_has_support(view.game.cells, tile) and view._settled(tile)
+						and view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(tile)),
+						"%s restores every body at a supported, interactive visual position" % interruption)
+					for other: Dictionary in view.game.cells:
+						if int(tile.id) < int(other.id):
+							check(not view._tile_rect(tile).intersects(view._tile_rect(other)),
+								"returning the dragged support cannot overlap words that fell into its old position")
+				check(support.text == "hat" and int(support.mass) == 2 and int(support.fragments) == 2
+					and int(lower.fragments) == 1 and view.game.cells.size() == 3
+					and view.game.fusions.is_empty() and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
+					"support removal and cancellation retain every word and fragment without merging or collecting")
 
 
 func _check_release_after_support_collection(view) -> void:

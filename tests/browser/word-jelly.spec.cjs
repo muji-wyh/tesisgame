@@ -320,11 +320,12 @@ function expectSupplyLayout(state, bounds) {
 }
 
 function expectSupportedChild(state, child) {
+  const resting = state.tiles.filter(tile => !tile.lifted);
   const bottom = child.row + child.height;
-  const supported = bottom === state.rows || state.tiles.some(other => other.id !== child.id &&
+  const supported = bottom === state.rows || resting.some(other => other.id !== child.id &&
     other.row === bottom && other.column < child.column + child.width && other.column + other.width > child.column);
   expect(supported, `Jelly ${child.text} touches the floor or an occupied footprint immediately below`).toBe(true);
-  for (const other of state.tiles.filter(tile => tile.id !== child.id)) {
+  for (const other of resting.filter(tile => tile.id !== child.id)) {
     const overlaps = child.column < other.column + other.width && child.column + child.width > other.column &&
       child.row < other.row + other.height && child.row + child.height > other.row;
     expect(overlaps, `Jelly ${child.text} cannot overlap jelly ${other.id}`).toBe(false);
@@ -617,6 +618,76 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.mass * 50);
   expect(after.collected_coins).toBe(before.collected_coins + completed.mass * 50);
   expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
+  expect(errors).toEqual([]);
+});
+
+test('lifting a lower jelly drops its stack while the pointer remains held', async ({ page }, info) => {
+  const errors = await startWordJelly(page), bounds = await metrics(page);
+  const before = await jelly(page), startingWallet = await wallet(page);
+  const support = before.tiles.find(tile => tile.row === before.rows - 1 && tile.width === 1 &&
+    before.tiles.some(upper => upper.column === tile.column && upper.row + upper.height === tile.row && upper.width === 1));
+  expect(support, 'The opening board contains a removable lower support').toBeTruthy();
+  const upper = before.tiles.find(tile => tile.column === support.column && tile.row + tile.height === support.row);
+  const from = center(support.rect, bounds);
+  const destination = center([before.board_rect[0] + before.board_rect[2] * 0.8,
+    before.board_rect[1] + before.board_rect[3] * 0.15, 0, 0], bounds);
+  await page.evaluate(id => {
+    const status = document.getElementById('game-status');
+    window.heldSupportFall = [];
+    const observer = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const tile = state.tiles?.find(item => item.id === id);
+      if (tile) window.heldSupportFall.push({ time: performance.now(), tile, drag: state.drag });
+    });
+    observer.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  }, upper.id);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await jelly(page)).drag.source).toBe(support.id);
+    expect((await jelly(page)).tiles.find(tile => tile.id === upper.id).row,
+      'A press alone keeps the original support').toBe(upper.row);
+    await page.mouse.move(destination.x, destination.y);
+    await expect.poll(async () => {
+      const state = await jelly(page), fallen = state.tiles.find(tile => tile.id === upper.id);
+      return state.drag.active && state.drag.source === support.id && fallen?.settled && fallen.row > upper.row;
+    }, { message: 'The upper jelly lands without waiting for pointer-up' }).toBe(true);
+    const held = await jelly(page), landed = held.tiles.find(tile => tile.id === upper.id);
+    expect(landed.rect[1]).toBeGreaterThan(upper.rect[1]);
+    expectSupportedChild(held, landed);
+    const timeline = await page.evaluate(() => window.heldSupportFall);
+    expect(timeline.some(frame => frame.drag.source === support.id && frame.tile.falling && !frame.tile.settled &&
+      frame.tile.rect[1] > upper.rect[1] && frame.tile.rect[1] < landed.rect[1]),
+    'The browser renders an intermediate fall while the lower jelly is held').toBe(true);
+    fs.writeFileSync(info.outputPath('word-jelly-held-support-fall.json'), JSON.stringify({ before, held, timeline }, null, 2));
+    await capture(page, info, 'word-jelly-stack-landed-while-support-held');
+    expect(held.collected_coins).toBe(before.collected_coins);
+    expect(held.merged_count).toBe(before.merged_count);
+    const outside = center([before.board_rect[0] - 20, before.board_rect[1] + before.board_rect[3] * 0.3, 0, 0], bounds);
+    await page.mouse.move(outside.x, outside.y);
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.drag.active && state.tiles.every(tile => tile.settled);
+  }).toBe(true);
+  const after = await jelly(page);
+  for (const tile of after.tiles) {
+    expect(Boolean(tile.lifted), 'Cancellation returns every body to the board').toBe(false);
+    expectSupportedChild(after, tile);
+    for (const other of after.tiles.filter(item => item.id > tile.id)) {
+      expect(tile.column < other.column + other.width && tile.column + tile.width > other.column &&
+        tile.row < other.row + other.height && tile.row + tile.height > other.row,
+      'Cancellation never overlaps the stack that occupied the old source position').toBe(false);
+    }
+  }
+  for (const original of before.tiles) {
+    const restored = after.tiles.find(tile => tile.id === original.id);
+    expect(restored).toBeTruthy();
+    for (const field of ['text', 'mass', 'fragments']) expect(restored[field]).toEqual(original[field]);
+  }
+  expect((await wallet(page)).balance).toBe(startingWallet.balance);
   expect(errors).toEqual([]);
 });
 

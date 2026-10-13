@@ -156,9 +156,9 @@ func _finished(result: Dictionary) -> void:
 
 func cancel_input() -> void:
 	_keyboard_source = -1
-	super.cancel_input()
+	# Resolve the lifted body before the base view paints its resting position.
 	game.set_held_tile()
-	_sync_positions()
+	super.cancel_input()
 
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	if _placement_tile != null:
@@ -233,6 +233,21 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_refresh_marks()
 	_publish()
 	return true
+
+func _move(global_point: Vector2) -> void:
+	if _preview_first_id < 0 and not _dragging and _source >= 0:
+		var point: Vector2 = get_global_transform().affine_inverse() * global_point
+		if point.distance_to(_press_point) * Style.ui_scale(self) > 7.0:
+			var source: int = _source
+			var generation: int = _generation
+			var serial: int = _gesture_serial
+			# A press still supports its stack; an actual drag lifts that support.
+			if not game.begin_drag(source):
+				cancel_input()
+				return
+			if generation != _generation or serial != _gesture_serial or source != _source or not _can_play():
+				return
+	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
 	if _preview_first_id >= 0:

@@ -35,6 +35,11 @@ func _run() -> void:
 	_test_collection_gravity()
 	_test_gravity_partial_support()
 	_test_gravity_held_stack()
+	_test_drag_support_removal()
+	_test_drag_partial_support()
+	_test_drag_return_capacity()
+	_test_drag_same_cell_release()
+	_test_drag_finish_lifecycle()
 	_test_gravity_reserved_operations()
 	_test_gravity_simultaneous_collections()
 	_test_gravity_settlement_determinism()
@@ -574,6 +579,9 @@ func _test_powerup_manual_guards() -> void:
 			"paid sequencing blocks manual merge, collection, split, and collect-all")
 		check(not model.can_reposition(1000, 0, 6) and not model.reposition(1000, 0, 6)
 			and not model.can_drop_now() and not model.drop_now(), "paid sequencing blocks reposition and supply input")
+		var lift_candidate: int = held_before if held_before >= 0 else 1000
+		check(not model.begin_drag(lift_candidate) and not model.is_lifted(lift_candidate),
+			"paid automatic motion cannot detach a manually requested source from its support footprint")
 		model.set_held_tile(1000)
 		check(model._held_tile_id == held_before and not model.can_activate_powerup("auto_merge")
 			and not model.can_activate_powerup("fragments") and not model.activate_powerup("auto_merge")
@@ -1286,6 +1294,215 @@ func _test_gravity_held_stack() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	check(model.cell(1001).row == 7 and bool(model.cell(1001).falling), "deferred gravity resumes after the released body's growth settles")
 	_assert_board(model, "released compressed body")
+
+
+func _test_drag_support_removal() -> void:
+	var model = _model([_word("hat"), _word("nose")])
+	var hat: Dictionary = _placed_tile(1000, "hat", 1, 7, 2, 3, _word("hat"))
+	var nose: Dictionary = _placed_tile(1001, "nose", 1, 6, 2, 2, _word("nose"))
+	hat.skin = 4
+	nose.skin = 6
+	model.cells.assign([hat.duplicate(true), nose.duplicate(true), _placed_tile(1002, "x", 5, 7)])
+	model._merge_history[1000] = [_tile(2000, "h", 1, 1), _tile(2001, "at", 1, 2)]
+	model._merge_history[1001] = [_tile(2002, "no", 1, 1), _tile(2003, "se", 1, 1)]
+	var history: Dictionary = model._merge_history.duplicate(true)
+	var events: Dictionary = _observe(model)
+	check(not model.begin_drag(1000) and not model.is_lifted(1000),
+		"an unheld word cannot silently detach itself from the board")
+	model.set_held_tile(1000)
+	model.step(0.10)
+	check(not model.is_lifted(1000) and model.cell(1001).row == 6 and not bool(model.cell(1001).get("falling", false)),
+		"merely pressing or selecting hat leaves nose resting on its unchanged support")
+	check(model.begin_drag(1000) and model.is_lifted(1000),
+		"an actual drag lifts hat out of the board's support occupancy")
+	var falling: Dictionary = model.cell(1001)
+	check(falling.column == 1 and falling.row == 7 and bool(falling.falling) and falling.falling_rows == 1
+		and bool(falling.settling) and is_zero_approx(float(falling.age)) and not bool(falling.arrival),
+		"nose immediately begins a natural one-row fall while hat is still being dragged")
+	for original: Dictionary in [hat, nose]:
+		var live: Dictionary = model.cell(int(original.id))
+		for key: String in ["id", "text", "word", "mass", "parts_count", "fragments", "chest", "kind", "skin", "width", "height"]:
+			check(live[key] == original[key], "lifting support preserves the body's " + key)
+	model.set_paused(true)
+	var paused: Dictionary = model.snapshot()
+	model.step(10.0)
+	check(model.snapshot() == paused and model.is_lifted(1000),
+		"pause freezes the lifted source and the unsupported body's in-progress fall")
+	model.set_paused(false)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.is_settled(model.cell(1001)) and model.cell(1001).row == 7,
+		"nose lands in the vacated hat footprint before the pointer is released")
+	model.set_held_tile(-1)
+	var restored: Dictionary = model.cell(1000)
+	check(not model.is_lifted(1000) and model._held_tile_id == -1
+		and restored.width == hat.width and restored.height == hat.height
+		and not _footprint(restored).intersects(_footprint(model.cell(1001))),
+		"cancelling after nose occupies the old position restores hat's whole body without overlap or loss")
+	check(model.cell(1001).row == 7 and model.cell(1001).column == 1,
+		"cancellation never moves the already landed nose back into the air")
+	model.step(Model.SETTLE_SECONDS * 2.0)
+	check(model._merge_history == history and _board_fragments(model) == 5 and model.cells.size() == 3
+		and events.collections.is_empty() and events.attempts.is_empty() and events.completed.is_empty()
+		and model.collected_coins == 0 and model.fragment_count == 0 and model.merged_count == 0,
+		"dragging and cancelling preserve ancestry, words, fragments, and rewards exactly")
+	_assert_supported_tiles(model, [1000, 1001], "cancelled drag above an occupied origin")
+	_assert_board(model, "cancelled drag above an occupied origin")
+	var settled: Dictionary = model.snapshot()
+	model.set_held_tile(-1)
+	check(model.snapshot() == settled, "a late repeated cancellation cannot move or duplicate the restored word")
+
+
+func _test_drag_partial_support() -> void:
+	for mass: int in [3, 7]:
+		var model = _model([_word("hat")])
+		var hat: Dictionary = _placed_tile(1000, "hat", 0, 7, 2, 2, _word("hat"))
+		var upper: Dictionary = _placed_tile(1001, "upper", 1 if mass == 3 else 0, 6 if mass == 3 else 5, mass, 3)
+		var support_column: int = 3 if mass == 3 else 5
+		model.cells.assign([hat.duplicate(true), upper.duplicate(true), _placed_tile(1002, "x", support_column, 7)])
+		model.set_held_tile(1000)
+		check(model.begin_drag(1000), "a supporting word can be lifted beneath a wide or wrapped neighbor")
+		model.step(Model.SETTLE_SECONDS)
+		check(_footprint(model.cell(1001)) == _footprint(upper) and not bool(model.cell(1001).get("falling", false)),
+			"a remaining support beneath any part of a wide or wrapped bottom edge prevents an invented fall")
+		model.set_held_tile(-1)
+		model.step(Model.SETTLE_SECONDS)
+		check(_board_fragments(model) == 5 and model.collected_coins == 0 and model.fragment_count == 0,
+			"a partially supported drag and cancellation do not consume either body's treasure")
+		_assert_supported_tiles(model, [1000, 1001], "partial support during a real drag")
+		_assert_board(model, "partial support during a real drag")
+
+
+func _test_drag_return_capacity() -> void:
+	var model = _model([_word("hat"), _word("nose"), _word("cat")])
+	var hat: Dictionary = _placed_tile(1000, "hat", 0, 7, 2, 3, _word("hat"))
+	hat.skin = 4
+	var compressed: Dictionary = _placed_tile(1002, "cat", 2, 7, 2, 4, _word("cat"))
+	compressed.width = 1
+	model.cells.assign([hat.duplicate(true), _placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), compressed])
+	_fill_rows(model, 4, 7)
+	model._merge_history[1000] = [_tile(3000, "h", 1, 1), _tile(3001, "at", 1, 2)]
+	var history: Dictionary = model._merge_history.duplicate(true)
+	var events: Dictionary = _observe(model)
+	_assert_board(model, "crowded drag fixture")
+	var initial_count: int = model.cells.size()
+	var initial_generated: int = model.generated_tiles
+	model.set_held_tile(1000)
+	check(model.begin_drag(1000), "a wide source can lift out of a physically supported crowded board")
+	model.step(Model.SETTLE_SECONDS * 3.0)
+	check(model.cell(1001).row == 7 and model.is_settled(model.cell(1001)),
+		"the return-capacity reservation never holds the unsupported stack in the air")
+	check(model.cell(1002).width == 2,
+		"an independent compressed body can restore growth while preserving a return cell for the live drag")
+	var excluded_ids: Array[int] = []
+	var drops: int = 0
+	for attempt in range(Model.ROWS + 2):
+		model._restore_growth()
+		model.step(Model.SETTLE_SECONDS * 2.0)
+		if not model.can_drop_now():
+			break
+		var previous_count: int = model.cells.size()
+		check(model.drop_now(), "real incoming supply can use spare capacity during an active drag")
+		drops += 1
+		check(model.cells.size() > previous_count and model._occupied(excluded_ids, false).size() < Model.CAPACITY,
+			"incoming supply adds bodies but never consumes the lifted source's last return cell")
+		model.step(2.0)
+		check(model.phase == "playing" and model.is_lifted(1000),
+			"repeated arrivals retain the live lifted source until the player releases it")
+	check(drops >= 3 and not model.can_drop_now() and model._occupied(excluded_ids, false).size() == Model.CAPACITY - 1,
+		"repeated supply and growth stop exactly at the single remaining real return cell")
+	var before_cancel: Dictionary = {}
+	for tile: Dictionary in model.cells:
+		before_cancel[int(tile.id)] = tile.duplicate(true)
+	var expected_fragments: int = _board_fragments(model)
+	model.set_held_tile(-1)
+	model.step(Model.SETTLE_SECONDS * 2.0)
+	check(not model.is_lifted(1000) and model._held_tile_id == -1 and model._dragged_tile_id == -1,
+		"cancelling at capacity restores the lifted source and clears every live drag identity")
+	check(model.cell(1000).width == 1 and model.cell(1000).height == 1,
+		"the full board uses its one-cell return capacity without discarding the wide source")
+	check(model.cells.size() == initial_count + model.generated_tiles - initial_generated
+		and model.cells.size() == before_cancel.size() and _board_fragments(model) == expected_fragments,
+		"a crowded cancellation retains all original and newly supplied bodies and carried fragments")
+	var restored_ids: Array[int] = []
+	for tile: Dictionary in model.cells:
+		restored_ids.append(int(tile.id))
+		var original: Dictionary = before_cancel[int(tile.id)]
+		for key: String in ["id", "text", "word", "mass", "parts_count", "fragments", "chest", "kind", "skin"]:
+			check(tile.get(key) == original.get(key), "crowded cancellation preserves every body's " + key)
+	check(model._merge_history == history and model.collected_coins == 0 and model.fragment_count == 0
+		and model.merged_count == 0 and events.collections.is_empty() and events.attempts.is_empty() and events.completed.is_empty(),
+		"compressed return preserves source ancestry and never invents collection or merge rewards")
+	_assert_supported_tiles(model, restored_ids, "crowded drag cancellation")
+	_assert_board(model, "crowded drag cancellation")
+
+
+func _test_drag_same_cell_release() -> void:
+	for locked: bool in [false, true]:
+		var model = _model([_word("hat"), _word("cat")])
+		var hat: Dictionary = _placed_tile(1000, "hat", 0, 6, 2, 3, _word("hat"))
+		hat.placement_locked = locked
+		model.cells.assign([hat, _placed_tile(1001, "cat", 0, 7, 2, 0, _word("cat"))])
+		model.set_held_tile(1000)
+		check(model.begin_drag(1000) and model.collect(1001),
+			"a lifted body can lose its support while its original placement is still free")
+		model.step(Model.COLLECT_SECONDS)
+		check(model.reposition(1000, 0, 6), "a lifted source can release over its unchanged logical cell")
+		var restored: Dictionary = model.cell(1000)
+		check(bool(restored.placement_locked) == locked and not model.is_lifted(1000)
+			and model._held_tile_id == -1 and model._dragged_tile_id == -1,
+			"same-cell release preserves the existing growth lock and clears the active drag")
+		check(restored.row == 7 and bool(restored.falling) and restored.falling_rows == 1,
+			"same-cell release immediately falls onto the floor when its previous support was collected")
+		model.step(Model.SETTLE_SECONDS)
+		_assert_board(model, "same-cell lifted release")
+
+
+func _test_drag_finish_lifecycle() -> void:
+	for accepted_merge: bool in [false, true]:
+		var model = _model([_word("hat"), _word("hats"), _word("nose")])
+		model.cells.assign([_placed_tile(1000, "hat", 0, 7, 2, 3, _word("hat")),
+			_placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), _placed_tile(1002, "s", 4, 7, 1, 1)])
+		model._merge_history[1000] = [_tile(2000, "h", 1, 1), _tile(2001, "at", 1, 2)]
+		var events: Dictionary = _observe(model)
+		model.set_held_tile(1000)
+		check(model.begin_drag(1000), "finish cleanup fixture lifts a supporting source")
+		model.step(Model.SETTLE_SECONDS)
+		var result_id: int = -1
+		if accepted_merge:
+			check(model.try_merge(1000, 1002, true) == "merged", "the lifted prefix can enter an accepted merge")
+			result_id = int(model.fusions[0].result.id)
+			model.step(Model.FUSION_SECONDS * 0.5)
+		model.set_paused(true)
+		var result: Dictionary = model.finish_round()
+		check(model.phase == "finished" and model.fusions.is_empty() and model._held_tile_id == -1
+			and model._dragged_tile_id == -1 and not model.is_lifted(1000),
+			"finishing during a live drag or accepted airborne merge clears every pending drag and operation")
+		check(model.cell(1001).row == 7 and _board_fragments(model) == 6
+			and model.collected_coins == 0 and model.fragment_count == 0 and result.coins == 0 and result.words.is_empty()
+			and events.collections.is_empty() and events.attempts.is_empty(),
+			"finish cleanup retains the fallen stack and all carried fragments without awarding uncollected words")
+		var mass: int = 0
+		for tile: Dictionary in model.cells:
+			mass += int(tile.mass)
+			check(not model.is_lifted(int(tile.id)), "finished boards contain no airborne support exclusions")
+		check(mass == 5, "finishing mid-drag preserves the total mass of every jelly")
+		if accepted_merge:
+			check(model.cells.size() == 2 and model.cell(1000).is_empty() and model.cell(1002).is_empty()
+				and model.cell(result_id).text == "hats" and model.cell(result_id).mass == 3
+				and model.cell(result_id).fragments == 4 and events.completed.size() == 1 and model.merged_count == 1,
+				"finish completes an already accepted lifted merge once without resurrecting its old source rectangle")
+		else:
+			check(model.cells.size() == 3 and model.cell(1000).text == "hat" and events.completed.is_empty(),
+				"finish restores a freely held source without creating a merge")
+		_assert_board(model, "finish during a lifted source")
+		var finished_state: Dictionary = model.snapshot()
+		check(model.finish_round() == result and model.snapshot() == finished_state,
+			"repeated finish cannot repeat a lifted source's merge or restoration")
+		check(model.configure([_word("hat"), _word("nose")], 3, 42)
+			and model._held_tile_id == -1 and model._dragged_tile_id == -1 and not model.is_lifted(1000)
+			and model.fusions.is_empty() and model._merge_history.is_empty(),
+			"a replacement round discards every old lifted identity and merge ancestry")
+		_assert_board(model, "new round after a lifted source")
 
 
 func _test_gravity_reserved_operations() -> void:

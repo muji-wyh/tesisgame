@@ -84,6 +84,7 @@ var _generation: int = 0
 var _growth_pending: bool = false
 var _gravity_pending: bool = false
 var _held_tile_id: int = -1
+var _dragged_tile_id: int = -1
 var _collection_batch_active: bool = false
 var _collection_batch_ids: Array[int] = []
 var _collection_batch_cursor: int = 0
@@ -142,6 +143,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_growth_pending = false
 	_gravity_pending = false
 	_held_tile_id = -1
+	_dragged_tile_id = -1
 	_reset_collection_batch()
 	_powerup.clear()
 	_powerup_ids.clear()
@@ -456,7 +458,7 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	_powerup_committing = false
 	var a: Dictionary = cell(a_id)
 	var b: Dictionary = cell(b_id)
-	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b):
+	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b) or is_lifted(b_id):
 		return "ignored"
 	# Only the dragged prefix followed by this target may form the current word.
 	# Reject before allocating IDs or reserving either body.
@@ -482,6 +484,9 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 		"popped": false
 	}
 	fusions.append(active)
+	if _dragged_tile_id == a_id:
+		# The accepted fusion owns the airborne source from this point onward.
+		_dragged_tile_id = -1
 	var generation: int = _generation
 	fusion_started.emit(active.duplicate(true))
 	if _can_continue(generation) and _fusion_index(str(active.attempt_id)) >= 0:
@@ -500,7 +505,7 @@ func split(tile_id: int) -> bool:
 	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var parent: Dictionary = cell(tile_id)
-	if not is_settled(parent) or not can_split(parent):
+	if not is_settled(parent) or not can_split(parent) or is_lifted(tile_id):
 		return false
 	var results: Array[Dictionary] = _split_placements(parent)
 	if results.size() != 2:
@@ -532,7 +537,7 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if phase != "playing" or paused or powerup_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
-	if tile.is_empty() or not is_settled(tile) or not is_valid_word(tile):
+	if tile.is_empty() or not is_settled(tile) or not is_valid_word(tile) or is_lifted(tile_id):
 		return false
 	if not _collection_event_ids.has(tile_id):
 		_collection_event_ids[tile_id] = _event_id("collect")
@@ -816,6 +821,8 @@ func set_held_tile(tile_id: int = -1) -> void:
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
 	if _held_tile_id == held_id:
 		return
+	if _dragged_tile_id >= 0 and _dragged_tile_id != held_id:
+		_restore_dragged_tile()
 	if _held_tile_id >= 0 and not is_fusing(_held_tile_id):
 		# Even an unchanged release must reconsider support beneath its old anchor.
 		# An accepted operation owns its own support change after it commits.
@@ -825,13 +832,103 @@ func set_held_tile(tile_id: int = -1) -> void:
 	changed.emit()
 
 
+func begin_drag(tile_id: int) -> bool:
+	if phase != "playing" or paused or powerup_active() or collection_batch_active() \
+		or tile_id != _held_tile_id or is_fusing(tile_id):
+		return false
+	if _dragged_tile_id == tile_id:
+		return true
+	var index: int = _index_for_id(tile_id)
+	if index < 0 or _dragged_tile_id >= 0 or not is_settled(cells[index]):
+		return false
+	var source: Dictionary = cells[index]
+	var removed_support: bool = false
+	for tile: Dictionary in cells:
+		if int(tile.id) == tile_id or bool(tile.get("lifted", false)):
+			continue
+		if int(tile.row) + int(tile.height) == int(source.row) \
+			and int(tile.column) < int(source.column) + int(source.width) \
+			and int(source.column) < int(tile.column) + int(tile.width):
+			removed_support = true
+			break
+	_dragged_tile_id = tile_id
+	source.lifted = true
+	if removed_support:
+		_gravity_pending = true
+		_resume_pending_motion()
+	changed.emit()
+	return true
+
+
+func is_lifted(tile_id: int) -> bool:
+	var index: int = _index_for_id(tile_id)
+	return index >= 0 and bool(cells[index].get("lifted", false))
+
+
+func _restore_dragged_tile() -> void:
+	var index: int = _index_for_id(_dragged_tile_id)
+	if index < 0 or is_fusing(_dragged_tile_id):
+		_dragged_tile_id = -1
+		return
+	var tile: Dictionary = cells[index]
+	var occupied: Dictionary = _occupied([_dragged_tile_id], false)
+	var extent := Vector2i(int(tile.width), int(tile.height))
+	var original_extent: Vector2i = extent
+	var position: Vector2i = _drag_return_position(occupied, extent.x, extent.y, tile)
+	if position.x < 0:
+		# Retain as much of the original body as possible if falling stacks have
+		# fragmented its old space. Mass, word data and ancestry remain intact.
+		var best_area: int = 0
+		for height in range(1, original_extent.y + 1):
+			for width in range(1, original_extent.x + 1):
+				if width * height <= best_area:
+					continue
+				var candidate: Vector2i = _drag_return_position(occupied, width, height, tile)
+				if candidate.x >= 0:
+					best_area = width * height
+					position = candidate
+					extent = Vector2i(width, height)
+		if position.x < 0:
+			return
+		if extent.x != int(tile.width) or extent.y != int(tile.height):
+			tile.placement_locked = false
+	tile.column = position.x
+	tile.row = position.y
+	tile.width = extent.x
+	tile.height = extent.y
+	tile.lifted = false
+	tile.age = SETTLE_SECONDS
+	tile.settling = false
+	tile.arrival = false
+	tile.falling = false
+	tile.falling_rows = 0
+	_dragged_tile_id = -1
+	_growth_pending = true
+	_gravity_pending = true
+
+
+func _drag_return_position(occupied: Dictionary, width: int, height: int, anchor: Dictionary) -> Vector2i:
+	var center := Vector2(float(anchor.column) + float(anchor.width) * 0.5,
+		float(anchor.row) + float(anchor.height) * 0.5)
+	var nearest := Vector2i(-1, -1)
+	var distance: float = INF
+	for row in range(ROWS - height, -1, -1):
+		for column in range(COLUMNS - width + 1):
+			var candidate := Vector2(column + width * 0.5, row + height * 0.5)
+			var candidate_distance: float = center.distance_squared_to(candidate)
+			if candidate_distance < distance and _fits(occupied, column, row, width, height):
+				nearest = Vector2i(column, row)
+				distance = candidate_distance
+	return nearest
+
+
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
 	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or (tile_id != _held_tile_id and not is_settled(tile)):
 		return false
-	if column == int(tile.column) and row == int(tile.row):
+	if column == int(tile.column) and row == int(tile.row) and not is_lifted(tile_id):
 		return false
 	var width: int = int(tile.width)
 	var height: int = int(tile.height)
@@ -844,11 +941,13 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 	if not can_reposition(tile_id, column, row):
 		return false
 	var tile: Dictionary = cells[_index_for_id(tile_id)]
+	var changed_position: bool = column != int(tile.column) or row != int(tile.row)
 	tile.column = column
 	tile.row = row
 	# This preserves the chosen footprint during later automatic growth only;
 	# it never exempts a manually placed body from gravity.
-	tile.placement_locked = true
+	if changed_position:
+		tile.placement_locked = true
 	# Make this release eligible for the support pass immediately, without a
 	# floating handover wobble before the actual fall begins.
 	tile.age = SETTLE_SECONDS
@@ -856,6 +955,9 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 	tile.arrival = false
 	tile.falling = false
 	tile.falling_rows = 0
+	tile.lifted = false
+	if _dragged_tile_id == tile_id:
+		_dragged_tile_id = -1
 	if _held_tile_id == tile_id:
 		_held_tile_id = -1
 	# Preserve the chosen column and full footprint while dropping onto support.
@@ -979,8 +1081,21 @@ func finish_round() -> Dictionary:
 			_complete_operation(str(pending.attempt_id))
 			if generation != _generation or phase == "finished":
 				return _result.duplicate(true)
+	# A dragged source has already released its support and its old rectangle
+	# may now hold another body. Preserve its accepted merge instead of putting
+	# that source back through the stack when the round ends mid-animation.
+	for pending in fusions.duplicate():
+		if str(pending.operation) == "merge" and is_lifted(int(pending.a_id)):
+			_complete_operation(str(pending.attempt_id))
+			if generation != _generation or phase == "finished":
+				return _result.duplicate(true)
+	_restore_dragged_tile()
 	phase = "finished"
 	fusions.clear()
+	_dragged_tile_id = -1
+	_held_tile_id = -1
+	for tile: Dictionary in cells:
+		tile.lifted = false
 	_result = {"cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	for word in _completed_words.values():
@@ -1232,6 +1347,7 @@ func _complete_split(completed: Dictionary) -> void:
 		restored.arrival = false
 		restored.falling = false
 		restored.falling_rows = 0
+		restored.lifted = false
 		restored.placement_locked = false
 		cells.append(restored)
 	if _held_tile_id == parent_id:
@@ -1372,7 +1488,7 @@ func _settle_collected_stack() -> void:
 			# operation or settlement boundary retries their support settlement.
 			_gravity_pending = true
 			continue
-		var occupied: Dictionary = _occupied([int(tile.id)])
+		var occupied: Dictionary = _occupied([int(tile.id)], false)
 		var row: int = int(tile.row)
 		while row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
 			row += 1
@@ -1388,10 +1504,10 @@ func _settle_collected_stack() -> void:
 		_growth_pending = true
 
 
-func _occupied(excluded_ids: Array[int] = []) -> Dictionary:
+func _occupied(excluded_ids: Array[int] = [], reserve_drag_return: bool = true) -> Dictionary:
 	var occupied: Dictionary = {}
 	for tile in cells:
-		if not int(tile.id) in excluded_ids:
+		if not int(tile.id) in excluded_ids and not bool(tile.get("lifted", false)):
 			_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
 	# A fusion owns its future footprint throughout the animation, so another
 	# merge or incoming batch cannot take its destination before handover.
@@ -1402,6 +1518,14 @@ func _occupied(excluded_ids: Array[int] = []) -> Dictionary:
 		elif str(active.operation) == "split":
 			for child: Dictionary in active.results:
 				_occupy(occupied, int(child.column), int(child.row), int(child.width), int(child.height))
+	if reserve_drag_return and _dragged_tile_id >= 0 and not _dragged_tile_id in excluded_ids:
+		# A moving spare cell protects cancellation from new arrivals and growth.
+		# Gravity never sees this reservation, so it cannot act as hidden support.
+		var anchor: Dictionary = cell(_dragged_tile_id)
+		if not anchor.is_empty():
+			var position: Vector2i = _drag_return_position(_occupied([], false), 1, 1, anchor)
+			if position.x >= 0:
+				_occupy(occupied, position.x, position.y, 1, 1)
 	return occupied
 
 
@@ -1431,7 +1555,7 @@ func _split_placements(parent: Dictionary) -> Array[Dictionary]:
 		outgoing_ids.append(int(active.b_id))
 	# Outgoing bodies still block placement, but only their reserved results
 	# can support a child after concurrent animations have completed.
-	var support_occupied: Dictionary = _occupied(outgoing_ids)
+	var support_occupied: Dictionary = _occupied(outgoing_ids, false)
 	var center := Vector2(float(parent.column) + float(parent.width) * 0.5,
 		float(parent.row) + float(parent.height) * 0.5)
 	for option: Dictionary in options:
