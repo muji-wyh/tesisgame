@@ -5,6 +5,7 @@ signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
+const WordSampler = preload("res://scripts/word_sampler.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MAX_HINTS: int = 3
 const MATCH_PAIR_COUNT: int = 5
@@ -58,17 +59,13 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 		rng.randomize()
 	else:
 		rng.seed = seed_value
-	var pool: Array = eligible.duplicate(true)
-	_shuffle(pool, rng)
+	var pool: Array = WordSampler.weighted_order(eligible.duplicate(true), rng)
 	# Every required pictured word must remain reachable. Theme/adventure names
 	# do not randomly narrow this pool to a topic that can starve another word.
 	var previous_ids: Array = lesson_words.map(func(word: Dictionary) -> String: return str(word.id)) if seed_value < 0 else []
-	var prioritized: Array = []
-	for priority in range(2, -1, -1):
-		var cohort: Array = pool.filter(func(word: Dictionary) -> bool: return clampi(int(word.get("_growth_priority", 0)), 0, 2) == priority)
-		prioritized.append_array(cohort.filter(func(word: Dictionary) -> bool: return not previous_ids.has(word.id)))
-		prioritized.append_array(cohort.filter(func(word: Dictionary) -> bool: return previous_ids.has(word.id)))
-	pool = prioritized
+	var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous_ids.has(word.id))
+	fresh.append_array(pool.filter(func(word: Dictionary) -> bool: return previous_ids.has(word.id)))
+	pool = fresh
 	if not requested_adventure_id.is_empty() and not repeating:
 		var requested: Dictionary = {}
 		for adventure in Data.adventures(eligible):

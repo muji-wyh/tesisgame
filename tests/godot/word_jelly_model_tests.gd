@@ -84,6 +84,7 @@ func _run() -> void:
 	_test_independent_operations()
 	_test_lifecycle_reentry()
 	_test_supply_and_determinism()
+	_test_mastery_supply()
 	_test_supply_packets()
 	_test_all_age_complementary_supply()
 	_test_supply_preview_stability()
@@ -3466,6 +3467,63 @@ func _test_supply_and_determinism() -> void:
 		check(whole.cells[index].id == sliced.cells[index].id and whole.cells[index].text == sliced.cells[index].text,
 			"time slicing preserves tile identity and text")
 	_assert_board(whole, "automatic supply")
+
+
+func _test_mastery_supply() -> void:
+	var words: Array = []
+	var mastered_ids: Dictionary = {}
+	for text: String in ["cat", "dog", "hat", "sun", "moon", "star", "fish", "duck", "book", "ball", "car", "tree", "boat", "frog", "apple", "bird"]:
+		words.append(_word(text))
+		if words.size() <= 8:
+			mastered_ids[text] = true
+	var live: Dictionary = {"active": false, "calls": 0}
+	var model := Model.new()
+	model.practice_weight_for = func(word: Dictionary) -> float:
+		live.calls += 1
+		return 0.8 if bool(live.active) and mastered_ids.has(str(word.id)) else 1.0
+	check(model.configure(words, 3, 419), "a mixed live-mastery catalog starts Jelly Words")
+	model.spawn_interval = 10000.0
+	var preview: Array = model.upcoming.duplicate(true)
+	var before_calls: int = int(live.calls)
+	live.active = true
+	model._fill_upcoming()
+	check(model.upcoming == preview, "new mastery cannot replace already advertised Jelly Words chunks")
+	var emitted: Array = model.cells.duplicate(true)
+	for packet_index in range(400):
+		preview = model.upcoming.duplicate(true)
+		emitted.append_array(preview)
+		model.cells.clear()
+		check(model.drop_now(int(preview[0].id)), "weighted Jelly Words supply continues over many catalog cycles")
+		for root: Dictionary in preview:
+			var released: Dictionary = model.cell(int(root.id))
+			check(str(released.text) == str(root.text) and int(released.supply_group) == int(root.supply_group)
+				and int(released.supply_part) == int(root.supply_part) and int(released.fragments) == int(root.fragments),
+				"mastery weighting preserves committed chunk spelling, pairing, and fragments")
+		model.step(_latest_arrival_ready(model))
+	var counts: Dictionary = {}
+	var group_parts: Dictionary = {}
+	for root: Dictionary in emitted:
+		var group: int = int(root.supply_group)
+		group_parts[group] = int(group_parts.get(group, 0)) + 1
+		if int(root.supply_part) == 0:
+			var id: String = str(root.source_word_id)
+			counts[id] = int(counts.get(id, 0)) + 1
+	var mastered: int = 0
+	var unmastered: int = 0
+	for word_id: String in counts:
+		if mastered_ids.has(word_id):
+			mastered += int(counts[word_id])
+		else:
+			unmastered += int(counts[word_id])
+	var ratio: float = float(mastered) / float(unmastered)
+	check(ratio > 0.76 and ratio < 0.84,
+		"Jelly Words gently lowers mastered source frequency beyond the opening packets: %.3f" % ratio)
+	check(counts.size() == words.size() and counts.values().min() >= 60,
+		"every mastered Jelly Words entry remains available for regular review")
+	check(group_parts.values().all(func(count: int) -> bool: return count == 2),
+		"long weighted supply still emits both complementary chunks for every selected word")
+	check(int(live.calls) > before_calls and model.phase == "playing",
+		"future packets consult live mastery without restarting the Jelly Words round")
 
 
 func _curated_word(text: String, parts: Array[String]) -> Dictionary:

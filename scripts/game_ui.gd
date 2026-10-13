@@ -2,6 +2,7 @@ extends Control
 
 const Model = preload("res://scripts/game_model.gd")
 const Data = preload("res://scripts/game_data.gd")
+const WordSampler = preload("res://scripts/word_sampler.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const VocabularyLoader = preload("res://scripts/vocabulary_loader.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
@@ -1393,6 +1394,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_pop_rewards.configure_saved(data.chests, reduced_motion)
 			_pop_rewards_shown = true
 	if _is_jelly_mode():
+		_active_jelly().game.practice_weight_for = _practice_weight
 		if not _active_jelly().configure(_learning_words(), growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
 			_show_error(_active_jelly().game.error)
@@ -1441,9 +1443,8 @@ func _configure_pop(seed_value: int = -1) -> void:
 	_pop_reward_theme = ""
 	var pool: Array = _learning_words().filter(func(word: Dictionary) -> bool:
 		return Data.word_age(word) <= growth.learning_age() and Data.supports_mode(word, "pop"))
-	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a._growth_priority > b._growth_priority)
-	var target_pool: Array = pool.filter(func(word: Dictionary) -> bool: return word._growth_priority > 0)
-	_pop.configure(target_pool if target_pool.size() >= 5 else pool, reduced_motion, seed_value)
+	_pop.game.practice_weight_for = _practice_weight
+	_pop.configure(pool, reduced_motion, seed_value)
 	_pop.apply_theme(Data.theme(model.theme_id), data.chests)
 	_pop.retry_button.text = "Play again"
 
@@ -4675,8 +4676,12 @@ func _learning_words(for_phrase: bool = false) -> Array:
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool:
 		return dependencies.has(str(word.id)) if for_phrase else Data.word_age(word) == age).duplicate(true)
 	for word: Dictionary in words:
-		word["_growth_priority"] = (2 if Data.word_age(word) == growth.learning_age() else 1) if not growth.is_mastered(str(word.id)) else 0
+		word["_practice_weight"] = _practice_weight(word)
 	return words
+
+
+func _practice_weight(word: Dictionary) -> float:
+	return WordSampler.MASTERED_WEIGHT if growth.is_mastered(str(word.id)) else 1.0
 
 
 func _match_growth_answer(id: String, words: Array[String], correct: bool) -> void:

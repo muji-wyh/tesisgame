@@ -45,7 +45,11 @@ The Lv bar measures first-time word mastery, not partial practice streaks or cur
 | Jelly Match | A successfully merged word-picture pair | Both words in a deliberately submitted mismatched pair | Tapping, cancelled drags, waiting, falling blocks |
 | Jelly Words | Collecting a complete current-age word, once per collection | None; joining pieces is exploratory | Merging, tapping incomplete words, cancelled drags, waiting, falling blocks |
 
-Match and Memory share the pictured word selection. It shuffles within mastery priority, favors current unmastered words, avoids repeating the previous board when possible, and checks picture/speech ambiguity. Phrase selection prioritizes unmastered words; every contextual word has a phrase reachable no later than its own stage. Contextual words have no invented illustration and participate through phrases. Word tiles retain authentic images wherever one is available.
+All six modes gently favor words still being learned: a currently mastered word has a relative sampling weight of **0.8**, compared with **1.0** for an unmastered word. Both remain eligible and can appear together; mastery never removes review words from play. A wrong answer restores the normal weight even if the word previously earned lifetime experience. Gameplay retains the current learning-age pool, including only explicit prerequisite words needed by current-age phrases.
+
+Match and Memory share a weighted shuffle of pictured words, avoid repeating the previous board when possible, and check picture/speech ambiguity. Explicit word requests and replayed lessons retain their chosen words. Phrase questions use the average weight of their target words so longer sentences receive no extra preference; distractors also use word weights. Every contextual word has a phrase reachable no later than its own stage. Contextual words have no invented illustration and participate through phrases. Word tiles retain authentic images wherever one is available.
+
+Jelly Match, Jelly Words and Voice Pop apply the same modest preference throughout continuous supply, with balanced exposure to avoid repetitive bursts. They read current mastery when choosing new words; already advertised previews and complete pairs or chunk groups remain intact. Changes to mastery affect future visits without reweighting the entire session's history.
 
 ## Durable state
 

@@ -4,6 +4,7 @@ signal changed
 
 const Data = preload("res://scripts/game_data.gd")
 const PhraseData = preload("res://scripts/phrase_data.gd")
+const Sampler = preload("res://scripts/word_sampler.gd")
 const QUESTION_COUNT: int = 3
 const DISTRACTOR_COUNT: int = 2
 
@@ -57,10 +58,8 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 		rng.randomize()
 	else:
 		rng.seed = seed_value
-	_shuffle(available, rng)
-	# Shuffle ties, then prioritize phrases containing the least-practised tier.
-	available.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return _learning_priority(a, by_id) > _learning_priority(b, by_id))
+	available.assign(Sampler.weighted_order(available, rng,
+		func(phrase: Dictionary) -> float: return _practice_weight(phrase, by_id)))
 	questions.assign(available.slice(0, QUESTION_COUNT))
 	for question in questions:
 		var bank: Array[Dictionary] = []
@@ -70,7 +69,7 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 		for word in eligible_words:
 			if not question.words.has(word.id):
 				distractors.append(word)
-		_shuffle(distractors, rng)
+		distractors.assign(Sampler.weighted_order(distractors, rng))
 		for index in range(DISTRACTOR_COUNT):
 			bank.append(distractors[index].duplicate(true))
 		_shuffle(bank, rng)
@@ -242,8 +241,9 @@ func _avoid_ordered_targets(bank: Array[Dictionary], target: Array) -> void:
 		bank[target_positions[1]] = first
 
 
-func _learning_priority(phrase: Dictionary, by_id: Dictionary) -> int:
-	var score: int = 0
+func _practice_weight(phrase: Dictionary, by_id: Dictionary) -> float:
+	# Average the targets so sentence length cannot increase its selection weight.
+	var score: float = 0.0
 	for id in phrase.words:
-		score += int(by_id[id].get("_growth_priority", 0))
-	return score
+		score += Sampler.weight(by_id[id])
+	return score / float(phrase.words.size())

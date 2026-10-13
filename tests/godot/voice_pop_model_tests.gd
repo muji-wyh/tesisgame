@@ -32,6 +32,7 @@ func _run() -> void:
 	_test_expiry_and_results()
 	_test_frame_independence()
 	_test_spawn_fairness()
+	_test_mastery_sampling()
 	_test_simultaneous_throws()
 	_test_late_throws()
 	_test_fragment_rewards()
@@ -706,6 +707,75 @@ func _test_spawn_fairness() -> void:
 			game.hit_transcript(target.word.text)
 		game.advance(0.1)
 	check(encountered.size() >= 20, "Quick successful speech leads to continued active play")
+
+
+func _test_mastery_sampling() -> void:
+	var pool: Array = words(["cat", "dog", "ball", "sun", "fish", "hat"]).duplicate(true)
+	var mastered_ids: Array[String] = ["cat", "dog", "ball"]
+	for word: Dictionary in pool:
+		word["_practice_weight"] = 0.8 if mastered_ids.has(str(word.id)) else 1.0
+	var original: Array = pool.duplicate(true)
+	var first_mastered: int = 0
+	var all_started: bool = true
+	for seed_value in range(1536):
+		var game := Model.new()
+		all_started = game.configure(pool, seed_value) and game.start() and all_started
+		first_mastered += 1 if mastered_ids.has(str(game.targets[0].word.id)) else 0
+	var first_rate: float = float(first_mastered) / 1536.0
+	check(all_started and first_rate > 0.40 and first_rate < 0.48,
+		"Mastered Voice Pop words remain reachable with a slightly lower opening probability")
+	var game := Model.new()
+	var twin := Model.new()
+	game.configure(pool, 79)
+	twin.configure(pool, 79)
+	var counts: Dictionary = {}
+	var reproducible: bool = true
+	for index in range(1800):
+		game.targets.clear()
+		twin.targets.clear()
+		game._spawn_target(5.0)
+		twin._spawn_target(5.0)
+		var target: Dictionary = game.targets[0]
+		counts[target.word.id] = int(counts.get(target.word.id, 0)) + 1
+		reproducible = reproducible and target == twin.targets[0]
+	var mastered_count: int = 0
+	for id in mastered_ids:
+		mastered_count += int(counts.get(id, 0))
+	var ratio: float = float(mastered_count) / float(1800 - mastered_count)
+	check(reproducible and counts.size() == pool.size() and ratio > 0.78 and ratio < 0.82,
+		"Continuous Voice Pop supply preserves the mild mastery bias over many vocabulary cycles")
+	check(pool == original, "Voice Pop sampling cannot modify the caller's mastery metadata")
+	var live_mastery: Dictionary = {"cat": true, "dog": true, "ball": true}
+	game.practice_weight_for = func(word: Dictionary) -> float:
+		return 0.8 if live_mastery.has(str(word.id)) else 1.0
+	game.configure(words(["cat", "dog", "ball", "sun", "fish", "hat"]), 79)
+	for index in range(900):
+		game.targets.clear()
+		game._spawn_target(5.0)
+	check(int(game._spawn_counts.cat) < int(game._spawn_counts.sun),
+		"Live mastery can influence future throws without reconfiguring the vocabulary")
+	var before_loss: Dictionary = game._spawn_counts.duplicate()
+	live_mastery.clear()
+	for index in range(900):
+		game.targets.clear()
+		game._spawn_target(5.0)
+	var low: int = 2147483647
+	var high: int = 0
+	for id in game._spawn_counts:
+		var future_count: int = int(game._spawn_counts[id]) - int(before_loss.get(id, 0))
+		low = mini(low, future_count)
+		high = maxi(high, future_count)
+	check(high - low <= 2, "Losing mastery restores normal future frequency without catching up on historical counts")
+	for word: Dictionary in pool:
+		word["_practice_weight"] = 0.8
+	game.practice_weight_for = Callable()
+	game.configure(pool, 43)
+	for index in range(pool.size() * 6):
+		game.targets.clear()
+		game._spawn_target(5.0)
+	check(game._spawn_counts.size() == pool.size() and game._spawn_counts.values().all(
+		func(count: int) -> bool: return count == 6),
+		"An entirely mastered Voice Pop catalog continues balanced practice without starvation")
 
 
 func _test_simultaneous_throws() -> void:

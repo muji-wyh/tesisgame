@@ -5,6 +5,7 @@ signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Sampler = preload("res://scripts/word_sampler.gd")
 
 const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
@@ -35,10 +36,12 @@ var hit_words: Array[Dictionary] = []
 var missed_words: Array[Dictionary] = []
 var recognition_feedback: String = ""
 var recognition_message: String = ""
+var practice_weight_for: Callable = Callable()
 
 var _words: Array[Dictionary] = []
 var _aliases: Dictionary = {}
 var _spawn_counts: Dictionary = {}
+var _spawn_service: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _next_uid: int = 1
 var _next_spawn_at: float = 0.0
@@ -300,6 +303,7 @@ func _reset_round(new_round: bool = true) -> void:
 	hit_words.clear()
 	missed_words.clear()
 	_spawn_counts.clear()
+	_spawn_service.clear()
 	_next_uid = 1
 	_next_spawn_at = 0.0
 	_next_burst_at = INF
@@ -342,19 +346,12 @@ func _spawn() -> void:
 
 func _spawn_target(lifetime: float) -> bool:
 	var candidates: Array[Dictionary] = []
-	var fewest: int = 2147483647
 	for word in _words:
-		if not _can_spawn(word):
-			continue
-		var count: int = _spawn_counts.get(word.id, 0)
-		if count < fewest:
-			fewest = count
-			candidates.clear()
-		if count == fewest:
+		if _can_spawn(word):
 			candidates.append(word)
 	if candidates.is_empty():
 		return false
-	var word: Dictionary = candidates[_rng.randi_range(0, candidates.size() - 1)]
+	var word: Dictionary = Sampler.next_word(candidates, _rng, _spawn_counts, _spawn_service, practice_weight_for)
 	var free_lanes: Array[int] = [0, 1, 2]
 	for target in targets:
 		free_lanes.erase(target.lane)
@@ -368,7 +365,6 @@ func _spawn_target(lifetime: float) -> bool:
 		"x_end": center + _rng.randf_range(-0.025, 0.025),
 		"peak": _rng.randf_range(0.18, 0.45), "spin": _rng.randf_range(-0.14, 0.14)
 	})
-	_spawn_counts[word.id] = fewest + 1
 	_next_uid += 1
 	return true
 

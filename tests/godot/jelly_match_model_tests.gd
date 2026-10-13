@@ -28,6 +28,7 @@ func _run() -> void:
 	_test_manual_drop_partial_batch()
 	_test_partial_and_stacked_drops()
 	_test_supply_fairness()
+	_test_mastery_supply()
 	_test_fall_physics()
 	_test_landing_timeline()
 	_test_fusion_timeline()
@@ -153,7 +154,7 @@ func _test_configuration() -> void:
 	var model = Model.new()
 	var words: Array = _vocabulary()
 	for index in range(words.size()):
-		words[index]._growth_priority = 2 if index < 4 else (1 if index < 8 else 0)
+		words[index]._practice_weight = 0.8 if index < 8 else 1.0
 	var context_only: Dictionary = _word("context")
 	context_only.image = ""
 	words.insert(0, context_only)
@@ -175,10 +176,13 @@ func _test_configuration() -> void:
 		check(model.is_settled(cell) and not cell.arrival and cell.falling_rows == 0,
 			"The starting tiles are ready without simultaneous falling")
 		initial_chests += 1 if cell.chest and not cell.arrival else 0
-	check(initial_ids.size() == 6 and model.cells.slice(0, 6).all(func(cell: Dictionary) -> bool:
-		return int(cell.word._growth_priority) == 2)
-		and model.cells.filter(func(cell: Dictionary) -> bool: return int(cell.word._growth_priority) == 2).size() == 8,
-		"The two opening bags include all highest-priority words and practise them first")
+	check(initial_ids.size() >= 5, "Weighted opening bags retain a broad variety of words")
+	for first in [0, 6]:
+		var bag_ids: Dictionary = {}
+		for cell: Dictionary in model.cells.slice(first, first + 6):
+			bag_ids[str(cell.word.id)] = int(bag_ids.get(str(cell.word.id), 0)) + 1
+		check(bag_ids.size() == Model.SUPPLY_BATCH_PAIRS and bag_ids.values().all(func(count: int) -> bool: return count == 2),
+			"Each opening bag retains three distinct complete pairs")
 	check(initial_chests == 2, "Every third initial pair contains exactly one chest")
 	for row in range(Model.ROWS):
 		check(model.cells.filter(func(cell: Dictionary) -> bool: return int(cell.row) == row).size()
@@ -208,17 +212,8 @@ func _test_configuration() -> void:
 		for cell in second.cells:
 			order.append(str(cell.word.id))
 		different_orders[JSON.stringify(order)] = true
-	check(different_orders.size() > 1, "Equal-priority words vary across seeded rounds")
+	check(different_orders.size() > 1, "Equal-weight words vary across seeded rounds")
 	model.step(_initial_fill_seconds())
-	var unique_order: Array[String] = []
-	var priorities: Array[int] = []
-	for cell in model.cells:
-		if not unique_order.has(str(cell.word.id)):
-			unique_order.append(str(cell.word.id))
-			priorities.append(int(cell.word._growth_priority))
-	check(priorities.slice(0, 3).all(func(priority: int) -> bool: return priority == 2)
-		and priorities.slice(9).all(func(priority: int) -> bool: return priority == 0),
-		"Supply bags preserve curriculum priority while interleaving their selected halves")
 	_assert_board(model, "Initial board")
 
 
@@ -517,6 +512,59 @@ func _test_supply_fairness() -> void:
 							"A full board or ordinary practice can clear a real pair from interleaved supply")
 						model.step(Model.FUSION_SECONDS)
 				check(model.phase == "playing", "Full-board rescue remains possible after any tested sequence of legal clears")
+
+
+func _test_mastery_supply() -> void:
+	var words: Array = _vocabulary(16)
+	var mastered_ids: Dictionary = {}
+	for index in range(8):
+		mastered_ids[str(words[index].id)] = true
+	var live: Dictionary = {"active": false, "calls": 0}
+	var model = Model.new()
+	model.practice_weight_for = func(word: Dictionary) -> float:
+		live.calls += 1
+		return 0.8 if bool(live.active) and mastered_ids.has(str(word.id)) else 1.0
+	check(model.configure(words, 3, 391), "A mixed live-mastery catalog starts Jelly Match")
+	model.spawn_interval = 10000.0
+	var preview: Array = model.upcoming.duplicate(true)
+	var before_calls: int = int(live.calls)
+	live.active = true
+	model._fill_upcoming()
+	check(model.upcoming == preview, "Mastering a word cannot replace an already advertised Jelly Match tile")
+	var counts: Dictionary = {}
+	var emitted: Array = model.cells.duplicate(true)
+	for packet_index in range(600):
+		preview = model.upcoming.duplicate(true)
+		emitted.append_array(preview)
+		model.cells.clear()
+		check(model.drop_now(int(preview[0].id)), "Weighted Jelly Match supply continues over many catalog cycles")
+		check(model.cells.map(func(cell: Dictionary) -> int: return int(cell.id))
+			== preview.map(func(cell: Dictionary) -> int: return int(cell.id)),
+			"Mastery weighting preserves every committed preview identity and its order")
+		model.step(Model.SETTLE_SECONDS)
+	for tile: Dictionary in emitted:
+		if str(tile.kind) == "word":
+			counts[str(tile.word.id)] = int(counts.get(str(tile.word.id), 0)) + 1
+	var mastered: int = 0
+	var unmastered: int = 0
+	for word_id: String in counts:
+		if mastered_ids.has(word_id):
+			mastered += int(counts[word_id])
+		else:
+			unmastered += int(counts[word_id])
+	var ratio: float = float(mastered) / float(unmastered)
+	check(ratio > 0.76 and ratio < 0.84,
+		"Jelly Match gently reduces mastered frequency beyond the opening bags: %.3f" % ratio)
+	check(counts.size() == words.size() and counts.values().min() >= 60,
+		"Every mastered Jelly Match word remains in regular review")
+	check(int(live.calls) > before_calls and model.phase == "playing",
+		"Newly generated pairs consult current mastery while the round remains playable")
+	var balances: Dictionary = {}
+	for tile: Dictionary in emitted:
+		var id: String = str(tile.word.id)
+		balances[id] = int(balances.get(id, 0)) + (1 if tile.kind == "word" else -1)
+	check(balances.values().all(func(balance: int) -> bool: return balance == 0),
+		"Long weighted supply preserves exact word-and-picture pair balance")
 
 
 func _test_fall_physics() -> void:
@@ -885,10 +933,18 @@ func _test_concurrent_fragment_milestone() -> void:
 	for index in range(3):
 		check(_earn_fragment(model), "Concurrent threshold fixture earns its first three fragments")
 	model.step(_danger_start_seconds())
-	var first: Array[int] = _pair(model, true, true)
+	# Reserve two actual pairs and mark exactly one half of each. The reward
+	# concurrency fixture must not depend on shuffled supply leaving two marks.
+	var first: Array[int] = _pair(model)
+	for cell: Dictionary in model.cells:
+		if first.has(int(cell.id)):
+			cell.chest = int(cell.id) == first[0]
 	check(first.size() == 2 and model.try_merge(first[0], first[1]) == "correct",
 		"A marked pair begins the fourth-fragment fusion")
-	var second: Array[int] = _pair(model, true, true)
+	var second: Array[int] = _pair(model)
+	for cell: Dictionary in model.cells:
+		if second.has(int(cell.id)):
+			cell.chest = int(cell.id) == second[0]
 	check(second.size() == 2 and model.try_merge(second[0], second[1]) == "correct",
 		"A separate marked pair can merge while the unlock is in flight")
 	model.step(Model.FUSION_SECONDS)

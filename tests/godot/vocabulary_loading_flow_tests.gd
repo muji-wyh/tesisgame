@@ -4,6 +4,7 @@ const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Loader = preload("res://scripts/vocabulary_loader.gd")
 const Progress = preload("res://scripts/medal_progress.gd")
 const Growth = preload("res://scripts/growth_state.gd")
+const Data = preload("res://scripts/game_data.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -279,7 +280,7 @@ func returning_learner() -> void:
 		"Returning players initially fetch only their current learning age")
 	host.reply(4, "ready", 1.0)
 	await settle()
-	for mode: String in ["match", "memory", "pop", "jelly", "phrase"]:
+	for mode: String in ["match", "memory", "pop", "jelly", "word_jelly", "phrase"]:
 		check(app.new_round(814, false, "", mode), "%s starts from the already mounted current-age pack" % mode)
 		check(host.requests == [4] and app.model.age_band_id == "4",
 			"%s does not download earlier review ages or future ages while starting" % mode)
@@ -287,6 +288,47 @@ func returning_learner() -> void:
 			check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) == 4),
 				"Returning learners get current-age phrases even when earlier prerequisite words are mounted")
 		check(app.duck.growth_age == 3, "%s retains the earned Pip appearance" % mode)
+	await dispose(app)
+
+
+func practice_weights() -> void:
+	var app = await make_app()
+	app.vocabulary_loader.downloads.reply(3, "ready", 1.0)
+	await settle()
+	var id: String = str(cohort(app, 3)[0])
+	master(app, [id], "sampling-mastery")
+	var weighted: Array = app._learning_words()
+	var mastered_word: Dictionary = weighted.filter(func(word: Dictionary) -> bool: return str(word.id) == id)[0]
+	check(is_equal_approx(float(mastered_word._practice_weight), 0.8)
+		and weighted.all(func(word: Dictionary) -> bool:
+			return is_equal_approx(float(word._practice_weight), 0.8 if str(word.id) == id else 1.0)),
+		"The host gives current mastery a gentle discount without excluding review words")
+	for mode: String in ["match", "memory", "phrase", "pop", "jelly", "word_jelly"]:
+		check(app.new_round(419, false, "", mode), "%s accepts mixed-mastery current-age vocabulary" % mode)
+		var pool: Array = app.model.lesson_words
+		if mode == "phrase":
+			pool = app._phrase.game.options
+		elif mode == "pop":
+			pool = app._pop.game._words
+			check(pool.size() == weighted.filter(func(word: Dictionary) -> bool:
+				return Data.supports_mode(word, "pop")).size(),
+				"Voice Pop keeps mastered review words even with many unfinished words available")
+		elif mode in ["jelly", "word_jelly"]:
+			pool = app._active_jelly().game._words
+		check(not pool.is_empty() and pool.all(func(word: Dictionary) -> bool:
+			return word.has("_practice_weight") and int(word.min_age) == 3),
+			"%s receives weighted vocabulary within the current learning age" % mode)
+	for game in [app._pop.game, app._jelly.game, app._word_jelly.game]:
+		check(game.practice_weight_for.is_valid()
+			and is_equal_approx(float(game.practice_weight_for.call(mastered_word)), 0.8),
+			"Continuous modes obtain mastery from the shared live state")
+	check(app.growth.record_attempt("sampling-review-mistake", [id], false).save_ok,
+		"A review mistake persists before subsequent word selection")
+	for game in [app._pop.game, app._jelly.game, app._word_jelly.game]:
+		check(is_equal_approx(float(game.practice_weight_for.call(mastered_word)), 1.0),
+			"A loss of mastery restores normal future weight without restarting the mode")
+	check(not app.data.words.any(func(word: Dictionary) -> bool: return word.has("_practice_weight")),
+		"Sampling metadata leaves the shared source vocabulary unchanged")
 	await dispose(app)
 
 
@@ -298,6 +340,7 @@ func _run() -> void:
 	await notebook_requests_and_stale_callbacks()
 	await canceled_and_background_rounds()
 	await returning_learner()
+	await practice_weights()
 	for directory in directories:
 		for file in DirAccess.get_files_at(directory):
 			DirAccess.remove_absolute(directory.path_join(file))

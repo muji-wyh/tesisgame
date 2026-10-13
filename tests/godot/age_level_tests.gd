@@ -78,10 +78,12 @@ func _initialize() -> void:
 	var contextual: Dictionary = words.filter(func(word: Dictionary) -> bool: return word.image.is_empty())[0]
 	original_cards = model.cards.duplicate(true)
 	check(not model.reset(words, 20, false, "", contextual.id, "12") and model.cards == original_cards, "Context-only words cannot be forced into a picture board")
-	var priorities: Array = words.duplicate(true)
-	for word: Dictionary in priorities:
-		word._growth_priority = 2 if int(word.min_age) == 4 else 0
-	check(model.reset(priorities, 33, false, "", "", "4") and model.lesson_words.all(func(word: Dictionary): return int(word.min_age) == 4), "Unmastered current-level words lead cumulative review")
+	var weighted: Array = words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 4).duplicate(true)
+	for word: Dictionary in weighted:
+		word._practice_weight = 0.8
+	check(model.reset(weighted, 33, false, "", "", "4")
+		and model.lesson_words.size() == 5 and model.lesson_words.all(func(word: Dictionary): return int(word.min_age) == 4),
+		"An entirely mastered current-age catalog remains a complete playable lesson")
 	for value in ["3", "", null, 2, 13, 3.5, true, [], {}]:
 		var invalid: Array = words.slice(0, 5).duplicate(true)
 		invalid[0].min_age = value

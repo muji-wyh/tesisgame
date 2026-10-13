@@ -18,6 +18,7 @@ signal powerup_fragment_arrived(payload: Dictionary)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const WordSampler = preload("res://scripts/word_sampler.gd")
 const COLUMNS: int = 6
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
@@ -75,7 +76,9 @@ var _supply: Array[Dictionary] = []
 var _supply_pending: Array[Dictionary] = []
 var _completed_words: Dictionary = {}
 var _result: Dictionary = {}
-var _word_index: int = 0
+var _word_counts: Dictionary = {}
+var _word_service: Dictionary = {}
+var practice_weight_for: Callable
 var _supply_words: int = 0
 var _next_tile_id: int = 1
 var _next_event_id: int = 1
@@ -140,7 +143,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	spawn_interval = INITIAL_SPAWN_INTERVAL
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
-	_word_index = 0
+	_word_counts.clear()
+	_word_service.clear()
 	_supply_words = 0
 	_next_tile_id = 1
 	_next_event_id = 1
@@ -176,14 +180,6 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		error = "Word Jelly needs at least one pictured word for this age."
 		changed.emit()
 		return false
-	for index in range(_words.size() - 1, 0, -1):
-		var other: int = _rng.randi_range(0, index)
-		var temporary: Dictionary = _words[index]
-		_words[index] = _words[other]
-		_words[other] = temporary
-	# Keep the curriculum priority without making equal-priority rounds identical.
-	_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return int(a.get("_growth_priority", 0)) > int(b.get("_growth_priority", 0)))
 	phase = "playing"
 	_fill_upcoming()
 	for index in range(INITIAL_SETTLED_TILES):
@@ -1239,8 +1235,7 @@ func _build_supply() -> void:
 	# Mix only a new six-root packet. Advertised preview identities never move,
 	# and any word crossing a packet boundary keeps its remaining chunks first.
 	while _supply_pending.size() < UPCOMING_COUNT:
-		var word: Dictionary = _words[_word_index % _words.size()]
-		_word_index += 1
+		var word: Dictionary = WordSampler.next_word(_words, _rng, _word_counts, _word_service, practice_weight_for)
 		_supply_words += 1
 		var parts: Array[String] = _parts_for_word(word)
 		var marked: int = _rng.randi_range(0, parts.size() - 1) if _supply_words % 2 == 0 else -1

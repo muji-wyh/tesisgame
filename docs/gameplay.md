@@ -18,6 +18,12 @@ the complete current cohort grows Pip to that age and unlocks the next cohort.
 Previously earned levels and ages never decrease, even when a mastered word needs
 practice again. Hints, pronunciation, peek, cancelled selections and idle time give no credit.
 
+New word selections gently favor unfinished learning: mastered words carry a
+relative weight of **0.8**, while unmastered words carry **1.0**. Review remains
+part of every mode. A mistake restores the word's normal weight. Continuous Jelly
+and Voice Pop supply follows current mastery as play continues, while keeping
+existing previews and complete word groups. The current-age vocabulary rule is unchanged.
+
 The persistent level display and progress bar show new words mastered toward the
 next experience level. The display or **More** opens the learning notebook. It
 includes all words in each cohort, their 0-2 practice streaks or Mastered labels,

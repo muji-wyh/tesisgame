@@ -25,7 +25,7 @@ func _run() -> void:
 	_test_requested_topics(words)
 	_test_required_words(words)
 	_test_rejected_requests(words)
-	_test_priority_and_repeat(words)
+	_test_mastery_and_repeat(words)
 	_test_round_chest_chance(words)
 	print("Word adventures: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -112,19 +112,40 @@ func _test_rejected_requests(words: Array) -> void:
 	check(_round_snapshot(model) == before and changes[0] == 0, "Unsafe and undersized pools keep every prior round field")
 
 
-func _test_priority_and_repeat(words: Array) -> void:
-	var prioritized: Array = words.duplicate(true)
-	for word in prioritized:
-		word._growth_priority = 2 if int(word.min_age) == 4 else 0
+func _test_mastery_and_repeat(words: Array) -> void:
+	var weighted: Array = words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 3).duplicate(true)
+	var probe = Model.new()
+	weighted = probe._distinct_words(weighted, 20)
+	var mastered_ids: Dictionary = {}
+	for index in range(weighted.size()):
+		weighted[index]._practice_weight = 0.8 if index < weighted.size() / 2 else 1.0
+		if index < weighted.size() / 2:
+			mastered_ids[str(weighted[index].id)] = true
+	var mastered: int = 0
+	var unmastered: int = 0
+	for seed_value in range(800):
+		var sampled = Model.new()
+		check(sampled.reset(weighted, seed_value, false, "", "", "3"), "A mixed mastery pool supplies a complete practice board")
+		for word: Dictionary in sampled.lesson_words:
+			if mastered_ids.has(str(word.id)):
+				mastered += 1
+			else:
+				unmastered += 1
+	var ratio: float = float(mastered) / float(unmastered)
+	check(ratio > 0.70 and ratio < 0.94,
+		"Finite lessons gently favor unmastered words while retaining mastered review: %.3f" % ratio)
 	var model = Model.new()
-	check(model.reset(prioritized, 17, false, "", "", "4"), "The current cohort supplies a practice board")
-	check(model.lesson_words.all(func(word: Dictionary) -> bool: return int(word.min_age) == 4), "Unmastered current-level vocabulary leads mastered earlier review")
+	check(model.reset(weighted, 17, false, "", "", "3"), "Weighted vocabulary supplies a practice board")
 	model.set_theme("ocean")
 	var lesson: Array = model.lesson_words.duplicate(true)
-	check(model.reset(prioritized, -1, true, "space-trip", "rocket", "4"), "A mode switch reuses its existing unlocked lesson")
+	check(model.reset(weighted, -1, true, "space-trip", "rocket", "3"), "A mode switch reuses its existing unlocked lesson")
 	check(model.lesson_words == lesson and model.theme_id == "ocean", "Repeating a lesson preserves its ordered words and chosen world")
-	check(model.reset(prioritized, -1, false, "", "", "4"), "Priority remains active on subsequent practice rounds")
-	check(model.lesson_words.all(func(word: Dictionary) -> bool: return int(word.min_age) == 4), "Freshness cannot replace the current cohort with already mastered words")
+	check(model.reset(weighted, -1, false, "", "", "3"), "A fresh weighted practice round remains available")
+	check(model.lesson_words.all(func(word: Dictionary) -> bool: return not lesson.has(word)),
+		"Freshness avoids the previous lesson when enough alternatives remain, including mastered words")
+	var required_id: String = str(weighted[0].id)
+	check(model.reset(weighted, 19, false, "", required_id, "3") and str(model.lesson_words[0].id) == required_id,
+		"A required mastered word still leads the requested lesson")
 
 
 func _round_snapshot(model) -> Dictionary:

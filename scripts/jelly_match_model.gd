@@ -12,6 +12,7 @@ signal finished(result: Dictionary)
 
 const Motion = preload("res://scripts/jelly_motion.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const WordSampler = preload("res://scripts/word_sampler.gd")
 const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
@@ -48,10 +49,12 @@ var spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var error: String = ""
+var practice_weight_for: Callable
 
 var _words: Array[Dictionary] = []
 var _supply: Array[Dictionary] = []
-var _word_index: int = 0
+var _word_counts: Dictionary = {}
+var _word_service: Dictionary = {}
 var _supply_pairs: int = 0
 var _last_supply_word: String = ""
 var _next_tile_id: int = 1
@@ -81,7 +84,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	spawn_interval = INITIAL_SPAWN_INTERVAL
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
-	_word_index = 0
+	_word_counts.clear()
+	_word_service.clear()
 	_supply_pairs = 0
 	_last_supply_word = ""
 	_next_tile_id = 1
@@ -104,20 +108,6 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		error = "Jelly Match needs at least one pictured word for this level."
 		changed.emit()
 		return false
-	# Randomize equal priorities before a stable curriculum ordering, so a new
-	# round practises current unmastered words without always starting identically.
-	for index in range(_words.size() - 1, 0, -1):
-		var other: int = _rng.randi_range(0, index)
-		var word: Dictionary = _words[index]
-		_words[index] = _words[other]
-		_words[other] = word
-	var order: Dictionary = {}
-	for index in range(_words.size()):
-		order[str(_words[index].id)] = index
-	_words.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var a_priority: int = int(a.get("_growth_priority", 0))
-		var b_priority: int = int(b.get("_growth_priority", 0))
-		return a_priority > b_priority if a_priority != b_priority else int(order[str(a.id)]) < int(order[str(b.id)]))
 	phase = "playing"
 	_fill_upcoming()
 	for index in range(INITIAL_SETTLED_TILES):
@@ -365,9 +355,10 @@ func _build_supply_batch() -> void:
 	# in any supply prefix: a full board therefore always contains a real match.
 	var first_wave: Array[Dictionary] = []
 	var second_wave: Array[Dictionary] = []
+	var candidates: Array = _words.duplicate()
 	for index in range(mini(SUPPLY_BATCH_PAIRS, _words.size())):
-		var word: Dictionary = _words[_word_index % _words.size()]
-		_word_index += 1
+		var word: Dictionary = WordSampler.next_word(candidates, _rng, _word_counts, _word_service, practice_weight_for)
+		candidates.erase(word)
 		_supply_pairs += 1
 		var marked_half: int = _rng.randi_range(0, 1) if _supply_pairs % 3 == 0 else -1
 		var first_is_word: bool = _rng.randi_range(0, 1) == 0

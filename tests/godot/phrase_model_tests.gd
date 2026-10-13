@@ -23,6 +23,7 @@ func _run() -> void:
 	var vocabulary: Array = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	_test_catalog(vocabulary)
 	_test_rounds(vocabulary)
+	_test_mastery_sampling(vocabulary)
 	_test_editing_and_completion(vocabulary)
 	_test_placement(vocabulary)
 	_test_invalid_input(vocabulary)
@@ -87,7 +88,7 @@ func _test_rounds(vocabulary: Array) -> void:
 		var dependencies: Array = catalog.ages[age_band].word_ids
 		var mounted_words: Array = vocabulary.filter(func(word: Dictionary) -> bool: return dependencies.has(word.id)).duplicate(true)
 		for word: Dictionary in mounted_words:
-			word["_growth_priority"] = 2 if Data.word_age(word) < age else 0
+			word["_practice_weight"] = 1.0 if Data.word_age(word) < age else 0.8
 		var scoped_model = PhraseModel.new()
 		check(scoped_model.reset(mounted_words, age_band, 47), "Each age can play with only its mounted words and prerequisites")
 		check(scoped_model.questions.all(func(phrase: Dictionary) -> bool: return int(phrase.min_age) == age),
@@ -137,6 +138,66 @@ func _test_rounds(vocabulary: Array) -> void:
 	var question: Dictionary = first.current_question()
 	question.words.clear()
 	check(not first.current_question().words.is_empty(), "Question consumers cannot mutate model targets")
+
+
+func _test_mastery_sampling(vocabulary: Array) -> void:
+	var ids: Array[String] = ["red", "apple", "happy", "baby", "sit", "down", "drink", "water"]
+	var mastered_ids: Array[String] = ["red", "apple", "happy", "baby"]
+	var pool: Array = vocabulary.filter(func(word: Dictionary) -> bool: return ids.has(str(word.id))).duplicate(true)
+	for word: Dictionary in pool:
+		word["_practice_weight"] = 0.8 if mastered_ids.has(str(word.id)) else 1.0
+	var original: Array = pool.duplicate(true)
+	var mastered_first: int = 0
+	var seen_questions: Dictionary = {}
+	var playable: bool = true
+	var safe: bool = true
+	var reproducible: bool = true
+	var mastered_available: int = 0
+	var learning_available: int = 0
+	var mastered_distractors: int = 0
+	var learning_distractors: int = 0
+	for seed_value in range(1536):
+		var model := PhraseModel.new()
+		if not model.reset(pool, "3", seed_value):
+			playable = false
+			continue
+		mastered_first += 1 if str(model.questions[0].id) in ["red-apple", "happy-baby"] else 0
+		var round_ids: Dictionary = {}
+		for question_index in range(model.questions.size()):
+			var question: Dictionary = model.questions[question_index]
+			seen_questions[question.id] = true
+			safe = safe and int(question.min_age) == 3 and not round_ids.has(question.id)
+			round_ids[question.id] = true
+			for id in ids:
+				if not question.words.has(id):
+					mastered_available += 1 if mastered_ids.has(id) else 0
+					learning_available += 0 if mastered_ids.has(id) else 1
+			for option: Dictionary in model._question_options[question_index]:
+				if not question.words.has(option.id):
+					mastered_distractors += 1 if mastered_ids.has(str(option.id)) else 0
+					learning_distractors += 0 if mastered_ids.has(str(option.id)) else 1
+		if seed_value % 64 == 0:
+			var twin := PhraseModel.new()
+			reproducible = reproducible and twin.reset(pool, "3", seed_value) \
+				and twin.questions == model.questions and twin._question_options == model._question_options
+	var first_rate: float = float(mastered_first) / 1536.0
+	check(playable and seen_questions.size() == 4 and first_rate > 0.40 and first_rate < 0.48,
+		"Mastered phrase targets remain available with a gently reduced selection probability")
+	check(safe and reproducible, "Weighted phrase rounds preserve age eligibility, distinct questions, and seeded choice banks")
+	var distractor_ratio: float = (float(mastered_distractors) / float(mastered_available)) \
+		/ (float(learning_distractors) / float(learning_available))
+	check(distractor_ratio > 0.78 and distractor_ratio < 0.96,
+		"Phrase distractors also make mastered words slightly less frequent per eligible opportunity")
+	check(pool == original, "Phrase weighting cannot modify the supplied vocabulary or mastery metadata")
+	for word: Dictionary in pool:
+		word["_practice_weight"] = 0.8
+	var reviewed: Dictionary = {}
+	for seed_value in range(32):
+		var model := PhraseModel.new()
+		playable = model.reset(pool, "3", seed_value) and playable
+		for question: Dictionary in model.questions:
+			reviewed[question.id] = true
+	check(playable and reviewed.size() == 4, "An entirely mastered phrase catalog still offers complete varied rounds")
 
 
 func _test_editing_and_completion(vocabulary: Array) -> void:
