@@ -101,6 +101,17 @@ func check_finish_header(app, view) -> void:
 	check(view.finish_button.is_visible_in_tree(), "Returning to Jelly Words restores its own Finish control")
 
 
+func check_finish_visibility_stable(view, expected_visible: bool, context: String) -> void:
+	var changes: Array[bool] = []
+	var observe: Callable = func() -> void: changes.append(view.finish_button.visible)
+	view.finish_button.visibility_changed.connect(observe)
+	for index in range(6):
+		view._refresh_controls()
+	view.finish_button.visibility_changed.disconnect(observe)
+	check(changes.is_empty() and view.finish_button.is_visible_in_tree() == expected_visible,
+		"Repeated refreshes preserve Finish visibility without triggering header reflow " + context)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 800)
@@ -157,8 +168,10 @@ func _run() -> void:
 	game.step(2.0)
 	check(game.paused and app.coin_wallet.balance == 100 and is_equal_approx(float(game.fusions.back().elapsed), paused_time), "The library freezes a pending collection before its wallet commit")
 	check(not view.finish_button.is_visible_in_tree(), "Home hides the hosted Finish action while the round is paused")
+	check_finish_visibility_stable(view, false, "on Home")
 	app._hide_mode_menu()
 	check(view.finish_button.is_visible_in_tree(), "Returning from Home restores the active Finish action")
+	check_finish_visibility_stable(view, true, "during play")
 	app.set_reduced_motion(false)
 	game.step(game.COLLECT_SECONDS)
 	check(not game.paused and game.fragment_count == 4 and game.chest_tier == 1 and app.coin_wallet.balance == 200, "Returning to play completes collection and unlocks the first chest")

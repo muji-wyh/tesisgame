@@ -1233,9 +1233,8 @@ func _refresh_controls() -> void:
 	replay_button.visible = _result_visible
 	chests_button.disabled = not _allowed() or _result_transition
 	replay_button.disabled = not _allowed() or _result_transition
-	finish_button.visible = is_visible_in_tree() and _configured and game.phase == "playing" and not _result_visible
-	if finish_button.get_parent() != self:
-		finish_button.visible = _can_play()
+	finish_button.visible = _can_play() if finish_button.get_parent() != self else \
+		_configured and game.phase == "playing" and not _result_visible
 	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
 	drop_button.disabled = not _can_play() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
