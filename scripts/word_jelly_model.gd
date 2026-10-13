@@ -19,6 +19,7 @@ signal powerup_fragment_arrived(payload: Dictionary)
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
+const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const COLUMNS: int = 6
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
@@ -34,14 +35,14 @@ const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.10
 const BATCH_POP_SECONDS: float = 0.06
-const COIN_DROP_CHANCE: float = 0.01
+const COIN_DROP_CHANCE: float = CoinEconomy.JELLY_BONUS_CHANCE
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
-const POWERUP_PRICES: Dictionary = {"auto_merge": 2000, "fragments": 500}
+const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
 const POWERUP_MERGE_BEAT_SECONDS: float = 0.2
 const POWERUP_DRAG_SECONDS: float = 0.3
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
@@ -103,6 +104,7 @@ var _collection_batch_serial: int = 0
 var _rng := RandomNumberGenerator.new()
 var _coin_rng := RandomNumberGenerator.new()
 var _powerup: Dictionary = {}
+var _powerup_uses: Dictionary = {"auto_merge": 0, "fragments": 0}
 var _powerup_ids: Array[int] = []
 var _powerup_purchasing: bool = false
 var _powerup_committing: bool = false
@@ -180,6 +182,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		error = "Word Jelly needs at least one pictured word for this age."
 		changed.emit()
 		return false
+	_powerup_uses = {"auto_merge": 0, "fragments": 0}
 	phase = "playing"
 	_fill_upcoming()
 	for index in range(INITIAL_SETTLED_TILES):
@@ -195,6 +198,10 @@ static func normalize_word(value: String) -> String:
 
 func powerup_active() -> bool:
 	return _powerup_purchasing or bool(_powerup.get("active", false))
+
+
+func powerup_price(kind: String) -> int:
+	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)))
 
 
 func powerup_snapshot() -> Dictionary:
@@ -218,9 +225,10 @@ func activate_powerup(kind: String) -> bool:
 		return false
 	var generation: int = _generation
 	var receipt_id: String = _event_id("powerup-" + kind)
+	var price: int = powerup_price(kind)
 	# Lock the board while persistence runs, including reentrant lifecycle calls.
 	_powerup_purchasing = true
-	var response: Variant = purchase_powerup.call(receipt_id, kind, int(POWERUP_PRICES[kind])) if purchase_powerup.is_valid() else {}
+	var response: Variant = purchase_powerup.call(receipt_id, kind, price) if purchase_powerup.is_valid() else {}
 	_powerup_purchasing = false
 	if generation != _generation:
 		return false
@@ -233,6 +241,8 @@ func activate_powerup(kind: String) -> bool:
 			_finish_after_purchase = false
 			finish_round()
 		return false
+	# Commit the next price before feedback or lifecycle callbacks can reenter.
+	_powerup_uses[kind] = int(_powerup_uses.get(kind, 0)) + 1
 	_powerup_ids.clear()
 	for tile: Dictionary in cells:
 		_powerup_ids.append(int(tile.id))
@@ -345,7 +355,7 @@ func _sync_powerup_drag() -> void:
 
 
 func _prepare_powerup_fragments() -> void:
-	var total: int = _rng.randi_range(2, 8)
+	var total: int = _rng.randi_range(CoinEconomy.TREASURE_FRAGMENT_MIN, CoinEconomy.TREASURE_FRAGMENT_MAX)
 	var pending_counts: Dictionary = {}
 	for tile: Dictionary in cells:
 		pending_counts[int(tile.id)] = int(tile.fragments)
@@ -1094,7 +1104,7 @@ func is_valid_word(tile: Dictionary) -> bool:
 static func coins_for_tile(tile: Dictionary) -> int:
 	# Potential bonus value; collection separately reserves the rare drop roll.
 	var mass: int = maxi(1, int(tile.get("mass", tile.get("parts_count", 1))))
-	return 50 * mass
+	return CoinEconomy.jelly_bonus(mass)
 
 
 func score() -> int:
@@ -1117,6 +1127,8 @@ func snapshot() -> Dictionary:
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
 		"powerup": powerup_snapshot(),
+		"powerup_uses": _powerup_uses.duplicate(),
+		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.merge(reward_progress(fragment_count), true)

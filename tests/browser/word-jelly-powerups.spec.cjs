@@ -11,7 +11,7 @@ const WRONG = 'assets/imported-audio/pair-feedback/wrong.wav';
 const RIGHT = 'assets/imported-audio/pair-feedback/right.wav';
 const FRAGMENT = 'assets/imported-audio/chest-reference/step-detail.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
-const prices = { auto_merge: 2000, fragments: 500 };
+const prices = { auto_merge: 600, fragments: 200 };
 const AUTO_MERGE_BEAT = 0.2;
 const AUTO_MERGE_DRAG = 0.3;
 const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => word.text.trim().toLowerCase()));
@@ -221,7 +221,7 @@ test('Auto merge launches eligible pairs every 200 ms with overlapping 300 ms tr
   const before = await jelly(page), saved = await savedGrowth(page);
   await beginTrace(page, 'auto-merge-200ms');
   await pressRect(page, before.powerup_buttons.auto_merge.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(3000);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete';
@@ -237,11 +237,11 @@ test('Auto merge launches eligible pairs every 200 ms with overlapping 300 ms tr
   expect(fragmentTotal(after)).toBe(fragmentTotal(before));
   expect(await savedGrowth(page)).toBe(saved);
   const persisted = await storedWallet(page);
-  expect(persisted.balance).toBe(3000);
+  expect(persisted.balance).toBe(4400);
   const debits = Object.entries(persisted.receipts).filter(([, amount]) => amount < 0);
   expect(debits).toHaveLength(1);
   expect(debits[0][0].endsWith(`:${after.powerup.receipt_id}`)).toBe(true);
-  expect(debits[0][1]).toBe(-2000);
+  expect(debits[0][1]).toBe(-600);
   await capture(page, info, 'auto-merge-200ms-complete');
   expect(errors).toEqual([]);
 });
@@ -315,7 +315,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   const beforeFragments = await jelly(page), fragmentAudioFrom = await playbackIndex(page);
   await beginTrace(page, 'fragments');
   await pressRect(page, beforeFragments.powerup_buttons.fragments.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(4500);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(4800);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'fragments' && !state.powerup.active && state.powerup.stage === 'complete';
@@ -355,15 +355,17 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     expect(recordingCount(audioEvidence.fragments.sounds, FRAGMENT)).toHaveLength(total);
   }
   const savedFragments = await storedWallet(page);
-  expect(savedFragments.balance).toBe(4500);
-  expect(Object.values(savedFragments.receipts).filter(amount => amount < 0)).toEqual([-500]);
+  expect(savedFragments.balance).toBe(4800);
+  expect(Object.values(savedFragments.receipts).filter(amount => amount < 0)).toEqual([-200]);
+  expect(afterFragments.powerup_buttons.fragments.price).toBe(300);
+  expect(afterFragments.powerup_buttons.fragments.price_text).toBe('300');
+  expect(afterFragments.powerup_buttons.auto_merge.price).toBe(600);
 
-  await expect.poll(async () => (await jelly(page)).powerup_buttons.auto_merge.enabled).toBe(true);
-  const beforeAuto = await jelly(page), autoAudioFrom = await playbackIndex(page);
+  const beforeAuto = await readyPowerup(page, 'auto_merge'), autoAudioFrom = await playbackIndex(page);
   expect(forwardPairs(beforeAuto).length).toBeGreaterThan(0);
   await beginTrace(page, 'auto-merge', { pauseOnOverlap: true });
   await pressRect(page, beforeAuto.powerup_buttons.auto_merge.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(2500);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(4200);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const paused = await jelly(page), pausedWallet = await storedWallet(page);
   try {
@@ -416,18 +418,21 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     expect(frame.chest_tier).toBe(opening.chest_tier);
   }
   const savedAuto = await storedWallet(page);
-  expect(savedAuto.balance).toBe(2500);
+  expect(savedAuto.balance).toBe(4200);
+  expect(afterAuto.powerup_buttons.auto_merge.price).toBe(900);
+  expect(afterAuto.powerup_buttons.auto_merge.price_text).toBe('900');
+  expect(afterAuto.powerup_buttons.fragments.price).toBe(300);
   expect(savedAuto, 'Resuming completes the existing purchase without another debit').toEqual(pausedWallet);
   const autoDebits = Object.entries(savedAuto.receipts).filter(([id]) => !Object.hasOwn(savedFragments.receipts, id));
   expect(autoDebits).toHaveLength(1);
   expect(autoDebits[0][0].endsWith(`:${afterAuto.powerup.receipt_id}`)).toBe(true);
-  expect(autoDebits[0][1]).toBe(-2000);
-  expect(Object.values(savedAuto.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-2000, -500]);
+  expect(autoDebits[0][1]).toBe(-600);
+  expect(Object.values(savedAuto.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-600, -200]);
   const completed = afterAuto.tiles.filter(tile => tile.mass > 1 && tile.word?.id);
   expect(completed.length).toBeGreaterThan(0);
   for (const tile of completed) {
     expect(tile.picture_visible).toBe(true);
-    expect(tile.coins).toBe(tile.mass * 50);
+    expect(tile.coins).toBe(tile.mass <= 2 ? 50 : 100);
     expect(tile.fragment_badges).toBe(Math.min(6, tile.fragments));
   }
   if (audioAvailable) {
@@ -441,12 +446,12 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   await pressRect(page, (await jelly(page)).collect_button.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + completed.length);
   const earnedCoins = collectionCoins(await jelly(page), opening, completed);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(2500 + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(4200 + earnedCoins);
   expect((await jelly(page)).fragment_count).toBe(opening.fragment_count + earnedFragments);
   await expect.poll(() => savedGrowth(page)).not.toBe(growth);
   const finalSave = await storedWallet(page);
-  expect(finalSave.balance).toBe(2500 + earnedCoins);
-  expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-2000, -500]);
+  expect(finalSave.balance).toBe(4200 + earnedCoins);
+  expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-600, -200]);
   fs.writeFileSync(info.outputPath('word-jelly-powerups-paid-audio.json'), JSON.stringify(audioEvidence, null, 2));
   fs.writeFileSync(info.outputPath('word-jelly-powerups-wallet.json'), JSON.stringify({ savedFragments, savedAuto, finalSave }, null, 2));
   expect(errors).toEqual([]);

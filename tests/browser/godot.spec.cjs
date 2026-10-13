@@ -84,7 +84,8 @@ async function expectMatchHintPrice(page) {
   const bounds = await logicalMetrics(page), state = bounds.growth.match.hint;
   const button = bounds.growth.controls.find(control => control.name === 'Hint' && control.visible);
   expect(button, 'The priced hint stays visible in the Match header').toBeTruthy();
-  expect(state).toMatchObject({ price: 200, price_text: '200' });
+  const expectedPrice = [100, 150, 200, 200][3 - state.remaining];
+  expect(state).toMatchObject({ price: expectedPrice, price_text: String(expectedPrice) });
   const [x, y, width, height] = button.rect;
   const [px, py, pw, ph] = state.price_rect;
   expect([x, y, width, height, px, py, pw, ph].every(Number.isFinite)).toBe(true);
@@ -98,7 +99,7 @@ async function expectMatchHintPrice(page) {
   expect(py + ph).toBeLessThanOrEqual(y + height + 0.5);
   expect(Math.min(width, height) * bounds.scale, 'The priced hint retains a usable touch target').toBeGreaterThanOrEqual(43.5);
   expect(pw).toBeGreaterThan(0);
-  expect(ph * bounds.scale, 'The 200-coin price fits at a readable display height').toBeGreaterThanOrEqual(11.5);
+  expect(ph * bounds.scale, 'The next hint price fits at a readable display height').toBeGreaterThanOrEqual(11.5);
   return state;
 }
 
@@ -108,15 +109,16 @@ async function buyMatchHint(page, activate) {
   await activate();
   await expect(page.locator('#game-status')).toHaveText(MATCH_HINT_STATUS);
   await expect.poll(async () => (await matchHintWallet(page)).balance,
-    { message: 'Each accepted Match hint deducts exactly 200 coins' }).toBe(before.balance - 200);
+    { message: 'Each accepted Match hint deducts its displayed price' }).toBe(before.balance - previousHint.price);
   const after = await matchHintWallet(page);
   const receipts = Object.entries(after.receipts).filter(([id]) => !Object.hasOwn(before.receipts, id));
-  expect(receipts.map(([, amount]) => amount), 'One accepted hint saves one 200-coin debit').toEqual([-200]);
+  expect(receipts.map(([, amount]) => amount), 'One accepted hint saves one debit at its quoted price').toEqual([-previousHint.price]);
   expect(Object.entries(before.receipts).every(([id, amount]) => after.receipts[id] === amount),
     'Hint purchases preserve earlier wallet receipts').toBe(true);
   expect(receipts[0][0]).toBe(`${previousHint.round_id}:match-hint:${4 - previousHint.remaining}`);
   await expect.poll(async () => (await matchHintState(page)).remaining).toBe(previousHint.remaining - 1);
-  expect(await matchHintState(page)).toMatchObject({ price: 200, price_text: '200',
+  const nextPrice = [100, 150, 200, 200][4 - previousHint.remaining];
+  expect(await matchHintState(page)).toMatchObject({ price: nextPrice, price_text: String(nextPrice),
     active: true, round_id: previousHint.round_id });
   await expect.poll(async () => page.locator('#coin-status').evaluate(node =>
     JSON.parse(node.dataset.snapshot || '{}').balance)).toBe(after.balance);
@@ -757,7 +759,8 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await pressGamepad(page, 0);
   await ready(page);
   const newRoundPurchase = await buyMatchHint(page, () => pressGamepad(page, 2));
-  expect(Object.values(newRoundPurchase.receipts).filter(amount => amount < 0)).toEqual([-200, -200, -200, -200]);
+  expect(Object.values(newRoundPurchase.receipts).filter(amount => amount < 0).sort((a, b) => a - b))
+    .toEqual([-200, -150, -100, -100]);
   // Pip's static speech indicator can change when the hint recording ends.
   const top = contentBounds(await logicalMetrics(page)).top * scale;
   const boardClip = { x: metrics.x, y: metrics.y + top, width: metrics.width, height: metrics.height - top };

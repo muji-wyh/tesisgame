@@ -442,7 +442,7 @@ func _check_concurrent_powerup_resize(view) -> void:
 			fragments += int(tile.fragments)
 		check(not view.game.powerup_active() and view.game.collectable_ids().size() == 2
 			and int(view.game.merged_count) == 2 and fragments == 10
-			and purchases.size() == 1 and int(purchases[0].price) == 2000
+			and purchases.size() == 1 and int(purchases[0].price) == 600
 			and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
 			"concurrent responsive travel finishes two words with all fragments and one debit, awaiting manual collection")
 	view.purchase_powerup = Callable()
@@ -797,7 +797,7 @@ func _check_collect_and_fragments(view) -> void:
 	check(view.game.cells.size() == 1 and payouts.is_empty(), "manual collection keeps the word reserved before its 420 ms payout")
 	_advance(view, 0.001)
 	check(view.game.cells.is_empty() and payouts.size() == 1 and attempts.size() == 1, "tap collection removes the word and emits one reward and learning attempt")
-	check(payouts[0].amount == 100 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
+	check(payouts[0].amount == 50 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
 		"coin and fragment flight origin matches the tapped merged jelly")
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
 
@@ -927,7 +927,7 @@ func _check_batch_collection(view) -> void:
 		var credits: Dictionary = {}
 		view.credit_collection = func(id: String, amount: int) -> Dictionary:
 			credits[id] = int(credits.get(id, 0)) + 1
-			check(amount == 100, "a rare batch coin drop retains the merged-word reward amount")
+			check(amount == 50, "a rare batch coin drop retains the merged-word reward amount")
 			return {"ok": true}
 		var pop_times: Array[float] = []
 		var on_pop: Callable = func(cue: String) -> void:
@@ -993,11 +993,11 @@ func _check_batch_collection(view) -> void:
 				"the existing disappearance sound stays at 60 ms within every 100 ms beat")
 		check(payouts.size() == 3 and credits.size() == 1 and attempts.size() == 3,
 			"batch collection records every word but only persists its one rare coin drop")
-		check(payouts[0].amount == 100 and payouts[1].amount == 0 and payouts[2].amount == 0,
+		check(payouts[0].amount == 50 and payouts[1].amount == 0 and payouts[2].amount == 0,
 			"ordinary batch members collect successfully without creating a coin reward")
 		for times: int in credits.values():
 			check(times == 1, "each batch event reaches persistent credit only once")
-		check(view.game.collected_coins == 100 and view.game.fragment_count == 3 and cues.count("pop") == 3,
+		check(view.game.collected_coins == 50 and view.game.fragment_count == 3 and cues.count("pop") == 3,
 			"all carried fragments and disappearance beats survive a batch containing one rare coin drop")
 		check(heard.is_empty(), "batch collection never pronounces a word, including the final pickup")
 		var reveals: Array = final.word_reveal.entries
@@ -1011,7 +1011,7 @@ func _check_batch_collection(view) -> void:
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
 			"collecting every completed merge returns the button to its empty state")
 		_advance(view, 2.0)
-		check(payouts.size() == 3 and view.game.collected_coins == 100,
+		check(payouts.size() == 3 and view.game.collected_coins == 50,
 			"the completed batch cannot replay its rewards on later frames")
 		check(view.snapshot().word_reveal.entries.is_empty() and int(view.snapshot().word_reveal.active_count) == 0,
 			"all concurrent batch reveals expire without replaying a collection")
@@ -1032,7 +1032,7 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 			check(is_equal_approx(float(entries[index].elapsed), 0.35 - index * 0.10),
 				"coarse frames carry only the remaining frame time into each new collection reveal")
 		check(not state.collection_batch.active and int(state.collection_batch.completed) == 3
-			and payouts.size() == 3 and attempts.size() == 3 and view.game.collected_coins == 100
+			and payouts.size() == 3 and attempts.size() == 3 and view.game.collected_coins == 50
 			and view.game.fragment_count == 3 and cues.count("pop") == 3 and heard.is_empty(),
 			"coarse reveal catch-up preserves one rare drop and three disappearance sounds without pronunciation")
 		view._process(0.10)
@@ -1045,7 +1045,7 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		state = view.snapshot()
 		check(state.word_reveal.entries == before_pause,
 			"an ignored hidden-tab frame preserves all reveal ages and geometry")
-		check(payouts.size() == 3 and view.game.collected_coins == 100 and cues.count("pop") == 3 and heard.is_empty(),
+		check(payouts.size() == 3 and view.game.collected_coins == 50 and cues.count("pop") == 3 and heard.is_empty(),
 			"an ignored hidden-tab frame cannot replay any batch rewards or sounds")
 
 
@@ -1071,7 +1071,7 @@ func _check_batch_chest_queue(view) -> void:
 		check(queued_during_batch and not view.game.collection_batch_active()
 			and view.game.fragment_count == 9 and view.game.chest_tier == 2,
 			"all nine fragments and the second chest tier commit before queued celebration begins")
-		check(payouts.size() == 9 and view.game.collected_coins == 100 and is_equal_approx(elapsed, 0.90),
+		check(payouts.size() == 9 and view.game.collected_coins == 50 and is_equal_approx(elapsed, 0.90),
 			"waiting chest artwork preserves nine collections and one rare coin reward within 900 ms")
 		var kinds: Dictionary = {}
 		for tick in range(320):
@@ -1083,7 +1083,7 @@ func _check_batch_chest_queue(view) -> void:
 			"the existing synthesis and upgrade performances both play after batch collection")
 		check(confetti.size() == (0 if reduced else 2),
 			"each queued chest releases one confetti celebration, with reduced motion respected")
-		check(payouts.size() == 9 and view.game.collected_coins == 100 and view.game.fragment_count == 9,
+		check(payouts.size() == 9 and view.game.collected_coins == 50 and view.game.fragment_count == 9,
 			"queued chest flights and confetti remain presentation-only after all batch rewards")
 		view._reward_presentation.confetti_requested.disconnect(on_confetti)
 
@@ -1145,7 +1145,7 @@ func _check_batch_wallet_failure(view) -> void:
 	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": true}
 	view.collect_button.pressed.emit()
 	_advance(view, 3.0)
-	check(payouts.size() == 3 and view.game.collected_coins == 100 and view.game.fragment_count == 3,
+	check(payouts.size() == 3 and view.game.collected_coins == 50 and view.game.fragment_count == 3,
 		"retry after wallet recovery preserves the rare drop and collects each carried fragment exactly once")
 
 
@@ -1216,7 +1216,7 @@ func _check_word_reveal(view) -> void:
 				and is_equal_approx(float(concurrent.entries[1].elapsed), 0.20),
 				"both individual reveals retain the correct picture, spelling and independent collection age")
 			_advance(view, Model.COLLECT_SECONDS)
-			check(payouts.size() == 2 and view.game.collected_coins == 100 and cues.count("pop") == 2,
+			check(payouts.size() == 2 and view.game.collected_coins == 50 and cues.count("pop") == 2,
 				"rapid different-word reveals preserve their rare drop and one disappearance cue per collection")
 			_advance(view, float(view.snapshot().word_reveal.duration))
 			check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty()
@@ -1294,7 +1294,7 @@ func _check_collection_stack_fall(view) -> void:
 				check(view._tiles[int(tile.id)].get_rect().is_equal_approx(origins[int(tile.id)]),
 					"a stack stays still until its lower word has actually disappeared")
 			_advance(view, 0.002)
-			check(view.game.cell(int(support.id)).is_empty() and payouts.size() == 1 and payouts[0].amount == 100,
+			check(view.game.cell(int(support.id)).is_empty() and payouts.size() == 1 and payouts[0].amount == 50,
 				"a support collection with a rare bonus starts gravity after exactly one coin payment")
 			for tile: Dictionary in [lower, upper]:
 				var falling: Dictionary = view.game.cell(int(tile.id))
@@ -2343,7 +2343,7 @@ func _check_split_pointer_recovery(view) -> void:
 			view._release(center)
 			check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "collect", "valid-word taps still collect instead of splitting")
 			_advance(view, Model.COLLECT_SECONDS)
-			check(payouts.size() == 1 and payouts[0].amount == 100 and payouts[0].fragments == 3
+			check(payouts.size() == 1 and payouts[0].amount == 50 and payouts[0].fragments == 3
 				and heard.size() == 1 and attempts.size() == 1, "correcting and collecting records its rare bonus and learning answer exactly once")
 
 
@@ -2583,7 +2583,7 @@ func _check_reduced_motion(view) -> void:
 	_advance(view, 0.1)
 	check(view._fusion_visuals.values()[0].merged.scale == Vector2.ONE, "reduced-motion collection fades without squeezing")
 	_advance(view, Model.COLLECT_SECONDS)
-	check(view.game.collected_coins == 100 and view.game.fragment_count == 2 and view._loot_flights.is_empty(), "reduced motion preserves rewards while suppressing fragment travel")
+	check(view.game.collected_coins == 50 and view.game.fragment_count == 2 and view._loot_flights.is_empty(), "reduced motion preserves rewards while suppressing fragment travel")
 
 
 func _check_wallet_failure(view) -> void:
@@ -2615,7 +2615,7 @@ func _check_keyboard(view) -> void:
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	view._activate(id)
 	_advance(view, Model.COLLECT_SECONDS)
-	check(payouts.size() == 1 and view.game.collected_coins == 100, "keyboard activation can collect a valid merged word")
+	check(payouts.size() == 1 and view.game.collected_coins == 50, "keyboard activation can collect a valid merged word")
 
 
 func _check_keyboard_rejection(view) -> void:
@@ -2838,7 +2838,7 @@ func _check_danger_ends_when_collecting(view) -> void:
 	_advance(view, 0.002)
 	check(cues.count("danger_end") == 1 and view.game.full_elapsed < 0.0 and view.game._has_free_cell(),
 		"successful collection stops danger in the same frame that its footprint is freed")
-	check(payouts.size() == 1 and payouts[0].amount == 100,
+	check(payouts.size() == 1 and payouts[0].amount == 50,
 		"danger relief does not duplicate or delay the collection reward")
 	_advance(view, 0.6)
 	check(cues.count("danger") == 1 and cues.count("danger_end") == 1,

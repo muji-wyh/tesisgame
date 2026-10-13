@@ -66,7 +66,7 @@ available for pronunciation. A mismatch resets both involved words' streaks;
 the player can correct it and continue until all five pairs match. There is no
 three-mistake loss or visible correct/error counter. Card positions stay stable.
 
-The Hint item costs 200 coins per use, with up to three uses per round. Its button
+The Hint item costs 100, 150, then 200 coins, with up to three uses per round. Its button
 shows the coin price and remaining uses. Payment must save before matching
 partners are highlighted; insufficient coins or a save failure preserves the
 board and allowance. Repeated input cannot charge again for an active hint.
@@ -83,6 +83,8 @@ A mismatch resets both involved words. There is no visible correct/error count.
 Hold the eye button to peek. Releasing the pointer, touch, key or controller
 button closes the eye immediately. Cancellation, interruption and page hiding
 also end the peek. Looking at cards does not change mastery.
+The first reveal in a round is free; later reveals cost 100, 200, then 300
+coins, with further reveals staying at 300. The button shows the next price.
 
 ## Phrase Builder
 
@@ -161,12 +163,19 @@ places incoming bodies directly on their supports with the same readiness clock.
 
 An exact word from the current learning-age vocabulary reveals its picture and
 a warm rim. Each word collected by a tap or Collect has an independent 1%
-chance of bonus coins. A lucky drop awards 50 coins per original chunk: 100
-for a two-part word or 150 for a three-part word. Opening chests is the main
+chance of bonus coins. A lucky drop awards 50 coins for a two-part word, or 100
+for a word with three or more original chunks. Opening chests is the main
 coin source. Every collection records learning and banks all carried fragments,
 including when no coins drop. Merging alone does not grant coins or mastery.
 Failed coin saves preserve the word and its original reward for retry;
 repeated input cannot reroll or award the same collection twice.
+
+Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
+Treasure costs 200, 300, then 400. Each item has its own successful-use count,
+and its button displays the next price. Treasure still distributes 2–8 fragments;
+Auto merge still leaves completed words for manual collection. Failed payments
+do not advance a price. A fresh round resets prices. See the
+[coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
 An accepted word tap also presents its picture and spelling in a brief upper
 overlay. The picture rises with a soft glow and painted glints, peaking with

@@ -21,7 +21,7 @@ completed in one valid merge. Authored longer chunk sequences combine adjacent
 parts at a balanced boundary. A completed word is collectible, and its picture
 and warm gel rim indicate readiness without adding a
 floating instruction label. Each collected word has an independent 1% chance
-of bonus coins, worth 50 coins per original chunk when it drops. Opening chests
+of bonus coins, worth 50 coins for two chunks or 100 for three or more. Opening chests
 is the main source of coins. A collection without bonus coins still records
 the learned word and collects all carried chest fragments, without a coin
 flight or coin sound. The roll is retained across collection retries and uses
@@ -41,12 +41,14 @@ direct word taps still pronounce the selected word. Leaving play or muting
 clears queued speech without replaying it on return.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
-2,000 coins and launches a random eligible Jelly every 200 ms, dragging it into
+600 coins initially, then 900 and 1200 on further uses in the round. It launches
+a random eligible Jelly every 200 ms, dragging it into
 its matching target over 300 ms. Consecutive flights briefly overlap, leaving
-the completed words on the board for ordinary collection. Treasure costs 500
-coins and delivers a random total of two to eight carried fragments to the current
+the completed words on the board for ordinary collection. Treasure costs 200,
+300, then 400 coins per round and delivers a random total of two to eight carried fragments to the current
 board, preferring bodies without fragments. Payment is persisted before either
-ability starts. Supply and danger clocks wait while the ability runs; Home and
+ability starts. The two prices advance independently after successful payment;
+failed or duplicate payments do not advance them. Supply and danger clocks wait while the ability runs; Home and
 Finish confirmation pause it. Neither ability collects words, grants coins, or
 credits learning progress by itself.
 

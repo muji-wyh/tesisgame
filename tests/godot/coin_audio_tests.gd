@@ -482,10 +482,10 @@ func _check_collect_application_route(app) -> void:
 	check(observed.streams.size() == 1 and observed.streams[0] == Audio.COIN_RELEASE_PATH
 		and is_equal_approx(float(observed.releases[0]), 0.10),
 		"The rare drop uses the appearance recording on its collection beat")
-	check(observed.receipts[0].coins == 100
+	check(observed.receipts[0].coins == 50
 		and observed.receipts.slice(1).all(func(receipt: Dictionary) -> bool: return receipt.coins == 0),
 		"The eleven ordinary pickups emit no coin reward and never trigger a release sound")
-	check(app.coin_wallet.balance == before + 100,
+	check(app.coin_wallet.balance == before + 50,
 		"Collect credits only its rare bonus")
 	check(not app.audio.voice.playing and app.audio._playback_requests.get(app.audio.voice, 0) == voice_request,
 		"Collect never adds pronunciation after its initial voice cancellation")
@@ -497,7 +497,7 @@ func _check_collect_application_route(app) -> void:
 				"A retried rare-drop receipt retains the wallet's idempotent result")
 		app._word_jelly_collected(str(receipt.id), {}, int(receipt.coins), 0, Vector2.ZERO)
 	app._coin_flight.advance(10.0)
-	check(app.coin_wallet.balance == before + 100 and app._coin_counter.target == before + 100
+	check(app.coin_wallet.balance == before + 50 and app._coin_counter.target == before + 50
 		and observed.releases.size() == release_count and not app._coin_flight.snapshot().active,
 		"Retries cannot duplicate rare-drop sounds or coins, and ordinary pickups cannot create a flight")
 	app._coin_flight.release_sound.disconnect(on_release)

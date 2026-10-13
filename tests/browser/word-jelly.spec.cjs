@@ -1769,7 +1769,7 @@ test('older-age words remain completable from two blocks and roll the same rare 
   retainLabels();
   expectCompleteLabel(completed);
   expect(completed.mass).toBe(2);
-  expect(completed.coins).toBe(completed.mass * 50);
+  expect(completed.coins).toBe(50);
   expect(completed.word.id).toBe(word.id);
   expect(completed.word.min_age).toBe(12);
   expect(completed.picture_visible).toBe(true);

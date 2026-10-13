@@ -70,6 +70,16 @@ func set_ui_scale(value: float) -> void:
 	_layout()
 
 
+func set_price(value: int) -> void:
+	var next_price: int = maxi(0, value)
+	if next_price == _price:
+		return
+	_price = next_price
+	# Updating the next purchase must not cancel the current success animation.
+	_layout()
+	_update_accessibility()
+
+
 func set_chest_texture(texture: Texture2D) -> void:
 	if texture == null or texture == _chest:
 		return

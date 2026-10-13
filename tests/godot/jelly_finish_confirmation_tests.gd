@@ -301,7 +301,7 @@ func check_collection_batch(app) -> void:
 	view.game.step(2.0)
 	check(not view.game.collection_batch_active() and int(view.game.collection_batch_snapshot().completed) == ready,
 		"Keep playing completes the original reserved sequence")
-	check(app.coin_wallet.balance == coins + 100 and view.game.collected_coins == 100,
+	check(app.coin_wallet.balance == coins + 50 and view.game.collected_coins == 50,
 		"Resuming preserves the rare bonus roll and collects ordinary words without extra coins")
 
 

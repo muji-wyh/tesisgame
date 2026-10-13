@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 
 var cards: Array[Dictionary] = []
@@ -114,7 +115,7 @@ func set_study(value: bool) -> bool:
 
 
 func peek_price() -> int:
-	return mini(peeks, 3) * 100
+	return Economy.memory_peek_price(peeks)
 
 
 func is_revealed(index: int) -> bool:

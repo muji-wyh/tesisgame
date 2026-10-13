@@ -23,7 +23,7 @@ func _run() -> void:
 	for scale_value: float in [0.65, 1.0, 1.5]:
 		for width: float in [88.0, 100.0, 120.0]:
 			for kind: String in ["auto_merge", "fragments"]:
-				button.configure(kind, 2000 if kind == "auto_merge" else 500, false)
+				button.configure(kind, 1200 if kind == "auto_merge" else 400, false)
 				button.set_ui_scale(scale_value)
 				button.size = Vector2(width, 64.0) / scale_value
 				button._layout()
@@ -38,7 +38,7 @@ func _run() -> void:
 				check(button.tooltip_text.is_empty(), "purchase controls never show tooltips")
 	var desktop_scale: float = 1175.0 / 480.0
 	for desktop_width: float in [100.0, 104.0]:
-		button.configure("auto_merge", 2000, false)
+		button.configure("auto_merge", 1200, false)
 		button.set_ui_scale(desktop_scale)
 		button.size = Vector2(desktop_width, 72.0) / desktop_scale
 		button._layout()
@@ -49,7 +49,7 @@ func _run() -> void:
 		check(physical_line_height >= 10.0, "desktop Auto merge line height remains readable at width=%s" % desktop_width)
 		check(title.get_visible_line_count() == title.get_line_count(), "desktop Auto merge shows every title line at width=%s" % desktop_width)
 		check(Rect2(Vector2.ZERO, button.size).encloses(title.get_rect()), "desktop Auto merge title stays inside its physical purchase target at width=%s" % desktop_width)
-	button.configure("auto_merge", 2000, false)
+	button.configure("auto_merge", 1200, false)
 	button.set_availability(true, false)
 	check(not button.disabled and not button.snapshot().affordable, "low funds remains clickable")
 	button.feedback(false)
@@ -67,6 +67,12 @@ func _run() -> void:
 	button.feedback(true)
 	button.advance(0.18)
 	check(button.snapshot().icon_scale > 1.0 and button.snapshot().light > 0.0, "success lifts artwork with local light")
+	var success_time: float = button.snapshot().feedback_elapsed
+	button.set_price(900)
+	check(button.snapshot().price == 900 and button.snapshot().price_text == "900"
+		and button.snapshot().feedback_elapsed == success_time and button.snapshot().feedback_success,
+		"refreshing the next price keeps the current successful-purchase animation intact")
+	check(str(button.get("accessibility_name")).contains("900 coins"), "the updated accessible price matches the visible price")
 	button.hide()
 	var hidden_time: float = button.snapshot().feedback_elapsed
 	button.advance(1.0)
@@ -78,7 +84,7 @@ func _run() -> void:
 	check(button.disabled, "busy action blocks repeated activation")
 	button.set_availability(false, true)
 	check(button.disabled, "unavailable action is disabled")
-	button.configure("treasure", 500, true)
+	button.configure("treasure", 200, true)
 	check(button.snapshot().kind == "fragments" and button.snapshot().title == "Treasure", "Treasure alias keeps the model's fragment identity")
 	button.set_availability(true, true)
 	for success: bool in [true, false]:

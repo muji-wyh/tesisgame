@@ -2,7 +2,9 @@
 
 The Auto merge and Treasure purchase controls share the game's quiet rounded
 interface framing. Their artwork stays separate from the stable touch target,
-title, and coin price. Auto merge costs 2000 coins; Treasure costs 500 coins.
+title, and coin price. Auto merge costs 600, 900, then 1200 coins per round;
+Treasure costs 200, 300, then 400. Each item tracks successful purchases separately
+and shows its next price without resetting the current feedback animation.
 The latter uses the same current chest texture as the jelly fragment markers.
 
 ## Artwork and acquisition

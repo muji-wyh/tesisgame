@@ -88,7 +88,7 @@ func _init() -> void:
 	add_child(collect_button)
 	for kind: String in WordModel.POWERUP_PRICES:
 		var button := PowerupButton.new()
-		button.configure(kind, int(WordModel.POWERUP_PRICES[kind]), reduced_motion)
+		button.configure(kind, game.powerup_price(kind), reduced_motion)
 		button.pressed.connect(_activate_powerup.bind(kind))
 		button.z_index = 5
 		add_child(button)
@@ -143,7 +143,7 @@ func set_reduced_motion(value: bool) -> void:
 	_word_reveal.set_reduced_motion(value)
 	collect_button.set_reduced_motion(value)
 	for kind: String in powerup_buttons:
-		powerup_buttons[kind].configure(kind, int(WordModel.POWERUP_PRICES[kind]), value)
+		powerup_buttons[kind].configure(kind, game.powerup_price(kind), value)
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
@@ -1101,9 +1101,11 @@ func _refresh_powerup_buttons() -> void:
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else 0
 	for kind: String in powerup_buttons:
 		var button: PowerupButton = powerup_buttons[kind]
+		var price: int = game.powerup_price(kind)
+		button.set_price(price)
 		button.visible = _configured and game.phase == "playing" and not _result_visible
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
-			balance >= int(WordModel.POWERUP_PRICES[kind]), game.powerup_active())
+			balance >= price, game.powerup_active())
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:

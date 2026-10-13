@@ -98,6 +98,7 @@ func _run() -> void:
 	_test_arrival_mixed_lane_readiness()
 	_test_powerup_eligibility()
 	_test_powerup_payment_atomicity()
+	_test_powerup_price_progression()
 	_test_powerup_auto_timeline()
 	_test_powerup_auto_rhythm()
 	_test_powerup_auto_random_sources()
@@ -348,8 +349,8 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 2000, "fragments": 500},
-		"paid powers have their advertised fixed coin prices")
+	check(Model.POWERUP_PRICES == {"auto_merge": 600, "fragments": 200},
+		"paid powers expose their first-purchase prices")
 	for kind: String in ["auto_merge", "fragments"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
 			var model = _powerup_model(kind)
@@ -446,6 +447,45 @@ func _test_powerup_payment_atomicity() -> void:
 			"separate accepted activations receive distinct wallet receipts")
 		model.finish_powerup(true)
 		model.purchase_powerup = Callable()
+
+
+func _test_powerup_price_progression() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var model = _model([_word("cat")])
+		var other: String = "fragments" if kind == "auto_merge" else "auto_merge"
+		var prices: Array = [600, 900, 1200, 1200] if kind == "auto_merge" else [200, 300, 400, 400]
+		for index in range(prices.size()):
+			_board(model, ["ca", "t"])
+			var expected: int = prices[index]
+			check(model.powerup_price(kind) == expected and model.snapshot().powerup_prices[kind] == expected,
+				"each successful-use tier exposes the exact next " + kind + " price")
+			for response: Dictionary in [{"ok": false, "reason": "insufficient"}, {"ok": false, "reason": "storage"}, {"ok": true, "duplicate": true}]:
+				model.purchase_powerup = func(_receipt_id: String, _requested: String, _price: int) -> Dictionary:
+					return response.duplicate()
+				check(not model.activate_powerup(kind) and model.powerup_price(kind) == expected
+					and model.snapshot().powerup_uses[kind] == index,
+					"insufficient, unsaved, and duplicate purchases cannot advance a price tier")
+			var payments: Array = _accept_powerup_payments(model)
+			check(model.activate_powerup(kind) and payments.size() == 1 and payments[0].price == expected,
+				"a successful purchase pays its quoted current price")
+			check(model.snapshot().powerup_uses[kind] == index + 1
+				and model.powerup_price(kind) == prices[mini(index + 1, prices.size() - 1)]
+				and model.powerup_price(other) == Model.POWERUP_PRICES[other],
+				"payment advances only its own price and caps repeat-use cost")
+			check(not model.activate_powerup(kind) and payments.size() == 1,
+				"a repeated press during an active purchase cannot spend or escalate again")
+			model.finish_powerup(true)
+			model.set_paused(true)
+			model.set_paused(false)
+			check(model.snapshot().powerup_uses[kind] == index + 1,
+				"pausing or completing the animation preserves the successful-use count")
+		check(model.configure([_word("cat")], 3, 42) and model.powerup_price(kind) == prices[0]
+			and model.snapshot().powerup_uses == {"auto_merge": 0, "fragments": 0},
+			"only a new round resets both powerup prices to their first-use tier")
+		model.purchase_powerup = Callable()
+	check(Model.coins_for_tile({"mass": 2}) == 50 and Model.coins_for_tile({"mass": 3}) == 100
+		and Model.coins_for_tile({"mass": 40}) == 100,
+		"rare word bonuses reward larger words but cannot exceed one hundred coins")
 
 
 func _test_powerup_auto_timeline() -> void:
@@ -666,7 +706,7 @@ func _test_powerup_auto_chain() -> void:
 		and payments.size() == 1, "a completed exhausted chain cannot charge again without a new valid pair")
 	check(model.collect(int(words.cater.id)), "the automatically built word still needs an ordinary collection")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 150 and model.fragment_count == 6,
+	check(model.collected_coins == 100 and model.fragment_count == 6,
 		"manual collection of the automatic result retains normal size-based coins and its carried fragments")
 	model.purchase_powerup = Callable()
 
@@ -1144,12 +1184,12 @@ func _test_merging_and_collection() -> void:
 	check(not model.collect(int(result.id)), "repeat taps are reserved")
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cells.is_empty() and model.cleared_pairs == 1, "collection removes the merged word once")
-	check(model.collected_coins == 100 and model.fragment_count == 2, "both parts earn coins and both fragments collect")
+	check(model.collected_coins == 50 and model.fragment_count == 2, "both parts earn coins and both fragments collect")
 	check(events.collections.size() == 1 and events.attempts.size() == 1, "collection emits one payout and one learning attempt")
-	check(events.collections[0].coins == 100 and events.collections[0].fragments == 2, "collection payload has exact payout and fragments")
+	check(events.collections[0].coins == 50 and events.collections[0].fragments == 2, "collection payload has exact payout and fragments")
 	check(events.cues.count("pop") == 1, "collection has exactly one disappearance cue")
 	var result_summary: Dictionary = model.finish_round()
-	check(result_summary.coins == 100 and result_summary.words.size() == 1, "round summary includes collected words and coins")
+	check(result_summary.coins == 50 and result_summary.words.size() == 1, "round summary includes collected words and coins")
 
 
 func _test_rare_coin_drop_boundary() -> void:
@@ -1174,7 +1214,7 @@ func _test_rare_coin_drop_boundary() -> void:
 			model.cells.assign([_placed_tile(1000, "cat", 0, Model.ROWS - ceili(float(mass) / Model.COLUMNS), mass, 2, _word("cat"))])
 			model._coin_rng.seed = seed_value
 			var board_rng_state: int = model._rng.state
-			var expected_coins: int = mass * 50 if roll < 0.01 else 0
+			var expected_coins: int = (50 if mass == 2 else 100) if roll < 0.01 else 0
 			check(model.collect(1000), "each probability boundary uses a real accepted collection")
 			check(int(model.fusions[0].coins) == expected_coins,
 				"only a roll below one percent grants the size-based bonus, including immediately adjacent outcomes")
@@ -1236,19 +1276,19 @@ func _test_rare_coin_drop_retry_and_pause() -> void:
 	check(model.collect(1000), "a rare winning word starts a retryable payment")
 	var receipt: String = str(model.fusions[0].attempt_id)
 	model.step(Model.COLLECT_SECONDS)
-	check(calls == [[receipt, 100]] and model.cells.size() == 1 and model.collected_coins == 0
-		and int(model._collection_coin_rewards[receipt]) == 100,
+	check(calls == [[receipt, 50]] and model.cells.size() == 1 and model.collected_coins == 0
+		and int(model._collection_coin_rewards[receipt]) == 50,
 		"a failed wallet keeps the winning outcome and the original word without granting rewards")
 	model._coin_rng.seed = _coin_seed_between(0.1, 0.9)
 	var retry_rng_state: int = model._coin_rng.state
-	check(model.collect(1000) and model._coin_rng.state == retry_rng_state and int(model.fusions[0].coins) == 100,
+	check(model.collect(1000) and model._coin_rng.state == retry_rng_state and int(model.fusions[0].coins) == 50,
 		"retrying a winning collection reuses its outcome without consuming even a losing next roll")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.paused and calls == [[receipt, 100], [receipt, 100]] and model.collected_coins == 0,
+	check(model.paused and calls == [[receipt, 50], [receipt, 50]] and model.collected_coins == 0,
 		"pause in the successful wallet callback safely defers removal after one accepted payment")
 	model.set_paused(false)
 	model.step(0.01)
-	check(calls.size() == 2 and model.cells.is_empty() and model.collected_coins == 100 and model.fragment_count == 3
+	check(calls.size() == 2 and model.cells.is_empty() and model.collected_coins == 50 and model.fragment_count == 3
 		and model._coin_rng.state == retry_rng_state and model._collection_coin_rewards.is_empty(),
 		"resuming a credited winning collection neither rerolls nor repays its saved bonus")
 	model.credit_collection = Callable()
@@ -1284,7 +1324,7 @@ func _test_rare_coin_drop_batch() -> void:
 		"the first ordinary batch word clears without a wallet call")
 	model.step(Model.BATCH_BEAT_SECONDS)
 	var failed_receipt: String = str(model._collection_event_ids[1001])
-	check(not model.collection_batch_active() and model.cleared_pairs == 1 and calls == [[failed_receipt, 100]],
+	check(not model.collection_batch_active() and model.cleared_pairs == 1 and calls == [[failed_receipt, 50]],
 		"only the rare winning word can encounter a coin-save failure and stop the batch")
 	var retry_rng_state: int = model._coin_rng.state
 	check(model.collect(1001) and model._coin_rng.state == retry_rng_state,
@@ -1292,11 +1332,11 @@ func _test_rare_coin_drop_batch() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	check(model.start_collection_batch(), "the remaining nonwinning word can continue in a new batch")
 	model.step(Model.BATCH_BEAT_SECONDS)
-	check(calls == [[failed_receipt, 100], [failed_receipt, 100]] and model.collected_coins == 100
+	check(calls == [[failed_receipt, 50], [failed_receipt, 50]] and model.collected_coins == 50
 		and model.cleared_pairs == 3 and model.fragment_count == 3 and model.cells.is_empty(),
 		"a mixed batch grants only the one winning bonus while collecting all words and fragments")
 	check(events.collections.size() == 3 and events.collections[0].coins == 0
-		and events.collections[1].coins == 100 and events.collections[2].coins == 0 and events.attempts.size() == 3,
+		and events.collections[1].coins == 50 and events.collections[2].coins == 0 and events.attempts.size() == 3,
 		"per-word events preserve both probability outcomes across batch failure and manual retry")
 	model.credit_collection = Callable()
 	var coarse = _model([_word("cat")], false)
@@ -1308,7 +1348,7 @@ func _test_rare_coin_drop_batch() -> void:
 	coarse.step(Model.BATCH_BEAT_SECONDS * 3.0)
 	for frame in range(30):
 		fine.step(0.01)
-	check(coarse.collected_coins == 100 and fine.collected_coins == 100 and coarse.cells == fine.cells
+	check(coarse.collected_coins == 50 and fine.collected_coins == 50 and coarse.cells == fine.cells
 		and coarse._coin_rng.state == fine._coin_rng.state and coarse.cleared_pairs == fine.cleared_pairs,
 		"frame slicing cannot change the independent batch outcomes or grant additional coin chances")
 
@@ -1331,15 +1371,15 @@ func _test_rare_coin_drop_frequency_and_independence() -> void:
 			if model == large:
 				model._rng.randi()
 			check(model.collect(1000 + sample), "the frequency sample is an actual accepted word collection")
-			check(int(model.fusions[0].coins) == (mass * 50 if expected_win else 0),
+			check(int(model.fusions[0].coins) == ((50 if mass == 2 else 100) if expected_win else 0),
 				"every collection draws exactly once with mass-independent odds and an independent board RNG")
 			# Commit the normal transaction directly; probability checks do not need animation frames.
 			model._complete_operation(str(model.fusions[0].attempt_id))
 	check(wins >= 120 and wins <= 280,
 		"twenty thousand deterministic collection chances keep the long-run rate near one percent")
-	check(small.collected_coins == wins * 100 and large.collected_coins == wins * 600
+	check(small.collected_coins == wins * 50 and large.collected_coins == wins * 100
 		and small.cleared_pairs == SAMPLES and large.cleared_pairs == SAMPLES,
-		"rare bonus magnitude still follows size while the majority of collected words award no coins")
+		"rare bonuses distinguish two-piece and larger words while staying capped and leaving most collections coin-free")
 	check(small._coin_rng.state == probe.state and large._coin_rng.state == probe.state
 		and small._collection_coin_rewards.is_empty() and large._collection_coin_rewards.is_empty(),
 		"all coin decisions consume one independent draw and retain no completed-outcome cache")
@@ -1465,7 +1505,7 @@ func _test_repeated_merge_and_fragments() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(third.id))
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 200 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
+	check(model.collected_coins == 100 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
 	check(model.chest_tier == 1 and model.chest_count == 1, "four fragments unlock a chest")
 
 
@@ -1492,7 +1532,7 @@ func _test_collection_timeline_and_pause() -> void:
 	model.step(0.239)
 	check(model.cells.size() == 1 and model.collected_coins == 0, "resumed manual collection remains uncredited before 420 ms")
 	model.step(0.001)
-	check(model.cells.is_empty() and model.collected_coins == 100, "resumed manual collection credits once at 420 ms")
+	check(model.cells.is_empty() and model.collected_coins == 50, "resumed manual collection credits once at 420 ms")
 	var snapshot: Dictionary = model.snapshot()
 	model.step(-1.0)
 	model.step(NAN)
@@ -1534,7 +1574,7 @@ func _test_collection_gravity() -> void:
 	check(model.cell(1001).skin == 3 and _footprint(model.cell(1003)) == Rect2i(5, 7, 1, 1),
 		"collection gravity preserves skins and already-supported neighboring bodies")
 	check(model.try_merge(1001, 1002) == "ignored" and not model.can_drop_now(), "falling bodies and supply wait until their landing finishes")
-	check(model.collected_coins == 100 and model.fragment_count == 4 and model.chest_tier == 1
+	check(model.collected_coins == 50 and model.fragment_count == 4 and model.chest_tier == 1
 		and events.collections.size() == 1 and events.attempts.size() == 1 and events.milestones == [[0, 1]],
 		"falling leaves the original word's single coin, fragment, learning, and chest payout unchanged")
 	model.set_paused(true)
@@ -1858,7 +1898,7 @@ func _test_gravity_simultaneous_collections() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cell(1002).row == 7 and model.cell(1002).falling_rows == 2 and model.cell(1002).age == 0.0,
 		"simultaneous removals produce one complete fall instead of an unnecessary stop at the first empty row")
-	check(model.collected_coins == 200 and model.fragment_count == 3 and model.cleared_pairs == 2,
+	check(model.collected_coins == 100 and model.fragment_count == 3 and model.cleared_pairs == 2,
 		"batched stack settlement preserves both independent collection rewards")
 	_assert_board(model, "simultaneous collection gravity")
 
@@ -1928,13 +1968,13 @@ func _test_gravity_wallet_failure() -> void:
 	model.collect(1001)
 	model.step(Model.COLLECT_SECONDS)
 	var retry_id: String = str(model._collection_event_ids[1001])
-	check(model.collected_coins == 100 and model.cell(1001).row == 7 and model.cell(1002).row == 6,
+	check(model.collected_coins == 50 and model.cell(1001).row == 7 and model.cell(1002).row == 6,
 		"failed upper payment retains its word and releases its reservation for gravity from the successful lower collection")
 	check(not model.collect(1001), "retained failed word waits for its fall to land before a payment retry")
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(1001), "failed word remains collectible after landing")
 	model.step(Model.COLLECT_SECONDS)
-	check(calls.size() == 3 and calls[2] == [retry_id, 100] and model.collected_coins == 200
+	check(calls.size() == 3 and calls[2] == [retry_id, 50] and model.collected_coins == 100
 		and model.fragment_count == 3 and model.cell(1002).row == 7,
 		"falling preserves the failed word's idempotent receipt and retry pays exactly once")
 	model.credit_collection = Callable()
@@ -2001,8 +2041,8 @@ func _test_wallet_retry() -> void:
 	check(model.collect(int(merged.id)), "failed wallet transaction can retry")
 	model.step(Model.COLLECT_SECONDS)
 	check(calls.size() == 2 and calls[0].id == calls[1].id, "retry uses the same stable wallet event ID")
-	check(calls[0].present and calls[1].present and calls[1].amount == 100, "wallet receives exact amount before irreversible removal")
-	check(model.cells.is_empty() and model.collected_coins == 100 and model.error.is_empty(), "successful retry completes exactly once")
+	check(calls[0].present and calls[1].present and calls[1].amount == 50, "wallet receives exact amount before irreversible removal")
+	check(model.cells.is_empty() and model.collected_coins == 50 and model.error.is_empty(), "successful retry completes exactly once")
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
 	_board(model, ["ca", "t"])
@@ -2018,7 +2058,7 @@ func _test_wallet_retry() -> void:
 	check(model.cells.size() == 1 and model.paused, "pause in wallet callback defers removal safely")
 	model.set_paused(false)
 	model.step(0.01)
-	check(pause_calls.size() == 1 and model.collected_coins == 100, "resuming a credited collection does not pay again")
+	check(pause_calls.size() == 1 and model.collected_coins == 50, "resuming a credited collection does not pay again")
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
 	_board(model, ["ca", "t"])
@@ -2030,7 +2070,7 @@ func _test_wallet_retry() -> void:
 	model.collect(int(merged.id))
 	model.step(Model.COLLECT_SECONDS)
 	var finished: Dictionary = model.finish_round()
-	check(finished.coins == 100 and finished.words.size() == 1, "exit while a credited collection is paused includes the accepted transaction")
+	check(finished.coins == 50 and finished.words.size() == 1, "exit while a credited collection is paused includes the accepted transaction")
 	model.credit_collection = Callable()
 
 
@@ -2093,7 +2133,7 @@ func _test_collection_batch_rhythm() -> void:
 		check(start.batch and start.index == index + 1 and start.total == expected_ids.size(), "presentation receives stable batch index and total")
 		check(is_equal_approx(float(start.time), expected_time) and start.collections_running == 1,
 			"each rhythmic start occurs at its authoritative time with one collecting body")
-		check(model.collected_coins == index * 100, "only preceding completed transactions have earned coins")
+		check(model.collected_coins == index * 50, "only preceding completed transactions have earned coins")
 		check(payouts.size() == index, "each 100 ms boundary commits exactly one preceding word")
 		if index > 0:
 			check(is_equal_approx(float(payouts[index - 1].time), expected_time),
@@ -2104,7 +2144,7 @@ func _test_collection_batch_rhythm() -> void:
 	model.step(0.001)
 	check(not model.collection_batch_active() and model.cells.is_empty(), "the batch ends only after its final transaction completes")
 	check(model.collection_batch_snapshot().completed == 9 and model.collection_batch_snapshot().remaining == 0, "completed status accounts for every collected word")
-	check(model.collected_coins == 900 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
+	check(model.collected_coins == 450 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
 	check(events.collections.size() == 9 and events.attempts.size() == 9 and events.cues.count("pop") == 9, "every word gets one collection, learning attempt and disappearance cue")
 	check(events.milestones == [[0, 1], [1, 2]], "batch fragments preserve normal chest unlock and upgrade milestones")
 	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 0.9)
@@ -2221,13 +2261,13 @@ func _test_collection_batch_reserved_motion() -> void:
 	model.step(0.10)
 	model.cancel_collection_batch()
 	model.step(1.2)
-	check(model.cleared_pairs == 2 and model.collected_coins == 200 and model.cells.size() == 1,
+	check(model.cleared_pairs == 2 and model.collected_coins == 100 and model.cells.size() == 1,
 		"cancelling reserves no later payout beyond the already-started word")
 	check(_footprint(model.cell(1002)) == Rect2i(4, 7, 2, 1) and model.is_settled(model.cell(1002)),
 		"cancelling releases the remaining word for its deferred growth and natural fall")
 	check(model.collect(1002), "the released word remains manually collectable after cancellation")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 300 and model.cells.is_empty(),
+	check(model.collected_coins == 150 and model.cells.is_empty(),
 		"manual retry after cancellation credits the remaining word once")
 
 
@@ -2272,14 +2312,14 @@ func _test_collection_batch_wallet() -> void:
 		return {"ok": calls.size() != 2}
 	model.start_collection_batch()
 	model.step(5.0)
-	check(calls.size() == 2 and model.cleared_pairs == 1 and model.collected_coins == 100, "wallet failure stops the batch at the failed word without subsequent payments")
+	check(calls.size() == 2 and model.cleared_pairs == 1 and model.collected_coins == 50, "wallet failure stops the batch at the failed word without subsequent payments")
 	check(not model.collection_batch_active() and model.cells.size() == 2 and not model.error.is_empty(), "failed and queued words remain available with a recoverable error")
 	check(model.collect(1001), "a failed batch word can retry through ordinary collection")
 	model.step(Model.COLLECT_SECONDS)
-	check(calls.size() == 3 and calls[1][0] == calls[2][0] and calls[2][1] == 100, "wallet retry keeps its original receipt and amount")
+	check(calls.size() == 3 and calls[1][0] == calls[2][0] and calls[2][1] == 50, "wallet retry keeps its original receipt and amount")
 	check(model.start_collection_batch(), "remaining unattempted word can be batch-collected after retry")
 	model.step(0.10)
-	check(model.cleared_pairs == 3 and model.collected_coins == 300 and calls.size() == 4, "retry and new batch still award each captured word exactly once")
+	check(model.cleared_pairs == 3 and model.collected_coins == 150 and calls.size() == 4, "retry and new batch still award each captured word exactly once")
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
 	_batch_board(model, 3)
@@ -2304,7 +2344,7 @@ func _test_collection_batch_wallet() -> void:
 	check(model.paused and paused_calls.size() == 1 and model.cleared_pairs == 0, "a wallet callback can pause an accepted batch transaction before its presentation commits")
 	model.set_paused(false)
 	model.step(3.0)
-	check(paused_calls.size() == 3 and model.cleared_pairs == 3 and model.collected_coins == 300, "resuming a credited batch does not repeat payment and continues its queue")
+	check(paused_calls.size() == 3 and model.cleared_pairs == 3 and model.collected_coins == 150, "resuming a credited batch does not repeat payment and continues its queue")
 	model.credit_collection = Callable()
 
 
@@ -2315,7 +2355,7 @@ func _test_collection_batch_lifecycle() -> void:
 	model.step(0.10)
 	var result: Dictionary = model.finish_round()
 	model.step(5.0)
-	check(result.coins == 100 and model.cells.size() == 2 and not model.collection_batch_active(), "finishing a round cancels queued words and includes only committed collections")
+	check(result.coins == 50 and model.cells.size() == 2 and not model.collection_batch_active(), "finishing a round cancels queued words and includes only committed collections")
 	model = _model([_word("cat")])
 	_batch_board(model, 3)
 	model.collection_started.connect(func(_payload: Dictionary) -> void:
@@ -2346,7 +2386,7 @@ func _test_collection_batch_lifecycle() -> void:
 	model.start_collection_batch()
 	model.step(0.10)
 	result = model.finish_round()
-	check(result.coins == 100 and model.cleared_pairs == 1 and not model.collection_batch_active(), "exit while paused commits the accepted batch receipt and cancels all later words")
+	check(result.coins == 50 and model.cleared_pairs == 1 and not model.collection_batch_active(), "exit while paused commits the accepted batch receipt and cancels all later words")
 	model.credit_collection = Callable()
 
 
@@ -2404,7 +2444,7 @@ func _test_packing_and_growth() -> void:
 	var large: Dictionary = model.cell(current_id)
 	check(int(large.width) == 6 and int(large.height) >= 2 and int(large.mass) == 10, "large jelly occupies multiple rows within the six-column well")
 	check(str(large.text).length() == 10, "wrapping never truncates accumulated text")
-	check(Model.coins_for_tile(large) == 500, "large jelly value follows accumulated root mass")
+	check(Model.coins_for_tile(large) == 100, "large jelly bonuses are capped at one hundred coins")
 
 
 func _test_target_placement() -> void:
@@ -2623,7 +2663,7 @@ func _test_reposition_support_loss() -> void:
 			and bool(model.cell(1000).falling) and model.cell(1000).falling_rows == 1,
 			"removing support resumes gravity for every manually moved footprint without changing its chosen column")
 		check(model.cell(1000).mass == mass and model.cell(1000).fragments == 2
-			and model.collected_coins == 100 and model.fragment_count == 4 and events.collections.size() == 1,
+			and model.collected_coins == 50 and model.fragment_count == 4 and events.collections.size() == 1,
 			"the resumed fall preserves moved content and pays only the collected support once")
 		model.step(Model.SETTLE_SECONDS)
 		_assert_supported_tiles(model, [1000], "manual support removed")
@@ -2728,7 +2768,7 @@ func _test_reposition_history_and_rewards() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(int(word.id)), "a positioned word remains collectable after its handover")
 	model.step(Model.COLLECT_SECONDS)
-	check(receipts.size() == 2 and receipts[0] == receipts[1] and model.collected_coins == 100
+	check(receipts.size() == 2 and receipts[0] == receipts[1] and model.collected_coins == 50
 		and model.fragment_count == 5 and model.cells.is_empty(), "manual reposition preserves exact retry identity and once-only coin and fragment rewards")
 	model.credit_collection = Callable()
 	model = _model()
@@ -2815,7 +2855,7 @@ func _test_deferred_growth() -> void:
 	var merged_id: int = int(merged.id)
 	check(merged.mass == 8 and merged.width == 4 and merged.height == 1,
 		"a crowded merge preserves a legal smaller footprint when its preferred size cannot fit")
-	check(merged.fragments == 5 and merged.text == "cat" and Model.coins_for_tile(merged) == 400,
+	check(merged.fragments == 5 and merged.text == "cat" and Model.coins_for_tile(merged) == 100,
 		"temporary compression preserves word content, all fragments, and full coin value")
 	_assert_board(model, "compressed growth")
 	model.step(Model.SETTLE_SECONDS)
@@ -2841,7 +2881,7 @@ func _test_deferred_growth() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(merged_id), "the expanded word remains collectible")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 600 and model.fragment_count == 7,
+	check(model.collected_coins == 200 and model.fragment_count == 7,
 		"compression and restored growth preserve the exact final coin and fragment payout")
 	model = _model([_word("cat")])
 	model.cells.clear()
@@ -2883,7 +2923,7 @@ func _test_growth_after_settlement() -> void:
 		merged = model.cell(id)
 		check(merged.width == 4 and merged.height == 1 and merged.column == 0 and merged.row == 7,
 			"settlement completion lets the deferred merged body fall into the newly cleared lower row")
-		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 400,
+		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 100,
 			"deferred falling reserves fresh settlement and preserves the full compressed reward")
 		_assert_board(model, "deferred falling after settlement")
 		final_states.append({"rect": _footprint(merged), "age": float(merged.age), "coins": model.collected_coins,
@@ -2973,7 +3013,7 @@ func _test_nested_splits() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(int(restored.id)), "a restored valid word collects normally")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 100 and model.fragment_count == 3 and model.cells.size() == 2,
+	check(model.collected_coins == 50 and model.fragment_count == 3 and model.cells.size() == 2,
 		"restored word awards only its own mass and fragments")
 	check(model._merge_history.is_empty(), "terminal collection prunes the restored word's ancestry")
 	_assert_board(model, "nested undo")
@@ -3286,7 +3326,7 @@ func _test_split_wallet_history() -> void:
 	payment.ok = true
 	check(model.collect(int(cat.id)), "restored child can retry its failed reward")
 	model.step(Model.COLLECT_SECONDS)
-	check(calls.size() == 3 and calls[2] == [cat_receipt, 100] and model.collected_coins == 100,
+	check(calls.size() == 3 and calls[2] == [cat_receipt, 50] and model.collected_coins == 50,
 		"restored retry uses the original idempotent payment key and credits once")
 	check(not model._collection_event_ids.has(int(cat.id)) and str(model._collection_event_ids[int(dog.id)]) == dog_receipt
 		and model._merge_history.has(int(dog.id)), "collecting one restored tree retains the unrelated failed word and receipt")
@@ -3305,7 +3345,7 @@ func _test_split_wallet_history() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(final_word.id))
 	model.step(Model.COLLECT_SECONDS)
-	check(model._merge_history.is_empty() and model._collection_event_ids.is_empty() and model.collected_coins == 200,
+	check(model._merge_history.is_empty() and model._collection_event_ids.is_empty() and model.collected_coins == 100,
 		"terminal collection prunes the entire consumed ancestry and descendant receipts without paying old children")
 
 
@@ -3397,7 +3437,7 @@ func _test_independent_operations() -> void:
 	var events: Dictionary = _observe(model)
 	check(model.collect(int(model.cells[0].id)) and model.collect(int(model.cells[1].id)), "disjoint valid words can collect concurrently")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.cells.is_empty() and model.collected_coins == 200 and model.fragment_count == 4, "concurrent collections conserve all coins and fragments")
+	check(model.cells.is_empty() and model.collected_coins == 100 and model.fragment_count == 4, "concurrent collections conserve all coins and fragments")
 	check(events.milestones == [[0, 1]] and events.collections.size() == 2, "simultaneous rewards unlock a chest exactly once")
 
 
@@ -3436,7 +3476,7 @@ func _test_lifecycle_reentry() -> void:
 	model.collected.connect(func(_id: String, _word: Dictionary, _coins: int, _fragments: int) -> void: model.finish_round(), CONNECT_ONE_SHOT)
 	model.collect(int(merged.id))
 	model.step(Model.COLLECT_SECONDS)
-	check(model.phase == "finished" and model.finish_round().coins == 100 and model.finish_round().words.size() == 1, "ending inside reward callback sees an atomically committed result")
+	check(model.phase == "finished" and model.finish_round().coins == 50 and model.finish_round().words.size() == 1, "ending inside reward callback sees an atomically committed result")
 
 
 func _test_supply_and_determinism() -> void:

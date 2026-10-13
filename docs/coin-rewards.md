@@ -1,5 +1,10 @@
 # Chest coins
 
+The numerical policy, affordability targets and reproducible budget scenarios
+are documented in [Coin economy](coin-economy.md). Chest payouts and saved wallet
+balances retain their previous values. Future purchases use escalating per-round
+prices, and rare Jelly collection bonuses are capped at 100 coins.
+
 Opening an ordinary chest awards **50 coins**. A levelled chest awards **50 × its chest level**: level 2 gives 100, level 3 gives 150, and so on. Pip's learning level and age do not change the payout. Match and Memory always show the ordinary tier-one wooden chest; their existing 50% round drop chance and separate three-round guarantees are unchanged. Phrase Builder also pays 50 coins. Voice Pop and Jelly Match pay according to the final level of each earned chest.
 
 The opening retains the existing chest performance. At completion, eight to fourteen production coin sprites emerge from the measured chest cavity, rise briefly, and follow curved paths into the header's coin display. The first deposit arrives after 1.14 seconds; following coins arrive 45 milliseconds apart. Each arrival releases its exact share into a rolling counter. The particles represent the reward amount rather than one coin apiece. Reduced motion uses a short static acknowledgement and an immediate count update.

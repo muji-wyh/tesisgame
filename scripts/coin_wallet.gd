@@ -2,7 +2,8 @@ extends RefCounted
 ## Coin changes and their permanent receipts commit together.
 
 const VERSION: int = 2
-const COINS_PER_TIER: int = 50
+const Economy = preload("res://scripts/coin_economy.gd")
+const COINS_PER_TIER: int = Economy.COINS_PER_TIER
 const MAX_BALANCE: int = 9007199254740991
 const MAX_TIER: int = 180143985094819
 const MAX_RECEIPTS: int = 100000
@@ -93,7 +94,7 @@ func credit(chest_id: String, tier: int) -> Dictionary:
 	if not _valid_id(chest_id) or tier < 0 or tier > MAX_TIER:
 		return _rejected("This chest needs a valid reward ID and level.")
 	# Ordinary chests have no tier; both ordinary and tier-one chests pay 50.
-	var amount: int = maxi(1, tier) * COINS_PER_TIER
+	var amount: int = Economy.chest_coins(tier)
 	if not _current_snapshot_matches():
 		return _outcome(false, false, 0, balance)
 	if _receipts.has(chest_id):
@@ -112,6 +113,10 @@ func credit(chest_id: String, tier: int) -> Dictionary:
 	balance += amount
 	_receipts = next_receipts
 	return _outcome(true, false, amount, before)
+
+
+func has_purchase(purchase_id: String, amount: int) -> bool:
+	return ready and amount > 0 and int(_receipts.get(purchase_id, 0)) == -amount
 
 
 func spend(purchase_id: String, amount: int) -> Dictionary:
