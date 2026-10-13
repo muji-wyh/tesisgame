@@ -88,6 +88,10 @@ batch's initial charge until completion. Reduced motion preserves the count,
 static material, stack and light accents without rocking, growth overshoot or
 twinkling. Earned chest celebrations queue until the collection rhythm finishes;
 their existing flight, upgrade and confetti then play through the shared system.
+Focus uses the gel skin's own mint-and-cream contour highlight, replacing the
+dark rectangle around its hit target. It remains distinct from the golden charge
+rim at high counts, stays steady with reduced motion, and clears when disabled.
+Keyboard navigation, activation and touch bounds remain unchanged.
 
 The existing collection pop marks each pickup. Batch word pictures update with
 each word without pronunciation, including the final pickup. Individual word

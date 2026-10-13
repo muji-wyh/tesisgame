@@ -201,10 +201,12 @@ func _draw() -> void:
 	_surface.scale = Vector2.ONE * art_scale
 	_surface.modulate = base_color
 	var warmth: float = clampf((_charge - 1.0) / 8.0, 0.0, 1.0)
+	var focused: bool = has_focus() and not disabled
+	# Focus follows the acquired gel silhouette while the hit target stays fixed.
 	_material.set_shader_parameter("palette_hue", lerpf(0.35, 0.115, warmth))
-	_material.set_shader_parameter("rim_strength", warmth * 0.72)
-	_material.set_shader_parameter("rim_color", Color("#eab243"))
-	_material.set_shader_parameter("rim_width", 1.15)
+	_material.set_shader_parameter("rim_strength", 0.95 if focused else warmth * 0.72)
+	_material.set_shader_parameter("rim_color", Color("#4c987a") if focused else Color("#eab243"))
+	_material.set_shader_parameter("rim_width", 1.4 if focused else 1.15)
 	if float(pose.glow) > 0.001:
 		_draw_art(GLOW, icon_center, Vector2.ONE * halo_edge, Color(1.0, 0.76, 0.22, float(pose.glow)))
 	if float(pose.rays) > 0.001:
@@ -219,9 +221,6 @@ func _draw() -> void:
 	_draw_sparkles(icon_center, halo_edge, pose, tall)
 	_draw_caption(tall, ready, unit)
 	_draw_count(tall, ready, unit, float(pose.strike))
-	if has_focus() and not disabled:
-		var focus := Style.box(Color.TRANSPARENT, Style.INK, ceili(13.0 * unit), maxi(2, roundi(2.0 * unit)))
-		draw_style_box(focus, Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit))
 
 
 func _draw_art(texture: Texture2D, center: Vector2, extent: Vector2, tint: Color = Color.WHITE) -> void:
