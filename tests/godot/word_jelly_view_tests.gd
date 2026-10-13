@@ -733,7 +733,7 @@ func _check_batch_collection(view) -> void:
 			check(times == 1, "each batch event reaches persistent credit only once")
 		check(view.game.collected_coins == 300 and view.game.fragment_count == 3 and cues.count("pop") == 3,
 			"all carried fragments, coins and three existing disappearance beats survive batch playback")
-		check(heard.size() == 1, "the final batch word speaks once after the short per-word sound rhythm")
+		check(heard.is_empty(), "batch collection never pronounces a word, including the final pickup")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,

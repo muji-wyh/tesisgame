@@ -76,6 +76,5 @@ twinkling. Earned chest celebrations queue until the collection rhythm finishes;
 their existing flight, upgrade and confetti then play through the shared system.
 
 The existing collection pop marks each pickup. Batch word pictures update with
-each word; only the final word plays its complete pronunciation, preventing
-rapid pickups from repeatedly cutting off speech. Individual word taps keep
-their existing picture and pronunciation behavior.
+each word without pronunciation, including the final pickup. Individual word
+taps keep their existing picture and pronunciation behavior.

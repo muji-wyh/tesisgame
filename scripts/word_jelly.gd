@@ -327,9 +327,8 @@ func _collection_started(fusion: Dictionary) -> void:
 	var word: Dictionary = fusion.word
 	_word_reveal.set_reduced_motion(reduced_motion)
 	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD))
-	# Keep the short collection pops on the beat. Only the last word receives
-	# a full reading so rapid pickups never repeatedly cut off pronunciation.
-	if not bool(fusion.get("batch", false)) or int(fusion.batch_index) == int(fusion.batch_total):
+	# Batch pickups keep their pop rhythm; pronunciation belongs to direct taps.
+	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
 	_refresh_controls()
 	_refresh_fusion()
