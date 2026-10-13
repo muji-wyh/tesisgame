@@ -15,12 +15,12 @@ const CoinCounter = preload("res://scripts/coin_counter.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const ModePreview = preload("res://scripts/game_mode_preview.gd")
 const CATALOG := [
+	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join letter pieces.\nCollect your words.", "detail": "BUILD WORDS · COINS", "tint": Color("#eee5f4")},
 	{"id": "match", "title": "Match", "copy": "Match a picture\nto its word.", "detail": "5 PAIRS", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Remember, flip,\nfind the pair.", "detail": "NO TIMER", "tint": Color("#f2e9d8")},
 	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nPop flying cards.", "detail": "50 SECONDS · MIC", "tint": Color("#e3eef1")},
 	{"id": "phrase", "title": "Phrase Builder", "copy": "Listen. Drag words\ninto a phrase.", "detail": "3 PHRASES", "tint": Color("#f5ebce")},
-	{"id": "jelly", "title": "Jelly Match", "copy": "Drag matching pairs.\nMerge & collect.", "detail": "MERGE PAIRS · TREASURE", "tint": Color("#e1efea")},
-	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join letter pieces.\nCollect your words.", "detail": "BUILD WORDS · COINS", "tint": Color("#eee5f4")}
+	{"id": "jelly", "title": "Jelly Match", "copy": "Drag matching pairs.\nMerge & collect.", "detail": "MERGE PAIRS · TREASURE", "tint": Color("#e1efea")}
 ]
 
 var heading: Label

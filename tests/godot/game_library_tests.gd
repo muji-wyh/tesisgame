@@ -126,7 +126,7 @@ func check_mode_previews(library: Library) -> void:
 	release.button_mask = 0
 	root.push_input(release, true)
 	await settle()
-	check(chosen == "match" and mode_requests == initial_requests + 1,
+	check(chosen == "word_jelly" and mode_requests == initial_requests + 1,
 		"Clicking inside a preview selects its game exactly once through the parent button")
 	await move_pointer(Vector2(1, 1))
 	library.pip.grab_focus()
@@ -210,7 +210,7 @@ func _run() -> void:
 		"Home has no manual motion control in its navigation or snapshot")
 	check(library._footer.get_child_count() == 2, "Home keeps only the word library and sound controls in its footer")
 	library.configure("word_jelly", false, true)
-	check(library.buttons.back().button_pressed, "Home identifies the resumable Jelly Words game")
+	check(library.buttons.front().button_pressed, "Home identifies the resumable Jelly Words game")
 	library.pip.set_idle_paused(true)
 	library.configure("word_jelly", false, true)
 	check(library.pip._idle_paused, "Refreshing Home settings cannot resume Pip while the page is in the background")
