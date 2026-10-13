@@ -1,5 +1,23 @@
 # Voice Pop treasure
 
+The shared opening progress now uses a continuous seven-band rainbow with a
+translucent unfilled track, soft traveling glints and three earned star accents.
+The band follows the real hold/opening progress and retains the existing cue
+times. A visible, naturally completed opening adds a separate 2.4-second
+flourish: soft radial light behind the chest and 28 staggered, colored star
+glints rising from its cavity. Its clock pauses with the chest. Cancel, hide,
+reset, restored opened chests, background settlement and reduced motion cannot
+start or replay the flourish. Rewards, audio and the five-second opening gate
+are unchanged; the flourish adds no input delay or random toy.
+
+These effects reuse the acquired static `portal_glow.png` from Bobardo's Modern
+2D Animated Chests and the Toon FX 1.52 `sparkle.png` and `rays.png` textures by
+Kenneth Foldal Moe (Archanor VFX). Their source, Standard Unity Asset Store EULA,
+local integration and exact source hashes are recorded in
+[the fragment asset record](assets/jelly-fragments.md#extra-motion-textures).
+The textures were inspected on a dark background; all new motion is authored
+in Godot. No additional artwork, audio or source animation was acquired.
+
 Voice Pop starts with zero fragments. Each spawned word card has a 35% chance
 of carrying a chest marker, fixed to that card identity. Successfully slicing a
 marked card earns one fragment; unmarked cards keep their usual score and

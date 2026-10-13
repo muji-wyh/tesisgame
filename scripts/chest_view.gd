@@ -11,6 +11,8 @@ const CHARGE_STEPS: int = 3
 const CROWN_COLORS: Array[Color] = [Color("#ff7189"), Color("#ffb354"), Color("#f5dc66"),
 	Color("#73d99b"), Color("#66d5e6"), Color("#799ff2"), Color("#bd8bea")]
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const CHARGE_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const OpeningEffect = preload("res://scripts/chest_opening_effect.gd")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
 const Surprise = preload("res://scripts/chest_surprise.gd")
@@ -85,6 +87,8 @@ var _model_time: float = 0.0
 var _cancel_model_drive := Vector2.ZERO
 var _model_rest_time: float = 0.0
 var _cancel_model_time: float = 0.0
+var _opened_effect := OpeningEffect.new()
+var _finish_flourish: bool = false
 
 
 func _ready() -> void:
@@ -117,6 +121,8 @@ func _ready() -> void:
 	_seam_light.draw.connect(_draw_seam)
 	add_child(_surprise)
 	_surprise.z_index = 11
+	add_child(_opened_effect)
+	_opened_effect.z_index = 8
 	resized.connect(_fit)
 	visibility_changed.connect(_visibility_changed)
 	_visibility_changed()
@@ -126,6 +132,7 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	if theme_id == palette.id:
 		return
 	_surprise.clear()
+	_finish_flourish = false
 	stop_reaction()
 	theme_id = palette.id
 	_feel = Feel.profile(theme_id)
@@ -390,6 +397,9 @@ func _fit() -> void:
 		or (mode == "opening" and _elapsed < Feel.RELEASE_TIME))
 	_glint.queue_redraw()
 	_surprise.fit(size, _cavity_origin(), _charge_scale)
+	_opened_effect.sample(_finish_flourish and mode == "opened" and is_visible_in_tree()
+		and not _idle_paused and not reduced_motion, _idle_time, _release_bounds(),
+		_cavity_origin(), 1.0 / _charge_scale, _release_color)
 
 
 func _update_charge() -> void:
@@ -435,21 +445,20 @@ func _draw_charge() -> void:
 	var pulse: float = _pulse_strength()
 	var crest: float = _crown_crest()
 	var frontier: Color = _crown_color(progress).lightened(0.35)
-	# A recessed casing gives the rail weight. Its light grows continuously;
-	# only the small accent follows the same delivered beats as the body/audio.
-	_draw_crown_arc(0.0, 1.0, Color(Color("#152332"), 0.50 * alpha), 14.0 * pixel, Vector2(0, 2.0 * pixel))
-	_draw_crown_arc(0.0, 1.0, Color(Color("#354554"), 0.92 * alpha), 12.0 * pixel)
-	_draw_crown_arc(0.0, 1.0, Color(Color("#b5c8d5"), 0.32 * alpha), 8.0 * pixel)
-	_draw_crown_arc(0.0, 1.0, Color(Color("#253444"), 0.90 * alpha), 5.0 * pixel)
+	# A translucent unfilled ribbon stays quiet; earned color flows in seven
+	# parallel bands, so this reads as a rainbow rather than a metal gauge.
+	_draw_crown_arc(0.0, 1.0, Color(Color("#294957"), 0.13 * alpha), 14.0 * pixel, Vector2(0, 1.5 * pixel))
+	_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, 0.28 * alpha), 12.0 * pixel)
 	if progress > 0.0:
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, (0.16 + progress * 0.16 + pulse * 0.05) * alpha), 22.0 * pixel, Vector2.ZERO, true)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.38 * alpha), 13.0 * pixel, Vector2.ZERO, true)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, alpha), 8.0 * pixel, Vector2.ZERO, true)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.26 * alpha), 3.0 * pixel)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.65 * alpha), 1.0 * pixel)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, (0.14 + progress * 0.13) * alpha), 24.0 * pixel, Vector2.ZERO, true)
+		for band in range(CROWN_COLORS.size()):
+			var radial: float = (3.0 - float(band)) * 1.65 * pixel
+			_draw_crown_arc(0.0, progress, Color(CROWN_COLORS[band], 0.96 * alpha), 2.25 * pixel, Vector2.ZERO, false, radial)
+		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.52 * alpha), 1.0 * pixel, Vector2.ZERO, false, 6.1 * pixel)
 	for streak in _crown_streaks():
-		_draw_crown_arc(streak.x, streak.y, Color(Color.WHITE, 0.70 * alpha), 9.0 * pixel, Vector2.ZERO, true)
-		_draw_crown_arc(lerpf(streak.x, streak.y, 0.45), streak.y, Color(Color.WHITE, alpha), 4.0 * pixel)
+		_draw_crown_arc(streak.x, streak.y, Color(Color.WHITE, 0.36 * alpha), 13.0 * pixel)
+		var point: Vector2 = _crown_point(streak.y)
+		_draw_crown_sparkle(point, 11.0 * pixel, Color(Color.WHITE, 0.9 * alpha), streak.y * 0.7)
 	if crest > 0.0:
 		# A single completed-rail crest merges into the cavity's release light.
 		_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, crest * 0.32 * alpha), 28.0 * pixel, Vector2.ZERO, true)
@@ -464,8 +473,15 @@ func _draw_charge() -> void:
 		var halo: float = (12.0 + pulse) * pixel
 		_charge.draw_texture_rect(CHARGE_GLOW, Rect2(tip - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
 			Color(frontier, (0.70 + progress * 0.30) * alpha))
-		_charge.draw_circle(tip, 4.0 * pixel, Color(Color.WHITE, alpha))
-		_draw_charge_star(tip, (7.0 + pulse) * pixel, Color(Color.WHITE, alpha))
+		_draw_crown_sparkle(tip, (25.0 + pulse * 2.0) * pixel, Color(Color.WHITE, alpha))
+		# Fine sparkles follow the earned frontier and remain within the ribbon.
+		for spark in range(8):
+			var phase: float = fposmod(_crown_flow_phase() * 0.30 + float(spark) * 0.618, 1.0)
+			var at: float = progress * (0.08 + phase * 0.88)
+			var point: Vector2 = _crown_point(at)
+			point.y += sin(float(spark) * 2.3 + phase * TAU) * 5.0 * pixel
+			_draw_crown_sparkle(point, (6.0 + phase * 5.0) * pixel,
+				Color(_crown_color(at).lightened(0.65), sin(phase * PI) * alpha), phase * 0.8)
 	for index in range(CHARGE_STEPS):
 		var threshold: float = float(index + 1) / CHARGE_STEPS
 		var lit: bool = progress + 0.000001 >= threshold
@@ -474,23 +490,24 @@ func _draw_charge() -> void:
 		var radius: float = _crown_star_radius()
 		var energy: Color = _crown_color((float(index) + 0.5) / CHARGE_STEPS)
 		var gold: Color = energy.lightened(0.50)
-		_charge.draw_circle(position + Vector2(0, 1.5 * pixel), radius * 1.50, Color(Color("#152332"), 0.55 * alpha))
-		_charge.draw_circle(position, radius * 1.40, Color(energy if lit else Color("#94a8b6"), (0.95 if lit else 0.45) * alpha))
-		_charge.draw_circle(position, radius * 1.16, Color(energy.darkened(0.72) if lit else Color("#253444"), 0.98 * alpha))
 		if lit:
 			var halo: float = radius * 1.80
 			_charge.draw_texture_rect(CHARGE_GLOW, Rect2(position - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
 				Color(gold, (0.65 + beat * 0.35) * alpha))
 		if beat > 0.0:
 			var expansion: float = clampf(_crown_milestone_age(index) / 0.32, 0.0, 1.0)
-			_charge.draw_arc(position, radius * lerpf(1.20, 1.80, expansion), 0, TAU, 32,
-				Color(gold, beat * alpha), 1.5 * pixel, true)
 			for spark in range(6):
 				var direction := Vector2.from_angle(float(spark) * TAU / 6.0 - PI * 0.5)
-				var point: Vector2 = position + direction * radius * lerpf(1.20, 1.72, expansion)
-				_charge.draw_line(point - direction * 3.0 * pixel * beat, point,
-					Color(gold, beat * alpha), 1.5 * pixel, true)
-		_draw_charge_star(position, radius * (0.87 + beat * 0.20), Color(gold if lit else Color.WHITE, alpha if lit else 0.50 * alpha))
+				var point: Vector2 = position + direction * radius * lerpf(0.90, 1.40, expansion)
+				_draw_crown_sparkle(point, 6.0 * pixel * beat, Color(gold, beat * alpha), expansion * 0.4)
+		_draw_crown_sparkle(position, radius * (2.5 + beat * 0.30),
+			Color(gold if lit else Color.WHITE, alpha if lit else 0.42 * alpha))
+
+
+func _draw_crown_sparkle(point: Vector2, edge: float, color: Color, turn: float = 0.0) -> void:
+	_charge.draw_set_transform(point, turn)
+	_charge.draw_texture_rect(CHARGE_SPARKLE, Rect2(Vector2.ONE * -edge * 0.5, Vector2.ONE * edge), false, color)
+	_charge.draw_set_transform(Vector2.ZERO)
 
 
 func _crown_clock() -> float:
@@ -533,11 +550,8 @@ func _crown_crest() -> float:
 
 
 func _crown_point(progress: float) -> Vector2:
-	var part: float = clampf(progress, 0.0, 1.0) * CHARGE_STEPS
-	var segment: int = mini(CHARGE_STEPS - 1, floori(part))
-	var start: float = PI + PI * float(segment) / CHARGE_STEPS + 0.06
-	var end: float = PI + PI * float(segment + 1) / CHARGE_STEPS - 0.06
-	return _charge_center + Vector2.from_angle(lerpf(start, end, part - segment)) * _charge_radius
+	return _charge_center + Vector2.from_angle(lerpf(PI + 0.04, TAU - 0.04,
+		clampf(progress, 0.0, 1.0))) * _charge_radius
 
 
 func _crown_color(progress: float) -> Color:
@@ -546,29 +560,20 @@ func _crown_color(progress: float) -> Color:
 	return CROWN_COLORS[index].lerp(CROWN_COLORS[index + 1], position - index)
 
 
-func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset: Vector2 = Vector2.ZERO, rainbow: bool = false) -> void:
-	# Every decorative stroke is clipped to its earned interval and the gaps.
-	for index in range(CHARGE_STEPS):
-		var start: float = maxf(0.0, from * CHARGE_STEPS - index)
-		var end: float = minf(1.0, to * CHARGE_STEPS - index)
-		if end <= start:
-			continue
-		var angle_start: float = PI + PI * float(index) / CHARGE_STEPS + 0.06
-		var angle_end: float = PI + PI * float(index + 1) / CHARGE_STEPS - 0.06
-		var points: PackedVector2Array = _ellipse_points(_charge_radius,
-			lerpf(angle_start, angle_end, start), lerpf(angle_start, angle_end, end), maxi(2, ceili((end - start) * 28.0)))
-		if offset != Vector2.ZERO:
-			for point in range(points.size()):
-				points[point] += offset
-		if rainbow:
-			var colors := PackedColorArray()
-			for point in range(points.size()):
-				# Sample the complete rail so partial fills and segment gaps never shift its hues.
-				var progress: float = (index + lerpf(start, end, float(point) / (points.size() - 1))) / CHARGE_STEPS
-				colors.append(_crown_color(progress) * color)
-			_charge.draw_polyline_colors(points, colors, width, true)
-		else:
-			_charge.draw_polyline(points, color, width, true)
+func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset: Vector2 = Vector2.ZERO, rainbow: bool = false, radial: float = 0.0) -> void:
+	if to <= from:
+		return
+	var points: PackedVector2Array = _ellipse_points((_charge_radius + Vector2.ONE * radial).max(Vector2.ZERO),
+		lerpf(PI + 0.04, TAU - 0.04, from), lerpf(PI + 0.04, TAU - 0.04, to), maxi(2, ceili((to - from) * 84.0)))
+	for point in range(points.size()):
+		points[point] += offset
+	if rainbow:
+		var colors := PackedColorArray()
+		for point in range(points.size()):
+			colors.append(_crown_color(lerpf(from, to, float(point) / (points.size() - 1))) * color)
+		_charge.draw_polyline_colors(points, colors, width, true)
+	else:
+		_charge.draw_polyline(points, color, width, true)
 
 
 func _crown_star_position(index: int) -> Vector2:
@@ -585,24 +590,14 @@ func _crown_effect_bounds() -> Rect2:
 	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
 		return Rect2(_charge_center, Vector2.ZERO)
 	var result := Rect2(_crown_point(0.0), Vector2.ZERO)
-	for index in range(CHARGE_STEPS):
-		var start: float = PI + PI * float(index) / CHARGE_STEPS + 0.06
-		var end: float = PI + PI * float(index + 1) / CHARGE_STEPS - 0.06
-		for point in _ellipse_points(_charge_radius, start, end, 28):
-			result = result.expand(point)
+	for point in _ellipse_points(_charge_radius, PI + 0.04, TAU - 0.04, 84):
+		result = result.expand(point)
 	result = result.grow(14.0 * _charge_unit)
 	var star_extent: float = _crown_star_radius() * 1.80 + 0.75 * _charge_unit
 	for index in range(CHARGE_STEPS):
 		var position: Vector2 = _crown_star_position(index)
 		result = result.merge(Rect2(position - Vector2.ONE * star_extent, Vector2.ONE * star_extent * 2.0))
 	return result
-
-
-func _draw_charge_star(center: Vector2, radius: float, color: Color) -> void:
-	var points := PackedVector2Array()
-	for index in range(10):
-		points.append(center + Vector2.from_angle(-PI * 0.5 + PI * float(index) / 5.0) * radius * (1.0 if index % 2 == 0 else 0.44))
-	_charge.draw_colored_polygon(points, color)
 
 
 func _hold_status() -> String:
@@ -861,6 +856,7 @@ func hold_effect_snapshot() -> Dictionary:
 			break
 	return {"active": active, "phase": performance_phase(),
 		"surprise": _surprise.snapshot(),
+		"opened_effect": _opened_effect.snapshot(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"visual_progress": _visual_performance_progress(),
 		"anticipation_held": mode == "opening" and not reduced_motion and _elapsed >= Feel.PAUSE_START_TIME and _elapsed < Feel.RELEASE_TIME,
@@ -1131,6 +1127,7 @@ func _release_radius() -> Vector2:
 func _draw_radiance() -> void:
 	if _fit_scale <= 0.0:
 		return
+	_opened_effect.draw_glow(_radiance)
 	var pressure: float = _lid_pressure()
 	var buildup: float = _buildup_glow()
 	var flash: float = _release_power()
@@ -1675,11 +1672,14 @@ func start_open(reduce: bool) -> void:
 		_fit()
 
 
-func finish_immediately() -> void:
+func finish_immediately(celebrate: bool = false) -> void:
 	if mode != "opening":
 		return
 	mode = "opened"
 	_idle_time = 0.0
+	# Only a visible, naturally completed performance earns this flourish.
+	# Restoration, background settlement and reduced motion use the quiet path.
+	_finish_flourish = celebrate and not reduced_motion and is_visible_in_tree() and not _idle_paused
 	_release_active = false
 	_opening_cues_enabled = false
 	_elapsed = OPEN_SECONDS
@@ -1698,6 +1698,8 @@ func show_surprise() -> void:
 
 func clear() -> void:
 	_surprise.clear()
+	_finish_flourish = false
+	_opened_effect.clear()
 	stop_reaction()
 	_surprise_shown = false
 	mode = "closed"
@@ -1767,6 +1769,8 @@ func piece_count() -> int:
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		_surprise.clear()
+		_finish_flourish = false
+		_opened_effect.clear()
 		stop_reaction()
 	set_process(is_visible_in_tree() and not _idle_paused)
 	if is_instance_valid(_model_view):
@@ -1775,6 +1779,10 @@ func _visibility_changed() -> void:
 
 func set_idle_paused(value: bool) -> void:
 	_idle_paused = value
+	if is_inside_tree():
+		_fit()
+	else:
+		_opened_effect.clear()
 	set_process(is_visible_in_tree() and not _idle_paused)
 	if is_instance_valid(_model_view):
 		_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)
@@ -1795,6 +1803,7 @@ func _advance_animation(delta: float) -> void:
 		return
 	if reduced_motion:
 		_surprise.reduce_motion()
+		_finish_flourish = false
 	_surprise.advance(delta)
 	if mode == "opened" and not reduced_motion:
 		_idle_time += delta
@@ -1833,6 +1842,6 @@ func _advance_animation(delta: float) -> void:
 					if live_pulse and live_rise and _elapsed - float(event.time) <= 0.20:
 						_emit_cue(str(event.cue), int(event.step), float(event.time))
 		if _elapsed >= OPEN_SECONDS:
-			finish_immediately()
+			finish_immediately(_opening_cues_enabled and not reduced_motion and delta <= 0.5)
 	_apply_pose(0.0)
 	_fit()

@@ -62,6 +62,8 @@ func _run() -> void:
 	_check_crown_effects(data)
 	_check_buildup_glow(data)
 	_check_hold_bounds(data)
+	_check_opened_flourish(data)
+	_check_opened_flourish_bounds(data)
 	var medal_path := "res://scripts/medal_view.gd"
 	check(FileAccess.file_exists(medal_path), "The saved favorite medal view exists")
 	if FileAccess.file_exists(medal_path):
@@ -121,6 +123,166 @@ func _check_themed_chests(data) -> void:
 						outside.append(str(piece.role) + " at " + str(transform * corner))
 			check(visible_pieces > 0 and outside.is_empty(),
 				"The opened %s chest keeps every transformed artwork corner inside %s without clipping: %s" % [theme_id, dimensions, outside])
+	chest.free()
+
+
+func _step_flourish_chest(chest, seconds: float) -> void:
+	var remaining: float = seconds
+	while remaining > 0.000001:
+		var step: float = minf(0.05, remaining)
+		chest._advance_animation(step)
+		remaining -= step
+
+
+func _open_flourish_chest(chest, data, theme: String) -> void:
+	chest.clear()
+	chest.show()
+	chest.set_idle_paused(false)
+	chest.reduced_motion = false
+	chest.configure_skin(data.theme(theme), data.chests)
+	chest.start_open(false)
+	_step_flourish_chest(chest, Feel.OPEN_SECONDS + 0.001)
+
+
+func _check_opened_flourish(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(410, 328)
+	var openings: Array[String] = []
+	var releases: Array[String] = []
+	chest.opened.connect(func() -> void: openings.append(chest.theme_id))
+	chest.release_reached.connect(func() -> void: releases.append(chest.theme_id))
+	for theme in data.THEMES:
+		var prior_openings: int = openings.size()
+		var prior_releases: int = releases.size()
+		chest.clear()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.start_open(false)
+		_step_flourish_chest(chest, Feel.OPEN_SECONDS - 0.05)
+		check(not chest.hold_effect_snapshot().opened_effect.active and openings.size() == prior_openings,
+			theme + " reserves the post-open flourish for physical completion")
+		_step_flourish_chest(chest, 0.06)
+		var beginning: Dictionary = chest.hold_effect_snapshot().opened_effect
+		check(chest.mode == "opened" and beginning.active and beginning.age <= 0.06
+			and openings.size() == prior_openings + 1 and releases.size() == prior_releases + 1,
+			theme + " starts one flourish with one opening and one release signal")
+		chest._advance_animation(0.20)
+		var visible: Dictionary = chest.hold_effect_snapshot().opened_effect
+		check(visible.active and visible.particle_count > 0 and visible.particles.size() == visible.particle_count,
+			theme + " shows a finite set of textured sparkles after opening")
+		chest.start_open(false)
+		chest.finish_immediately()
+		check(chest.hold_effect_snapshot().opened_effect.age == visible.age
+			and openings.size() == prior_openings + 1 and releases.size() == prior_releases + 1,
+			theme + " ignores repeated starts and finishes without restarting the flourish or reward signals")
+		chest.set_idle_paused(true)
+		var paused: Dictionary = chest.hold_effect_snapshot().opened_effect
+		chest._advance_animation(4.0)
+		var waiting: Dictionary = chest.hold_effect_snapshot().opened_effect
+		check(not waiting.active and waiting.particle_count == 0 and waiting.age == paused.age,
+			theme + " hides and freezes the post-open flourish while the result is paused")
+		chest.set_idle_paused(false)
+		check(chest.hold_effect_snapshot().opened_effect.age == paused.age,
+			theme + " resumes the existing flourish clock without restarting it")
+		chest._advance_animation(0.10)
+		check(chest.hold_effect_snapshot().opened_effect.active
+			and chest.hold_effect_snapshot().opened_effect.age > paused.age,
+			theme + " continues the remaining sparkle motion after resuming")
+		chest._advance_animation(8.0)
+		var finished: Dictionary = chest.hold_effect_snapshot().opened_effect
+		check(not finished.active and finished.particle_count == 0
+			and openings.size() == prior_openings + 1 and releases.size() == prior_releases + 1,
+			theme + " exhausts its post-open particles without repeating reward or release callbacks")
+
+	_open_flourish_chest(chest, data, "spring")
+	chest._advance_animation(0.20)
+	chest.hide()
+	chest._advance_animation(0.20)
+	chest.show()
+	chest._advance_animation(0.20)
+	check(not chest.hold_effect_snapshot().opened_effect.active,
+		"Hiding a completed chest discards its transient flourish instead of replaying it on return")
+	_open_flourish_chest(chest, data, "spring")
+	chest.reduced_motion = true
+	chest._advance_animation(0.01)
+	check(not chest.hold_effect_snapshot().opened_effect.active
+		and chest.hold_effect_snapshot().opened_effect.particle_count == 0,
+		"Enabling reduced motion immediately removes post-open sparkle movement")
+	chest.reduced_motion = false
+	chest._advance_animation(0.10)
+	check(not chest.hold_effect_snapshot().opened_effect.active,
+		"Disabling reduced motion cannot replay a discarded flourish")
+	_open_flourish_chest(chest, data, "spring")
+	chest.configure_skin(data.theme("winter"), data.chests)
+	check(not chest.hold_effect_snapshot().opened_effect.active and chest.mode == "closed",
+		"Changing the chest skin clears the previous opening flourish")
+	_open_flourish_chest(chest, data, "spring")
+	chest.clear()
+	check(not chest.hold_effect_snapshot().opened_effect.active and chest.hold_effect_snapshot().opened_effect.particle_count == 0,
+		"Clearing a result removes its transient particles")
+	for pathway in ["cancel", "hidden", "skip", "restore", "reduced", "stalled"]:
+		chest.clear()
+		chest.show()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme("spring"), data.chests)
+		var before: int = openings.size()
+		if pathway == "restore":
+			chest.mode = "opening"
+			chest.finish_immediately()
+		else:
+			chest.start_open(pathway == "reduced")
+			if pathway == "cancel":
+				_step_flourish_chest(chest, Feel.RELEASE_TIME - 0.05)
+				chest.cancel_open()
+			elif pathway == "hidden":
+				_step_flourish_chest(chest, Feel.RELEASE_TIME + 0.05)
+				chest.hide()
+				chest.finish_immediately()
+				chest.show()
+			elif pathway == "skip":
+				chest.finish_immediately()
+			elif pathway == "stalled":
+				chest._advance_animation(Feel.OPEN_SECONDS + 1.0)
+		chest._advance_animation(0.25)
+		var quiet: Dictionary = chest.hold_effect_snapshot().opened_effect
+		check(not quiet.active and quiet.particle_count == 0,
+			"The " + pathway + " completion pathway cannot invent or replay a post-open flourish")
+		check(openings.size() == before + (0 if pathway == "cancel" else 1),
+			"The " + pathway + " pathway preserves its original exactly-once opening callback")
+	chest.free()
+
+
+func _check_opened_flourish_bounds(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	for theme in data.THEMES:
+		for dimensions in [Vector2(180, 120), Vector2(320, 72), Vector2(326, 260), Vector2(410, 328)]:
+			chest.size = dimensions
+			_open_flourish_chest(chest, data, theme)
+			var stage := Rect2(Vector2.ZERO, dimensions).grow(0.01)
+			var issues: Array[String] = []
+			var saw_particles: bool = false
+			for frame in range(45):
+				chest._advance_animation(0.10)
+				var effect: Dictionary = chest.hold_effect_snapshot().opened_effect
+				if not effect.active:
+					continue
+				var bounds: Rect2 = effect.bounds
+				if bounds.has_area() and not stage.encloses(bounds):
+					issues.append("Effect envelope at %.2fs: %s" % [effect.age, bounds])
+				for particle in effect.particles:
+					saw_particles = true
+					var center: Vector2 = particle.position
+					var edge: float = particle.edge
+					if edge <= 0.0 or not is_finite(edge) or particle.alpha < 0.0 or particle.alpha > 1.0:
+						issues.append("Invalid particle at %.2fs: %s" % [effect.age, particle])
+					for corner in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5)]:
+						var point: Vector2 = center + (corner * edge).rotated(particle.rotation)
+						if not stage.has_point(point):
+							issues.append("Particle corner at %.2fs: %s" % [effect.age, point])
+			check(saw_particles and issues.is_empty(),
+				"The %s opening flourish has visible, unclipped particles inside %s: %s" % [theme, dimensions, issues])
 	chest.free()
 
 
