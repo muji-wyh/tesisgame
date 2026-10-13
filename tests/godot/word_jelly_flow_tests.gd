@@ -3,6 +3,9 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const RESPONSIVE_SIZES: Array[Vector2i] = [Vector2i(320, 480), Vector2i(393, 852), Vector2i(624, 1119),
+	Vector2i(768, 1024), Vector2i(834, 1194), Vector2i(568, 320), Vector2i(844, 390),
+	Vector2i(1366, 768), Vector2i(1473, 1175)]
 var checks := 0
 var failures := 0
 
@@ -55,7 +58,7 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 func check_finish_header(app, view) -> void:
 	var original_size: Vector2i = root.size
 	var reveal_word: Dictionary = app._learning_words()[0]
-	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(320, 480), Vector2i(568, 320), Vector2i(844, 390)]:
+	for dimensions: Vector2i in RESPONSIVE_SIZES:
 		root.size = dimensions
 		await settle()
 		var s: float = app.Style.ui_scale(app)
@@ -72,21 +75,32 @@ func check_finish_header(app, view) -> void:
 		check(finish.size.x * s >= 44.0 - 0.1 and finish.size.y * s >= 44.0 - 0.1
 			and not finish.intersects(app._mode_heading.get_global_rect()),
 			"The header keeps a full touch target and an unobstructed mode title" + context)
-		var bottom: float = maxf(view._global_rect(view._board).end.y, maxf(collect.end.y, view._loot_meter.get_global_rect().end.y))
+		var bottom: float = maxf(view._global_rect(view._board).end.y, collect.end.y)
+		for button: Control in view.powerup_buttons.values():
+			bottom = maxf(bottom, button.get_global_rect().end.y)
 		check(absf(bottom - (playfield.end.y - 12.0 / s)) < 0.1,
 			"The board and collection controls retain twelve-pixel bottom padding" + context)
-		var chest: Rect2 = view._loot_meter.get_global_rect()
-		var icon: Rect2 = view._loot_icon.get_global_rect()
+		var chest: Rect2 = view._global_rect(view.chest_meter_rect())
+		var icon: Rect2 = view._global_rect(view.chest_anchor_rect())
+		check(view.has_header_chest() and view._chest_tap.is_visible_in_tree()
+			and app._header.get_global_rect().grow(0.1).encloses(chest),
+			"The active chest belongs to the existing header instead of reserving a playfield band" + context)
 		check(chest.is_equal_approx(view._chest_tap.get_global_rect()) and chest.encloses(icon)
 			and chest.get_center().distance_to(icon.get_center()) < 0.1
 			and chest.size.x * s >= 44.0 - 0.1 and chest.size.y * s >= 44.0 - 0.1,
 			"The chest artwork remains centered inside its full-size meter and tap target" + context)
-		check(view._reward_presentation._anchor.is_equal_approx(view._loot_icon.get_rect()),
+		check(view._reward_presentation._anchor.is_equal_approx(view.chest_anchor_rect()),
 			"The milestone flight returns to the current local chest artwork anchor" + context)
+		var header_neighbors: Dictionary = {"Pip profile": app._header_duck_slot.get_global_rect(),
+			"Home": app._mode_heading_button.get_global_rect(), "mode title": app._mode_heading.get_global_rect(),
+			"coin balance": app._coin_counter.get_global_rect(), "Finish": finish}
+		for name: String in header_neighbors:
+			check(not chest.intersects(header_neighbors[name]),
+				"The header chest stays clear of " + name + context)
+		_check_playfield_layout(view, s, context)
 		if not view._compact_hud:
-			check(chest.position.y <= playfield.position.y + 24.0 / s
-				and chest.end.y + 12.0 / s <= view.drop_button.global_position.y + 0.1,
-				"Phone treasure sits near the top with room above the supply tray" + context)
+			check(chest.end.y <= playfield.position.y + 0.1,
+				"Portrait treasure stays above the playfield and supply tray" + context)
 			check(absf(collect.get_center().x - view._global_rect(view._board).get_center().x) < 0.1,
 				"Hosted Collect remains centered beneath the phone board" + context)
 			view._word_reveal.set_reduced_motion(false)
@@ -105,10 +119,9 @@ func check_finish_header(app, view) -> void:
 				view._word_reveal.advance(0.025)
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
-		if dimensions == Vector2i(393, 852):
-			check(absf(view._board.size.x - (view.size.x - 16.0 / s)) < 0.1
-				and is_equal_approx(view._board.size.x / view._pitch, 6.0),
-				"The taller phone retains all six columns at their full available width")
+		if dimensions == Vector2i(624, 1119):
+			check(view._board.size.x * s >= 540.0,
+				"The reported portrait size gains substantial board width beyond its former 468-pixel cap")
 	root.size = original_size
 	await settle()
 	var source: Vector2 = view._tiles[int(view.game.cells[0].id)].get_global_rect().get_center()
@@ -138,6 +151,33 @@ func check_finish_header(app, view) -> void:
 	Fixture.enter_mode(app, "word_jelly")
 	await settle()
 	check(view.finish_button.is_visible_in_tree(), "Returning to Jelly Words restores its own Finish control")
+
+
+func _check_playfield_layout(view, s: float, context: String) -> void:
+	var bounds: Rect2 = view.get_global_rect().grow(0.1)
+	var board: Rect2 = view._global_rect(view._board)
+	var tray: Rect2 = view.drop_button.get_global_rect()
+	var regions: Dictionary = {"board": board, "supply tray": tray,
+		"Collect words": view.collect_button.get_global_rect()}
+	for kind: String in view.powerup_buttons:
+		regions[kind + " powerup"] = view.powerup_buttons[kind].get_global_rect()
+	var names: Array = regions.keys()
+	for index in range(names.size()):
+		var rectangle: Rect2 = regions[names[index]]
+		check(bounds.encloses(rectangle), str(names[index]) + " stays inside the playfield" + context)
+		if names[index] != "board":
+			check(rectangle.size.x * s >= 44.0 - 0.1 and rectangle.size.y * s >= 44.0 - 0.1,
+				str(names[index]) + " retains a full touch target" + context)
+		for next in range(index + 1, names.size()):
+			check(not rectangle.intersects(regions[names[next]]),
+				str(names[index]) + " stays clear of " + str(names[next]) + context)
+	check(is_equal_approx(board.size.x / board.size.y, 6.0 / 8.0)
+		and is_equal_approx(tray.position.x, board.position.x) and is_equal_approx(tray.size.x, board.size.x),
+		"Six square-cell columns keep an aligned supply tray without stretching the board" + context)
+	var horizontal_slack: float = view.size.x - board.size.x
+	var top_slack: float = tray.position.y - view.global_position.y
+	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
+		"The board uses the available width or height instead of leaving spare room in both directions" + context)
 
 
 func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
@@ -328,18 +368,46 @@ func _run() -> void:
 		"Closing vocabulary resumes the original flight without replaying its reveal")
 	view.advance_reward_presentation(ChestCelebration.PERFORMANCE_SECONDS - ChestCelebration.REVEAL_SECONDS)
 	merged = merged_word(view, word, 1)
+	var save_test_size: Vector2i = root.size
+	root.size = Vector2i(320, 480)
+	await settle()
+	view._process(0.0)
+	var normal_board: Rect2 = view._board
+	var normal_tray: Rect2 = view._preview_rect
 	var wallet_path: String = app.coin_wallet._path
 	app.coin_wallet._path = directory + "/missing/coins.cfg"
 	check(game.collect(merged.id), "A word reserves its collection before storage is attempted")
 	var retry_event: String = str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
 	check(not game.cell(merged.id).is_empty() and app.coin_wallet.balance == 200 and game.fragment_count == 4, "A failed wallet write keeps the word and its fragments recoverable")
+	view._process(0.0)
+	await settle()
+	var notice: Rect2 = view._notice.get_global_rect()
+	check(view._notice.is_visible_in_tree() and view._notice.text == game.error and not game.error.is_empty(),
+		"A real failed collection exposes its retry instruction on the short phone")
+	check(view.get_global_rect().grow(0.1).encloses(notice),
+		"The failed-save instruction stays within the short phone playfield")
+	var error_regions: Array[Rect2] = [view._global_rect(view._board), view.drop_button.get_global_rect(),
+		view.collect_button.get_global_rect()]
+	for button: Control in view.powerup_buttons.values():
+		error_regions.append(button.get_global_rect())
+	for region: Rect2 in error_regions:
+		check(not notice.intersects(region) and view.get_global_rect().grow(0.1).encloses(region),
+			"The failed-save instruction leaves incoming roots, the board, and actions visible and inside the short phone")
 	app.coin_wallet._path = wallet_path
 	check(app.coin_wallet.load_state(), "The wallet reloads after storage recovers")
 	app._refresh()
 	check(game.collect(merged.id) and str(game.fusions.back().attempt_id) == retry_event, "Retrying the same word keeps its original receipt identity")
 	game.step(game.COLLECT_SECONDS)
 	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 300 and game.fragment_count == 5, "The successful retry credits coins and fragments once")
+	view._process(0.0)
+	await settle()
+	check(game.error.is_empty() and not view._notice.is_visible_in_tree(),
+		"A successful saved collection removes the retry instruction")
+	check(view._board.is_equal_approx(normal_board) and view._preview_rect.is_equal_approx(normal_tray),
+		"Recovery returns the temporary instruction space to the board and supply tray")
+	root.size = save_test_size
+	await settle()
 	app.on_page_hidden()
 	var spawn_before: float = game.spawn_elapsed
 	game.step(2.0)

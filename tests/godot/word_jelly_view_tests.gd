@@ -4,8 +4,9 @@ const Jelly = preload("res://scripts/word_jelly.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const LAYOUT_SIZES: Array[Vector2] = [Vector2(1473, 1175), Vector2(1000, 720), Vector2(768, 1024),
-	Vector2(390, 844), Vector2(390, 700), Vector2(568, 320), Vector2(568, 260), Vector2(320, 480), Vector2(320, 320)]
+const LAYOUT_SIZES: Array[Vector2] = [Vector2(1473, 1175), Vector2(1366, 768), Vector2(1000, 720),
+	Vector2(834, 1194), Vector2(768, 1024), Vector2(624, 1119), Vector2(393, 852), Vector2(390, 844),
+	Vector2(390, 700), Vector2(844, 390), Vector2(568, 320), Vector2(568, 260), Vector2(320, 480), Vector2(320, 320)]
 
 var checks: int = 0
 var failures: int = 0
@@ -221,8 +222,10 @@ func _check_supply_layout(view) -> void:
 		var column_center: float = board.position.x + (float(index) + 0.5) * board.size.x / Model.COLUMNS
 		check(absf(preview.get_center().x - column_center) < 0.01,
 			"preview %d is centered above its well column%s" % [index, context])
-	var regions: Dictionary = {"well": board, "supply tray": tray, "chest meter": view._loot_meter.get_rect(),
+	var regions: Dictionary = {"well": board, "supply tray": tray, "chest meter": view.chest_meter_rect(),
 		"Finish": view.finish_button.get_rect(), "Collect words": view.collect_button.get_rect()}
+	for kind: String in view.powerup_buttons:
+		regions[kind + " powerup"] = view.powerup_buttons[kind].get_rect()
 	if view._loot_detail.visible:
 		regions["chest detail"] = view._loot_detail.get_rect()
 		var detail_font: Font = view._loot_detail.get_theme_font("font")
@@ -245,6 +248,11 @@ func _check_supply_layout(view) -> void:
 		"manual drop and Finish retain forty-four-pixel target heights" + context)
 	check(view.collect_button.size.y * s >= 44.0 - 0.01 and view.collect_button.size.x * s >= 44.0 - 0.01,
 		"batch collection retains a forty-four-pixel target in every layout" + context)
+	check(view.chest_meter_rect().size.x * s >= 44.0 - 0.01 and view.chest_meter_rect().size.y * s >= 44.0 - 0.01,
+		"the standalone chest retains a forty-four-pixel target without covering the well" + context)
+	for button: Control in view.powerup_buttons.values():
+		check(button.size.x * s >= 44.0 - 0.01 and button.size.y * s >= 44.0 - 0.01,
+			"each paid powerup retains its own forty-four-pixel target" + context)
 
 
 func _check_preview_label_height(view) -> void:

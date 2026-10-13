@@ -46,6 +46,7 @@ var _completion_elapsed: float = 0.0
 var _reveal_frame_end: float = -1.0
 var _reveal_frame_batch: int = -1
 var _reveal_frame_generation: int = -1
+var _error_notice_reserved: bool = false
 
 func _init() -> void:
 	super()
@@ -1033,11 +1034,15 @@ func _landing_contact_at(cell: Dictionary) -> float:
 
 func _refresh_hud() -> void:
 	super._refresh_hud()
-	_loot_detail.visible = _loot_detail.visible and _compact_hud
+	_loot_detail.visible = _loot_detail.visible and _compact_hud and not has_header_chest()
+	var has_error: bool = not game.error.is_empty()
 	_notice.hide()
-	if not game.error.is_empty():
+	if has_error:
 		_notice.text = game.error
 		_notice.show()
+	if _error_notice_reserved != has_error:
+		_error_notice_reserved = has_error
+		_layout.call_deferred()
 	_refresh_collect_button()
 
 func _can_tap_chest() -> bool:
@@ -1094,28 +1099,33 @@ func _layout() -> void:
 	var accent: Color = _theme.get("accent", Style.GOOD)
 	Style.action_button(chests_button, accent, true)
 	Style.action_button(replay_button, accent)
-	var edge: float = 8.0 / s
+	var edge: float = 6.0 / s
 	var bottom_padding: float = 12.0 / s
-	var padding: float = 5.0 / s
+	var padding: float = 4.0 / s
 	var feed_gap: float = 4.0 / s
-	var hud_width: float = 108.0 / s
-	var hud_gap: float = 12.0 / s
-	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - padding * 2.0 - feed_gap)
-	_pitch = _fit_layout_pitch(available, s)
-	# The well determines the supply columns and the available HUD gutter.
-	# Portrait tablets can have a side rail; phones keep treasure above play.
-	var side_hud: bool = (size.x - _pitch * WordModel.COLUMNS) * 0.5 >= edge + hud_gap + hud_width
+	var hud_width: float = 100.0 / s
+	var hud_gap: float = 8.0 / s
+	var local_finish: bool = finish_button.get_parent() == self
+	var local_chest: bool = not has_header_chest()
+	var top_hud_height: float = 52.0 / s if local_finish or local_chest else 0.0
+	var notice_y: float = top_hud_height
+	if not game.error.is_empty():
+		top_hud_height += 42.0 / s
+	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - top_hud_height)
+	var footer_height: float = 56.0 / s + edge
+	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
+	var side_pitch: float = _fit_layout_pitch(available - Vector2((hud_width + hud_gap) * 2.0, 0.0), s)
+	# Use side controls only when they buy a larger board. A tall portrait
+	# must not grow gutters just because its former cell-size cap left room.
+	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s
 	_compact_hud = side_hud
-	var footer_height: float = 0.0 if side_hud else 64.0 / s + edge
-	var chest_margin: float = 20.0 / s
-	var top_hud_height: float = 0.0 if side_hud else 44.0 / s + chest_margin * 2.0
-	available.y -= footer_height + top_hud_height
-	_pitch = _fit_layout_pitch(available, s)
+	footer_height = 0.0 if side_hud else footer_height
+	_pitch = side_pitch if side_hud else bottom_pitch
 	_gap = maxf(3.0 / s, _pitch * 0.09)
 	var preview_size: float = _pitch - _gap
 	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
-	var group_top: float = maxf(0.0, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
+	var group_top: float = maxf(top_hud_height, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
 	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
@@ -1131,16 +1141,16 @@ func _layout() -> void:
 	_falling_layer.size = _board.size
 	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 356.0 / s))
 	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
-	var meter_edge: float = (60.0 if side_hud else 44.0) / s
-	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(maxf(hud_x, chest_margin), chest_margin)
-	_loot_meter.size = Vector2.ONE * meter_edge
-	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
-	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
-	_chest_tap.position = _loot_meter.position
-	_chest_tap.size = _loot_meter.size
-	_loot_detail.position = Vector2(hud_x, _loot_meter.position.y + meter_edge + 2.0 / s) if side_hud else _loot_meter.position + Vector2(meter_edge + 6.0 / s, 14.0 / s)
-	_loot_detail.size = Vector2(hud_width if side_hud else maxf(0.0, footer_width - meter_edge - hud_width - 14.0 / s), 16.0 / s)
-	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if side_hud else HORIZONTAL_ALIGNMENT_LEFT
+	if not layout_header_chest():
+		_loot_meter.position = Vector2(edge, 4.0 / s)
+		_loot_meter.size = Vector2.ONE * 44.0 / s
+		_loot_icon.size = _loot_meter.size * 0.67
+		_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
+		_chest_tap.position = _loot_meter.position
+		_chest_tap.size = _loot_meter.size
+	_loot_detail.position = chest_meter_rect().position + Vector2(50.0, 14.0) / s
+	_loot_detail.size = Vector2(maxf(0.0, size.x - 152.0 / s), 16.0 / s)
+	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_loot_detail.add_theme_font_size_override("font_size", ceili(10.0 / s))
 	_preview_rect = Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height))
 	drop_button.position = _preview_rect.position
@@ -1151,37 +1161,34 @@ func _layout() -> void:
 		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * _pitch - preview_size * 0.5, (preview_height - preview_size) * 0.5)
 	_style_finish_button()
 	# The app hosts Finish in its header, away from dragging and collection.
-	var local_finish: bool = finish_button.get_parent() == self
 	if local_finish:
-		finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
-		finish_button.position = Vector2(hud_x, group_top + meter_edge + 24.0 / s) if side_hud else Vector2(size.x - edge - finish_button.size.x, chest_margin)
+		finish_button.size = Vector2(84.0, 44.0) / s
+		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
 	if collect_button != null:
 		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 64.0 / s)
+		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 56.0 / s)
 		collect_button.position = Vector2(hud_x, _board.end.y - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - collect_button.size.x) * 0.5, _board.end.y + edge)
 	for index in range(powerup_buttons.size()):
 		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
 		button.set_ui_scale(s)
-		button.size = Vector2(hud_width, 72.0 / s) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 64.0 / s)
+		button.size = Vector2(hud_width, 56.0 / s) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 56.0 / s)
 		button.position = Vector2(_board.end.x + hud_gap, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
 			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge)
 	if _powerup_effects != null:
 		_powerup_effects.size = size
-	# A collected word must not cover the upper chest or its sparkle response.
-	var reveal_left: float = edge if side_hud else _loot_meter.get_rect().end.x + chest_margin
-	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(reveal_left, maxf(0.0, group_top - 42.0 / s - edge))
-	_notice.size = Vector2(hud_width if side_hud else size.x - reveal_left - edge, 42.0 / s)
+	_notice.position = Vector2(edge, notice_y)
+	_notice.size = Vector2(size.x - edge * 2.0, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_result.position = Vector2.ZERO
 	_result.size = size
 	_reward_presentation.size = size
-	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
+	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _word_reveal != null:
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[_loot_meter.get_rect().grow(10.0 / s)])
+			[chest_meter_rect().grow(10.0 / s)])
 	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
@@ -1190,10 +1197,11 @@ func _layout() -> void:
 	_publish()
 
 func _fit_layout_pitch(available: Vector2, s: float) -> float:
-	# Reserve a full-sized root above the well, including its shared cell gap.
-	var height_pitch: float = maxf(available.y / (WordModel.ROWS + 0.91), (available.y + 3.0 / s) / (WordModel.ROWS + 1.0))
-	height_pitch = minf(height_pitch, (available.y - 34.0 / s) / WordModel.ROWS)
-	return maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, height_pitch), 78.0 / s))
+	# Fit the well together with a full-sized supply row, its 44px hit area,
+	# and the gap below it. Cell size follows the space available on screen.
+	var height_pitch: float = maxf((available.y - 12.0 / s) / (WordModel.ROWS + 0.91), (available.y - 9.0 / s) / (WordModel.ROWS + 1.0))
+	height_pitch = minf(height_pitch, (available.y - 48.0 / s) / WordModel.ROWS)
+	return maxf(8.0 / s, minf(available.x / WordModel.COLUMNS, height_pitch))
 
 func snapshot() -> Dictionary:
 	var state: Dictionary = super.snapshot()

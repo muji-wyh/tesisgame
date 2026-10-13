@@ -745,6 +745,9 @@ func _build_controls() -> void:
 	_jelly.changed.connect(_publish_jelly.bind("jelly"))
 	_jelly.hide()
 	column.add_child(_jelly)
+	_jelly.host_header_chest(header)
+	_jelly.finish_button.reparent(_toolbar, false)
+	_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("jelly"))
 	_word_jelly = WordJelly.new()
 	_word_jelly.name = "JellyWords"
@@ -768,6 +771,7 @@ func _build_controls() -> void:
 	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
+	_word_jelly.host_header_chest(header)
 	_word_jelly.finish_button.reparent(_toolbar, false)
 	_word_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_word_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("word_jelly"))
@@ -2670,7 +2674,11 @@ func _fit_content() -> void:
 		var area: Vector2 = size * scale
 		area.x = minf(area.x, GAME_AREA_MAX_SIZE.x)
 		if area.x >= GAME_AREA_DESKTOP_WIDTH:
-			area.y = minf(area.y, GAME_AREA_MAX_SIZE.y)
+			if _is_jelly_mode():
+				if size.x >= size.y:
+					area.y = minf(area.y, 1040.0)
+			else:
+				area.y = minf(area.y, GAME_AREA_MAX_SIZE.y)
 			if _mode_id in ["match", "memory"]:
 				# Reserve the header and reward strip, then keep the two card rows proportional.
 				area.y = minf(area.y, 142.0 + (area.x - 24.0) * 0.5)
@@ -2786,6 +2794,16 @@ func _layout_game_heading() -> void:
 	_toolbar.reset_size()
 	_toolbar.position = Vector2(_header.size.x - _toolbar.size.x, 44.0 / scale) if stacked else Vector2(_coin_counter.position.x - gap - _toolbar.size.x, (row - _toolbar.size.y) * 0.5)
 	var right: float = _toolbar.position.x - gap if _toolbar.get_minimum_size().x > 0.0 else _header.size.x if stacked else _coin_counter.position.x - gap
+	if _is_jelly_mode() and is_instance_valid(_active_jelly()) and _active_jelly().has_header_chest():
+		var dock_size: Vector2 = Vector2.ONE * 44.0 / scale
+		var dock_x: float = (profile_width + _coin_counter.position.x - dock_size.x) * 0.5 if stacked else right - dock_size.x
+		for view in [_jelly, _word_jelly]:
+			if is_instance_valid(view) and view.has_header_chest():
+				view._header_chest_host.position = Vector2(dock_x, (row - dock_size.y) * 0.5)
+				view._header_chest_host.size = dock_size
+				view.layout_header_chest()
+		if not stacked:
+			right = dock_x - gap
 	if _storage_retry_button.visible:
 		_storage_retry_button.reset_size()
 		_storage_retry_button.position = Vector2(right - _storage_retry_button.size.x, (44.0 if stacked else 0.0) / scale + (row - _storage_retry_button.size.y) * 0.5)

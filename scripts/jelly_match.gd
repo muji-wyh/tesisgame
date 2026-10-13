@@ -77,6 +77,7 @@ var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_meter: LootMeter
 var _chest_tap: ChestTap
+var _header_chest_host: Control
 var _loot_detail: Label
 var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
@@ -298,6 +299,55 @@ func _ready() -> void:
 	_prepare_chest()
 	_layout()
 
+func _exit_tree() -> void:
+	if has_header_chest() and not _header_chest_host.is_queued_for_deletion():
+		_header_chest_host.hide()
+		_header_chest_host.queue_free()
+
+func host_header_chest(header: Control) -> void:
+	if has_header_chest():
+		return
+	_header_chest_host = Control.new()
+	_header_chest_host.name = name + "ChestDock"
+	_header_chest_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_header_chest_host.hide()
+	header.add_child(_header_chest_host)
+	for control: Control in [_loot_meter, _loot_icon, _chest_tap]:
+		control.reparent(_header_chest_host, false)
+	_header_chest_host.resized.connect(layout_header_chest)
+	_header_chest_host.item_rect_changed.connect(_sync_header_chest_anchor)
+	item_rect_changed.connect(_sync_header_chest_anchor)
+	layout_header_chest()
+	_sync_chest_tap()
+
+func has_header_chest() -> bool:
+	return is_instance_valid(_header_chest_host)
+
+func layout_header_chest() -> bool:
+	if not has_header_chest():
+		return false
+	var edge: float = minf(_header_chest_host.size.x, _header_chest_host.size.y)
+	_loot_meter.position = (_header_chest_host.size - Vector2.ONE * edge) * 0.5
+	_loot_meter.size = Vector2.ONE * edge
+	_loot_icon.size = Vector2.ONE * edge * 0.67
+	_loot_icon.position = (_header_chest_host.size - _loot_icon.size) * 0.5
+	_chest_tap.position = _loot_meter.position
+	_chest_tap.size = _loot_meter.size
+	_loot_detail.hide()
+	_sync_header_chest_anchor()
+	return true
+
+func chest_anchor_rect() -> Rect2:
+	return get_global_transform().affine_inverse() * _loot_icon.get_global_rect()
+
+func chest_meter_rect() -> Rect2:
+	return get_global_transform().affine_inverse() * _loot_meter.get_global_rect()
+
+func _sync_header_chest_anchor() -> void:
+	if is_inside_tree() and is_instance_valid(_reward_presentation):
+		_reward_presentation.set_chest_anchor(chest_anchor_rect())
+		queue_redraw()
+
 func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
@@ -428,6 +478,8 @@ func _tap_chest() -> void:
 
 func _sync_chest_tap() -> void:
 	var shown: bool = _configured and not _result_visible and not _reward_presentation.visible
+	if has_header_chest():
+		_header_chest_host.visible = _can_play()
 	_chest_tap.visible = shown
 	_chest_tap.disabled = not _can_tap_chest()
 	_loot_icon.visible = shown and not _chest_tap.is_active()
@@ -1213,10 +1265,10 @@ func _refresh_hud() -> void:
 	if _compact_hud and full:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
-	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
+	_notice.visible = _configured and not _result_visible and not has_header_chest() and (not _compact_hud or full)
 	_sync_chest_tap()
 	_loot_meter.visible = _configured and not _result_visible
-	_loot_detail.visible = _configured and not _result_visible
+	_loot_detail.visible = _configured and not _result_visible and not has_header_chest()
 	_sync_preview()
 
 func set_pending_chests(count: int) -> void:
@@ -1330,6 +1382,9 @@ func _style_finish_button() -> void:
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
 		return
+	if has_header_chest():
+		_layout_hosted()
+		return
 	var scale_factor: float = Style.ui_scale(self)
 	var accent: Color = _theme.get("accent", Style.GOOD)
 	Style.action_button(chests_button, accent, true)
@@ -1393,8 +1448,67 @@ func _layout() -> void:
 	_result.position = Vector2.ZERO
 	_result.size = size
 	_reward_presentation.size = size
-	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
+	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	_layout_result(scale_factor, edge)
+	_sync_positions()
+	_refresh_fusion()
+	_refresh_hud()
+	queue_redraw()
+	_publish()
+
+func _layout_hosted() -> void:
+	var s: float = Style.ui_scale(self)
+	var edge: float = (4.0 if size.y * s < 320.0 else 6.0) / s
+	var bottom: float = 8.0 / s
+	var feed_gap: float = 6.0 / s
+	var padding: float = 6.0 / s
+	var available: Vector2 = size - Vector2(edge * 2.0, edge + bottom)
+	var supply_side: float = minf(132.0 / s, maxf(88.0 / s, available.x * 0.18))
+	var top_feed: float = minf(72.0 / s, maxf(44.0 / s, available.x / 4.0))
+	var top_height: float = minf(available.y - top_feed - feed_gap, available.x * 1.5)
+	var side_height: float = minf(available.y, (available.x - supply_side - feed_gap) * 1.5)
+	var side_supply: bool = side_height > top_height + 1.0 / s
+	_compact_hud = true
+	var board_height: float = maxf(48.0 / s, side_height if side_supply else top_height)
+	var board_width: float = board_height * 2.0 / 3.0
+	var group_width: float = board_width + supply_side + feed_gap if side_supply else board_width
+	var group_x: float = (size.x - group_width) * 0.5
+	var board_y: float = size.y - bottom - board_height
+	var next_board := Rect2(Vector2(group_x, board_y), Vector2(board_width, board_height))
+	if next_board != _board:
+		if _dragging:
+			cancel_input()
+		_snapbacks.clear()
+	_board = next_board
+	_pitch = board_height / 6.0
+	_gap = maxf(2.0 / s, _pitch * 0.035)
+	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
+	_falling_layer.position = _board.position
+	_falling_layer.size = _board.size
+	layout_header_chest()
+	var preview_columns: int = 2 if side_supply else JellyMatchModel.UPCOMING_COUNT
+	var preview_gap: float = 4.0 / s
+	var preview_width: float = supply_side if side_supply else board_width
+	var preview_size: float = minf(60.0 / s, (preview_width - padding * 2.0 - preview_gap * (preview_columns - 1)) / preview_columns)
+	if side_supply:
+		preview_size = minf(preview_size, (available.y - padding * 2.0 - preview_gap) * 0.5)
+	else:
+		preview_size = minf(preview_size, top_feed - padding * 2.0)
+	var preview_height: float = maxf(44.0 / s, preview_size * (2.0 if side_supply else 1.0) + padding * 2.0 + (preview_gap if side_supply else 0.0))
+	_preview_rect = Rect2(Vector2(_board.end.x + feed_gap, board_y) if side_supply else Vector2(group_x, board_y - feed_gap - preview_height), Vector2(preview_width, preview_height))
+	drop_button.position = _preview_rect.position
+	drop_button.size = _preview_rect.size
+	_style_drop_button()
+	var inset: float = (preview_width - preview_columns * preview_size - (preview_columns - 1) * preview_gap) * 0.5
+	for index in range(_preview_tiles.size()):
+		_preview_tiles[index].size = Vector2.ONE * preview_size
+		_preview_origins[index] = _preview_rect.position + Vector2(inset + (index % preview_columns) * (preview_size + preview_gap), padding + floorf(float(index) / preview_columns) * (preview_size + preview_gap))
+	_style_finish_button()
+	_result.position = Vector2.ZERO
+	_result.size = size
+	_reward_presentation.size = size
+	_reward_presentation.set_chest_anchor(chest_anchor_rect())
+	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -1476,7 +1590,7 @@ func _draw() -> void:
 	if _chest_texture != null:
 		for flight: Dictionary in _loot_flights:
 			var p: float = clampf(float(flight.elapsed) / LOOT_FLIGHT_SECONDS, 0.0, 1.0)
-			var destination: Vector2 = _loot_icon.position + _loot_icon.size * 0.5
+			var destination: Vector2 = chest_anchor_rect().get_center()
 			var center: Vector2 = Vector2(flight.from).lerp(destination, smoothstep(0.0, 1.0, p))
 			center.y -= sin(p * PI) * 44.0 / Style.ui_scale(self)
 			var edge_size: float = lerpf(_pitch * 0.60, _loot_icon.size.x, p)
