@@ -154,10 +154,13 @@ Sealing every entrance starts the existing full-well countdown. Reduced motion
 places incoming bodies directly on their supports with the same readiness clock.
 
 An exact word from the current learning-age vocabulary reveals its picture and
-a warm rim. Tap that word to collect it for 50 coins per original chunk: a
-two-part word earns 100 coins, and a three-part word earns 150. Merging alone
-does not grant coins or mastery. Failed coin saves preserve the word for retry;
-repeated input cannot award the same collection twice.
+a warm rim. Each word collected by a tap or Collect has an independent 1%
+chance of bonus coins. A lucky drop awards 50 coins per original chunk: 100
+for a two-part word or 150 for a three-part word. Opening chests is the main
+coin source. Every collection records learning and banks all carried fragments,
+including when no coins drop. Merging alone does not grant coins or mastery.
+Failed coin saves preserve the word and its original reward for retry;
+repeated input cannot reroll or award the same collection twice.
 
 An accepted word tap also presents its picture and spelling in a brief upper
 overlay. The picture rises with a soft glow and painted glints, peaking with

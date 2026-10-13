@@ -447,6 +447,8 @@ func _check_collect_application_route(app) -> void:
 	var view = app._word_jelly
 	var game = view.game
 	game.spawn_interval = 10000.0
+	# This stream gives the first pickup a bonus and the next eleven no coins.
+	game._coin_rng.seed = 208
 	game.cells.clear()
 	for index in range(12):
 		var tile: Dictionary = game._new_tile(str(game._words[0].text), 2, 0)
@@ -456,44 +458,48 @@ func _check_collect_application_route(app) -> void:
 	view._sync_tiles()
 	view._layout()
 	var before: int = app.coin_wallet.balance
-	var voice_request: int = app.audio._playback_requests.get(app.audio.voice, 0)
 	var observed := {"time": 0.0, "releases": [], "receipts": [], "streams": []}
 	var on_release := func() -> void:
 		observed.releases.append(observed.time)
 		var index: int = posmod(app.audio._coin_next_player - 1, Audio.COIN_CHANNELS)
 		observed.streams.append(app.audio._coin_players[index].stream.resource_path)
-	var on_collected := func(id: String, _word: Dictionary, _coins: int, _fragments: int, _origin: Vector2) -> void:
-		observed.receipts.append(id)
+	var on_collected := func(id: String, _word: Dictionary, coins: int, _fragments: int, _origin: Vector2) -> void:
+		observed.receipts.append({"id": id, "coins": coins})
 	app._coin_flight.release_sound.connect(on_release)
 	view.collected.connect(on_collected)
 	view.collect_button.pressed.emit()
+	var voice_request: int = app.audio._playback_requests.get(app.audio.voice, 0)
+	check(not app.audio.voice.playing, "Starting Collect cancels pending pronunciation before the first pickup")
 	check(game.collection_batch_active() and game.collection_batch_snapshot().total == 12,
 		"The real Collect button queues twelve valid merged jellies")
 	for frame in range(130):
 		observed.time += 0.01
 		view._process(0.01)
 		app._coin_flight.advance(0.01)
-	check(observed.receipts.size() == 12 and observed.releases.size() == 12
-		and not game.collection_batch_active() and _coin_playing(app.audio, Audio.COIN_RELEASE_PATH),
-		"Every removed jelly in a rapid Collect run launches one audible coin appearance")
-	check(observed.streams.size() == 12 and observed.streams.all(func(path: String) -> bool: return path == Audio.COIN_RELEASE_PATH),
-		"Every rapid Collect release uses the appearance recording rather than the HUD deposit recording")
-	for index in range(1, observed.releases.size()):
-		check(is_equal_approx(float(observed.releases[index]) - float(observed.releases[index - 1]), 0.10),
-			"The real Collect button retains a 100 millisecond coin-appearance rhythm")
-	check(app.coin_wallet.balance == before + 1200 and not app.audio.voice.playing
-		and app.audio._playback_requests.get(app.audio.voice, 0) == voice_request,
-		"Collect credits every word once and coin audio never adds batch pronunciation")
+	check(observed.receipts.size() == 12 and observed.releases.size() == 1
+		and not game.collection_batch_active(),
+		"Twelve rapid word pickups produce only the one successful rare coin appearance")
+	check(observed.streams.size() == 1 and observed.streams[0] == Audio.COIN_RELEASE_PATH
+		and is_equal_approx(float(observed.releases[0]), 0.10),
+		"The rare drop uses the appearance recording on its collection beat")
+	check(observed.receipts[0].coins == 100
+		and observed.receipts.slice(1).all(func(receipt: Dictionary) -> bool: return receipt.coins == 0),
+		"The eleven ordinary pickups emit no coin reward and never trigger a release sound")
+	check(app.coin_wallet.balance == before + 100,
+		"Collect credits only its rare bonus")
+	check(not app.audio.voice.playing and app.audio._playback_requests.get(app.audio.voice, 0) == voice_request,
+		"Collect never adds pronunciation after its initial voice cancellation")
 	var release_count: int = observed.releases.size()
-	for id: String in observed.receipts:
-		var duplicate: Dictionary = app._credit_word_jelly(id, 100)
-		app._word_jelly_collected(id, {}, 100, 0, Vector2.ZERO)
-		check(duplicate.ok and duplicate.duplicate,
-			"A retried Collect receipt retains the wallet's idempotent result")
+	for receipt: Dictionary in observed.receipts:
+		if int(receipt.coins) > 0:
+			var duplicate: Dictionary = app._credit_word_jelly(str(receipt.id), int(receipt.coins))
+			check(duplicate.ok and duplicate.duplicate,
+				"A retried rare-drop receipt retains the wallet's idempotent result")
+		app._word_jelly_collected(str(receipt.id), {}, int(receipt.coins), 0, Vector2.ZERO)
 	app._coin_flight.advance(10.0)
-	check(app.coin_wallet.balance == before + 1200 and app._coin_counter.target == before + 1200
+	check(app.coin_wallet.balance == before + 100 and app._coin_counter.target == before + 100
 		and observed.releases.size() == release_count and not app._coin_flight.snapshot().active,
-		"Retries cannot duplicate release sounds or coins and all overlapping flights settle their full value")
+		"Retries cannot duplicate rare-drop sounds or coins, and ordinary pickups cannot create a flight")
 	app._coin_flight.release_sound.disconnect(on_release)
 	view.collected.disconnect(on_collected)
 

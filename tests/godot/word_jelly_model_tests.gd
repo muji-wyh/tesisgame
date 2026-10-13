@@ -4,6 +4,7 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 var checks: int = 0
 var failures: int = 0
+var _coin_seed_cache: Dictionary = {}
 
 
 func _initialize() -> void:
@@ -20,6 +21,11 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	_test_configuration()
 	_test_merging_and_collection()
+	_test_rare_coin_drop_boundary()
+	_test_collection_without_coin_drop()
+	_test_rare_coin_drop_retry_and_pause()
+	_test_rare_coin_drop_batch()
+	_test_rare_coin_drop_frequency_and_independence()
 	_test_current_age_validation()
 	_test_rejected_merge_atomicity()
 	_test_repeated_merge_and_fragments()
@@ -113,11 +119,36 @@ func _word(text: String, age: int = 3, word_id: String = "") -> Dictionary:
 		"image": "assets/images/words/cat.png", "audio": "assets/audio/words/cat.wav"}
 
 
-func _model(words: Array = []) -> RefCounted:
+func _model(words: Array = [], force_coin_drop: bool = true) -> RefCounted:
 	var model := Model.new()
 	model.configure([_word("cat"), _word("caterpillar"), _word("sunflower")] if words.is_empty() else words, 3, 42)
 	model.spawn_interval = 10000.0
+	if force_coin_drop:
+		# Existing wallet and gravity fixtures explicitly exercise the rare winning branch.
+		# Natural probability, zero rewards, and mixed batches have dedicated tests below.
+		var winning_seed: int = _coin_seed_between(0.0, Model.COIN_DROP_CHANCE)
+		model._coin_rng.seed = winning_seed
+		var observed: WeakRef = weakref(model)
+		model.collection_started.connect(func(_payload: Dictionary) -> void:
+			var active_model: RefCounted = observed.get_ref()
+			if active_model != null:
+				active_model._coin_rng.seed = winning_seed)
 	return model
+
+
+func _coin_seed_between(minimum: float, maximum: float) -> int:
+	var key: Vector2 = Vector2(minimum, maximum)
+	if _coin_seed_cache.has(key):
+		return int(_coin_seed_cache[key])
+	var probe := RandomNumberGenerator.new()
+	for seed_value in range(1000000):
+		probe.seed = seed_value
+		var roll: float = probe.randf()
+		if roll >= minimum and roll < maximum:
+			_coin_seed_cache[key] = seed_value
+			return seed_value
+	check(false, "the coin fixture can find a real RNG seed in its requested probability interval")
+	return -1
 
 
 func _tile(id: int, text: String, mass: int = 1, fragments: int = 0, word: Dictionary = {}) -> Dictionary:
@@ -1118,6 +1149,199 @@ func _test_merging_and_collection() -> void:
 	check(events.cues.count("pop") == 1, "collection has exactly one disappearance cue")
 	var result_summary: Dictionary = model.finish_round()
 	check(result_summary.coins == 100 and result_summary.words.size() == 1, "round summary includes collected words and coins")
+
+
+func _test_rare_coin_drop_boundary() -> void:
+	check(is_equal_approx(Model.COIN_DROP_CHANCE, 0.01), "merged-word collection has exactly a one-percent coin chance")
+	var rejected_model = _model([_word("cat")], false)
+	_board(rejected_model, ["ca", "t"])
+	var untouched_state: int = rejected_model._coin_rng.state
+	check(not rejected_model.collect(1000) and not rejected_model.collect(1001) and not rejected_model.collect(-1)
+		and rejected_model._coin_rng.state == untouched_state and rejected_model._collection_coin_rewards.is_empty(),
+		"tapping roots or missing IDs never creates a receipt or consumes a coin chance")
+	rejected_model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat"))])
+	rejected_model.set_paused(true)
+	check(not rejected_model.collect(1000) and rejected_model._coin_rng.state == untouched_state,
+		"a paused collection attempt cannot consume a coin chance")
+	for interval: Vector2 in [Vector2(0.0, 0.0001), Vector2(0.0099, 0.01), Vector2(0.01, 0.0101), Vector2(0.9999, 1.0001)]:
+		var seed_value: int = _coin_seed_between(interval.x, interval.y)
+		var probe := RandomNumberGenerator.new()
+		probe.seed = seed_value
+		var roll: float = probe.randf()
+		for mass: int in [2, 12]:
+			var model = _model([_word("cat")], false)
+			model.cells.assign([_placed_tile(1000, "cat", 0, Model.ROWS - ceili(float(mass) / Model.COLUMNS), mass, 2, _word("cat"))])
+			model._coin_rng.seed = seed_value
+			var board_rng_state: int = model._rng.state
+			var expected_coins: int = mass * 50 if roll < 0.01 else 0
+			check(model.collect(1000), "each probability boundary uses a real accepted collection")
+			check(int(model.fusions[0].coins) == expected_coins,
+				"only a roll below one percent grants the size-based bonus, including immediately adjacent outcomes")
+			var coin_rng_state: int = model._coin_rng.state
+			check(not model.collect(1000) and model._coin_rng.state == coin_rng_state,
+				"repeated taps during collection never roll an additional chance")
+			check(model._rng.state == board_rng_state, "coin rolls leave board supply and powerup randomness untouched")
+			model._complete_operation(str(model.fusions[0].attempt_id))
+			check(model.collected_coins == expected_coins and model.fragment_count == 2 and model.cleared_pairs == 1,
+				"both coin outcomes collect the word and every carried fragment exactly once")
+			check(model._collection_coin_rewards.is_empty() and model._collection_event_ids.is_empty(),
+				"completed collections discard their cached probability outcomes and receipts")
+
+
+func _test_collection_without_coin_drop() -> void:
+	var model = _model([_word("cat")], false)
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 4, _word("cat"))])
+	model._coin_rng.seed = _coin_seed_between(0.1, 0.9)
+	var calls: Array = []
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		calls.append([receipt, coins])
+		return {"ok": false}
+	var events: Dictionary = _observe(model)
+	check(model.collect(1000) and int(model.fusions[0].coins) == 0,
+		"an ordinary nonwinning word starts its disappearance with no coin reward")
+	var coin_rng_state: int = model._coin_rng.state
+	model.step(Model.POP_SECONDS)
+	model.set_paused(true)
+	var paused_snapshot: Dictionary = model.snapshot()
+	model.step(5.0)
+	check(model.snapshot() == paused_snapshot and model._coin_rng.state == coin_rng_state,
+		"pausing a nonwinning collection freezes its animation and its already-decided chance")
+	model.set_paused(false)
+	model.step(Model.COLLECT_SECONDS - Model.POP_SECONDS)
+	check(calls.is_empty() and model.error.is_empty() and model.cells.is_empty(),
+		"a nonwinning collection bypasses the coin wallet even when that wallet would reject payment")
+	check(model.collected_coins == 0 and model.fragment_count == 4 and model.chest_tier == 1,
+		"ordinary collections still supply chest fragments without routine coin income")
+	check(events.collections.size() == 1 and events.collections[0].coins == 0 and events.collections[0].fragments == 4
+		and events.attempts.size() == 1 and events.milestones == [[0, 1]] and events.cues == ["pop", "chest"],
+		"zero-coin collection retains learning credit, disappearance feedback, and chest unlock presentation")
+	var result: Dictionary = model.finish_round()
+	check(result.coins == 0 and result.words.size() == 1,
+		"round results retain learned words when their coin chance did not win")
+	model.credit_collection = Callable()
+
+
+func _test_rare_coin_drop_retry_and_pause() -> void:
+	var model = _model([_word("cat")], false)
+	var configured_coin_state: int = model._coin_rng.state
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 3, _word("cat"))])
+	model._coin_rng.seed = _coin_seed_between(0.0, 0.01)
+	var calls: Array = []
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		calls.append([receipt, coins])
+		if calls.size() > 1:
+			model.set_paused(true)
+		return {"ok": calls.size() > 1}
+	check(model.collect(1000), "a rare winning word starts a retryable payment")
+	var receipt: String = str(model.fusions[0].attempt_id)
+	model.step(Model.COLLECT_SECONDS)
+	check(calls == [[receipt, 100]] and model.cells.size() == 1 and model.collected_coins == 0
+		and int(model._collection_coin_rewards[receipt]) == 100,
+		"a failed wallet keeps the winning outcome and the original word without granting rewards")
+	model._coin_rng.seed = _coin_seed_between(0.1, 0.9)
+	var retry_rng_state: int = model._coin_rng.state
+	check(model.collect(1000) and model._coin_rng.state == retry_rng_state and int(model.fusions[0].coins) == 100,
+		"retrying a winning collection reuses its outcome without consuming even a losing next roll")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.paused and calls == [[receipt, 100], [receipt, 100]] and model.collected_coins == 0,
+		"pause in the successful wallet callback safely defers removal after one accepted payment")
+	model.set_paused(false)
+	model.step(0.01)
+	check(calls.size() == 2 and model.cells.is_empty() and model.collected_coins == 100 and model.fragment_count == 3
+		and model._coin_rng.state == retry_rng_state and model._collection_coin_rewards.is_empty(),
+		"resuming a credited winning collection neither rerolls nor repays its saved bonus")
+	model.credit_collection = Callable()
+	model.cells.assign([_placed_tile(1001, "cat", 0, 7, 2, 0, _word("cat"))])
+	check(model.collect(1001) and not model._collection_coin_rewards.is_empty(),
+		"a new pending word owns an independent outcome")
+	model.configure([_word("cat")], 3, 42)
+	check(model._collection_coin_rewards.is_empty() and model._collection_event_ids.is_empty()
+		and model._coin_rng.state == configured_coin_state,
+		"new-round configuration discards pending outcomes and reproducibly resets the separate coin stream")
+
+
+func _test_rare_coin_drop_batch() -> void:
+	var model = _model([_word("cat")], false)
+	_batch_board(model, 3)
+	var probe := RandomNumberGenerator.new()
+	var mixed_seed: int = -1
+	for seed_value in range(100000):
+		probe.seed = seed_value
+		if probe.randf() >= 0.01 and probe.randf() < 0.01 and probe.randf() >= 0.01:
+			mixed_seed = seed_value
+			break
+	check(mixed_seed >= 0, "a real seeded batch contains nonwinning, winning, and nonwinning words")
+	model._coin_rng.seed = mixed_seed
+	var calls: Array = []
+	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
+		calls.append([receipt, coins])
+		return {"ok": calls.size() > 1}
+	var events: Dictionary = _observe(model)
+	check(model.start_collection_batch(), "a mixed batch retains the normal rhythmic collection action")
+	model.step(Model.BATCH_BEAT_SECONDS)
+	check(model.cleared_pairs == 1 and model.collected_coins == 0 and calls.is_empty(),
+		"the first ordinary batch word clears without a wallet call")
+	model.step(Model.BATCH_BEAT_SECONDS)
+	var failed_receipt: String = str(model._collection_event_ids[1001])
+	check(not model.collection_batch_active() and model.cleared_pairs == 1 and calls == [[failed_receipt, 100]],
+		"only the rare winning word can encounter a coin-save failure and stop the batch")
+	var retry_rng_state: int = model._coin_rng.state
+	check(model.collect(1001) and model._coin_rng.state == retry_rng_state,
+		"manual retry after a batch failure preserves its winning draw and the next word's chance")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.start_collection_batch(), "the remaining nonwinning word can continue in a new batch")
+	model.step(Model.BATCH_BEAT_SECONDS)
+	check(calls == [[failed_receipt, 100], [failed_receipt, 100]] and model.collected_coins == 100
+		and model.cleared_pairs == 3 and model.fragment_count == 3 and model.cells.is_empty(),
+		"a mixed batch grants only the one winning bonus while collecting all words and fragments")
+	check(events.collections.size() == 3 and events.collections[0].coins == 0
+		and events.collections[1].coins == 100 and events.collections[2].coins == 0 and events.attempts.size() == 3,
+		"per-word events preserve both probability outcomes across batch failure and manual retry")
+	model.credit_collection = Callable()
+	var coarse = _model([_word("cat")], false)
+	var fine = _model([_word("cat")], false)
+	for active in [coarse, fine]:
+		_batch_board(active, 3)
+		active._coin_rng.seed = mixed_seed
+		active.start_collection_batch()
+	coarse.step(Model.BATCH_BEAT_SECONDS * 3.0)
+	for frame in range(30):
+		fine.step(0.01)
+	check(coarse.collected_coins == 100 and fine.collected_coins == 100 and coarse.cells == fine.cells
+		and coarse._coin_rng.state == fine._coin_rng.state and coarse.cleared_pairs == fine.cleared_pairs,
+		"frame slicing cannot change the independent batch outcomes or grant additional coin chances")
+
+
+func _test_rare_coin_drop_frequency_and_independence() -> void:
+	var small = _model([_word("cat")], false)
+	var large = _model([_word("cat")], false)
+	var probe := RandomNumberGenerator.new()
+	probe.seed = 19372026
+	small._coin_rng.seed = probe.seed
+	large._coin_rng.seed = probe.seed
+	var wins: int = 0
+	const SAMPLES: int = 20000
+	for sample in range(SAMPLES):
+		var expected_win: bool = probe.randf() < 0.01
+		wins += int(expected_win)
+		for model in [small, large]:
+			var mass: int = 2 if model == small else 12
+			model.cells.assign([_placed_tile(1000 + sample, "cat", 0, Model.ROWS - ceili(float(mass) / Model.COLUMNS), mass, 0, _word("cat"))])
+			if model == large:
+				model._rng.randi()
+			check(model.collect(1000 + sample), "the frequency sample is an actual accepted word collection")
+			check(int(model.fusions[0].coins) == (mass * 50 if expected_win else 0),
+				"every collection draws exactly once with mass-independent odds and an independent board RNG")
+			# Commit the normal transaction directly; probability checks do not need animation frames.
+			model._complete_operation(str(model.fusions[0].attempt_id))
+	check(wins >= 120 and wins <= 280,
+		"twenty thousand deterministic collection chances keep the long-run rate near one percent")
+	check(small.collected_coins == wins * 100 and large.collected_coins == wins * 600
+		and small.cleared_pairs == SAMPLES and large.cleared_pairs == SAMPLES,
+		"rare bonus magnitude still follows size while the majority of collected words award no coins")
+	check(small._coin_rng.state == probe.state and large._coin_rng.state == probe.state
+		and small._collection_coin_rewards.is_empty() and large._collection_coin_rewards.is_empty(),
+		"all coin decisions consume one independent draw and retain no completed-outcome cache")
 
 
 func _test_current_age_validation() -> void:

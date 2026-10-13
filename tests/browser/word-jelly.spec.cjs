@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio, seedGrowth } = require('./game-ui.cjs');
 const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
+const { collectionCoins } = require('./word-jelly-rewards.cjs');
 const vocabulary = require('../../words.json');
 
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -615,8 +616,8 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   const frame = await page.evaluate(() => window.wordJellyGravityFrame);
   fs.writeFileSync(info.outputPath('word-jelly-stack-falling-midpoint.png'), Buffer.from(frame, 'base64'));
   await capture(page, info, 'word-jelly-stack-landed-after-collection');
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.mass * 50);
-  expect(after.collected_coins).toBe(before.collected_coins + completed.mass * 50);
+  const earnedCoins = collectionCoins(after, before, [completed]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
   expect(errors).toEqual([]);
 });
@@ -898,8 +899,10 @@ test('released roots and merged words fall onto support and keep their contents 
   }
   expect((await wallet(page)).balance, 'Dragging and a rejected merge do not collect word coins').toBe(startingWallet.balance);
   await pressRect(page, rejected.after.tiles.find(tile => tile.id === placed.id).rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + placed.coins);
+  await expect.poll(async () => (await read()).cleared_pairs).toBe(opening.cleared_pairs + 1);
   const final = await read();
+  const earnedCoins = collectionCoins(final, opening, [placed]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(final.cleared_pairs).toBe(opening.cleared_pairs + 1);
   expect(final.fragment_count).toBe(opening.fragment_count + placed.fragments);
   expect(errors).toEqual([]);
@@ -1117,7 +1120,7 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
   });
 }
 
-test('six columns build a pictured word and a deliberate tap credits its coins once', async ({ page }, info) => {
+test('six columns build a pictured word and a deliberate tap rolls its rare coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   expect(opening.tiles).toHaveLength(18);
   expect(opening.columns).toBe(6);
@@ -1179,19 +1182,19 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   await pressRect(page, resumed.rect);
   await pressRect(page, resumed.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
   const collected = await jelly(page);
+  const earnedCoins = collectionCoins(collected, before, [merged]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(collected.tiles.some(tile => tile.id === merged.id)).toBe(false);
-  expect(collected.collected_coins).toBe(before.collected_coins + 100);
   expect(collected.fragment_count).toBe(before.fragment_count + merged.fragments);
   await openModeMenu(page);
   const match = (await metrics(page)).library.controls.find(item => item.name === 'Mode_match');
   await pressRect(page, match.rect);
   await expect.poll(async () => (await metrics(page)).library.current).toBe('match');
-  expect((await wallet(page)).balance, 'Leaving the mode never pays the collected word again').toBe(startingWallet.balance + 100);
+  expect((await wallet(page)).balance, 'Leaving the mode never pays the collected word again').toBe(startingWallet.balance + earnedCoins);
   await page.reload();
   await enterGame(page);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 100);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(errors).toEqual([]);
 });
 
@@ -1225,7 +1228,6 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const before = await jelly(page), startingWallet = await wallet(page);
   const selected = before.tiles.filter(tile => collectedIds.includes(tile.id));
   const retained = before.tiles.filter(tile => !collectedIds.includes(tile.id)).map(tile => tile.id);
-  const expectedCoins = selected.reduce((sum, tile) => sum + tile.coins, 0);
   const expectedFragments = selected.reduce((sum, tile) => sum + tile.fragments, 0);
   expect(expectedFragments, 'The ordinary-input batch includes a real carried treasure fragment').toBeGreaterThan(0);
   await page.exposeFunction('saveWordJellyBatchFrame', (index, encoded) =>
@@ -1271,6 +1273,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   await expect.poll(async () => (await jelly(page)).collection_batch.completed,
     { message: 'Every captured completed word is collected through the rhythmic queue' }).toBe(3);
   await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
+  const expectedCoins = collectionCoins(await jelly(page), before, selected);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + expectedCoins);
   let timeline;
   try {
@@ -1301,8 +1304,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
     expect(frame.effects.length, 'Only one collection effect is active at each observed point').toBeLessThanOrEqual(1);
     const paid = frame.ids.slice(0, frame.completed).map(id => selectedById.get(id));
     expect(frame.cleared, 'Only the completed prefix has cleared from the board').toBe(before.cleared_pairs + paid.length);
-    expect(frame.collectedCoins, 'Observed coin credit matches the completed prefix exactly')
-      .toBe(before.collected_coins + paid.reduce((sum, tile) => sum + tile.coins, 0));
+    collectionCoins({ collected_coins: frame.collectedCoins }, before, paid);
     expect(frame.fragments, 'Observed treasure credit matches the same completed prefix')
       .toBe(before.fragment_count + paid.reduce((sum, tile) => sum + tile.fragments, 0));
     for (const entry of frame.revealed.entries) {
@@ -1454,11 +1456,12 @@ test('collected words reveal their picture and spelling above the bottom-anchore
     }
   }
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 2);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + 200);
+  const earnedCoins = collectionCoins(await jelly(page), before, [firstMerged, secondMerged]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   await expect.poll(async () => (await jelly(page)).word_reveal.visible,
     { message: 'The picture and spelling leave on their own after the reading beat' }).toBe(false);
   const final = await jelly(page);
-  expect(final.collected_coins).toBe(before.collected_coins + 200);
+  expect(final.collected_coins).toBe(before.collected_coins + earnedCoins);
   expect(final.fragment_count).toBe(before.fragment_count + firstMerged.fragments + secondMerged.fragments);
   fs.writeFileSync(info.outputPath('word-jelly-reveal-timeline.json'), JSON.stringify({ timeline: evidence.timeline, pronunciationObservations }, null, 2));
   await page.evaluate(() => {
@@ -1559,8 +1562,10 @@ test('only forward dictionary words merge while rejected pairs separate without 
   await capture(page, info, 'word-jelly-forward-cat-after-rejections');
   expect((await wallet(page)).balance).toBe(startingWallet.balance);
   await pressRect(page, completed.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.coins);
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + 1);
   const final = await jelly(page);
+  const earnedCoins = collectionCoins(final, opening, [completed]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(final.merged_count).toBe(beforeValid.merged_count + 1);
   expect(final.cleared_pairs).toBe(opening.cleared_pairs + 1);
   expect(final.fragment_count).toBe(opening.fragment_count + completed.fragments);
@@ -1736,7 +1741,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
   expect(errors).toEqual([]);
 });
 
-test('older-age words remain completable from two blocks and pay their collected reward', async ({ page }, info) => {
+test('older-age words remain completable from two blocks and roll the same rare collection reward', async ({ page }, info) => {
   await seedGrowth(page, 12, { unmastered: ['quadrilateral'] });
   const errors = await startWordJelly(page, { age: 12, reducedMotion: 'reduce', preseededGrowth: true });
   const word = vocabulary.find(candidate => candidate.id === 'quadrilateral');
@@ -1773,7 +1778,7 @@ test('older-age words remain completable from two blocks and pay their collected
   const before = await jelly(page);
   await pressRect(page, completed.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.coins);
-  expect((await jelly(page)).collected_coins).toBe(before.collected_coins + completed.coins);
+  const earnedCoins = collectionCoins(await jelly(page), before, [completed]);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(errors).toEqual([]);
 });

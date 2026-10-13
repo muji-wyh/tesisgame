@@ -286,6 +286,8 @@ func check_collection_batch(app) -> void:
 		check(start_merge(view), "A real word merges for batch collection")
 		view.game.step(view.game.FUSION_SECONDS + 2.0)
 	var ready: int = view.game.collectable_ids().size()
+	# The reserved batch contains one rare bonus followed by two ordinary pickups.
+	view.game._coin_rng.seed = 208
 	check(ready == 3 and view.game.start_collection_batch(), "Collect begins the real three-word sequence")
 	view.game.step(0.04)
 	open_dialog(app, "word_jelly collection")
@@ -299,7 +301,8 @@ func check_collection_batch(app) -> void:
 	view.game.step(2.0)
 	check(not view.game.collection_batch_active() and int(view.game.collection_batch_snapshot().completed) == ready,
 		"Keep playing completes the original reserved sequence")
-	check(app.coin_wallet.balance == coins + ready * 100, "Resuming credits each two-part word once")
+	check(app.coin_wallet.balance == coins + 100 and view.game.collected_coins == 100,
+		"Resuming preserves the rare bonus roll and collects ordinary words without extra coins")
 
 
 func check_mode(mode: String) -> void:

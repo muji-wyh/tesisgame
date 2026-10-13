@@ -135,9 +135,10 @@ peak; the denser release is normalized to 0.18. Runtime gain is 0.60 for both,
 with a further 6 dB reduction during word pronunciation.
 
 Every reward mode shares this two-event coin-flight audio. Chest payouts and
-Jelly Words collections play the release cue as coins emerge, followed by the
-deposit cue when they reach the balance counter. Both a single word and each
-word in Collect use the visible release cue. Release and arrival
+the rare 1% bonus drops from Jelly Words collections play the release cue as
+coins emerge, followed by the deposit cue when they reach the balance counter.
+Single taps and Collect both play these cues only when coins actually drop;
+ordinary word collections produce no coin flight or coin audio. Release and arrival
 cues share a limit of once per rendered update and at least 100 ms apart.
 Four fixed channels let the brief tails overlap;
 skipped accents are never queued. The Jelly Words Collect cadence and voice

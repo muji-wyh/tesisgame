@@ -20,8 +20,13 @@ Each supplied word has two complementary chunks at every age, so it can be
 completed in one valid merge. Authored longer chunk sequences combine adjacent
 parts at a balanced boundary. A completed word is collectible, and its picture
 and warm gel rim indicate readiness without adding a
-floating instruction label. Each original chunk adds mass and 50 coins; merging
-preserves all fragment markers, while tapping the complete word collects them.
+floating instruction label. Each collected word has an independent 1% chance
+of bonus coins, worth 50 coins per original chunk when it drops. Opening chests
+is the main source of coins. A collection without bonus coins still records
+the learned word and collects all carried chest fragments, without a coin
+flight or coin sound. The roll is retained across collection retries and uses
+a separate random stream from word supply and powerups. Merging preserves all
+fragment markers, while tapping the complete word collects them.
 Long spellings fit their actual wrapped font lines so a two-part body keeps
 every letter visible beside its picture.
 The model owns the merge and collection clocks, wallet receipt, fragment count,

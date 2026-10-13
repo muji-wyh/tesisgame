@@ -1278,6 +1278,7 @@ func snapshot() -> Dictionary:
 		item["label_height"] = tile._label.size.y
 		item["fragment_badges"] = tile.visible_fragment_badges()
 		item["coins"] = WordModel.coins_for_tile(item)
+		item["coin_drop_chance"] = WordModel.COIN_DROP_CHANCE
 		item["splittable"] = game.can_split(item)
 		item["palette_index"] = tile.palette_index
 		item["palette_hue"] = tile._gel.get_shader_parameter("palette_hue")

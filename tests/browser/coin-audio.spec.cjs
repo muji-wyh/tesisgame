@@ -4,9 +4,11 @@ const {
   openGame, enterGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap
 } = require('./game-ui.cjs');
 const {
-  watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming
+  watchAudioRequests, observeOutputAudio, expectRecording, recordingTiming
 } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
+const { collectionCoins } = require('./word-jelly-rewards.cjs');
+const { roomState } = require('./pop-treasure-ui.cjs');
 
 const COIN_CLIPS = { release: 'assets/audio/coins/release.wav', arrival: 'assets/audio/coins/collect.wav' };
 const PRESENTATION_KEY = 'pipAndWords.presentation.v1';
@@ -15,8 +17,6 @@ const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
 const playbacksSince = (page, from) => page.evaluate(index => window.audioObservation.playbacks.slice(index), from);
 const matching = (sounds, recording) => sounds.filter(sound => sound.fingerprint === recording.fingerprint);
-const coinFeedback = (sounds, recordings) => sounds.filter(sound =>
-  Object.values(recordings).some(recording => sound.fingerprint === recording.fingerprint));
 
 test.use({ deviceScaleFactor: 1, trace: 'off',
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
@@ -47,20 +47,20 @@ async function settled(page) {
   }, { timeout: 20000, message: 'The real Word Jelly board is ready for a trusted gesture' }).toBe(true);
 }
 
-async function makeWord(page) {
+async function makeWord(page, { marked = false } = {}) {
   const words = new Map(vocabulary.filter(word => word.min_age === 3).map(word => [word.text.toLowerCase(), word]));
   let pair;
   for (let attempt = 0; attempt < 4; attempt++) {
     await settled(page);
     const state = await jelly(page);
     const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
-    // Prefer unmarked roots so this audio test does not start an unrelated chest
-    // celebration, but keep the regular supply available if no such pair exists.
+    // One marked word verifies fragment retention; other trials prefer unmarked
+    // roots to avoid an unrelated chest celebration in the audio observation.
     const candidates = [];
     for (const first of roots) for (const second of roots) {
       if (first.id !== second.id && words.has((first.text + second.text).toLowerCase())) candidates.push([first, second]);
     }
-    candidates.sort((a, b) => a[0].fragments + a[1].fragments - b[0].fragments - b[1].fragments);
+    candidates.sort((a, b) => (marked ? -1 : 1) * (a[0].fragments + a[1].fragments - b[0].fragments - b[1].fragments));
     if (candidates.length) { pair = candidates[0]; break; }
     expect(state.preview.enabled).toBe(true);
     await pressRect(page, state.preview.rect);
@@ -164,115 +164,86 @@ function expectReleaseAndArrival(releases, deposits, timeline, balance, reducedM
   return { launches, arrivals };
 }
 
+function coinRecordings(sounds) {
+  return sounds.filter(sound => Object.values(COIN_CLIPS).some(path => {
+    const timing = recordingTiming(path);
+    return Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate;
+  }));
+}
+
 for (const reducedMotion of ['no-preference', 'reduce']) {
-  test(`Jelly coin appearance and deposits play bundled Kenney feedback with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
+  test(`Jelly collection keeps rare coin feedback honest with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
     test.setTimeout(180000);
-    const requests = watchAudioRequests(page), evidence = { reducedMotion };
+    const requests = watchAudioRequests(page), evidence = { reducedMotion, collections: [] };
     await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
     const errors = await start(page, reducedMotion);
     const available = await page.evaluate(() => window.audioObservation.available);
     if (browserName === 'chromium') expect(available).toBe(true);
-    test.skip(!available, 'This browser runtime has no WebAudio.');
-    const single = await makeWord(page);
-    await page.waitForTimeout(400);
-    const singleBalance = (await wallet(page)).balance;
-    await observeWallet(page);
-    const singleFrom = await playbackIndex(page);
+    evidence.audioAvailable = available;
+    if (!available) info.annotations.push({ type: 'audio', description: 'WebAudio unavailable; collection and wallet flow remain verified.' });
     await context.setOffline(true);
     try {
-      // A deliberate tap uses the real valid-word collection path. Its normal
-      // word pronunciation remains separate from the new coin launch accent.
-      await pressRect(page, single.rect);
-      evidence.recordings = {
-        release: await expectRecording(page, singleFrom, COIN_CLIPS.release),
-        arrival: await expectRecording(page, singleFrom, COIN_CLIPS.arrival)
+      const single = await makeWord(page, { marked: true });
+      expect(single.fragments, 'The normal collection route includes a real carried fragment').toBeGreaterThan(0);
+      const collectAndCheck = async (tiles, batch) => {
+        const before = await jelly(page), startingWallet = await wallet(page);
+        const growth = await page.evaluate(() => localStorage.getItem('growWithPip.growth.v1'));
+        await observeWallet(page);
+        const from = await playbackIndex(page);
+        if (batch) await collect(page, tiles.length);
+        else await pressRect(page, before.tiles.find(tile => tile.id === tiles[0].id).rect);
+        await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + tiles.length);
+        const after = await jelly(page), earned = collectionCoins(after, before, tiles);
+        await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(startingWallet.balance + earned);
+        await expect.poll(async () => (await wallet(page)).active).toBe(false);
+        expect(after.fragment_count).toBe(before.fragment_count + tiles.reduce((sum, tile) => sum + tile.fragments, 0));
+        expect(after.tiles.some(tile => tiles.some(removed => removed.id === tile.id))).toBe(false);
+        await expect.poll(() => page.evaluate(() => localStorage.getItem('growWithPip.growth.v1')),
+          { message: 'Learning progress is retained even when collection drops no coins' }).not.toBe(growth);
+        await page.waitForTimeout(500);
+        const sounds = await playbacksSince(page, from), timeline = await page.evaluate(() => window.coinAudioTimeline);
+        const trial = { batch, earned, words: tiles.map(tile => tile.word.id), sounds, timeline };
+        evidence.collections.push(trial);
+        if (earned === 0) {
+          if (available) expect(coinRecordings(sounds), 'An ordinary no-drop collection plays neither coin appearance nor deposit recording').toEqual([]);
+          expect(timeline.every(frame => !frame.active && frame.balance === startingWallet.balance &&
+            frame.arrived_balance === startingWallet.arrived_balance), 'No-drop collection launches no phantom coin flight').toBe(true);
+        } else if (available) {
+          const recordings = { release: await expectRecording(page, from, COIN_CLIPS.release),
+            arrival: await expectRecording(page, from, COIN_CLIPS.arrival) };
+          expect(recordings.release.fingerprint).not.toBe(recordings.arrival.fingerprint);
+          trial.events = expectReleaseAndArrival(matching(sounds, recordings.release), matching(sounds, recordings.arrival),
+            timeline, startingWallet.balance, reducedMotion, batch ? 10 : 6);
+        }
+        if (batch) {
+          if (available) expectNoPronunciation(sounds, tiles.map(tile => tile.word));
+          expect(after.collection_batch.completed).toBe(tiles.length);
+          expect(after.collection_batch.elapsed).toBeCloseTo(tiles.length * 0.1, 6);
+        }
+        expect((await wallet(page)).balance, 'Presentation frames cannot repeat a lucky reward').toBe(startingWallet.balance + earned);
       };
-      expect(evidence.recordings.release.fingerprint,
-        'Appearance and arrival decode to different PCM audio instead of replaying one recording')
-        .not.toBe(evidence.recordings.arrival.fingerprint);
-      for (const recording of Object.values(evidence.recordings)) {
-        expect(recording.fingerprint, 'Each bundled recording has an observed PCM identity').toBeTruthy();
-        expect(recording.peak, 'Each selected recording contains nonzero samples').toBeGreaterThan(0.01);
-      }
-      evidence.singleOutput = await expectOutputEnergy(page);
-      await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(singleBalance + 100);
-      await expect.poll(async () => (await wallet(page)).active).toBe(false);
-      await page.waitForTimeout(450);
-      evidence.single = { playbacks: await playbacksSince(page, singleFrom),
-        timeline: await page.evaluate(() => window.coinAudioTimeline), word: single.word.id };
-      evidence.single.releaseSounds = matching(evidence.single.playbacks, evidence.recordings.release);
-      evidence.single.arrivalSounds = matching(evidence.single.playbacks, evidence.recordings.arrival);
-      evidence.single.events = expectReleaseAndArrival(evidence.single.releaseSounds, evidence.single.arrivalSounds,
-        evidence.single.timeline, singleBalance, reducedMotion, reducedMotion === 'reduce' ? 2 : 6);
-      expect((await wallet(page)).balance, 'A tapped word credits its coins once').toBe(singleBalance + 100);
-
+      await collectAndCheck([single], false);
       const words = [];
       for (let index = 0; index < 3; index++) words.push(await makeWord(page));
-      // Wait for the final merge cue to finish before delimiting Collect audio.
-      await page.waitForTimeout(400);
+      await collectAndCheck(words, true);
       const balance = (await wallet(page)).balance;
-      await observeWallet(page);
-      const from = await playbackIndex(page);
-      await collect(page, 3);
-      for (const [kind, clip] of Object.entries(COIN_CLIPS)) {
-        const batchRecording = await expectRecording(page, from, clip);
-        expect(batchRecording.fingerprint, `Single taps and Collect use the same distinct ${kind} recording`)
-          .toBe(evidence.recordings[kind].fingerprint);
-      }
-      evidence.output = await expectOutputEnergy(page);
-      await expect.poll(async () => (await wallet(page)).active).toBe(false);
-      await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(balance + 300);
-      await page.waitForTimeout(450);
-      evidence.playbacks = await playbacksSince(page, from);
-      evidence.timeline = await page.evaluate(() => window.coinAudioTimeline);
-      evidence.releaseSounds = matching(evidence.playbacks, evidence.recordings.release);
-      evidence.arrivalSounds = matching(evidence.playbacks, evidence.recordings.arrival);
-      const batch = (await jelly(page)).collection_batch;
-      expect(batch.completed).toBe(3);
-      expect(batch.elapsed, 'Coin feedback preserves the 100 ms word collection rhythm').toBeCloseTo(0.3, 6);
-      expectNoPronunciation(evidence.playbacks, words.map(tile => tile.word));
-      evidence.events = expectReleaseAndArrival(evidence.releaseSounds, evidence.arrivalSounds, evidence.timeline, balance,
-        reducedMotion, reducedMotion === 'reduce' ? 5 : 10);
-      const finishedFrom = await playbackIndex(page);
-      await page.waitForTimeout(400);
-      expect(coinFeedback(await playbacksSince(page, finishedFrom), evidence.recordings),
-        'Finishing the deposit never replays its sound').toEqual([]);
-
-      if (reducedMotion === 'no-preference') {
-        await makeWord(page);
-        await page.waitForTimeout(400);
-        const interruptedFrom = await playbackIndex(page), beforeInterrupt = (await wallet(page)).balance;
-        await collect(page, 1);
-        await expect.poll(async () => (await wallet(page)).balance).toBe(beforeInterrupt + 100);
-        // Browser protocol/renderer latency may allow valid arrivals before
-        // Home. Delimit at the actual Home transition instead of treating
-        // those earned cues as a cancellation failure.
-        await openModeMenu(page);
-        const homeFrom = await playbackIndex(page);
-        await expect.poll(async () => (await wallet(page)).active).toBe(false);
-        await page.waitForTimeout(650);
-        evidence.interrupted = await playbacksSince(page, interruptedFrom);
-        expect(coinFeedback(await playbacksSince(page, homeFrom), evidence.recordings),
-          'Home never replays settled coins or starts delayed deposit cues').toEqual([]);
-        expect(coinFeedback(evidence.interrupted, evidence.recordings).filter(sound =>
-          sound.stoppedAt === undefined && sound.endedAt === undefined),
-        'No coin recording keeps playing behind Home').toEqual([]);
-        expect((await wallet(page)).arrived_balance).toBe(beforeInterrupt + 100);
-
-        await toggleHomeSound(page, browserName, info.project.use.isMobile);
+      await openModeMenu(page);
+      const homeFrom = await playbackIndex(page);
+      await page.waitForTimeout(500);
+      if (available) expect(coinRecordings(await playbacksSince(page, homeFrom)), 'Home does not invent delayed coin feedback').toEqual([]);
+      expect((await wallet(page)).balance).toBe(balance);
+      if (!info.project.use.isMobile) {
+        await toggleHomeSound(page, browserName, false);
         await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key)).muted, PRESENTATION_KEY)).toBe(true);
         await chooseMode(page, 'word_jelly');
-        await makeWord(page);
-        const mutedFrom = await playbackIndex(page), mutedBalance = (await wallet(page)).balance;
+        const muted = await makeWord(page), mutedBefore = await jelly(page), mutedBalance = (await wallet(page)).balance;
+        const mutedFrom = await playbackIndex(page);
         await collect(page, 1);
-        await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(mutedBalance + 100);
-        await expect.poll(async () => (await wallet(page)).active).toBe(false);
-        evidence.muted = await playbacksSince(page, mutedFrom);
-        expect(evidence.muted, 'Mute prevents coin, collection, and word recordings from starting').toEqual([]);
-
-        await openModeMenu(page);
-        await toggleHomeSound(page, browserName, info.project.use.isMobile);
-        await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key)).muted, PRESENTATION_KEY)).toBe(false);
+        await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(mutedBefore.cleared_pairs + 1);
+        const mutedCoins = collectionCoins(await jelly(page), mutedBefore, [muted]);
+        await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(mutedBalance + mutedCoins);
+        await page.waitForTimeout(400);
+        expect(await playbacksSince(page, mutedFrom), 'Mute prevents collection, coin, and word recordings').toEqual([]);
       }
     } finally {
       await context.setOffline(false);
@@ -284,10 +255,58 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     await page.reload();
     await enterGame(page, { home: true });
     await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(finalBalance);
-    await page.waitForTimeout(500);
-    const restored = await playbacksSince(page, 0);
-    expect(coinFeedback(restored, evidence.recordings), 'Restoring an owned wallet balance never replays either coin recording').toEqual([]);
-    expect(requests, 'All coin and game feedback plays from already bundled recordings').toEqual([]);
+    expect(requests, 'Collection feedback stays bundled and offline').toEqual([]);
     expect(errors).toEqual([]);
   });
 }
+
+test('an earned chest still pays its complete guaranteed coin reward with distinct launch and arrival sounds', async ({ page, browserName }, info) => {
+  test.setTimeout(90000);
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
+  await page.addInitScript(() => {
+    window.SpeechRecognition = undefined;
+    window.webkitSpeechRecognition = undefined;
+    if (!localStorage.getItem('wordBuddies.popRewards')) localStorage.setItem('wordBuddies.popRewards',
+      '[treasure]\nversion=1\nround_id="coin-economy-chest"\nentries=[{"theme":"spring","opened":false}]\nreceipts=[]\n');
+  });
+  await page.goto('/');
+  await enterGame(page, { home: true });
+  await chooseMode(page, 'pop');
+  await expect.poll(async () => { const room = await roomState(page); return room.visible && room.chests.length === 1; }).toBe(true);
+  const opening = await roomState(page), balance = (await wallet(page)).balance;
+  const rect = opening.chests[0].rect, bounds = await metrics(page);
+  await observeWallet(page);
+  const from = await playbackIndex(page), audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(audioAvailable).toBe(true);
+  if (!audioAvailable) info.annotations.push({ type: 'audio', description: 'WebAudio unavailable; guaranteed chest payout remains verified.' });
+  await page.mouse.move(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
+    bounds.y + (rect.y + rect.height / 2) * bounds.scale);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await roomState(page)).opened_count).toBe(1);
+  } finally {
+    await page.mouse.up();
+  }
+  const expected = Math.max(1, opening.chests[0].tier) * 50;
+  await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(balance + expected);
+  await expect.poll(async () => (await wallet(page)).active).toBe(false);
+  if (audioAvailable) {
+    const release = await expectRecording(page, from, COIN_CLIPS.release);
+    const arrival = await expectRecording(page, from, COIN_CLIPS.arrival);
+    expect(release.fingerprint, 'Chest coins retain separate appearance and deposit recordings').not.toBe(arrival.fingerprint);
+    expect(arrival.at).toBeGreaterThan(release.at);
+    expect(release.peak).toBeGreaterThan(0.01);
+    expect(arrival.peak).toBeGreaterThan(0.01);
+  }
+  await page.mouse.click(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
+    bounds.y + (rect.y + rect.height / 2) * bounds.scale, { delay: 700 });
+  await page.waitForTimeout(500);
+  expect((await wallet(page)).balance, 'An opened chest cannot pay the guaranteed reward twice').toBe(balance + expected);
+  await page.reload();
+  await enterGame(page, { home: true });
+  await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(balance + expected);
+  await info.attach('guaranteed-chest-coins', { body: JSON.stringify({ expected, balance: await wallet(page) }, null, 2), contentType: 'application/json' });
+  expect(errors).toEqual([]);
+});

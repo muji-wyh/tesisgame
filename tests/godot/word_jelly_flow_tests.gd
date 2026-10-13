@@ -3,6 +3,7 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const COIN_REWARD_SEED: int = 208
 const RESPONSIVE_SIZES: Array[Vector2i] = [Vector2i(320, 480), Vector2i(393, 852), Vector2i(624, 1119),
 	Vector2i(768, 1024), Vector2i(834, 1194), Vector2i(568, 320), Vector2i(844, 390),
 	Vector2i(1366, 768), Vector2i(1473, 1175)]
@@ -28,6 +29,8 @@ func settle() -> void:
 
 func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 	var game = view.game
+	# Existing persistence fixtures deliberately exercise the rare winning branch.
+	game._coin_rng.seed = COIN_REWARD_SEED
 	game.step(0.4)
 	var pair: Array[int] = []
 	for first: Dictionary in game.cells:
@@ -283,6 +286,49 @@ func check_finish_visibility_stable(view, expected_visible: bool, context: Strin
 		"Repeated refreshes preserve Finish visibility without triggering header reflow " + context)
 
 
+func check_ordinary_collection(app, view, word: Dictionary) -> void:
+	var game = view.game
+	game.spawn_interval = 10000.0
+	var merged: Dictionary = merged_word(view, word, 2)
+	game._coin_rng.seed = 0
+	app._coin_flight.sync(app.coin_wallet.balance)
+	app.audio.interact(app.model.theme_id, false)
+	app.audio.stop_voice()
+	var balance: int = app.coin_wallet.balance
+	var receipts: Dictionary = app.coin_wallet._receipts.duplicate()
+	var saved: Variant = app.coin_wallet._saved_text
+	var streak: int = int(app.growth.snapshot().streaks.get(word.id, 0))
+	var coin_cues: Array[String] = []
+	var on_release: Callable = func() -> void: coin_cues.append("release")
+	var on_arrival: Callable = func() -> void: coin_cues.append("arrival")
+	app._coin_flight.release_sound.connect(on_release)
+	app._coin_flight.arrival_sound.connect(on_arrival)
+	app.coin_wallet.ready = false
+	check(game.collect(merged.id), "An ordinary merged word accepts collection while coin storage is unavailable")
+	game.step(game.COLLECT_SECONDS)
+	app._coin_flight.advance(2.0)
+	check(game.cell(merged.id).is_empty() and game.cleared_pairs == 1 and game.collected_coins == 0
+		and game.error.is_empty(), "The ordinary pickup completes without a coin award or a wallet error")
+	check(app.coin_wallet.balance == balance and app.coin_wallet._receipts == receipts
+		and app.coin_wallet._saved_text == saved and app.coin_wallet.error.is_empty(),
+		"An ordinary pickup does not create a zero-value receipt or touch unavailable coin storage")
+	check(game.fragment_count == 2 and int(app.growth.snapshot().streaks.get(word.id, 0)) == streak + 1,
+		"Removing an ordinary word retains every carried fragment and its learning answer")
+	check(not app._coin_flight.snapshot().active and app._word_jelly_credits.is_empty()
+		and app._coin_counter.target == balance and coin_cues.is_empty(),
+		"An ordinary pickup creates no coin burst, HUD deposit, counter increment, or coin sound")
+	for player: AudioStreamPlayer in app.audio._coin_players:
+		check(not player.playing, "Ordinary collection leaves every coin audio channel silent")
+	app._coin_flight.release_sound.disconnect(on_release)
+	app._coin_flight.arrival_sound.disconnect(on_arrival)
+	check(app.coin_wallet.load_state(), "Coin storage can recover after a successful ordinary collection")
+	check(app.new_round(406, false, "", "word_jelly"), "Rare-drop fixtures resume in a fresh round namespace")
+	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405),
+		"Rare-drop fixtures restore the same current-age vocabulary after ordinary collection")
+	app._sync_jelly()
+	view.set_process(false)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 800)
@@ -314,17 +360,19 @@ func _run() -> void:
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio)), "The new mode routes a complete word to its exact pronunciation")
 	app.audio.halt()
 	check_rejected_drop_flow(app, view, word)
+	check_ordinary_collection(app, view, word)
 	app.audio.set_muted(true)
 	var game = view.game
 	game.spawn_interval = 10000.0
+	var initial_streak: int = int(app.growth.snapshot().streaks.get(word.id, 0))
 	var merged: Dictionary = merged_word(view, word, 2)
 	check(game.fragment_count == 0 and app.coin_wallet.balance == 0, "Merging keeps carried fragments and coins uncollected")
 	check(game.collect(merged.id), "A valid word can be collected through the shared view model")
 	var receipt_event: String = str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
-	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 100, "Removing a two-piece word saves its hundred coins immediately")
-	check(game.fragment_count == 2 and int(app.growth.snapshot().streaks.get(word.id, 0)) == 1, "The collection credits every carried fragment and one learning answer")
-	check(app._coin_flight.snapshot().active, "The collected word launches the shared coin flight")
+	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 100, "A two-piece word's rare drop saves its hundred bonus coins immediately")
+	check(game.fragment_count == 2 and int(app.growth.snapshot().streaks.get(word.id, 0)) == initial_streak + 1, "The collection credits every carried fragment and one learning answer")
+	check(app._coin_flight.snapshot().active, "The rare coin drop launches the shared coin flight")
 	var duplicate: Dictionary = app._credit_word_jelly(receipt_event, 100)
 	app._word_jelly_collected(receipt_event, word, 100, 2, Vector2.ZERO)
 	check(duplicate.ok and duplicate.duplicate and app.coin_wallet.balance == 100, "A retried collection receipt cannot pay twice")
@@ -438,7 +486,7 @@ func _run() -> void:
 	growth_before = app.growth.snapshot().streaks.duplicate()
 	view.word_attempted.emit("hidden-words", [str(word.id)] as Array[String], true)
 	check(app.growth.snapshot().streaks == growth_before, "A stopped Jelly Words callback cannot credit Jelly Match")
-	check(app.coin_wallet.balance == 500, "Switching modes preserves every immediate word reward")
+	check(app.coin_wallet.balance == 500, "Switching modes preserves every rare word bonus from the winning fixtures")
 	app.audio.halt()
 	app.queue_free()
 	await settle()

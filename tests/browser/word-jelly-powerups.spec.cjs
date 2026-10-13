@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
+const { collectionCoins } = require('./word-jelly-rewards.cjs');
 const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, observeAudio } = require('./game-ui.cjs');
 const { expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
@@ -436,10 +437,10 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     expect(recordingCount(audioEvidence.auto.sounds, MERGE).length).toBeGreaterThan(0);
   }
   await capture(page, info, 'word-jelly-auto-merge-awaits-collection');
-  const earnedCoins = completed.reduce((sum, tile) => sum + tile.mass * 50, 0);
   const earnedFragments = completed.reduce((sum, tile) => sum + tile.fragments, 0);
   await pressRect(page, (await jelly(page)).collect_button.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + completed.length);
+  const earnedCoins = collectionCoins(await jelly(page), opening, completed);
   await expect.poll(async () => (await wallet(page)).balance).toBe(2500 + earnedCoins);
   expect((await jelly(page)).fragment_count).toBe(opening.fragment_count + earnedFragments);
   await expect.poll(() => savedGrowth(page)).not.toBe(growth);

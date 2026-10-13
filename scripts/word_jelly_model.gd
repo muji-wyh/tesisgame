@@ -33,6 +33,7 @@ const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.10
 const BATCH_POP_SECONDS: float = 0.06
+const COIN_DROP_CHANCE: float = 0.01
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
@@ -79,6 +80,7 @@ var _supply_words: int = 0
 var _next_tile_id: int = 1
 var _next_event_id: int = 1
 var _collection_event_ids: Dictionary = {}
+var _collection_coin_rewards: Dictionary = {}
 var _merge_history: Dictionary = {}
 var _generation: int = 0
 var _growth_pending: bool = false
@@ -96,6 +98,7 @@ var _collection_batch_next_in: float = 0.0
 var _collection_batch_event_id: String = ""
 var _collection_batch_serial: int = 0
 var _rng := RandomNumberGenerator.new()
+var _coin_rng := RandomNumberGenerator.new()
 var _powerup: Dictionary = {}
 var _powerup_ids: Array[int] = []
 var _powerup_purchasing: bool = false
@@ -122,6 +125,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_supply_pending.clear()
 	_completed_words.clear()
 	_collection_event_ids.clear()
+	_collection_coin_rewards.clear()
 	_merge_history.clear()
 	_result.clear()
 	phase = "finished"
@@ -152,8 +156,11 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
+		_coin_rng.randomize()
 	else:
 		_rng.seed = seed_value
+		# Coin rolls must not alter word supply, fragments, or automatic matching.
+		_coin_rng.seed = seed_value ^ 0x434F494E
 	var ids: Dictionary = {}
 	for candidate in words:
 		if not candidate is Dictionary or not _eligible(candidate, level):
@@ -594,11 +601,13 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		return false
 	if not _collection_event_ids.has(tile_id):
 		_collection_event_ids[tile_id] = _event_id("collect")
+		# Reserve one independent roll per collection, including wallet retries.
+		_collection_coin_rewards[_collection_event_ids[tile_id]] = coins_for_tile(tile) if _coin_rng.randf() < COIN_DROP_CHANCE else 0
 	var active: Dictionary = {
 		"operation": "collect", "a_id": tile_id, "b_id": tile_id,
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
-		"coins": coins_for_tile(tile), "fragments": int(tile.fragments),
+		"coins": int(_collection_coin_rewards[_collection_event_ids[tile_id]]), "fragments": int(tile.fragments),
 		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS,
 		"pop_at": BATCH_POP_SECONDS if batch_index > 0 else POP_SECONDS,
 		"popped": false, "credited": false,
@@ -1087,6 +1096,7 @@ func is_valid_word(tile: Dictionary) -> bool:
 
 
 static func coins_for_tile(tile: Dictionary) -> int:
+	# Potential bonus value; collection separately reserves the rare drop roll.
 	var mass: int = maxi(1, int(tile.get("mass", tile.get("parts_count", 1))))
 	return 50 * mass
 
@@ -1325,7 +1335,7 @@ func _complete_operation(event_id: String) -> void:
 		_complete_split(completed)
 	elif str(completed.operation) == "collect":
 		var generation: int = _generation
-		if not bool(completed.get("credited", false)) and credit_collection.is_valid():
+		if int(completed.coins) > 0 and not bool(completed.get("credited", false)) and credit_collection.is_valid():
 			var response: Variant = credit_collection.call(event_id, int(completed.coins))
 			if generation != _generation or phase != "playing" or _fusion_index(event_id) < 0:
 				return
@@ -1410,6 +1420,7 @@ func _complete_split(completed: Dictionary) -> void:
 	if _held_tile_id == parent_id:
 		_held_tile_id = -1
 	_merge_history.erase(parent_id)
+	_collection_coin_rewards.erase(_collection_event_ids.get(parent_id, ""))
 	_collection_event_ids.erase(parent_id)
 	# Wrapped parents may release padding cells. Reconsider compressed neighbors
 	# only after both frozen split destinations have finished settling.
@@ -1431,6 +1442,7 @@ func _discard_history(tile_id: int) -> void:
 		for child: Dictionary in _merge_history.get(current_id, []):
 			pending.append(int(child.id))
 		_merge_history.erase(current_id)
+		_collection_coin_rewards.erase(_collection_event_ids.get(current_id, ""))
 		_collection_event_ids.erase(current_id)
 
 

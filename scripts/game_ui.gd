@@ -2427,7 +2427,7 @@ func _refresh() -> void:
 	elif playing and _mode_id == "jelly":
 		_message.text = "Drag a picture onto its word. Make room for the falling jellies!"
 	elif playing and _mode_id == "word_jelly":
-		_message.text = "Join word pieces. Tap a complete word to collect coins and treasure fragments."
+		_message.text = "Join word pieces. Collect complete words and treasure fragments, with a 1% chance of bonus coins. Open chests to earn coins."
 	var won: bool = model.phase == "won"
 	var earned_chest: bool = won and model.chest_earned
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
