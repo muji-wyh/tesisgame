@@ -12,6 +12,7 @@ const CROWN_COLORS: Array[Color] = [Color("#ff7189"), Color("#ffb354"), Color("#
 	Color("#73d99b"), Color("#66d5e6"), Color("#799ff2"), Color("#bd8bea")]
 const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHARGE_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const RAINBOW_LIGHT = preload("res://scripts/chest_rainbow_light.gdshader")
 const OpeningEffect = preload("res://scripts/chest_opening_effect.gd")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
@@ -36,6 +37,8 @@ var hold_progress: float = 0.0
 var _glint := Node2D.new()
 var _glint_color: Color = Color.WHITE
 var _charge := Node2D.new()
+var _rainbow_light := Sprite2D.new()
+var _rainbow_material := ShaderMaterial.new()
 var _charge_color := Color("#58d7c5")
 var _charge_spark := Color("#fff4be")
 var _hold_active: bool = false
@@ -98,8 +101,12 @@ func _ready() -> void:
 	add_child(_radiance)
 	_radiance.draw.connect(_draw_radiance)
 	add_child(_charge)
-	# Keep the progress rail readable above the lid, below the release flash.
-	_charge.z_index = 9
+	# Atmospheric light sits behind the solid chest instead of reading as UI.
+	_charge.z_index = 0
+	_rainbow_light.texture = CHARGE_GLOW
+	_rainbow_material.shader = RAINBOW_LIGHT
+	_rainbow_light.material = _rainbow_material
+	_charge.add_child(_rainbow_light)
 	_charge.hide()
 	_charge.draw.connect(_draw_charge)
 	add_child(_art)
@@ -313,7 +320,7 @@ func _measure_motion_bounds() -> void:
 		return
 	_motion_bounds = _bounds
 	for frame in range(37):
-		var time: float = Feel.BUILDUP_SECONDS + 1.8 * float(frame) / 36.0
+		var time: float = lerpf(Feel.BUILDUP_SECONDS, Feel.OPEN_SECONDS, float(frame) / 36.0)
 		for index in range(_pieces.size()):
 			var state: Dictionary = _piece_pose(index, time, true)
 			if float(state.alpha) <= 0.001:
@@ -416,92 +423,60 @@ func _update_charge() -> void:
 	_charge_unit = minf(pixel, minf(available, available_height) / 100.0)
 	_charge_center = Vector2(size.x * 0.5, top + available_height * 0.52)
 	_charge_radius = Vector2(maxf(0, available * 0.37 - 18.0 * _charge_unit), maxf(0, available_height * 0.39 - 18.0 * _charge_unit))
-	# Every halo, star and spark stays in this measured rectangle, including
+	# Every halo and drifting glint stays in this measured rectangle, including
 	# the one-shot release. The parent stage can safely keep clipping enabled.
 	var extent: Vector2 = _charge_radius * 1.13 + Vector2.ONE * 18.0 * _charge_unit
 	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
 		extent = Vector2.ZERO
 	_charge_bounds = Rect2(_charge_center - extent, extent * 2.0)
+	_rainbow_light.position = _charge_center
+	_rainbow_light.scale = extent * 2.0 / Vector2(CHARGE_GLOW.get_size())
+	_rainbow_material.set_shader_parameter("ellipse_radius", _charge_radius / extent.max(Vector2.ONE * 0.001))
+	_rainbow_material.set_shader_parameter("band_width", minf(0.34, 14.0 * _charge_unit / maxf(1.0, minf(_charge_radius.x, _charge_radius.y))))
+	_rainbow_material.set_shader_parameter("strength", _rainbow_strength())
+	_rainbow_material.set_shader_parameter("light_phase", 0.0 if reduced_motion else _crown_flow_phase())
 	_charge.queue_redraw()
 
 
-func _ellipse_points(radius: Vector2, start: float, end: float, steps: int = 72) -> PackedVector2Array:
-	var points := PackedVector2Array()
-	for index in range(steps + 1):
-		var angle: float = lerpf(start, end, float(index) / float(steps))
-		points.append(_charge_center + Vector2(cos(angle), sin(angle)) * radius)
-	return points
+func _rainbow_strength() -> float:
+	if not _charge.visible or _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
+		return 0.0
+	var fade: float = 1.0 - smoothstep(0.0, 0.18, _elapsed - Feel.RELEASE_TIME) if mode == "opening" else 1.0
+	return (0.08 + pow(_visual_performance_progress(), 0.8) * 0.43 + _crown_crest() * 0.08) * fade
+
+
+func _rainbow_motes() -> Array[Dictionary]:
+	var motes: Array[Dictionary] = []
+	if reduced_motion or _rainbow_strength() <= 0.0:
+		return motes
+	var progress: float = _visual_performance_progress()
+	for index in range(7):
+		var seed_value: float = fposmod(float(index) * 0.618034, 1.0)
+		var age: float = fposmod(_crown_flow_phase() * 0.42 + seed_value, 1.0)
+		var start: Vector2 = _charge_center + Vector2((seed_value - 0.5) * _charge_radius.x * 0.55, 0.0)
+		var drift := Vector2(sin(float(index) * 2.4) * _charge_radius.x * 0.45,
+			-_charge_radius.y * 0.84)
+		var point: Vector2 = start + drift * age
+		var edge: float = (3.0 + seed_value * 3.0) * _charge_unit
+		motes.append({"position": point, "edge": edge,
+			"alpha": sin(age * PI) * (0.25 + progress * 0.40) * _rainbow_strength(),
+			"color": _crown_color(seed_value).lightened(0.38), "rotation": seed_value * 0.8})
+	return motes
 
 
 func _draw_charge() -> void:
-	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
+	var strength: float = _rainbow_strength()
+	if strength <= 0.0:
 		return
-	var pixel: float = _charge_unit
-	var progress: float = _visual_performance_progress()
-	var releasing: bool = mode == "opening" and _elapsed >= Feel.RELEASE_TIME
-	var alpha: float = 1.0 - smoothstep(0.0, 0.22, _elapsed - Feel.RELEASE_TIME) if releasing else 1.0
-	if alpha <= 0.0:
-		return
-	var pulse: float = _pulse_strength()
-	var crest: float = _crown_crest()
-	var frontier: Color = _crown_color(progress).lightened(0.35)
-	# A translucent unfilled ribbon stays quiet; earned color flows in seven
-	# parallel bands, so this reads as a rainbow rather than a metal gauge.
-	_draw_crown_arc(0.0, 1.0, Color(Color("#294957"), 0.13 * alpha), 14.0 * pixel, Vector2(0, 1.5 * pixel))
-	_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, 0.28 * alpha), 12.0 * pixel)
-	if progress > 0.0:
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, (0.14 + progress * 0.13) * alpha), 24.0 * pixel, Vector2.ZERO, true)
-		for band in range(CROWN_COLORS.size()):
-			var radial: float = (3.0 - float(band)) * 1.65 * pixel
-			_draw_crown_arc(0.0, progress, Color(CROWN_COLORS[band], 0.96 * alpha), 2.25 * pixel, Vector2.ZERO, false, radial)
-		_draw_crown_arc(0.0, progress, Color(Color.WHITE, 0.52 * alpha), 1.0 * pixel, Vector2.ZERO, false, 6.1 * pixel)
-	for streak in _crown_streaks():
-		_draw_crown_arc(streak.x, streak.y, Color(Color.WHITE, 0.36 * alpha), 13.0 * pixel)
-		var point: Vector2 = _crown_point(streak.y)
-		_draw_crown_sparkle(point, 11.0 * pixel, Color(Color.WHITE, 0.9 * alpha), streak.y * 0.7)
-	if crest > 0.0:
-		# A single completed-rail crest merges into the cavity's release light.
-		_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, crest * 0.32 * alpha), 28.0 * pixel, Vector2.ZERO, true)
-		_draw_crown_arc(0.0, 1.0, Color(Color.WHITE, crest * alpha), 7.0 * pixel)
-	if not reduced_motion and not releasing and progress > 0.0:
-		# This comet is the earned progress frontier, never an independent timer.
-		for trail in range(5):
-			var end: float = maxf(0.0, progress - float(trail) * 0.009)
-			_draw_crown_arc(maxf(0.0, end - 0.009), end,
-				Color(frontier, (0.8 - float(trail) * 0.13) * alpha), (7.0 - float(trail)) * pixel)
-		var tip: Vector2 = _crown_point(progress)
-		var halo: float = (12.0 + pulse) * pixel
-		_charge.draw_texture_rect(CHARGE_GLOW, Rect2(tip - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
-			Color(frontier, (0.70 + progress * 0.30) * alpha))
-		_draw_crown_sparkle(tip, (25.0 + pulse * 2.0) * pixel, Color(Color.WHITE, alpha))
-		# Fine sparkles follow the earned frontier and remain within the ribbon.
-		for spark in range(8):
-			var phase: float = fposmod(_crown_flow_phase() * 0.30 + float(spark) * 0.618, 1.0)
-			var at: float = progress * (0.08 + phase * 0.88)
-			var point: Vector2 = _crown_point(at)
-			point.y += sin(float(spark) * 2.3 + phase * TAU) * 5.0 * pixel
-			_draw_crown_sparkle(point, (6.0 + phase * 5.0) * pixel,
-				Color(_crown_color(at).lightened(0.65), sin(phase * PI) * alpha), phase * 0.8)
-	for index in range(CHARGE_STEPS):
-		var threshold: float = float(index + 1) / CHARGE_STEPS
-		var lit: bool = progress + 0.000001 >= threshold
-		var beat: float = _crown_milestone_strength(index)
-		var position: Vector2 = _crown_star_position(index)
-		var radius: float = _crown_star_radius()
-		var energy: Color = _crown_color((float(index) + 0.5) / CHARGE_STEPS)
-		var gold: Color = energy.lightened(0.50)
-		if lit:
-			var halo: float = radius * 1.80
-			_charge.draw_texture_rect(CHARGE_GLOW, Rect2(position - Vector2.ONE * halo, Vector2.ONE * halo * 2.0), false,
-				Color(gold, (0.65 + beat * 0.35) * alpha))
-		if beat > 0.0:
-			var expansion: float = clampf(_crown_milestone_age(index) / 0.32, 0.0, 1.0)
-			for spark in range(6):
-				var direction := Vector2.from_angle(float(spark) * TAU / 6.0 - PI * 0.5)
-				var point: Vector2 = position + direction * radius * lerpf(0.90, 1.40, expansion)
-				_draw_crown_sparkle(point, 6.0 * pixel * beat, Color(gold, beat * alpha), expansion * 0.4)
-		_draw_crown_sparkle(position, radius * (2.5 + beat * 0.30),
-			Color(gold if lit else Color.WHITE, alpha if lit else 0.42 * alpha))
+	# Light leaks out of the cavity; there is no plate beneath the rainbow.
+	var origin: Vector2 = _cavity_origin()
+	var edge: float = minf(_charge_radius.x * 1.4, _charge_radius.y * 1.5)
+	origin = origin.clamp(_charge_bounds.position + Vector2.ONE * edge * 0.5,
+		_charge_bounds.end - Vector2.ONE * edge * 0.5)
+	_charge.draw_texture_rect(CHARGE_GLOW, Rect2(origin - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+		false, Color(_release_color.lightened(0.25), strength * 0.28))
+	for mote in _rainbow_motes():
+		_draw_crown_sparkle(mote.position, mote.edge, Color(mote.color, mote.alpha), mote.rotation)
 
 
 func _draw_crown_sparkle(point: Vector2, edge: float, color: Color, turn: float = 0.0) -> void:
@@ -520,38 +495,11 @@ func _crown_flow_phase() -> float:
 	return 0.40 * time + 0.35 * time * time
 
 
-func _crown_streaks() -> Array[Vector2]:
-	var streaks: Array[Vector2] = []
-	var progress: float = _visual_performance_progress()
-	if reduced_motion or not _charge.visible or progress <= 0.0 or progress >= 1.0:
-		return streaks
-	for index in range(3):
-		var head: float = fposmod(_crown_flow_phase() + float(index) / 3.0, 1.0) * progress
-		streaks.append(Vector2(maxf(0.0, head - 0.045 - progress * 0.020), head))
-	return streaks
-
-
-func _crown_milestone_age(index: int) -> float:
-	return _crown_clock() - float(index + 1) * (Feel.HOLD_SECONDS + Feel.RELEASE_TIME) / CHARGE_STEPS
-
-
-func _crown_milestone_strength(index: int) -> float:
-	var age: float = _crown_milestone_age(index)
-	if reduced_motion or not _charge.visible or age < 0.0 or age >= 0.32:
-		return 0.0
-	return (1.0 - smoothstep(0.04, 0.32, age)) * smoothstep(0.0, 0.025, age)
-
-
 func _crown_crest() -> float:
 	if reduced_motion or not _charge.visible or mode != "opening":
 		return 0.0
 	var age: float = _elapsed - Feel.RELEASE_TIME
 	return smoothstep(0.0, 0.025, age) * (1.0 - smoothstep(0.035, 0.20, age)) if age >= 0.0 else 0.0
-
-
-func _crown_point(progress: float) -> Vector2:
-	return _charge_center + Vector2.from_angle(lerpf(PI + 0.04, TAU - 0.04,
-		clampf(progress, 0.0, 1.0))) * _charge_radius
 
 
 func _crown_color(progress: float) -> Color:
@@ -560,44 +508,9 @@ func _crown_color(progress: float) -> Color:
 	return CROWN_COLORS[index].lerp(CROWN_COLORS[index + 1], position - index)
 
 
-func _draw_crown_arc(from: float, to: float, color: Color, width: float, offset: Vector2 = Vector2.ZERO, rainbow: bool = false, radial: float = 0.0) -> void:
-	if to <= from:
-		return
-	var points: PackedVector2Array = _ellipse_points((_charge_radius + Vector2.ONE * radial).max(Vector2.ZERO),
-		lerpf(PI + 0.04, TAU - 0.04, from), lerpf(PI + 0.04, TAU - 0.04, to), maxi(2, ceili((to - from) * 84.0)))
-	for point in range(points.size()):
-		points[point] += offset
-	if rainbow:
-		var colors := PackedColorArray()
-		for point in range(points.size()):
-			colors.append(_crown_color(lerpf(from, to, float(point) / (points.size() - 1))) * color)
-		_charge.draw_polyline_colors(points, colors, width, true)
-	else:
-		_charge.draw_polyline(points, color, width, true)
-
-
-func _crown_star_position(index: int) -> Vector2:
-	return _charge_center + Vector2.from_angle(PI + PI * (float(index) + 0.5) / CHARGE_STEPS) * _charge_radius
-
-
-func _crown_star_radius() -> float:
-	return minf(9.0 * _charge_unit, minf(_charge_radius.x, _charge_radius.y) * 0.24)
-
-
 func _crown_effect_bounds() -> Rect2:
-	# The drawing uses these same rail points and star/head sizes. Include
-	# stroke half-widths, the release crest, and milestone spark travel.
-	if _charge_radius.x <= 0.0 or _charge_radius.y <= 0.0:
-		return Rect2(_charge_center, Vector2.ZERO)
-	var result := Rect2(_crown_point(0.0), Vector2.ZERO)
-	for point in _ellipse_points(_charge_radius, PI + 0.04, TAU - 0.04, 84):
-		result = result.expand(point)
-	result = result.grow(14.0 * _charge_unit)
-	var star_extent: float = _crown_star_radius() * 1.80 + 0.75 * _charge_unit
-	for index in range(CHARGE_STEPS):
-		var position: Vector2 = _crown_star_position(index)
-		result = result.merge(Rect2(position - Vector2.ONE * star_extent, Vector2.ONE * star_extent * 2.0))
-	return result
+	# The spectrum, source glow and drifting motes share the fitted light area.
+	return _charge_bounds
 
 
 func _hold_status() -> String:
@@ -611,8 +524,8 @@ func performance_progress() -> float:
 
 
 func _visual_performance_progress() -> float:
-	# Keep the rail loaded during the held breath. Semantic progress continues
-	# on elapsed time, and the third star still lights on the real release cue.
+	# Keep the light steady during the held breath while semantic progress
+	# continues on elapsed time to the real release cue.
 	if mode == "opening" and not reduced_motion and _elapsed < Feel.RELEASE_TIME:
 		return Feel.progress(Feel.anticipation_pose_time(_elapsed))
 	return performance_progress()
@@ -695,13 +608,7 @@ func performance_status() -> String:
 
 
 func _charge_particle_count() -> int:
-	if reduced_motion or not _charge.visible:
-		return 0
-	var count: int = 1 if performance_progress() > 0.0 and performance_progress() < 1.0 else 0
-	for index in range(CHARGE_STEPS):
-		if _crown_milestone_strength(index) > 0.0:
-			count += 6
-	return count
+	return _rainbow_motes().size()
 
 
 func _hold_pose_state() -> Vector2:
@@ -843,12 +750,6 @@ func hold_effect_snapshot() -> Dictionary:
 	var bloom_bounds: Rect2 = _release_bloom_bounds()
 	var core_bounds: Rect2 = _release_core_bounds()
 	var wave_bounds: Rect2 = _release_wave_bounds()
-	var crown_streaks: Array[Dictionary] = []
-	var crown_milestones: Array[float] = []
-	for streak in _crown_streaks():
-		crown_streaks.append({"start": streak.x, "end": streak.y})
-	for index in range(CHARGE_STEPS):
-		crown_milestones.append(_crown_milestone_strength(index))
 	var surface_light: float = 0.0
 	for piece in _pieces:
 		if piece.role in ["body", "chest"]:
@@ -865,7 +766,8 @@ func hold_effect_snapshot() -> Dictionary:
 		"pulse_strength": _pulse_strength(),
 		"pulse_motion": _pulse_motion(),
 		"crown_clock": _crown_clock(), "crown_flow_phase": _crown_flow_phase(),
-		"crown_streaks": crown_streaks, "crown_milestones": crown_milestones, "crown_crest": _crown_crest(),
+		"crown_streaks": [], "crown_milestones": [], "crown_crest": _crown_crest(),
+		"rainbow_strength": _rainbow_strength(), "rainbow_motes": _rainbow_motes(),
 		"crown_effect_bounds": {"x": crown_bounds.position.x, "y": crown_bounds.position.y,
 			"width": crown_bounds.size.x, "height": crown_bounds.size.y},
 		"buildup_intensity": _buildup_intensity(), "buildup_glow": _buildup_glow(),
@@ -1320,7 +1222,7 @@ func _draw_details() -> void:
 	var time: float = Feel.anticipation_pose_time(_elapsed) if opening_now else _charge_time
 	var release: float = maxf(0.0, time - Feel.RELEASE_TIME) if opening_now else 0.0
 	var visual_progress: float = _visual_performance_progress()
-	var fade: float = (0.35 + visual_progress * 0.65) * (1.0 - smoothstep(Feel.BUILDUP_SECONDS + 1.05, Feel.BUILDUP_SECONDS + 1.6, time)) if opening_now else 0.35 + visual_progress * 0.55
+	var fade: float = (0.35 + visual_progress * 0.65) * (1.0 - smoothstep(Feel.SETTLE_TIME, Feel.OPEN_SECONDS - 0.12, time)) if opening_now else 0.35 + visual_progress * 0.55
 	var center: Vector2 = _art.transform * (_bounds.get_center() - Vector2(0, _bounds.size.y * 0.12))
 	var extent := Vector2(_bounds.size.x * _fit_scale * 0.48, _bounds.size.y * _fit_scale * 0.40)
 	var radius: float = maxf(0.8, minf(extent.x, extent.y) * 0.055)

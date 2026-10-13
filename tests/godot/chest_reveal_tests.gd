@@ -763,12 +763,12 @@ func _check_hold_feedback(data) -> void:
 		"Holding exposes semantic zero-percent progress before the first game frame")
 	chest.set_hold_progress(0.45)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.percent == 16 and state.text.contains("16%") and not state.status.is_empty()
+	check(state.active and state.percent == 18 and state.text.contains("18%") and not state.status.is_empty()
 		and state.animated and state.spark_count > 0,
 		"Confirmation contributes its real elapsed share of the complete progress")
 	chest.set_hold_progress(2.0)
 	chest._advance_animation(2.0)
-	check(chest.hold_effect_snapshot().percent == 35 and chest.mode == "closed" and openings.is_empty(),
+	check(chest.hold_effect_snapshot().percent == 40 and chest.mode == "closed" and openings.is_empty(),
 		"Completing confirmation never opens the chest or reports the whole buildup complete")
 	chest.set_hold_progress(0.0)
 	check(not chest.hold_effect_snapshot().active and not chest._charge.visible and not chest._glint.visible
@@ -807,16 +807,16 @@ func _check_hold_feedback(data) -> void:
 	chest.set_hold_progress(1.0)
 	chest.start_open(false)
 	state = chest.hold_effect_snapshot()
-	check(state.active and state.phase == "gathering" and state.percent == 35 and not state.status.is_empty()
+	check(state.active and state.phase == "gathering" and state.percent == 40 and not state.status.is_empty()
 		and chest.mode == "opening" and openings.is_empty(),
 		"Confirmation flows into automatic gathering without resetting or finishing progress")
 	chest.start_open(false)
-	chest._advance_animation(1.0)
+	chest._advance_animation(Feel.ANTICIPATION_TIME * 0.6)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent > 50 and state.percent < 70 and state.phase == "building"
 		and state.spark_count > 0 and openings.is_empty(),
 		"Automatic buildup keeps semantic progress advancing with gathering sparks")
-	chest._advance_animation(Feel.RELEASE_TIME - 1.0 + 0.01)
+	chest._advance_animation(Feel.RELEASE_TIME - chest.hold_effect_snapshot().opening_time + 0.01)
 	state = chest.hold_effect_snapshot()
 	check(state.active and state.percent == 100 and state.phase == "release" and state.spark_count > 0,
 		"Only the final physical release reaches 100 percent and scatters sparks")
@@ -824,7 +824,7 @@ func _check_hold_feedback(data) -> void:
 	check(not chest.hold_effect_snapshot().active and chest.mode == "opening" and openings.is_empty(),
 		"The progress effects finish after release while the reward settles")
 	chest._advance_animation(Feel.OPEN_SECONDS - chest.hold_effect_snapshot().opening_time - 0.01)
-	check(chest.mode == "opening" and openings.is_empty(), "The complete 3.8-second automatic opening precedes the reward")
+	check(chest.mode == "opening" and openings.is_empty(), "The complete two-second automatic opening precedes the reward")
 	chest._advance_animation(0.02)
 	chest.start_open(false)
 	chest.finish_immediately()
@@ -859,27 +859,35 @@ func _check_crown_effects(data) -> void:
 		var after: Dictionary = chest.hold_effect_snapshot()
 		check(is_equal_approx(after.crown_clock, before.crown_clock)
 			and is_equal_approx(after.crown_flow_phase, before.crown_flow_phase)
-			and after.crown_streaks == before.crown_streaks and after.crown_milestones == before.crown_milestones,
-			theme + " preserves crown travelers and milestone effects across the hold-to-opening handoff")
-		var late_start: Dictionary = _advance_crown_to(chest, 2.70)
-		var late_end: Dictionary = _advance_crown_to(chest, 2.90)
+			and is_equal_approx(after.rainbow_strength, before.rainbow_strength)
+			and after.rainbow_motes == before.rainbow_motes,
+			theme + " preserves the rainbow light and drifting motes across the hold-to-opening handoff")
+		var late_start: Dictionary = _advance_crown_to(chest, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.45)
+		var late_end: Dictionary = _advance_crown_to(chest, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.45 + 0.20)
 		check(early_end.crown_flow_phase > early_start.crown_flow_phase
 			and late_end.crown_flow_phase - late_start.crown_flow_phase >
-				(early_end.crown_flow_phase - early_start.crown_flow_phase) * 2.0,
-			theme + " visibly accelerates crown energy during equal-duration early and late intervals")
-		var valid_streaks: bool = true
+				(early_end.crown_flow_phase - early_start.crown_flow_phase)
+			and early_end.rainbow_motes != early_start.rainbow_motes
+			and late_end.rainbow_motes != late_start.rainbow_motes,
+			theme + " continuously drifts its light motes through equal-duration early and late intervals")
+		check(early_end.rainbow_strength > early_start.rainbow_strength
+			and before.rainbow_strength > early_end.rainbow_strength
+			and late_end.rainbow_strength > after.rainbow_strength,
+			theme + " gradually brightens the same spectral bow as actual opening progress advances")
+		var valid_motes: bool = true
 		for state in [early_start, early_end, before, after, late_start, late_end]:
-			valid_streaks = valid_streaks and not state.crown_streaks.is_empty()
-			for streak in state.crown_streaks:
-				valid_streaks = valid_streaks and streak.start >= 0.0 and streak.end > streak.start \
-					and streak.end <= state.performance_progress + 0.000001
-		check(valid_streaks, theme + " clips every traveling streak to earned progress instead of lighting the unfilled rail")
+			valid_motes = valid_motes and state.rainbow_motes.size() == 7 \
+				and state.crown_streaks.is_empty() and state.crown_milestones.is_empty()
+			for mote in state.rainbow_motes:
+				valid_motes = valid_motes and Rect2(Vector2.ZERO, chest.size).has_point(mote.position) \
+					and is_finite(mote.edge) and mote.edge > 0.0 and mote.alpha >= 0.0 and mote.alpha <= 1.0
+		check(valid_motes, theme + " uses a few bounded drifting motes without a progress comet or fixed milestone markers")
 		chest.cancel_open(true)
 		var cancelled: Dictionary = chest.hold_effect_snapshot()
 		check(not cancelled.active and is_zero_approx(cancelled.crown_clock) and cancelled.crown_streaks.is_empty()
-			and cancelled.crown_milestones.all(func(value: float) -> bool: return is_zero_approx(value))
-			and is_zero_approx(cancelled.crown_crest),
-			theme + " immediately clears crown travelers and bursts when an opening is cancelled")
+			and cancelled.crown_milestones.is_empty() and cancelled.rainbow_motes.is_empty()
+			and is_zero_approx(cancelled.rainbow_strength) and is_zero_approx(cancelled.crown_crest),
+			theme + " immediately clears spectral light and motes when an opening is cancelled")
 		chest.reduced_motion = true
 		chest.begin_hold()
 		chest.set_hold_progress(0.8)
@@ -887,27 +895,33 @@ func _check_crown_effects(data) -> void:
 		chest._advance_animation(0.5)
 		var static_state: Dictionary = chest.hold_effect_snapshot()
 		check(static_state.active and static_state.percent == 80 and static_state.crown_streaks.is_empty()
-			and static_state.crown_milestones.all(func(value: float) -> bool: return is_zero_approx(value))
+			and static_state.crown_milestones.is_empty() and static_state.rainbow_motes.is_empty()
+			and static_state.rainbow_strength > 0.0 and static_state.rainbow_strength == reduced.rainbow_strength
 			and is_zero_approx(static_state.crown_crest) and static_state.crown_flow_phase == reduced.crown_flow_phase
-			and static_state.crown_effect_bounds == reduced.crown_effect_bounds,
-			theme + " keeps a readable static crown without travelers or bursts in reduced motion")
+			and static_state.crown_effect_bounds == reduced.crown_effect_bounds
+			and is_zero_approx(float(chest._rainbow_material.get_shader_parameter("light_phase"))),
+			theme + " keeps a readable static spectral bow without drifting motes in reduced motion")
 
 		chest.clear()
 		chest.reduced_motion = false
 		chest.configure_skin(data.theme(theme), data.chests)
 		chest.begin_hold()
-		for index in range(3):
+		for index in range(2):
 			var threshold: float = duration * float(index + 1) / 3.0
 			var unearned: Dictionary = _advance_crown_to(chest, threshold - 0.005)
-			var burst: Dictionary = _advance_crown_to(chest, threshold + 0.08)
-			var settled: Dictionary = _advance_crown_to(chest, threshold + 0.36)
-			check(is_zero_approx(unearned.crown_milestones[index]) and burst.crown_milestones[index] > 0.0
-				and is_zero_approx(settled.crown_milestones[index]),
-				"%s milestone %d celebrates its real threshold once and then settles" % [theme, index + 1])
-			if index == 2:
-				check(unearned.crown_crest == 0.0 and burst.crown_crest > 0.0 and settled.crown_crest == 0.0
-					and burst.release_flash > 0.0 and settled.release_flash > 0.0,
-					theme + " briefly crowns completion before yielding to the existing cavity release flash")
+			var earned: Dictionary = _advance_crown_to(chest, threshold + 0.005)
+			check(unearned.crown_milestones.is_empty() and earned.crown_milestones.is_empty()
+				and earned.rainbow_strength > unearned.rainbow_strength
+				and earned.rainbow_strength - unearned.rainbow_strength < 0.02,
+				"%s progress threshold %d passes smoothly without a fixed badge or star burst" % [theme, index + 1])
+		var before_release: Dictionary = _advance_crown_to(chest, duration - 0.005)
+		var release: Dictionary = _advance_crown_to(chest, duration + 0.035)
+		var settled: Dictionary = _advance_crown_to(chest, duration + 0.21)
+		check(is_zero_approx(before_release.crown_crest) and release.crown_crest > 0.0
+			and release.rainbow_strength > 0.0 and release.release_flash > 0.0
+			and is_zero_approx(settled.crown_crest) and is_zero_approx(settled.rainbow_strength)
+			and settled.rainbow_motes.is_empty() and settled.release_flash > 0.0,
+			theme + " briefly lights the release and fades the bow before the cavity flash finishes")
 	chest.free()
 
 
@@ -937,7 +951,8 @@ func _check_buildup_glow(data) -> void:
 			var previous_intensity: float = 0.0
 			var previous_glow: float = 0.0
 			chest.begin_hold()
-			for elapsed in [0.16, 1.65, 3.22]:
+			for elapsed in [Feel.HOLD_SECONDS * 0.25, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.35,
+				Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME - 0.01]:
 				if elapsed < Feel.HOLD_SECONDS:
 					chest.set_hold_progress(elapsed / Feel.HOLD_SECONDS)
 				else:
@@ -999,9 +1014,9 @@ func _check_hold_bounds(data) -> void:
 				if phase == "gathering":
 					chest.start_open(false)
 				elif phase == "building":
-					chest._advance_animation(1.0)
+					chest._advance_animation(Feel.ANTICIPATION_TIME * 0.6)
 				elif phase == "anticipation":
-					chest._advance_animation(Feel.ANTICIPATION_TIME - 1.0 + 0.01)
+					chest._advance_animation(Feel.ANTICIPATION_TIME - chest.hold_effect_snapshot().opening_time + 0.01)
 				elif phase == "release":
 					chest._advance_animation(Feel.RELEASE_TIME - Feel.ANTICIPATION_TIME)
 				var state: Dictionary = chest.hold_effect_snapshot()
@@ -1011,7 +1026,7 @@ func _check_hold_bounds(data) -> void:
 				var crown: Dictionary = state.crown_effect_bounds
 				var crown_bounds := Rect2(Vector2(crown.x, crown.y), Vector2(crown.width, crown.height))
 				check(crown_bounds.has_area() and stage.encloses(crown_bounds),
-					"The %s %s crown rail, comet and milestone bursts fit inside %s: %s" % [theme_id, phase, dimensions, crown_bounds])
+					"The %s %s spectral bow and drifting motes fit inside %s: %s" % [theme_id, phase, dimensions, crown_bounds])
 				var outside: Array[String] = []
 				for piece in chest._pieces:
 					var sprite: Sprite2D = piece.node

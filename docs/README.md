@@ -16,7 +16,7 @@ commands, asset counts, and measurements may no longer describe the game.
 | [Performance assessment](performance.md) | Reproducible rendered workloads, paired comparisons, acceptance criteria, and measurement limits | `tools/benchmark-performance.cjs`, `tests/performance/main_scene_benchmark.gd` |
 | [Speech matching](voice-matching.md) | Homophones, interim stability, target binding, local experiment | `scripts/speech_words.gd`, `scripts/voice_pop_model.gd`, `web/shell.html` |
 | [Voice Pop slices](voice-pop-slice-feedback.md) | Cut presentation, audio integration, original release evidence | `scripts/voice_pop_slice.gd`, `scripts/game_audio.gd` |
-| [Chest performance](assets/chest-feel.md) | Theme motion, five-second timeline, cancellation, sound | `scripts/chest_feel.gd`, `scripts/chest_view.gd` |
+| [Chest performance](assets/chest-feel.md) | Theme motion, 2.65-second timeline, cancellation, sound | `scripts/chest_feel.gd`, `scripts/chest_view.gd` |
 | [Asset index](assets/README.md) | Media generation, imports, licenses, fallback priority | `tools/`, `assets/`, associated JSON manifests |
 
 Implementation and maintained tests settle discrepancies with old documents.

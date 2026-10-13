@@ -154,8 +154,9 @@ func _check_reference_recording(source: PackedByteArray, sample_rate: int, cue: 
 			roundi(duration * 0.85 * sample_rate) * 2) > 0.002,
 			label + " preserves the recorded phrase beyond its initial onset")
 	if cue == "release":
-		check(duration < Feel.OPEN_SECONDS - Feel.RELEASE_TIME,
-			"The complete reference shimmer ends before physical completion can stop chest audio")
+		check(duration > Feel.OPEN_SECONDS - Feel.RELEASE_TIME
+			and duration - (Feel.OPEN_SECONDS - Feel.RELEASE_TIME) < 0.5,
+			"The complete reference shimmer has a short natural tail beyond the faster physical completion")
 
 
 func _run() -> void:
@@ -645,7 +646,7 @@ func _check_delayed_rhythm_delivery() -> void:
 		var bed: AudioStream = audio.chest_charge.stream
 		var delivered_hold: Array[int] = []
 		var pulse_gain: float = -100.0
-		for frame in range(1, 21):
+		for frame in range(1, ceili(Feel.HOLD_SECONDS / 0.06) + 1):
 			var previous: int = audio._chest_last_hold_pulse
 			chest.set_hold_progress(float(frame) * 0.06 / Feel.HOLD_SECONDS)
 			audio.set_chest_charge(chest.hold_progress)
@@ -662,9 +663,9 @@ func _check_delayed_rhythm_delivery() -> void:
 		check(audio.chest_charge.playing and audio.chest_charge.stream == bed,
 			"The view's opening preserves the material bed already playing during the hold")
 		var delivered: Array[int] = []
-		for frame in range(32):
+		for frame in range(ceili((Feel.ANTICIPATION_TIME - 0.001) / 0.03)):
 			var previous: int = audio._chest_last_tension_pulse
-			chest._advance_animation(0.06)
+			chest._advance_animation(minf(0.03, Feel.ANTICIPATION_TIME - 0.001 - chest._elapsed))
 			var state: Dictionary = chest.hold_effect_snapshot()
 			if audio._chest_last_tension_pulse > previous:
 				delivered.append(audio._chest_last_tension_pulse)
@@ -673,11 +674,11 @@ func _check_delayed_rhythm_delivery() -> void:
 					and _last_player(audio).volume_db > pulse_gain and is_equal_approx(_last_player(audio).pitch_scale, 1.0)
 					and _last_player(audio).stream == audio.cache[Bank.path_for(theme,
 						Bank.pulse_cue(Feel.tension(float(Feel.PULSE_TIMES[audio._chest_last_tension_pulse - 1]))))],
-					"A 60-millisecond %s frame starts each audible strike with its body kick and glow" % theme)
+					"A 30-millisecond %s frame starts each audible strike with its body kick and glow" % theme)
 				pulse_gain = _last_player(audio).volume_db
 		check(delivered == range(1, Feel.PULSE_TIMES.size() + 1)
 			and delivered.size() + delivered_hold.size() == Feel.PULSE_TIMES.size() + Feel.HOLD_PULSE_TIMES.size(),
-			"The %s rhythm delivers every opening beat after its hold beats at 60-millisecond cadence" % theme)
+			"The %s rhythm delivers every opening beat after its hold beats at 30-millisecond cadence" % theme)
 		chest._advance_animation(Feel.ANTICIPATION_TIME - chest._elapsed)
 		var bridge_index: int = audio._chest_next_player
 		check(audio.chest_charge.playing and _last_player(audio).playing
@@ -743,12 +744,12 @@ func _check_delayed_rhythm_delivery() -> void:
 		chest.begin_hold()
 		audio.set_chest_charge(0.0)
 		before_jump = audio._chest_next_player
-		chest.set_hold_progress(0.32 / Feel.HOLD_SECONDS)
+		chest.set_hold_progress((float(Feel.HOLD_PULSE_TIMES[0]) + 0.201) / Feel.HOLD_SECONDS)
 		check(audio._chest_last_hold_pulse == 0 and audio._chest_next_player == before_jump
 			and is_zero_approx(chest.hold_effect_snapshot().pulse_motion),
 			"A held " + theme + " strike more than 200 milliseconds stale cannot replay its sound or kick")
-		chest.set_hold_progress(0.92 / Feel.HOLD_SECONDS)
-		check(audio._chest_last_hold_pulse == 4 and audio._chest_next_player == (before_jump + 1) % 3,
+		chest.set_hold_progress((float(Feel.HOLD_PULSE_TIMES.back()) + 0.01) / Feel.HOLD_SECONDS)
+		check(audio._chest_last_hold_pulse == Feel.HOLD_PULSE_TIMES.size() and audio._chest_next_player == (before_jump + 1) % 3,
 			"A stalled " + theme + " hold plays only its newest live beat instead of a backlog")
 		audio.stop_chest_performance()
 		chest.clear()
@@ -766,18 +767,18 @@ func _check_delayed_rhythm_delivery() -> void:
 		chest.configure_skin(data.theme(theme), data.chests)
 		audio.prepare_chest(theme)
 		chest.start_open(false)
-		chest._advance_animation(1.90)
+		chest._advance_animation(float(Feel.PULSE_TIMES.back()) + 0.005)
 		audio.set_chest_tension(chest.tension_progress())
 		check(audio._chest_last_tension_pulse == Feel.PULSE_TIMES.size() and _playing(audio) == 2,
 			"The %s stalled-frame fixture reaches the final roll with its bed and newest strike" % theme)
 		before_jump = audio._chest_next_player
-		chest._advance_animation(0.14)
+		chest._advance_animation(Feel.UNLOCK_TIME - 0.01 - chest._elapsed)
 		audio.set_chest_tension(chest.tension_progress())
 		check(not audio._chest_seen.has("anticipation0") and audio._chest_next_player == before_jump
 			and _playing(audio) == 1 and audio.chest_charge.playing
 			and is_equal_approx(audio.chest_charge.volume_db, linear_to_db(0.025))
 			and is_equal_approx(audio.music.volume_db, linear_to_db(0.12 * 0.06)),
-			"A %s frame from 1.90 to 2.04 seconds skips the late breath but still quiets the held state" % theme)
+			"A %s frame jumping from the final roll to the held pose skips the late breath but still quiets pressure" % theme)
 		audio.set_chest_tension(1.0)
 		chest._advance_animation(Feel.UNLOCK_TIME - chest._elapsed + 0.000001)
 		audio.set_chest_tension(chest.tension_progress())
@@ -886,6 +887,28 @@ func _check_motion_completion_before_save() -> void:
 			check(audio._chest_phase == "holding" and _playing(audio) == 1,
 				"A new performance explicitly clears the old motion guard")
 			audio.stop_chest_performance()
+		audio.prepare_chest(theme)
+		audio.interact(theme, false)
+		audio.chest_cue(theme, "opening")
+		audio.chest_cue(theme, "release")
+		var release_player: AudioStreamPlayer = _last_player(audio)
+		var release_stream: AudioStream = release_player.stream
+		var release_age: float = Feel.OPEN_SECONDS - Feel.RELEASE_TIME
+		check(release_stream.get_length() > release_age,
+			"The complete recorded release extends beyond the faster visual opening")
+		release_player.seek(release_age)
+		audio.chest_cue(theme, "settle")
+		audio.finish_chest_motion()
+		check(release_player.playing and release_player.stream == release_stream and _playing(audio) == 1
+			and audio.chest_charge.stream == null and audio._chest_motion_finished,
+			"Finishing %s motion preserves its natural release tail while stopping pressure and other physical cues" % theme)
+		audio.chest_reward(theme)
+		check(release_player.playing and release_player.stream == release_stream and _playing(audio) == 2
+			and _last_player(audio) != release_player and _last_player(audio).stream == audio.cache[Bank.path_for(theme, "reward")],
+			"The %s saved reward shares the mix with the remaining release tail without restarting it" % theme)
+		audio.stop_chest_performance()
+		check(_playing(audio) == 0 and release_player.stream == null,
+			"Leaving the completed %s performance immediately cancels its remaining release tail" % theme)
 	audio.queue_free()
 	await process_frame
 

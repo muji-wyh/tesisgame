@@ -131,7 +131,7 @@ func _run() -> void:
 	app._process(0.25)
 	check(is_zero_approx(app._hold_elapsed) and app.chest.hold_effect_snapshot().percent == 0,
 		"A fresh press never consumes the preceding slow frame's 250 milliseconds")
-	app._advance_ui(0.36)
+	app._advance_ui(Feel.HOLD_SECONDS * 0.30)
 	var elapsed: float = app._hold_elapsed
 	var percent: int = app.chest.hold_effect_snapshot().percent
 	var pitch: float = app.audio.chest_charge.pitch_scale
@@ -146,23 +146,25 @@ func _run() -> void:
 	_check_cancelled(app, 0, "Releasing an incomplete hold")
 	_begin(app)
 	check(app.chest.hold_effect_snapshot().percent == 0, "Reholding starts a fresh charge at zero")
-	app._advance_ui(0.6)
-	check(app.chest.hold_effect_snapshot().percent == 17 and app.audio.chest_charge.pitch_scale > pitch,
+	app._advance_ui(Feel.HOLD_SECONDS * 0.5)
+	var halfway_percent: int = floori(100.0 * Feel.HOLD_SECONDS * 0.5 / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME))
+	check(app.chest.hold_effect_snapshot().percent == halfway_percent and app.audio.chest_charge.pitch_scale > pitch,
 		"Confirmation advances its real share of the complete progress and rising audio pitch")
-	app._advance_ui(0.51)
+	var first_milestone_time: float = (Feel.HOLD_SECONDS + Feel.RELEASE_TIME) / 3.0
+	app._advance_ui(first_milestone_time - 0.01 - app._hold_elapsed)
 	check(not cues.any(func(item): return item[1] == "charge_step"),
-		"The hold keeps its first progress star silent until one third of the complete buildup")
+		"The hold keeps its first progress cue silent until one third of the complete buildup")
 	app._advance_ui(0.02)
 	check(app.model.chest_state == "closed" and cues.back() == [RewardProgress.theme_for_tier(1), "charge_step", 1],
-		"The first progress star lights during the hold immediately before confirmation")
-	app._advance_ui(0.08)
+		"The first progress cue arrives during the hold immediately before confirmation")
+	app._advance_ui(Feel.HOLD_SECONDS - app._hold_elapsed + 0.001)
 	state = app.chest.hold_effect_snapshot()
-	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == 35,
+	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == floori(Feel.progress(0.0) * 100.0),
 		"Completing confirmation keeps the gesture held while gathering advances")
 	check(app._holding_chest and not app.chest_button.disabled,
 		"The opening keeps both its held gesture and button release path active")
 	check(cues.filter(func(item): return item[1] == "charge_step") == [[RewardProgress.theme_for_tier(1), "charge_step", 1]],
-		"The automatic handoff does not replay the first progress star")
+		"The automatic handoff does not replay the first progress cue")
 	check(not app.audio._chest_charge_active and app.audio.chest_charge.playing
 		and app.audio._chest_phase == "opening",
 		"Confirmation hands its audio loop to the automatic tension timeline")
@@ -175,7 +177,8 @@ func _run() -> void:
 	check(_pieces(app) == 0, "The piece still waits for the actual chest-opened callback")
 	app.chest_button.button_up.emit()
 	_check_cancelled(app, 0, "Releasing just after confirmation")
-	for release_at in [2.0, Feel.HOLD_SECONDS + (Feel.PAUSE_START_TIME + Feel.RELEASE_TIME) * 0.5,
+	for release_at in [Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.4,
+		Feel.HOLD_SECONDS + (Feel.PAUSE_START_TIME + Feel.RELEASE_TIME) * 0.5,
 		Feel.HOLD_SECONDS + Feel.RELEASE_TIME - 0.01]:
 		_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
@@ -193,7 +196,7 @@ func _run() -> void:
 	# any of the abandoned opening's elapsed time, flash or reward selection.
 	_begin(app)
 	app._advance_ui(Feel.HOLD_SECONDS)
-	app.chest._advance_animation(0.8)
+	app.chest._advance_animation(Feel.ANTICIPATION_TIME * 0.4)
 	app.chest_button.button_up.emit()
 	_begin(app)
 	check(app._holding_chest and app.chest.hold_effect_snapshot().percent == 0
@@ -203,7 +206,7 @@ func _run() -> void:
 	app._advance_ui(0.2)
 	check(app.model.chest_state == "closed" and _pieces(app) == 0 and app._holding_chest,
 		"A stale completion after repressing cannot save or skip the new hold")
-	app._advance_ui(1.0)
+	app._advance_ui(Feel.HOLD_SECONDS - app._hold_elapsed + 0.01)
 	cues.clear()
 	var coin_receipts: int = app._coin_flight._seen.size()
 	app.chest.finish_immediately()
@@ -344,9 +347,9 @@ func _run() -> void:
 			_begin(app)
 		app._advance_ui(Feel.HOLD_SECONDS)
 		app.chest.set_process(false)
-		app.chest._advance_animation(0.8)
+		app.chest._advance_animation(Feel.ANTICIPATION_TIME * 0.4)
 		check(app.model.chest_state == "opening" and app._holding_chest,
-			input_kind + " reaches the same two-second active opening")
+			input_kind + " reaches the same cancellable buildup phase")
 		match input_kind:
 			"mouse release":
 				var release := InputEventMouseButton.new()
@@ -382,7 +385,7 @@ func _run() -> void:
 
 	app.set_reduced_motion(true)
 	_begin(app)
-	app._advance_ui(0.6)
+	app._advance_ui(Feel.HOLD_SECONDS * 0.5)
 	state = app.chest.hold_effect_snapshot()
 	check(state.active and state.percent == 50 and state.text.contains("50%")
 		and not state.animated and state.spark_count == 0 and _pieces(app) == 2,
@@ -390,7 +393,7 @@ func _run() -> void:
 	app.chest_button.button_up.emit()
 	_check_cancelled(app, 2, "Releasing a reduced-motion hold")
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	check(app.model.chest_state == "opened" and _pieces(app) == 3
 		and not app.chest.hold_effect_snapshot().active
 		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
@@ -411,7 +414,7 @@ func _run() -> void:
 	var flights_before_retry: int = app._coin_flight._seen.size()
 	storage.fail_write = true
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	app.chest.set_process(false)
 	app.chest._advance_animation(Feel.ANTICIPATION_TIME + 0.01)
 	app.chest._advance_animation(Feel.UNLOCK_TIME - 0.02 - app.chest.hold_effect_snapshot().opening_time)
@@ -469,7 +472,7 @@ func _run() -> void:
 	check(storage.writes == reward_writes + 1 and _pieces(app) == 1, "Stale retries and callbacks cannot write a second reward")
 	_win(app, 86)
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	app.chest._advance_animation(float(Feel.PULSE_TIMES[0]) + 0.001)
 	check(app.audio._chest_last_tension_pulse == 1 and app.audio.chest_charge.playing,
 		"Background interruption exercises an actual audible rhythm after its first synchronized kick")
@@ -493,7 +496,7 @@ func _run() -> void:
 	check(_pieces(app) == 2, "The earned chest remains available to reopen after background cancellation")
 	_win(app, 87)
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	cues.clear()
 	app._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
 	check(_pieces(app) == 2 and app.model.chest_state == "closed" and cues.all(func(item): return item[1] == "cancel")
@@ -514,7 +517,7 @@ func _run() -> void:
 	app.set_reduced_motion(true)
 	storage.fail_write = true
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	check(app._save_error and _pieces(app) == 3 and not app.audio._chest_rewarded
 		and not app.audio.chest_charge.playing and is_equal_approx(app.audio._chest_music_duck, 1.0),
 		"A reduced-motion save failure leaves no tension loop or music duck and does not announce success")
@@ -525,8 +528,8 @@ func _run() -> void:
 	app.set_reduced_motion(false)
 	storage.fail_write = true
 	_begin(app)
-	app._advance_ui(1.21)
-	app.chest._advance_animation(1.0)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
+	app.chest._advance_animation(Feel.ANTICIPATION_TIME * 0.5)
 	check(app.audio.chest_charge.playing, "The interrupted scenario starts with an active automatic tension loop")
 	cues.clear()
 	app.set_reduced_motion(true)
@@ -540,7 +543,7 @@ func _run() -> void:
 	_win(app, 91)
 	app.set_reduced_motion(false)
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	app.chest._advance_animation(Feel.ANTICIPATION_TIME + 0.001)
 	check(app.audio.chest_charge.playing and app.audio._chest_seen.has("anticipation0"),
 		"The stalled-release scenario reaches the audible final pressure rise")
@@ -559,8 +562,10 @@ func _run() -> void:
 		and storage.writes == stalled_writes and not app.audio._chest_rewarded
 		and cues.is_empty() and app.audio._chest_next_player == stalled_player,
 		"Stopping stale pressure adds no late cue, saved piece or early reward")
+	var stale_frame_step: float = minf(0.05,
+		(Feel.SETTLE_TIME - app.chest.hold_effect_snapshot().opening_time - 0.01) / 3.0)
 	for frame in range(3):
-		app.chest._advance_animation(0.05)
+		app.chest._advance_animation(stale_frame_step)
 		app._advance_ui(0.0)
 		app.audio.set_chest_tension(1.0)
 	check(not app.audio.chest_charge.playing and app.audio.chest_charge.stream == null
@@ -573,7 +578,7 @@ func _run() -> void:
 	_win(app, 90)
 	app.set_reduced_motion(false)
 	_begin(app)
-	app._advance_ui(1.21)
+	app._advance_ui(Feel.HOLD_SECONDS + 0.01)
 	app._show_collection()
 	app._advance_ui(0.25)
 	check(app.collection_page.visible and app._chest_announced_percent == -1,
@@ -647,7 +652,7 @@ func _check_release_commitment(directory: String) -> void:
 			"A completion callback before the physical tail finishes cannot claim the committed reward early")
 		app.chest._advance_animation(Feel.OPEN_SECONDS - released.opening_time - 0.001)
 		check(app.model.chest_state == "opening" and _pieces(app) == pieces and storage.writes == writes,
-			"Letting go does not shorten the five-second opening performance")
+			"Letting go does not shorten the complete opening performance")
 		check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins,
 			"Coins wait until the entire opening is complete")
 		var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate()
@@ -926,14 +931,16 @@ func _check_gameplay_pixels(directory: String) -> void:
 			check(late >= 2.0 and late > first, "%s at viewport %s/stage %s: final body rocking grows to %.2f screen pixels" %
 				[theme_id, dimensions, app._stage.size, late])
 			var cues: Array = app.chest.hold_effect_snapshot().cues
-			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == 5
-				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == 15,
-				"The real %s result emits all twenty body beats at %s" % [theme_id, dimensions])
+			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == Feel.HOLD_PULSE_TIMES.size()
+				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == Feel.PULSE_TIMES.size(),
+				"The real %s result emits every scheduled body beat at %s" % [theme_id, dimensions])
 			app._end_chest_hold()
 			var trace: Array = _buildup_trace(app)
-			var early: Dictionary = _motion_window(trace, 0.08, 0.55)
-			var middle: Dictionary = _motion_window(trace, 1.35, 1.85)
-			var final: Dictionary = _motion_window(trace, 2.80, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME)
+			var early: Dictionary = _motion_window(trace, float(Feel.HOLD_PULSE_TIMES[0]), Feel.HOLD_SECONDS * 0.46)
+			var middle: Dictionary = _motion_window(trace, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.08,
+				Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.34)
+			var final: Dictionary = _motion_window(trace, Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME * 0.75,
+				Feel.HOLD_SECONDS + Feel.ANTICIPATION_TIME)
 			var held: Dictionary = _motion_window(trace, Feel.HOLD_SECONDS + Feel.PAUSE_START_TIME,
 				Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
 			var envelope := Vector3(early.span, middle.span, final.span)
@@ -946,7 +953,8 @@ func _check_gameplay_pixels(directory: String) -> void:
 			check(final.quiet <= 0.075,
 				"The actual %s final roll at %s stays active before its deliberate brake (longest quiet interval %.0f milliseconds)" %
 				[theme_id, dimensions, final.quiet * 1000.0])
-			check(held.duration >= 0.14 and held.span < 0.01 and held.vertical_span < 0.01 and held.glow_span < 0.000001,
+			var sampled_hold_minimum: float = Feel.RELEASE_TIME - Feel.PAUSE_START_TIME - 2.0 / 60.0
+			check(held.duration >= sampled_hold_minimum and held.span < 0.01 and held.vertical_span < 0.01 and held.glow_span < 0.000001,
 				"The actual %s body and buildup glow at %s hold for %.0f milliseconds before the release (%.4f by %.4f screen pixels)" %
 				[theme_id, dimensions, held.duration * 1000.0, held.span, held.vertical_span])
 			check(middle.glow > early.glow + 0.10 and final.glow > middle.glow + 0.15,

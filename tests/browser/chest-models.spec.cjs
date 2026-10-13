@@ -147,7 +147,7 @@ async function openByHolding(page, info, index, saved) {
     'An opened reward always has a committed physical model release').toBe(true);
   expect(observed.writes, 'One hold creates exactly one durable reward write').toHaveLength(1);
   expect(observed.pressedAt, 'The duration starts at the real canvas pointer event').not.toBeNull();
-  expect(observed.writes[0].at - observed.pressedAt, 'The shared 1.2-second hold and release buildup cannot award early').toBeGreaterThanOrEqual(3000);
+  expect(observed.writes[0].at - observed.pressedAt, 'The shared 0.65-second hold and 0.94-second release buildup cannot award early').toBeGreaterThanOrEqual(1490);
   expect(observed.writes[0].value).not.toBe(saved);
   expect((await roomState(page)).chests.map(chest => chest.opened)).toEqual(room.chests.map((chest, at) => chest.opened || at === index));
 }

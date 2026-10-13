@@ -1,9 +1,10 @@
 # Eight-world chest performance
 
-The chest uses a 5-second performance: 1.2 seconds of initial pressure followed
-by 3.8 seconds of buildup, opening and settling. Keep holding until the lid
-releases 3.36 seconds after the press. That visible release completes input;
-letting go preserves the remaining 1.64 seconds of motion, light and sound.
+The chest uses a 2.65-second performance: 0.65 seconds of initial pressure followed
+by 2 seconds of buildup, opening and settling. Keep holding until the lid
+releases 1.59 seconds after the press. That visible release completes input;
+letting go preserves the remaining 1.06 seconds of motion and light, while the
+release recording finishes its natural decay.
 Releasing earlier cancels the performance, stops its sounds and resets progress
 while preserving the unopened chest. Reward selection and the save format are
 unchanged.
@@ -43,34 +44,38 @@ inside `begin_hold()`, without waiting for a tween or a network result.
 Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
-The three stars follow elapsed time up to the lid-release beat. The progress
-arc follows it until the final held pose, then completes on release.
-The filled rail carries a fixed coral-to-violet rainbow along the complete arc,
-with a neutral recessed track for the unfilled portion. Its frontier and earned
-stars take their color from their position on that rainbow. Thin white highlights
-preserve the color at phone size; existing flow, milestone and release timing
-remain unchanged. This is a color treatment of the existing code-drawn progress
-interface and reuses the integrated portal glow; no new artwork is acquired.
-There is no visible phase or percentage label; semantic progress remains
-available to screen readers. The first star lights just
-before the initial hold ends and remains lit as the opening phase begins. Five
-holding beats lead into fifteen opening beats. Intervals tighten from 320 ms to
-60 ms, and their shared timestamps drive both physical impulses and sounds.
+The rainbow is a translucent light arc behind the chest. Overlapping spectral
+bands have feathered edges and fading ends; its brightness follows actual hold
+progress. The recessed track, white bevel, moving cursor and three fixed stars
+are removed. Seven small glints drift upward from the chest and disappear with
+the light. There is no visible phase or percentage label; semantic progress
+remains available to screen readers.
+
+The shader reuses the integrated `portal_glow.png` from Bobardo's **Modern 2D
+Animated Chests Pack_FREE Demo 1.0.2**, under the Standard Unity Asset Store EULA
+recorded in [treasure assets](../voice-pop-treasure.md), with source mapping in
+`assets/chests/SOURCE.txt`. Glints reuse `sparkle.png` from Kenneth Foldal Moe /
+Archanor VFX's **Toon FX 1.52**, acquired under the Standard Unity Asset Store
+EULA; its integration record is in [Jelly fragments](jelly-fragments.md).
+These are existing static texture assets with game-authored shading and motion;
+no new artwork was acquired for this change.
+
+Three holding beats lead into eight opening beats. Opening intervals tighten
+from 130 ms to 50 ms, and their shared timestamps drive physical impulses and sounds.
 Lock pressure, lid strain, seam light, inward particles and the material loop
-rise in intensity. Background music progressively ducks. At opening +1.94 s,
-the final roll brakes over 60 ms into a loaded pose. From +2.00 s to +2.16 s,
-the chest holds that pose for 160 ms: body, lid strain, shadow, local light and
+rise in intensity. Background music progressively ducks. At opening +0.76 s,
+the final roll brakes over 40 ms into a loaded pose. From +0.80 s to +0.94 s,
+the chest holds that pose for 140 ms: body, lid strain, shadow, local light and
 flowing decoration stop moving while the real progress and input clock continue. Sound takes the
 same short breath, quieting the pressure without restarting its source. A tiny
-latch clicks inside the hold; the lid then releases immediately at the original
-beat. The pause fits inside the existing five seconds.
+latch clicks inside the hold; the lid then releases at the shared release beat.
 
 Release triggers the opening lid, material sound and theme-colored light from
 one cue. The flash reaches its crest within 45 ms and expands across the safe
 stage extents, with seven broad beams behind the lid, one outward light wave
 and twelve long radial streaks. The theme-colored bloom lasts up to 1.02 seconds;
 a smaller white core preserves the theme hue and chest silhouette. The progress
-crown fades over 160 ms. The light radiates from the opening seam and interior,
+light fades over 180 ms. The light radiates from the opening seam and interior,
 while the base and contact shadow preserve the chest's weight.
 
 Hold and opening transitions record their engine-frame origin. Runtime stepping
@@ -83,23 +88,23 @@ logic through separate step helpers.
 | Cue | Time | Consumer |
 | --- | --- | --- |
 | `press` | Pointer/key/controller hold starts | Contact sound |
-| `hold_pulse` | Hold +0.08 s through +1.12 s | Five weighted material beats |
-| `charge_step` | 1/3, 2/3, 3/3 of elapsed hold-to-release time | Silent progress stars |
+| `hold_pulse` | Hold +0.08 s through +0.50 s | Three weighted material beats |
+| `charge_step` | 1/3, 2/3, 3/3 of elapsed hold-to-release time | Silent semantic progress checkpoints |
 | `cancel` | Release or drag before the lid releases | Stop all performance sounds, brief return sound |
-| `opening` | Initial pressure completes at 1.2 s; hold remains active | Continue pressure bed without restarting |
-| `tension_pulse` | Opening +0.11 s through +1.86 s | Fifteen accelerating material beats |
-| `anticipation` | Opening +1.94 s | Brake for 60 ms, then hold the loaded pose and quiet breath for 160 ms |
-| `unlock` | Opening +2.08 s (3.28 s total) | Subtle lock/core sound within the held pose |
-| `release` | Opening +2.16 s (3.36 s total) | Complete input; lid, material sound, local theme flash and twelve light streaks |
-| `settle` | Opening +2.58 s (3.78 s total) | Material landing sound |
-| `opened` | Opening +3.8 s (5 s total), with no further hold required | Save progress before the opened result |
+| `opening` | Initial pressure completes at 0.65 s; hold remains active | Continue pressure bed without restarting |
+| `tension_pulse` | Opening +0.05 s through +0.72 s | Eight accelerating material beats |
+| `anticipation` | Opening +0.76 s | Brake for 40 ms, then hold the loaded pose and quiet breath for 140 ms |
+| `unlock` | Opening +0.86 s (1.51 s total) | Subtle lock/core sound within the held pose |
+| `release` | Opening +0.94 s (1.59 s total) | Complete input; lid, material sound, local theme flash and twelve light streaks |
+| `settle` | Opening +1.28 s (1.93 s total) | Material landing sound |
+| `opened` | Opening +2 s (2.65 s total), with no further hold required | Save progress before the opened result |
 
 A frame stall consumes expired beats without playing a backlog. A breath cue
 more than 80 ms late is skipped; the steady bed still quiets from real progress,
 and release stops it. Fast-forward and
 explicit new-round settlement remain silent. Backgrounding cancels unreleased
 chests and silently settles already released ones. Reduced motion retains the
-initial 1.2-second hold and skips the buildup.
+initial 0.65-second hold and skips the buildup; drifting glints remain hidden.
 
 `release_reached` marks the irreversible input boundary independently of filtered
 sound cues. It is emitted once when the clock crosses the lid-release time, even
@@ -155,9 +160,10 @@ WAVs are private build inputs under `assets/imported-audio/chest-reference/`.
 They replace forty per-world generated WAVs without duplicating the recordings.
 
 Three 240 ms attacks supply the existing accelerating hold/opening beats. Their
-original pitch is preserved, and progress stars remain silent. The 1.5-second
-release follows the lid opening and decays through the remaining animation,
-finishing before the five-second performance ends. The separate 1.2-second
+original pitch is preserved, and progress checkpoints remain silent. The 1.5-second
+release follows the lid opening and decays naturally, including its final 440 ms
+after physical completion. Normal completion preserves that already-playing
+release only; interruption, mute and a new opening still stop it. The separate 1.2-second
 reward clip plays only after the reward save succeeds. A failed save cannot
 play that acknowledgement; a successful explicit retry plays it just once.
 
@@ -217,8 +223,8 @@ Outputs go to `build/chest-feel/`: 7.5-second MP4s with the engine's mixed audio
 twelve stills per world, motion grids, resource hashes, cue/media reports and
 `index.html`. Each gallery also has a content-hashed entry point, and embedded
 media URLs carry content hashes so updated captures cannot reuse stale previews.
-Stills sample delivered recoil cues after 33 ms, the anticipation brake after
-30 ms, the held pose after 90 ms and 190 ms, the release flash after 60 ms,
+Stills sample delivered recoil cues after 33 ms, inside the 40 ms anticipation
+brake, near both ends of the 140 ms held pose, the release flash after 60 ms,
 and the opening lid after 200 ms. A side-by-side comparison uses the same
 640 x 640 crop for both held poses; real progress may still advance between them.
 Mixed-audio checks measure the quiet hold separately from the preceding roll

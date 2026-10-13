@@ -723,13 +723,16 @@ func stop_chest_charge() -> void:
 func finish_chest_motion() -> void:
 	if _chest_phase != "opening" or _chest_motion_finished:
 		return
-	# The physical timeline can finish before persistence succeeds, especially
-	# when reduced motion skips its release cues. Silence that performance while
-	# retaining the pending receipt for a later successful save acknowledgement.
+	# The shorter physical timeline can finish before the recorded release tail
+	# or persistence. Keep only that already-playing tail; a skipped release must
+	# stay silent while its receipt waits for a successful save acknowledgement.
 	_chest_motion_finished = true
 	_chest_anticipating = true
 	stop_chest_charge()
+	var release_stream: AudioStream = _chest_stream(_chest_theme, "release") if _chest_seen.has("release0") else null
 	for player: AudioStreamPlayer in _chest_players:
+		if release_stream != null and player.playing and player.stream == release_stream:
+			continue
 		player.stop()
 		player.stream = null
 	_chest_music_duck = 1.0

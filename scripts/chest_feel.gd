@@ -1,18 +1,18 @@
 extends RefCounted
 
 const CANCEL_SECONDS: float = 0.12
-const HOLD_SECONDS: float = 1.2
-const BUILDUP_SECONDS: float = 2.0
-const ANTICIPATION_TIME: float = 1.94
-const PAUSE_START_TIME: float = 2.0
+const HOLD_SECONDS: float = 0.65
+const BUILDUP_SECONDS: float = 0.8
+const ANTICIPATION_TIME: float = BUILDUP_SECONDS - 0.04
+const PAUSE_START_TIME: float = BUILDUP_SECONDS
 const RELEASE_BLEND_SECONDS: float = 0.075
-const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.08
-const RELEASE_TIME: float = BUILDUP_SECONDS + 0.16
-const SETTLE_TIME: float = RELEASE_TIME + 0.42
-const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.8
-const HOLD_PULSE_TIMES := [0.08, 0.40, 0.68, 0.91, 1.12]
-const PULSE_TIMES := [0.11, 0.30, 0.48, 0.65, 0.81, 0.96, 1.10, 1.23,
-	1.35, 1.46, 1.56, 1.65, 1.73, 1.80, 1.86]
+const UNLOCK_TIME: float = BUILDUP_SECONDS + 0.06
+const RELEASE_TIME: float = BUILDUP_SECONDS + 0.14
+const SETTLE_TIME: float = RELEASE_TIME + 0.34
+const OPEN_SECONDS: float = BUILDUP_SECONDS + 1.2
+const HOLD_PULSE_TIMES := [0.08, 0.30, 0.50]
+const PULSE_TIMES := [0.05, 0.18, 0.30, 0.41, 0.51, 0.60, 0.67, 0.72]
+const FINAL_DRIVE_TIME: float = PULSE_TIMES[-2]
 const FLASH_COLORS := {"spring": Color("#89ef9c"), "summer": Color("#ffcd51"),
 	"autumn": Color("#ff9b45"), "winter": Color("#8ccfff"), "ocean": Color("#4be6e0"),
 	"space": Color("#b994ff"), "jungle": Color("#a9e74b"), "candy": Color("#ff92d4")}
@@ -86,7 +86,7 @@ static func buildup_motion(elapsed: float, pulse_time: float = -INF) -> float:
 	if is_inf(pulse_time):
 		pulse_time = elapsed + HOLD_SECONDS if holding else elapsed
 	var sustain: float = smoothstep(0.38, 0.78, progress(elapsed))
-	var handover: float = smoothstep(1.80, ANTICIPATION_TIME, elapsed)
+	var handover: float = smoothstep(FINAL_DRIVE_TIME, ANTICIPATION_TIME, elapsed)
 	var strike: float = pulse_motion(pulse_time, holding)
 	var sway: float = _buildup_sway(elapsed)
 	var motion: float = strike * (1.0 - sustain * 0.45) * (1.0 - handover)
@@ -143,7 +143,7 @@ static func release_flash(elapsed: float) -> float:
 static func final_drive(elapsed: float) -> float:
 	# Gather into maximum compression before the brief held breath.
 	var held: float = ANTICIPATION_TIME + (PAUSE_START_TIME - ANTICIPATION_TIME) * 0.5
-	return smoothstep(1.80, held, anticipation_pose_time(elapsed))
+	return smoothstep(FINAL_DRIVE_TIME, held, anticipation_pose_time(elapsed))
 
 
 static func phase(elapsed: float) -> String:

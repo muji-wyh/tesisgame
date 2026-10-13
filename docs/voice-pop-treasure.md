@@ -1,14 +1,15 @@
 # Voice Pop treasure
 
-The shared opening progress now uses a continuous seven-band rainbow with a
-translucent unfilled track, soft traveling glints and three earned star accents.
-The band follows the real hold/opening progress and retains the existing cue
-times. A visible, naturally completed opening adds a separate 2.4-second
+The shared opening uses a translucent spectral arc behind the chest, with soft
+edges, fading ends and small rising glints. Its brightness follows real progress;
+there is no unfilled track, cursor or fixed star marker. Holding for 1.59 seconds
+releases the lid; the complete motion lasts 2.65 seconds. See
+[the opening timeline](assets/chest-feel.md) for cue and audio details.
+A visible, naturally completed opening adds a separate 2.4-second
 flourish: soft radial light behind the chest and 28 staggered, colored star
 glints rising from its cavity. Its clock pauses with the chest. Cancel, hide,
 reset, restored opened chests, background settlement and reduced motion cannot
-start or replay the flourish. Rewards, audio and the five-second opening gate
-are unchanged; the flourish adds no input delay or random toy.
+start or replay the flourish. The flourish adds no input delay or random toy.
 
 These effects reuse the acquired static `portal_glow.png` from Bobardo's Modern
 2D Animated Chests and the Toon FX 1.52 `sparkle.png` and `rays.png` textures by
@@ -82,7 +83,7 @@ and retains its source ambient occlusion. The remaining designs use source
 geometry and UVs with adapted pastel, wood and pearl material colors. Four
 game-authored hinges and Moonstone's magnetic cover lift animate continuously,
 with pressure feedback and real interior lighting. They retain the shared
-five-second performance, cancellation, reduced motion, and exactly-once rewards. Source package hashes,
+2.65-second performance, cancellation, reduced motion, and exactly-once rewards. Source package hashes,
 license references, and motion provenance are recorded in
 `assets/chests/downloaded/SOURCE.txt` and its manifest. Exact source designs,
 geometry adaptations and available source animations are documented in
