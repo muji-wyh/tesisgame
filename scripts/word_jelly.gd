@@ -866,7 +866,8 @@ func _layout() -> void:
 	var footer_height: float = 0.0 if side_hud else 52.0 / s + edge
 	available.y -= footer_height
 	_pitch = _fit_layout_pitch(available, s)
-	var preview_size: float = minf(48.0 / s, _pitch * 0.84)
+	_gap = maxf(3.0 / s, _pitch * 0.09)
+	var preview_size: float = _pitch - _gap
 	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
 	var group_top: float = maxf(0.0, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
@@ -880,7 +881,6 @@ func _layout() -> void:
 		_reflow.clear()
 		_snapbacks.clear()
 	_board = next_board
-	_gap = maxf(3.0 / s, _pitch * 0.09)
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
@@ -926,8 +926,8 @@ func _layout() -> void:
 	_publish()
 
 func _fit_layout_pitch(available: Vector2, s: float) -> float:
-	# A small well also has a smaller supply row, leaving room for the game.
-	var height_pitch: float = maxf(available.y / (WordModel.ROWS + 0.84), (available.y - 48.0 / s) / WordModel.ROWS)
+	# Reserve a full-sized root above the well, including its shared cell gap.
+	var height_pitch: float = maxf(available.y / (WordModel.ROWS + 0.91), (available.y + 3.0 / s) / (WordModel.ROWS + 1.0))
 	height_pitch = minf(height_pitch, (available.y - 34.0 / s) / WordModel.ROWS)
 	return maxf(8.0, minf(minf(available.x / WordModel.COLUMNS, height_pitch), 78.0 / s))
 
