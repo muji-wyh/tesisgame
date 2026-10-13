@@ -136,6 +136,14 @@ deadline wins. Finish cancels unfinished pairs without crediting them, while
 retaining completed scores, learning attempts and fragments. Gravity responds to
 each completed pair immediately, including when other fusions are still active.
 
+In both Jelly modes, Finish first opens a centered confirmation card using the
+existing typography and theme palette. Keep playing receives default focus;
+Escape or controller Back also resumes the round. Supply, fusions, collection
+beats, danger clocks, chest effects and confetti pause while the player decides,
+including across page backgrounding.
+Only the separate Finish action commits the result. Automatic full-board expiry
+and internal round settlement retain their existing immediate behavior.
+
 The control has the accessible name `Drop the next jellies` without a hover popup, while
 the visible layout retains its four previews without a `Next` label or progress
 bar. Keyboard and controller users can focus the whole area and activate it.

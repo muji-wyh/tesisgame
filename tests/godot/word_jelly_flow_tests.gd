@@ -114,8 +114,12 @@ func check_finish_header(app, view) -> void:
 	view._refresh_controls()
 	view.finish_button.pressed.emit()
 	await settle()
+	check(app._finish_confirmation_open() and view.game.phase == "playing" and view.game.paused,
+		"A deliberate header Finish pauses the round for confirmation")
+	app._finish_confirmation.finish_button.pressed.emit()
+	await settle()
 	check(view.game.phase == "finished" and view._result_visible and not view.finish_button.is_visible_in_tree(),
-		"A deliberate header Finish opens results and removes the round action")
+		"Confirming Finish opens results and removes the round action")
 	view.replay_button.pressed.emit()
 	await settle()
 	view._process(0.0)

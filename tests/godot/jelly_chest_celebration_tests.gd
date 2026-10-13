@@ -693,14 +693,14 @@ func _check_finish_during_reward(view, words: Array, manifest: Dictionary) -> vo
 	var results: Array[Dictionary] = []
 	var record: Callable = func(result: Dictionary) -> void: results.append(result)
 	view.round_finished.connect(record)
-	view.finish_button.pressed.emit()
-	view.finish_button.pressed.emit()
+	view._finish_round()
+	view._finish_round()
 	_advance_owner(view, 4.0)
 	view.round_finished.disconnect(record)
 	check(view.game.phase == "finished" and results.size() == 1
 		and int(results[0].chest_count) == 1 and int(results[0].chest_tier) == 1
 		and int(results[0].fragment_count) == 4 and int(results[0].score) == 1,
-		"Finish during confetti settles the exact earned chest once despite repeated clicks")
+		"Finish during confetti settles the exact earned chest once despite repeated confirmations")
 	check(not view._reward_presentation.is_active() and not view._reward_presentation.visible,
 		"Finishing clears every queued chest motion while its paper tail remains the host's responsibility")
 	view.stop()

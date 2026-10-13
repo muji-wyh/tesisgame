@@ -219,6 +219,9 @@ func check_application(mode: String) -> void:
 	await check_advances(backdrop, mode + " returning from nested navigation")
 
 	view.finish_button.pressed.emit()
+	check(app._finish_confirmation_open() and view.game.phase == "playing", mode + ": Finish asks before ending the round")
+	await check_frozen(backdrop, mode + " finish confirmation")
+	app._finish_confirmation.finish_button.pressed.emit()
 	check(view.game.phase == "finished", mode + ": Finish ends the active round")
 	await check_frozen(backdrop, mode + " finished round")
 	view.replay_button.pressed.emit()

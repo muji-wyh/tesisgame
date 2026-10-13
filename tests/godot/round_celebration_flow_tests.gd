@@ -44,11 +44,13 @@ func pieces(app) -> int:
 
 func check_fullscreen_confetti(app, context: String) -> void:
 	var state: Dictionary = app._reward_confetti.snapshot()
-	check(state.active and state.visible, context + " shows the shared confetti overlay")
+	var expected: bool = app._mode_id != "phrase"
+	check(state.active == expected and state.visible == expected,
+		context + (" shows the shared confetti overlay" if expected else " keeps the Phrase finale free of chest confetti"))
 	var bounds: Array = state.screen_rect
 	var screen: Rect2 = root.get_visible_rect()
 	check(bounds.size() == 4 and Rect2(float(bounds[0]), float(bounds[1]), float(bounds[2]), float(bounds[3])).is_equal_approx(screen),
-		context + " spreads confetti across the entire viewport, including the header")
+		context + " retains a viewport-sized confetti canvas, including the header")
 	check(app._reward_confetti is CanvasLayer and app._reward_confetti.get_parent() == app
 		and app._reward_confetti._surface.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		context + " owns a separate screen canvas outside the clipped game stage and leaves input untouched")
@@ -234,7 +236,7 @@ func check_manual_mode(app, mode: String) -> void:
 		mode + " preserves the full three-second performance gate")
 	view.advance(0.02)
 	check(view.snapshot().ready and not view.action_button.disabled and view.action_button.is_visible_in_tree()
-		and app._reward_confetti.is_active(),
+		and app._reward_confetti.is_active() == (mode != "phrase"),
 		mode + " exposes Open chest after the performance")
 	check_fullscreen_confetti(app, mode + " ready invitation tail")
 	root.gui_release_focus()
@@ -337,8 +339,8 @@ func check_voice_gate(app) -> void:
 		and app._phrase.game.phase == "correct" and app.model.phase != "won",
 		"A long final phrase remains pending after the animation deadline")
 	app._reward_confetti.advance(2.0)
-	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().ages[0] >= 2.0,
-		"A long final pronunciation lets the independent paper tail descend past the performance deadline")
+	check(not app._reward_confetti.is_active(),
+		"A long final pronunciation does not introduce chest confetti after the performance deadline")
 	app._reward_confetti.advance(app._reward_confetti.DURATION)
 	check(not app._reward_confetti.is_active(), "A long final pronunciation does not freeze or loop the confetti")
 	view.action_button.pressed.emit()
@@ -385,8 +387,8 @@ func check_interruption_and_replacement(app) -> void:
 		await cover(app, kind, false)
 		view.set_process(false)
 		check(not view.snapshot().paused and view.snapshot().elapsed < 0.3 and view.snapshot().round_id == identity
-			and app._reward_confetti.snapshot().keys == paper.keys and app._reward_confetti.snapshot().visible,
-			kind + " resumes the same paper tail while restarting the interrupted Pip performance")
+			and app._reward_confetti.snapshot().keys == paper.keys and not app._reward_confetti.snapshot().visible,
+			kind + " restarts the interrupted Pip performance without adding Phrase chest confetti")
 		view.advance(1.9)
 		check_fullscreen_confetti(app, kind + " resume")
 		check(app._reward_confetti.snapshot().keys == paper.keys,
@@ -449,6 +451,9 @@ func check_jelly_confetti_owner(app) -> void:
 		and app._reward_confetti.snapshot().ages[0] >= 3.0,
 		"Jelly paper keeps falling after the chest has returned to its HUD anchor")
 	app._jelly.finish_button.pressed.emit()
+	check(app._finish_confirmation_open() and app._jelly.game.phase == "playing",
+		"A Finish request does not prematurely commit the round result")
+	app._finish_confirmation.finish_button.pressed.emit()
 	check(app._jelly.game.phase == "finished" and app._reward_confetti.is_active(),
 		"Finishing Jelly retains the earned paper tail over the resulting screen")
 	app._speech_debug_active = true

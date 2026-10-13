@@ -27,6 +27,7 @@ const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const WordJelly = preload("res://scripts/word_jelly.gd")
+const FinishConfirmation = preload("res://scripts/finish_confirmation.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
@@ -183,6 +184,11 @@ var _pop_reward_theme: String = ""
 var _pop_settling: bool = false
 var _jelly: JellyMatch
 var _word_jelly: WordJelly
+var _finish_confirmation: FinishConfirmation
+var _finish_confirmation_mode: String = ""
+var _finish_confirmation_round: String = ""
+var _finish_confirmation_generation: int = -1
+var _finish_confirmation_focus_modes: Dictionary = {}
 var _word_jelly_credits: Dictionary = {}
 var _jelly_rewards: PopRewardRoom
 var _jelly_rewards_shown: bool = false
@@ -729,6 +735,7 @@ func _build_controls() -> void:
 	_jelly.audio_requested.connect(_jelly_audio.bind("jelly"))
 	_jelly.word_attempted.connect(_jelly_growth_answer.bind("jelly"))
 	_jelly.round_finished.connect(_jelly_finished.bind("jelly"))
+	_jelly.finish_requested.connect(_request_jelly_finish.bind("jelly"))
 	_jelly.chests_requested.connect(func() -> void:
 		if _mode_id == "jelly":
 			_show_jelly_rewards())
@@ -749,6 +756,7 @@ func _build_controls() -> void:
 	_word_jelly.audio_requested.connect(_jelly_audio.bind("word_jelly"))
 	_word_jelly.word_attempted.connect(_jelly_growth_answer.bind("word_jelly"))
 	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
+	_word_jelly.finish_requested.connect(_request_jelly_finish.bind("word_jelly"))
 	_word_jelly.chests_requested.connect(func() -> void:
 		if _mode_id == "word_jelly":
 			_show_jelly_rewards())
@@ -889,6 +897,14 @@ func _build_controls() -> void:
 	_coin_flight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_reward_confetti = RewardConfetti.new()
 	add_child(_reward_confetti)
+	_finish_confirmation = FinishConfirmation.new()
+	add_child(_finish_confirmation)
+	_finish_confirmation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_finish_confirmation.canceled.connect(_cancel_jelly_finish)
+	_finish_confirmation.confirmed.connect(_confirm_jelly_finish)
+	_finish_confirmation.resized.connect(_publish_finish_confirmation.call_deferred)
+	_finish_confirmation.keep_playing_button.focus_entered.connect(_publish_finish_confirmation.call_deferred)
+	_finish_confirmation.finish_button.focus_entered.connect(_publish_finish_confirmation.call_deferred)
 	visibility_changed.connect(_sync_reward_confetti)
 	# Input is dispatched child-first; observe it before interactive descendants consume it.
 	var observer := InputActivityObserver.new()
@@ -967,7 +983,7 @@ func _play_ui_click(source: Control = null) -> void:
 
 
 func _show_mode_menu() -> void:
-	if _mode_menu_open() or _page_hidden or collection_page.visible \
+	if _mode_menu_open() or _finish_confirmation_open() or _page_hidden or collection_page.visible \
 		or model.chest_state == "opening" \
 		or (_save_error and not _pending_fragment.is_empty()):
 		return
@@ -1243,6 +1259,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 
 
 func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_jelly_treasure: bool = true) -> bool:
+	_close_finish_confirmation(true, false)
 	if not growth.ready:
 		_growth_save_failed = true
 		_refresh()
@@ -1426,7 +1443,81 @@ func _active_jelly():
 func _jelly_interaction_allowed() -> bool:
 	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
 		and not _rebuilding and not _page_hidden and not _speech_debug_active \
-		and not collection_page.visible and not _mode_menu_open()
+		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open()
+
+
+func _finish_confirmation_open() -> bool:
+	return is_instance_valid(_finish_confirmation) and _finish_confirmation.visible
+
+
+func _publish_finish_confirmation() -> void:
+	if _finish_confirmation_open():
+		_publish_jelly(_active_jelly().snapshot())
+
+
+func _request_jelly_finish(source_mode: String) -> void:
+	if source_mode != _mode_id or not _jelly_interaction_allowed() \
+		or not _active_jelly()._can_play() or _active_jelly()._pointer != JellyMatch.NO_POINTER:
+		return
+	_finish_confirmation_mode = _mode_id
+	_finish_confirmation_round = _round_id
+	_finish_confirmation_generation = _active_jelly()._generation
+	_finish_confirmation.configure(Data.theme(model.theme_id), reduced_motion)
+	_finish_confirmation.open()
+	_sync_reward_confetti()
+	_on_input_canceled()
+	_stop_controller_actions()
+	_controller_accept_needs_release = true
+	audio.stop_voice()
+	_sync_jelly()
+	_finish_confirmation_focus_modes.clear()
+	for control in find_children("*", "Control", true, false):
+		if not _finish_confirmation.is_ancestor_of(control):
+			_finish_confirmation_focus_modes[control] = control.focus_mode
+			control.focus_mode = Control.FOCUS_NONE
+	_finish_confirmation.keep_playing_button.grab_focus()
+	_announce_status("Finish this round? Keep playing, or Finish to see your score. Your collected rewards will be kept.")
+	_publish_jelly(_active_jelly().snapshot())
+
+
+func _close_finish_confirmation(resume_game: bool = true, restore_focus: bool = true) -> void:
+	if not _finish_confirmation_open():
+		return
+	_finish_confirmation.close()
+	_sync_reward_confetti()
+	_finish_confirmation_mode = ""
+	_finish_confirmation_round = ""
+	_finish_confirmation_generation = -1
+	for control in _finish_confirmation_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = _finish_confirmation_focus_modes[control]
+	_finish_confirmation_focus_modes.clear()
+	_stop_controller_actions()
+	if resume_game:
+		_sync_jelly()
+	if restore_focus and not _page_hidden:
+		_default_focus().grab_focus()
+
+
+func _cancel_jelly_finish() -> void:
+	if not _finish_confirmation_open() or _page_hidden:
+		return
+	_close_finish_confirmation()
+	_announce_status("Keep playing.")
+
+
+func _confirm_jelly_finish() -> void:
+	if not _finish_confirmation_open() or _page_hidden:
+		return
+	var same_round: bool = _is_jelly_mode() and _mode_id == _finish_confirmation_mode \
+		and _round_id == _finish_confirmation_round \
+		and _active_jelly()._generation == _finish_confirmation_generation
+	_close_finish_confirmation(false, false)
+	if same_round and _jelly_interaction_allowed():
+		# Settle while paused so confirming cannot advance a queued motion or reward.
+		_active_jelly().game.finish_round()
+	else:
+		_sync_jelly()
 
 
 func _sync_jelly() -> void:
@@ -1501,6 +1592,7 @@ func _word_jelly_collected(event_id: String, _word: Dictionary, _amount: int, _f
 func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 	if (not source_mode.is_empty() and source_mode != _mode_id) or not _is_jelly_mode() or not _round_result.is_empty():
 		return
+	_close_finish_confirmation(false, false)
 	_round_result = result.duplicate(true)
 	var tier: int = int(result.get("chest_tier", 0))
 	_jelly_reward_theme = JellyRewardProgress.theme_for_tier(tier) if tier > 0 else model.theme_id
@@ -1614,6 +1706,7 @@ func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	value["mode"] = _mode_id
 	value["round_id"] = _round_id
+	value["finish_confirmation"] = _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false}
 	_host.jellyStatus(JSON.stringify(value))
 
 
@@ -1812,7 +1905,7 @@ func _pop_chest_audio(action: String, theme_id: String, progress: float) -> void
 func _reward_confetti_allowed() -> bool:
 	return is_visible_in_tree() and not _page_hidden and not _rebuilding and not _speech_debug_active \
 		and is_instance_valid(collection_page) and not collection_page.visible and not _mode_menu_open() \
-		and not (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible)
+		and not _finish_confirmation_open() and not (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible)
 
 
 func _sync_reward_confetti() -> void:
@@ -2298,7 +2391,9 @@ func _refresh() -> void:
 	elif _journey_save_failed and playing:
 		_message.text = "Your preferences could not be saved. Choose Retry saving."
 	_sync_growth_load_notice()
-	if collection_page.visible:
+	if _finish_confirmation_open():
+		_announce_status("Finish this round? Keep playing, or Finish to see your score. Your collected rewards will be kept.")
+	elif collection_page.visible:
 		_announce_collection_state()
 	elif not celebrating:
 		_announce_status(_message.text if playing else _title.text + " " + _caption.text)
@@ -2315,6 +2410,9 @@ func _refresh() -> void:
 		if is_instance_valid(control):
 			control.focus_mode = Control.FOCUS_NONE
 	for control in _mode_menu_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = Control.FOCUS_NONE
+	for control in _finish_confirmation_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = Control.FOCUS_NONE
 	_layout_result()
@@ -2471,6 +2569,10 @@ func _continue_match() -> void:
 
 func _refresh_controller_focus() -> void:
 	if not _controller_mode or collection_page.visible:
+		return
+	if _finish_confirmation_open():
+		if not _valid_focus(get_viewport().gui_get_focus_owner()):
+			_default_focus().grab_focus()
 		return
 	if _mode_menu_open():
 		if not _valid_focus(get_viewport().gui_get_focus_owner()):
@@ -3111,6 +3213,8 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
+	if is_instance_valid(_finish_confirmation):
+		_finish_confirmation.cancel_input()
 	_reward_confetti.set_paused(true)
 	_coin_flight.sync(coin_wallet.balance)
 	audio.stop_ui_click()
@@ -3239,6 +3343,22 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _finish_confirmation_open():
+		if event.is_action_pressed("ui_cancel"):
+			_cancel_jelly_finish()
+			get_viewport().set_input_as_handled()
+			return
+		if event is InputEventKey and event.is_action_pressed("ui_accept") and event.echo:
+			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("ui_focus_next") or event.is_action_pressed("ui_focus_prev"):
+			var target: Button = _finish_confirmation.finish_button if get_viewport().gui_get_focus_owner() == _finish_confirmation.keep_playing_button else _finish_confirmation.keep_playing_button
+			target.grab_focus()
+			get_viewport().set_input_as_handled()
+			return
+		if event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]:
+			get_viewport().set_input_as_handled()
+			return
 	if _mode_menu_open():
 		if event.is_action_pressed("ui_cancel"):
 			get_viewport().set_input_as_handled()
@@ -3383,6 +3503,9 @@ func _controller_accept() -> void:
 
 
 func _controller_back() -> void:
+	if _finish_confirmation_open():
+		_cancel_jelly_finish()
+		return
 	if _mode_menu_open():
 		return
 	if _controller_holding_jelly_chest:
@@ -3528,6 +3651,8 @@ func _valid_focus(control: Control) -> bool:
 	if not is_instance_valid(control) or not control.is_visible_in_tree() or control.focus_mode == Control.FOCUS_NONE \
 		or (control is Button and (control as Button).disabled):
 		return false
+	if _finish_confirmation_open():
+		return _finish_confirmation.is_ancestor_of(control)
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		return _vocabulary_prompt.is_ancestor_of(control)
 	if _mode_menu_open():
@@ -3540,6 +3665,8 @@ func _valid_focus(control: Control) -> bool:
 
 
 func _default_focus() -> Control:
+	if _finish_confirmation_open():
+		return _finish_confirmation.keep_playing_button
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		return _vocabulary_retry if _vocabulary_retry.visible else _vocabulary_back
 	if _mode_menu_open():
@@ -3794,6 +3921,8 @@ func _exit_tree() -> void:
 
 
 func _on_input_canceled(_arguments: Array = []) -> void:
+	if is_instance_valid(_finish_confirmation):
+		_finish_confirmation.cancel_input()
 	_mode_menu_pointer = -2
 	if is_instance_valid(_mode_panel):
 		_mode_panel.scroll.cancel_drag()
@@ -4189,7 +4318,7 @@ func _retry_storage() -> void:
 
 
 func _show_collection() -> void:
-	if collection_page.visible:
+	if collection_page.visible or _finish_confirmation_open():
 		return
 	_coin_flight.sync(coin_wallet.balance)
 	# Preserve prepared and hard-error gates; only an interrupted live or pending

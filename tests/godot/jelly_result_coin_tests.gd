@@ -132,6 +132,9 @@ func finish_result(app, tier: int) -> void:
 	earn_fragments(app._jelly, fragments)
 	var score: int = app._jelly.game.score()
 	app._jelly.finish_button.pressed.emit()
+	check(app._finish_confirmation_open() and app._jelly.game.phase == "playing",
+		"The real Finish control pauses before committing its result")
+	app._finish_confirmation.finish_button.pressed.emit()
 	check(app._jelly.game.phase == "finished" and int(app._round_result.score) == score,
 		"The real Finish control records the completed Jelly score")
 	check(int(app._round_result.chest_tier) == tier and int(app._round_result.chest_count) == (0 if tier == 0 else 1),

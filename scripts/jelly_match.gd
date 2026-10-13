@@ -7,6 +7,7 @@ signal word_requested(word: Dictionary)
 signal audio_requested(cue: String)
 signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 signal round_finished(result: Dictionary)
+signal finish_requested
 signal chests_requested
 signal replay_requested
 signal changed(state: Dictionary)
@@ -154,9 +155,9 @@ func _init() -> void:
 	finish_button.name = "JellyFinish"
 	finish_button.text = "Finish"
 	finish_button.expand_icon = true
-	finish_button.set("accessibility_name", "Finish this round and see your score")
+	finish_button.set("accessibility_name", "Finish this round. Opens confirmation.")
 	UiClick.bind_button(finish_button)
-	finish_button.pressed.connect(_finish_round)
+	finish_button.pressed.connect(_request_finish)
 	add_child(finish_button)
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
@@ -1142,6 +1143,10 @@ func _finished(result: Dictionary) -> void:
 	_refresh_controls()
 	round_finished.emit(result.duplicate(true))
 	_publish()
+
+func _request_finish() -> void:
+	if _can_play() and _pointer == NO_POINTER:
+		finish_requested.emit()
 
 func _finish_round() -> void:
 	if not _can_play() or _pointer != NO_POINTER:

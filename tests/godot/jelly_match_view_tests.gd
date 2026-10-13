@@ -76,6 +76,7 @@ func _run() -> void:
 	_check_fusion(view)
 	_check_progressive_union(view)
 	_check_concurrent_fusions(view)
+	_check_finish_requests(view)
 	_check_finish_during_fusion(view)
 	_check_preview_during_fusion(view)
 	_check_drag_across_fusion_completion(view)
@@ -1975,7 +1976,7 @@ func _check_result_gate(view) -> void:
 	view.replay_requested.connect(func() -> void: replayed.append(1))
 	_earn_fragments(view, 4)
 	var score_before: int = view.game.score()
-	view.finish_button.pressed.emit()
+	view._finish_round()
 	check(finishes.size() == 1 and view.game.phase == "finished", "Finish emits a settled result once")
 	view._open_chests()
 	view._replay()
@@ -2002,7 +2003,7 @@ func _check_result_gate(view) -> void:
 	view._replay()
 	check(opened.size() == 1 and replayed.is_empty(), "Repeated result activation produces a single transition")
 	_reset(view)
-	view.finish_button.pressed.emit()
+	view._finish_round()
 	view.result_reveal()
 	check(not view.chests_button.visible and view.replay_button.visible, "A zero-chest round offers replay without a false opening action")
 	check(view.snapshot().score == 0 and view.snapshot().result.caption == "Score: 0 · Fragments: 0 / 4",
@@ -2236,6 +2237,36 @@ func _check_preview_during_fusion(view) -> void:
 	_reset(view)
 
 
+func _check_finish_requests(view) -> void:
+	_reset(view)
+	var requests: Array[int] = []
+	var record: Callable = func() -> void: requests.append(1)
+	view.finish_requested.connect(record)
+	var pair: Array[int] = _pair(view)
+	check(view._press(-1, _center(view, pair[0])), "A settled jelly can own the pointer before requesting Finish")
+	view._move(_center(view, pair[1]))
+	view._refresh_controls()
+	view.finish_button.pressed.emit()
+	check(view._dragging and view.finish_button.disabled and requests.is_empty()
+		and view.game.phase == "playing" and finishes.is_empty(),
+		"Finish cannot request confirmation or end a round during an owned drag")
+	view.cancel_input()
+	view._refresh_controls()
+	view.finish_button.pressed.emit()
+	check(requests.size() == 1 and view.game.phase == "playing" and finishes.is_empty(),
+		"The Finish control requests a host decision without ending the round")
+	view.pause(true)
+	view.finish_button.pressed.emit()
+	check(requests.size() == 1 and view.game.phase == "playing", "A paused round cannot issue another Finish request")
+	view.pause(false)
+	view._finish_round()
+	view.finish_button.pressed.emit()
+	check(requests.size() == 1 and finishes.size() == 1 and view.game.phase == "finished",
+		"Explicit confirmation finishes once and a completed round cannot request it again")
+	view.finish_requested.disconnect(record)
+	_reset(view)
+
+
 func _check_finish_during_fusion(view) -> void:
 	for delay: float in [0.2, 0.8]:
 		_reset(view)
@@ -2249,12 +2280,12 @@ func _check_finish_during_fusion(view) -> void:
 		_advance(view, delay)
 		check(not view.finish_button.disabled and view.navigation_controls().has(view.finish_button),
 			"Finish remains reachable by keyboard and controller during both effect stages")
-		view.finish_button.pressed.emit()
+		view._finish_round()
 		check(view.game.phase == "finished" and finishes.size() == 1
 			and view.game.fragment_count == earned and view.game.cleared_pairs == score
 			and attempts.size() == 1 and view.game.fusions.is_empty() and view._fusion_visuals.is_empty(),
 			"Finish preserves completed score and fragments while cancelling the unfinished effect")
-		view.finish_button.pressed.emit()
+		view._finish_round()
 		_advance(view, 2.0)
 		check(finishes.size() == 1 and attempts.size() == 1 and view.game.fragment_count == earned,
 			"Repeated Finish and stale animation time cannot replay a canceled pair or settlement")
