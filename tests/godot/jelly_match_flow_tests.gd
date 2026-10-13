@@ -265,7 +265,7 @@ func _run() -> void:
 		check(app._mode_panel.buttons.size() == 6, "All six modes remain available")
 		check(app._mode_panel.get_global_rect().end.y <= root.size.y + 1, "Mode cards fit at %s" % viewport_size)
 		for tile in app._mode_panel._tiles:
-			check(tile.picture.is_visible_in_tree() and tile.picture.size.x > 0 and tile.picture.size.y > 0, "Every mode retains its picture")
+			check(tile.preview.is_visible_in_tree() and tile.preview.size.x > 0 and tile.preview.size.y > 0, "Every mode retains its illustrated gameplay preview")
 		app._hide_mode_menu()
 	app.audio.halt()
 	app.queue_free()

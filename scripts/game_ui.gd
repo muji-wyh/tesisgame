@@ -215,7 +215,7 @@ var reduced_motion: bool = false
 var _page_hidden: bool = false
 var _resume_music_after_background: bool = false
 var _background: ColorRect
-var _jelly_backdrop: Control
+var _jelly_backdrop: JellyBackdrop
 var _message: Label
 var _storage_retry_button: Button
 var _outcome: Control
@@ -325,6 +325,7 @@ func _ready() -> void:
 	_presentation.load_preferences(DisplayServer.accessibility_should_reduce_animation() == 1)
 	_preferred_theme = _presentation.preferred_theme
 	reduced_motion = _presentation.reduced_motion
+	_jelly_backdrop.set_reduced_motion(reduced_motion)
 	WordArt.set_reduced_motion(reduced_motion)
 	audio.set_muted(_presentation.muted)
 	call_deferred("_sync_controller_accept_startup")
@@ -540,7 +541,7 @@ func _build_controls() -> void:
 	add_child(_background)
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_jelly_backdrop = JellyBackdrop.new()
-	_jelly_backdrop.name = "JellyWoodland"
+	_jelly_backdrop.name = "JellyGarden"
 	add_child(_jelly_backdrop)
 	_jelly_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_jelly_backdrop.hide()
@@ -1435,6 +1436,7 @@ func _sync_jelly() -> void:
 	_jelly.pause(not allowed or _mode_id != "jelly")
 	_word_jelly.pause(not allowed or _mode_id != "word_jelly")
 	_jelly_backdrop.visible = _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
+	_jelly_backdrop.set_ambient_active(allowed and _active_jelly().game.phase == "playing")
 	if not allowed:
 		audio.stop_jelly_sounds()
 	if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
@@ -2907,6 +2909,7 @@ func set_reduced_motion(value: bool) -> void:
 	_pop_rewards.set_reduced_motion(value)
 	_jelly.set_reduced_motion(value)
 	_word_jelly.set_reduced_motion(value)
+	_jelly_backdrop.set_reduced_motion(value)
 	_jelly_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_phrase.set_reduced_motion(value)

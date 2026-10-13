@@ -5,7 +5,8 @@ pictures and labels. A shared silhouette, consistent upper-left highlights and
 muted color variants give the board a soft material without competing with the
 learning content. The appearance comes from a production illustration; animation
 deforms that illustration rather than replacing it with flat geometry.
-The playfield now sits in a sourced [woodland environment](jelly-environment.md).
+The playfield sits in the sourced [Kenney layered garden](jelly-garden.md), with
+quiet distant hills, clouds and perimeter foliage shared by both jelly modes.
 
 Jelly Words reuses the acquired coral skin and its signed-distance material.
 A per-instance shader hue preserves the original highlights, shaded contours

@@ -1,7 +1,7 @@
 # Jelly Words
 
 Jelly Words reuses the acquired production assets from [Jelly Match](jelly-match.md),
-the [woodland environment](jelly-environment.md), and the
+the [Kenney layered garden](jelly-garden.md), and the
 [chest-fragment presentation](jelly-fragments.md). No new artwork was downloaded.
 
 | Material | Source, creator, license | Integration and animation |
