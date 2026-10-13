@@ -217,7 +217,7 @@ test('theme choices support arrow, Home and End keys without entering the game',
   await maintainedShell(page);
   await themeButton(page, 'spring').focus();
   for (const [key, id] of [['ArrowRight', 'summer'], ['End', 'candy'], ['ArrowRight', 'spring'],
-    ['ArrowLeft', 'candy'], ['Home', 'spring']]) {
+    ['ArrowLeft', 'candy'], ['Home', 'spring'], ['ArrowDown', 'ocean'], ['ArrowUp', 'spring']]) {
     await page.keyboard.press(key);
     await expectPreview(page, id);
     await expect(themeButton(page, id)).toBeFocused();
@@ -253,7 +253,7 @@ test('controller shoulder buttons change theme once per press before Start enter
   expect(await page.evaluate(() => controllerTheme)).toBe('summer');
 });
 
-test('the theme rail keeps its controls and entry visible on compact and wide loading screens', async ({ page }, testInfo) => {
+test('theme choices keep their controls and entry visible on compact and wide loading screens', async ({ page }, testInfo) => {
   await maintainedShell(page);
   await page.evaluate(() => wordBuddiesHost.ready());
   await expect(page.locator('#enter-game')).toBeEnabled();
@@ -284,9 +284,11 @@ test('the theme rail keeps its controls and entry visible on compact and wide lo
     expect(layout.scrollHeight).toBeLessThanOrEqual(layout.clientHeight);
     expect(layout.scrollTop).toBe(0);
     expect(layout.scrollbarHidden).toBe(true);
-    if (viewport.width === 320) {
+    if (viewport.width === 320 && viewport.height === 320) {
       expect(layout.scrollWidth).toBeGreaterThan(layout.clientWidth);
       expect(['auto', 'scroll']).toContain(layout.overflowX);
+    } else {
+      expect(layout.scrollWidth).toBe(layout.clientWidth);
     }
     await page.screenshot({ path: testInfo.outputPath(`loading-themes-${viewport.width}x${viewport.height}.png`), scale: 'css' });
   }

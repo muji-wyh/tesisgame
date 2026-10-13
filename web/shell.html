@@ -75,13 +75,13 @@
     canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: manipulation; }
     #status {
       position: absolute; inset: 0; display: grid; place-items: center;
-      padding: 24px; text-align: center; background: var(--cp-bg); overflow: auto;
+      padding: clamp(20px, 4vw, 48px); text-align: center; background: var(--cp-bg); overflow: auto;
       transition: background-color 650ms ease;
     }
     [hidden] { display: none !important; }
     .loader-layout { display: grid; grid-template-areas: "heading" "toy" "themes" "download";
-      gap: 20px; width: min(100%, 380px); }
-    .loading-heading { grid-area: heading; margin-bottom: -28px; }
+      gap: 20px; width: min(100%, 560px); margin: auto; min-width: 0; }
+    .loading-heading { grid-area: heading; }
     .loading-eyebrow { color: var(--cp-accent); font-size: 10px; font-weight: 850; letter-spacing: .16em; margin-bottom: 8px; }
     .loading-tagline { color: var(--cp-text-muted); font-size: 15px; }
     #enter-game { box-shadow: 0 4px 0 color-mix(in srgb, var(--cp-accent), black 20%); border-radius: 16px; }
@@ -92,11 +92,12 @@
       gap: 8px; padding: 0 4px 6px; font-size: 14px; text-align: left; }
     #loading-theme-label { font-weight: 700; }
     #loading-theme-name { color: var(--cp-accent); font-weight: 650; }
-    #loading-theme-options { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain;
-      padding: 4px; scroll-padding-inline: 4px; touch-action: pan-x pinch-zoom; }
-    .loading-theme { flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
-      min-height: 48px; padding: 10px 13px; border: 2px solid transparent; border-radius: 14px;
-      background: var(--cp-surface); color: var(--cp-text-muted); font-size: 14px; font-weight: 600; }
+    #loading-theme-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px; padding: 4px; scroll-padding-inline: 4px; }
+    .loading-theme { min-width: 0; display: flex; flex-direction: column; justify-content: center;
+      align-items: center; gap: 7px; min-height: 70px; padding: 10px 4px;
+      border: 2px solid transparent; border-radius: 14px;
+      background: var(--cp-surface); color: var(--cp-text-muted); font-size: 13px; font-weight: 650; }
     .loading-theme-icon { font-size: 22px; line-height: 1; }
     .loading-theme[aria-pressed="true"] { border-color: var(--cp-accent); color: var(--cp-accent);
       background: var(--cp-accent-soft); box-shadow: 0 2px 0 var(--cp-accent); }
@@ -106,7 +107,7 @@
     #loading-play { grid-area: toy; min-width: 0; -webkit-tap-highlight-color: var(--cp-tap-highlight); }
     #loading-play, #loading-play * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .toy-scene { position: relative; display: grid; grid-template-columns: 45% 55%;
-      align-items: end; width: min(100%, 340px); height: 212px; margin: 0 auto; }
+      align-items: end; width: min(100%, 380px); height: 228px; margin: 0 auto; }
     #loading-toy { display: block; width: 100%; height: 180px; min-height: 44px; border: 0; padding: 0;
       border-radius: 16px; background: transparent; touch-action: pinch-zoom;
       -webkit-appearance: none; appearance: none; }
@@ -116,11 +117,17 @@
       transform: translateX(10px); }
     .duck-sprite { display: block; width: 100%; height: 100%; aspect-ratio: 1;
       background-image: var(--pip-art); background-size: 400% 100%; background-position: 0% 0%; }
-    #loading-duck { width: 100%; height: 212px; min-height: 44px; padding: 0;
+    #loading-duck { position: relative; width: 100%; height: 228px; min-height: 44px; padding: 0;
       border-radius: 18px; background: transparent; touch-action: manipulation; }
     #loading-duck:focus-visible { outline-offset: 0; }
     #loading-duck svg { display: block; width: 100%; height: 100%; pointer-events: none;
       transform: translateX(-16px); }
+    #loading-duck .loading-pip-outgoing { position: absolute; inset: 0; }
+    .loading-eyebrow, #loading-theme-name, #loading-percent, .loading-theme, #enter-game {
+      transition: color 650ms ease, background-color 650ms ease, border-color 650ms ease, box-shadow 650ms ease; }
+    #loading-toy svg [fill], #loading-toy svg [stroke] { transition: fill 650ms ease, stroke 650ms ease; }
+    #progress::-webkit-progress-value { transition: background-color 650ms ease; }
+    #progress::-moz-progress-bar { transition: background-color 650ms ease; }
     #loading-pip-body { transform-origin: 60px 104px; }
     #loading-pip-head { transform-origin: 60px 69px; }
     #loading-pip-left-wing { transform-origin: 41px 76px; }
@@ -301,19 +308,50 @@
     html[data-reduced-motion="true"] .speech-bubble { animation: none !important; transition: none !important; transform: none !important; }
     html[data-reduced-motion="true"] #speech-panel .speech-bubble { background: none !important; }
     html[data-reduced-motion="true"] .duck-sprite { animation: none !important; }
-    html[data-reduced-motion="true"] #status { transition: none; }
+    html[data-reduced-motion="true"] #status,
+    html[data-reduced-motion="true"] #status * { transition: none !important; }
+    html[data-reduced-motion="true"] #progress::-webkit-progress-value { transition: none; }
+    html[data-reduced-motion="true"] #progress::-moz-progress-bar { transition: none; }
     html[data-reduced-motion="true"] #speech-panel[data-heard="true"] .duck-sprite { background-position: 0% 0% !important; }
     #status[data-state="error"] .loader-layout { grid-template-areas: "heading" "download";
       grid-template-columns: 1fr; max-width: 440px; }
     #status[data-state="error"] .loading-heading { margin-bottom: 0; }
     #status[data-state="slow"] #enter-game { display: none; }
+    @media (min-width: 900px) and (min-height: 501px) {
+      .loader-layout { width: min(100%, 1040px); grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+        grid-template-areas: "heading heading" "toy themes" "toy download";
+        gap: 24px 48px; align-items: center; }
+      .loading-heading { margin-bottom: 12px; }
+      h1 { font-size: 56px; }
+      .loading-eyebrow { font-size: 12px; }
+      .loading-tagline { font-size: 18px; }
+      .toy-scene { width: min(100%, 480px); height: 320px; }
+      #loading-toy { height: 276px; }
+      #loading-duck { height: 320px; }
+      .loading-theme { min-height: 74px; font-size: 14px; }
+      .loading-theme-icon { font-size: 26px; }
+      #loading-themes { align-self: end; }
+      .loading-download { align-self: start; gap: 10px; }
+      #enter-game { min-height: 56px; font-size: 18px; }
+    }
     @media (max-height: 650px) {
       #status { padding: 16px; }
       .loader-layout { gap: 12px; }
       h1 { font-size: 32px; margin-bottom: 4px; }
+      .loading-heading { margin-bottom: 0; }
+      .loading-eyebrow, .loading-tagline { display: none; }
       .toy-scene { width: min(100%, 256px); height: 156px; }
       #loading-toy { height: 132px; }
       #loading-duck { height: 156px; }
+      .loading-theme { min-height: 54px; gap: 4px; padding: 6px 2px; font-size: 12px; }
+      .loading-theme-icon { font-size: 20px; }
+      .loading-download { gap: 6px; }
+    }
+    @media (max-height: 600px) and (max-width: 899px) {
+      .toy-scene { width: min(100%, 216px); height: 116px; }
+      #loading-toy { height: 98px; }
+      #loading-duck { height: 116px; }
+      .loading-theme-heading { display: none; }
     }
     @media (max-height: 500px) and (min-width: 501px) {
       .loading-heading { margin-bottom: 0; }
@@ -341,7 +379,9 @@
       .loading-eyebrow, .loading-tagline { display: none; }
       h1 { font-size: 28px; }
       .loading-theme-heading { display: none; }
-      .loading-theme { min-height: 44px; padding-block: 8px; }
+      #loading-theme-options { display: flex; overflow-x: auto; overscroll-behavior-x: contain;
+        touch-action: pan-x pinch-zoom; }
+      .loading-theme { flex: 0 0 auto; flex-direction: row; min-height: 44px; padding: 8px 12px; gap: 7px; }
       .play-caption span { font-size: 12px; }
       .toy-scene { width: 126px; height: 64px; }
       #loading-toy { height: 56px; }
@@ -635,9 +675,56 @@
       const danceParts = Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']
         .map(part => [part, document.getElementById('loading-pip-' + part)]));
       const pipWardrobe = $PIP_WARDROBE_JSON;
-      function setPipTheme(requested) {
+      const loadingPipArt = loadingDuck.querySelector('svg');
+      let outgoingPipArt = null;
+      let pipThemeAnimations = [];
+      function clearPipThemeTransition() {
+        for (const animation of pipThemeAnimations) animation.cancel();
+        pipThemeAnimations = [];
+        outgoingPipArt?.remove();
+        outgoingPipArt = null;
+      }
+      function finishLoadingThemeTransition() {
+        clearPipThemeTransition();
+        // Finish palette changes without interrupting the separate dance timeline.
+        for (const animation of status.getAnimations({ subtree: true })) {
+          if (animation instanceof CSSTransition) animation.finish();
+        }
+      }
+      function setPipTheme(requested, animate = false) {
         const theme = Object.hasOwn(pipWardrobe, requested) ? requested : 'spring';
         if (document.documentElement.dataset.pipTheme === theme) return;
+        clearPipThemeTransition();
+        if (animate && !loadingMotionReduced() && !document.hidden) {
+          outgoingPipArt = loadingPipArt.cloneNode(true);
+          // Freeze the outgoing pose; the live, identifiable parts keep dancing.
+          for (const [part, element] of Object.entries(danceParts)) {
+            const snapshot = outgoingPipArt.querySelector('#loading-pip-' + part);
+            const pose = getComputedStyle(element);
+            snapshot.style.transform = pose.transform;
+            snapshot.style.transformOrigin = pose.transformOrigin;
+          }
+          // Keep each costume's gradients and paper filters local to its snapshot.
+          const snapshotIds = new Map();
+          for (const element of outgoingPipArt.querySelectorAll('[id]')) {
+            const original = element.id;
+            element.id = 'loading-pip-outgoing-' + original;
+            snapshotIds.set(original, element.id);
+          }
+          for (const element of outgoingPipArt.querySelectorAll('*')) {
+            for (const attribute of [...element.attributes]) {
+              let value = attribute.value.replace(/url\(#([^)]+)\)/g,
+                (reference, id) => snapshotIds.has(id) ? `url(#${snapshotIds.get(id)})` : reference);
+              if (attribute.localName === 'href' && value.startsWith('#') && snapshotIds.has(value.slice(1))) {
+                value = '#' + snapshotIds.get(value.slice(1));
+              }
+              if (value !== attribute.value) attribute.value = value;
+            }
+          }
+          outgoingPipArt.classList.add('loading-pip-outgoing');
+          outgoingPipArt.setAttribute('aria-hidden', 'true');
+          loadingDuck.appendChild(outgoingPipArt);
+        }
         const outfit = pipWardrobe[theme];
         document.documentElement.dataset.pipTheme = theme;
         document.documentElement.style.setProperty('--pip-art', `url("${outfit.sprite}")`);
@@ -646,6 +733,15 @@
         danceParts.head.insertAdjacentHTML('beforeend',
           '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="40" cy="55" rx="5.5" ry="3.5"/><ellipse cx="80" cy="55" rx="5.5" ry="3.5"/></g>' +
           '<g class="pip-bonk-stars" fill="#FFD979" stroke="#B88535" stroke-width="1.5"><path d="m10 20 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/><path d="m109 12 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/></g>');
+        if (outgoingPipArt) {
+          const options = { duration: 650, easing: 'ease-in-out' };
+          const incoming = loadingPipArt.animate([{ opacity: 0 }, { opacity: 1 }], options);
+          const outgoing = outgoingPipArt.animate([{ opacity: 1 }, { opacity: 0 }], options);
+          pipThemeAnimations = [incoming, outgoing];
+          outgoing.finished.then(() => {
+            if (pipThemeAnimations.includes(outgoing)) clearPipThemeTransition();
+          }).catch(() => {});
+        }
       }
       const themePicker = document.getElementById('loading-themes');
       const themeOptions = document.getElementById('loading-theme-options');
@@ -676,11 +772,15 @@
         return button;
       });
       function revealThemeChoice(button) {
+        if (themeOptions.scrollWidth <= themeOptions.clientWidth) return;
         const rail = themeOptions.getBoundingClientRect(), choice = button.getBoundingClientRect();
-        if (choice.left < rail.left + 4) themeOptions.scrollLeft -= rail.left + 4 - choice.left;
-        else if (choice.right > rail.right - 4) themeOptions.scrollLeft += choice.right - rail.right + 4;
+        let offset = 0;
+        if (choice.left < rail.left + 4) offset = choice.left - rail.left - 4;
+        else if (choice.right > rail.right - 4) offset = choice.right - rail.right + 4;
+        if (offset) themeOptions.scrollBy({ left: offset, behavior: loadingMotionReduced() ? 'instant' : 'smooth' });
       }
       function selectLoadingTheme(requested, focus = false, automatic = false) {
+        const animate = Boolean(status.dataset.theme);
         selectedTheme = Object.hasOwn(loadingThemes, requested) ? requested : 'spring';
         const palette = loadingThemes[selectedTheme];
         const dark = document.documentElement.dataset.theme === 'dark';
@@ -692,7 +792,7 @@
         status.style.setProperty('--cp-highlight', `${palette.accent}22`);
         themeName.setAttribute('aria-live', automatic ? 'off' : 'polite');
         themeName.textContent = palette.name;
-        setPipTheme(selectedTheme);
+        setPipTheme(selectedTheme, animate);
         document.querySelector('meta[name="theme-color"]').content = dark ? '#152e29' : palette.background;
         for (const button of themeButtons) {
           const selected = button.dataset.theme === selectedTheme;
@@ -812,7 +912,8 @@
         button.addEventListener('keydown', event => {
           const index = themeIds.indexOf(selectedTheme);
           const next = { ArrowLeft: (index + themeIds.length - 1) % themeIds.length,
-            ArrowRight: (index + 1) % themeIds.length, Home: 0, End: themeIds.length - 1 }[event.key];
+            ArrowRight: (index + 1) % themeIds.length, ArrowUp: (index + themeIds.length - 4) % themeIds.length,
+            ArrowDown: (index + 4) % themeIds.length, Home: 0, End: themeIds.length - 1 }[event.key];
           if (next === undefined) return;
           event.preventDefault();
           void interfaceClickSound.play(event.isTrusted);
@@ -1225,6 +1326,7 @@
       }
 
       function clearLoadingEffects() {
+        finishLoadingThemeTransition();
         loadingPlay.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         sparks.replaceChildren();
         chestArt.style.transform = '';
