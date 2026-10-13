@@ -60,7 +60,11 @@ stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
 motion keeps static light, glints and the painted rim without a sweep or enlargement.
 All completion feedback, including the contact highlight, uses the same forward
 spelling: holding `sma` lights `ll` for `small`, while holding `ll` does not light
-`sma`. Freeform invalid merges remain available and can still be split.
+`sma`. Every other physical contact still compresses both painted skins and
+adds a soft cream glint, with the existing contact sound on first touch. This
+neutral pressure cue does not show a red error rim or a completion glow. Moving
+apart or canceling clears it; reduced motion keeps the static glint. Freeform
+invalid merges remain available and can still be split.
 
 Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover

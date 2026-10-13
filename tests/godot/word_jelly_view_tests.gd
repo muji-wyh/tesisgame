@@ -78,6 +78,8 @@ func _run() -> void:
 	_check_word_pair_colors(view)
 	_check_completion_hints(view)
 	_check_ordered_completion_contact(view)
+	_check_neutral_contact_targets(view)
+	_check_neutral_contact_lifecycle(view)
 	_check_completion_hint_targets(view)
 	_check_completion_hint_lifecycle(view)
 	_check_completion_hint_reduced_motion(view)
@@ -905,7 +907,9 @@ func _check_reveal_content(view, expected: Dictionary) -> void:
 	var panel: Rect2 = _snapshot_rect(reveal.rect)
 	var picture: Rect2 = _snapshot_rect(reveal.picture_rect)
 	var spelling: Rect2 = _snapshot_rect(reveal.spelling_rect)
-	check(view.get_global_rect().grow(0.1).encloses(panel) and panel.end.y <= view.get_global_rect().position.y + view.size.y * 0.42 + 0.1,
+	# Short landscape screens reserve two rows in the upper sixty percent.
+	var top_fraction: float = 0.60 if view.size.x > view.size.y * 1.4 and view.size.y * Style.ui_scale(view) < 350.0 else 0.42
+	check(view.get_global_rect().grow(0.1).encloses(panel) and panel.end.y <= view.get_global_rect().position.y + view.size.y * top_fraction + 0.1,
 		"the reveal remains near the top and inside the available playfield")
 	check(panel.grow(0.1).encloses(picture) and panel.grow(0.1).encloses(spelling) and picture.end.x < spelling.position.x,
 		"picture and spelling have separate readable space inside the reveal")
@@ -1340,7 +1344,8 @@ func _check_ordered_completion_contact(view) -> void:
 		{"source": 0, "target": 1, "text": "small", "complete": true},
 		{"source": 1, "target": 0, "text": "llsma", "complete": false},
 		{"source": 0, "target": 2, "text": "smaller", "complete": false},
-		{"source": 0, "target": 3, "text": "smallest", "complete": false}
+		{"source": 0, "target": 3, "text": "smallest", "complete": false},
+		{"source": 0, "target": 4, "text": "smax", "complete": false}
 	]
 	for pointer: int in [-1, 7]:
 		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
@@ -1380,23 +1385,21 @@ func _check_ordered_completion_contact(view) -> void:
 				check(view._dragging and view._target == target_id and source.selected,
 					context + ": the physical target remains available for an ordered merge")
 				_assert_completion_hints(view, expected, context + " contact")
-				var kind: String = "match" if bool(pairing.complete) else "none"
+				var kind: String = "match" if bool(pairing.complete) else "touch"
 				check(view._contact_state().kind == kind and bool(target.highlighted) == bool(pairing.complete),
-					context + ": only an exact forward word receives target and contact highlighting")
-				for body in [source, target]:
-					check(body._contact_kind == kind
-						and (body._gel.get_shader_parameter("contact_match") == true) == bool(pairing.complete),
-						context + ": both rendered skins agree with ordered contact eligibility")
-					if not bool(pairing.complete):
-						var strength: Variant = body._gel.get_shader_parameter("contact_strength")
-						check(strength == null or is_zero_approx(float(strength)),
-							context + ": an ineligible contact has no residual success deformation")
+					context + ": all touching pairs respond while only an exact forward word receives success highlighting")
+				_assert_contact_surfaces(view, source_id, target_id, kind, reduced, context)
 				if int(pairing.source) == 0 and not bool(pairing.complete):
 					check(not view._tiles[ids[1]].highlighted and view._tiles[ids[1]]._contact_kind == "none"
 						and view._tiles[ids[1]].completion_hint,
 						context + ": changing target clears old contact feedback while retaining the valid candidate glow")
 				check(cues.count("contact") == contacts and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
 					context + ": neutral physical contact gives no learning credit or reward")
+				for repeat in range(5):
+					_pointer_event(view, pointer, "move", destination)
+				_advance(view, 0.3)
+				check(cues.count("contact") == contacts and view.game.fusions.is_empty(),
+					context + ": holding and repeated movement at one contact never repeat its sound or merge early")
 				_pointer_event(view, pointer, "up", destination)
 				check(view.game.fusions.size() == 1 and cues.count("merge") == 1,
 					context + ": release still accepts forward, reverse, and out-of-age merges")
@@ -1410,6 +1413,104 @@ func _check_ordered_completion_contact(view) -> void:
 				check(payouts.is_empty() and attempts.is_empty(), context + ": merging alone never collects or awards credit")
 	view.size = Vector2(1000, 720)
 	words = original_words
+
+
+func _assert_contact_surfaces(view, source_id: int, target_id: int, kind: String, reduced: bool, context: String) -> void:
+	var source = view._tiles[source_id]
+	var target = view._tiles[target_id]
+	for body in [source, target]:
+		check(body._contact_kind == kind and (body._gel.get_shader_parameter("contact_match") == true) == (kind == "match"),
+			context + ": both rendered skins separate physical contact from word completion")
+		var strength: float = float(body._gel.get_shader_parameter("contact_strength"))
+		check(is_zero_approx(strength) if reduced else strength > 0.0,
+			context + ": contact pressure is visible on both bodies unless reduced motion is enabled")
+		if kind == "touch":
+			var rim: Color = body._gel.get_shader_parameter("rim_color")
+			check(not rim.is_equal_approx(Color("#b54649")) and not rim.is_equal_approx(Color("#24856a"))
+				and not body.highlighted and not body.completion_hint,
+				context + ": neutral touching has neither rejection red nor successful completion marking")
+		if reduced:
+			check(body._surface.position.is_zero_approx() and body._surface.scale.is_equal_approx(Vector2.ONE),
+				context + ": reduced-motion contact keeps both skins still")
+		else:
+			check(not body._surface.scale.is_equal_approx(body._base_stretch),
+				context + ": both touching bodies visibly compress or stretch")
+	if not reduced:
+		check(source._surface.position.dot(target._surface.position) < 0.0,
+			context + ": both bodies give reciprocal physical contact feedback")
+
+
+func _check_neutral_contact_targets(view) -> void:
+	for pointer: int in [-1, 7]:
+		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
+		for reduced: bool in [false, true]:
+			for fixture: Dictionary in [{"pieces": ["x", "cat"], "masses": [1, 2]},
+				{"pieces": ["cat", "x"], "masses": [2, 1]}, {"pieces": ["x", "caterpillar"], "masses": [1, 7]}]:
+				_reset(view, reduced)
+				var pieces: Array[String] = []
+				pieces.assign(fixture.pieces)
+				var masses: Array[int] = []
+				masses.assign(fixture.masses)
+				var ids: Array[int] = _install(view, pieces, [], masses)
+				var target = view._tiles[ids[1]]
+				var destination: Vector2 = _center(view, ids[1])
+				var target_rect: Rect2 = target.get_rect()
+				var target_outline: PackedVector2Array = target.contact_outline()
+				var context: String = "%s + %s neutral contact with %s%s" % [pieces[0], pieces[1],
+					"mouse" if pointer < 0 else "touch", " and reduced motion" if reduced else ""]
+				_pointer_event(view, pointer, "down", _center(view, ids[0]))
+				_pointer_event(view, pointer, "move", destination)
+				_advance(view, 0.16)
+				check(view._target == ids[1] and view._contact_state().kind == "touch",
+					context + ": a complete or wrapped word still participates in physical collision")
+				_assert_contact_surfaces(view, ids[0], ids[1], "touch", reduced, context)
+				check(target.get_rect().is_equal_approx(target_rect) and target.contact_outline() == target_outline,
+					context + ": pressure never changes the target's layout or collision outline")
+				var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
+				_pointer_event(view, pointer, "move", empty)
+				check(view._target == -1 and view._contact_state().kind == "none", context + ": separating ends the collision")
+				for id: int in ids:
+					check(view._tiles[id]._contact_kind == "none" and view._tiles[id]._surface.position.is_zero_approx(),
+						context + ": separating immediately clears pressure from both skins")
+				_pointer_event(view, pointer, "move", destination)
+				_advance(view, 0.2)
+				check(cues.count("contact") == 2, context + ": touching again plays exactly one new contact cue")
+				view.cancel_input()
+				_advance(view, 0.2)
+				check(cues.count("contact") == 2 and view.game.fusions.is_empty() and heard.is_empty()
+					and payouts.is_empty() and attempts.is_empty(), context + ": cancelling contact never collects, pronounces, or rewards the complete word")
+	view.size = Vector2(1000, 720)
+
+
+func _check_neutral_contact_lifecycle(view) -> void:
+	for interruption: String in ["cancel", "pointer_cancel", "pause", "hide", "focus", "blocked", "stop", "reconfigure"]:
+		_reset(view)
+		var ids: Array[int] = _install(view, ["x", "cat"], [], [1, 2])
+		var destination: Vector2 = _center(view, ids[1])
+		_pointer_event(view, 7, "down", _center(view, ids[0]))
+		_pointer_event(view, 7, "move", destination)
+		_advance(view, 0.16)
+		check(view._contact_state().kind == "touch", interruption + ": the interruption starts from an active neutral collision")
+		match interruption:
+			"cancel": view.cancel_input()
+			"pointer_cancel": _pointer_event(view, 7, "up", destination, true)
+			"pause": view.pause(true)
+			"hide": view.hide()
+			"focus": view._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+			"blocked":
+				view.interaction_allowed = func() -> bool: return false
+				view._process(0.01)
+			"stop": view.stop()
+			"reconfigure": _reset(view)
+		check(view._contact_state().kind == "none", interruption + ": interruption immediately ends neutral contact ownership")
+		for body in view._tiles.values():
+			check(body._contact_kind == "none" and body._surface.position.is_zero_approx(),
+				interruption + ": no surviving jelly keeps collision pressure or an offset")
+		check(view.game.fusions.is_empty() and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
+			interruption + ": a cancelled contact never commits a merge or collects a word")
+		view.interaction_allowed = Callable()
+		view.show()
+		view.pause(false)
 
 
 func _check_completion_hint_targets(view) -> void:

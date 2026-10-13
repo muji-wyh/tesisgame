@@ -183,8 +183,9 @@ func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength
 	if kind_value == "none":
 		_refresh_feedback()
 		return
-	_gel.set_shader_parameter("rim_color", Color("#24856a") if kind_value == "match" else Color("#b54649"))
-	_gel.set_shader_parameter("rim_strength", 1.0)
+	var rim: Color = Color("#fff4d4") if kind_value == "touch" else Color("#24856a") if kind_value == "match" else Color("#b54649")
+	_gel.set_shader_parameter("rim_color", rim)
+	_gel.set_shader_parameter("rim_strength", 0.7 if kind_value == "touch" else 1.0)
 	_gel.set_shader_parameter("rim_width", 1.0)
 	if reduced:
 		_surface.scale = Vector2.ONE

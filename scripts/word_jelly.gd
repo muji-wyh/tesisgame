@@ -661,11 +661,15 @@ func _contact_state() -> Dictionary:
 		return state
 	var source: Dictionary = _cell(_source)
 	var target: Dictionary = _cell(_target)
-	# Every physical target can still merge; only a forward word earns match feedback.
-	if not _settled(source) or not _settled(target) or not Palette.completes(source, target, game._word_lookup):
+	if not _settled(source) or not _settled(target):
 		return state
+	# All painted bodies respond to pressure. Only a forward word earns the
+	# separate completion highlight; freeform contact is neither right nor wrong.
+	var completing: bool = Palette.completes(source, target, game._word_lookup)
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
-	state.merge({"kind": "match", "source": _source, "target": _target,
+	if direction.length_squared() < 0.1:
+		direction = (_tile_rect(target).get_center() - _tile_rect(source).get_center()).normalized()
+	state.merge({"kind": "match" if completing else "touch", "source": _source, "target": _target,
 		"strength": lerpf(0.2, 0.65, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
 	return state
 

@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio } = require('./game-ui.cjs');
-const { recordingTiming } = require('./bundled-audio.cjs');
+const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -719,28 +719,42 @@ test('word pair colors distinguish exact completion targets and preserve source 
 
 for (const reducedMotion of ['no-preference', 'reduce']) {
   test(`drag completion hints follow exact source order and clear with the gesture (${reducedMotion})`, async ({ page }, info) => {
-    test.setTimeout(180000);
+    test.setTimeout(240000);
+    await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5 });
     const errors = await startWordJelly(page, { reducedMotion });
     const pair = await availableWord(page, 3, 2, { invalidReverse: true });
     const opening = await jelly(page), bounds = await metrics(page);
+    const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+    const playbackIndex = () => page.evaluate(() => window.audioObservation.playbacks.length);
+    const contactSounds = (from, recording) => page.evaluate(({ from, fingerprint }) =>
+      window.audioObservation.playbacks.slice(from).filter(sound => sound.fingerprint === fingerprint),
+    { from, fingerprint: recording.fingerprint });
+    const evidence = { reducedMotion, prefix: pair.roots[0].text, suffix: pair.roots[1].text,
+      audioAvailable, opening };
+    const evidencePath = info.outputPath('word-jelly-completion-samples.json');
+    const retainEvidence = () => fs.writeFileSync(evidencePath, JSON.stringify(evidence, null, 2));
     const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
     const hintedIds = state => state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b);
     const expectedIds = (state, source) => state.tiles.filter(tile => tile.id !== source.id && tile.settled &&
       words.has(normalize(source.text + tile.text))).map(tile => tile.id).sort((a, b) => a - b);
     const expectQuiet = state => {
       expect(hintedIds(state), 'Idle, canceled and paused jellies do not advertise a held prefix').toEqual([]);
+      expect(state.contact.kind, 'Contact pressure clears when the gesture ends or pauses').toBe('none');
       for (const tile of state.tiles) expect(tile.completion_scale).toBe(1);
     };
     const safePoint = center([opening.board_rect[0] + opening.board_rect[2] * 0.25,
       opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
     const beginDrag = async source => {
+      await expect.poll(async () => (await jelly(page)).tiles.find(tile => tile.id === source.id)?.settled,
+        { message: 'The next held root is settled after the previous cancellation' }).toBe(true);
       const point = center((await jelly(page)).tiles.find(tile => tile.id === source.id).rect, await metrics(page));
       await page.mouse.move(point.x, point.y);
       await page.mouse.down();
       await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
-      const held = await jelly(page);
-      expect(hintedIds(held), 'Holding a prefix immediately lights its forward completions before dragging')
-        .toEqual(expectedIds(held, source));
+      await expect.poll(async () => {
+        const held = await jelly(page);
+        return JSON.stringify(hintedIds(held)) === JSON.stringify(expectedIds(held, source));
+      }, { message: 'A held prefix publishes its forward completions before dragging' }).toBe(true);
       await capture(page, info, `word-jelly-completion-held-${source.id}`);
       await page.mouse.move(safePoint.x, safePoint.y, { steps: 8 });
       await expect.poll(async () => (await jelly(page)).drag.active).toBe(true);
@@ -774,10 +788,18 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
           .toBeGreaterThan(0.003);
       }
       await capture(page, info, 'word-jelly-completion-active');
-      await info.attach('word-jelly-completion-samples.json', {
-        body: JSON.stringify({ reducedMotion, prefix: pair.roots[0].text, suffix: pair.roots[1].text,
-          opening, active: await jelly(page), scales: samples }, null, 2), contentType: 'application/json'
+      evidence.active = await jelly(page);
+      evidence.scales = samples;
+      const forwardTarget = center((await jelly(page)).tiles.find(tile => tile.id === pair.roots[1].id).rect, bounds);
+      forwardTarget.y -= pair.roots[1].rect[3] * bounds.scale * 0.34;
+      await page.mouse.move(forwardTarget.x, forwardTarget.y, { steps: 8 });
+      await expect.poll(async () => (await jelly(page)).contact).toMatchObject({
+        kind: 'match', source: pair.roots[0].id, target: pair.roots[1].id
       });
+      evidence.forwardContact = await jelly(page);
+      expect(evidence.forwardContact.contact.strength).toBeGreaterThan(0);
+      expect(evidence.forwardContact.tiles.find(tile => tile.id === pair.roots[1].id).completion_hint).toBe(true);
+      await capture(page, info, 'word-jelly-completion-forward-contact');
       await page.keyboard.press('Escape');
       await expect.poll(async () => (await jelly(page)).drag.active).toBe(false);
       expectQuiet(await jelly(page));
@@ -790,12 +812,35 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       expect(reversed.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint,
         'Dragging a suffix never highlights the original prefix when their reversed spelling is invalid').toBe(false);
       const reverseTarget = center(reversed.tiles.find(tile => tile.id === pair.roots[0].id).rect, bounds);
+      reverseTarget.y -= pair.roots[0].rect[3] * bounds.scale * 0.34;
+      const beforeContact = await playbackIndex();
       await page.mouse.move(reverseTarget.x, reverseTarget.y, { steps: 8 });
       await expect.poll(async () => (await jelly(page)).drag.target).toBe(pair.roots[0].id);
       const touching = await jelly(page);
-      expect(touching.contact.kind, 'Physical contact cannot falsely advertise a reversed word as a match').toBe('none');
+      expect(touching.contact.kind, 'Every settled body gives neutral pressure without advertising a reversed word as a match').toBe('touch');
+      expect(touching.contact.strength).toBeGreaterThan(0);
+      expect(touching.contact).toMatchObject({ source: pair.roots[1].id, target: pair.roots[0].id });
       expect(touching.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint).toBe(false);
+      evidence.reverseContact = touching;
       await capture(page, info, 'word-jelly-completion-reverse-contact');
+      if (audioAvailable) {
+        evidence.contactAudio = await expectRecording(page, beforeContact, 'assets/imported-audio/jelly-interaction/contact.wav');
+        expect(evidence.contactAudio.fingerprint).toBeTruthy();
+        expect(evidence.contactAudio.peak).toBeGreaterThan(0.01);
+        const heldSounds = await contactSounds(beforeContact, evidence.contactAudio);
+        await page.waitForTimeout(250);
+        expect(await contactSounds(beforeContact, evidence.contactAudio),
+          'Holding a noncompleting contact does not repeat the bundled contact sound').toHaveLength(heldSounds.length);
+        await page.mouse.move(safePoint.x, safePoint.y);
+        await expect.poll(async () => (await jelly(page)).contact.kind).toBe('none');
+        const beforeReturn = await playbackIndex();
+        await page.mouse.move(reverseTarget.x, reverseTarget.y);
+        await expect.poll(async () => (await jelly(page)).contact.kind).toBe('touch');
+        await expectRecording(page, beforeReturn, 'assets/imported-audio/jelly-interaction/contact.wav');
+        evidence.recontactAudio = await contactSounds(beforeReturn, evidence.contactAudio);
+        expect(evidence.recontactAudio, 'Separating and touching the same jelly again produces one new cue').toHaveLength(1);
+      }
+      retainEvidence();
       const outside = center([opening.board_rect[0] - 20 / bounds.scale,
         opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
       await page.mouse.move(outside.x, outside.y, { steps: 5 });
@@ -816,6 +861,12 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     await expect.poll(async () => (await jelly(page)).paused).toBe(false);
     expectQuiet(await jelly(page));
     await capture(page, info, 'word-jelly-completion-cleared');
+    evidence.cleared = await jelly(page);
+    expect(evidence.cleared.merged_count, 'Contact previews and cancellation do not commit a merge').toBe(opening.merged_count);
+    expect(evidence.cleared.cleared_pairs).toBe(opening.cleared_pairs);
+    expect(evidence.cleared.fragment_count).toBe(opening.fragment_count);
+    retainEvidence();
+    await info.attach('word-jelly-completion-samples.json', { path: evidencePath, contentType: 'application/json' });
     expect(errors).toEqual([]);
   });
 }
