@@ -19,6 +19,7 @@ const PAIR_FEEDBACK_GAIN := 0.48
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
 const COIN_PATH := "res://assets/audio/coins/collect.wav"
+const COIN_RELEASE_PATH := "res://assets/audio/coins/release.wav"
 const COIN_CHANNELS := 4
 const COIN_GAIN := 0.60
 const COIN_SPEECH_DB := -6.0
@@ -151,6 +152,7 @@ func _ready() -> void:
 	ui_click = _player(UI_CLICK_GAIN)
 	_stream(UI_CLICK_PATH)
 	_stream(COIN_PATH)
+	_stream(COIN_RELEASE_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -235,10 +237,14 @@ func stop_ui_click() -> void:
 
 
 func play_coin_release() -> void:
-	play_coin_arrival()
+	_play_coin(COIN_RELEASE_PATH)
 
 
 func play_coin_arrival() -> void:
+	_play_coin(COIN_PATH)
+
+
+func _play_coin(path: String) -> void:
 	if muted or not active or not available:
 		return
 	if _coin_players.is_empty():
@@ -248,7 +254,7 @@ func play_coin_arrival() -> void:
 	var player: AudioStreamPlayer = _coin_players[_coin_next_player]
 	_coin_next_player = (_coin_next_player + 1) % COIN_CHANNELS
 	_update_coin_gain()
-	_play(player, COIN_PATH)
+	_play(player, path)
 	set_process(true)
 
 

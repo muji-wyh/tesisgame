@@ -1,0 +1,35 @@
+{
+  "creator": "Kenney",
+  "pack": "Retro Sounds 2 1.0",
+  "sourceUrl": "https://kenney.nl",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "acquisition": "Acquired from the user-provided local Kenney Game Assets All-in-1 3.7.0 collection; integrated.",
+  "source": "Audio/Retro Sounds 2/Audio/coin5.ogg",
+  "sourceSha256": "73ce21b89de7eca2b7a7cac2e8faed4b20c9699e12c13d96c9851bb7b85edf59",
+  "destination": "assets/audio/coins/release.wav",
+  "sha256": "0e2668ad3d3e67b943da35bf7a3136889736a0444c57434f421638e64dda4550",
+  "sampleRate": 44100,
+  "channels": 1,
+  "bitDepth": 16,
+  "seconds": 0.14077097505668934,
+  "processing": {
+    "downmix": "mono",
+    "resample": 44100,
+    "fadeInFrames": 88,
+    "fadeOutFrames": 529,
+    "peak": 0.18,
+    "gain": 0.25152434520690153,
+    "trimming": "none",
+    "pitch": "unchanged"
+  },
+  "animations": "Not applicable; audio only.",
+  "licenseFile": "assets/audio/coins/LICENSE-Retro-Sounds-2.txt",
+  "review": {
+    "rms": 0.060206792875093555,
+    "clippedSamples": 0,
+    "onsetAboveFourPercentPeakSeconds": 0.00009070294784580499,
+    "lastAboveFourPercentPeakSeconds": 0.12419501133786848,
+    "method": "Source identity, decoded waveform, timing and spectrum inspected; no acoustic audition."
+  }
+}

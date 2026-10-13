@@ -103,33 +103,41 @@ Lifecycle tests verify arrival-gated counting, persistence and interrupted fligh
 
 ## Coin release and deposit sound
 
-The deposit sound is Kenney's `handleCoins2.ogg` from **RPG Audio 1.0**,
-acquired from the user's local **Kenney Game Assets All-in-1 3.7.0** collection
-under `Audio/RPG Audio/Audio/`. The creator and distributor is
-[Kenney](https://kenney.nl/assets/rpg-audio). The original pack license is
-**CC0-1.0**, copied to `assets/audio/coins/LICENSE.txt`. This recording is
-integrated in the game, not a source preview; it has no associated animation.
+Coin appearance and wallet arrival use different Kenney recordings, acquired
+from the user's local **Kenney Game Assets All-in-1 3.7.0** collection. Both are
+integrated production audio under **CC0-1.0**, not source previews, and contain
+no animation.
 
-The two RPG coin recordings and five Retro Sounds 2 coin recordings were
-inspected for format and duration. The shorter RPG recording was selected for
-its authored coin-material identity and 0.338-second duration. Decoded signal
-statistics were checked; automated inspection is not a listening review.
-`assets/audio/coins/manifest.json` records source and output SHA-256 hashes.
+| Event | Source and delivered asset | License and provenance |
+| --- | --- | --- |
+| Coins appear | Kenney **Retro Sounds 2 1.0**, `Audio/coin5.ogg`, delivered as `assets/audio/coins/release.wav`. A short pitched coin accent distinguishes appearance from the physical deposit. | Original `LICENSE-Retro-Sounds-2.txt` retained; [release manifest](../../assets/audio/coins/release-manifest.json) records the local source, source and output hashes, and processing. Creator: [Kenney](https://kenney.nl). |
+| Coins reach the wallet | Kenney **RPG Audio 1.0**, `Audio/handleCoins2.ogg`, delivered as `assets/audio/coins/collect.wav`. Existing 338 ms coin-material recording retained byte-for-byte. | Original `LICENSE.txt` and [deposit manifest](../../assets/audio/coins/manifest.json) unchanged. Source: [RPG Audio](https://kenney.nl/assets/rpg-audio). |
 
-Reproduce the mono 44,100 Hz PCM16 runtime WAV with:
+The five Retro coin variants, short interface selections and digital power-up
+recordings were inspected for source identity, duration, attack and spectrum.
+`coin5` supplies the shortest pitched coin cue at 141 ms; the broader-spectrum
+deposit keeps its established material identity. The release has a 0.18 peak
+and 0.06021 RMS, close to the deposit's 0.06060 RMS despite its much lower peak.
+Its measured attack begins within 0.1 ms and its significant tail ends at
+124 ms, with no clipped samples. Audio playback was unavailable in the review
+environment; these are waveform measurements, not a listening claim.
+
+Reproduce the mono 44,100 Hz PCM16 runtime WAVs independently with:
 
 ```powershell
 node tools/import-coin-audio.cjs 'Q:/uwok/Kenney Game Assets All-in-1 3.7.0/Audio/RPG Audio/Audio/handleCoins2.ogg'
+node tools/import-coin-audio.cjs --release 'Q:/uwok/Kenney Game Assets All-in-1 3.7.0/Audio/Retro Sounds 2/Audio/coin5.ogg'
 ```
 
-The full recording is retained at its original pitch, downmixed and resampled,
-with 2 ms / 12 ms edge fades and a peak level of 0.8. Runtime gain is 0.60,
+Both full recordings retain their original pitch, with mono conversion,
+44,100 Hz resampling and 2 ms / 12 ms edge fades. The deposit retains its 0.8
+peak; the denser release is normalized to 0.18. Runtime gain is 0.60 for both,
 with a further 6 dB reduction during word pronunciation.
 
-Every reward mode shares the same coin-flight audio. Chest payouts and Jelly
-Words collections play one accent as the coins emerge, followed by accents when
-they reach the balance counter. Both a single word and each word in Collect use
-the visible release cue. Release and arrival
+Every reward mode shares this two-event coin-flight audio. Chest payouts and
+Jelly Words collections play the release cue as coins emerge, followed by the
+deposit cue when they reach the balance counter. Both a single word and each
+word in Collect use the visible release cue. Release and arrival
 cues share a limit of once per rendered update and at least 100 ms apart.
 Four fixed channels let the brief tails overlap;
 skipped accents are never queued. The Jelly Words Collect cadence and voice
@@ -137,5 +145,5 @@ behavior are unchanged. Reduced motion coalesces simultaneous deposits. A
 stalled frame that skips the burst does not replay its release sound afterward.
 Mute, backgrounding, Home, Library, and silent balance synchronization cancel
 the coin channels, including pending stream requests. Restore and duplicate
-receipts do not replay the sound. The WAV is a required startup-pack resource,
-so deposits never make an additional audio download.
+receipts do not replay the sound. Both WAVs are required startup-pack resources,
+so neither event makes an additional audio download.

@@ -10,7 +10,7 @@ class DelayedCoinAudio extends "res://scripts/game_audio.gd":
 	var delay_coin: bool = false
 
 	func _stream(path: String, loop: bool = false) -> AudioStream:
-		if delay_coin and path == COIN_PATH:
+		if delay_coin and path in [COIN_PATH, COIN_RELEASE_PATH]:
 			await coin_loaded
 		return await super._stream(path, loop)
 
@@ -246,14 +246,18 @@ func _coin_players_silent(audio) -> bool:
 	return true
 
 
-func _coin_playing(audio) -> bool:
+func _coin_playing(audio, path: String = "") -> bool:
 	for player: AudioStreamPlayer in audio._coin_players:
-		if player.playing and player.stream != null and player.stream.resource_path == Audio.COIN_PATH:
+		if player.playing and player.stream != null and (path.is_empty() or player.stream.resource_path == path):
 			return true
 	return false
 
 
 func _check_audio_channels() -> void:
+	var arrival: AudioStreamWAV = load(Audio.COIN_PATH)
+	var release: AudioStreamWAV = load(Audio.COIN_RELEASE_PATH)
+	check(Audio.COIN_RELEASE_PATH != Audio.COIN_PATH and release != arrival and release.data != arrival.data,
+		"Coin appearance and HUD arrival are distinct production recordings rather than aliases of one stream")
 	var audio := Audio.new()
 	root.add_child(audio)
 	check(audio._coin_players.is_empty(), "Starting the game does not allocate or play coin channels")
@@ -271,7 +275,8 @@ func _check_audio_channels() -> void:
 	var rng_state: int = audio._pop_slice_rng.state
 	for index in range(24):
 		audio.play_coin_arrival()
-	check(audio._coin_players.size() == Audio.COIN_CHANNELS and _coin_playing(audio),
+	check(audio._coin_players.size() == Audio.COIN_CHANNELS and _coin_playing(audio, Audio.COIN_PATH)
+		and not _coin_playing(audio, Audio.COIN_RELEASE_PATH),
 		"Repeated deposits reuse a fixed pool and play the selected production recording")
 	var channels: int = audio.get_child_count()
 	for index in range(16):
@@ -279,8 +284,9 @@ func _check_audio_channels() -> void:
 			audio.play_coin_release()
 		else:
 			audio.play_coin_arrival()
-	check(audio.get_child_count() == channels and _coin_playing(audio),
-		"Chest releases and long Collect runs reuse the same fixed recording pool")
+	check(audio.get_child_count() == channels and _coin_playing(audio, Audio.COIN_PATH)
+		and _coin_playing(audio, Audio.COIN_RELEASE_PATH),
+		"Distinct appearance and deposit recordings overlap within the same fixed channel pool")
 	check(audio.voice.playing and audio._playback_requests[audio.voice] == voice_request
 		and audio._playback_requests[audio.pair_feedback] == pair_request
 		and audio._playback_requests[jelly] == jelly_request and audio._pop_slice_rng.state == rng_state,
@@ -288,16 +294,18 @@ func _check_audio_channels() -> void:
 	for player: AudioStreamPlayer in audio._coin_players:
 		check(player.stream is AudioStreamWAV and not player.stream.stereo
 			and player.stream.loop_mode == AudioStreamWAV.LOOP_DISABLED
-			and player.stream.get_length() > 0.30 and player.stream.get_length() < 0.38,
-			"Each coin channel uses the complete short mono recording without a loop")
+			and player.stream in [arrival, release]
+			and player.stream.get_length() > 0.05 and player.stream.get_length() < 1.0,
+			"Each coin channel uses one of the complete short mono production recordings without a loop")
 		check(player.volume_db <= linear_to_db(Audio.COIN_GAIN) + 0.001 and player.pitch_scale == 1.0,
 			"The coin recording keeps its original pitch and bounded mix level")
 	audio.stop_coin_sounds()
 	check(_coin_players_silent(audio) and audio.voice.playing,
 		"Settling coins stops only their own tails and preserves pronunciation")
 	audio.play_coin_arrival()
+	audio.play_coin_release()
 	audio.set_muted(true)
-	check(_coin_players_silent(audio), "Mute immediately stops every coin tail")
+	check(_coin_players_silent(audio), "Mute immediately stops both appearance and deposit tails")
 	audio.play_coin_arrival()
 	audio.play_coin_release()
 	audio.set_muted(false)
@@ -309,7 +317,8 @@ func _check_audio_channels() -> void:
 	check(_coin_players_silent(audio), "Unavailable audio leaves the earned reward silent")
 	audio.available = true
 	audio.play_coin_release()
-	check(_coin_playing(audio), "A new live chest release can play after audio availability returns")
+	check(_coin_playing(audio, Audio.COIN_RELEASE_PATH) and not _coin_playing(audio, Audio.COIN_PATH),
+		"A new live chest release selects only the appearance recording after audio availability returns")
 	audio.halt()
 	check(_coin_players_silent(audio), "Leaving gameplay stops the entire coin pool")
 	audio.play_coin_arrival()
@@ -340,7 +349,10 @@ func _check_pending_audio() -> void:
 			await process_frame
 			check(_coin_players_silent(audio), "A delayed %s asset cannot revive playback after %s" % [cue, interruption])
 			audio.call("play_coin_" + cue)
-			check(_coin_playing(audio), "A new real %s still responds after %s" % [cue, interruption])
+			var expected: String = Audio.COIN_RELEASE_PATH if cue == "release" else Audio.COIN_PATH
+			var unexpected: String = Audio.COIN_PATH if cue == "release" else Audio.COIN_RELEASE_PATH
+			check(_coin_playing(audio, expected) and not _coin_playing(audio, unexpected),
+				"A new real %s selects its own recording after %s" % [cue, interruption])
 			audio.halt()
 			audio.queue_free()
 			await process_frame
@@ -369,12 +381,14 @@ func _check_application_routes() -> void:
 	check(chest.ok and app.coin_wallet.balance == 50 and not _coin_playing(app.audio),
 		"The shared chest route commits its wallet receipt before the first visual burst frame")
 	app._coin_flight.advance(0.016)
-	check(_coin_playing(app.audio) and app._coin_counter.target == 0,
-		"The application sounds chest coins as they emerge before their HUD deposit")
+	check(_coin_playing(app.audio, Audio.COIN_RELEASE_PATH) and not _coin_playing(app.audio, Audio.COIN_PATH)
+		and app._coin_counter.target == 0,
+		"The first visible chest burst selects the appearance recording before any HUD deposit")
 	app.audio.stop_coin_sounds()
 	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.015)
-	check(_coin_playing(app.audio) and app._coin_counter.target > 0,
-		"The application keeps the separate coin arrival sound after the chest release")
+	check(_coin_playing(app.audio, Audio.COIN_PATH) and not _coin_playing(app.audio, Audio.COIN_RELEASE_PATH)
+		and app._coin_counter.target > 0,
+		"The chest's first actual HUD deposit selects the distinct arrival recording")
 	app._show_mode_menu()
 	check(_coin_players_silent(app.audio) and not app._coin_flight.snapshot().active
 		and app._coin_counter.target == app.coin_wallet.balance,
@@ -386,11 +400,13 @@ func _check_application_routes() -> void:
 	check(word.ok and app.coin_wallet.balance == 150 and not _coin_playing(app.audio),
 		"Jelly Words saves its reward before the first visible coin frame")
 	app._coin_flight.advance(0.016)
-	check(_coin_playing(app.audio) and app._coin_counter.target == 50,
-		"A collected Jelly Word sounds when its coins appear, before they reach the counter")
+	check(_coin_playing(app.audio, Audio.COIN_RELEASE_PATH) and not _coin_playing(app.audio, Audio.COIN_PATH)
+		and app._coin_counter.target == 50,
+		"A collected Jelly Word selects the appearance recording at its first visible coin frame")
 	app.audio.stop_coin_sounds()
 	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.015)
-	check(_coin_playing(app.audio), "A collected Jelly Word uses the shared coin arrival sound")
+	check(_coin_playing(app.audio, Audio.COIN_PATH) and not _coin_playing(app.audio, Audio.COIN_RELEASE_PATH),
+		"A collected Jelly Word switches to the distinct recording for its actual HUD deposit")
 	app._show_collection()
 	check(_coin_players_silent(app.audio) and not app._coin_flight.snapshot().active,
 		"Opening the word library cancels coin tails even without halting all audio")
@@ -403,11 +419,13 @@ func _check_application_routes() -> void:
 	word = app._credit_word_jelly("audio-reduced", 100)
 	app._word_jelly_collected("audio-reduced", {}, 100, 0, Vector2.ZERO)
 	app._coin_flight.advance(0.016)
-	check(word.ok and _coin_playing(app.audio) and app._coin_counter.target == 150,
+	check(word.ok and _coin_playing(app.audio, Audio.COIN_RELEASE_PATH)
+		and not _coin_playing(app.audio, Audio.COIN_PATH) and app._coin_counter.target == 150,
 		"Reduced-motion Jelly Words retains the coin-appearance sound")
 	app.audio.stop_coin_sounds()
 	app._coin_flight.advance(0.225)
-	check(word.ok and _coin_playing(app.audio) and app._coin_counter.displayed == 250.0,
+	check(word.ok and _coin_playing(app.audio, Audio.COIN_PATH)
+		and not _coin_playing(app.audio, Audio.COIN_RELEASE_PATH) and app._coin_counter.displayed == 250.0,
 		"Reduced-motion gameplay still acknowledges a real coin deposit audibly")
 	app.on_page_hidden()
 	check(_coin_players_silent(app.audio), "Backgrounding immediately stops coin feedback")
@@ -439,8 +457,11 @@ func _check_collect_application_route(app) -> void:
 	view._layout()
 	var before: int = app.coin_wallet.balance
 	var voice_request: int = app.audio._playback_requests.get(app.audio.voice, 0)
-	var observed := {"time": 0.0, "releases": [], "receipts": []}
-	var on_release := func() -> void: observed.releases.append(observed.time)
+	var observed := {"time": 0.0, "releases": [], "receipts": [], "streams": []}
+	var on_release := func() -> void:
+		observed.releases.append(observed.time)
+		var index: int = posmod(app.audio._coin_next_player - 1, Audio.COIN_CHANNELS)
+		observed.streams.append(app.audio._coin_players[index].stream.resource_path)
 	var on_collected := func(id: String, _word: Dictionary, _coins: int, _fragments: int, _origin: Vector2) -> void:
 		observed.receipts.append(id)
 	app._coin_flight.release_sound.connect(on_release)
@@ -453,8 +474,10 @@ func _check_collect_application_route(app) -> void:
 		view._process(0.01)
 		app._coin_flight.advance(0.01)
 	check(observed.receipts.size() == 12 and observed.releases.size() == 12
-		and not game.collection_batch_active() and _coin_playing(app.audio),
+		and not game.collection_batch_active() and _coin_playing(app.audio, Audio.COIN_RELEASE_PATH),
 		"Every removed jelly in a rapid Collect run launches one audible coin appearance")
+	check(observed.streams.size() == 12 and observed.streams.all(func(path: String) -> bool: return path == Audio.COIN_RELEASE_PATH),
+		"Every rapid Collect release uses the appearance recording rather than the HUD deposit recording")
 	for index in range(1, observed.releases.size()):
 		check(is_equal_approx(float(observed.releases[index]) - float(observed.releases[index - 1]), 0.10),
 			"The real Collect button retains a 100 millisecond coin-appearance rhythm")

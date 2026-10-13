@@ -8,13 +8,15 @@ const {
 } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
-const COIN_CLIP = 'assets/audio/coins/collect.wav';
+const COIN_CLIPS = { release: 'assets/audio/coins/release.wav', arrival: 'assets/audio/coins/collect.wav' };
 const PRESENTATION_KEY = 'pipAndWords.presentation.v1';
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
 const playbacksSince = (page, from) => page.evaluate(index => window.audioObservation.playbacks.slice(index), from);
 const matching = (sounds, recording) => sounds.filter(sound => sound.fingerprint === recording.fingerprint);
+const coinFeedback = (sounds, recordings) => sounds.filter(sound =>
+  Object.values(recordings).some(recording => sound.fingerprint === recording.fingerprint));
 
 test.use({ deviceScaleFactor: 1, trace: 'off',
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
@@ -131,21 +133,28 @@ function expectNoPronunciation(sounds, words) {
   }
 }
 
-function expectReleaseAndArrival(sounds, timeline, balance, reducedMotion, maximum) {
+function expectReleaseAndArrival(releases, deposits, timeline, balance, reducedMotion, maximum) {
+  const sounds = [...releases, ...deposits].sort((a, b) => a.at - b.at);
   const launches = timeline.filter((frame, index, frames) => frame.active && frame.balance >
     (index ? frames[index - 1].balance : balance));
   const arrivals = timeline.filter((frame, index, frames) => index > 0 &&
     frame.arrived_balance > frames[index - 1].arrived_balance);
   expect(launches.length, 'A visual coin flight begins for the collected word').toBeGreaterThan(0);
   expect(arrivals.length, 'The same flight eventually deposits its coins').toBeGreaterThan(0);
+  expect(releases.length, 'The appearing coins play their own recording').toBeGreaterThan(0);
+  expect(deposits.length, 'The HUD deposits play their distinct recording').toBeGreaterThan(0);
   expect(sounds.length, 'Coin appearance and later arrival both have feedback').toBeGreaterThanOrEqual(2);
   expect(sounds.length, 'Launches and dense arrivals share one bounded cadence').toBeLessThanOrEqual(maximum);
-  expect(Math.abs(sounds[0].at - launches[0].at),
-    'The first Kenney accent accompanies the appearing coins, including publication latency').toBeLessThan(180);
-  expect(arrivals[0].at - sounds[0].at,
+  expect(Math.abs(releases[0].at - launches[0].at),
+    'The appearance recording accompanies the first visible coins, including publication latency').toBeLessThan(180);
+  expect(arrivals[0].at - releases[0].at,
     'The initial accent is audible before the later HUD deposit').toBeGreaterThan(reducedMotion === 'reduce' ? 50 : 650);
-  expect(sounds.some(sound => arrivals.some(frame => Math.abs(frame.at - sound.at) < 180)),
-    'The later HUD deposit retains its own Kenney accent').toBe(true);
+  for (const sound of releases) expect(launches.some(frame => Math.abs(frame.at - sound.at) < 180),
+    'The appearance recording belongs only to a visible coin launch').toBe(true);
+  for (const sound of deposits) expect(arrivals.some(frame => Math.abs(frame.at - sound.at) < 180),
+    'The arrival recording belongs only to an actual HUD deposit').toBe(true);
+  expect(deposits[0].at - releases[0].at,
+    'The two distinct recordings follow appearance then deposit in time').toBeGreaterThan(reducedMotion === 'reduce' ? 50 : 650);
   for (const [index, sound] of sounds.entries()) {
     expect([...launches, ...arrivals].some(frame => Math.abs(frame.at - sound.at) < 180),
       'Each coin accent belongs to a visible launch or actual HUD deposit').toBe(true);
@@ -174,15 +183,26 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       // A deliberate tap uses the real valid-word collection path. Its normal
       // word pronunciation remains separate from the new coin launch accent.
       await pressRect(page, single.rect);
-      evidence.recording = await expectRecording(page, singleFrom, COIN_CLIP);
+      evidence.recordings = {
+        release: await expectRecording(page, singleFrom, COIN_CLIPS.release),
+        arrival: await expectRecording(page, singleFrom, COIN_CLIPS.arrival)
+      };
+      expect(evidence.recordings.release.fingerprint,
+        'Appearance and arrival decode to different PCM audio instead of replaying one recording')
+        .not.toBe(evidence.recordings.arrival.fingerprint);
+      for (const recording of Object.values(evidence.recordings)) {
+        expect(recording.fingerprint, 'Each bundled recording has an observed PCM identity').toBeTruthy();
+        expect(recording.peak, 'Each selected recording contains nonzero samples').toBeGreaterThan(0.01);
+      }
       evidence.singleOutput = await expectOutputEnergy(page);
       await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(singleBalance + 100);
       await expect.poll(async () => (await wallet(page)).active).toBe(false);
       await page.waitForTimeout(450);
       evidence.single = { playbacks: await playbacksSince(page, singleFrom),
         timeline: await page.evaluate(() => window.coinAudioTimeline), word: single.word.id };
-      evidence.single.coinSounds = matching(evidence.single.playbacks, evidence.recording);
-      evidence.single.events = expectReleaseAndArrival(evidence.single.coinSounds,
+      evidence.single.releaseSounds = matching(evidence.single.playbacks, evidence.recordings.release);
+      evidence.single.arrivalSounds = matching(evidence.single.playbacks, evidence.recordings.arrival);
+      evidence.single.events = expectReleaseAndArrival(evidence.single.releaseSounds, evidence.single.arrivalSounds,
         evidence.single.timeline, singleBalance, reducedMotion, reducedMotion === 'reduce' ? 2 : 6);
       expect((await wallet(page)).balance, 'A tapped word credits its coins once').toBe(singleBalance + 100);
 
@@ -194,27 +214,28 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       await observeWallet(page);
       const from = await playbackIndex(page);
       await collect(page, 3);
-      const batchRecording = await expectRecording(page, from, COIN_CLIP);
-      expect(batchRecording.fingerprint, 'Single taps and Collect use the same bundled Kenney recording')
-        .toBe(evidence.recording.fingerprint);
-      expect(evidence.recording.fingerprint, 'The bundled recording has observed PCM identity').toBeTruthy();
-      expect(evidence.recording.peak, 'The selected Kenney recording contains nonzero samples').toBeGreaterThan(0.01);
+      for (const [kind, clip] of Object.entries(COIN_CLIPS)) {
+        const batchRecording = await expectRecording(page, from, clip);
+        expect(batchRecording.fingerprint, `Single taps and Collect use the same distinct ${kind} recording`)
+          .toBe(evidence.recordings[kind].fingerprint);
+      }
       evidence.output = await expectOutputEnergy(page);
       await expect.poll(async () => (await wallet(page)).active).toBe(false);
       await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(balance + 300);
       await page.waitForTimeout(450);
       evidence.playbacks = await playbacksSince(page, from);
       evidence.timeline = await page.evaluate(() => window.coinAudioTimeline);
-      evidence.coinSounds = matching(evidence.playbacks, evidence.recording);
+      evidence.releaseSounds = matching(evidence.playbacks, evidence.recordings.release);
+      evidence.arrivalSounds = matching(evidence.playbacks, evidence.recordings.arrival);
       const batch = (await jelly(page)).collection_batch;
       expect(batch.completed).toBe(3);
       expect(batch.elapsed, 'Coin feedback preserves the 100 ms word collection rhythm').toBeCloseTo(0.3, 6);
       expectNoPronunciation(evidence.playbacks, words.map(tile => tile.word));
-      evidence.events = expectReleaseAndArrival(evidence.coinSounds, evidence.timeline, balance,
+      evidence.events = expectReleaseAndArrival(evidence.releaseSounds, evidence.arrivalSounds, evidence.timeline, balance,
         reducedMotion, reducedMotion === 'reduce' ? 5 : 10);
       const finishedFrom = await playbackIndex(page);
       await page.waitForTimeout(400);
-      expect(matching(await playbacksSince(page, finishedFrom), evidence.recording),
+      expect(coinFeedback(await playbacksSince(page, finishedFrom), evidence.recordings),
         'Finishing the deposit never replays its sound').toEqual([]);
 
       if (reducedMotion === 'no-preference') {
@@ -231,9 +252,9 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
         await expect.poll(async () => (await wallet(page)).active).toBe(false);
         await page.waitForTimeout(650);
         evidence.interrupted = await playbacksSince(page, interruptedFrom);
-        expect(matching(await playbacksSince(page, homeFrom), evidence.recording),
+        expect(coinFeedback(await playbacksSince(page, homeFrom), evidence.recordings),
           'Home never replays settled coins or starts delayed deposit cues').toEqual([]);
-        expect(matching(evidence.interrupted, evidence.recording).filter(sound =>
+        expect(coinFeedback(evidence.interrupted, evidence.recordings).filter(sound =>
           sound.stoppedAt === undefined && sound.endedAt === undefined),
         'No coin recording keeps playing behind Home').toEqual([]);
         expect((await wallet(page)).arrived_balance).toBe(beforeInterrupt + 100);
@@ -265,7 +286,7 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(finalBalance);
     await page.waitForTimeout(500);
     const restored = await playbacksSince(page, 0);
-    expect(matching(restored, evidence.recording), 'Restoring an owned wallet balance never replays coin feedback').toEqual([]);
+    expect(coinFeedback(restored, evidence.recordings), 'Restoring an owned wallet balance never replays either coin recording').toEqual([]);
     expect(requests, 'All coin and game feedback plays from already bundled recordings').toEqual([]);
     expect(errors).toEqual([]);
   });

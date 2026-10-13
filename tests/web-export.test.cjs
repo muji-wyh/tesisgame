@@ -222,6 +222,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
   fixture.writeImport('assets/audio/coins/collect.wav');
+  fixture.writeImport('assets/audio/coins/release.wav');
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
   for (const cue of ['clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
@@ -236,7 +237,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 417);
+  assert.equal(required.length, 418);
   assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);

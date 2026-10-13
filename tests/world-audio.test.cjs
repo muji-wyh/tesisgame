@@ -52,6 +52,28 @@ test('the new-world provenance preserves superseded music and speech while pinni
   }
 });
 
+test('coin release and arrival use distinct acquired recordings with verified source manifests', () => {
+  const cues = [
+    ['collect', 'manifest.json'],
+    ['release', 'release-manifest.json']
+  ].map(([cue, filename]) => {
+    const manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/audio/coins', filename), 'utf8'));
+    assert.equal(manifest.creator, 'Kenney');
+    assert.equal(manifest.license, 'CC0-1.0');
+    assert.equal(manifest.destination, `assets/audio/coins/${cue}.wav`);
+    const bytes = fs.readFileSync(path.join(root, manifest.destination));
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), manifest.sha256, manifest.destination);
+    assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
+    assert.equal(bytes.toString('ascii', 8, 12), 'WAVE');
+    assert.equal(bytes.readUInt16LE(22), manifest.channels);
+    assert.equal(bytes.readUInt32LE(24), manifest.sampleRate);
+    assert.equal(bytes.readUInt16LE(34), manifest.bitDepth);
+    return manifest;
+  });
+  assert.notEqual(cues[0].source, cues[1].source, 'Release has its own source instead of repitching the arrival recording');
+  assert.notEqual(cues[0].sha256, cues[1].sha256, 'The shipped release and arrival cues remain separate recordings');
+});
+
 test('missing-only SFX generation adds two arrival cues without rewriting effects or restoring retired openings', (t) => {
   const { sounds, makeWave, generateSfx } = require('../tools/generate-sfx.cjs');
   const directory = fixture(t);
@@ -156,6 +178,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
     'assets/audio/coins/collect.wav',
+    'assets/audio/coins/release.wav',
     'assets/audio/jelly-finish/ready.ogg',
     ...['clear', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
@@ -205,6 +228,8 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 330);
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
+  assert.equal(audio.filter(file => file.source.includes('/audio/coins/')).length, 2,
+    'Coin release and wallet arrival both ship in the startup bundle');
   assert.ok(audio.every(file => !/\/chests\/[^/]+-(?:step(?:-detail|-roll)?|release|reward)\.wav$/.test(file.source)),
     'Replaced theme copies never re-enter the required inventory');
   const phraseCatalog = path.join(directory, 'phrases.json');
@@ -233,6 +258,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.throws(() => collectRequiredAudio(directory), /phrase-red-apple\.wav\.import/,
     'A whole-phrase recording cannot silently disappear from the required bundle');
   fs.writeFileSync(phraseImport, phraseMetadata);
+  const coinReleaseImport = path.join(directory, 'assets/audio/coins/release.wav.import');
+  const coinReleaseMetadata = fs.readFileSync(coinReleaseImport);
+  fs.unlinkSync(coinReleaseImport);
+  assert.throws(() => collectRequiredAudio(directory), /coins.*release\.wav\.import/,
+    'The coin release cannot silently disappear from the startup bundle');
+  fs.writeFileSync(coinReleaseImport, coinReleaseMetadata);
   const clickImport = path.join(directory, `${click.asset.destination}.import`);
   const clickMetadata = fs.readFileSync(clickImport);
   fs.unlinkSync(clickImport);
