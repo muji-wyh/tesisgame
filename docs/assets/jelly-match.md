@@ -315,22 +315,25 @@ Do not play merge or clear for every animation frame or every affected card.
 The full-board clock triggers one danger recording at each remaining second,
 including entry. The board's rim light uses that same eight-second clock. Its
 primary beat holds for 180 ms and fades by 550 ms; a weaker second beat gradually
-enters during the latter half of the countdown. Muted amber progresses to soft
-coral, and two small cream highlights travel faster around the rounded rim.
+enters during the latter half of the countdown. Amber progresses through hot
+orange to scarlet, and two bright highlights accelerate around the rounded rim.
 Quiet intervals separate the flashes. Light fades within five interior screen
 pixels of the edge, leaving the learning faces clear; the board and its
 input geometry do not move. No full-screen flash or additional warning label is
 introduced. Reduced motion removes traveling highlights and repeated flashes,
 retaining a stationary glow with gradual color and intensity changes.
 
-Jelly Match and Jelly Words share this restrained warning presentation. Within
-the existing 54-screen-pixel drawing margin, the visible exterior halo fades
-out at 26 pixels. Its narrow core and small textured ripple avoid a thick neon
-rim or a broad red wash. Traveling glints grow from 72 to 112 pixels with
-urgency, keeping each accent local. The later double beat and warmer color
-communicate escalation while preserving the jelly pieces as the focus. The
-ripple follows the model-driven pulse and disappears in reduced motion; the
-eight-second Match and ten-second Words rescue windows and audio stay unchanged.
+Jelly Match and Jelly Words share this escalating warning presentation. The
+exterior light footprint grows from 12 to 72 screen pixels within an 80-pixel
+drawing margin. Its textured corona grows broader and brighter while the inner
+mask continues to protect the word faces. Two traveling glints leave luminous
+tails that lengthen with speed, growing from a deliberate 0.07 to 0.72 laps per
+second. The continuous orbit integrates a quadratic speed curve using the real
+normalized rescue clock, so both modes reach the same urgency without phase
+jumps. Each existing beat sends a soft wave outward; the second beat enters
+later for the final buildup. Reduced motion removes glints, tails, waves and
+flashes while retaining gradual outward growth and color change. The eight-second
+Match and ten-second Words rescue windows and audio stay unchanged.
 
 The rim reuses the acquired `portal_glow.png` from Bobardo's Modern 2D Animated
 Chests Pack_FREE Demo 1.0.2, under the existing Standard Unity Asset Store EULA
@@ -348,7 +351,7 @@ the fusion actually makes space. Starting a match keeps the countdown running.
 Pause, hidden page, blocked interaction, stop, new round and expiry suppress the
 light; resume restores its saved phase without restarting a beat.
 
-The softened rim was compared before and after on the same seeded full boards
+The expanded warning was compared before and after on the same seeded full boards
 in both modes at 393 x 852 and 1473 x 1175. The 48 local rendered frames cover
 opening, middle and late bright beats, a quiet interval, the late secondary
 beat and reduced motion. Existing native view regressions verify progressive

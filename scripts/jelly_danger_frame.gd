@@ -4,7 +4,7 @@ extends ColorRect
 const LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const GLINT = preload("res://assets/chests/milestone/sparkle.png")
 const FRAME_SHADER = preload("res://scripts/jelly_danger_frame.gdshader")
-const HALO_MARGIN: float = 54.0
+const HALO_MARGIN: float = 80.0
 
 var state: Dictionary = {}
 
@@ -34,14 +34,19 @@ static func primary_pulse(elapsed: float, reduced: bool) -> float:
 static func sample(elapsed: float, duration: float, reduced: bool) -> Dictionary:
 	var progress: float = clampf(elapsed / maxf(0.001, duration), 0.0, 1.0)
 	var urgency: float = smoothstep(0.0, 1.0, progress)
+	# Integrating the speed keeps the orbit continuous as the rescue clock advances.
+	var travel_speed: float = 0.07 + 0.65 * progress * progress
+	var travel: float = duration * (0.07 * progress + 0.65 * pow(progress, 3.0) / 3.0)
 	var beat: float = fposmod(elapsed, 1.0)
 	# A quieter second beat enters halfway through the actual rescue window.
 	var echo: float = smoothstep(0.46, 0.53, beat) * (1.0 - smoothstep(0.63, 0.88, beat))
 	echo *= smoothstep(0.38, 0.82, progress) * 0.82
 	return {
 		"urgency": urgency,
+		"glow_extent": lerpf(12.0, 72.0, urgency),
+		"travel_speed": travel_speed,
 		"pulse": 0.65 if reduced else maxf(primary_pulse(elapsed, false), echo),
-		"travel": 0.125 if reduced else elapsed * 0.065 + elapsed * elapsed * 0.009,
+		"travel": 0.125 if reduced else travel,
 		"moving": not reduced,
 	}
 

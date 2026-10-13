@@ -4,6 +4,7 @@ const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -68,6 +69,7 @@ func _run() -> void:
 	_check_rejection_lifecycle(view)
 	_check_keyboard_feedback(view)
 	_check_feedback_lifecycle(view)
+	_check_danger_curve()
 	_check_danger_clock(view)
 	_check_danger_escalation(view)
 	_check_danger_lifecycle(view)
@@ -1455,6 +1457,52 @@ func _check_danger_hidden(view, reason: String) -> void:
 		"%s also removes the rendered rim light" % reason)
 
 
+func _check_danger_curve() -> void:
+	# Both modes should reach the same visual stakes over their own rescue window.
+	for duration: float in [8.0, 10.0]:
+		var opening: Dictionary = DangerFrame.sample(0.0, duration, false)
+		var peak: Dictionary = DangerFrame.sample(duration, duration, false)
+		check(float(peak.glow_extent) >= float(opening.glow_extent) * 4.0,
+			"The final warning spreads its light well beyond the opening rim")
+		check(float(peak.travel_speed) >= float(opening.travel_speed) * 8.0,
+			"The final traveling light is substantially faster than the opening warning")
+		var previous: Dictionary = opening
+		for progress: float in [0.15, 0.35, 0.60, 0.85]:
+			var elapsed: float = progress * duration
+			var state: Dictionary = DangerFrame.sample(elapsed, duration, false)
+			var other: Dictionary = DangerFrame.sample(progress * 10.0, 10.0, false)
+			check(float(state.urgency) > float(previous.urgency)
+				and float(state.glow_extent) > float(previous.glow_extent)
+				and float(state.travel_speed) > float(previous.travel_speed),
+				"Color urgency, outward glow, and perimeter speed all build through the rescue window")
+			for property: String in ["urgency", "glow_extent", "travel_speed"]:
+				check(is_equal_approx(float(state[property]), float(other[property])),
+					"The same relative danger stage has the same %s in both Jelly modes" % property)
+			var step: float = 0.001
+			var before: Dictionary = DangerFrame.sample(elapsed - step, duration, false)
+			var after: Dictionary = DangerFrame.sample(elapsed + step, duration, false)
+			var measured_speed: float = (float(after.travel) - float(before.travel)) / (2.0 * step)
+			check(absf(measured_speed - float(state.travel_speed)) < 0.002,
+				"The actual perimeter travel follows the reported accelerating speed without phase jumps")
+			var still: Dictionary = DangerFrame.sample(elapsed, duration, true)
+			var still_opening: Dictionary = DangerFrame.sample(0.0, duration, true)
+			check(not bool(still.moving) and still.travel == still_opening.travel and still.pulse == still_opening.pulse,
+				"Reduced motion never moves the perimeter light or pulses while danger increases")
+			check(is_equal_approx(float(still.urgency), float(state.urgency))
+				and is_equal_approx(float(still.glow_extent), float(state.glow_extent)),
+				"Reduced motion preserves the growing light footprint and dangerous color progression")
+			previous = state
+	var frame = DangerFrame.new()
+	var peak_extent: float = float(DangerFrame.sample(10.0, 10.0, false).glow_extent)
+	for scale_factor: float in [0.65, 1.0, 1.6]:
+		var bounds := Rect2(90.0, 100.0, 260.0, 440.0)
+		frame.layout_frame(bounds, scale_factor, 18.0)
+		var required := bounds.grow(peak_extent / scale_factor)
+		check(Rect2(frame.position, frame.size).encloses(required),
+			"The danger canvas contains the full final glow at every UI scale")
+	frame.free()
+
+
 func _check_danger_escalation(view) -> void:
 	_reset(view)
 	_fill_board(view)
@@ -1468,16 +1516,21 @@ func _check_danger_escalation(view) -> void:
 	check(is_zero_approx(float(view._danger_frame.state.pulse)),
 		"The opening warning leaves a quiet interval after its single beat")
 	var last_urgency: float = float(early.urgency)
+	var last_extent: float = float(early.glow_extent)
 	var last_echo: float = 0.0
 	for moment: float in [2.58, 4.58, 6.58]:
 		while float(view.game.full_elapsed) < moment - 0.000001:
 			view._process(minf(0.25, moment - float(view.game.full_elapsed)))
 		var state: Dictionary = view._danger_frame.state
 		check(float(state.urgency) > last_urgency, "Rim color and halo intensity build throughout the rescue window")
+		check(float(state.glow_extent) > last_extent, "The rendered warning expands farther outward throughout the rescue window")
 		check(float(state.pulse) >= last_echo, "The secondary beat becomes more pronounced toward expiry")
 		check(is_equal_approx(float(view._danger_frame.material.get_shader_parameter("urgency")), float(state.urgency)),
 			"The rendered material receives the current urgency")
+		check(is_equal_approx(float(view._danger_frame.material.get_shader_parameter("glow_extent")), float(state.glow_extent)),
+			"The rendered material receives the expanding light footprint")
 		last_urgency = float(state.urgency)
+		last_extent = float(state.glow_extent)
 		last_echo = float(state.pulse)
 	check(last_echo > 0.7, "The final seconds have a distinct second light beat")
 	var before: Dictionary = view._danger_frame.state.duplicate()
@@ -1494,8 +1547,9 @@ func _check_danger_escalation(view) -> void:
 	check(not bool(steady.moving) and not bool(view._danger_frame.state.moving)
 		and steady.pulse == view._danger_frame.state.pulse and steady.travel == view._danger_frame.state.travel,
 		"Reduced motion disables both traveling highlights and repeated flashes")
-	check(float(view._danger_frame.state.urgency) > float(steady.urgency),
-		"Reduced motion still communicates increasing urgency through gradual light changes")
+	check(float(view._danger_frame.state.urgency) > float(steady.urgency)
+		and float(view._danger_frame.state.glow_extent) > float(steady.glow_extent),
+		"Reduced motion still communicates increasing urgency through gradual color and outward glow changes")
 	check(view._board == board, "Escalation and reduced motion preserve the board and its hit geometry")
 	view.interaction_allowed = func() -> bool: return false
 	view._process(0.1)
