@@ -194,6 +194,18 @@ both private inputs without silently restoring them. The focused
 `chest-milestone-art` Node suite covers exact copying, preserved resource UIDs,
 idempotence, invalid sources and changed import settings.
 
+## Local chest tap
+
+The Jelly Match and Jelly Words HUD chest also responds to a tap with a 920 ms
+local enlargement, alternating turn and gold light accent. The source chest art,
+Bobardo Modern 2D Animated Chests portal glow, and acquired Toon FX rays/glint
+textures above are reused under their existing recorded licenses. These are
+integrated production assets; the new tap timeline is authored in the game.
+It keeps the HUD anchor and hit area fixed and grants no fragments or rewards.
+Repeated taps share one bounded response. Reduced motion uses a 400 ms glow
+without enlargement or rotation. Leaving, pausing, finishing, or starting an
+earned chest celebration cancels the local response.
+
 ## Lifecycle and review boundary
 
 Queued milestone visuals must stay attached to their round and fragment event.

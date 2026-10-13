@@ -22,6 +22,7 @@ const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const LootMeter = preload("res://scripts/jelly_loot_meter.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const ChestTap = preload("res://scripts/jelly_chest_tap.gd")
 const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
 const LOOT_FLIGHT_SECONDS: float = ChestCelebration.ARRIVAL_SECONDS
 const SURFACES := ["coral", "mint", "sky", "lilac"]
@@ -74,6 +75,7 @@ var _rejection: Dictionary = {}
 var _loot_flights: Array[Dictionary] = []
 var _loot_icon: TextureRect
 var _loot_meter: LootMeter
+var _chest_tap: ChestTap
 var _loot_detail: Label
 var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
@@ -107,6 +109,9 @@ func _init() -> void:
 	_loot_meter = LootMeter.new()
 	add_child(_loot_meter)
 	_loot_icon = _image(self)
+	_chest_tap = ChestTap.new()
+	_chest_tap.pressed.connect(_tap_chest)
+	add_child(_chest_tap)
 	_loot_detail = _label(self, "Fragments", 11)
 	_loot_detail.name = "JellyFragmentProgress"
 	drop_button = Button.new()
@@ -296,6 +301,7 @@ func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
 	reduced_motion = value
+	_chest_tap.clear()
 	_reward_presentation.reduced_motion = value
 	_reward_presentation._sync()
 	_snapbacks.clear()
@@ -362,6 +368,7 @@ func stop() -> void:
 	_publish()
 
 func cancel_input() -> void:
+	_chest_tap.clear()
 	_contact_cue_target = -1
 	_pointer = NO_POINTER
 	_preview_first_id = -1
@@ -373,6 +380,7 @@ func cancel_input() -> void:
 	_contact_elapsed = 0.0
 	_rejection.clear()
 	_gesture_serial += 1
+	_sync_chest_tap()
 	_refresh_marks()
 	_sync_positions()
 	_refresh_fusion()
@@ -406,6 +414,22 @@ func _allowed() -> bool:
 
 func _can_play() -> bool:
 	return _allowed() and game.phase == "playing" and not _result_visible
+
+func _can_tap_chest() -> bool:
+	return _can_play() and _pointer == NO_POINTER and not _reward_presentation.is_active()
+
+func _tap_chest() -> void:
+	if not _can_tap_chest() or _chest_tap.is_active():
+		return
+	_chest_tap.play(_loot_icon.texture, _loot_icon.modulate.a, reduced_motion)
+	_sync_chest_tap()
+	_publish()
+
+func _sync_chest_tap() -> void:
+	var shown: bool = _configured and not _result_visible and not _reward_presentation.visible
+	_chest_tap.visible = shown
+	_chest_tap.disabled = not _can_tap_chest()
+	_loot_icon.visible = shown and not _chest_tap.is_active()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _pointer != NO_POINTER:
@@ -855,12 +879,15 @@ func _process(delta: float) -> void:
 				cache.art.set_idle_paused(true)
 				cache.viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	if not _allowed() or delta > 0.5:
+		_chest_tap.clear()
+		_sync_chest_tap()
 		_refresh_danger()
 		if _pointer != NO_POINTER:
 			cancel_input()
 		return
 	var generation: int = _generation
 	var previous_ages: Dictionary = {}
+	_chest_tap.advance(delta)
 	for cell: Dictionary in game.cells:
 		previous_ages[int(cell.id)] = float(cell.age)
 	_landing_cooldown = maxf(0.0, _landing_cooldown - delta)
@@ -1088,6 +1115,7 @@ func _fusion_completed(fusion: Dictionary, awarded: int) -> void:
 func _chest_milestone(previous_tier: int, tier: int) -> void:
 	if not _configured or game.phase != "playing":
 		return
+	_chest_tap.clear()
 	_reward_presentation.reduced_motion = reduced_motion
 	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
 	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1))
@@ -1181,7 +1209,7 @@ func _refresh_hud() -> void:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not _result_visible and (not _compact_hud or full)
-	_loot_icon.visible = _configured and not _result_visible and not _reward_presentation.visible
+	_sync_chest_tap()
 	_loot_meter.visible = _configured and not _result_visible
 	_loot_detail.visible = _configured and not _result_visible
 	_sync_preview()
@@ -1196,6 +1224,7 @@ func set_pending_chests(count: int) -> void:
 	_publish()
 
 func _refresh_controls() -> void:
+	_sync_chest_tap()
 	_refresh_danger()
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
@@ -1227,6 +1256,8 @@ func navigation_controls() -> Array[Control]:
 				controls.append(_tiles[int(cell.id)])
 		if not drop_button.disabled:
 			controls.append(drop_button)
+		if not _chest_tap.disabled:
+			controls.append(_chest_tap)
 		if not finish_button.disabled:
 			controls.append(finish_button)
 	return controls
@@ -1317,6 +1348,8 @@ func _layout() -> void:
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
+	_chest_tap.position = _loot_meter.position
+	_chest_tap.size = _loot_meter.size
 	_loot_detail.position = Vector2(hud_x, hud_y + meter_edge + 2.0 / scale_factor)
 	_loot_detail.size = Vector2(hud_width, 17.0 / scale_factor)
 	_loot_detail.add_theme_font_size_override("font_size", ceili(11.0 / scale_factor))
@@ -1487,6 +1520,8 @@ func snapshot() -> Dictionary:
 	result["loot"]["progress_text"] = _loot_detail.text
 	result["loot"]["progress"] = _loot_meter.snapshot()
 	result["loot"]["progress"]["rect"] = _rect(_loot_meter.get_global_rect())
+	result["loot"]["tap"] = _chest_tap.snapshot()
+	result["loot"]["tap"].merge(_control(_chest_tap))
 	result["reward_presentation"] = _reward_presentation.snapshot()
 	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
 		"open": _control(chests_button), "replay": _control(replay_button)}

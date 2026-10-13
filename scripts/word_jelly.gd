@@ -625,6 +625,8 @@ func navigation_controls() -> Array[Control]:
 		controls.append(collect_button)
 	if not drop_button.disabled:
 		controls.append(drop_button)
+	if not _chest_tap.disabled:
+		controls.append(_chest_tap)
 	if not finish_button.disabled:
 		controls.append(finish_button)
 	return controls
@@ -827,6 +829,9 @@ func _refresh_hud() -> void:
 		_notice.show()
 	_refresh_collect_button()
 
+func _can_tap_chest() -> bool:
+	return not game.collection_batch_active() and super._can_tap_chest()
+
 func _refresh_controls() -> void:
 	super._refresh_controls()
 	if collect_button == null:
@@ -909,6 +914,8 @@ func _layout() -> void:
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
+	_chest_tap.position = _loot_meter.position
+	_chest_tap.size = _loot_meter.size
 	_loot_detail.position = Vector2(hud_x, _loot_meter.position.y + meter_edge + 2.0 / s) if side_hud else _loot_meter.position + Vector2(meter_edge + 6.0 / s, 14.0 / s)
 	_loot_detail.size = Vector2(hud_width if side_hud else maxf(0.0, footer_width - meter_edge - hud_width - 14.0 / s), 16.0 / s)
 	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if side_hud else HORIZONTAL_ALIGNMENT_LEFT
