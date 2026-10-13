@@ -333,7 +333,13 @@ func _check_collect_and_fragments(view) -> void:
 	view._release(center)
 	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "collect", "touch tap begins a distinct disappearance operation")
 	check(heard.size() == 1 and heard[0].id == "cat", "collect tap speaks the completed word once")
-	_advance(view, Model.COLLECT_SECONDS)
+	_advance(view, 0.179)
+	check(cues.count("pop") == 0 and payouts.is_empty(), "manual collection retains its full 180 ms anticipation before the pop")
+	_advance(view, 0.001)
+	check(cues.count("pop") == 1 and payouts.is_empty(), "manual collection plays the existing disappearance sound at 180 ms")
+	_advance(view, 0.239)
+	check(view.game.cells.size() == 1 and payouts.is_empty(), "manual collection keeps the word reserved before its 420 ms payout")
+	_advance(view, 0.001)
 	check(view.game.cells.is_empty() and payouts.size() == 1 and attempts.size() == 1, "tap collection removes the word and emits one reward and learning attempt")
 	check(payouts[0].amount == 100 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
 		"coin and fragment flight origin matches the tapped merged jelly")
@@ -488,16 +494,16 @@ func _check_batch_collection(view) -> void:
 			previous_completed = now_completed
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
-			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 0.90),
-			"three words finish in exactly 900 ms through three sequential collection beats")
+			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 0.30),
+			"three words finish in exactly 300 ms through three sequential collection beats")
 		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
 			"each collected word has a separate visible start, payout and disappearance sound")
 		for index in range(start_times.size()):
-			check(is_equal_approx(start_times[index], index * 0.30)
-				and is_equal_approx(payout_times[index], (index + 1) * 0.30),
-				"ordinary and reduced-motion collection both preserve exact 300 ms start and payout spacing")
-			check(is_equal_approx(pop_times[index], index * 0.30 + 0.18),
-				"the existing disappearance sound stays at 180 ms within every 300 ms beat")
+			check(is_equal_approx(start_times[index], index * 0.10)
+				and is_equal_approx(payout_times[index], (index + 1) * 0.10),
+				"ordinary and reduced-motion collection both preserve exact 100 ms start and payout spacing")
+			check(is_equal_approx(pop_times[index], index * 0.10 + 0.06),
+				"the existing disappearance sound stays at 60 ms within every 100 ms beat")
 		check(payouts.size() == 3 and credits.size() == 3 and attempts.size() == 3,
 			"batch collection credits and records each captured word exactly once")
 		for times: int in credits.values():
@@ -537,8 +543,8 @@ func _check_batch_chest_queue(view) -> void:
 		check(queued_during_batch and not view.game.collection_batch_active()
 			and view.game.fragment_count == 9 and view.game.chest_tier == 2,
 			"all nine fragments and the second chest tier commit before queued celebration begins")
-		check(payouts.size() == 9 and view.game.collected_coins == 900,
-			"waiting chest artwork never delays or duplicates the nine authoritative coin rewards")
+		check(payouts.size() == 9 and view.game.collected_coins == 900 and is_equal_approx(elapsed, 0.90),
+			"waiting chest artwork preserves all nine authoritative coin rewards within 900 ms")
 		var kinds: Dictionary = {}
 		for tick in range(320):
 			_advance(view, 0.025)
@@ -558,7 +564,7 @@ func _check_batch_lifecycle(view) -> void:
 	_reset(view)
 	_install_batch_words(view, 3)
 	view._collect_all()
-	_advance(view, 0.12)
+	_advance(view, 0.04)
 	view.pause(true)
 	var paused: Dictionary = view.snapshot()
 	_advance(view, 1.0)
@@ -581,7 +587,7 @@ func _check_batch_lifecycle(view) -> void:
 		_reset(view)
 		_install_batch_words(view, 3)
 		view._collect_all()
-		_advance(view, 0.10)
+		_advance(view, 0.03)
 		match action:
 			"stop": view.stop()
 			"finish": view._finish_round()

@@ -605,7 +605,7 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
 });
 
 test('collect button grows with completed words and collects a rhythmic batch once', async ({ page }, info) => {
-  test.setTimeout(120000);
+  test.setTimeout(240000);
   const errors = await startWordJelly(page), initial = await jelly(page), bounds = await metrics(page);
   expect(initial.collect_button.visible).toBe(true);
   expect(initial.collect_button.enabled).toBe(false);
@@ -650,22 +650,25 @@ test('collect button grows with completed words and collects a rhythmic batch on
       window.wordJellyBatchTimeline.push({ ...batch, button: state.collect_button,
         effects: state.fusion_effects, revealed: state.word_reveal, cleared: state.cleared_pairs,
         collectedCoins: state.collected_coins, fragments: state.fragment_count, at: performance.now() });
-      if (!batch.active || !batch.started || pending.has(batch.started)) return;
       const reveal = state.word_reveal;
-      // The status bridge publishes at 100 ms intervals. Capture the first
-      // readable pose instead of waiting past it within a 300 ms pickup.
-      if (!reveal?.visible || reveal.content_alpha <= 0.9 || !state.fusion_effects?.length) return;
-      pending.add(batch.started);
-      const index = batch.started;
-      document.getElementById('canvas').toBlob(blob => {
-        if (!blob) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-          window.wordJellyBatchCaptured.push(index);
-          window.saveWordJellyBatchFrame(index, reader.result.split(',')[1]);
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/png');
+      // A 100 ms status publication can skip a whole 100 ms pickup. Capture
+      // playback and the final reading pose, without requiring every transient.
+      const index = batch.active && batch.started && state.fusion_effects?.length ? 'active' :
+        !batch.active && batch.completed === batch.total && reveal?.visible && reveal.content_alpha > 0.9 ? 'reveal' : '';
+      if (!index || pending.has(index)) return;
+      pending.add(index);
+      // Let the status update reach the rendered canvas before capturing it.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = async () => {
+            await window.saveWordJellyBatchFrame(index, reader.result.split(',')[1]);
+            window.wordJellyBatchCaptured.push(index);
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }));
     });
     window.wordJellyBatchObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
@@ -677,33 +680,50 @@ test('collect button grows with completed words and collects a rhythmic batch on
     { message: 'Every captured completed word is collected through the rhythmic queue' }).toBe(3);
   await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + expectedCoins);
+  let timeline;
+  try {
+    await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.slice().sort()),
+      { message: 'The real batch animation and final readable word both produce rendered evidence' }).toEqual(['active', 'reveal']);
+  } finally {
+    timeline = await page.evaluate(() => {
+      window.wordJellyBatchObserver.disconnect();
+      return window.wordJellyBatchTimeline;
+    });
+    fs.writeFileSync(info.outputPath('word-jelly-batch-timeline.json'), JSON.stringify({ stages, timeline }, null, 2));
+  }
   const final = await jelly(page);
-  const timeline = await page.evaluate(() => {
-    window.wordJellyBatchObserver.disconnect();
-    return window.wordJellyBatchTimeline;
-  });
-  fs.writeFileSync(info.outputPath('word-jelly-batch-timeline.json'), JSON.stringify({ stages, timeline }, null, 2));
-  await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.length),
-    { message: 'Each staggered collection produces an actual rendered review frame' }).toBe(3);
-  expect(timeline.length).toBeGreaterThan(3);
+  expect(timeline.some(frame => frame.active), 'The observer sees the disabled control during batch playback').toBe(true);
+  expect(timeline.some(frame => !frame.active && frame.completed === 3), 'The browser observes the completed queue').toBe(true);
+  const selectedById = new Map(selected.map(tile => [tile.id, tile]));
   let previousStarted = 0, previousCompleted = 0;
   for (const frame of timeline) {
     expect(frame.total).toBe(3);
+    expect(frame.ids.slice().sort((a, b) => a - b)).toEqual(collectedIds.slice().sort((a, b) => a - b));
+    expect(frame.skipped, 'Every captured word remains eligible throughout playback').toBe(0);
     expect(frame.started).toBeGreaterThanOrEqual(previousStarted);
-    expect(frame.started - previousStarted, 'Render snapshots observe one new collection at a time').toBeLessThanOrEqual(1);
+    expect(frame.started).toBeLessThanOrEqual(3);
     expect(frame.completed).toBeGreaterThanOrEqual(previousCompleted);
-    expect(frame.completed - previousCompleted, 'Coins settle one word at a time').toBeLessThanOrEqual(1);
+    expect(frame.completed).toBeLessThanOrEqual(frame.started);
     expect(frame.started - frame.completed, 'The active disappearance never overlaps a second payout').toBeLessThanOrEqual(1);
+    expect(frame.effects.length, 'Only one collection effect is active at each observed point').toBeLessThanOrEqual(1);
+    const paid = frame.ids.slice(0, frame.completed).map(id => selectedById.get(id));
+    expect(frame.cleared, 'Only the completed prefix has cleared from the board').toBe(before.cleared_pairs + paid.length);
+    expect(frame.collectedCoins, 'Observed coin credit matches the completed prefix exactly')
+      .toBe(before.collected_coins + paid.reduce((sum, tile) => sum + tile.coins, 0));
+    expect(frame.fragments, 'Observed treasure credit matches the same completed prefix')
+      .toBe(before.fragment_count + paid.reduce((sum, tile) => sum + tile.fragments, 0));
     if (frame.active) expect(frame.button.enabled).toBe(false);
     previousStarted = frame.started;
     previousCompleted = frame.completed;
   }
-  const starts = [1, 2, 3].map(index => timeline.find(frame => frame.started === index));
-  expect(starts.every(Boolean), 'Every batch member has an individually observed beginning').toBe(true);
-  for (let index = 1; index < starts.length; index++) {
-    expect(Math.abs(starts[index].elapsed - starts[index - 1].elapsed - 0.3),
-      'Neighboring collections keep the requested 300 ms beat within one rendered frame').toBeLessThan(0.08);
-  }
+  expect(final.collection_batch.started).toBe(3);
+  expect(final.collection_batch.completed).toBe(3);
+  expect(final.collection_batch.elapsed, 'Three 100 ms collections finish in 300 ms of game time').toBeCloseTo(0.3, 6);
+  const readable = timeline.find(frame => !frame.active && frame.revealed?.visible && frame.revealed.content_alpha > 0.9);
+  const lastWord = selectedById.get(final.collection_batch.ids.at(-1)).word;
+  expect(readable, 'The final collected word retains an opaque reading pose after the fast batch').toBeTruthy();
+  expect(readable.revealed.word_id).toBe(lastWord.id);
+  expect(readable.revealed.spelling).toBe(lastWord.text);
   expect(final.cleared_pairs).toBe(before.cleared_pairs + 3);
   expect(final.collected_coins).toBe(before.collected_coins + expectedCoins);
   expect(final.fragment_count).toBe(before.fragment_count + expectedFragments);

@@ -28,7 +28,8 @@ const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.30
+const BATCH_BEAT_SECONDS: float = 0.10
+const BATCH_POP_SECONDS: float = 0.06
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
@@ -245,7 +246,8 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
 		"coins": coins_for_tile(tile), "fragments": int(tile.fragments),
-		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS, "pop_at": POP_SECONDS,
+		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS,
+		"pop_at": BATCH_POP_SECONDS if batch_index > 0 else POP_SECONDS,
 		"popped": false, "credited": false,
 		"batch": batch_index > 0, "batch_index": batch_index,
 		"batch_total": _collection_batch_ids.size() if batch_index > 0 else 0,
@@ -352,7 +354,7 @@ func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
-	# so later gravity or growth cannot stretch the 300 ms collection beat.
+	# so later gravity or growth cannot stretch the 100 ms collection beat.
 	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,
@@ -459,7 +461,7 @@ func step(delta: float) -> void:
 				break
 			if _fusion_index(str(active.attempt_id)) < 0:
 				continue
-			if str(active.operation) == "collect" and not bool(active.popped) and float(active.elapsed) + EPSILON >= POP_SECONDS:
+			if str(active.operation) == "collect" and not bool(active.popped) and float(active.elapsed) + EPSILON >= float(active.pop_at):
 				active.popped = true
 				cue_requested.emit("pop")
 				if not _can_continue(generation):
