@@ -52,6 +52,55 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 	return result
 
 
+func check_finish_header(app, view) -> void:
+	var original_size: Vector2i = root.size
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(320, 480), Vector2i(568, 320), Vector2i(844, 390)]:
+		root.size = dimensions
+		await settle()
+		var s: float = app.Style.ui_scale(app)
+		var finish: Rect2 = view.finish_button.get_global_rect()
+		var playfield: Rect2 = view.get_global_rect()
+		var collect: Rect2 = view.collect_button.get_global_rect()
+		var context: String = " at %s" % dimensions
+		check(view.finish_button.is_visible_in_tree() and not view.finish_button.disabled
+			and app._header.get_global_rect().grow(0.1).encloses(finish),
+			"The active round places Finish inside the game header" + context)
+		check(finish.end.y + 4.0 / s <= playfield.position.y + 0.1
+			and collect.position.y - finish.end.y >= 16.0 / s - 0.1,
+			"Finish is separated from the playfield and Collect words" + context)
+		check(finish.size.x * s >= 44.0 - 0.1 and finish.size.y * s >= 44.0 - 0.1
+			and not finish.intersects(app._mode_heading.get_global_rect()),
+			"The header keeps a full touch target and an unobstructed mode title" + context)
+		var bottom: float = maxf(view._global_rect(view._board).end.y, maxf(collect.end.y, view._loot_meter.get_global_rect().end.y))
+		check(absf(bottom - (playfield.end.y - 12.0 / s)) < 0.1,
+			"The board and collection controls retain twelve-pixel bottom padding" + context)
+	root.size = original_size
+	await settle()
+	var source: Vector2 = view._tiles[int(view.game.cells[0].id)].get_global_rect().get_center()
+	check(view._press(-1, source), "A settled root can begin the header Finish drag guard check")
+	view._move(source + Vector2(24.0 / app.Style.ui_scale(app), 0))
+	view._process(0.0)
+	check(view._dragging and view.finish_button.disabled, "Dragging a root disables the header Finish target")
+	view.finish_button.pressed.emit()
+	check(view.game.phase == "playing" and app._round_result.is_empty(), "A Finish signal cannot end an owned board drag")
+	view.cancel_input()
+	view._refresh_controls()
+	view.finish_button.pressed.emit()
+	await settle()
+	check(view.game.phase == "finished" and view._result_visible and not view.finish_button.is_visible_in_tree(),
+		"A deliberate header Finish opens results and removes the round action")
+	view.replay_button.pressed.emit()
+	await settle()
+	view._process(0.0)
+	check(view.game.phase == "playing" and view.finish_button.is_visible_in_tree(), "Replay restores Finish to the active header")
+	Fixture.enter_mode(app, "match")
+	await settle()
+	check(not view.finish_button.is_visible_in_tree(), "Switching to Match leaves no Jelly Words Finish in its header")
+	Fixture.enter_mode(app, "word_jelly")
+	await settle()
+	check(view.finish_button.is_visible_in_tree(), "Returning to Jelly Words restores its own Finish control")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 800)
@@ -73,6 +122,7 @@ func _run() -> void:
 	check(app._active_jelly() == view and view.is_visible_in_tree() and not app._jelly.is_visible_in_tree(), "Only the selected Jelly board is visible")
 	check(app._jelly_backdrop.visible and app._mode_heading.text.begins_with("Jelly Words"), "The new game has its heading and shared woodland")
 	check(app._round_id.begins_with("word_jelly:"), "Word treasure and coin receipts use a distinct round namespace")
+	await check_finish_header(app, view)
 	var vocabulary: Array = app._learning_words()
 	var word: Dictionary = vocabulary.filter(func(item: Dictionary) -> bool: return str(item.text).length() >= 2 and str(item.text).length() <= 6)[0]
 	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405), "The integration fixture uses a real current-age word")
@@ -106,7 +156,9 @@ func _run() -> void:
 	app._show_mode_menu()
 	game.step(2.0)
 	check(game.paused and app.coin_wallet.balance == 100 and is_equal_approx(float(game.fusions.back().elapsed), paused_time), "The library freezes a pending collection before its wallet commit")
+	check(not view.finish_button.is_visible_in_tree(), "Home hides the hosted Finish action while the round is paused")
 	app._hide_mode_menu()
+	check(view.finish_button.is_visible_in_tree(), "Returning from Home restores the active Finish action")
 	app.set_reduced_motion(false)
 	game.step(game.COLLECT_SECONDS)
 	check(not game.paused and game.fragment_count == 4 and game.chest_tier == 1 and app.coin_wallet.balance == 200, "Returning to play completes collection and unlocks the first chest")
@@ -124,6 +176,7 @@ func _run() -> void:
 	app._show_collection()
 	check(game.paused and not view._reward_presentation._flight_surface.is_visible_in_tree(),
 		"The vocabulary page is never covered by a paused chest flight")
+	check(not view.finish_button.is_visible_in_tree(), "Vocabulary hides the hosted Finish action")
 	app._hide_collection()
 	check(not game.paused and view._reward_presentation._flight_surface.is_visible_in_tree()
 		and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), reward_elapsed),
@@ -166,6 +219,7 @@ func _run() -> void:
 	Fixture.enter_mode(app, "jelly")
 	await settle()
 	check(app._mode_id == "jelly" and app._jelly_rewards_shown and app._jelly_rewards.has_pending(), "Switching Jelly games preserves and opens the saved treasure room")
+	check(not view.finish_button.is_visible_in_tree(), "The treasure room and the other Jelly mode cannot expose Jelly Words Finish")
 	check(app._jelly_rewards.rewards.entries[0].tier == 2 and app._jelly_rewards.rewards.round_id == earned_round
 		and app._jelly_rewards.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0", "The saved reward retains the exact upgraded tier and mode namespace")
 	growth_before = app.growth.snapshot().streaks.duplicate()

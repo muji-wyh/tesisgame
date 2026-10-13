@@ -175,7 +175,7 @@ function expectSupplyLayout(state, bounds) {
       `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
   }
   const regions = [['well', board], ['supply tray', tray], ['chest meter', state.loot.progress.rect],
-    ['Finish', state.finish.rect], ['Collect words', state.collect_button.rect]];
+    ['Collect words', state.collect_button.rect]];
   inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
   for (const [index, [label, rect]] of regions.entries()) {
     inside(rect, area, label);
@@ -185,10 +185,16 @@ function expectSupplyLayout(state, bounds) {
       expect(width <= tolerance || height <= tolerance, `${label} and ${otherLabel} do not overlap`).toBe(true);
     }
   }
+  inside(state.finish.rect, [0, 0, bounds.width, bounds.height], 'Header Finish');
+  expect(state.finish.visible, 'Finish is visible in the active round header').toBe(true);
+  expect(state.finish.rect[1] + state.finish.rect[3] + 4 / scale,
+    'Finish stays above the playfield with a separate header gap').toBeLessThanOrEqual(area[1] + tolerance);
+  expect(state.collect_button.rect[1] - state.finish.rect[1] - state.finish.rect[3],
+    'Collect words remains well below the header Finish target').toBeGreaterThanOrEqual(16 / scale - tolerance);
   expect(tray[3] * scale, 'The supply tray retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
   expect(state.finish.rect[3] * scale, 'Finish retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
   expect(state.collect_button.rect[3] * scale, 'Collect words retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
-  const bottom = Math.max(board[1] + board[3], state.finish.rect[1] + state.finish.rect[3]);
+  const bottom = Math.max(...regions.map(([, rect]) => rect[1] + rect[3]));
   expect(Math.abs(bottom - (area[1] + area[3] - 12 / scale)), 'The game retains twelve-pixel bottom padding').toBeLessThan(tolerance);
 }
 
@@ -807,11 +813,12 @@ test('six columns build a pictured word and a deliberate tap credits its coins o
   await capture(page, info, 'word-jelly-six-column-opening');
   const originalViewport = page.viewportSize();
   for (const viewport of [{ width: 1473, height: 1175 }, { width: 768, height: 1024 },
-    { width: 390, height: 844 }, { width: 568, height: 320 }]) {
+    { width: 390, height: 844 }, { width: 393, height: 852 }, { width: 568, height: 320 }]) {
     await page.setViewportSize(viewport);
     await rendered(page);
     await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
       .toPass({ timeout: 5000 });
+    if (viewport.width === 393) await capture(page, info, 'word-jelly-header-finish-393x852');
   }
   await page.setViewportSize(originalViewport);
   await rendered(page);
@@ -998,9 +1005,10 @@ test('collected words reveal their picture and spelling above the bottom-anchore
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 4 });
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   const scale = Math.max(2 / 3, bounds.scale), area = opening.playfield_rect;
-  const gameBottom = Math.max(opening.board_rect[1] + opening.board_rect[3], opening.finish.rect[1] + opening.finish.rect[3]);
+  const gameBottom = Math.max(...[opening.board_rect, opening.collect_button.rect, opening.loot.progress.rect]
+    .map(rect => rect[1] + rect[3]));
   expect(Math.abs(gameBottom - (area[1] + area[3] - 12 / scale)) * bounds.scale,
-    'The game group ends at its bottom padding within a quarter rendered pixel, including the portrait Finish control')
+    'The board and collection controls retain their bottom padding within a quarter rendered pixel')
     .toBeLessThan(0.25);
   expect(opening.preview.rect[1] + opening.preview.rect[3], 'The full supply tray remains above the board')
     .toBeLessThanOrEqual(opening.board_rect[1]);

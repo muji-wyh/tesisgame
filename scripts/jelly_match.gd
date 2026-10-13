@@ -1233,7 +1233,9 @@ func _refresh_controls() -> void:
 	replay_button.visible = _result_visible
 	chests_button.disabled = not _allowed() or _result_transition
 	replay_button.disabled = not _allowed() or _result_transition
-	finish_button.visible = _configured and game.phase == "playing" and not _result_visible
+	finish_button.visible = is_visible_in_tree() and _configured and game.phase == "playing" and not _result_visible
+	if finish_button.get_parent() != self:
+		finish_button.visible = _can_play()
 	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
 	drop_button.disabled = not _can_play() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
@@ -1289,13 +1291,15 @@ func _set_preview_pressed(value: bool, force: bool = false) -> void:
 
 func _style_finish_button() -> void:
 	var s: float = Style.ui_scale(self)
+	var hosted: bool = finish_button.get_parent() != self
+	var compact: bool = _compact_hud or hosted
 	var ink := Color("#514731")
 	Style.action_button(finish_button, ink)
-	finish_button.icon = null if _compact_hud else preload("res://assets/images/ui/finish-flag.svg")
-	finish_button.custom_minimum_size = Vector2(0, 44.0 / s)
-	finish_button.add_theme_font_size_override("font_size", ceili((12.0 if _compact_hud else 14.0) / s))
-	finish_button.add_theme_constant_override("icon_max_width", ceili((16.0 if _compact_hud else 20.0) / s))
-	finish_button.add_theme_constant_override("h_separation", ceili((4.0 if _compact_hud else 6.0) / s))
+	finish_button.icon = null if _compact_hud and not hosted else preload("res://assets/images/ui/finish-flag.svg")
+	finish_button.custom_minimum_size = Vector2(84.0 if hosted else 0.0, 44.0) / s
+	finish_button.add_theme_font_size_override("font_size", ceili((12.0 if compact else 14.0) / s))
+	finish_button.add_theme_constant_override("icon_max_width", ceili((16.0 if compact else 20.0) / s))
+	finish_button.add_theme_constant_override("h_separation", ceili((4.0 if compact else 6.0) / s))
 	var fills := {"normal": Color("#fff5dc"), "hover": Color("#fff9e9"),
 		"pressed": Color("#efdfbb"), "disabled": Color("#e7e9dc")}
 	for state: String in fills:
@@ -1306,7 +1310,7 @@ func _style_finish_button() -> void:
 		surface.shadow_color = Color("#294834", 0.0 if pressed or inactive else 0.12)
 		surface.shadow_size = ceili(3.0 / s)
 		surface.shadow_offset = Vector2(0, 2.0 / s)
-		surface.content_margin_left = (6.0 if _compact_hud else 12.0) / s
+		surface.content_margin_left = (6.0 if compact else 12.0) / s
 		surface.content_margin_right = surface.content_margin_left
 		surface.content_margin_top = (10.0 if pressed else 7.0) / s
 		surface.content_margin_bottom = (4.0 if pressed else 7.0) / s

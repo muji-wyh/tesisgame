@@ -928,12 +928,17 @@ func _layout() -> void:
 		_preview_tiles[index].size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * _pitch - preview_size * 0.5, (preview_height - preview_size) * 0.5)
 	_style_finish_button()
-	finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
-	finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge + 8.0 / s)
+	# The app hosts Finish in its header, away from dragging and collection.
+	var local_finish: bool = finish_button.get_parent() == self
+	if local_finish:
+		finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
+		finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge + 8.0 / s)
 	if collect_button != null:
+		var finish_width: float = finish_button.size.x if local_finish else 0.0
+		var finish_height: float = finish_button.size.y + 16.0 / s if local_finish else 0.0
 		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - meter_edge - finish_button.size.x - 20.0 / s), 52.0 / s)
-		collect_button.position = Vector2(hud_x, finish_button.position.y - collect_button.size.y - 16.0 / s) if side_hud else Vector2(hud_x + meter_edge + (footer_width - meter_edge - finish_button.size.x - collect_button.size.x) * 0.5, _board.end.y + edge)
+		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - meter_edge - finish_width - 20.0 / s), 52.0 / s)
+		collect_button.position = Vector2(hud_x, _board.end.y - finish_height - collect_button.size.y) if side_hud else Vector2(hud_x + meter_edge + (footer_width - meter_edge - finish_width - collect_button.size.x) * 0.5, _board.end.y + edge)
 	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(_board.position.x, maxf(0.0, group_top - 42.0 / s - edge))
 	_notice.size = Vector2(hud_width if side_hud else _board.size.x, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))

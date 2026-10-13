@@ -757,6 +757,8 @@ func _build_controls() -> void:
 	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
+	_word_jelly.finish_button.reparent(_toolbar, false)
+	_word_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_word_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("word_jelly"))
 	_jelly_rewards = PopRewardRoom.new()
 	_jelly_rewards.credit_coins = _credit_coins
