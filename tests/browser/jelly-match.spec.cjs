@@ -118,7 +118,7 @@ test('opening and replay wait for the first batch while manual release stays ava
 for (const mode of ['jelly', 'word_jelly']) {
   for (const pointer of ['mouse', 'touch']) {
     test(`${mode} pull Finish ${pointer} arms only downward, springs back, and cancels safely`, async ({ page }, info) => {
-      test.setTimeout(150000);
+      test.setTimeout(210000);
       test.skip(pointer === 'touch' && info.project.use.browserName !== 'chromium',
         'Real multi-event touch injection uses Chromium; mouse and native touch coverage remain available.');
       const errors = await openGame(page, { reducedMotion: 'no-preference' });

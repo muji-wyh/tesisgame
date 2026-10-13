@@ -24,18 +24,30 @@ function eventTarget() {
 
 function fixture({ hidden = false, reducedMotion = false } = {}) {
   const window = eventTarget(), canvas = eventTarget();
+  Object.assign(window, { innerWidth: 393, innerHeight: 852, devicePixelRatio: 2 });
+  window.visualViewport = Object.assign(eventTarget(), { width: 393, height: 852, scale: 1 });
+  const rect = { x: 0, y: 0, width: 393, height: 852 };
+  canvas.getBoundingClientRect = () => ({ ...rect, left: rect.x, top: rect.y,
+    right: rect.x + rect.width, bottom: rect.y + rect.height });
+  const observers = [];
+  class ResizeObserver {
+    constructor(callback) { this.callback = callback; observers.push(this); }
+    observe(target) { this.target = target; }
+    disconnect() {}
+    trigger() { this.callback([{ target: this.target, contentRect: canvas.getBoundingClientRect() }]); }
+  }
   const document = Object.assign(eventTarget(), { hidden });
   const motion = Object.assign(eventTarget(), { matches: reducedMotion });
-  const calls = { hidden: 0, visible: 0, canceled: 0, motion: [], released: [] };
-  const host = vm.runInNewContext(`({${source}})`, { window, canvas, document, motion });
+  const calls = { hidden: 0, visible: 0, canceled: 0, motion: [], released: [], events: [] };
+  const host = vm.runInNewContext(`({${source}})`, { window, canvas, document, motion, ResizeObserver });
   host.observe(
     () => calls.hidden++,
     value => calls.motion.push(value),
     () => calls.visible++,
-    () => calls.canceled++,
-    (...args) => calls.released.push(args)
+    () => { calls.canceled++; calls.events.push('cancel'); },
+    (...args) => { calls.released.push(args); calls.events.push('release'); }
   );
-  return { window, canvas, document, motion, calls };
+  return { window, canvas, document, motion, calls, rect, observers };
 }
 
 test('trusted touch releases forward each changed finger with signed Godot IDs and a touch discriminator', () => {
@@ -110,4 +122,68 @@ test('pointer release changes preserve cancellation, visibility, page, and motio
   const initiallyHidden = fixture({ hidden: true });
   assert.equal(initiallyHidden.calls.hidden, 1);
   assert.deepEqual(initiallyHidden.calls.motion, [false]);
+});
+
+test('a changed viewport cancels synchronously before release even when resize callbacks are late', () => {
+  for (const type of ['touchend', 'mouseup']) {
+    const f = fixture();
+    f.window.innerWidth -= 12;
+    f.rect.width -= 12;
+    f.window.dispatch(type, { isTrusted: true, button: 0, changedTouches: [{ identifier: 0 }] });
+    assert.deepEqual(f.calls.events, ['cancel', 'release'],
+      `${type} invalidates the held gesture before Godot sees its ordinary release fallback`);
+    assert.equal(f.calls.canceled, 1);
+    f.window.dispatch(type, { isTrusted: true, button: 0, changedTouches: [{ identifier: 0 }] });
+    assert.deepEqual(f.calls.events, ['cancel', 'release', 'release'],
+      'The remembered geometry prevents a duplicate cancellation at the same size');
+  }
+});
+
+test('window and canvas resize cancel changed input geometry once without reacting to unchanged notifications', () => {
+  const f = fixture();
+  f.window.dispatch('resize');
+  assert.equal(f.calls.canceled, 0, 'A duplicate initial resize cannot interrupt a valid gesture');
+  f.window.innerHeight -= 24;
+  f.window.dispatch('resize');
+  assert.equal(f.calls.canceled, 1, 'Window geometry changes invalidate the gesture immediately');
+  f.window.dispatch('resize');
+  assert.equal(f.calls.canceled, 1);
+  const observer = f.observers.find(value => value.target === f.canvas);
+  assert.ok(observer, 'Canvas size is observed independently of window notifications');
+  f.rect.x += 4;
+  observer.trigger();
+  assert.equal(f.calls.canceled, 2, 'A shifted canvas invalidates its old input coordinate frame');
+  observer.trigger();
+  assert.equal(f.calls.canceled, 2);
+  assert.deepEqual(f.calls.released, [], 'A layout cancellation cannot masquerade as a physical release');
+});
+
+test('visual viewport and pixel density changes invalidate held coordinates', () => {
+  const f = fixture();
+  f.window.visualViewport.height -= 60;
+  f.window.visualViewport.dispatch('resize');
+  assert.equal(f.calls.canceled, 1);
+  f.window.visualViewport.dispatch('resize');
+  assert.equal(f.calls.canceled, 1, 'Repeated visual viewport notifications preserve current gestures');
+  f.window.visualViewport.scale = 1.25;
+  f.window.dispatch('touchend', { isTrusted: true, changedTouches: [{ identifier: -2 }] });
+  assert.deepEqual(f.calls.events.slice(-2), ['cancel', 'release'], 'A late visual zoom update is checked again before touch release');
+  f.window.devicePixelRatio = 3;
+  f.window.dispatch('mouseup', { isTrusted: true, button: 0 });
+  assert.deepEqual(f.calls.events.slice(-2), ['cancel', 'release'], 'A display density change also invalidates the old gesture');
+  assert.equal(f.calls.canceled, 3);
+});
+
+test('a fresh trusted press refreshes geometry before Godot begins its new gesture', () => {
+  const f = fixture();
+  f.rect.y = 8;
+  f.window.dispatch('touchstart', { isTrusted: true, touches: [{ identifier: 7 }], changedTouches: [{ identifier: 7 }] });
+  assert.deepEqual(f.calls.events, ['cancel'], 'Capture clears the old coordinate frame before Godot can start the new touch');
+  f.window.dispatch('touchend', { isTrusted: true, changedTouches: [{ identifier: 7 }] });
+  assert.deepEqual(f.calls.events, ['cancel', 'release'], 'Releasing the new touch does not cancel its current coordinate frame');
+  f.window.innerWidth = 400;
+  f.window.dispatch('mousedown', { isTrusted: true, button: 0 });
+  assert.deepEqual(f.calls.events, ['cancel', 'release', 'cancel']);
+  f.window.dispatch('mouseup', { isTrusted: true, button: 0 });
+  assert.deepEqual(f.calls.events, ['cancel', 'release', 'cancel', 'release'], 'A fresh mouse gesture receives one ordinary release without another cancellation');
 });

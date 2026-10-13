@@ -3316,15 +3316,46 @@
           }
         },
         observe(onHidden, onMotion, onVisible, onInputCanceled, onPointerReleased) {
+          const inputGeometry = () => {
+            const bounds = canvas.getBoundingClientRect();
+            const viewport = window.visualViewport;
+            return [bounds.left, bounds.top, bounds.width, bounds.height,
+              window.innerWidth, window.innerHeight, window.devicePixelRatio || 1,
+              viewport?.width, viewport?.height, viewport?.scale];
+          };
+          let previousGeometry = inputGeometry();
+          const cancelResizedInput = () => {
+            const current = inputGeometry();
+            const changed = current.some((value, index) => value !== previousGeometry[index]);
+            previousGeometry = current;
+            if (changed) onInputCanceled();
+          };
+          // Mobile browsers can deliver a release before their resize callbacks
+          // reach Godot. Check the live geometry in capture before that release
+          // can commit a held Finish or chest gesture against its old position.
+          for (const type of ['mousedown', 'touchstart']) {
+            window.addEventListener(type, event => {
+              if (event.isTrusted) cancelResizedInput();
+            }, { capture: true });
+          }
+          window.addEventListener('resize', cancelResizedInput);
+          if (window.visualViewport) window.visualViewport.addEventListener('resize', cancelResizedInput);
+          new ResizeObserver(cancelResizedInput).observe(canvas);
           // A held Memory eye must close even if its canvas loses the release.
           // Capture at the window before canvas handlers; preserve finger identity.
           window.addEventListener('touchend', event => {
             // Godot stores browser touch IDs as signed i32 values. A negative
             // identifier is still a finger, so carry the input source separately.
-            if (event.isTrusted) for (const touch of event.changedTouches) onPointerReleased(touch.identifier | 0, true);
+            if (event.isTrusted) {
+              cancelResizedInput();
+              for (const touch of event.changedTouches) onPointerReleased(touch.identifier | 0, true);
+            }
           }, { capture: true });
           window.addEventListener('mouseup', event => {
-            if (event.isTrusted && event.button === 0) onPointerReleased(-1, false);
+            if (event.isTrusted && event.button === 0) {
+              cancelResizedInput();
+              onPointerReleased(-1, false);
+            }
           }, { capture: true });
           // Godot Web translates touchcancel into an ordinary release.
           for (const type of ['touchcancel', 'pointercancel']) {
