@@ -38,10 +38,12 @@ audio above; it adds no downloaded assets.
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with a 0.64-second beat that gradually tightens to 0.48 seconds. Every
-third pickup leaves an extra 0.10-second breath. Each jelly squashes, lifts
+rows, with one pickup every 300 ms. Each batch collection finishes within that
+same beat, keeping reward transactions sequential. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
 fragment transaction. Invalid combinations remain available for splitting.
+Existing movement settles before the first pickup; queued words then keep their
+places so gravity and deferred growth cannot delay the following beats.
 The current batch finishes before another can begin; pause freezes its clock,
 leaving the round cancels queued pickups, and a failed wallet save stops the
 sequence with the uncollected words intact.

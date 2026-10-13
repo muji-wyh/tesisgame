@@ -28,10 +28,7 @@ const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_INITIAL_BEAT: float = 0.64
-const BATCH_MINIMUM_BEAT: float = 0.48
-const BATCH_BEAT_ACCELERATION: float = 0.025
-const BATCH_BREATH: float = 0.10
+const BATCH_BEAT_SECONDS: float = 0.30
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 16.0
 const FULL_SECONDS: float = 10.0
@@ -248,7 +245,7 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
 		"coins": coins_for_tile(tile), "fragments": int(tile.fragments),
-		"elapsed": 0.0, "duration": COLLECT_SECONDS, "pop_at": POP_SECONDS,
+		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS, "pop_at": POP_SECONDS,
 		"popped": false, "credited": false,
 		"batch": batch_index > 0, "batch_index": batch_index,
 		"batch_total": _collection_batch_ids.size() if batch_index > 0 else 0,
@@ -258,7 +255,7 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if batch_index > 0:
 		_collection_batch_event_id = str(active.attempt_id)
 		_collection_batch_started += 1
-		_collection_batch_next_in = collection_batch_beat(_collection_batch_started)
+		_collection_batch_next_in = BATCH_BEAT_SECONDS
 	var generation: int = _generation
 	fusion_started.emit(active.duplicate(true))
 	if _can_continue(generation) and _fusion_index(str(active.attempt_id)) >= 0:
@@ -338,11 +335,6 @@ func cancel_collection_batch() -> void:
 	changed.emit()
 
 
-static func collection_batch_beat(started: int) -> float:
-	var beat: float = maxf(BATCH_MINIMUM_BEAT, BATCH_INITIAL_BEAT - float(maxi(0, started - 1)) * BATCH_BEAT_ACCELERATION)
-	return beat + (BATCH_BREATH if started % 3 == 0 else 0.0)
-
-
 func _reset_collection_batch() -> void:
 	_collection_batch_active = false
 	_collection_batch_ids.clear()
@@ -358,6 +350,10 @@ func _reset_collection_batch() -> void:
 
 func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
+		return
+	# Let existing motion finish once, then keep the captured bodies in place
+	# so later gravity or growth cannot stretch the 300 ms collection beat.
+	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,
 	# but the batch never overlaps two collection animations or transactions.
@@ -389,6 +385,10 @@ func _advance_collection_batch() -> void:
 func _collection_batch_boundary() -> float:
 	if not collection_batch_active():
 		return INF
+	if _collection_batch_started == 0:
+		var settling: float = _collection_batch_settling_remaining()
+		if settling > EPSILON:
+			return settling
 	if _collection_batch_next_in > EPSILON:
 		return _collection_batch_next_in
 	if _collection_batch_cursor < _collection_batch_ids.size():
@@ -396,6 +396,19 @@ func _collection_batch_boundary() -> float:
 		if not tile.is_empty() and not is_settled(tile):
 			return maxf(0.0, settle_duration(tile) - float(tile.age))
 	return INF
+
+
+func _collection_batch_settling_remaining() -> float:
+	var remaining: float = 0.0
+	for tile_id: int in _collection_batch_ids:
+		var tile: Dictionary = cell(tile_id)
+		if not tile.is_empty():
+			remaining = maxf(remaining, settle_duration(tile) - float(tile.age))
+	return remaining
+
+
+func _reserved_for_collection(tile_id: int) -> bool:
+	return collection_batch_active() and _collection_batch_ids.has(tile_id)
 
 
 func step(delta: float) -> void:
@@ -922,7 +935,7 @@ func _restore_growth(excluded_id: int = -1) -> void:
 			continue
 		if is_fusing(int(tile.id)):
 			continue
-		if int(tile.id) == excluded_id or int(tile.id) == _held_tile_id or not is_settled(tile):
+		if int(tile.id) == excluded_id or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
 			# Another collection may free space during this body's final wobble.
 			_growth_pending = true
 			continue
@@ -961,8 +974,8 @@ func _settle_collected_stack() -> void:
 			return int(a.column) < int(b.column)
 		return int(a.id) < int(b.id))
 	for tile: Dictionary in ordered:
-		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or not is_settled(tile):
-			# Keep frozen fusion endpoints and held anchors intact. A later
+		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
+			# Keep fusion endpoints, held anchors and queued pickups intact. A later
 			# operation or settlement boundary retries the collection's gravity.
 			_gravity_pending = true
 			continue

@@ -652,7 +652,9 @@ test('collect button grows with completed words and collects a rhythmic batch on
         collectedCoins: state.collected_coins, fragments: state.fragment_count, at: performance.now() });
       if (!batch.active || !batch.started || pending.has(batch.started)) return;
       const reveal = state.word_reveal;
-      if (!reveal?.visible || reveal.elapsed < 0.12 || reveal.content_alpha <= 0.9 || !state.fusion_effects?.length) return;
+      // The status bridge publishes at 100 ms intervals. Capture the first
+      // readable pose instead of waiting past it within a 300 ms pickup.
+      if (!reveal?.visible || reveal.content_alpha <= 0.9 || !state.fusion_effects?.length) return;
       pending.add(batch.started);
       const index = batch.started;
       document.getElementById('canvas').toBlob(blob => {
@@ -675,14 +677,14 @@ test('collect button grows with completed words and collects a rhythmic batch on
     { message: 'Every captured completed word is collected through the rhythmic queue' }).toBe(3);
   await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + expectedCoins);
-  await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.length),
-    { message: 'Each staggered collection produces an actual rendered review frame' }).toBe(3);
   const final = await jelly(page);
   const timeline = await page.evaluate(() => {
     window.wordJellyBatchObserver.disconnect();
     return window.wordJellyBatchTimeline;
   });
   fs.writeFileSync(info.outputPath('word-jelly-batch-timeline.json'), JSON.stringify({ stages, timeline }, null, 2));
+  await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.length),
+    { message: 'Each staggered collection produces an actual rendered review frame' }).toBe(3);
   expect(timeline.length).toBeGreaterThan(3);
   let previousStarted = 0, previousCompleted = 0;
   for (const frame of timeline) {
@@ -699,10 +701,8 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const starts = [1, 2, 3].map(index => timeline.find(frame => frame.started === index));
   expect(starts.every(Boolean), 'Every batch member has an individually observed beginning').toBe(true);
   for (let index = 1; index < starts.length; index++) {
-    expect(starts[index].elapsed - starts[index - 1].elapsed,
-      'The stagger leaves a perceptible beat between neighboring collections').toBeGreaterThan(0.3);
-    expect(starts[index].elapsed - starts[index - 1].elapsed,
-      'A three-word sweep retains a brisk rhythm').toBeLessThan(1.2);
+    expect(Math.abs(starts[index].elapsed - starts[index - 1].elapsed - 0.3),
+      'Neighboring collections keep the requested 300 ms beat within one rendered frame').toBeLessThan(0.08);
   }
   expect(final.cleared_pairs).toBe(before.cleared_pairs + 3);
   expect(final.collected_coins).toBe(before.collected_coins + expectedCoins);

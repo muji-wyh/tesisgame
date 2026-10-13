@@ -622,8 +622,9 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		merged.pivot_offset = rect.size * 0.5
 		merged.rotation = 0.0
 		merged._surface.show()
-		var charge: float = smoothstep(0.0, 0.42, p)
-		var release: float = smoothstep(0.42, 1.0, p)
+		var pop_progress: float = float(fusion.pop_at) / float(fusion.duration)
+		var charge: float = smoothstep(0.0, pop_progress, p)
+		var release: float = smoothstep(pop_progress, 1.0, p)
 		merged.scale = Vector2.ONE if reduced_motion else Vector2(1.0 + charge * 0.12, 1.0 - charge * 0.12).lerp(Vector2.ONE * 0.18, release)
 		merged.modulate.a = 1.0 - release
 		if bool(fusion.get("batch", false)) and not reduced_motion:

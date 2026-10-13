@@ -440,6 +440,11 @@ func _check_batch_collection(view) -> void:
 			credits[id] = int(credits.get(id, 0)) + 1
 			check(amount == 100, "each batch member uses the ordinary merged-word coin calculation")
 			return {"ok": true}
+		var pop_times: Array[float] = []
+		var on_pop: Callable = func(cue: String) -> void:
+			if cue == "pop":
+				pop_times.append(float(view.game.collection_batch_snapshot().elapsed))
+		view.audio_requested.connect(on_pop)
 		view.collect_button.pressed.emit()
 		var started: Dictionary = view.snapshot()
 		check(started.collection_batch.active and int(started.collection_batch.total) == 3
@@ -460,7 +465,8 @@ func _check_batch_collection(view) -> void:
 		var elapsed: float = 0.0
 		var previous_started: int = 1
 		var previous_completed: int = 0
-		var first_completion: float = -1.0
+		var start_times: Array[float] = [0.0]
+		var payout_times: Array[float] = []
 		while elapsed < 5.0 and bool(view.snapshot().collection_batch.active):
 			_advance(view, 0.025)
 			elapsed += 0.025
@@ -472,15 +478,26 @@ func _check_batch_collection(view) -> void:
 				"batch members start and commit singly in monotonic order")
 			check(now_started - now_completed <= 1 and view.game.fusions.size() <= 1,
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
-			if now_completed == 1 and first_completion < 0.0:
-				first_completion = elapsed
-				check(now_started == 1, "the first committed word has a brief rest before the next begins")
+			if now_started > previous_started:
+				start_times.append(float(state.collection_batch.elapsed))
+			if now_completed > previous_completed:
+				payout_times.append(float(state.collection_batch.elapsed))
+				check(now_started == mini(3, now_completed + 1),
+					"the next captured word starts on the same beat as the preceding payout")
 			previous_started = now_started
 			previous_completed = now_completed
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
-			and int(final.collection_batch.started) == 3 and elapsed > 1.25,
-			"three words finish through a visible sequence instead of an instantaneous sweep")
+			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 0.90),
+			"three words finish in exactly 900 ms through three sequential collection beats")
+		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
+			"each collected word has a separate visible start, payout and disappearance sound")
+		for index in range(start_times.size()):
+			check(is_equal_approx(start_times[index], index * 0.30)
+				and is_equal_approx(payout_times[index], (index + 1) * 0.30),
+				"ordinary and reduced-motion collection both preserve exact 300 ms start and payout spacing")
+			check(is_equal_approx(pop_times[index], index * 0.30 + 0.18),
+				"the existing disappearance sound stays at 180 ms within every 300 ms beat")
 		check(payouts.size() == 3 and credits.size() == 3 and attempts.size() == 3,
 			"batch collection credits and records each captured word exactly once")
 		for times: int in credits.values():
@@ -495,6 +512,7 @@ func _check_batch_collection(view) -> void:
 		_advance(view, 2.0)
 		check(payouts.size() == 3 and view.game.collected_coins == 300,
 			"the completed batch cannot replay its rewards on later frames")
+		view.audio_requested.disconnect(on_pop)
 
 
 func _check_batch_chest_queue(view) -> void:
