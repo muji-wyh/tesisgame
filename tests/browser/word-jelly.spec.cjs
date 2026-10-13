@@ -109,9 +109,8 @@ async function merge(page, sourceId, targetId) {
     const unchanged = after.tiles.find(tile => tile.id === original.id);
     expect(unchanged, 'Merging preserves every unrelated jelly').toBeTruthy();
     if (original.placement_locked) {
-      expect([unchanged.column, unchanged.row, unchanged.width, unchanged.height], 'Merging preserves an unrelated player placement')
-        .toEqual([original.column, original.row, original.width, original.height]);
-      continue;
+      expect([unchanged.width, unchanged.height], 'Merging preserves an unrelated player-chosen footprint')
+        .toEqual([original.width, original.height]);
     }
     const expanded = unchanged.width !== original.width || unchanged.height !== original.height;
     if (expanded) {
@@ -520,9 +519,10 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   expect(errors).toEqual([]);
 });
 
-test('roots and merged words stay at player placements and keep their contents through invalid drops and splitting', async ({ page }, info) => {
+test('released roots and merged words fall onto support and keep their contents through later moves and splitting', async ({ page }, info) => {
   test.setTimeout(240000);
-  const errors = await startWordJelly(page), bounds = await metrics(page);
+  const reducedMotion = info.project.use.reducedMotion || 'no-preference';
+  const errors = await startWordJelly(page, { reducedMotion }), bounds = await metrics(page);
   const { roots, word } = await availableWord(page, 3, 2, { markedOnly: true });
   const opening = await jelly(page), startingWallet = await wallet(page);
   const read = () => page.evaluate(() => JSON.parse(document.getElementById('game-status').dataset.jelly));
@@ -530,11 +530,14 @@ test('roots and merged words stay at player placements and keep their contents t
     word: tile.word, coins: tile.coins, fragments: tile.fragments,
     picture: tile.picture_visible, badges: tile.fragment_badges });
   const footprint = tile => [tile.column, tile.row, tile.width, tile.height];
-  const vacant = (state, tile) => {
-    for (let row = 1; row < state.rows - tile.height; row++) for (let column = 0; column <= state.columns - tile.width; column++) {
+  const vacant = (state, tile, { sameColumn = false, outside = null } = {}) => {
+    const columns = Array.from({ length: state.columns - tile.width + 1 }, (_, column) => column)
+      .filter(column => !outside || column + tile.width <= outside.column || column >= outside.column + outside.width)
+      .sort((a, b) => Number(a === tile.column) * (sameColumn ? -1 : 1) - Number(b === tile.column) * (sameColumn ? -1 : 1));
+    for (let row = 1; row < state.rows - tile.height; row++) for (const column of columns) {
       if (column === tile.column && row === tile.row) continue;
-      // Include one empty row below the footprint, proving this is an explicit
-      // player placement rather than an ordinary resting surface.
+      // Leave air below the release footprint so a grounded outcome cannot be
+      // confused with a body pinned to the pointer's last position.
       if (!state.tiles.some(other => other.id !== tile.id && other.column < column + tile.width &&
         other.column + other.width > column && other.row < row + tile.height + 1 && other.row + other.height > row))
         return { column, row };
@@ -545,7 +548,67 @@ test('roots and merged words stay at player placements and keep their contents t
     x: state.board_rect[0] + (placement.column + tile.width / 2) * state.board_rect[2] / state.columns,
     y: state.board_rect[1] + (placement.row + tile.height / 2) * state.board_rect[3] / state.rows
   });
-  const drag = async (id, point, ready, screenshot) => {
+  const observeFall = async (id, label, origin) => page.evaluate(({ id, label, origin }) => {
+    const status = document.getElementById('game-status');
+    window.wordJellyPlacementFalls ||= {};
+    const evidence = window.wordJellyPlacementFalls[label] = { origin, timeline: [], frame: null };
+    let capturing = false;
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const tile = state.tiles?.find(item => item.id === id);
+      if (!tile || state.drag.source === id) return;
+      evidence.timeline.push({ time: performance.now(), tile });
+      const pitch = state.board_rect[3] / state.rows;
+      const gap = tile.height * pitch - tile.rect[3];
+      const landingY = state.board_rect[1] + tile.row * pitch + gap / 2;
+      const progress = (tile.rect[1] - origin.rect[1]) / (landingY - origin.rect[1]);
+      if (!capturing && tile.falling && !tile.settled && progress > 0.12 && progress < 0.85) {
+        capturing = true;
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => { evidence.frame = reader.result.split(',')[1]; };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
+    };
+    const observer = new MutationObserver(record);
+    observer.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  }, { id, label, origin });
+  const verifyFall = async (label, original, landed, { release = false } = {}) => {
+    const evidence = await page.evaluate(label => window.wordJellyPlacementFalls[label], label);
+    const frames = evidence.timeline.map(frame => frame.tile);
+    fs.writeFileSync(info.outputPath(`${label}-timeline.json`), JSON.stringify({ reducedMotion, bounds,
+      original, landed, origin: evidence.origin, timeline: evidence.timeline }, null, 2));
+    expect(content(landed), 'Falling keeps the word, picture, reward and carried fragments').toEqual(content(original));
+    for (const tile of frames) expect(content(tile)).toEqual(content(original));
+    if (reducedMotion !== 'reduce') {
+      const falling = frames.filter(tile => tile.falling && !tile.settled);
+      expect(falling.length, 'The real browser publishes an airborne pose before landing').toBeGreaterThan(0);
+      const travel = landed.rect[1] - evidence.origin.rect[1];
+      if (release) expect(Math.abs(falling[0].rect[1] - evidence.origin.rect[1]),
+        'The released jelly starts near the hand instead of snapping to its old resting position')
+        .toBeLessThan(travel * 0.18 + 1);
+      if (release) expect(falling[0].rect[1], 'Final pointer-up rounding stays within one display pixel of the held pose')
+        .toBeGreaterThanOrEqual(evidence.origin.rect[1] - 1 / bounds.scale);
+      expect(falling.some(tile => tile.rect[1] > evidence.origin.rect[1] + 0.1 && tile.rect[1] < landed.rect[1] - 0.1),
+        'At least one visible position lies between the release and supported landing').toBe(true);
+      // The final pointer-up event can round differently from the last mousemove.
+      // Check monotonic descent between published post-release frames.
+      let previousY = frames[0].rect[1];
+      for (const tile of frames) {
+        expect(tile.rect[1], 'The falling body never rewinds upward').toBeGreaterThanOrEqual(previousY - 0.1);
+        expect(tile.rect[1]).toBeLessThanOrEqual(landed.rect[1] + 0.1);
+        previousY = tile.rect[1];
+      }
+      await expect.poll(() => page.evaluate(label => Boolean(window.wordJellyPlacementFalls[label].frame), label),
+        { message: 'The browser retains an actual intermediate falling frame' }).toBe(true);
+      const frame = await page.evaluate(label => window.wordJellyPlacementFalls[label].frame, label);
+      fs.writeFileSync(info.outputPath(`${label}-midfall.png`), Buffer.from(frame, 'base64'));
+    }
+  };
+  const drag = async (id, point, ready, screenshot, beforeRelease) => {
     const state = await read(), tile = state.tiles.find(item => item.id === id);
     expect(tile?.settled, 'The player grabs a settled body').toBe(true);
     const from = center(tile.rect, bounds), to = center([point.x, point.y, 0, 0], bounds);
@@ -556,13 +619,15 @@ test('roots and merged words stay at player placements and keep their contents t
       await page.mouse.move(to.x, to.y, { steps: 3 });
       await expect.poll(async () => ready(await read()), { message: 'The ordinary drag presents the expected drop affordance' }).toBe(true);
       if (screenshot) await capture(page, info, screenshot);
+      if (beforeRelease) await beforeRelease(await read());
     } finally {
       await page.mouse.up();
     }
     await expect.poll(async () => (await read()).drag.active).toBe(false);
   };
-  const park = async (id, screenshot) => {
-    const state = await read(), tile = state.tiles.find(item => item.id === id), placement = vacant(state, tile);
+  let relocation = 0;
+  const dropAndLand = async (id, screenshot, options = {}) => {
+    const state = await read(), tile = state.tiles.find(item => item.id === id), placement = vacant(state, tile, options);
     const point = dropPoint(state, tile, placement);
     if (screenshot) {
       point.x += state.board_rect[2] / state.columns * 0.2;
@@ -570,16 +635,16 @@ test('roots and merged words stay at player placements and keep their contents t
     }
     await drag(id, point, current => current.placement.visible && current.placement.valid &&
       current.placement.tile_id === id && current.placement.column === placement.column && current.placement.row === placement.row,
-    screenshot);
+    screenshot, current => observeFall(id, `word-jelly-release-${++relocation}`, current.tiles.find(item => item.id === id)));
     await expect.poll(async () => {
       const moved = (await read()).tiles.find(item => item.id === id);
-      return moved?.settled && moved.placement_locked && moved.column === placement.column && moved.row === placement.row;
+      return moved?.settled && moved.column === placement.column && moved.row > placement.row;
     }).toBe(true);
-    await page.waitForTimeout(900);
-    const moved = (await read()).tiles.find(item => item.id === id);
-    expect(footprint(moved), 'A released player placement remains exactly where it was dropped')
-      .toEqual([placement.column, placement.row, tile.width, tile.height]);
-    expect(content(moved), 'Relocating changes neither the word nor its reward and fragment contents').toEqual(content(tile));
+    const current = await read(), moved = current.tiles.find(item => item.id === id);
+    expect([moved.column, moved.width, moved.height], 'The release keeps the chosen column and body footprint')
+      .toEqual([placement.column, tile.width, tile.height]);
+    expectSupportedChild(current, moved);
+    await verifyFall(`word-jelly-release-${relocation}`, tile, moved, { release: true });
     return moved;
   };
   const join = async (sourceId, targetId) => {
@@ -600,13 +665,33 @@ test('roots and merged words stay at player placements and keep their contents t
     return merged;
   };
 
-  await park(roots[0].id);
+  await dropAndLand(roots[0].id);
   const merged = await join(roots[0].id, roots[1].id);
   expect(merged.word.id).toBe(word.id);
   expect(merged.width).toBeGreaterThan(1);
   expect(merged.picture_visible).toBe(true);
-  const placed = await park(merged.id, 'word-jelly-valid-empty-placement');
-  await capture(page, info, 'word-jelly-placed-word-over-empty-space');
+  let placed = await dropAndLand(merged.id, 'word-jelly-word-held-over-empty-space', { sameColumn: true });
+  const firstLanding = placed;
+  placed = await dropAndLand(placed.id, null, { sameColumn: true });
+  expect(placed.column, 'Lifting a supported word straight upward keeps its lane').toBe(firstLanding.column);
+  await capture(page, info, 'word-jelly-released-word-on-support');
+
+  const beforeSupportMove = placed;
+  await observeFall(placed.id, 'word-jelly-released-word-loses-support', beforeSupportMove);
+  for (let attempt = 0; attempt < 3 && placed.row === beforeSupportMove.row; attempt++) {
+    const state = await read();
+    const support = state.tiles.find(tile => tile.id !== placed.id && tile.settled &&
+      tile.row === placed.row + placed.height && tile.column < placed.column + placed.width && tile.column + tile.width > placed.column);
+    expect(support, 'The released word has a real removable support body').toBeTruthy();
+    await dropAndLand(support.id, null, { outside: placed });
+    await expect.poll(async () => (await read()).tiles.find(tile => tile.id === placed.id)?.settled).toBe(true);
+    placed = (await read()).tiles.find(tile => tile.id === placed.id);
+  }
+  expect(placed.row, 'Moving away the supports lets an already relocated word fall again').toBeGreaterThan(beforeSupportMove.row);
+  expect(placed.column).toBe(beforeSupportMove.column);
+  expectSupportedChild(await read(), placed);
+  await verifyFall('word-jelly-released-word-loses-support', beforeSupportMove, placed);
+  await capture(page, info, 'word-jelly-released-word-after-support-moves');
 
   const beforeInvalid = await read();
   const returnedToPlacement = async () => {
@@ -617,10 +702,10 @@ test('roots and merged words stay at player placements and keep their contents t
   const overflow = { x: beforeInvalid.board_rect[0] + beforeInvalid.board_rect[2] * (1 - 0.3 / beforeInvalid.columns),
     y: beforeInvalid.board_rect[1] + beforeInvalid.board_rect[3] * 0.5 / beforeInvalid.rows };
   await drag(placed.id, overflow, current => current.drag.target === -1 && current.placement.visible && !current.placement.valid);
-  await expect.poll(returnedToPlacement, { message: 'A footprint crossing the edge visibly returns to its parked position' }).toBe(true);
+  await expect.poll(returnedToPlacement, { message: 'A footprint crossing the edge visibly returns to its supported position' }).toBe(true);
   const outside = { x: beforeInvalid.board_rect[0] - 12 / bounds.scale, y: overflow.y };
   await drag(placed.id, outside, current => current.drag.target === -1 && !current.placement.valid);
-  await expect.poll(returnedToPlacement, { message: 'A pointer released outside the well visibly returns to its parked position' }).toBe(true);
+  await expect.poll(returnedToPlacement, { message: 'A pointer released outside the well visibly returns to its supported position' }).toBe(true);
   const returned = await read();
   expect(content(returned.tiles.find(tile => tile.id === placed.id))).toEqual(content(placed));
   expect(returned.merged_count, 'A rejected empty or outside drop never starts a merge').toBe(beforeInvalid.merged_count);
@@ -634,8 +719,8 @@ test('roots and merged words stay at player placements and keep their contents t
   const invalid = await join(extra.id, placed.id);
   expect(invalid.word).toEqual({});
   expect(invalid.splittable).toBe(true);
-  const parkedInvalid = await park(invalid.id);
-  await pressRect(page, parkedInvalid.rect);
+  const landedInvalid = await dropAndLand(invalid.id);
+  await pressRect(page, landedInvalid.rect);
   await expect.poll(async () => {
     const state = await read();
     return !state.tiles.some(tile => tile.id === invalid.id) && [extra.id, placed.id].every(id =>

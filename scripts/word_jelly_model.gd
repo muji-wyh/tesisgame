@@ -508,6 +508,10 @@ func set_held_tile(tile_id: int = -1) -> void:
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
 	if _held_tile_id == held_id:
 		return
+	if _held_tile_id >= 0 and not is_fusing(_held_tile_id):
+		# Even an unchanged release must reconsider support beneath its old anchor.
+		# An accepted operation owns its own support change after it commits.
+		_gravity_pending = true
 	_held_tile_id = held_id
 	_resume_pending_motion()
 	changed.emit()
@@ -534,19 +538,26 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 	var tile: Dictionary = cells[_index_for_id(tile_id)]
 	tile.column = column
 	tile.row = row
+	# This preserves the chosen footprint during later automatic growth only;
+	# it never exempts a manually placed body from gravity.
 	tile.placement_locked = true
-	tile.age = 0.0
-	tile.settling = true
+	# Make this release eligible for the support pass immediately, without a
+	# floating handover wobble before the actual fall begins.
+	tile.age = SETTLE_SECONDS
+	tile.settling = false
 	tile.arrival = false
 	tile.falling = false
 	tile.falling_rows = 0
 	if _held_tile_id == tile_id:
 		_held_tile_id = -1
-	# The player owns this exact placement. Bodies left above the old position
-	# still settle naturally, and newly opened room can restore compressed peers.
+	# Preserve the chosen column and full footprint while dropping onto support.
+	# Bodies left above the old position also settle into the newly opened space.
 	_growth_pending = true
 	_gravity_pending = true
 	_resume_pending_motion()
+	if not bool(tile.falling):
+		tile.age = 0.0
+		tile.settling = true
 	if _has_free_cell():
 		full_elapsed = -1.0
 	changed.emit()
@@ -973,7 +984,7 @@ func _complete_collection(completed: Dictionary) -> void:
 
 func _restore_growth(excluded_id: int = -1) -> void:
 	# Growth can reuse nearby space. Its settled result and any neighbors that
-	# lose support then fall, while explicit player placements stay unchanged.
+	# lose support then fall. Manual footprints keep their chosen size and column.
 	_growth_pending = false
 	for tile in cells:
 		var extent: Vector2i = _preferred_size(int(tile.mass))
@@ -1023,8 +1034,6 @@ func _settle_collected_stack() -> void:
 			return int(a.column) < int(b.column)
 		return int(a.id) < int(b.id))
 	for tile: Dictionary in ordered:
-		if bool(tile.get("placement_locked", false)):
-			continue
 		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
 			# Keep fusion endpoints, held anchors and queued pickups intact. A later
 			# operation or settlement boundary retries their support settlement.

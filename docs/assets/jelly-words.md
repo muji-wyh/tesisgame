@@ -22,16 +22,19 @@ and chest tier. Visual callbacks never grant coins.
 
 Automatic merges, splits, and restored growth check for support after the
 fusion handover and settle vertically onto the nearest body or the floor.
-Dragging into empty space instead snaps the entire jelly footprint to the
-nearest grid position, preserving the original finger offset. A translucent
+Dragging into empty space snaps the entire jelly footprint to the nearest
+grid position, preserving the original finger offset. A translucent
 copy of the acquired gel skin previews the destination, with a mint rim for a
 fitting space and a coral rim when blocked. Drops outside the well or without
 enough space return to the previous position; painted-body contact still takes
-priority for merging. A successful manual placement stays where the player
-put it, while bodies above its former position settle. Merging or splitting
-that jelly resumes automatic support behavior. Moving preserves its word,
+priority for merging. After release, an unsupported jelly immediately falls
+from the final pointer position onto the nearest supporting body or the floor.
+The full footprint determines support, and the fall keeps the chosen column
+and body size. Removing its support starts another fall; bodies above its
+former position also settle. Moving preserves its word,
 picture, mass, merge history, fragments, and reward receipt without paying coins.
-Reduced motion keeps the same placement rules and static preview.
+Reduced motion keeps the same placement rules and static preview, placing
+the body directly at its supported destination.
 
 New six-root supply packets mix parts from different words, leaving intervening
 roots between siblings whenever the packet permits it. The same arrangement

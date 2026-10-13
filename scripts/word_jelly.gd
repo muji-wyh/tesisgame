@@ -210,7 +210,14 @@ func _release_empty_space(source: int, from: Vector2) -> void:
 		if generation != _generation or not _can_play():
 			return
 		_snapbacks.erase(source)
-		_reflow.erase(source)
+		var placed: Dictionary = game.cell(source)
+		# Gravity reserves the supported destination immediately. Start its visual
+		# fall at pointer-up, even when it lands back in the original board slot.
+		_rest_rects[source] = _tile_rect(placed)
+		if reduced_motion:
+			_reflow.erase(source)
+		else:
+			_reflow[source] = {"from": from, "started": float(placed.age), "falling": bool(placed.get("falling", false))}
 		_sync_positions()
 		_refresh_hud()
 		queue_redraw()

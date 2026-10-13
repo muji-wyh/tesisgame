@@ -377,12 +377,13 @@ func _check_reposition_release(view) -> void:
 		view.size = dimensions
 		for reduced: bool in [false, true]:
 			for pointer: int in [-1, 7]:
-				for mass: int in [1, 2, 7]:
+				for placement: Vector2i in [Vector2i(1, 2), Vector2i(2, 0), Vector2i(2, 2), Vector2i(7, 0)]:
 					_reset(view, reduced)
+					var mass: int = placement.x
 					var tile: Dictionary = _reposition_fixture(view, mass)
 					var original: Dictionary = tile.duplicate(true)
 					var id: int = int(tile.id)
-					var column: int = 0 if mass == 7 else 2
+					var column: int = placement.y
 					var motion: Vector2 = _placement_point(view, tile, column, 1)
 					var release: Vector2 = _placement_point(view, tile, column, 3)
 					_pointer_event(view, pointer, "down", _center(view, id))
@@ -398,8 +399,12 @@ func _check_reposition_release(view) -> void:
 						"placement reuses the painted jelly artwork without intercepting mouse or touch ownership")
 					_pointer_event(view, pointer, "up", release)
 					var placed: Dictionary = view.game.cell(id)
-					check(int(placed.column) == column and int(placed.row) == 3 and bool(placed.get("placement_locked", false)),
-						"placement uses the final pointer-up cell, including a newer coordinate than the last motion event")
+					check(int(placed.column) == column and int(placed.row) == Model.ROWS - int(placed.height)
+						and _has_support(view.game.cells, placed),
+						"an unsupported release reserves the first supported destination in the chosen column")
+					check(bool(placed.get("falling", false)) and int(placed.get("falling_rows", 0)) == int(placed.row) - 3
+						and is_zero_approx(float(placed.age)),
+						"gravity starts immediately at the final pointer-up row without a suspended settling delay")
 					check(placed.text == original.text and placed.word == original.word and placed.mass == original.mass
 						and placed.fragments == original.fragments and placed.width == original.width and placed.height == original.height,
 						"repositioning preserves identity, spelling, picture, mass, full footprint, and every fragment")
@@ -408,17 +413,32 @@ func _check_reposition_release(view) -> void:
 					check(not view._press(pointer, _center(view, id)), "a newly placed body cannot accept a competing tap during its settle")
 					if reduced:
 						check(view._tiles[id].get_rect().is_equal_approx(view._tile_rect(placed)) and view._tiles[id].scale == Vector2.ONE,
-							"reduced motion places the body at the exact snapped cell without a moving or scaled target")
+							"reduced motion places the body at its supported destination without a moving or scaled target")
+					else:
+						var released_origin: Vector2 = view.get_global_transform().affine_inverse() * release - view._tiles[id].size * 0.5
+						check(view._tiles[id].position.is_equal_approx(released_origin) and view._reflow.has(id)
+							and bool(view._reflow[id].falling) and not view._snapbacks.has(id),
+							"the fall starts at the final pointer location even when its landing slot matches the original slot")
+						_advance(view, Model.SETTLE_SECONDS * 0.12)
+						var first_position: Vector2 = view._tiles[id].position
+						_advance(view, Model.SETTLE_SECONDS * 0.12)
+						var second_position: Vector2 = view._tiles[id].position
+						check(first_position.y > released_origin.y and second_position.y > first_position.y
+							and second_position.y < view._tile_rect(placed).position.y,
+							"released bodies visibly fall through intermediate positions instead of teleporting to the floor")
+						check(second_position.y - first_position.y > first_position.y - released_origin.y
+							and is_equal_approx(second_position.x, released_origin.x),
+							"gravity accelerates downward while retaining the chosen horizontal lane")
 					_advance(view, Model.SETTLE_SECONDS + 0.01)
 					placed = view.game.cell(id)
 					check(view._settled(placed) and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(placed)),
-						"the settled body and its hit target agree at the player's chosen position")
+						"the settled body and its hit target agree at the supported landing position")
 					check(view._tiles[id].visible_fragment_badges() == 2 and view._board.encloses(view._tiles[id].get_rect()),
 						"a relocated root or wrapped word retains its chest artwork inside the well")
 					view.game._settle_collected_stack()
 					_advance(view, 1.0)
-					check(int(placed.row) == 3 and int(placed.column) == column,
-						"later gravity respects an intentional player placement instead of pulling it to the floor")
+					check(_has_support(view.game.cells, placed) and int(placed.column) == column,
+						"later gravity keeps the relocated body grounded in the player's chosen column")
 					check(payouts.is_empty() and attempts.is_empty() and heard.is_empty()
 						and view.game.collected_coins == 0 and view.game.fragment_count == 0,
 						"moving even a completed word never pays coins, collects fragments, teaches, or pronounces it")
@@ -537,7 +557,7 @@ func _check_reposition_ancestry(view) -> void:
 	_pointer_event(view, 7, "up", release)
 	_advance(view, Model.SETTLE_SECONDS + 0.01)
 	tile = view.game.cell(fixture.id)
-	check(view.game.can_split(tile) and bool(tile.get("placement_locked", false)), "moving an invalid merged word retains its undo ancestry")
+	check(view.game.can_split(tile) and _has_support(view.game.cells, tile), "moving an invalid merged word retains its undo ancestry after landing")
 	var center: Vector2 = _center(view, fixture.id)
 	_pointer_event(view, 7, "down", center)
 	_pointer_event(view, 7, "up", center)
@@ -2081,6 +2101,9 @@ func _check_cancel_and_pause(view) -> void:
 	view.cancel_input()
 	view._release(_center(view, ids[1]))
 	check(view.game.fusions.is_empty() and payouts.is_empty(), "canceled contact cannot merge or collect")
+	_advance(view, Model.SETTLE_SECONDS)
+	check(_has_support(view.game.cells, view.game.cell(ids[0])) and _has_support(view.game.cells, view.game.cell(ids[1])),
+		"canceling a held unsupported fixture releases both bodies to natural support before the next drag")
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
 	_advance(view, 0.2)

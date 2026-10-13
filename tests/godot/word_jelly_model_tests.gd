@@ -46,8 +46,10 @@ func _run() -> void:
 	_test_target_placement()
 	_test_edge_placement()
 	_test_automatic_support_settlement()
-	_test_reposition_bounds_and_locks()
+	_test_reposition_bounds_and_falls()
 	_test_reposition_support_and_growth()
+	_test_reposition_support_loss()
+	_test_reposition_legacy_gravity()
 	_test_reposition_reservations_and_guards()
 	_test_reposition_history_and_rewards()
 	_test_fusion_reservations()
@@ -556,10 +558,25 @@ func _test_gravity_wallet_failure() -> void:
 	model.credit_collection = Callable()
 	model = _gravity_tower()
 	model.credit_collection = func(_receipt: String, _coins: int) -> Dictionary: return {"ok": false}
+	model.set_held_tile(1000)
 	model.collect(1000)
+	model.set_held_tile(-1)
+	check(not model._gravity_pending and model._held_tile_id == -1,
+		"releasing a pointer after its collection commits does not schedule an unrelated gravity pass")
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cell(1001).row == 6 and model.cell(1002).row == 5 and not model._gravity_pending,
 		"a failed collection alone neither removes support nor initiates gravity")
+	model.credit_collection = Callable()
+	model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "cat", 2, 2, 2, 3, _word("cat"))])
+	model.credit_collection = func(_receipt: String, _coins: int) -> Dictionary: return {"ok": false}
+	model.set_held_tile(1000)
+	check(model.collect(1000), "a held upper word can start its normal collection")
+	model.set_held_tile(-1)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1000).row == 2 and model.is_settled(model.cell(1000)) and not model._gravity_pending
+		and model.collected_coins == 0 and model.fragment_count == 0,
+		"a failed wallet leaves an upper collected word immediately available at its unchanged retry position")
 	model.credit_collection = Callable()
 
 
@@ -1110,7 +1127,7 @@ func _test_automatic_support_settlement() -> void:
 	_assert_board(model, "automatic wrapped growth and fall")
 
 
-func _test_reposition_bounds_and_locks() -> void:
+func _test_reposition_bounds_and_falls() -> void:
 	var model = _model([_word("cat")])
 	var original: Dictionary = _placed_tile(1000, "cat", 0, 7, 2, 3, _word("cat"))
 	original.skin = 4
@@ -1120,40 +1137,45 @@ func _test_reposition_bounds_and_locks() -> void:
 	for position: Vector2i in [Vector2i(-1, 0), Vector2i(5, 0), Vector2i(0, -1), Vector2i(0, 8), Vector2i(3, 3), Vector2i(0, 7)]:
 		check(not model.can_reposition(1000, position.x, position.y)
 			and not model.reposition(1000, position.x, position.y), "invalid, occupied, and unchanged full-body placements are rejected")
-		check(model.snapshot() == before, "a rejected placement leaves position, locks, clocks, and rewards unchanged")
+		check(model.snapshot() == before, "a rejected placement leaves position, footprint, clocks, and rewards unchanged")
 	check(not model.can_reposition(-1, 2, 1) and not model.reposition(-1, 2, 1), "missing tile IDs cannot reserve a placement")
 	check(model.can_reposition(1000, 2, 1) and model.reposition(1000, 2, 1), "an entire wide jelly can be placed in a fitting empty space")
 	var moved: Dictionary = model.cell(1000)
-	check(_footprint(moved) == Rect2i(2, 1, 2, 1) and bool(moved.placement_locked)
-		and not model.is_settled(moved) and bool(moved.settling) and not bool(moved.falling),
-		"explicit placement locks the exact grid position and starts ordinary handover settlement")
+	check(_footprint(moved) == Rect2i(2, 7, 2, 1) and bool(moved.placement_locked)
+		and not model.is_settled(moved) and bool(moved.settling) and bool(moved.falling)
+		and moved.falling_rows == 6 and is_zero_approx(float(moved.age)),
+		"an unsupported release immediately plans a fall in the chosen column while preserving its whole footprint")
 	for key: String in ["id", "text", "word", "mass", "parts_count", "fragments", "chest", "kind", "skin"]:
 		check(moved[key] == original[key], "reposition preserves the jelly's " + key)
 	check(events.collections.is_empty() and events.attempts.is_empty() and events.cues.is_empty()
 		and model.collected_coins == 0 and model.fragment_count == 0 and model.merged_count == 0,
 		"manual reposition emits no collection, learning, sound, fragment, or coin reward")
 	model.step(Model.SETTLE_SECONDS - 0.001)
-	check(not model.is_settled(model.cell(1000)), "manual handover remains unavailable until its last settling millisecond")
+	check(not model.is_settled(model.cell(1000)), "manual drop remains unavailable until its last landing millisecond")
 	model.step(0.001)
-	check(model.is_settled(model.cell(1000)), "manual handover completes at the ordinary settle boundary")
+	check(model.is_settled(model.cell(1000)), "manual drop completes at the ordinary settle boundary")
 	model.step(2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(2, 1, 2, 1) and not model._gravity_pending and not model._growth_pending,
-		"an explicitly placed unsupported word stays chosen without keeping pending-motion flags alive")
+	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 2, 1) and not model._gravity_pending and not model._growth_pending,
+		"a released word finishes on the floor without keeping pending-motion flags alive")
 	before = model.snapshot()
-	check(not model.reposition(1000, 2, 1) and model.snapshot() == before,
-		"releasing an already locked word at its current coordinate preserves its existing state")
+	check(not model.reposition(1000, 2, 7) and model.snapshot() == before,
+		"releasing an already supported word at its current coordinate preserves its existing state")
 	check(model.reposition(1000, 3, 1), "a moved footprint may overlap its own old cells when the full destination is free")
 	model.step(Model.SETTLE_SECONDS)
-	_assert_board(model, "locked manual wide placement")
+	check(_footprint(model.cell(1000)) == Rect2i(3, 6, 2, 1), "a wide drop stops when its right edge reaches another body's support")
+	_assert_supported_tiles(model, [1000], "manual wide drop")
+	_assert_board(model, "manual wide drop")
 	model = _model()
 	model.cells.assign([_placed_tile(1000, "wrapped", 0, 6, 7, 2)])
 	check(not model.can_reposition(1000, 1, 0) and not model.reposition(1000, 0, 7),
 		"wrapped placement validates both the six-column width and the second occupied row")
 	check(model.reposition(1000, 0, 0), "a wrapped jelly can be placed at the top when its complete body fits")
 	model.step(Model.SETTLE_SECONDS * 2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(0, 0, 6, 2) and bool(model.cell(1000).placement_locked),
-		"a manually placed multirow body retains both its full size and chosen height")
-	_assert_board(model, "locked manual wrapped placement")
+	check(_footprint(model.cell(1000)) == Rect2i(0, 6, 6, 2) and bool(model.cell(1000).placement_locked)
+		and model.cell(1000).falling_rows == 6,
+		"a manually released multirow body falls to the floor with its full height intact")
+	_assert_supported_tiles(model, [1000], "manual wrapped drop")
+	_assert_board(model, "manual wrapped drop")
 
 
 func _test_reposition_support_and_growth() -> void:
@@ -1163,18 +1185,18 @@ func _test_reposition_support_and_growth() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cell(1001).row == 6 and model.cell(1002).row == 5, "held source keeps its old stack stable while support is collected")
 	check(model.reposition(1001, 3, 3), "a held source can commit its explicit destination after lower support changes")
-	check(model.cell(1001).row == 3 and bool(model.cell(1001).placement_locked)
+	check(model.cell(1001).row == 7 and bool(model.cell(1001).placement_locked) and bool(model.cell(1001).falling)
 		and model.cell(1002).row == 7 and bool(model.cell(1002).falling),
-		"manual relocation keeps its own chosen position while the abandoned upper stack drops naturally")
+		"manual relocation immediately drops both the released body and the abandoned upper stack onto real support")
 	model.set_held_tile(-1)
 	model.step(Model.SETTLE_SECONDS)
-	check(model.cell(1001).row == 3 and model.is_settled(model.cell(1001)) and not model._gravity_pending,
-		"releasing the drag anchor cannot undo a successful explicit placement")
+	check(model.cell(1001).row == 7 and model.cell(1001).column == 3 and model.is_settled(model.cell(1001)) and not model._gravity_pending,
+		"releasing the drag anchor preserves the chosen column through the natural landing")
 	model.cells.append(_placed_tile(9000, "x", 3, 1))
 	model._gravity_pending = true
 	model.step(Model.SETTLE_SECONDS)
-	check(model.cell(9000).row == 2 and model.cell(1001).row == 3,
-		"a locked body remains physical support for naturally falling neighbors")
+	check(model.cell(9000).row == 6 and model.cell(1001).row == 7,
+		"a manually moved body supports naturally falling neighbors only at its actual landing position")
 	_assert_board(model, "manual position supports a falling neighbor")
 	model = _model()
 	var compressed: Dictionary = _placed_tile(1000, "large", 0, 7, 7, 2)
@@ -1186,9 +1208,79 @@ func _test_reposition_support_and_growth() -> void:
 	model._restore_growth()
 	model._gravity_pending = true
 	model.step(2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(2, 2, 2, 1) and bool(model.cell(1000).placement_locked)
+	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 2, 1) and bool(model.cell(1000).placement_locked)
 		and not model._gravity_pending and not model._growth_pending,
-		"deferred automatic growth cannot resize or displace an explicit compressed placement")
+		"deferred growth preserves the moved compressed footprint and column while gravity still brings it to the floor")
+
+
+func _test_reposition_support_loss() -> void:
+	for mass: int in [1, 3, 7]:
+		var model = _model([_word("cat")])
+		var column: int = 0 if mass == 7 else 2 if mass == 3 else 4
+		var body: Dictionary = _placed_tile(1000, "part", 0, 0, mass, 2)
+		model.cells.assign([body, _placed_tile(1001, "cat", 4, 7, 2, 4, _word("cat"))])
+		var height: int = int(body.height)
+		var width: int = int(body.width)
+		var events: Dictionary = _observe(model)
+		check(model.reposition(1000, column, 2), "the complete released footprint fits above a partial supporting word")
+		check(_footprint(model.cell(1000)) == Rect2i(column, 7 - height, width, height)
+			and bool(model.cell(1000).falling) and model.cell(1000).falling_rows == 5 - height,
+			"single, wide, and wrapped manual drops stop at the first support under any part of their bottom edge")
+		check(events.collections.is_empty() and events.attempts.is_empty() and events.cues.is_empty(),
+			"finding support during a manual drop never creates a reward or learning attempt")
+		_assert_supported_tiles(model, [1000], "manual partial support")
+		_assert_board(model, "manual partial support")
+		model.step(Model.SETTLE_SECONDS)
+		check(model.collect(1001), "the actual supporting word remains collectable after the moved body lands")
+		model.step(Model.COLLECT_SECONDS)
+		check(_footprint(model.cell(1000)) == Rect2i(column, Model.ROWS - height, width, height)
+			and bool(model.cell(1000).falling) and model.cell(1000).falling_rows == 1,
+			"removing support resumes gravity for every manually moved footprint without changing its chosen column")
+		check(model.cell(1000).mass == mass and model.cell(1000).fragments == 2
+			and model.collected_coins == 100 and model.fragment_count == 4 and events.collections.size() == 1,
+			"the resumed fall preserves moved content and pays only the collected support once")
+		model.step(Model.SETTLE_SECONDS)
+		_assert_supported_tiles(model, [1000], "manual support removed")
+		_assert_board(model, "manual support removed")
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "x", 0, 7), _placed_tile(1001, "cat", 4, 7, 2, 0, _word("cat"))])
+	check(model.reposition(1000, 4, 6), "a release can also land directly on an existing body")
+	check(_footprint(model.cell(1000)) == Rect2i(4, 6, 1, 1) and not bool(model.cell(1000).falling)
+		and model.cell(1000).falling_rows == 0 and not model.is_settled(model.cell(1000)),
+		"an already supported release keeps the usual landing wobble without inventing a downward fall")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.is_settled(model.cell(1000)) and not model._gravity_pending, "a supported release settles without persistent gravity work")
+
+
+func _test_reposition_legacy_gravity() -> void:
+	for mass: int in [1, 7]:
+		for pause_release: bool in [false, true]:
+			var model = _model()
+			var body: Dictionary = _placed_tile(1000, "legacy", 0, 1, mass, 3)
+			body.placement_locked = true
+			model.cells.assign([body, _placed_tile(1001, "x", 0, 0)])
+			model.set_held_tile(1000)
+			model.step(0.1)
+			check(model.cell(1000).row == 1 and model.cell(1001).row == 0,
+				"a held legacy placement still anchors its stack until release")
+			model.set_paused(pause_release)
+			model.set_held_tile(-1)
+			if pause_release:
+				check(model.cell(1000).row == 1 and model._gravity_pending,
+					"a paused unchanged release queues gravity without moving the held stack")
+				model.set_paused(false)
+			var landing_row: int = Model.ROWS - int(body.height)
+			check(model.cell(1000).row == landing_row and model.cell(1000).column == 0
+				and bool(model.cell(1000).falling) and model.cell(1000).falling_rows == landing_row - 1,
+				"an old placement lock cannot keep an unsupported body floating after an unchanged release")
+			check(model.cell(1001).row == landing_row - 1 and bool(model.cell(1001).falling),
+				"releasing a legacy floating body also lowers the stack it used to support")
+			model.step(Model.SETTLE_SECONDS)
+			check(model.cell(1000).mass == mass and model.cell(1000).fragments == 3
+				and not model._gravity_pending and model.collected_coins == 0,
+				"legacy placement recovery preserves its content and completes without rewards")
+			_assert_supported_tiles(model, [1000, 1001], "legacy placement recovery")
+			_assert_board(model, "legacy placement recovery")
 
 
 func _test_reposition_reservations_and_guards() -> void:
