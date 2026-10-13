@@ -116,6 +116,89 @@ test('opening and replay wait for the first batch while manual release stays ava
 });
 
 for (const mode of ['jelly', 'word_jelly']) {
+  test(`${mode} Finish tap demonstrates a downward tug and elastic return`, async ({ page }, info) => {
+    test.skip(!['desktop-chromium', 'iphone-webkit'].includes(info.project.name),
+      'A mouse click and native phone tap cover the shared Finish surface.');
+    const errors = await openGame(page, { reducedMotion: 'no-preference', mode });
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return state.mode === mode && state.phase === 'playing' &&
+        state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+    }).toBe(true);
+    const before = await jelly(page), bounds = await metrics(page);
+    const point = center(before.finish.rect, bounds);
+    await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-rest.png`), scale: 'css' });
+    await page.evaluate(() => {
+      const status = document.getElementById('game-status');
+      window.finishTapTimeline = [];
+      const record = () => {
+        const state = JSON.parse(status.dataset.jelly || '{}'), pull = state.finish?.pull;
+        if (!pull) return;
+        window.finishTapTimeline.push({ at: performance.now(), phase: state.phase,
+          confirmation: state.finish_confirmation.visible, round: state.round_id, ...pull });
+      };
+      window.finishTapObserver = new MutationObserver(record);
+      window.finishTapObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+      record();
+    });
+    const renderFrames = [];
+    const capture = info.project.use.browserName === 'chromium' ? await page.context().newCDPSession(page) : null;
+    if (capture) {
+      capture.on('Page.screencastFrame', frame => {
+        if (renderFrames.length < 45) renderFrames.push(frame);
+        capture.send('Page.screencastFrameAck', { sessionId: frame.sessionId }).catch(() => {});
+      });
+      await capture.send('Page.startScreencast', { format: 'png', everyNthFrame: 1 });
+    }
+    if (info.project.use.isMobile) await page.touchscreen.tap(point.x, point.y);
+    else await page.mouse.click(point.x, point.y);
+    await expect.poll(async () => page.evaluate(() =>
+      window.finishTapTimeline.some(frame => frame.visual_pull > frame.threshold * 0.18)),
+    { intervals: [20], message: 'Tapping Finish visibly tugs the gel downward' }).toBe(true);
+    await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-downstroke.png`), scale: 'css' });
+    await expect.poll(async () => page.evaluate(() =>
+      window.finishTapTimeline.some(frame => frame.returning && frame.visual_pull < -0.1)),
+    { intervals: [20], message: 'The gel overshoots upward during its elastic return' }).toBe(true);
+    await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-recoil.png`), scale: 'css' });
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return !state.finish.pull.tap_hint && !state.finish.pull.returning && Math.abs(state.finish.pull.visual_pull) < 0.1;
+    }, { intervals: [30], message: 'The tap demonstration settles in its original header position' }).toBe(true);
+    const after = await jelly(page);
+    const observed = await page.evaluate(() => {
+      window.finishTapObserver.disconnect();
+      return { timeline: window.finishTapTimeline };
+    });
+    if (capture) {
+      await capture.send('Page.stopScreencast');
+      await capture.detach();
+      for (const [index, frame] of renderFrames.entries()) {
+        fs.writeFileSync(info.outputPath(`${mode}-finish-tap-frame-${String(index).padStart(2, '0')}.png`),
+          Buffer.from(frame.data, 'base64'));
+      }
+    }
+    expect(observed.timeline.some(frame => frame.tap_hint), 'Real pointer input starts the tap demonstration').toBe(true);
+    expect(observed.timeline.every(frame => !frame.armed && !frame.glow && frame.progress === 0),
+      'The demonstration never arms the destructive action').toBe(true);
+    expect(observed.timeline.every(frame => frame.phase === 'playing' && !frame.confirmation)).toBe(true);
+    expect(Math.max(...observed.timeline.map(frame => frame.visual_pull / frame.threshold)),
+      'A tap only demonstrates a small part of the deliberate finish gesture').toBeLessThan(0.6);
+    expect(after.round_id).toBe(before.round_id);
+    expect(after.score).toBe(before.score);
+    expect(after.finish.rect, 'The button layout target never moves').toEqual(before.finish.rect);
+    expect(after.drag.active, 'The Finish demonstration never drags a board tile').toBe(false);
+    const timelinePath = info.outputPath(`${mode}-finish-tap-timeline.json`);
+    fs.writeFileSync(timelinePath, JSON.stringify(observed.timeline, null, 2));
+    await info.attach('finish-tap-timeline', { path: timelinePath, contentType: 'application/json' });
+    await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-settled.png`), scale: 'css' });
+    await finishRound(page);
+    expect((await jelly(page)).finish_confirmation.visible,
+      'A subsequent deliberate pull still goes directly to results').toBe(false);
+    expect(errors).toEqual([]);
+  });
+}
+
+for (const mode of ['jelly', 'word_jelly']) {
   for (const pointer of ['mouse', 'touch']) {
     test(`${mode} pull Finish ${pointer} arms only downward, springs back, and cancels safely`, async ({ page }, info) => {
       test.setTimeout(210000);

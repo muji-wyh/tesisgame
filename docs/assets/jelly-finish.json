@@ -9,7 +9,7 @@
     "status": "Reuses acquired and integrated production artwork; no new artwork acquisition",
     "sourceManifest": "docs/assets/jelly-match.json",
     "surface": "assets/images/jelly-match/gel-coral.png",
-    "animations": "Static source body. Runtime pull, deformation, rebound and idle hint are authored by the game."
+    "animations": "Static source body. Runtime pull, deformation, rebound, tap demonstration and idle hint are authored by the game."
   },
   "audio": {
     "creator": "Kenney",

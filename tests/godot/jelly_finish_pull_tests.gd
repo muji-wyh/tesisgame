@@ -67,6 +67,86 @@ func relax(button) -> void:
 		button.advance(1.0 / 60.0)
 
 
+func check_tap_response(button, context: String, cues: Array[int], commits: Array[int], requests: Array[int]) -> void:
+	var fixed_target: Rect2 = button.get_global_rect()
+	var peak: float = 0.0
+	var recovery: float = 0.0
+	var safe: bool = true
+	var stable_target: bool = true
+	for frame in range(120):
+		button.advance(1.0 / 60.0)
+		var state: Dictionary = button.snapshot()
+		peak = maxf(peak, float(state.visual_pull))
+		recovery = minf(recovery, float(state.visual_pull))
+		safe = safe and not state.pulling and not state.armed and not state.glow
+		stable_target = stable_target and button.get_global_rect().is_equal_approx(fixed_target)
+	check(peak > float(button.snapshot().threshold) * 0.2 and peak < float(button.snapshot().threshold),
+		context + ": a tap visibly demonstrates a short downward pull below the finish threshold")
+	check(recovery < -0.1 and absf(recovery) < 8.0,
+		context + ": the tap demonstration has a small elastic overshoot on its return")
+	check(safe and cues.is_empty() and commits.is_empty() and requests.is_empty(),
+		context + ": the demonstration never captures a pointer, arms, sounds ready, or finishes")
+	check(stable_target, context + ": the tap demonstration preserves the header layout and hit target")
+	check(not button.snapshot().tap_hint and not button.snapshot().returning and absf(float(button.snapshot().visual_pull)) < 0.5,
+		context + ": the tap demonstration returns to its resting shape")
+
+
+func check_tap_interruption(button) -> void:
+	var start: Vector2 = button.get_global_rect().get_center()
+	pointer(start, true, true)
+	motion(start + Vector2(3, 2), true)
+	pointer(start + Vector2(3, 2), false, true)
+	check(button.snapshot().tap_hint, "A small touch wobble still receives the downward tap demonstration")
+	button.advance(0.1)
+	check(float(button.snapshot().visual_pull) > 0.0, "The explicit tap cue begins immediately")
+	button.set_hint_allowed(false)
+	button.advance(0.04)
+	check(button.snapshot().tap_hint and float(button.snapshot().visual_pull) > 0.0,
+		"Suppressing idle invitations does not suppress the player's explicit tap feedback")
+	button.set_hint_allowed(true)
+	pointer(start, true, true)
+	check(button.is_pulling() and not button.snapshot().tap_hint and is_zero_approx(float(button.snapshot().visual_pull)),
+		"A new touch interrupts the demonstration and gives direct control of the jelly")
+	motion(start + Vector2(0, 24), true)
+	motion(start, true)
+	pointer(start, false, true)
+	check(not button.snapshot().tap_hint, "A deliberate drag returning to its start is not mistaken for a tap")
+	button.cancel_pull(true)
+	for interruption: String in ["cancel", "disable", "hide", "resize", "focus", "app_focus"]:
+		pointer(start, true)
+		pointer(start, false)
+		button.advance(0.1)
+		check(button.snapshot().tap_hint and float(button.snapshot().visual_pull) > 0.0,
+			"The tap demonstration is active before " + interruption)
+		match interruption:
+			"cancel": button.cancel_pull(true)
+			"disable":
+				button.disabled = true
+				button.advance(1.0 / 60.0)
+			"hide": button.hide()
+			"resize":
+				button.size += Vector2(1, 0)
+				await settle()
+			"focus": button.release_focus()
+			"app_focus": button.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
+		check(not button.snapshot().tap_hint and is_zero_approx(float(button.snapshot().visual_pull)),
+			interruption + ": interruption clears the tap cue without leaving a stretched button")
+		button.disabled = false
+		button.show()
+		button.advance(1.0 / 60.0)
+		start = button.get_global_rect().get_center()
+		button.advance(0.2)
+		check(not button.snapshot().tap_hint and is_zero_approx(float(button.snapshot().visual_pull)),
+			interruption + ": the interrupted cue cannot restart later")
+	pointer(start, true)
+	button.release_pointer(-1)
+	await process_frame
+	check(not button.is_pulling() and not button.snapshot().tap_hint,
+		"A missing host release safely cancels without pretending the player tapped")
+	button.size = Vector2(84, 44)
+	await settle()
+
+
 func check_component() -> void:
 	root.size = Vector2i(640, 720)
 	var button = Finish.new()
@@ -91,7 +171,7 @@ func check_component() -> void:
 		check(button.is_pulling(), context + ": the header target owns a real pointer press")
 		pointer(start, false, touch)
 		check(commits.is_empty() and requests.is_empty(), context + ": a tap neither finishes nor opens keyboard confirmation")
-		relax(button)
+		check_tap_response(button, context, cues, commits, requests)
 		pointer(start, true, touch)
 		motion(start - Vector2(0, threshold * 0.2), touch)
 		check(not button.snapshot().armed and float(button.snapshot().progress) <= 0.01,
@@ -167,6 +247,9 @@ func check_component() -> void:
 		commits.clear()
 		cues.clear()
 		button.cancel_pull(true)
+	await check_tap_interruption(button)
+	check(commits.is_empty() and cues.is_empty() and requests.is_empty(),
+		"Tap feedback and its interruptions never trigger finishing or a ready cue")
 	button.disabled = true
 	pointer(start, true)
 	motion(start + Vector2(0, threshold * 2.0))
@@ -178,6 +261,11 @@ func check_component() -> void:
 	check(requests.size() == 1 and commits.is_empty(), "Keyboard activation requests the accessible safe confirmation")
 	button.configure(Color("e2a268"), 1.0, true)
 	button.set_hint_allowed(true)
+	pointer(start, true)
+	pointer(start, false)
+	button.advance(0.2)
+	check(not button.snapshot().tap_hint and is_zero_approx(float(button.snapshot().visual_pull)) and commits.is_empty(),
+		"Reduced motion keeps tap feedback stationary and never finishes the round")
 	var idle_peak: float = 0.0
 	for frame in range(1200):
 		button.advance(1.0 / 60.0)
@@ -223,6 +311,17 @@ func check_gameplay(mode: String) -> void:
 	button.set_process(false)
 	var completions: Array[Dictionary] = []
 	view.round_finished.connect(func(result: Dictionary) -> void: completions.append(result))
+	var tap_start: Vector2 = button.get_global_rect().get_center()
+	pointer(tap_start, true)
+	pointer(tap_start, false)
+	button.advance(0.1)
+	var before_demo: float = view.game.spawn_elapsed
+	view._process(0.2)
+	check(button.snapshot().tap_hint and not button.is_pulling() and view.game.spawn_elapsed > before_demo,
+		mode + ": the tap demonstration teaches pulling without freezing board simulation")
+	check(view.game.phase == "playing" and completions.is_empty() and not app._finish_confirmation_open(),
+		mode + ": a teaching tap preserves the game without opening confirmation")
+	button.cancel_pull(true)
 	for interruption: String in ["home", "resize", "page_hidden", "host_cancel"]:
 		var start: Vector2 = button.get_global_rect().get_center()
 		var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)

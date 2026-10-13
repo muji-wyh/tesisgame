@@ -13,6 +13,9 @@ const GEL = preload("res://assets/images/jelly-match/gel-coral.png")
 const FLAG = preload("res://assets/images/ui/finish-flag.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const TAP_SLOP_PX: float = 8.0
+const TAP_HINT_PULL_PX: float = 32.0
+const TAP_HINT_ATTACK_SECONDS: float = 0.20
 
 var _ui_scale: float = 1.0
 var _reduced_motion: bool = false
@@ -20,6 +23,10 @@ var _accent := Color("#357d70")
 var _pulling: bool = false
 var _armed: bool = false
 var _returning: bool = false
+var _tap_hint: bool = false
+var _tap_elapsed: float = 0.0
+var _tap_start_pull: float = 0.0
+var _gesture_travel: float = 0.0
 var _pointer_id: int = -2
 var _gesture_serial: int = 0
 var _suppress_emulated_mouse: bool = false
@@ -155,12 +162,23 @@ func advance(delta: float) -> void:
 	if not is_visible_in_tree() or disabled:
 		return
 	_clock += delta
+	var return_delta: float = delta
+	if _tap_hint and not _returning:
+		var attack_delta: float = minf(delta, TAP_HINT_ATTACK_SECONDS - _tap_elapsed)
+		_tap_elapsed += attack_delta
+		return_delta -= attack_delta
+		var progress: float = clampf(_tap_elapsed / TAP_HINT_ATTACK_SECONDS, 0.0, 1.0)
+		_visual_pull = lerpf(_tap_start_pull, TAP_HINT_PULL_PX / _ui_scale, 1.0 - pow(1.0 - progress, 3.0))
+		if _tap_elapsed >= TAP_HINT_ATTACK_SECONDS:
+			_returning = true
+			_velocity = 0.0
 	if _returning:
 		if _reduced_motion:
 			_visual_pull = 0.0
 			_returning = false
+			_tap_hint = false
 		else:
-			var remaining: float = minf(delta, 0.5)
+			var remaining: float = minf(return_delta, 0.5)
 			while remaining > 0.0:
 				var step: float = minf(remaining, 1.0 / 120.0)
 				_velocity += (-_visual_pull * 190.0 - _velocity * 17.5) * step
@@ -172,7 +190,8 @@ func advance(delta: float) -> void:
 				_velocity = 0.0
 				_sideways = 0.0
 				_returning = false
-	elif not _pulling and _hint_allowed and not _reduced_motion:
+				_tap_hint = false
+	elif not _pulling and not _tap_hint and _hint_allowed and not _reduced_motion:
 		if _idle_cue >= 0.0:
 			_idle_cue += delta
 			if _idle_cue >= 0.92:
@@ -196,7 +215,7 @@ func advance(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or disabled:
-		if _pulling:
+		if _pulling or _tap_hint:
 			cancel_pull(true)
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -258,6 +277,9 @@ func _begin_pull(point: Vector2, pointer_id: int) -> void:
 	_armed = false
 	_armed_once = false
 	_returning = false
+	_tap_hint = false
+	_tap_elapsed = 0.0
+	_gesture_travel = 0.0
 	_pull_distance = 0.0
 	_visual_pull = 0.0
 	_sideways = 0.0
@@ -272,6 +294,7 @@ func _move_pull(point: Vector2) -> void:
 	if not _pulling:
 		return
 	var local_delta: Vector2 = get_global_transform().basis_xform_inv(point - _start)
+	_gesture_travel = maxf(_gesture_travel, local_delta.length())
 	_pull_distance = maxf(0.0, local_delta.y)
 	_sideways = clampf(local_delta.x * 0.12, -10.0 / _ui_scale, 10.0 / _ui_scale)
 	# A little extra resistance beyond the threshold protects the header from
@@ -290,6 +313,7 @@ func _release_pull(point: Vector2) -> void:
 		return
 	_move_pull(point)
 	var commit: bool = _armed and not disabled and is_visible_in_tree()
+	var tapped: bool = _gesture_travel * _ui_scale <= TAP_SLOP_PX
 	_pulling = false
 	_gesture_serial += 1
 	_pointer_id = -2
@@ -305,6 +329,15 @@ func _release_pull(point: Vector2) -> void:
 		if not _returning:
 			_visual_pull = 0.0
 			_sideways = 0.0
+		if tapped and not _reduced_motion:
+			# Demonstrate the gesture without owning input or advancing Finish.
+			# The same anchored skin and spring as a real pull teach its direction.
+			_tap_hint = true
+			_tap_elapsed = 0.0
+			_tap_start_pull = _visual_pull
+			_returning = false
+			_velocity = 0.0
+			_sideways = 0.0
 		_update_visual()
 		pull_canceled.emit()
 
@@ -317,6 +350,9 @@ func cancel_pull(immediate: bool = false) -> void:
 	_pointer_id = -2
 	_pull_distance = 0.0
 	_armed_once = false
+	_tap_hint = false
+	_tap_elapsed = 0.0
+	_gesture_travel = 0.0
 	_hint_elapsed = 0.0
 	_idle_cue = -1.0
 	_returning = not immediate and not _reduced_motion and absf(_visual_pull) > 0.01
@@ -360,6 +396,8 @@ func _on_visibility_changed() -> void:
 func _on_focus_exited() -> void:
 	if _pulling:
 		cancel_pull()
+	elif _tap_hint:
+		cancel_pull(true)
 	_update_visual()
 
 
@@ -373,7 +411,7 @@ func _update_visual() -> void:
 		return
 	# A stretched header control crosses the preview without going behind its
 	# tiles. Confirmation and other modal layers still retain their higher level.
-	z_index = 85 if _pulling or _returning or _idle_cue >= 0.0 else 0
+	z_index = 85 if _pulling or _returning or _tap_hint or _idle_cue >= 0.0 else 0
 	var unit: float = 1.0 / maxf(0.1, _ui_scale)
 	var margin := Vector2(14.0, 12.0) * unit
 	_surface.position = -margin
@@ -421,6 +459,7 @@ func _update_visual() -> void:
 func snapshot() -> Dictionary:
 	return {
 		"pulling": _pulling, "armed": _armed, "returning": _returning,
+		"tap_hint": _tap_hint,
 		"progress": clampf(_pull_distance / maxf(1.0, _threshold), 0.0, 1.0),
 		"pull_distance": _pull_distance, "visual_pull": _visual_pull,
 		"threshold": _threshold, "max_pull": _max_pull, "ui_scale": _ui_scale,

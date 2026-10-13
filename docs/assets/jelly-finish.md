@@ -6,6 +6,15 @@ release threshold adds a local glow and one short ready cue; releasing commits
 only while the threshold is reached. An early release returns the gel to its
 resting shape. These poses are authored by the game, not source animations.
 
+A pointer tap demonstrates the same action: the gel stretches down by 32 screen
+pixels over 200 ms, then springs back with a small upward overshoot. The header
+layout and hit target stay fixed. Only gestures that travel at most 8 screen
+pixels receive this cue; an actual drag keeps its existing release behavior.
+The demonstration never arms Finish, plays its ready sound, or pauses the board.
+Repeated taps restart one cue, and a fresh pull takes control immediately.
+Reduced motion keeps the existing focus highlight without the demonstration's
+travel. Cancellation, hiding, resizing, disabling, and focus loss clear the cue.
+
 ## Sources and integration
 
 | Material | Creator, source and license | Acquisition and animation |
