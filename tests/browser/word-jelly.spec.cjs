@@ -283,8 +283,8 @@ function expectSupplyLayout(state, bounds) {
     expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + 0.5) * board[2] / 6)),
       `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
   }
-  const regions = [['well', board], ['supply tray', tray], ['chest meter', state.loot.progress.rect],
-    ['Collect words', state.collect_button.rect]];
+  const regions = [['well', board], ['supply tray', tray], ['Collect words', state.collect_button.rect],
+    ...Object.entries(state.powerup_buttons).map(([kind, button]) => [kind, button.rect])];
   inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
   for (const [index, [label, rect]] of regions.entries()) {
     inside(rect, area, label);
@@ -293,6 +293,18 @@ function expectSupplyLayout(state, bounds) {
       const height = Math.min(rect[1] + rect[3], other[1] + other[3]) - Math.max(rect[1], other[1]);
       expect(width <= tolerance || height <= tolerance, `${label} and ${otherLabel} do not overlap`).toBe(true);
     }
+  }
+  const chest = state.loot.progress.rect;
+  inside(chest, [0, 0, bounds.width, bounds.height], 'Header chest');
+  inside(state.loot.rect, chest, 'Chest artwork');
+  expect(chest[1] + chest[3] + 4 / scale,
+    'The chest uses the header without reserving playfield space').toBeLessThanOrEqual(area[1] + tolerance);
+  expect(chest[2] * scale, 'The header chest keeps its full touch width').toBeGreaterThanOrEqual(43.75);
+  expect(chest[3] * scale, 'The header chest keeps its full touch height').toBeGreaterThanOrEqual(43.75);
+  for (const [label, rect] of [...regions, ['Finish', state.finish.rect]]) {
+    const width = Math.min(chest[0] + chest[2], rect[0] + rect[2]) - Math.max(chest[0], rect[0]);
+    const height = Math.min(chest[1] + chest[3], rect[1] + rect[3]) - Math.max(chest[1], rect[1]);
+    expect(width <= tolerance || height <= tolerance, `Header chest and ${label} do not overlap`).toBe(true);
   }
   inside(state.finish.rect, [0, 0, bounds.width, bounds.height], 'Header Finish');
   expect(state.finish.visible, 'Finish is visible in the active round header').toBe(true);
