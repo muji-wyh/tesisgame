@@ -37,9 +37,13 @@ func _flight_fixture() -> Dictionary:
 	root.add_child(counter)
 	root.add_child(flight)
 	var state: Dictionary = {"flight": flight, "counter": counter, "time": 0.0,
-		"times": [], "balances": [], "settlements": 0}
+		"times": [], "balances": [], "release_times": [], "sound_times": [], "settlements": 0}
+	flight.release_sound.connect(func() -> void:
+		state.release_times.append(state.time)
+		state.sound_times.append(state.time))
 	flight.arrival_sound.connect(func() -> void:
 		state.times.append(state.time)
+		state.sound_times.append(state.time)
 		state.balances.append(counter.target))
 	flight.settled.connect(func() -> void: state.settlements += 1)
 	flight.sync(0)
@@ -64,9 +68,9 @@ func _dispose_flight(state: Dictionary) -> void:
 func _check_flight_timing() -> void:
 	var state := _flight_fixture()
 	var flight = state.flight
-	flight.present("chest", _reward(0), Vector2(100, 100))
+	flight.present("word", _reward(0), Vector2(100, 100))
 	check(state.times.is_empty() and state.counter.target == 0,
-		"Saving and launching a coin reward cannot sound before its visible arrival")
+		"Saving and launching a collected word cannot sound before its visible arrival")
 	for delta: float in [0.0, -1.0, INF, NAN]:
 		_advance(state, delta)
 	check(state.times.is_empty(), "Invalid clock updates cannot produce a coin sound")
@@ -87,14 +91,103 @@ func _check_flight_timing() -> void:
 			"Every audible beat accompanies newly arrived value")
 	check(state.counter.target == 50 and not flight.snapshot().active,
 		"Sound cadence cannot delay or change the earned balance")
+	check(state.release_times.is_empty(), "Collected words never request a chest release sound")
 	var sounds: int = state.times.size()
-	flight.present("chest", _reward(0), Vector2.ZERO)
+	flight.present("word", _reward(0), Vector2.ZERO)
 	_advance(state, 10.0)
 	check(state.times.size() == sounds and state.counter.target == 50,
 		"A completed receipt and idle time cannot replay coin audio")
 	flight.present("zero", _reward(50, 0), Vector2.ZERO)
 	_advance(state, 10.0)
 	check(state.times.size() == sounds, "An empty reward has no deposit sound")
+	_dispose_flight(state)
+
+
+func _check_chest_release_timing() -> void:
+	var state := _flight_fixture()
+	state.flight.present("chest", _reward(0), Vector2.ZERO, true)
+	check(state.sound_times.is_empty() and state.counter.target == 0,
+		"Queuing chest coins leaves audio activation to the first visible burst frame")
+	for delta: float in [0.0, -1.0, INF, NAN]:
+		_advance(state, delta)
+	check(state.sound_times.is_empty(), "Invalid updates cannot consume or play a pending chest release")
+	_advance(state, 0.016)
+	check(state.release_times.size() == 1 and state.times.is_empty() and state.counter.target == 0,
+		"The first valid chest burst frame plays one release cue before any coins arrive")
+	state.flight.present("chest", _reward(0), Vector2.ZERO, true)
+	for frame in range(200):
+		_advance(state, 0.01)
+	check(state.release_times.size() == 1 and state.times.size() >= 3 and state.counter.target == 50,
+		"A chest release sounds once while its original deposit rhythm and full value remain intact")
+	for index in range(1, state.sound_times.size()):
+		check(float(state.sound_times[index]) - float(state.sound_times[index - 1]) >= Flight.SOUND_INTERVAL - 0.00001,
+			"Chest release and deposit cues respect the same 100 millisecond interval")
+	var sounds: int = state.sound_times.size()
+	state.flight.present("chest", _reward(0), Vector2.ZERO, true)
+	state.flight.present("empty", _reward(50, 0), Vector2.ZERO, true)
+	state.flight.present("negative", _reward(50, -50), Vector2.ZERO, true)
+	_advance(state, 0.016)
+	check(state.sound_times.size() == sounds and not state.flight.snapshot().active,
+		"Duplicate and nonpositive chest receipts cannot replay their release or deposit")
+	state.flight.present("background", _reward(50), Vector2.ZERO, true)
+	state.flight.sync(100)
+	_advance(state, 0.016)
+	state.flight.present("background", _reward(50), Vector2.ZERO, true)
+	state.flight.present("restored", _reward(50), Vector2.ZERO, true)
+	_advance(state, 10.0)
+	check(state.sound_times.size() == sounds and state.counter.target == 100,
+		"Settlement before the first burst frame cancels release audio, including retry and restored receipts")
+	_dispose_flight(state)
+
+
+func _check_chest_release_boundaries() -> void:
+	var cases: Array[Dictionary] = [
+		{"reduced": false, "amount": 50, "delta": Flight.BURST_SECONDS + 0.01, "release": true},
+		{"reduced": false, "amount": 50, "delta": Flight.BURST_SECONDS + 7 * 0.045, "release": false},
+		{"reduced": false, "amount": 350, "delta": Flight.BURST_SECONDS + 13 * 0.045 - 0.001, "release": true},
+		{"reduced": false, "amount": 350, "delta": Flight.BURST_SECONDS + 13 * 0.045, "release": false},
+		{"reduced": false, "amount": 50, "delta": Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS + 0.001, "release": false},
+		{"reduced": false, "amount": 50, "delta": 10.0, "release": false},
+		{"reduced": true, "amount": 50, "delta": 0.016, "release": true},
+		{"reduced": true, "amount": 50, "delta": 0.239, "release": true},
+		{"reduced": true, "amount": 50, "delta": 0.24, "release": false},
+		{"reduced": true, "amount": 50, "delta": 10.0, "release": false}
+	]
+	for scenario: Dictionary in cases:
+		var state := _flight_fixture()
+		state.flight.reduced_motion = scenario.reduced
+		state.flight.present("boundary", _reward(0, scenario.amount), Vector2.ZERO, true)
+		_advance(state, scenario.delta)
+		check(state.release_times.size() == (1 if scenario.release else 0),
+			"A %d-coin chest first shown at %.3f seconds only sounds while its burst remains visible (reduced: %s)"
+			% [scenario.amount, scenario.delta, scenario.reduced])
+		_advance(state, 10.0)
+		check(state.release_times.size() == (1 if scenario.release else 0)
+			and state.counter.target == scenario.amount and not state.flight.snapshot().active,
+			"A delayed frame settles the full receipt without replaying a skipped or completed release")
+		_dispose_flight(state)
+
+
+func _check_chest_release_cadence() -> void:
+	var state := _flight_fixture()
+	state.flight.present("word", _reward(0), Vector2.ZERO)
+	_advance(state, Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.01)
+	state.flight.present("chest-one", _reward(50), Vector2.ZERO, true)
+	state.flight.present("chest-two", _reward(100), Vector2.ZERO, true)
+	_advance(state, 0.02)
+	check(state.release_times.size() == 1 and state.times.is_empty() and state.counter.target > 0,
+		"Simultaneous chest releases coalesce and take precedence over an older word's arriving coins")
+	state.flight.present("chest-suppressed", _reward(150), Vector2.ZERO, true)
+	_advance(state, 0.01)
+	check(state.release_times.size() == 1 and state.times.is_empty(),
+		"A second chest within the shared sound interval cannot stack another release cue")
+	for frame in range(200):
+		_advance(state, 0.01)
+	check(state.release_times.size() == 1 and not state.times.is_empty() and state.counter.target == 200,
+		"A coalesced release is never queued for later, while every overlapping reward still arrives")
+	for index in range(1, state.sound_times.size()):
+		check(float(state.sound_times[index]) - float(state.sound_times[index - 1]) >= Flight.SOUND_INTERVAL - 0.00001,
+			"Mixed word deposits and chest releases cannot exceed the shared audio cadence")
 	_dispose_flight(state)
 
 
@@ -160,7 +253,8 @@ func _check_audio_channels() -> void:
 	root.add_child(audio)
 	check(audio._coin_players.is_empty(), "Starting the game does not allocate or play coin channels")
 	audio.play_coin_arrival()
-	check(audio._coin_players.is_empty(), "Inactive gameplay cannot enqueue a deposit cue")
+	audio.play_coin_release()
+	check(audio._coin_players.is_empty(), "Inactive gameplay cannot enqueue release or deposit cues")
 	audio.interact("spring", false)
 	audio.say("res://assets/audio/voice/word-cat.wav")
 	audio.play_pair_feedback(true)
@@ -176,8 +270,12 @@ func _check_audio_channels() -> void:
 		"Repeated deposits reuse a fixed pool and play the selected production recording")
 	var channels: int = audio.get_child_count()
 	for index in range(16):
-		audio.play_coin_arrival()
-	check(audio.get_child_count() == channels, "Long Collect runs cannot grow the audio player pool")
+		if index % 2 == 0:
+			audio.play_coin_release()
+		else:
+			audio.play_coin_arrival()
+	check(audio.get_child_count() == channels and _coin_playing(audio),
+		"Chest releases and long Collect runs reuse the same fixed recording pool")
 	check(audio.voice.playing and audio._playback_requests[audio.voice] == voice_request
 		and audio._playback_requests[audio.pair_feedback] == pair_request
 		and audio._playback_requests[jelly] == jelly_request and audio._pop_slice_rng.state == rng_state,
@@ -196,47 +294,51 @@ func _check_audio_channels() -> void:
 	audio.set_muted(true)
 	check(_coin_players_silent(audio), "Mute immediately stops every coin tail")
 	audio.play_coin_arrival()
+	audio.play_coin_release()
 	audio.set_muted(false)
-	check(_coin_players_silent(audio), "Unmuting never replays a suppressed coin cue")
+	check(_coin_players_silent(audio), "Unmuting never replays a suppressed release or deposit cue")
 	audio.interact("spring", false)
 	audio.available = false
 	audio.play_coin_arrival()
+	audio.play_coin_release()
 	check(_coin_players_silent(audio), "Unavailable audio leaves the earned reward silent")
 	audio.available = true
-	audio.play_coin_arrival()
-	check(_coin_playing(audio), "A new live deposit can play after audio availability returns")
+	audio.play_coin_release()
+	check(_coin_playing(audio), "A new live chest release can play after audio availability returns")
 	audio.halt()
 	check(_coin_players_silent(audio), "Leaving gameplay stops the entire coin pool")
 	audio.play_coin_arrival()
-	check(_coin_players_silent(audio), "Late arrival callbacks cannot resume a halted gameplay channel")
+	audio.play_coin_release()
+	check(_coin_players_silent(audio), "Late release or arrival callbacks cannot resume a halted gameplay channel")
 	audio.queue_free()
 	await process_frame
 
 
 func _check_pending_audio() -> void:
-	for interruption: String in ["settlement", "mute", "halt"]:
-		var audio := DelayedCoinAudio.new()
-		root.add_child(audio)
-		audio.interact("spring", false)
-		audio.delay_coin = true
-		audio.play_coin_arrival()
-		check(_coin_players_silent(audio), "The pending %s fixture delays the coin asset before playback" % interruption)
-		match interruption:
-			"settlement": audio.stop_coin_sounds()
-			"mute":
-				audio.set_muted(true)
-				audio.set_muted(false)
-			"halt": audio.halt()
-		audio.interact("spring", false)
-		audio.delay_coin = false
-		audio.coin_loaded.emit()
-		await process_frame
-		check(_coin_players_silent(audio), "A delayed coin asset cannot revive playback after %s" % interruption)
-		audio.play_coin_arrival()
-		check(_coin_playing(audio), "A new real arrival still responds after %s" % interruption)
-		audio.halt()
-		audio.queue_free()
-		await process_frame
+	for cue: String in ["arrival", "release"]:
+		for interruption: String in ["settlement", "mute", "halt"]:
+			var audio := DelayedCoinAudio.new()
+			root.add_child(audio)
+			audio.interact("spring", false)
+			audio.delay_coin = true
+			audio.call("play_coin_" + cue)
+			check(_coin_players_silent(audio), "The pending %s fixture delays the %s asset before playback" % [interruption, cue])
+			match interruption:
+				"settlement": audio.stop_coin_sounds()
+				"mute":
+					audio.set_muted(true)
+					audio.set_muted(false)
+				"halt": audio.halt()
+			audio.interact("spring", false)
+			audio.delay_coin = false
+			audio.coin_loaded.emit()
+			await process_frame
+			check(_coin_players_silent(audio), "A delayed %s asset cannot revive playback after %s" % [cue, interruption])
+			audio.call("play_coin_" + cue)
+			check(_coin_playing(audio), "A new real %s still responds after %s" % [cue, interruption])
+			audio.halt()
+			audio.queue_free()
+			await process_frame
 
 
 func _check_application_routes() -> void:
@@ -260,9 +362,14 @@ func _check_application_routes() -> void:
 	var chest: Dictionary = app._credit_coins("audio-chest", 1)
 	app._present_room_coins("audio-chest", chest, Vector2.ZERO, true)
 	check(chest.ok and app.coin_wallet.balance == 50 and not _coin_playing(app.audio),
-		"The shared chest route commits its wallet receipt without premature coin sound")
-	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS + 0.001)
-	check(_coin_playing(app.audio), "The application connects a chest's visual arrival to the coin sound")
+		"The shared chest route commits its wallet receipt before the first visual burst frame")
+	app._coin_flight.advance(0.016)
+	check(_coin_playing(app.audio) and app._coin_counter.target == 0,
+		"The application sounds chest coins as they emerge before their HUD deposit")
+	app.audio.stop_coin_sounds()
+	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.015)
+	check(_coin_playing(app.audio) and app._coin_counter.target > 0,
+		"The application keeps the separate coin arrival sound after the chest release")
 	app._show_mode_menu()
 	check(_coin_players_silent(app.audio) and not app._coin_flight.snapshot().active
 		and app._coin_counter.target == app.coin_wallet.balance,
@@ -304,6 +411,9 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 800)
 	_check_flight_timing()
+	_check_chest_release_timing()
+	_check_chest_release_boundaries()
+	_check_chest_release_cadence()
 	_check_overlapping_and_reduced()
 	await _check_audio_channels()
 	await _check_pending_audio()

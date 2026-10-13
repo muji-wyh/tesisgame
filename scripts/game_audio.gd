@@ -232,6 +232,10 @@ func stop_ui_click() -> void:
 		ui_click.stream = null
 
 
+func play_coin_release() -> void:
+	play_coin_arrival()
+
+
 func play_coin_arrival() -> void:
 	if muted or not active or not available:
 		return

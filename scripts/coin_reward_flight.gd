@@ -2,6 +2,7 @@ extends Control
 ## A visual receipt: every arriving sprite releases its share to the counter.
 
 signal arrived(value: int)
+signal release_sound
 signal arrival_sound
 signal settled
 signal completed
@@ -36,7 +37,7 @@ func sync(balance: int) -> void:
 	queue_redraw()
 
 
-func present(id: String, reward: Dictionary, source: Vector2) -> void:
+func present(id: String, reward: Dictionary, source: Vector2, from_chest: bool = false) -> void:
 	if _seen.has(id) or int(reward.get("amount", 0)) <= 0:
 		return
 	_seen[id] = true
@@ -49,7 +50,7 @@ func present(id: String, reward: Dictionary, source: Vector2) -> void:
 		counter.sync(_visual_total)
 	var count: int = clampi(7 + int(reward.amount) / 50, 8, 14)
 	_events.append({"id": id, "amount": int(reward.amount), "source": source,
-		"elapsed": 0.0, "count": count, "arrivals": 0})
+		"elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": from_chest})
 	queue_redraw()
 
 
@@ -59,10 +60,15 @@ func advance(delta: float) -> void:
 	counter.reduced_motion = reduced_motion
 	_elapsed += delta
 	_sound_cooldown = maxf(0.0, _sound_cooldown - delta)
+	var has_release: bool = false
 	var has_arrivals: bool = false
 	for event in _events:
 		event.elapsed += delta
 		var count: int = event.count
+		if event.release_pending:
+			event.release_pending = false
+			var burst_end: float = 0.24 if reduced_motion else BURST_SECONDS + (count - 1) * 0.045
+			has_release = has_release or event.elapsed < burst_end
 		for index in range(int(event.arrivals), count):
 			var arrival: float = 0.24 if reduced_motion else BURST_SECONDS + TRAVEL_SECONDS + index * 0.045
 			if event.elapsed < arrival:
@@ -75,9 +81,12 @@ func advance(delta: float) -> void:
 			has_arrivals = true
 	# A dense batch, reduced motion or a stalled frame gets one current beat.
 	# Skipped accents are never queued, so audio cannot outlive the coin flight.
-	if has_arrivals and _sound_cooldown <= 0.000001:
+	if (has_release or has_arrivals) and _sound_cooldown <= 0.000001:
 		_sound_cooldown = SOUND_INTERVAL
-		arrival_sound.emit()
+		if has_release:
+			release_sound.emit()
+		else:
+			arrival_sound.emit()
 	var had_events: bool = not _events.is_empty()
 	_events = _events.filter(func(event: Dictionary) -> bool: return event.arrivals < event.count)
 	if had_events and _events.is_empty():

@@ -101,7 +101,7 @@ and free of a rectangular matte. Integrated captures check the chest burst, flig
 arrival and settled balance at 1000 x 800, 390 x 844, 320 x 568 and 568 x 320.
 Lifecycle tests verify arrival-gated counting, persistence and interrupted flights.
 
-## Coin deposit sound
+## Coin release and deposit sound
 
 The deposit sound is Kenney's `handleCoins2.ogg` from **RPG Audio 1.0**,
 acquired from the user's local **Kenney Game Assets All-in-1 3.7.0** collection
@@ -126,11 +126,14 @@ The full recording is retained at its original pitch, downmixed and resampled,
 with 2 ms / 12 ms edge fades and a peak level of 0.8. Runtime gain is 0.60,
 with a further 6 dB reduction during word pronunciation.
 
-Every reward mode shares the same coin-flight arrival signal. An accent plays
-only when coins reach the balance counter, at most once per rendered update
-and at least 100 ms apart. Four fixed channels let the brief tails overlap;
+Every reward mode shares the same coin-flight audio. Chest payouts play one
+accent as the coins emerge, followed by accents when they reach the balance
+counter. Word collection retains only its arrival accents. Release and arrival
+cues share a limit of once per rendered update and at least 100 ms apart.
+Four fixed channels let the brief tails overlap;
 skipped accents are never queued. The Jelly Words Collect cadence and voice
-behavior are unchanged. Reduced motion coalesces simultaneous deposits.
+behavior are unchanged. Reduced motion coalesces simultaneous deposits. A
+stalled frame that skips the burst does not replay its release sound afterward.
 Mute, backgrounding, Home, Library, and silent balance synchronization cancel
 the coin channels, including pending stream requests. Restore and duplicate
 receipts do not replay the sound. The WAV is a required startup-pack resource,

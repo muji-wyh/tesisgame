@@ -891,6 +891,7 @@ func _build_controls() -> void:
 	_outcome.hide()
 	_coin_flight = CoinFlight.new()
 	_coin_flight.counter = _coin_counter
+	_coin_flight.release_sound.connect(audio.play_coin_release)
 	_coin_flight.arrival_sound.connect(audio.play_coin_arrival)
 	_coin_flight.settled.connect(audio.stop_coin_sounds)
 	add_child(_coin_flight)
@@ -3151,7 +3152,7 @@ func _present_room_coins(id: String, reward: Dictionary, origin: Vector2, animat
 func _present_coins(id: String, reward: Dictionary, origin: Vector2, animate: bool = true) -> void:
 	if animate and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 		_coin_flight.reduced_motion = reduced_motion
-		_coin_flight.present(id, reward, origin)
+		_coin_flight.present(id, reward, origin, true)
 	else:
 		_coin_flight.sync(coin_wallet.balance)
 	if int(reward.get("amount", 0)) > 0:
