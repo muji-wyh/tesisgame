@@ -90,11 +90,19 @@ func check_finish_header(app, view) -> void:
 			check(absf(collect.get_center().x - view._global_rect(view._board).get_center().x) < 0.1,
 				"Hosted Collect remains centered beneath the phone board" + context)
 			view._word_reveal.set_reduced_motion(false)
-			view._word_reveal.present(reveal_word, view._picture(reveal_word), app.Style.GOOD)
-			view._word_reveal.advance(view.WordReveal.PEAK_SECONDS)
-			check(view._word_reveal.is_visible_in_tree()
-				and not view._word_reveal._surface.get_global_rect().intersects(chest),
-				"The collected-word reveal stays clear of the chest at its animated peak" + context)
+			view._word_reveal._rng.seed = 4821
+			for index in range(3):
+				view._word_reveal.present(reveal_word, view._picture(reveal_word), app.Style.GOOD)
+				view._word_reveal.advance(0.10)
+			check(view._word_reveal.is_visible_in_tree() and view._word_reveal.snapshot().entries.size() == 3,
+				"Rapid collected words coexist beside the hosted chest" + context)
+			for tick in range(16):
+				for entry: Dictionary in view._word_reveal.snapshot().entries:
+					var rect: Array = entry.rect
+					var card := Rect2(float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3]))
+					check(not card.intersects(chest) and playfield.grow(0.1).encloses(card),
+						"Every collected-word card stays clear of the chest throughout its elastic motion" + context)
+				view._word_reveal.advance(0.025)
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
 		if dimensions == Vector2i(393, 852):

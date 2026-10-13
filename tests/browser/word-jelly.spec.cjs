@@ -150,6 +150,26 @@ function expectInside(rect, bounds) {
   expect(rect[1] + rect[3]).toBeLessThanOrEqual(bounds.height + 1);
 }
 
+function expectWordRevealContent(entry, bounds, area) {
+  for (const rect of [entry.rect, entry.resting_rect, entry.picture_rect, entry.spelling_rect]) expectInside(rect, bounds);
+  expect(entry.rect[1] + entry.rect[3], 'Each independent word remains in the upper part of the playfield')
+    .toBeLessThan(area[1] + area[3] * 0.42);
+  const [x, y, width, height] = entry.rect;
+  for (const rect of [entry.picture_rect, entry.spelling_rect]) {
+    expect(rect[0], 'Word content remains inside its own card').toBeGreaterThanOrEqual(x - 1);
+    expect(rect[1], 'Word content remains inside its own card').toBeGreaterThanOrEqual(y - 1);
+    expect(rect[0] + rect[2], 'Word content remains inside its own card').toBeLessThanOrEqual(x + width + 1);
+    expect(rect[1] + rect[3], 'Word content remains inside its own card').toBeLessThanOrEqual(y + height + 1);
+  }
+  expect(entry.picture_rect[0] + entry.picture_rect[2], 'Picture and spelling have distinct reading space')
+    .toBeLessThan(entry.spelling_rect[0]);
+  const contentWidth = entry.spelling_rect[0] + entry.spelling_rect[2] - entry.picture_rect[0];
+  const contentHeight = Math.max(entry.picture_rect[1] + entry.picture_rect[3], entry.spelling_rect[1] + entry.spelling_rect[3]) -
+    Math.min(entry.picture_rect[1], entry.spelling_rect[1]);
+  expect(width, 'The card fits its picture and spelling without a wide empty fixed-size shell').toBeLessThan(contentWidth * 1.6);
+  expect(height, 'The card height follows its content with modest padding').toBeLessThan(contentHeight * 1.7);
+}
+
 function expectSupplyLayout(state, bounds) {
   const board = state.board_rect, tray = state.preview.rect, area = state.playfield_rect;
   const scale = Math.max(2 / 3, bounds.scale), tolerance = 0.25 / bounds.scale;
@@ -926,9 +946,10 @@ test('collect button grows with completed words and collects a rhythmic batch on
         collectedCoins: state.collected_coins, fragments: state.fragment_count, at: performance.now() });
       const reveal = state.word_reveal;
       // A 100 ms status publication can skip a whole 100 ms pickup. Capture
-      // playback and the final reading pose, without requiring every transient.
+      // playback and the overlapping reading burst, without requiring every transient.
       const index = batch.active && batch.started && state.fusion_effects?.length ? 'active' :
-        !batch.active && batch.completed === batch.total && reveal?.visible && reveal.content_alpha > 0.9 ? 'reveal' : '';
+        !batch.active && batch.completed === batch.total && reveal?.entries?.length === batch.total &&
+        reveal.entries.every(entry => entry.content_alpha > 0.9) ? 'reveal' : '';
       if (!index || pending.has(index)) return;
       pending.add(index);
       // Let the status update reach the rendered canvas before capturing it.
@@ -957,7 +978,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   let timeline;
   try {
     await expect.poll(() => page.evaluate(() => window.wordJellyBatchCaptured.slice().sort()),
-      { message: 'The real batch animation and final readable word both produce rendered evidence' }).toEqual(['active', 'reveal']);
+      { message: 'The real batch animation and overlapping readable words both produce rendered evidence' }).toEqual(['active', 'reveal']);
   } finally {
     timeline = await page.evaluate(() => {
       window.wordJellyBatchObserver.disconnect();
@@ -970,6 +991,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   expect(timeline.some(frame => !frame.active && frame.completed === 3), 'The browser observes the completed queue').toBe(true);
   const selectedById = new Map(selected.map(tile => [tile.id, tile]));
   let previousStarted = 0, previousCompleted = 0;
+  const entryStates = new Map();
   for (const frame of timeline) {
     expect(frame.total).toBe(3);
     expect(frame.ids.slice().sort((a, b) => a - b)).toEqual(collectedIds.slice().sort((a, b) => a - b));
@@ -986,6 +1008,17 @@ test('collect button grows with completed words and collects a rhythmic batch on
       .toBe(before.collected_coins + paid.reduce((sum, tile) => sum + tile.coins, 0));
     expect(frame.fragments, 'Observed treasure credit matches the same completed prefix')
       .toBe(before.fragment_count + paid.reduce((sum, tile) => sum + tile.fragments, 0));
+    for (const entry of frame.revealed.entries) {
+      expect(entry.entry_id, 'Each word owns a stable independent reveal identity').toBeTruthy();
+      const earlier = entryStates.get(entry.entry_id);
+      if (earlier) {
+        expect(entry.word_id, 'Later pickups cannot replace an active entry content').toBe(earlier.word_id);
+        expect(entry.resting_rect, 'Each card keeps its chosen position throughout its lifetime').toEqual(earlier.resting_rect);
+        expect(entry.variant_scale, 'Each card keeps its own chosen size throughout its lifetime').toBe(earlier.variant_scale);
+        expect(entry.elapsed, 'Each card advances its own lifetime').toBeGreaterThanOrEqual(earlier.elapsed);
+      }
+      entryStates.set(entry.entry_id, entry);
+    }
     if (frame.active) expect(frame.button.enabled).toBe(false);
     previousStarted = frame.started;
     previousCompleted = frame.completed;
@@ -993,11 +1026,20 @@ test('collect button grows with completed words and collects a rhythmic batch on
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
   expect(final.collection_batch.elapsed, 'Three 100 ms collections finish in 300 ms of game time').toBeCloseTo(0.3, 6);
-  const readable = timeline.find(frame => !frame.active && frame.revealed?.visible && frame.revealed.content_alpha > 0.9);
+  const readable = timeline.find(frame => !frame.active && frame.revealed?.entries?.length === 3 &&
+    frame.revealed.entries.every(entry => entry.content_alpha > 0.9));
   const lastWord = selectedById.get(final.collection_batch.ids.at(-1)).word;
-  expect(readable, 'The final collected word retains an opaque reading pose after the fast batch').toBeTruthy();
+  expect(readable, 'All three collected words coexist in an opaque reading burst after the fast batch').toBeTruthy();
   expect(readable.revealed.word_id).toBe(lastWord.id);
   expect(readable.revealed.spelling).toBe(lastWord.text);
+  const burst = readable.revealed.entries;
+  expect(new Set(burst.map(entry => entry.entry_id)).size, 'New words add independent cards').toBe(3);
+  expect(burst.map(entry => entry.word_id).sort()).toEqual(selected.map(tile => tile.word.id).sort());
+  expect(new Set(burst.map(entry => entry.resting_rect.slice(0, 2).join(','))).size,
+    'The three words occupy different positions instead of covering a shared center').toBe(3);
+  expect(new Set(burst.map(entry => entry.variant_scale)).size,
+    'The burst varies its card sizes for a staggered rhythm').toBeGreaterThan(1);
+  for (const entry of burst) expectWordRevealContent(entry, bounds, before.playfield_rect);
   expect(final.cleared_pairs).toBe(before.cleared_pairs + 3);
   expect(final.collected_coins).toBe(before.collected_coins + expectedCoins);
   expect(final.fragment_count).toBe(before.fragment_count + expectedFragments);
@@ -1049,18 +1091,20 @@ test('collected words reveal their picture and spelling above the bottom-anchore
       const state = JSON.parse(status.dataset.jelly || '{}'), reveal = state.word_reveal;
       if (!reveal) return;
       window.wordRevealTimeline.push({ ...reveal, at: performance.now(), cleared: state.cleared_pairs });
-      if (!reveal.visible || reveal.content_alpha < 0.95 || reveal.elapsed < 0.20 || pending.has(reveal.word_id)) return;
-      pending.add(reveal.word_id);
-      document.getElementById('canvas').toBlob(blob => {
-        if (!blob) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-          const encoded = reader.result.split(',')[1];
-          window.wordRevealFrames[reveal.word_id] = encoded;
-          window.saveWordRevealFrame(reveal.word_id, encoded);
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/png');
+      for (const entry of reveal.entries) {
+        if (!entry.visible || entry.content_alpha < 0.95 || entry.elapsed < 0.20 || pending.has(entry.word_id)) continue;
+        pending.add(entry.word_id);
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            const encoded = reader.result.split(',')[1];
+            window.wordRevealFrames[entry.word_id] = encoded;
+            window.saveWordRevealFrame(entry.word_id, encoded);
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
     });
     window.wordRevealObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
@@ -1082,23 +1126,26 @@ test('collected words reveal their picture and spelling above the bottom-anchore
   const evidence = await page.evaluate(() => ({ timeline: window.wordRevealTimeline, frames: window.wordRevealFrames,
     inputs: window.wordRevealInputs, sounds: window.audioObservation.playbacks }));
   fs.writeFileSync(info.outputPath('word-jelly-reveal-timeline.json'), JSON.stringify(evidence.timeline, null, 2));
-  const firstReplacement = evidence.timeline.findIndex(reveal => reveal.visible && reveal.word_id === second.word.id);
-  expect(firstReplacement).toBeGreaterThan(0);
-  expect(evidence.timeline[firstReplacement - 1].word_id, 'The next word replaces the first while its layer is still active').toBe(first.word.id);
-  expect(evidence.timeline[firstReplacement - 1].visible).toBe(true);
+  const together = evidence.timeline.find(reveal => reveal.entries.some(entry => entry.word_id === first.word.id) &&
+    reveal.entries.some(entry => entry.word_id === second.word.id));
+  expect(together, 'The next word appears while the earlier card continues its own reading beat').toBeTruthy();
+  const firstEntry = together.entries.find(entry => entry.word_id === first.word.id);
+  const secondEntry = together.entries.find(entry => entry.word_id === second.word.id);
+  expect(firstEntry.entry_id).not.toBe(secondEntry.entry_id);
+  expect(firstEntry.resting_rect.slice(0, 2), 'Successive taps use different reveal positions')
+    .not.toEqual(secondEntry.resting_rect.slice(0, 2));
+  expect(firstEntry.elapsed, 'Showing another word does not restart the earlier card').toBeGreaterThan(secondEntry.elapsed);
   if (audioAvailable) expect(evidence.inputs, 'The four real taps delimit separate word-audio windows').toHaveLength(4);
   const pronunciationObservations = [];
   for (const [index, candidate] of candidates.entries()) {
-    const reveal = evidence.timeline.find(frame => frame.visible && frame.word_id === candidate.word.id && frame.content_alpha > 0.95);
+    const reveal = evidence.timeline.flatMap(frame => frame.entries)
+      .find(entry => entry.word_id === candidate.word.id && entry.content_alpha > 0.95);
     expect(reveal, 'Each collected word owns a readable opaque hold within its actual lifetime').toBeTruthy();
     expect(reveal.spelling).toBe(candidate.word.text);
     expect(reveal.word.id).toBe(candidate.word.id);
     expect(reveal.picture.replace(/^res:\/\//, '')).toBe(candidate.merged.word.image);
-    for (const rect of [reveal.rect, reveal.picture_rect, reveal.spelling_rect]) expectInside(rect, bounds);
-    expect(reveal.rect[1] + reveal.rect[3], 'The reveal uses the upper part of the playfield')
-      .toBeLessThan(area[1] + area[3] * 0.42);
-    expect(reveal.picture_rect[0] + reveal.picture_rect[2]).toBeLessThan(reveal.spelling_rect[0]);
-    if (index === 1) expect(reveal.reduced_motion, 'The replacement word also supports a steady reduced-motion reading beat').toBe(true);
+    expectWordRevealContent(reveal, bounds, area);
+    if (index === 1) expect(reveal.reduced_motion, 'The new word also supports a steady reduced-motion reading beat').toBe(true);
     if (audioAvailable) {
       const from = evidence.inputs[index * 2].sounds, end = evidence.inputs[(index + 1) * 2]?.sounds;
       const timing = recordingTiming(candidate.word.audio);

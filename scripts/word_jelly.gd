@@ -29,6 +29,9 @@ var _placement_tile: WordTile
 var _placement: Dictionary = {}
 var _completion_source: int = -1
 var _completion_elapsed: float = 0.0
+var _reveal_frame_end: float = -1.0
+var _reveal_frame_batch: int = -1
+var _reveal_frame_generation: int = -1
 
 func _init() -> void:
 	super()
@@ -328,7 +331,12 @@ func _collection_started(fusion: Dictionary) -> void:
 	_collection_origins[str(fusion.attempt_id)] = origin
 	var word: Dictionary = fusion.word
 	_word_reveal.set_reduced_motion(reduced_motion)
-	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD))
+	var batch: bool = bool(fusion.get("batch", false))
+	var initial_age: float = 0.0
+	if batch and _reveal_frame_end >= 0.0 and _reveal_frame_generation == _generation \
+		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
+		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
+	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age)
 	# Batch pickups keep their pop rhythm; pronunciation belongs to direct taps.
 	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
@@ -571,8 +579,14 @@ func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
 
 func _process(delta: float) -> void:
+	_reveal_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
 		_word_reveal.advance(delta)
+		if game.collection_batch_active():
+			# New cards keep their actual 100 ms offsets even when a frame spans several beats.
+			_reveal_frame_end = float(game.collection_batch_snapshot().elapsed) + delta
+			_reveal_frame_batch = game._collection_batch_serial
+			_reveal_frame_generation = _generation
 		collect_button.advance(delta)
 		if _completion_source >= 0:
 			_completion_elapsed += delta
@@ -581,6 +595,7 @@ func _process(delta: float) -> void:
 	for cell: Dictionary in game.cells:
 		previous_rows[int(cell.id)] = int(cell.row)
 	super._process(delta)
+	_reveal_frame_end = -1.0
 	if generation != _generation or not _can_play() or game.full_elapsed >= 0.0 or _landing_cooldown > 0.0:
 		return
 	# A long frame can finish collection and pass the new fall's contact time.
@@ -961,7 +976,11 @@ func _layout() -> void:
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
 	if _word_reveal != null:
-		_word_reveal.configure_layout(Rect2(Vector2(reveal_left, edge), Vector2(size.x - reveal_left - edge, minf(180.0 / s, size.y * 0.36))), s)
+		# Short landscape screens need two compact rows for distinct collection beats.
+		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
+		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
+			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
+			[_loot_meter.get_rect().grow(10.0 / s)])
 	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()

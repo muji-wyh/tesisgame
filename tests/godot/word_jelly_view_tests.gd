@@ -66,6 +66,7 @@ func _run() -> void:
 	_check_collect_and_fragments(view)
 	_check_collect_button_growth(view)
 	_check_batch_collection(view)
+	_check_coarse_frame_batch_reveals(view)
 	_check_batch_chest_queue(view)
 	_check_batch_lifecycle(view)
 	_check_batch_wallet_failure(view)
@@ -684,6 +685,8 @@ func _check_batch_collection(view) -> void:
 		check(started.collection_batch.active and int(started.collection_batch.total) == 3
 			and int(started.collection_batch.started) == 1 and not started.collect_button.enabled,
 			"one collect-button activation snapshots three valid merges and starts only the first")
+		check(int(started.word_reveal.active_count) == 1 and started.word_reveal.entries.size() == 1,
+			"the first collection beat immediately opens its own word reveal")
 		check(not started.preview.enabled and not view.navigation_controls().has(view.collect_button)
 			and view.navigation_controls().has(view.finish_button),
 			"a running batch blocks more supply and collection while leaving Finish accessible")
@@ -712,6 +715,8 @@ func _check_batch_collection(view) -> void:
 				"batch members start and commit singly in monotonic order")
 			check(now_started - now_completed <= 1 and view.game.fusions.size() <= 1,
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
+			check(int(state.word_reveal.active_count) == now_started and state.word_reveal.entries.size() == now_started,
+				"each 100 ms pickup adds a concurrent reveal while prior reading cards remain alive")
 			if now_started > previous_started:
 				start_times.append(float(state.collection_batch.elapsed))
 			if now_completed > previous_completed:
@@ -739,6 +744,12 @@ func _check_batch_collection(view) -> void:
 		check(view.game.collected_coins == 300 and view.game.fragment_count == 3 and cues.count("pop") == 3,
 			"all carried fragments, coins and three existing disappearance beats survive batch playback")
 		check(heard.is_empty(), "batch collection never pronounces a word, including the final pickup")
+		var reveals: Array = final.word_reveal.entries
+		check(reveals.size() == 3 and int(final.word_reveal.active_count) == 3,
+			"all three collected words coexist after the 300 ms batch")
+		for index in range(reveals.size()):
+			check(str(reveals[index].word_id) == "cat" and is_equal_approx(float(reveals[index].elapsed), 0.30 - index * 0.10),
+				"repeated spellings retain separate reveal timelines at the unchanged 100 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
@@ -746,7 +757,40 @@ func _check_batch_collection(view) -> void:
 		_advance(view, 2.0)
 		check(payouts.size() == 3 and view.game.collected_coins == 300,
 			"the completed batch cannot replay its rewards on later frames")
+		check(view.snapshot().word_reveal.entries.is_empty() and int(view.snapshot().word_reveal.active_count) == 0,
+			"all concurrent batch reveals expire without replaying a collection")
 		view.audio_requested.disconnect(on_pop)
+
+
+func _check_coarse_frame_batch_reveals(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		_install_batch_words(view, 3)
+		view._collect_all()
+		view._process(0.35)
+		var state: Dictionary = view.snapshot()
+		var entries: Array = state.word_reveal.entries
+		check(entries.size() == 3 and int(state.word_reveal.active_count) == 3,
+			"one coarse frame preserves all three independently started word reveals")
+		for index in range(entries.size()):
+			check(is_equal_approx(float(entries[index].elapsed), 0.35 - index * 0.10),
+				"coarse frames carry only the remaining frame time into each new collection reveal")
+		check(not state.collection_batch.active and int(state.collection_batch.completed) == 3
+			and payouts.size() == 3 and attempts.size() == 3 and view.game.collected_coins == 300
+			and view.game.fragment_count == 3 and cues.count("pop") == 3 and heard.is_empty(),
+			"coarse reveal catch-up preserves three ordinary rewards and disappearance sounds without pronunciation")
+		view._process(0.10)
+		entries = view.snapshot().word_reveal.entries
+		for index in range(entries.size()):
+			check(is_equal_approx(float(entries[index].elapsed), 0.45 - index * 0.10),
+				"after a completed batch each independent reveal advances once per frame")
+		var before_pause: Array = entries.duplicate(true)
+		view._process(1.25)
+		state = view.snapshot()
+		check(state.word_reveal.entries == before_pause,
+			"an ignored hidden-tab frame preserves all reveal ages and geometry")
+		check(payouts.size() == 3 and view.game.collected_coins == 300 and cues.count("pop") == 3 and heard.is_empty(),
+			"an ignored hidden-tab frame cannot replay any batch rewards or sounds")
 
 
 func _check_batch_chest_queue(view) -> void:
@@ -851,20 +895,21 @@ func _check_batch_wallet_failure(view) -> void:
 
 func _check_reveal_content(view, expected: Dictionary) -> void:
 	var reveal: Dictionary = view.snapshot().word_reveal
+	var card = view._word_reveal._entries.back()
 	check(reveal.visible and reveal.word_id == expected.id and reveal.word.id == expected.id,
 		"collecting a completed word reveals that word above the board")
 	check(reveal.spelling == expected.text and str(reveal.picture).trim_prefix("res://") == expected.image,
 		"the reveal uses the collected word's complete spelling and production image")
-	check(reveal.content_alpha > 0.95 and view._word_reveal._picture.texture != null,
+	check(reveal.content_alpha > 0.95 and card._picture.texture != null,
 		"the reveal reaches a readable opaque hold with real picture art")
 	var panel: Rect2 = _snapshot_rect(reveal.rect)
 	var picture: Rect2 = _snapshot_rect(reveal.picture_rect)
 	var spelling: Rect2 = _snapshot_rect(reveal.spelling_rect)
-	check(view.get_global_rect().encloses(panel) and panel.end.y <= view.get_global_rect().position.y + view.size.y * 0.42,
+	check(view.get_global_rect().grow(0.1).encloses(panel) and panel.end.y <= view.get_global_rect().position.y + view.size.y * 0.42 + 0.1,
 		"the reveal remains near the top and inside the available playfield")
-	check(panel.encloses(picture) and panel.encloses(spelling) and picture.end.x < spelling.position.x,
+	check(panel.grow(0.1).encloses(picture) and panel.grow(0.1).encloses(spelling) and picture.end.x < spelling.position.x,
 		"picture and spelling have separate readable space inside the reveal")
-	var label: Label = view._word_reveal._spelling
+	var label: Label = card._spelling
 	var font: Font = label.get_theme_font("font")
 	var pixels: int = label.get_theme_font_size("font_size")
 	check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x <= label.size.x + 0.1,
@@ -892,45 +937,59 @@ func _check_word_reveal(view) -> void:
 			_check_reveal_content(view, words[0])
 			var first: Dictionary = view.snapshot().word_reveal
 			view._activate(ids[0])
-			check(is_equal_approx(view.snapshot().word_reveal.elapsed, first.elapsed) and heard.size() == 1,
+			check(is_equal_approx(view.snapshot().word_reveal.elapsed, first.elapsed) and heard.size() == 1
+				and int(view.snapshot().word_reveal.active_count) == 1,
 				"duplicate activation cannot restart the reveal or repeat pronunciation")
 			check(cues.count("pop") == 1, "the reveal peak shares the one existing disappearance sound")
 			if reduced:
-				check(view._word_reveal._visual.scale == Vector2.ONE and not view._word_reveal._aura.visible,
+				check(_snapshot_rect(first.rect).is_equal_approx(_snapshot_rect(first.resting_rect))
+					and not view._word_reveal._entries.back()._aura.visible,
 					"reduced motion preserves a steady readable picture and spelling")
 			_advance(view, Model.COLLECT_SECONDS)
 			view._activate(ids[1])
 			_advance(view, 0.20)
 			_check_reveal_content(view, words[1])
-			check(view.snapshot().word_reveal.elapsed < first.elapsed + 0.01 and heard.size() == 2,
-				"another keyboard collection immediately replaces the first word instead of queuing stale overlays")
+			var concurrent: Dictionary = view.snapshot().word_reveal
+			check(int(concurrent.active_count) == 2 and concurrent.entries.size() == 2 and heard.size() == 2,
+				"another individual collection immediately coexists with the first word")
+			check(str(concurrent.entries[0].word_id) == str(words[0].id)
+				and str(concurrent.entries[1].word_id) == str(words[1].id)
+				and is_equal_approx(float(concurrent.entries[0].elapsed), float(first.elapsed) + Model.COLLECT_SECONDS + 0.20)
+				and is_equal_approx(float(concurrent.entries[1].elapsed), 0.20),
+				"both individual reveals retain the correct picture, spelling and independent collection age")
 			_advance(view, Model.COLLECT_SECONDS)
 			check(payouts.size() == 2 and view.game.collected_coins == 200 and cues.count("pop") == 2,
 				"rapid different-word reveals preserve exactly one reward and one disappearance cue per collection")
 			_advance(view, float(view.snapshot().word_reveal.duration))
-			check(not view.snapshot().word_reveal.visible and heard.size() == 2 and payouts.size() == 2,
-				"the reveal clears itself without replaying a word or collecting another reward")
+			check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty()
+				and int(view.snapshot().word_reveal.active_count) == 0 and heard.size() == 2 and payouts.size() == 2,
+				"all reveals clear themselves without replaying a word or collecting another reward")
 	view.size = Vector2(1000, 720)
 
 
 func _check_word_reveal_lifecycle(view) -> void:
 	for action: String in ["pause", "hide", "finish", "stop", "configure"]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["cat"], [], [2])
+		var ids: Array[int] = _install(view, ["cat", "caterpillar"], [], [2, 2])
 		view._activate(ids[0])
 		_advance(view, 0.2)
-		check(view.snapshot().word_reveal.visible, "lifecycle fixture begins with a visible collected word")
+		view._activate(ids[1])
+		_advance(view, 0.2)
+		check(view.snapshot().word_reveal.visible and int(view.snapshot().word_reveal.active_count) == 2,
+			"lifecycle fixture begins with two simultaneous collected words")
 		match action:
 			"pause": view.pause(true)
 			"hide": view.hide()
 			"finish": view._finish_round()
 			"stop": view.stop()
 			"configure": view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
-		check(not view.snapshot().word_reveal.visible, action + " clears the temporary word reveal immediately")
+		check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty()
+			and int(view.snapshot().word_reveal.active_count) == 0, action + " clears every temporary word reveal immediately")
 		view.show()
 		view.pause(false)
 		_advance(view, 0.1)
-		check(not view.snapshot().word_reveal.visible, action + " never restores a stale collected-word overlay")
+		check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty(),
+			action + " never restores stale collected-word overlays")
 	_reset(view)
 	var ids: Array[int] = _install(view, ["cat"], [], [2])
 	view._activate(ids[0])

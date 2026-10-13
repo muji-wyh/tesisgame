@@ -1,25 +1,16 @@
 extends Control
-## A manually advanced reading beat for a word the player has already collected.
+## Independent reading bursts, advanced by the same clock as collection.
 
-const Style = preload("res://scripts/ui_style.gd")
-const WordArt = preload("res://scripts/word_art.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const GLINT = preload("res://assets/chests/milestone/sparkle.png")
+const Card = preload("res://scripts/word_jelly_word_reveal_card.gd")
 const SECONDS: float = 1.95
-const PEAK_SECONDS: float = 0.18
+const BATCH_SECONDS: float = 0.86
 
-var _word: Dictionary = {}
-var _elapsed: float = 0.0
+var _entries: Array[Card] = []
+var _rng := RandomNumberGenerator.new()
+var _serial: int = 0
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
-var _accent: Color = Style.GOOD
-var _rest := Rect2()
-var _visual: Control
-var _surface: Panel
-var _aura: TextureRect
-var _picture: TextureRect
-var _spelling: Label
-var _glints: Array[TextureRect] = []
+var _exclusions: Array[Rect2] = []
 
 
 func _init() -> void:
@@ -27,159 +18,130 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
 	z_index = 55
-	_visual = Control.new()
-	_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_visual)
-	_surface = Panel.new()
-	_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_visual.add_child(_surface)
-	_aura = _texture(GLOW)
-	_picture = _texture(null)
-	_picture.name = "CollectedWordPicture"
-	_spelling = Style.label("", 34)
-	_spelling.name = "CollectedWordSpelling"
-	_spelling.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_spelling.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_spelling.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_spelling.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_spelling.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
-	_visual.add_child(_spelling)
-	for index in range(3):
-		var glint := _texture(GLINT)
-		glint.name = "WordGlint%d" % index
-		_glints.append(glint)
+	_rng.randomize()
 	hide()
 
 
-func _texture(value: Texture2D) -> TextureRect:
-	var result := TextureRect.new()
-	result.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	result.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	result.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	result.texture = value
-	_visual.add_child(result)
-	return result
-
-
-func configure_layout(available: Rect2, ui_scale: float) -> void:
+func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2] = []) -> void:
+	var next_scale: float = maxf(0.5, ui_scale)
+	if get_rect() == available and _ui_scale == next_scale and _exclusions == exclusions:
+		return
 	position = available.position
 	size = available.size.max(Vector2.ZERO)
-	_ui_scale = maxf(0.5, ui_scale)
-	_layout()
-	_sync()
+	_ui_scale = next_scale
+	_exclusions = exclusions.duplicate()
+	var placed: Array[Card] = []
+	for entry: Card in _entries:
+		entry.fit_content(size, _ui_scale)
+		_place(entry, placed)
+		placed.append(entry)
+		entry.sync()
 
 
-func present(word: Dictionary, picture: Texture2D, accent: Color) -> void:
+func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0) -> void:
 	if str(word.get("text", "")).strip_edges().is_empty() or picture == null:
-		reset()
 		return
-	_word = word.duplicate(true)
-	_elapsed = 0.0
-	_accent = accent
-	_picture.texture = picture
-	WordArt.bind(picture, _picture)
-	_spelling.text = str(word.text)
-	set("accessibility_name", str(word.text))
-	_layout()
+	var seconds: float = BATCH_SECONDS if batch else SECONDS
+	if batch and size.y * _ui_scale < 180.0:
+		seconds = 0.48
+	elif batch and size.x * _ui_scale < 520.0:
+		seconds = 0.62
+	if not is_finite(initial_age) or initial_age >= seconds:
+		return
+	_serial += 1
+	var variation: float = _rng.randf_range(0.82, 1.18)
+	if not _entries.is_empty() and absf(variation - _entries.back().variant_scale) < 0.10:
+		variation = 0.84 if _entries.back().variant_scale > 1.0 else 1.16
+	var entry := Card.new()
+	add_child(entry)
+	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion)
+	entry.fit_content(size, _ui_scale)
+	_place(entry, _entries)
+	entry.elapsed = maxf(0.0, initial_age)
+	_entries.append(entry)
+	entry.sync()
 	show()
-	_sync()
+
+
+func _place(entry: Card, occupied: Array[Card]) -> void:
+	# Reserve the entire squash/stretch envelope, including shadow and lift.
+	var margin := Vector2.ONE * 6.0 / _ui_scale
+	var envelope: Vector2 = entry.size * 1.22 + margin * 2.0
+	var room: Vector2 = (size - envelope).max(Vector2.ZERO)
+	var best := Rect2(margin, entry.size)
+	var best_score: float = INF
+	for attempt in range(72):
+		var anchor := Vector2(_rng.randf(), _rng.randf())
+		if attempt < 16:
+			anchor = (Vector2(_rng.randi_range(0, 1), _rng.randi_range(0, 1))
+				+ (anchor - Vector2.ONE * 0.5) * 0.10).clamp(Vector2.ZERO, Vector2.ONE)
+		elif attempt < 40:
+			# Jittered edge/center bands leave usable gaps for the next beats.
+			anchor = (Vector2(_rng.randi_range(0, 2), _rng.randi_range(0, 2)) * 0.5
+				+ (anchor - Vector2.ONE * 0.5) * 0.18).clamp(Vector2.ZERO, Vector2.ONE)
+		var candidate := Rect2(room * anchor, envelope)
+		var candidate_rest: Vector2 = candidate.get_center() - entry.size * 0.5
+		var spelling := Rect2(candidate_rest + entry._spelling.position, entry._spelling.size)
+		var score: float = 0.0
+		for exclusion: Rect2 in _exclusions:
+			var local := Rect2(exclusion.position - position, exclusion.size)
+			score += candidate.intersection(local).get_area() * 100.0
+		for other: Card in occupied:
+			var bounds := Rect2(other.rest_position - other.size * 0.11 - margin,
+				other.size * 1.22 + margin * 2.0)
+			var tail: float = 1.0 - smoothstep(other.duration - 0.22, other.duration, other.elapsed)
+			score += candidate.intersection(bounds).get_area() * lerpf(0.12, 1.0, tail)
+			var other_spelling := Rect2(other.rest_position + other._spelling.position, other._spelling.size)
+			score += (candidate.intersection(other_spelling).get_area()
+				+ bounds.intersection(spelling).get_area()) * 12.0 * tail
+			if other == occupied.back():
+				var separation: float = candidate.get_center().distance_to(bounds.get_center())
+				score += maxf(0.0, minf(size.x, size.y) * 0.48 - separation) * 16.0
+		if score < best_score:
+			best_score = score
+			best = candidate
+		if score <= 0.0:
+			break
+	entry.rest_position = best.get_center() - entry.size * 0.5
 
 
 func advance(delta: float) -> void:
-	if _word.is_empty() or not is_finite(delta) or delta <= 0.0:
+	if not is_finite(delta) or delta <= 0.0:
 		return
-	_elapsed = minf(SECONDS, _elapsed + delta)
-	if _elapsed >= SECONDS:
-		reset()
-		return
-	_sync()
+	for index in range(_entries.size() - 1, -1, -1):
+		var entry: Card = _entries[index]
+		entry.elapsed += delta
+		if entry.elapsed >= entry.duration:
+			_entries.remove_at(index)
+			entry.free()
+		else:
+			entry.sync()
+	visible = not _entries.is_empty()
 
 
 func set_reduced_motion(value: bool) -> void:
 	_reduced_motion = value
-	_sync()
+	for entry: Card in _entries:
+		entry.reduced_motion = value
+		entry.sync()
 
 
 func reset() -> void:
-	_word.clear()
-	_elapsed = 0.0
-	_picture.texture = null
-	_spelling.text = ""
-	_visual.modulate.a = 0.0
+	for entry: Card in _entries:
+		entry.free()
+	_entries.clear()
 	hide()
 
 
-func _layout() -> void:
-	var padding: float = minf(10.0 / _ui_scale, size.y * 0.10)
-	var width: float = maxf(0.0, minf(400.0 / _ui_scale, size.x - padding * 2.0))
-	var height: float = maxf(0.0, minf(132.0 / _ui_scale, size.y - padding * 2.0))
-	_rest = Rect2(Vector2((size.x - width) * 0.5, padding), Vector2(width, height))
-	_visual.size = _rest.size
-	_visual.pivot_offset = _rest.size * 0.5
-	_surface.position = Vector2.ZERO
-	_surface.size = _rest.size
-	var skin := Style.box(Style.PAPER.lightened(0.4), _accent.lightened(0.50),
-		maxi(1, roundi(minf(24.0 / _ui_scale, height * 0.24))), maxi(1, roundi(2.0 / _ui_scale)))
-	skin.shadow_color = Color(_accent.darkened(0.65), 0.18)
-	skin.shadow_size = maxi(1, roundi(9.0 / _ui_scale))
-	skin.shadow_offset = Vector2(0.0, 4.0 / _ui_scale)
-	_surface.add_theme_stylebox_override("panel", skin)
-	var inset: float = minf(14.0 / _ui_scale, height * 0.12)
-	var picture_edge: float = minf(height - inset * 2.0, width * 0.31)
-	_picture.position = Vector2(inset, (height - picture_edge) * 0.5)
-	_picture.size = Vector2.ONE * picture_edge
-	_aura.position = _picture.position - Vector2.ONE * picture_edge * 0.16
-	_aura.size = Vector2.ONE * picture_edge * 1.32
-	var spelling_x: float = _picture.position.x + picture_edge + inset
-	_spelling.position = Vector2(spelling_x, inset)
-	_spelling.size = Vector2(maxf(0.0, width - spelling_x - inset * 1.5), height - inset * 2.0)
-	var pixels: int = maxi(1, roundi(minf(34.0 / _ui_scale, height * 0.40)))
-	var minimum: int = maxi(1, roundi(14.0 / _ui_scale))
-	while pixels > minimum and Style.HEADING_FONT.get_string_size(_spelling.text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > _spelling.size.x:
-		pixels -= 1
-	_spelling.add_theme_font_size_override("font_size", pixels)
-	for index in range(_glints.size()):
-		var edge: float = minf(27.0 / _ui_scale, height * 0.28) * (1.0 if index == 0 else 0.72)
-		var point: Vector2 = [Vector2(width * 0.95, height * 0.15),
-			Vector2(width * 0.35, height * 0.16), Vector2(width * 0.07, height * 0.87)][index]
-		_glints[index].position = point - Vector2.ONE * edge * 0.5
-		_glints[index].size = Vector2.ONE * edge
-		_glints[index].pivot_offset = Vector2.ONE * edge * 0.5
-
-
-func _sync() -> void:
-	if _visual == null:
-		return
-	var alpha: float = smoothstep(0.0, 0.10, _elapsed) * (1.0 - smoothstep(1.64, SECONDS, _elapsed))
-	_visual.modulate.a = alpha if not _word.is_empty() else 0.0
-	_visual.position = _rest.position
-	_visual.scale = Vector2.ONE
-	_aura.visible = not _reduced_motion and not _word.is_empty()
-	_aura.modulate = Color(_accent.lightened(0.42), 0.32 * (1.0 - smoothstep(0.25, 0.85, _elapsed)))
-	if not _reduced_motion:
-		var stretch: float = lerpf(0.78, 1.045, 1.0 - pow(1.0 - clampf(_elapsed / PEAK_SECONDS, 0.0, 1.0), 3.0))
-		if _elapsed >= PEAK_SECONDS:
-			stretch = lerpf(1.045, 1.0, smoothstep(PEAK_SECONDS, 0.34, _elapsed))
-		_visual.scale = Vector2.ONE * stretch
-		_visual.position.y += 8.0 / _ui_scale * (1.0 - smoothstep(0.0, PEAK_SECONDS, _elapsed))
-	for index in range(_glints.size()):
-		var age: float = _elapsed - PEAK_SECONDS - index * 0.105
-		var pulse: float = sin(clampf(age / 0.36, 0.0, 1.0) * PI)
-		_glints[index].visible = not _reduced_motion and not _word.is_empty() and pulse > 0.001
-		_glints[index].modulate = Color(_accent.lightened(0.58), pulse * 0.95)
-		_glints[index].scale = Vector2.ONE * lerpf(0.58, 1.12, pulse)
-		_glints[index].rotation = age * 0.35
-
-
 func snapshot() -> Dictionary:
-	return {"word_id": str(_word.get("id", "")), "word": _word.duplicate(true),
-		"picture": WordArt.source_path(_picture.texture), "spelling": _spelling.text,
-		"visible": visible and not _word.is_empty(), "elapsed": _elapsed, "duration": SECONDS,
-		"rect": _rect_data(_surface.get_global_rect()), "resting_rect": _rect_data(get_global_transform() * _rest),
-		"picture_rect": _rect_data(_picture.get_global_rect()), "spelling_rect": _rect_data(_spelling.get_global_rect()),
-		"content_alpha": _visual.modulate.a, "reduced_motion": _reduced_motion}
-
-
-func _rect_data(rect: Rect2) -> Array:
-	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+	var states: Array[Dictionary] = []
+	for entry: Card in _entries:
+		states.append(entry.snapshot())
+	var latest: Dictionary = states.back().duplicate(true) if not states.is_empty() else {
+		"word_id": "", "word": {}, "picture": "", "spelling": "", "elapsed": 0.0,
+		"duration": SECONDS, "rect": [], "resting_rect": [], "picture_rect": [],
+		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion}
+	latest["visible"] = visible and not states.is_empty()
+	latest["entries"] = states
+	latest["active_count"] = states.size()
+	return latest

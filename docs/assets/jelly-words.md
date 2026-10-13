@@ -102,6 +102,16 @@ dark rectangle around its hit target. It remains distinct from the golden charge
 rim at high counts, stays steady with reduced motion, and clears when disabled.
 Keyboard navigation, activation and touch bounds remain unchanged.
 
-The existing collection pop marks each pickup. Batch word pictures update with
-each word without pronunciation, including the final pickup. Individual word
-taps keep their existing picture and pronunciation behavior.
+The existing collection pop marks each pickup. Each collected word now owns an
+independent picture-and-spelling burst: new words coexist with older ones instead
+of replacing them. A separate presentation RNG varies size and position across
+the upper playfield, scores overlap against active words, and avoids the chest.
+The card measures its actual spelling and picture before fitting its bounds; it
+reserves space for the elastic stretch, compression and settling motion. Batch
+bursts last 480–860 ms according to the available screen space, with a short
+fading tail so dense small-screen collections remain legible. Individual taps retain their
+1.95-second reading beat. Pauses and exits clear every entry; reduced motion uses
+steady cards with the same content and lifetimes. The vocabulary artwork and
+the acquired Bobardo portal glow and Archanor sparkle above are reused, with no
+new asset downloads. Batch collection remains silent for pronunciation,
+including the final pickup; individual word taps retain their pronunciation.
