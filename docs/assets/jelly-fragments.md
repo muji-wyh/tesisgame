@@ -63,8 +63,13 @@ Each paper strip is 1.5 times its base edge in length and 0.65 times in width,
 with its full rotated footprint kept inside the viewport sides. The chest and Pip retain
 their original completion gates while the paper continues over the current
 game or result screen. A 0.55-0.8-second launch spreads across the full width;
-the descent then takes more than four seconds, with gentle sideways drift,
-slow flutter and a bounded terminal speed. Each piece stays opaque until its
+the descent then takes more than four seconds. Independent air currents, opposing
+tumbles with changing angular speed, and two-axis flutter keep the paper from
+moving as one band. The acquired rounded-square texture bends along each strip's
+center, with continuous front/back shading as it turns. Wider launch heights and
+small flutter-driven lifts vary the descent while retaining a bounded terminal
+speed. Each reward identity seeds its own repeatable arrangement without consuming
+gameplay randomness. Each piece stays opaque until its
 entire footprint passes below the viewport bottom, with staggered exits.
 Menu and background pauses hide and freeze the tail. Leaving the round or
 starting another clears it; reduced motion suppresses it. Round identity

@@ -31,13 +31,19 @@ func _run() -> void:
 		and (paper._surface.get_global_transform_with_canvas() * paper.screen_rect()).is_equal_approx(root.get_visible_rect()),
 		"Paper has its own full-viewport canvas despite an offset, scaled and clipped ancestor")
 	_check_lifecycle(paper)
+	_check_burst_sampling()
+	_check_motion_variety(paper)
+	paper.burst("paths:earned-tier-three")
+	var variations: Array[float] = [0.0, float(paper._bursts[0].variation), 0.999999]
+	paper.clear()
 	for layout: Dictionary in [
 		{"screen": Rect2(0, 0, 1366, 768), "unit": 1.0},
 		{"screen": Rect2(0, 0, 390, 844), "unit": 1.0},
 		{"screen": Rect2(0, 0, 568, 320), "unit": 1.0},
 		{"screen": Rect2(0, 0, 320, 220), "unit": 0.75},
 		{"screen": Rect2(0, 0, 1920, 1240), "unit": 2.0}]:
-		_check_paths(paper, layout.screen, float(layout.unit))
+		for variation: float in variations:
+			_check_paths(paper, layout.screen, float(layout.unit), variation)
 	clip.free()
 	print("Reward confetti: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -71,20 +77,147 @@ func _check_lifecycle(paper) -> void:
 	check(not paper.is_active() and not paper.visible and paper.snapshot().keys.is_empty(),
 		"Navigation and a new round clear all paper and reward identities immediately")
 
+func _check_burst_sampling() -> void:
+	var coarse := Confetti.new()
+	var fine := Confetti.new()
+	root.add_child(coarse)
+	root.add_child(fine)
+	for effect in [coarse, fine]:
+		check(effect.burst("sampling:first-chest"), "A deterministic motion fixture accepts its first reward")
+	coarse.advance(2.4)
+	for frame in range(120):
+		fine.advance(0.02)
+	var first_variation: float = float(coarse._bursts[0].variation)
+	var before_retry: Array[Dictionary] = coarse._bursts.duplicate(true)
+	check(not coarse.burst("sampling:first-chest") and coarse._bursts == before_retry,
+		"Retrying an active reward preserves its existing age and motion variation")
+	for effect in [coarse, fine]:
+		check(effect.burst("sampling:upgraded-chest"), "A different earned chest can overlap the older paper")
+	check(float(coarse._bursts[0].variation) == first_variation
+		and float(coarse._bursts[1].variation) != first_variation,
+		"A new reward receives independent variation without reshuffling the active tail")
+	coarse.advance(0.8)
+	for frame in range(80):
+		fine.advance(0.01)
+	var screen := Rect2(0, 0, 960, 620)
+	var changed_paths: int = 0
+	for burst_index in range(2):
+		var a: Dictionary = coarse._bursts[burst_index]
+		var b: Dictionary = fine._bursts[burst_index]
+		check(is_equal_approx(float(a.age), float(b.age)) and a.variation == b.variation,
+			"Coarse and fine frames retain the same independent burst age and deterministic variation")
+		for index in range(Confetti.PAPER_COUNT):
+			var first: Dictionary = coarse._paper_state(index, screen, 1.0, float(a.age), float(a.variation))
+			var second: Dictionary = fine._paper_state(index, screen, 1.0, float(b.age), float(b.variation))
+			check(first.is_empty() == second.is_empty(), "Frame subdivision cannot create or delete a paper at a different age")
+			if first.is_empty() or second.is_empty():
+				continue
+			check(Vector2(first.position).is_equal_approx(second.position) and Vector2(first.size).is_equal_approx(second.size)
+				and is_equal_approx(float(first.rotation), float(second.rotation))
+				and is_equal_approx(float(first.bend), float(second.bend)) and Color(first.color).is_equal_approx(second.color),
+				"A slow frame samples the same wind, tumble, fold, and lighting as many small frames")
+			check(first == coarse._paper_state(index, screen, 1.0, float(a.age), float(a.variation)),
+				"Repeated drawing of one paper never consumes randomness or advances its pose")
+	for index in range(Confetti.PAPER_COUNT):
+		var first: Dictionary = coarse._paper_state(index, screen, 1.0, 2.4, float(coarse._bursts[0].variation))
+		var second: Dictionary = coarse._paper_state(index, screen, 1.0, 2.4, float(coarse._bursts[1].variation))
+		if Vector2(first.position).distance_to(second.position) > 0.01 \
+			or absf(float(first.rotation) - float(second.rotation)) > 0.001 \
+			or Vector2(first.size).distance_to(second.size) > 0.01:
+			changed_paths += 1
+	check(changed_paths > Confetti.PAPER_COUNT / 2,
+		"Overlapping rewards do not replay the same synchronized paper poses at the same elapsed time")
+	var paused: Array[Dictionary] = coarse._bursts.duplicate(true)
+	coarse.set_paused(true)
+	coarse.advance(10.0)
+	check(coarse._bursts == paused, "Pausing freezes every burst's motion seed together with its timeline")
+	coarse.set_paused(false)
+	coarse.clear()
+	check(coarse.burst("sampling:first-chest") and float(coarse._bursts[0].variation) == first_variation,
+		"Recreating the same reward identity reproduces its paper variation without dependence on earlier bursts")
+	coarse.free()
+	fine.free()
+
+
+func _check_motion_variety(paper) -> void:
+	var screen := Rect2(0, 0, 960, 620)
+	var clockwise: int = 0
+	var counterclockwise: int = 0
+	var changing_spin: int = 0
+	var changing_thickness: int = 0
+	var bow_positive: bool = false
+	var bow_negative: bool = false
+	for index in range(Confetti.PAPER_COUNT):
+		var early: Dictionary = paper._paper_state(index, screen, 1.0, 1.2)
+		var middle: Dictionary = paper._paper_state(index, screen, 1.0, 2.4)
+		var late: Dictionary = paper._paper_state(index, screen, 1.0, 3.6)
+		var first_turn: float = float(middle.rotation) - float(early.rotation)
+		var second_turn: float = float(late.rotation) - float(middle.rotation)
+		if first_turn + second_turn > 0.0:
+			clockwise += 1
+		elif first_turn + second_turn < 0.0:
+			counterclockwise += 1
+		if absf(first_turn - second_turn) > 0.001:
+			changing_spin += 1
+		var narrowest: float = INF
+		var widest: float = 0.0
+		var thinnest: float = INF
+		var thickest: float = 0.0
+		for sample in range(31):
+			var state: Dictionary = paper._paper_state(index, screen, 1.0, 1.2 + float(sample) * 0.1)
+			var dimensions: Vector2 = state.size
+			var bow: float = float(state.bend)
+			check(dimensions.x > 0.0 and dimensions.y > 0.0 and is_finite(bow)
+				and absf(bow) < dimensions.y * 0.5,
+				"Paper folds remain finite and inside the reported body dimensions")
+			narrowest = minf(narrowest, dimensions.x)
+			widest = maxf(widest, dimensions.x)
+			thinnest = minf(thinnest, dimensions.y)
+			thickest = maxf(thickest, dimensions.y)
+			bow_positive = bow_positive or bow > 0.001
+			bow_negative = bow_negative or bow < -0.001
+		check(widest - narrowest > 0.01, "A drifting paper visibly changes projected width as its face turns")
+		if thickest - thinnest > 0.01:
+			changing_thickness += 1
+	check(clockwise > 0 and counterclockwise > 0, "The canopy contains papers tumbling in both directions")
+	check(changing_spin > Confetti.PAPER_COUNT / 2,
+		"Most papers vary their tumble speed instead of rotating as a rigid synchronized layer")
+	check(changing_thickness > Confetti.PAPER_COUNT / 2 and bow_positive and bow_negative,
+		"Independent pitch and signed bow give the falling paper more than a flat width flip")
+	for index in range(0, Confetti.PAPER_COUNT, 13):
+		var previous: Dictionary = {}
+		var darkest: float = INF
+		var brightest: float = -INF
+		var continuous: bool = true
+		for sample in range(721):
+			var state: Dictionary = paper._paper_state(index, screen, 1.0, 1.0 + float(sample) / 240.0)
+			var color: Color = state.color
+			var light: float = color.get_luminance()
+			darkest = minf(darkest, light)
+			brightest = maxf(brightest, light)
+			if not previous.is_empty():
+				var before: Color = previous.color
+				continuous = continuous and maxf(absf(color.r - before.r),
+					maxf(absf(color.g - before.g), absf(color.b - before.b))) < 0.03
+			previous = state
+		check(continuous and brightest - darkest > 0.01,
+			"Front-to-back lighting changes smoothly through the fold instead of switching color abruptly")
+
+
 func _half_extent(state: Dictionary) -> Vector2:
 	var half: Vector2 = state.size * 0.5
 	var angle: float = float(state.rotation)
 	return Vector2(absf(cos(angle)) * half.x + absf(sin(angle)) * half.y,
 		absf(sin(angle)) * half.x + absf(cos(angle)) * half.y)
 
-func _check_paths(paper, screen: Rect2, unit: float) -> void:
+func _check_paths(paper, screen: Rect2, unit: float, variation: float = 0.0) -> void:
 	var columns: Dictionary = {}
 	var canopy_top: float = INF
 	var canopy_bottom: float = -INF
 	var first_exit: float = INF
 	var last_exit: float = 0.0
 	for index in range(Confetti.PAPER_COUNT):
-		var canopy: Dictionary = paper._paper_state(index, screen, unit, 2.8)
+		var canopy: Dictionary = paper._paper_state(index, screen, unit, 2.8, variation)
 		canopy_top = minf(canopy_top, float(canopy.position.y))
 		canopy_bottom = maxf(canopy_bottom, float(canopy.position.y))
 		var previous: Dictionary = {}
@@ -102,7 +235,7 @@ func _check_paths(paper, screen: Rect2, unit: float) -> void:
 		var descent_speed: float = 0.0
 		for frame in range(385):
 			var seconds: float = float(frame) / 60.0
-			var state: Dictionary = paper._paper_state(index, screen, unit, seconds)
+			var state: Dictionary = paper._paper_state(index, screen, unit, seconds, variation)
 			if state.is_empty():
 				if not last.is_empty() and not ended:
 					ended = true
@@ -128,7 +261,7 @@ func _check_paths(paper, screen: Rect2, unit: float) -> void:
 			previous = state
 			last = state
 			last_time = seconds
-		var context: String = "Paper %d at %s" % [index, screen.size]
+		var context: String = "Paper %d at %s with variation %.6f" % [index, screen.size, variation]
 		check(not last.is_empty() and ended and not repeated and bounded and continuous,
 			context + " has one finite, continuous path inside the screen sides")
 		check(apex_time < 1.1 and first_empty - apex_time > 4.0,
@@ -139,7 +272,7 @@ func _check_paths(paper, screen: Rect2, unit: float) -> void:
 		var upper: float = first_empty
 		for iteration in range(18):
 			var middle: float = (lower + upper) * 0.5
-			var state: Dictionary = paper._paper_state(index, screen, unit, middle)
+			var state: Dictionary = paper._paper_state(index, screen, unit, middle, variation)
 			if state.is_empty():
 				upper = middle
 			else:
