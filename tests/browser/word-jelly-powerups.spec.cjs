@@ -269,8 +269,8 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   const afterFragments = await jelly(page);
   const fragmentEvidence = await retainTrace(page, info, 'word-jelly-treasure', ['fragment-flight', 'fragment-arrival']);
   const total = afterFragments.powerup.total, arrivals = afterFragments.powerup.arrivals;
-  expect(total).toBeGreaterThanOrEqual(1);
-  expect(total).toBeLessThanOrEqual(5);
+  expect(total).toBeGreaterThanOrEqual(2);
+  expect(total).toBeLessThanOrEqual(8);
   expect(afterFragments.powerup.completed).toBe(total);
   expect(arrivals).toHaveLength(total);
   expect(fragmentTotal(afterFragments) - fragmentTotal(beforeFragments)).toBe(total);

@@ -310,7 +310,7 @@ func _reserved_for_powerup(tile_id: int) -> bool:
 
 
 func _prepare_powerup_fragments() -> void:
-	var total: int = _rng.randi_range(1, 5)
+	var total: int = _rng.randi_range(2, 8)
 	var pending_counts: Dictionary = {}
 	for tile: Dictionary in cells:
 		pending_counts[int(tile.id)] = int(tile.fragments)

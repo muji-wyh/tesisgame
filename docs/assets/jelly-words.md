@@ -30,7 +30,7 @@ and chest tier. Visual callbacks never grant coins.
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
 1,500 coins and moves matching bodies into their targets one at a time, leaving
 the completed words on the board for ordinary collection. Treasure costs 500
-coins and delivers a random total of one to five carried fragments to the current
+coins and delivers a random total of two to eight carried fragments to the current
 board, preferring bodies without fragments. Payment is persisted before either
 ability starts. Supply and danger clocks wait while the ability runs; Home and
 Finish confirmation pause it. Neither ability collects words, grants coins, or

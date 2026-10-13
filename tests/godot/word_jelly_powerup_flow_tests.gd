@@ -198,9 +198,9 @@ func _check_fragments(app) -> void:
 	var before: int = app.coin_wallet.balance
 	view.powerup_buttons.fragments.pressed.emit()
 	var state: Dictionary = game.powerup_snapshot()
-	check(state.active and state.kind == "fragments" and int(state.total) >= 1 and int(state.total) <= 5
+	check(state.active and state.kind == "fragments" and int(state.total) >= 2 and int(state.total) <= 8
 		and app.coin_wallet.balance == before - 500 and _carried_fragments(game) == 0,
-		"Treasure purchases reserve one to five fragment arrivals for the exact 500-coin price")
+		"Treasure purchases reserve two to eight fragment arrivals for the exact 500-coin price")
 	view._process(game.POWERUP_FRAGMENT_FLIGHT * 0.5)
 	check(view._powerup_effects.stamps.size() > 0 and _carried_fragments(game) == 0,
 		"Treasure art flies toward the board before any fragment is attached")
@@ -231,7 +231,7 @@ func _check_fragment_coarse_frame(app) -> void:
 	var probe := RandomNumberGenerator.new()
 	for seed_value in range(100):
 		probe.seed = seed_value
-		if probe.randi_range(1, 5) >= 3:
+		if probe.randi_range(2, 8) >= 3:
 			game._rng.seed = seed_value
 			break
 	view.powerup_buttons.fragments.pressed.emit()

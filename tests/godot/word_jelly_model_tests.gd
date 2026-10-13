@@ -601,8 +601,8 @@ func _test_powerup_fragment_timeline() -> void:
 	check(model.activate_powerup("fragments"), "fragment delivery accepts a stable occupied board")
 	var active: Dictionary = model.powerup_snapshot()
 	var total: int = int(active.total)
-	check(active.stage == "arrivals" and total >= 1 and total <= 5 and active.arrivals.size() == total,
-		"one fragment purchase reserves a random one-to-five arrival sequence")
+	check(active.stage == "arrivals" and total >= 2 and total <= 8 and active.arrivals.size() == total,
+		"one fragment purchase reserves a random two-to-eight arrival sequence")
 	check(_board_fragments(model) == original and events.arrivals.is_empty(),
 		"payment reserves fragment destinations without applying them before arrival")
 	var reserved_ids: Array[int] = []
@@ -764,12 +764,13 @@ func _test_powerup_determinism() -> void:
 		_accept_powerup_payments(model)
 		model.activate_powerup("fragments")
 		var total: int = int(model.powerup_snapshot().total)
-		check(total >= 1 and total <= 5, "every seeded purchase stays within its advertised random one-to-five fragment range")
+		check(total >= 2 and total <= 8, "every seeded purchase stays within its advertised random two-to-eight fragment range")
 		observed_totals[total] = true
 		model.finish_powerup(true)
 		check(_board_fragments(model) == total, "fragment randomization never duplicates or drops a reserved reward")
 		model.purchase_powerup = Callable()
 	check(observed_totals.size() > 1, "different seeds vary the fragment purchase total")
+	check(observed_totals.has(2) and observed_totals.has(8), "seeded purchases can award both advertised fragment range endpoints")
 
 
 func _test_powerup_finish_and_lifecycle() -> void:
