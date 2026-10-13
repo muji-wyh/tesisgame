@@ -50,3 +50,17 @@ test('silently dropped and quota-failed coin writes never report success', () =>
   const quota = host({ getItem: () => null, setItem() { throw Error('quota exceeded'); } });
   assert.equal(quota.saveCoinWalletState('next', null), false);
 });
+
+test('signed v2 receipts migrate in the existing namespace with conditional persistence', () => {
+  const first = '[wallet]\nversion=1\nbalance=2000\nreceipts={"chest:funding":2000}\n';
+  const second = '[wallet]\nversion=2\nbalance=500\nreceipts={"chest:funding":2000,"power:auto-merge":-1500}\n';
+  const records = new Map([[key, first]]);
+  let writes = 0;
+  const bridge = host({ getItem: name => records.get(name) ?? null, setItem(name, text) { records.set(name, text); writes++; } });
+  assert.equal(bridge.coinWalletState(), first);
+  assert.equal(bridge.saveCoinWalletState(second, first), true);
+  assert.equal(bridge.coinWalletState(), second);
+  assert.equal(bridge.saveCoinWalletState(first, first), false, 'A stale positive-only wallet cannot undo the saved purchase');
+  assert.deepEqual([...records.keys()], [key], 'Migration uses the existing durable wallet key');
+  assert.equal(writes, 1);
+});

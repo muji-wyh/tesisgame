@@ -751,6 +751,8 @@ func _build_controls() -> void:
 	_word_jelly.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_word_jelly.interaction_allowed = func() -> bool: return _mode_id == "word_jelly" and _jelly_interaction_allowed()
 	_word_jelly.credit_collection = _credit_word_jelly
+	_word_jelly.purchase_powerup = _purchase_word_jelly_powerup
+	_word_jelly.coin_balance = func() -> int: return coin_wallet.balance
 	_word_jelly.collected.connect(_word_jelly_collected)
 	_word_jelly.word_requested.connect(_jelly_hear.bind("word_jelly"))
 	_word_jelly.audio_requested.connect(_jelly_audio.bind("word_jelly"))
@@ -1549,14 +1551,43 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 		return
 	if cue == "danger_end":
 		audio.stop_jelly_danger()
-	elif cue == "wrong":
+	elif cue in ["wrong", "powerup_wrong"]:
 		audio.play_pair_feedback(false)
+	elif cue == "powerup_success":
+		audio.stop_jelly_danger()
+		audio.play_pair_feedback(true)
+	elif cue == "powerup_fragment":
+		audio.play_jelly_cue("assemble")
 	elif cue == "chest":
 		audio.play_jelly_cue("fragment")
 	else:
-		if cue == "pick" and _mode_id == "word_jelly":
+		if cue == "pick" and _mode_id == "word_jelly" and not _word_jelly.game.powerup_active():
 			audio.stop_pair_feedback()
 		audio.play_jelly_cue(cue)
+
+
+func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) -> Dictionary:
+	if _mode_id != "word_jelly" or not _jelly_interaction_allowed() or event_id.is_empty() \
+		or not WordJelly.WordModel.POWERUP_PRICES.has(kind) or price != int(WordJelly.WordModel.POWERUP_PRICES[kind]):
+		return {"ok": false, "error": "This powerup cannot be used yet."}
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var receipt: String = _round_id + ":" + event_id
+	var result: Dictionary = coin_wallet.spend(receipt, price)
+	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
+	if bool(result.get("ok", false)) and not bool(result.get("duplicate", false)):
+		_coin_flight.sync(coin_wallet.balance)
+		_announce_status("%s purchased for %d coins. Total: %d coins." % ["Auto merge" if kind == "auto_merge" else "Treasure", price, coin_wallet.balance])
+	elif bool(result.get("duplicate", false)):
+		_announce_status("This powerup purchase was already processed. No more coins were spent.")
+	elif coin_wallet.balance < price:
+		_announce_status("Not enough coins. This powerup costs %d coins." % price)
+	else:
+		_announce_status("Your purchase could not be saved. No coins were spent.")
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	_publish_coins()
+	return result
 
 
 func _jelly_growth_answer(id: String, words: Array[String], correct: bool, source_mode: String = "") -> void:

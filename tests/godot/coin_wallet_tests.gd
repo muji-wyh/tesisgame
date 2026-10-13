@@ -61,7 +61,11 @@ func _run() -> void:
 	_test_rewards_and_receipts()
 	_test_retry_and_conflicts()
 	_test_validation_and_overflow()
+	_test_spending_and_migration()
+	_test_spending_retry_and_conflicts()
+	_test_signed_receipt_validation()
 	_test_native_durability()
+	_test_native_spending()
 	print("Coin wallet: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -152,7 +156,7 @@ func _test_retry_and_conflicts() -> void:
 func _test_validation_and_overflow() -> void:
 	var invalid: Array = [
 		false, 42, "", "[wallet", "[wallet]\nversion=1\nbalance=0\n",
-		_save(0, {}, 2), _save(0, {}, 1.0), _save(0.0, {}), _save(-1, {}),
+		_save(0, {}, 3), _save(0, {}, 1.0), _save(0.0, {}), _save(-1, {}),
 		_save(50, {}), _save(0, []), _save(50, {"": 50}),
 		_save(50, {"match:x": 50.0}), _save(25, {"match:x": 25}),
 		_save(50, {"match:x\n": 50}), _save(50, {" match:x": 50}),
@@ -186,6 +190,157 @@ func _test_validation_and_overflow() -> void:
 	var reloaded := Wallet.new("user://unused-coin-wallet.cfg", storage)
 	check(reloaded.load_state() and reloaded.balance == largest and reloaded.credit("jelly:largest:0", Wallet.MAX_TIER).duplicate,
 		"Large balances remain exact and idempotent after reload")
+
+
+func _test_spending_and_migration() -> void:
+	var storage := BrowserStorage.new()
+	var original: String = _save(3000, {"chest:one": 2000, "chest:two": 1000})
+	storage.text = original
+	var wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(not wallet.spend("power:unloaded", 500).ok and storage.calls == 0,
+		"An unloaded wallet cannot charge a purchase")
+	check(wallet.load_state() and wallet.balance == 3000 and storage.text == original and storage.writes == 0,
+		"Version-one wallets load without rewriting their original balance or receipt history")
+	check(wallet.credit("chest:one", 40).duplicate and storage.text == original,
+		"An old credit remains idempotent before migration without an unnecessary save")
+	var spent: Dictionary = wallet.spend("power:auto-merge:one", 1500)
+	check(spent == {"ok": true, "duplicate": false, "amount": -1500, "before": 3000, "after": 1500, "error": ""},
+		"Auto merge charges its exact cost and returns a signed balance delta after saving")
+	var config := ConfigFile.new()
+	check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == 2
+		and config.get_value("wallet", "balance") == 1500
+		and config.get_value("wallet", "receipts") == {"chest:one": 2000, "chest:two": 1000, "power:auto-merge:one": -1500},
+		"The first successful purchase atomically migrates v1 credits and adds one signed debit")
+	var writes: int = storage.writes
+	check(wallet.spend("power:auto-merge:one", 1500) == {"ok": true, "duplicate": true, "amount": 0, "before": 1500, "after": 1500, "error": ""}
+		and storage.writes == writes, "Repeated purchase callbacks acknowledge the receipt without another charge or write")
+	check(wallet.spend("power:fragments:one", 500).amount == -500 and wallet.balance == 1000,
+		"Fragment purchases charge the lower price through the same durable API")
+	var saved: String = storage.text
+	var receipts: Dictionary = wallet._receipts.duplicate()
+	writes = storage.writes
+	for purchase in [{"id": "chest:one", "amount": 2000}, {"id": "power:auto-merge:one", "amount": 500}]:
+		check(not wallet.spend(str(purchase.id), int(purchase.amount)).ok and wallet.balance == 1000
+			and wallet._receipts == receipts and storage.text == saved and storage.writes == writes,
+			"A credit identity or different purchase price cannot be reused as a debit")
+	check(not wallet.credit("power:fragments:one", 10).ok and wallet.balance == 1000 and storage.text == saved,
+		"A negative purchase receipt cannot be replayed as a positive credit")
+	var reloaded := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == 1000 and reloaded._receipts == receipts,
+		"Migrated credit and debit receipts survive reloading with the exact balance")
+	check(reloaded.credit("chest:one", 40).duplicate and reloaded.credit("chest:two", 20).duplicate
+		and reloaded.spend("power:fragments:one", 500).duplicate and storage.writes == writes,
+		"Every old credit and saved purchase remains idempotent after migration")
+	check(reloaded.spend("power:empty-wallet", 1000).after == 0, "A purchase may consume the exact remaining balance")
+	writes = storage.writes
+	saved = storage.text
+	check(reloaded.spend("power:auto-merge:one", 1500).duplicate and storage.writes == writes,
+		"A paid purchase is acknowledged even when the current balance cannot pay its price again")
+	var insufficient: Dictionary = reloaded.spend("power:no-funds", 500)
+	check(not insufficient.ok and not insufficient.duplicate and insufficient.amount == 0
+		and insufficient.before == 0 and insufficient.after == 0 and not insufficient.error.is_empty()
+		and insufficient.reason == "insufficient" and reloaded.ready and reloaded.error.is_empty()
+		and not reloaded._receipts.has("power:no-funds") and storage.text == saved and storage.writes == writes,
+		"Insufficient funds reserve no receipt, change no coins, perform no write, and leave coin storage available")
+	check(reloaded.credit("chest:after-spending", 10).amount == 500
+		and reloaded.spend("power:no-funds", 500).amount == -500,
+		"An unfunded purchase can retry after new coins arrive without losing its identity")
+	var final_wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(final_wallet.load_state() and final_wallet.balance == 0 and final_wallet.spend("power:no-funds", 500).duplicate,
+		"A spent-down wallet reloads at zero without restoring any consumed coins")
+
+
+func _test_spending_retry_and_conflicts() -> void:
+	var storage := BrowserStorage.new()
+	storage.text = _save(2000, {"chest:funding": 2000})
+	var wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	var other := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(wallet.load_state() and other.load_state(), "Two tabs observe the same funded v1 wallet")
+	var original: String = storage.text
+	var receipts: Dictionary = wallet._receipts.duplicate()
+	storage.fail_write = true
+	for attempt in range(2):
+		var result: Dictionary = wallet.spend("power:retry", 1500)
+		check(not result.ok and result.amount == 0 and result.before == 2000 and result.after == 2000
+			and wallet.balance == 2000 and wallet._receipts == receipts and storage.text == original and storage.writes == 0,
+			"A failed purchase write preserves its v1 snapshot, balance, and permanent receipts")
+	storage.fail_write = false
+	check(wallet.spend("power:retry", 1500).amount == -1500 and wallet.balance == 500,
+		"Storage recovery retries the same purchase once and commits migration with its debit")
+	var calls: int = storage.calls
+	var saved: String = storage.text
+	check(not other.spend("power:stale", 500).ok and other.balance == 2000 and other.error.contains("Reload")
+		and storage.text == saved and storage.calls == calls,
+		"A stale tab cannot overwrite a newer purchase with its older funded balance")
+	check(other.load_state() and other.spend("power:retry", 1500).duplicate and storage.calls == calls,
+		"Reloading a stale tab recovers a paid purchase without paying it twice")
+	storage.conflict_text = _save(1000, {"chest:funding": 2000, "power:retry": -1500, "chest:concurrent": 500}, 2)
+	receipts = wallet._receipts.duplicate()
+	check(not wallet.spend("power:between-read-write", 500).ok and wallet.balance == 500
+		and wallet._receipts == receipts and not wallet._receipts.has("power:between-read-write"),
+		"A concurrent storage change at commit cannot debit the in-memory wallet or consume a purchase ID")
+	check(wallet.load_state() and wallet.balance == 1000
+		and wallet.spend("power:between-read-write", 500).amount == -500,
+		"A conflicted purchase retries after reload against the latest durable balance")
+	calls = storage.calls
+	receipts = wallet._receipts.duplicate()
+	storage.fail_read = true
+	check(not wallet.spend("power:unreadable", 500).ok and wallet.balance == 500
+		and wallet._receipts == receipts and storage.calls == calls,
+		"Unavailable reads cannot start a debit or reinterpret storage as a new wallet")
+	storage.fail_read = false
+	storage.text = null
+	check(not wallet.spend("power:deleted", 500).ok and wallet.balance == 500
+		and wallet._receipts == receipts and storage.calls == calls,
+		"Deleted shared storage is not reconstructed with a stale purchase")
+
+
+func _test_signed_receipt_validation() -> void:
+	var invalid: Array = [
+		_save(0, {"credit": 50, "debit": -50}),
+		_save(0, {"credit": 50, "debit": -100}, 2),
+		_save(50, {"credit": 50, "debit": -50}, 2),
+		_save(0, {"zero": 0}, 2), _save(0, {"credit": 50, "debit": -50.0}, 2),
+		_save(25, {"credit": 50, "debit": -25}, 2),
+		_save(0, {"credit": 50, "debit\n": -50}, 2),
+		_save(0, {"credit": 50, "debit": -Wallet.MAX_BALANCE - 1}, 2),
+		_save(0, {"credit": 50, "debit": -9223372036854775807}, 2),
+		_save(Wallet.MAX_BALANCE, {"one": Wallet.MAX_TIER * 50, "two": 50}, 2),
+		_save(0, {}, 2) + "unknown=1\n"
+	]
+	for text in invalid:
+		var storage := BrowserStorage.new()
+		storage.text = text
+		var wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
+		check(not _load_corrupt(wallet) and not wallet.ready and not wallet.error.is_empty(),
+			"Malformed signed histories, v1 negative receipts, and mismatched totals fail closed")
+		check(not wallet.spend("power:invalid-save", 500).ok and not wallet.credit("chest:invalid-save", 1).ok
+			and storage.text == text and storage.calls == 0, "Invalid signed saves cannot be rewritten by either coin operation")
+	var storage := BrowserStorage.new()
+	storage.text = _save(2000, {"credit": 2000}, 2)
+	var wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(wallet.load_state(), "A credit-only version-two wallet is supported")
+	var saved: String = storage.text
+	for amount: int in [-500, 0, 1, 49, 51, Wallet.MAX_BALANCE, Wallet.MAX_BALANCE + 1]:
+		check(not wallet.spend("power:bad-price", amount).ok and wallet.balance == 2000
+			and storage.text == saved and storage.calls == 0, "A price must be a positive, safely represented multiple of 50")
+	for id: String in ["", " ", "bad\nreceipt", "bad\treceipt", " leading", "trailing ", "x".repeat(513)]:
+		check(not wallet.spend(id, 500).ok and storage.text == saved and storage.calls == 0,
+			"Purchase IDs follow the same strict receipt rules as earned rewards")
+	var largest: int = Wallet.MAX_TIER * 50
+	var history: Dictionary = {"final-credit": 50}
+	for index in range(1200):
+		history["debit:%d" % index] = -largest
+		history["credit:%d" % index] = largest
+	storage.text = _save(50, history, 2)
+	check(wallet.load_state() and wallet.balance == 50 and wallet._receipts == history,
+		"Signed receipt reconstruction is exact when reordered lifetime earnings exceed even the native integer range")
+	check(wallet.spend("debit:0", largest).duplicate and wallet.credit("credit:0", Wallet.MAX_TIER).duplicate,
+		"Very large prior credits and debits retain exact amounts and permanent idempotence")
+	check(wallet.spend("power:last-fifty", 50).amount == -50, "A large lifetime history still supports an ordinary small purchase")
+	var reloaded := Wallet.new("user://unused-coin-wallet.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("power:last-fifty", 50).duplicate,
+		"Serialized mixed-sign history survives another save and reload without overflow or precision loss")
 
 
 func _test_native_durability() -> void:
@@ -225,5 +380,43 @@ func _test_native_durability() -> void:
 	check(DirAccess.remove_absolute(path) == OK, "Remove the isolated corrupted fixture")
 	check(DirAccess.make_dir_absolute(path) == OK, "Use a directory to test an unreadable native save path")
 	check(not Wallet.new(path).load_state(), "A directory at the wallet path is unavailable storage, not a missing save")
+	DirAccess.remove_absolute(path)
+	DirAccess.remove_absolute(directory)
+
+
+func _test_native_spending() -> void:
+	var directory: String = "user://coin-spending-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated native spending storage")
+	var path: String = directory + "/wallet.cfg"
+	var original: String = _save(3000, {"chest:native-funding": 3000})
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(original)
+	file.close()
+	var wallet := Wallet.new(path)
+	var stale := Wallet.new(path)
+	check(wallet.load_state() and stale.load_state() and wallet.balance == 3000,
+		"Native purchase fixtures load a preexisting version-one wallet")
+	check(DirAccess.make_dir_absolute(path + ".pending") == OK, "Block native purchase staging")
+	check(not wallet.spend("power:native-fragments", 500).ok and wallet.balance == 3000
+		and not wallet._receipts.has("power:native-fragments") and FileAccess.get_file_as_string(path) == original,
+		"Native save failure leaves the old wallet and purchase identity intact without migrating")
+	check(DirAccess.remove_absolute(path + ".pending") == OK, "Restore native purchase staging")
+	check(wallet.spend("power:native-fragments", 500).amount == -500 and wallet.balance == 2500,
+		"Retry persists a native debit together with v1 migration")
+	var saved: String = FileAccess.get_file_as_string(path)
+	check(not stale.spend("power:native-stale", 1500).ok and stale.balance == 3000
+		and FileAccess.get_file_as_string(path) == saved, "A stale native wallet cannot overwrite a committed debit")
+	check(DirAccess.rename_absolute(path, path + ".previous") == OK, "Simulate an interrupted native signed-save rename")
+	var recovered := Wallet.new(path)
+	check(recovered.load_state() and recovered.balance == 2500
+		and recovered.spend("power:native-fragments", 500).duplicate
+		and recovered.credit("chest:native-funding", 60).duplicate,
+		"Native journal recovery preserves signed purchase and credit idempotence")
+	check(recovered.spend("power:native-remainder", 2500).after == 0, "Native spending can safely consume the remaining balance")
+	var reloaded := Wallet.new(path)
+	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("power:native-remainder", 2500).duplicate,
+		"A native zero balance retains the last purchase receipt after reload")
+	check(not FileAccess.file_exists(path + ".pending") and not FileAccess.file_exists(path + ".previous"),
+		"Successful native spending clears staging and backup files")
 	DirAccess.remove_absolute(path)
 	DirAccess.remove_absolute(directory)

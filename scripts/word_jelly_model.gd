@@ -12,6 +12,9 @@ signal cue_requested(cue: String)
 signal fragments_awarded(count: int)
 signal chest_milestone(previous_tier: int, new_tier: int)
 signal finished(result: Dictionary)
+signal powerup_feedback(kind: String, success: bool)
+signal powerup_drag_started(payload: Dictionary)
+signal powerup_fragment_arrived(payload: Dictionary)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -36,6 +39,11 @@ const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
+const POWERUP_PRICES: Dictionary = {"auto_merge": 1500, "fragments": 500}
+const POWERUP_DRAG_SECONDS: float = 0.40
+const POWERUP_FRAGMENT_FLIGHT: float = 0.42
+const POWERUP_FRAGMENT_STAGGER: float = 0.18
+const POWERUP_FRAGMENT_RECOVERY: float = 0.35
 
 var cells: Array[Dictionary] = []
 var upcoming: Array[Dictionary] = []
@@ -57,6 +65,7 @@ var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var error: String = ""
 var credit_collection: Callable
+var purchase_powerup: Callable
 
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
@@ -85,9 +94,22 @@ var _collection_batch_next_in: float = 0.0
 var _collection_batch_event_id: String = ""
 var _collection_batch_serial: int = 0
 var _rng := RandomNumberGenerator.new()
+var _powerup: Dictionary = {}
+var _powerup_ids: Array[int] = []
+var _powerup_purchasing: bool = false
+var _powerup_committing: bool = false
+var _finishing_powerup: bool = false
+var _finish_after_purchase: bool = false
+var _settle_after_purchase: bool = false
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
+	if _powerup_purchasing or _finishing_powerup:
+		return false
+	var previous_generation: int = _generation
+	finish_powerup()
+	if previous_generation != _generation:
+		return false
 	_generation += 1
 	cells.clear()
 	upcoming.clear()
@@ -120,6 +142,10 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_gravity_pending = false
 	_held_tile_id = -1
 	_reset_collection_batch()
+	_powerup.clear()
+	_powerup_ids.clear()
+	_finish_after_purchase = false
+	_settle_after_purchase = false
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
@@ -161,9 +187,250 @@ static func normalize_word(value: String) -> String:
 	return " ".join(pieces)
 
 
+func powerup_active() -> bool:
+	return _powerup_purchasing or bool(_powerup.get("active", false))
+
+
+func powerup_snapshot() -> Dictionary:
+	return _powerup.duplicate(true) if not _powerup.is_empty() else {
+		"active": false, "kind": "", "receipt_id": "", "stage": "", "elapsed": 0.0,
+		"duration": 0.0, "source_id": -1, "target_id": -1, "source": {}, "target": {},
+		"completed": 0, "total": 0, "arrivals": []}
+
+
+func can_activate_powerup(kind: String) -> bool:
+	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or powerup_active() \
+		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
+		or not fusions.is_empty() or _settling_remaining() > EPSILON or cells.is_empty():
+		return false
+	return kind == "fragments" or not _powerup_pair(false).is_empty()
+
+
+func activate_powerup(kind: String) -> bool:
+	if not can_activate_powerup(kind):
+		return false
+	var generation: int = _generation
+	var receipt_id: String = _event_id("powerup-" + kind)
+	# Lock the board while persistence runs, including reentrant lifecycle calls.
+	_powerup_purchasing = true
+	var response: Variant = purchase_powerup.call(receipt_id, kind, int(POWERUP_PRICES[kind])) if purchase_powerup.is_valid() else {}
+	_powerup_purchasing = false
+	if generation != _generation:
+		return false
+	if not response is Dictionary or not bool(response.get("ok", false)) or bool(response.get("duplicate", false)):
+		_settle_after_purchase = false
+		powerup_feedback.emit(kind, false)
+		if generation == _generation and not powerup_active():
+			cue_requested.emit("powerup_wrong")
+		if _finish_after_purchase and generation == _generation:
+			_finish_after_purchase = false
+			finish_round()
+		return false
+	_powerup_ids.clear()
+	for tile: Dictionary in cells:
+		_powerup_ids.append(int(tile.id))
+	_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
+		"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
+		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": []}
+	if kind == "fragments":
+		_prepare_powerup_fragments()
+	# The paid obligation exists before any user callback may pause or leave.
+	if _settle_after_purchase or _finish_after_purchase:
+		_settle_after_purchase = false
+		finish_powerup()
+		if _finish_after_purchase:
+			_finish_after_purchase = false
+			finish_round()
+		return true
+	powerup_feedback.emit(kind, true)
+	if not _same_powerup(generation, receipt_id):
+		return true
+	if not paused:
+		cue_requested.emit("powerup_success")
+	if _same_powerup(generation, receipt_id) and not paused:
+		_advance_powerup()
+	if generation == _generation:
+		changed.emit()
+	return true
+
+
+func finish_powerup(silent: bool = true) -> void:
+	if _powerup_purchasing:
+		_settle_after_purchase = true
+		return
+	if not powerup_active() or _finishing_powerup:
+		return
+	var was_paused: bool = paused
+	var was_blocked: bool = is_blocking_signals()
+	var generation: int = _generation
+	_finishing_powerup = true
+	if silent:
+		set_block_signals(true)
+	paused = false
+	# Every merge reduces the captured set. This bounded drain also completes
+	# the normal fusion, gravity and settlement without collecting any word.
+	for boundary in range(CAPACITY * (ROWS + 6)):
+		if not powerup_active() or generation != _generation:
+			break
+		step(10.0)
+	paused = was_paused
+	_finishing_powerup = false
+	set_block_signals(was_blocked)
+	if generation == _generation:
+		changed.emit()
+
+
+func _same_powerup(generation: int, receipt_id: String) -> bool:
+	return generation == _generation and bool(_powerup.get("active", false)) \
+		and str(_powerup.get("receipt_id", "")) == receipt_id
+
+
+func _powerup_pair(captured_only: bool = true) -> Array[int]:
+	for source: Dictionary in cells:
+		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source):
+			continue
+		for target: Dictionary in cells:
+			if int(source.id) == int(target.id) or (captured_only and not _powerup_ids.has(int(target.id))) or not is_settled(target):
+				continue
+			if _word_lookup.has(normalize_word(str(source.text) + str(target.text))):
+				return [int(source.id), int(target.id)]
+	return []
+
+
+func _prepare_powerup_fragments() -> void:
+	var total: int = _rng.randi_range(1, 5)
+	var pending_counts: Dictionary = {}
+	for tile: Dictionary in cells:
+		pending_counts[int(tile.id)] = int(tile.fragments)
+	for index in range(total):
+		var candidates: Array[int] = []
+		for id: int in _powerup_ids:
+			if int(pending_counts[id]) == 0:
+				candidates.append(id)
+		if candidates.is_empty():
+			candidates = _powerup_ids.duplicate()
+		var id: int = candidates[_rng.randi_range(0, candidates.size() - 1)]
+		pending_counts[id] = int(pending_counts[id]) + 1
+		_powerup.arrivals.append({"tile_id": id, "index": index, "at": POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER, "arrived": false})
+	_powerup.stage = "arrivals"
+	_powerup.total = total
+	_powerup.duration = POWERUP_FRAGMENT_FLIGHT + (total - 1) * POWERUP_FRAGMENT_STAGGER + POWERUP_FRAGMENT_RECOVERY
+
+
+func _advance_powerup() -> void:
+	if not bool(_powerup.get("active", false)) or paused or phase != "playing":
+		return
+	var generation: int = _generation
+	var receipt_id: String = str(_powerup.receipt_id)
+	if str(_powerup.kind) == "fragments":
+		for arrival: Dictionary in _powerup.arrivals:
+			if bool(arrival.arrived) or float(_powerup.elapsed) + EPSILON < float(arrival.at):
+				continue
+			arrival.arrived = true
+			var index: int = _index_for_id(int(arrival.tile_id))
+			if index < 0:
+				continue
+			_grant_powerup_fragment(cells[index])
+			_powerup.completed = int(_powerup.completed) + 1
+			powerup_fragment_arrived.emit({"tile_id": int(arrival.tile_id), "index": int(arrival.index),
+				"total": int(_powerup.total), "fragments": int(cells[index].fragments), "receipt_id": receipt_id})
+			if not _same_powerup(generation, receipt_id) or paused:
+				return
+			cue_requested.emit("powerup_fragment")
+			if not _same_powerup(generation, receipt_id) or paused:
+				return
+		if float(_powerup.elapsed) + EPSILON >= float(_powerup.duration):
+			_complete_powerup()
+		return
+	var stage: String = str(_powerup.stage)
+	if stage == "drag":
+		if float(_powerup.elapsed) + EPSILON < POWERUP_DRAG_SECONDS:
+			return
+		_powerup.stage = "fusion"
+		_powerup.elapsed = 0.0
+		_powerup.duration = FUSION_SECONDS
+		cue_requested.emit("contact")
+		if not _same_powerup(generation, receipt_id) or paused:
+			return
+		_powerup_committing = true
+		var accepted: String = try_merge(int(_powerup.source_id), int(_powerup.target_id), true)
+		_powerup_committing = false
+		if not _same_powerup(generation, receipt_id):
+			return
+		if accepted != "merged":
+			_powerup.stage = "ready"
+		return
+	if not fusions.is_empty():
+		return
+	if _settling_remaining() > EPSILON:
+		if str(_powerup.stage) != "settling":
+			_powerup.stage = "settling"
+			_powerup.elapsed = 0.0
+		_powerup.duration = float(_powerup.elapsed) + _settling_remaining()
+		return
+	var pair: Array[int] = _powerup_pair()
+	if pair.is_empty():
+		_complete_powerup()
+		return
+	_powerup.stage = "drag"
+	_powerup.elapsed = 0.0
+	_powerup.duration = POWERUP_DRAG_SECONDS
+	_powerup.source_id = pair[0]
+	_powerup.target_id = pair[1]
+	_powerup.source = cell(pair[0])
+	_powerup.target = cell(pair[1])
+	_powerup.total = int(_powerup.completed) + 1
+	_held_tile_id = pair[0]
+	powerup_drag_started.emit(powerup_snapshot())
+	if _same_powerup(generation, receipt_id) and not paused:
+		cue_requested.emit("pick")
+
+
+func _powerup_boundary() -> float:
+	if not bool(_powerup.get("active", false)):
+		return INF
+	if str(_powerup.kind) == "fragments":
+		for arrival: Dictionary in _powerup.arrivals:
+			if not bool(arrival.arrived):
+				return maxf(0.0, float(arrival.at) - float(_powerup.elapsed))
+		return maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
+	if str(_powerup.stage) == "drag":
+		return maxf(0.0, POWERUP_DRAG_SECONDS - float(_powerup.elapsed))
+	if _settling_remaining() > EPSILON:
+		return _settling_remaining()
+	return INF
+
+
+func _complete_powerup() -> void:
+	_powerup.active = false
+	_powerup.stage = "complete"
+	_powerup.source_id = -1
+	_powerup.target_id = -1
+	_powerup.source = {}
+	_powerup.target = {}
+	_held_tile_id = -1
+	_powerup_ids.clear()
+
+
+func _grant_powerup_fragment(tile: Dictionary) -> void:
+	tile.fragments = int(tile.fragments) + 1
+	tile.chest = true
+	# A historical merged body may later split repeatedly. Store each new
+	# marker in one descendant at every level so no split loses or copies it.
+	var descendants: Array = _merge_history.get(int(tile.id), [])
+	if not descendants.is_empty():
+		var selected: Dictionary = descendants[0]
+		for child: Dictionary in descendants:
+			if int(child.fragments) < int(selected.fragments):
+				selected = child
+		_grant_powerup_fragment(selected)
+
+
 func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
-	if phase != "playing" or paused or collection_batch_active() or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
+	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
+	# The internal authorization is consumed before emitting any callbacks.
+	_powerup_committing = false
 	var a: Dictionary = cell(a_id)
 	var b: Dictionary = cell(b_id)
 	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b):
@@ -207,7 +474,7 @@ func can_split(tile: Dictionary) -> bool:
 
 
 func split(tile_id: int) -> bool:
-	if phase != "playing" or paused or collection_batch_active() or is_fusing(tile_id):
+	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var parent: Dictionary = cell(tile_id)
 	if not is_settled(parent) or not can_split(parent):
@@ -233,13 +500,13 @@ func split(tile_id: int) -> bool:
 
 
 func collect(tile_id: int) -> bool:
-	if collection_batch_active():
+	if powerup_active() or collection_batch_active():
 		return false
 	return _begin_collection(tile_id)
 
 
 func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
-	if phase != "playing" or paused or is_fusing(tile_id):
+	if phase != "playing" or paused or powerup_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or not is_settled(tile) or not is_valid_word(tile):
@@ -318,7 +585,7 @@ func collection_batch_snapshot() -> Dictionary:
 
 
 func start_collection_batch() -> bool:
-	if phase != "playing" or paused or collection_batch_active() or _held_tile_id >= 0:
+	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0:
 		return false
 	var ids: Array[int] = collectable_ids()
 	if ids.is_empty():
@@ -419,17 +686,22 @@ func _reserved_for_collection(tile_id: int) -> bool:
 
 
 func step(delta: float) -> void:
-	if phase != "playing" or paused or not is_finite(delta) or delta <= 0.0:
+	if phase != "playing" or paused or _powerup_purchasing or not is_finite(delta) or delta <= 0.0:
 		return
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
 		_resume_pending_motion()
 		_advance_collection_batch()
+		_advance_powerup()
 		if not _can_continue(generation):
 			break
+		if _finishing_powerup and not powerup_active():
+			break
+		var powerup_running: bool = powerup_active()
 		var consumed: float = remaining
 		consumed = minf(consumed, _collection_batch_boundary())
+		consumed = minf(consumed, _powerup_boundary())
 		if _growth_pending and _settling_remaining() > EPSILON:
 			consumed = minf(consumed, _settling_remaining())
 		if _gravity_pending and _next_settlement() > EPSILON:
@@ -440,25 +712,27 @@ func step(delta: float) -> void:
 				boundary = float(active.pop_at)
 			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
 		var full: bool = not _has_free_cell()
-		var danger_running: bool = full and full_elapsed >= 0.0
+		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running
 		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
-		elif full:
+		elif full and not powerup_running:
 			consumed = minf(consumed, maxf(0.0, _settling_remaining()))
-		else:
+		elif not powerup_running:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		for tile in cells:
 			tile.age = float(tile.age) + consumed
 			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
 		for active in fusions:
 			active.elapsed = float(active.elapsed) + consumed
+		if powerup_running:
+			_powerup.elapsed = float(_powerup.elapsed) + consumed
 		if collection_batch_active():
 			_collection_batch_elapsed += consumed
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
 		if danger_running:
 			full_elapsed += consumed
-		elif not full:
+		elif not full and not powerup_running:
 			spawn_elapsed += consumed
 		remaining -= consumed
 		for active in fusions.duplicate():
@@ -477,8 +751,13 @@ func step(delta: float) -> void:
 			break
 		_resume_pending_motion()
 		_advance_collection_batch()
+		_advance_powerup()
 		if not _can_continue(generation):
 			break
+		if powerup_running:
+			if _finishing_powerup and not powerup_active():
+				break
+			continue
 		if not _has_free_cell():
 			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 				full_elapsed = 0.0
@@ -508,7 +787,7 @@ func set_paused(value: bool) -> void:
 
 
 func set_held_tile(tile_id: int = -1) -> void:
-	if collection_batch_active() and tile_id >= 0:
+	if powerup_active() or (collection_batch_active() and tile_id >= 0):
 		return
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
 	if _held_tile_id == held_id:
@@ -523,7 +802,7 @@ func set_held_tile(tile_id: int = -1) -> void:
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
-	if phase != "playing" or paused or collection_batch_active() or is_fusing(tile_id):
+	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or (tile_id != _held_tile_id and not is_settled(tile)):
@@ -570,7 +849,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
+	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -648,6 +927,7 @@ func snapshot() -> Dictionary:
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
+		"powerup": powerup_snapshot(),
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.merge(reward_progress(fragment_count), true)
@@ -655,9 +935,17 @@ func snapshot() -> Dictionary:
 
 
 func finish_round() -> Dictionary:
+	if _powerup_purchasing:
+		_finish_after_purchase = true
+		return _result.duplicate(true)
+	if _finishing_powerup:
+		return _result.duplicate(true)
 	if phase == "finished":
 		return _result.duplicate(true)
 	var generation: int = _generation
+	finish_powerup()
+	if generation != _generation or phase == "finished":
+		return _result.duplicate(true)
 	_collection_batch_active = false
 	_collection_batch_next_in = 0.0
 	# A persistence callback may pause after accepting payment. That accepted
@@ -886,6 +1174,14 @@ func _complete_merge(completed: Dictionary) -> void:
 	_restore_growth(int(result.id))
 	_gravity_pending = true
 	merged_count += 1
+	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "auto_merge":
+		_powerup_ids.erase(int(a.id))
+		_powerup_ids.erase(int(b.id))
+		_powerup_ids.append(int(result.id))
+		_powerup.completed = int(_powerup.completed) + 1
+		_powerup.stage = "settling"
+		_powerup.elapsed = 0.0
+		_powerup.duration = SETTLE_SECONDS
 	if _has_free_cell():
 		full_elapsed = -1.0
 	completed.result = cell(int(result.id))

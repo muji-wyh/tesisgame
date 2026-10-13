@@ -56,6 +56,7 @@ func _run() -> void:
 		attempts.append({"id": id, "words": ids, "correct": correct}))
 	_check_opening_and_bounds(view)
 	_check_paused_resize(view)
+	_check_powerup_paused_resize(view)
 	await _check_long_word_label_visibility(view)
 	_check_root_tap(view)
 	_check_edge_drag(view)
@@ -180,7 +181,9 @@ func _check_opening_and_bounds(view) -> void:
 		check(view._board.position.x >= 0 and view._board.position.y >= 0 and view._board.end.x <= dimensions.x + 0.1
 			and view._board.end.y <= dimensions.y + 0.1, "board fits portrait and landscape bounds")
 		var s: float = Style.ui_scale(view)
-		var bottom: float = view._board.end.y if view._compact_hud else view.finish_button.get_rect().end.y
+		var bottom: float = maxf(view._board.end.y, view.collect_button.get_rect().end.y)
+		for button: Control in view.powerup_buttons.values():
+			bottom = maxf(bottom, button.get_rect().end.y)
 		check(is_equal_approx(bottom, dimensions.y - 12.0 / s),
 			"game group at %s ends above twelve-pixel padding: actual %.3f, expected %.3f" % [dimensions, bottom, dimensions.y - 12.0 / s])
 		check(view._preview_rect.position.y >= 0 and view.finish_button.get_rect().end.y <= dimensions.y,
@@ -292,6 +295,67 @@ func _check_paused_resize(view) -> void:
 		_check_supply_layout(view)
 		_check_preview_label_height(view)
 	view.pause(false)
+
+
+func _check_powerup_paused_resize(view) -> void:
+	var purchases: Array[Dictionary] = []
+	view.purchase_powerup = func(receipt: String, kind: String, price: int) -> Dictionary:
+		purchases.append({"receipt": receipt, "kind": kind, "price": price})
+		return {"ok": true}
+	for reduced: bool in [false, true]:
+		for stage: String in ["drag", "fusion"]:
+			view.size = Vector2(1000, 720)
+			_reset(view, reduced)
+			purchases.clear()
+			_install(view, ["ca", "t"])
+			view._activate_powerup("auto_merge")
+			_advance(view, 0.17 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + 0.15)
+			check(view.game.powerup_snapshot().stage == stage,
+				"responsive powerup coverage reaches the paid " + stage + " stage")
+			view.pause(true)
+			var frozen: Dictionary = view.game.powerup_snapshot()
+			view.size = Vector2(390, 844)
+			view._layout()
+			var phone: Rect2 = Rect2(Vector2.ZERO, view.size).grow(0.01)
+			check(view.game.powerup_snapshot() == frozen,
+				"desktop-to-phone layout preserves the paused powerup clock and captured pair")
+			if stage == "drag":
+				var body = view._tiles[int(frozen.source_id)]
+				var before: Vector2 = body.get_rect().get_center()
+				check(phone.encloses(body.get_rect()), "paused automatic drag relocates its painted body inside the phone viewport")
+				view._process(0.25)
+				check(body.get_rect().get_center().is_equal_approx(before) and view.game.powerup_snapshot() == frozen,
+					"paused responsive drag neither moves nor advances its paid clock")
+				view.pause(false)
+				_advance(view, 0.04)
+				check(body.get_rect().get_center().distance_to(before) > 0.1,
+					"resuming a resized automatic drag continues its existing travel")
+			else:
+				var fusion: Dictionary = view.game.fusions[0]
+				var visual: Dictionary = view._fusion_visuals[str(fusion.attempt_id)]
+				var contact: Vector2 = view._tile_rect(fusion.b).get_center()
+				check(Vector2(visual.origin_a).is_equal_approx(contact) and Vector2(visual.origin_b).is_equal_approx(contact),
+					"automatic union resolves both contact origins against the resized destination")
+				check(phone.encloses(visual.merged.get_rect()), "the automatic merged-word artwork stays inside the phone viewport")
+				if not reduced:
+					for key: String in ["body_a", "body_b"]:
+						var paint: Vector4 = visual.art._gel.get_shader_parameter(key)
+						var center: Vector2 = visual.art.position + Vector2(paint.x, paint.y)
+						check(phone.encloses(Rect2(center - Vector2(paint.z, paint.w) * 0.5, Vector2(paint.z, paint.w))),
+							"each native gel lobe stays inside the resized phone instead of retaining desktop pixels")
+				view._process(0.25)
+				check(view.game.powerup_snapshot() == frozen and is_equal_approx(float(view.game.fusions[0].elapsed), 0.15),
+					"paused responsive union preserves its normal fusion timeline")
+				view.pause(false)
+				_advance(view, 0.04)
+				check(float(view.game.fusions[0].elapsed) > 0.15,
+					"resuming a resized union advances the same already-paid fusion")
+			_advance(view, 2.0)
+			check(not view.game.powerup_active() and view.game.cells.size() == 1 and str(view.game.cells[0].text) == "cat"
+				and int(view.game.merged_count) == 1 and purchases.size() == 1 and payouts.is_empty(),
+				"responsive pause and resume finish one purchased merge without double payment or automatic collection")
+	view.purchase_powerup = Callable()
+	view.size = Vector2(1000, 720)
 
 
 func _check_long_word_label_visibility(view) -> void:

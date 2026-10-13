@@ -1,7 +1,7 @@
 extends RefCounted
-## A chest receipt and its coins are committed together and never expire.
+## Coin changes and their permanent receipts commit together.
 
-const VERSION: int = 1
+const VERSION: int = 2
 const COINS_PER_TIER: int = 50
 const MAX_BALANCE: int = 9007199254740991
 const MAX_TIER: int = 180143985094819
@@ -47,21 +47,38 @@ func load_state() -> bool:
 		var version: Variant = config.get_value("wallet", "version", null)
 		var saved_balance: Variant = config.get_value("wallet", "balance", null)
 		var receipts: Variant = config.get_value("wallet", "receipts", null)
-		if not version is int or version != VERSION:
+		if not version is int or version not in [1, VERSION]:
 			return _fail("This coin save needs a supported version.")
 		if not saved_balance is int or saved_balance < 0 or saved_balance > MAX_BALANCE \
 			or not receipts is Dictionary or receipts.size() > MAX_RECEIPTS:
 			return _fail("Your coin save contains an invalid balance or receipt history.")
+		var credits: Array[int] = []
+		var debits: Array[int] = []
 		for id in receipts:
 			var amount: Variant = receipts[id]
-			if not _valid_id(id) or not amount is int or amount < COINS_PER_TIER \
-				or amount > MAX_BALANCE or amount % COINS_PER_TIER != 0 \
-				or next_balance > MAX_BALANCE - amount:
-				return _fail("Your coin save contains an invalid chest receipt.")
+			if not _valid_id(id) or not amount is int or amount == 0 \
+				or amount < -MAX_BALANCE or amount > MAX_BALANCE or amount % COINS_PER_TIER != 0 \
+				or (version == 1 and amount < 0):
+				return _fail("Your coin save contains an invalid receipt.")
 			next_receipts[id] = amount
+			if amount > 0:
+				credits.append(amount)
+			else:
+				debits.append(amount)
+		# ConfigFile may reorder dictionary entries. Cancel opposite signs first:
+		# lifetime earnings can exceed MAX_BALANCE while the actual wallet cannot.
+		while not credits.is_empty() or not debits.is_empty():
+			var amount: int
+			if not credits.is_empty() and (next_balance <= 0 or debits.is_empty()):
+				amount = credits.pop_back()
+			else:
+				amount = debits.pop_back()
+			if (amount > 0 and next_balance > MAX_BALANCE - amount) \
+				or (amount < 0 and next_balance < -MAX_BALANCE - amount):
+				return _fail("Your coin save contains an invalid receipt total.")
 			next_balance += amount
 		if saved_balance != next_balance:
-			return _fail("Your coin balance does not match its saved chest receipts.")
+			return _fail("Your coin balance does not match its saved receipts.")
 	balance = next_balance
 	_receipts = next_receipts
 	_saved_text = stored.text
@@ -97,6 +114,36 @@ func credit(chest_id: String, tier: int) -> Dictionary:
 	return _outcome(true, false, amount, before)
 
 
+func spend(purchase_id: String, amount: int) -> Dictionary:
+	error = ""
+	if not ready:
+		return _rejected("Load your coins successfully before making this purchase.")
+	if not _valid_id(purchase_id) or amount < COINS_PER_TIER or amount > MAX_BALANCE or amount % COINS_PER_TIER != 0:
+		return _rejected("This purchase needs a valid ID and a positive cost in multiples of 50 coins.")
+	if not _current_snapshot_matches():
+		return _outcome(false, false, 0, balance)
+	if _receipts.has(purchase_id):
+		if int(_receipts[purchase_id]) != -amount:
+			return _rejected("This purchase's saved coin cost is different.")
+		return _outcome(true, true, 0, balance)
+	if _receipts.size() >= MAX_RECEIPTS:
+		return _rejected("Your coin receipt storage is full. This purchase has not been charged.")
+	if balance < amount:
+		# Affordability is an ordinary game state, not a storage failure.
+		var insufficient: Dictionary = _outcome(false, false, 0, balance)
+		insufficient.reason = "insufficient"
+		insufficient.error = "You need more coins for this purchase."
+		return insufficient
+	var before: int = balance
+	var next_receipts: Dictionary = _receipts.duplicate()
+	next_receipts[purchase_id] = -amount
+	if not _persist(balance - amount, next_receipts):
+		return _outcome(false, false, 0, before)
+	balance -= amount
+	_receipts = next_receipts
+	return _outcome(true, false, -amount, before)
+
+
 func _persist(next_balance: int, next_receipts: Dictionary) -> bool:
 	var config := ConfigFile.new()
 	config.set_value("wallet", "version", VERSION)
@@ -104,7 +151,7 @@ func _persist(next_balance: int, next_receipts: Dictionary) -> bool:
 	config.set_value("wallet", "receipts", next_receipts)
 	var text: String = config.encode_to_text()
 	if text.to_utf8_buffer().size() > MAX_SAVE_BYTES:
-		return _fail("Your coin receipt storage is full. Your chest remains unopened.")
+		return _fail("Your coin receipt storage is full. This transaction has not been saved.")
 	if _host != null:
 		var result: Variant = _host.saveCoinWalletState(text, _saved_text)
 		if not result is bool or not result:
@@ -159,7 +206,7 @@ func _current_snapshot_matches() -> bool:
 	if not stored.ok:
 		return false
 	if stored.text != _saved_text:
-		return _fail("Your coins changed in another session. Reload before opening this chest.")
+		return _fail("Your coins changed in another session. Reload before changing your coins.")
 	return true
 
 

@@ -84,6 +84,18 @@ func _run() -> void:
 	_test_arrival_reserved_lanes()
 	_test_arrival_same_lane_spacing()
 	_test_arrival_mixed_lane_readiness()
+	_test_powerup_eligibility()
+	_test_powerup_payment_atomicity()
+	_test_powerup_auto_timeline()
+	_test_powerup_auto_chain()
+	_test_powerup_manual_guards()
+	_test_powerup_fragment_timeline()
+	_test_powerup_fragment_ancestry()
+	_test_powerup_pause_and_clocks()
+	_test_powerup_determinism()
+	_test_powerup_finish_and_lifecycle()
+	_test_powerup_payment_reentry()
+	_test_powerup_presentation_reentry()
 	print("Word Jelly model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -236,6 +248,654 @@ func _observe(model) -> Dictionary:
 	model.fusion_completed.connect(func(payload: Dictionary, fragments: int) -> void:
 		events.completed.append({"payload": payload, "fragments": fragments}))
 	return events
+
+
+func _powerup_model(kind: String):
+	var model = _model([_word("cat"), _word("cater"), _word("dog")])
+	if kind == "auto_merge":
+		_board(model, ["t", "ca", "er", "do", "g", "x"], [1, 2, 3, 4, 5, 6])
+	else:
+		_board(model, ["ca", "t", "do", "g", "x", "y"], [0, 0, 0, 0, 3, 7])
+	return model
+
+
+func _accept_powerup_payments(model) -> Array:
+	var payments: Array = []
+	model.purchase_powerup = func(receipt_id: String, kind: String, price: int) -> Dictionary:
+		payments.append({"id": receipt_id, "kind": kind, "price": price})
+		return {"ok": true, "duplicate": false}
+	return payments
+
+
+func _observe_powerups(model) -> Dictionary:
+	var events: Dictionary = {"feedback": [], "drags": [], "arrivals": []}
+	model.powerup_feedback.connect(func(kind: String, success: bool) -> void:
+		events.feedback.append([kind, success]))
+	model.powerup_drag_started.connect(func(payload: Dictionary) -> void:
+		events.drags.append(payload.duplicate(true)))
+	model.powerup_fragment_arrived.connect(func(payload: Dictionary) -> void:
+		events.arrivals.append(payload.duplicate(true)))
+	return events
+
+
+func _board_fragments(model) -> int:
+	var total: int = 0
+	for tile: Dictionary in model.cells:
+		total += int(tile.fragments)
+	return total
+
+
+func _approximately_equal_state(left: Variant, right: Variant) -> bool:
+	if typeof(left) != typeof(right):
+		return false
+	if left is float:
+		return is_equal_approx(float(left), float(right))
+	if left is Dictionary:
+		if left.size() != right.size():
+			return false
+		for key: Variant in left:
+			if not right.has(key) or not _approximately_equal_state(left[key], right[key]):
+				return false
+		return true
+	if left is Array:
+		if left.size() != right.size():
+			return false
+		for index in range(left.size()):
+			if not _approximately_equal_state(left[index], right[index]):
+				return false
+		return true
+	return left == right
+
+
+func _test_powerup_eligibility() -> void:
+	check(Model.POWERUP_PRICES == {"auto_merge": 1500, "fragments": 500},
+		"paid powers have their advertised fixed coin prices")
+	for kind: String in ["auto_merge", "fragments"]:
+		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
+			var model = _powerup_model(kind)
+			var payments: Array = _accept_powerup_payments(model)
+			match blocked_by:
+				"paused":
+					model.set_paused(true)
+				"held":
+					model.set_held_tile(1000)
+				"settling":
+					model.cells[0].age = 0.0
+					model.cells[0].settling = true
+				"fusion":
+					_board(model, ["ca", "t", "ca", "t"])
+					model.try_merge(1000, 1001)
+				"collection", "batch":
+					model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
+						_placed_tile(1001, "ca", 2, 7), _placed_tile(1002, "t", 3, 7)])
+					if blocked_by == "collection":
+						model.collect(1000)
+					else:
+						model.start_collection_batch()
+				"finished":
+					model.finish_round()
+				"empty":
+					model.cells.clear()
+			var before: Dictionary = model.snapshot()
+			check(not model.can_activate_powerup(kind) and not model.activate_powerup(kind),
+				kind + " rejects " + blocked_by + " boards before payment")
+			check(payments.is_empty() and model.snapshot() == before and not model.powerup_active(),
+				"ineligible paid power preserves the board and never invokes the wallet: " + blocked_by)
+			model.purchase_powerup = Callable()
+	var model = _model([_word("cat")])
+	_board(model, ["ca", "x"])
+	var payments: Array = _accept_powerup_payments(model)
+	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
+		and payments.is_empty(), "automatic merging cannot charge for a board without an exact dictionary pair")
+	check(model.can_activate_powerup("fragments"), "fragment delivery remains available without a possible word")
+	check(not model.activate_powerup("unknown") and not model.can_activate_powerup("unknown")
+		and payments.is_empty(), "an unknown power cannot make a wallet request")
+	model.purchase_powerup = Callable()
+	model = _model()
+	model.configure([_word("cat", 3), _word("rocket", 6), _word("advanced", 12)], 6, 42)
+	_board(model, ["ca", "t", "adva", "nced"])
+	payments = _accept_powerup_payments(model)
+	check(not model.activate_powerup("auto_merge") and payments.is_empty(),
+		"automatic merging excludes both younger and older words from its paid eligibility search")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_payment_atomicity() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var model = _powerup_model(kind)
+		var before: Dictionary = model.snapshot()
+		check(not model.activate_powerup(kind) and not model.powerup_active() and model.snapshot() == before,
+			"a missing purchase adapter cannot provide a free " + kind + " power")
+		for response: Dictionary in [{"ok": false}, {"ok": true, "duplicate": true}]:
+			model = _powerup_model(kind)
+			var calls: Array = []
+			var events: Dictionary = _observe_powerups(model)
+			var regular_events: Dictionary = _observe(model)
+			before = model.snapshot()
+			var history: Dictionary = model._merge_history.duplicate(true)
+			var rng_state: int = model._rng.state
+			model.purchase_powerup = func(receipt_id: String, requested: String, price: int) -> Dictionary:
+				calls.append([receipt_id, requested, price])
+				check(model.cells == before.cells and not model.powerup_snapshot().active,
+					"the wallet is called before any paid animation or effect is committed")
+				return response.duplicate(true)
+			check(not model.activate_powerup(kind) and not model.powerup_active(),
+				"failed and duplicate purchases do not begin a power")
+			check(calls.size() == 1 and not str(calls[0][0]).is_empty()
+				and calls[0][1] == kind and calls[0][2] == Model.POWERUP_PRICES[kind],
+				"purchase persistence receives one receipt, the requested power, and its exact price")
+			check(model.cells == before.cells and model.upcoming == before.upcoming
+				and model._merge_history == history and model._rng.state == rng_state
+				and model.collected_coins == 0 and model.fragment_count == 0,
+				"failed or duplicate payment changes no pieces, fragments, rewards, supply, or random draw")
+			check(events.drags.is_empty() and events.arrivals.is_empty()
+				and regular_events.completed.is_empty() and regular_events.collections.is_empty(),
+				"failed payment has no merge, fragment, collection, or completion presentation")
+			model.purchase_powerup = Callable()
+		model = _powerup_model(kind)
+		var payments: Array = _accept_powerup_payments(model)
+		var events: Dictionary = _observe_powerups(model)
+		check(model.activate_powerup(kind), "a new successfully persisted power activates")
+		var receipt: String = str(model.powerup_snapshot().receipt_id)
+		check(payments.size() == 1 and receipt == payments[0].id and events.feedback == [[kind, true]],
+			"an accepted power exposes its persisted receipt and one success response")
+		model.finish_powerup(true)
+		if kind == "auto_merge":
+			_board(model, ["ca", "t"])
+		check(model.activate_powerup(kind) and payments.size() == 2 and payments[1].id != receipt,
+			"separate accepted activations receive distinct wallet receipts")
+		model.finish_powerup(true)
+		model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_timeline() -> void:
+	var model = _model([_word("cat")])
+	_board(model, ["t", "ca"], [2, 3])
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var regular_events: Dictionary = _observe(model)
+	check(model.activate_powerup("auto_merge"), "automatic merging finds the forward pair even when its source follows its target")
+	var active: Dictionary = model.powerup_snapshot()
+	check(active.active and active.kind == "auto_merge" and active.stage == "drag"
+		and active.source_id == 1001 and active.target_id == 1000,
+		"the paid sequence starts with a visible drag in valid spelling order")
+	check(active.source.text == "ca" and active.target.text == "t" and events.drags.size() == 1,
+		"the drag exposes both intact endpoint bodies for its presentation")
+	active.source.text = "changed snapshot"
+	active.target.fragments = 999
+	check(model.powerup_snapshot().source.text == "ca" and model.cell(1000).fragments == 2,
+		"presentation snapshots cannot mutate the captured power or live bodies")
+	model.step(0.399)
+	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
+		"both bodies remain separate for the complete first 399 ms of the paid drag")
+	model.step(0.001)
+	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
+		and model.fusions[0].a_id == 1001 and model.fusions[0].b_id == 1000,
+		"400 ms starts the normal fusion using the advertised ordered endpoints")
+	model.step(Model.FUSION_SECONDS - 0.001)
+	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps the ordinary full fusion duration")
+	model.step(0.001)
+	check(model.cells.size() == 1 and model.cells[0].text == "cat" and model.cells[0].fragments == 5
+		and model.powerup_snapshot().stage == "settling" and not model.is_settled(model.cells[0]),
+		"fusion hands over a pictured persistent word with all carried fragments")
+	model.step(Model.SETTLE_SECONDS - 0.001)
+	check(model.powerup_active(), "the paid sequence reserves the result until its ordinary landing finishes")
+	model.step(0.001)
+	check(not model.powerup_active() and model.is_settled(model.cells[0]) and payments.size() == 1,
+		"the one-pair purchase ends precisely after drag, fusion, and settlement")
+	check(model.collected_coins == 0 and model.fragment_count == 0 and model.cleared_pairs == 0
+		and regular_events.collections.is_empty() and regular_events.attempts.is_empty()
+		and regular_events.cues.count("pop") == 0,
+		"automatic fusion neither collects words nor grants coins, chest progress, or learning credit")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_chain() -> void:
+	var model = _powerup_model("auto_merge")
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var regular_events: Dictionary = _observe(model)
+	var generated: int = model.generated_tiles
+	check(model.activate_powerup("auto_merge"), "a chain of complementary pairs accepts one purchase")
+	model.step(6.0)
+	check(not model.powerup_active() and model.merged_count == 3 and model.cells.size() == 3,
+		"automatic merging recomputes pairs after each result and resolves both independent and chained words")
+	var words: Dictionary = {}
+	for tile: Dictionary in model.cells:
+		words[str(tile.text)] = tile
+	check(words.has("cater") and words.has("dog") and words.has("x")
+		and words.cater.mass == 3 and words.cater.fragments == 6 and words.dog.fragments == 9,
+		"the new cat result can merge with er while unrelated pieces and all fragments are preserved")
+	check(payments.size() == 1 and events.drags.size() == 3 and regular_events.completed.size() == 3,
+		"one purchase owns the entire recomputed merge sequence with one presentation per pair")
+	check(model.generated_tiles == generated and model.collected_coins == 0 and model.fragment_count == 0
+		and regular_events.collections.is_empty(), "automatic merging consumes only captured board pieces and never collects them")
+	_assert_board(model, "paid automatic chain")
+	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
+		and payments.size() == 1, "a completed exhausted chain cannot charge again without a new valid pair")
+	check(model.collect(int(words.cater.id)), "the automatically built word still needs an ordinary collection")
+	model.step(Model.COLLECT_SECONDS)
+	check(model.collected_coins == 150 and model.fragment_count == 6,
+		"manual collection of the automatic result retains normal size-based coins and its carried fragments")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_manual_guards() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var model = _model([_word("cat")])
+		var parent: Dictionary = _placed_tile(1003, "xy", 4, 7, 2)
+		model.cells.assign([_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 1, 7),
+			_placed_tile(1002, "cat", 2, 7, 2, 0, _word("cat")), parent])
+		model._merge_history[1003] = [_placed_tile(1010, "x", 4, 7), _placed_tile(1011, "y", 5, 7)]
+		var payments: Array = _accept_powerup_payments(model)
+		check(model.activate_powerup(kind), "stable mixed board can start the paid power")
+		var before: Dictionary = model.snapshot()
+		var held_before: int = model._held_tile_id
+		check(model.try_merge(1000, 1001) == "ignored" and not model.collect(1002)
+			and not model.split(1003) and not model.start_collection_batch(),
+			"paid sequencing blocks manual merge, collection, split, and collect-all")
+		check(not model.can_reposition(1000, 0, 6) and not model.reposition(1000, 0, 6)
+			and not model.can_drop_now() and not model.drop_now(), "paid sequencing blocks reposition and supply input")
+		model.set_held_tile(1000)
+		check(model._held_tile_id == held_before and not model.can_activate_powerup("auto_merge")
+			and not model.can_activate_powerup("fragments") and not model.activate_powerup("auto_merge")
+			and not model.activate_powerup("fragments") and payments.size() == 1,
+			"paid sequencing prevents held input, overlapping powers, and duplicate wallet calls")
+		check(model.snapshot() == before, "blocked manual actions do not mutate a reserved paid sequence")
+		model.finish_powerup(true)
+		model.purchase_powerup = Callable()
+
+
+func _test_powerup_fragment_timeline() -> void:
+	var model = _powerup_model("fragments")
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var regular_events: Dictionary = _observe(model)
+	var original: int = _board_fragments(model)
+	check(model.activate_powerup("fragments"), "fragment delivery accepts a stable occupied board")
+	var active: Dictionary = model.powerup_snapshot()
+	var total: int = int(active.total)
+	check(active.stage == "arrivals" and total >= 1 and total <= 5 and active.arrivals.size() == total,
+		"one fragment purchase reserves a random one-to-five arrival sequence")
+	check(_board_fragments(model) == original and events.arrivals.is_empty(),
+		"payment reserves fragment destinations without applying them before arrival")
+	var reserved_ids: Array[int] = []
+	for index in range(total):
+		var arrival: Dictionary = active.arrivals[index]
+		check(is_equal_approx(float(arrival.at), 0.42 + index * 0.18) and not arrival.arrived,
+			"fragment arrivals have a 420 ms lead-in followed by 180 ms beats")
+		if index < 4:
+			check(int(arrival.tile_id) in [1000, 1001, 1002, 1003] and int(arrival.tile_id) not in reserved_ids,
+				"fragment-free bodies are selected before adding more fragments to an already marked body")
+		reserved_ids.append(int(arrival.tile_id))
+	check(is_equal_approx(float(active.duration), 0.42 + (total - 1) * 0.18 + 0.35),
+		"the fragment sequence includes the final 350 ms impact recovery")
+	var elapsed: float = 0.0
+	for index in range(total):
+		var deadline: float = 0.42 + index * 0.18
+		model.step(deadline - elapsed - 0.001)
+		check(events.arrivals.size() == index and _board_fragments(model) == original + index,
+			"fragment application waits for its exact arrival deadline")
+		model.step(0.001)
+		elapsed = deadline
+		check(events.arrivals.size() == index + 1 and _board_fragments(model) == original + index + 1,
+			"one fragment applies atomically at each staggered arrival")
+		var payload: Dictionary = events.arrivals[index]
+		var target: Dictionary = model.cell(int(payload.tile_id))
+		check(payload.tile_id == reserved_ids[index] and int(payload.total) == total
+			and int(payload.fragments) == int(target.fragments) and bool(target.chest)
+			and str(payload.receipt_id) == str(payments[0].id),
+			"arrival presentation identifies the reserved target, persisted purchase, and updated fragment count")
+	model.step(0.349)
+	check(model.powerup_active(), "fragment impact recovery remains reserved until its last millisecond")
+	model.step(0.001)
+	check(not model.powerup_active() and payments.size() == 1 and _board_fragments(model) == original + total,
+		"all purchased fragments apply once and the sequence ends after recovery")
+	check(model.fragment_count == 0 and model.collected_coins == 0 and model.chest_tier == 0
+		and regular_events.collections.is_empty() and regular_events.milestones.is_empty(),
+		"delivered fragments remain on jellies until collection and do not immediately unlock a chest")
+	model.purchase_powerup = Callable()
+
+
+func _assert_fragment_history(model, tile: Dictionary) -> void:
+	check(bool(tile.chest) == (int(tile.fragments) > 0), "fragment ancestry keeps the chest flag consistent")
+	if not model._merge_history.has(int(tile.id)):
+		return
+	var children: Array = model._merge_history[int(tile.id)]
+	var total: int = 0
+	for child: Dictionary in children:
+		total += int(child.fragments)
+		_assert_fragment_history(model, child)
+	check(total == int(tile.fragments), "each historical parent carries precisely the sum of its updated descendants")
+
+
+func _test_powerup_fragment_ancestry() -> void:
+	for original_fragments: Array in [[0, 0, 0], [1, 2, 3]]:
+		var model = _model([_word("cat")])
+		var amounts: Array[int] = []
+		amounts.assign(original_fragments)
+		_board(model, ["x", "y", "z"], amounts)
+		var inner: Dictionary = _legacy_parent(model, 1000, 1001)
+		var outer: Dictionary = _legacy_parent(model, int(inner.id), 1002)
+		model.step(Model.SETTLE_SECONDS)
+		var original: int = _board_fragments(model)
+		_accept_powerup_payments(model)
+		check(model.activate_powerup("fragments"), "a single historical invalid merged body can receive a fragment purchase")
+		var total: int = int(model.powerup_snapshot().total)
+		model.finish_powerup(true)
+		check(_board_fragments(model) == original + total, "every reserved fragment is delivered even with only one possible target")
+		_assert_fragment_history(model, model.cell(int(outer.id)))
+		check(model.split(int(outer.id)), "the purchased outer historical body remains splittable")
+		model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+		check(_board_fragments(model) == original + total, "splitting the outer parent preserves every newly purchased fragment")
+		_assert_fragment_history(model, model.cell(int(inner.id)))
+		check(model.split(int(inner.id)), "the restored nested historical body remains splittable")
+		model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+		check(_board_fragments(model) == original + total and model.cells.size() == 3
+			and model._merge_history.is_empty(), "splitting all ancestral levels retains exactly the purchased and original fragment total")
+		for tile: Dictionary in model.cells:
+			check(bool(tile.chest) == (int(tile.fragments) > 0), "restored original roots render their updated fragment markers")
+		model.purchase_powerup = Callable()
+
+
+func _test_powerup_pause_and_clocks() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var model = _powerup_model(kind)
+		_accept_powerup_payments(model)
+		model.spawn_interval = 20.0
+		model.spawn_elapsed = 19.9
+		var generated: int = model.generated_tiles
+		var upcoming: Array = model.upcoming.duplicate(true)
+		check(model.activate_powerup(kind), "paid sequence starts near the automatic supply deadline")
+		model.step(0.10)
+		model.set_paused(true)
+		var before: Dictionary = model.snapshot()
+		var active: Dictionary = model.powerup_snapshot()
+		model.step(50.0)
+		check(model.snapshot() == before and model.powerup_snapshot() == active,
+			"pause freezes paid sequence, board motion, and supply at the exact same point")
+		model.set_paused(false)
+		model.step(0.10)
+		check(model.spawn_elapsed == 19.9 and model.generated_tiles == generated and model.upcoming == upcoming,
+			"an active paid sequence preserves the automatic supply countdown and advertised roots")
+		model.finish_powerup(true)
+		check(model.spawn_elapsed == 19.9 and model.generated_tiles == generated,
+			"silently draining a paid effect consumes no supply time")
+		model.step(0.099)
+		check(model.generated_tiles == generated, "normal supply resumes with its preserved remaining time")
+		model.step(0.001)
+		check(model.generated_tiles == generated + Model.DROP_COUNT, "the preserved supply deadline fires once after the paid effect")
+		model.purchase_powerup = Callable()
+		model = _model([_word("cat")])
+		var pieces: Array[String] = []
+		for index in range(Model.CAPACITY):
+			pieces.append("x")
+		pieces[0] = "ca"
+		pieces[1] = "t"
+		_board(model, pieces)
+		model.step(0.001)
+		model.full_elapsed = Model.FULL_SECONDS - 0.1
+		_accept_powerup_payments(model)
+		check(model.activate_powerup(kind), "a stable full board permits a paid rescue before danger expires")
+		model.step(0.20)
+		check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
+			"paid presentation freezes the active danger deadline without resetting it")
+		model.finish_powerup(true)
+		check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
+			"a paid action that frees no occupied cell preserves the full-board danger deadline")
+		model.step(0.10)
+		check(model.phase == "finished", "unrelieved danger resumes and expires normally after the paid effect")
+		model.purchase_powerup = Callable()
+
+
+func _test_powerup_determinism() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var large = _powerup_model(kind)
+		var fine = _powerup_model(kind)
+		var large_payments: Array = _accept_powerup_payments(large)
+		var fine_payments: Array = _accept_powerup_payments(fine)
+		var large_events: Dictionary = _observe_powerups(large)
+		var fine_events: Dictionary = _observe_powerups(fine)
+		large.activate_powerup(kind)
+		fine.activate_powerup(kind)
+		check(large.powerup_snapshot() == fine.powerup_snapshot(),
+			"equal seeds reserve identical paid targets, receipts, and random fragment totals")
+		large.step(6.0)
+		for index in range(600):
+			fine.step(0.01)
+		check(not large.powerup_active() and not fine.powerup_active()
+			and _approximately_equal_state(_rejection_state(large), _rejection_state(fine)),
+			"coarse and fine frames agree on the paid result, history, supply clocks, and rewards: " + kind)
+		check(_approximately_equal_state(large_events, fine_events) and large_payments == fine_payments,
+			"frame slicing preserves every paid drag, fragment impact, and single payment: " + kind)
+		large.purchase_powerup = Callable()
+		fine.purchase_powerup = Callable()
+	var observed_totals: Dictionary = {}
+	for seed_value in range(1, 25):
+		var model = _model([_word("cat")])
+		model.configure([_word("cat")], 3, seed_value)
+		_board(model, ["ca", "t"])
+		_accept_powerup_payments(model)
+		model.activate_powerup("fragments")
+		var total: int = int(model.powerup_snapshot().total)
+		check(total >= 1 and total <= 5, "every seeded purchase stays within its advertised random one-to-five fragment range")
+		observed_totals[total] = true
+		model.finish_powerup(true)
+		check(_board_fragments(model) == total, "fragment randomization never duplicates or drops a reserved reward")
+		model.purchase_powerup = Callable()
+	check(observed_totals.size() > 1, "different seeds vary the fragment purchase total")
+
+
+func _test_powerup_finish_and_lifecycle() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		for progress: float in [0.0, 0.20, 0.60, 1.20]:
+			var model = _powerup_model(kind)
+			var payments: Array = _accept_powerup_payments(model)
+			var events: Dictionary = _observe_powerups(model)
+			var regular_events: Dictionary = _observe(model)
+			model.activate_powerup(kind)
+			var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+			model.step(progress)
+			model.set_paused(true)
+			var presentation: Dictionary = events.duplicate(true)
+			var cues: Array = regular_events.cues.duplicate()
+			model.finish_powerup(true)
+			check(not model.powerup_active() and model.paused and payments.size() == 1
+				and _board_fragments(model) == expected_fragments,
+				"silent lifecycle completion preserves pause and deterministically finishes the accepted effect")
+			check(events == presentation and regular_events.cues == cues,
+				"silent completion emits no catch-up drag, fragment, feedback, or cue storm")
+			check(model.fusions.is_empty() and model.collected_coins == 0 and model.fragment_count == 0,
+				"silent completion leaves no unpaid collection or orphan fusion")
+			if kind == "auto_merge":
+				check(model.merged_count == 3 and model.cells.size() == 3,
+					"exiting in drag, fusion, or landing still applies every accepted automatic merge")
+			var before: Dictionary = model.snapshot()
+			model.finish_powerup(true)
+			check(model.snapshot() == before and payments.size() == 1,
+				"repeated lifecycle completion cannot reapply or repurchase a paid effect")
+			model.purchase_powerup = Callable()
+		for replace_round: bool in [false, true]:
+			var model = _powerup_model(kind)
+			var payments: Array = _accept_powerup_payments(model)
+			var events: Dictionary = _observe_powerups(model)
+			model.activate_powerup(kind)
+			var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+			model.step(0.20)
+			model.set_paused(true)
+			var presentation: Dictionary = events.duplicate(true)
+			if replace_round:
+				model.configure([_word("cat")], 3, 9)
+				check(model.cells.size() == Model.INITIAL_SETTLED_TILES and model.fusions.is_empty()
+					and not model.powerup_active() and model._merge_history.is_empty(),
+					"reconfiguration drains the old accepted power before installing an independent fresh board")
+			else:
+				var result: Dictionary = model.finish_round()
+				check(model.phase == "finished" and not model.powerup_active() and model.fusions.is_empty()
+					and _board_fragments(model) == expected_fragments and result.coins == 0 and result.words.is_empty(),
+					"round exit applies an accepted power while preserving uncollected rewards on the finished board")
+				if kind == "auto_merge":
+					check(model.merged_count == 3 and model.cells.size() == 3,
+						"round exit completes the full accepted automatic chain")
+			check(payments.size() == 1 and events == presentation,
+				"round replacement and round finish neither repay nor replay a paid presentation")
+			model.purchase_powerup = Callable()
+
+
+func _test_powerup_payment_reentry() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		var model = _powerup_model(kind)
+		var calls: Array = []
+		model.purchase_powerup = func(receipt_id: String, requested: String, price: int) -> Dictionary:
+			calls.append([receipt_id, requested, price])
+			check(not model.activate_powerup("auto_merge") and not model.activate_powerup("fragments"),
+				"purchase persistence cannot recursively buy a second power")
+			return {"ok": true, "duplicate": false}
+		check(model.activate_powerup(kind) and calls.size() == 1, "the guarded outer purchase commits only once")
+		model.finish_powerup(true)
+		model.purchase_powerup = Callable()
+		model = _powerup_model(kind)
+		calls = []
+		model.purchase_powerup = func(receipt_id: String, requested: String, price: int) -> Dictionary:
+			calls.append([receipt_id, requested, price])
+			model.set_paused(true)
+			return {"ok": true, "duplicate": false}
+		check(model.activate_powerup(kind) and model.paused and model.powerup_active(),
+			"pause during accepted payment retains the purchased effect for eventual completion")
+		var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+		model.finish_powerup(true)
+		check(not model.powerup_active() and calls.size() == 1 and _board_fragments(model) == expected_fragments,
+			"the accepted paused payment finishes once without invoking persistence again")
+		model.purchase_powerup = Callable()
+		for callback_action: String in ["configure", "finish", "settle"]:
+			model = _powerup_model(kind)
+			calls = []
+			var before: Dictionary = model.snapshot()
+			var generation: int = model._generation
+			var original_fragments: int = _board_fragments(model)
+			model.purchase_powerup = func(receipt_id: String, requested: String, price: int) -> Dictionary:
+				calls.append([receipt_id, requested, price])
+				match callback_action:
+					"configure":
+						check(not model.configure([_word("cat")], 3, 9),
+							"configuration is rejected while a purchase response is unresolved")
+					"finish":
+						model.finish_round()
+					"settle":
+						model.finish_powerup(true)
+				check(model.phase == "playing" and model._generation == generation and model.cells == before.cells,
+					"purchase callbacks cannot discard or mutate the board before persistence answers")
+				return {"ok": true, "duplicate": false}
+			check(model.activate_powerup(kind) and calls.size() == 1 and model._generation == generation,
+				"reentrant lifecycle requests preserve exactly one accepted purchase on its original round")
+			if callback_action == "configure":
+				check(model.powerup_active() and model.phase == "playing",
+					"rejected reconfiguration allows the accepted original purchase to animate normally")
+				model.finish_powerup(true)
+			else:
+				check(not model.powerup_active() and model.phase == ("finished" if callback_action == "finish" else "playing"),
+					"deferred finish and drain requests run only after the accepted purchase can be completed")
+			if kind == "auto_merge":
+				check(model.merged_count == 3 and model.cells.size() == 3,
+					"a lifecycle callback cannot lose any paid automatic merges")
+			else:
+				check(_board_fragments(model) == original_fragments + int(model.powerup_snapshot().total),
+					"a lifecycle callback cannot lose any purchased fragment arrivals")
+			model.purchase_powerup = Callable()
+
+
+func _test_powerup_presentation_reentry() -> void:
+	for action: String in ["pause", "drain", "finish"]:
+		var model = _powerup_model("auto_merge")
+		var payments: Array = _accept_powerup_payments(model)
+		var handled: Dictionary = {"contact": false}
+		model.cue_requested.connect(func(cue: String) -> void:
+			if cue != "contact" or handled.contact:
+				return
+			handled.contact = true
+			check(model.powerup_snapshot().stage == "fusion" and model.fusions.is_empty(),
+				"the contact cue can interrupt after the announced handover but before the merge commits")
+			if action == "pause":
+				model.set_paused(true)
+			elif action == "drain":
+				model.finish_powerup(true)
+			else:
+				model.finish_round())
+		check(model.activate_powerup("auto_merge"), "automatic power accepts before a reentrant contact callback")
+		model.step(0.40)
+		check(handled.contact, "the original pair reaches its contact boundary")
+		if action == "pause":
+			check(model.paused and model.powerup_active() and model.fusions.is_empty(),
+				"contact-time pause retains an accepted power without inventing an active fusion")
+			var before: Dictionary = model.snapshot()
+			model.step(50.0)
+			check(model.snapshot() == before, "contact-time pause preserves its reserved source without advancing")
+			model.set_paused(false)
+			model.step(6.0)
+		check(not model.powerup_active() and model.fusions.is_empty() and model._held_tile_id == -1
+			and model.merged_count == 3 and model.cells.size() == 3 and payments.size() == 1,
+			"contact interruption resumes or drains the original chain exactly once without a held-source deadlock")
+		check(_board_fragments(model) == 21 and model.collected_coins == 0 and model.fragment_count == 0,
+			"contact callback lifecycle changes preserve every carried fragment and leave collection rewards untouched")
+		check(model.phase == ("finished" if action == "finish" else "playing"),
+			"contact callback round exit takes effect only after the accepted chain is fulfilled")
+		model.purchase_powerup = Callable()
+	var model = _powerup_model("auto_merge")
+	_accept_powerup_payments(model)
+	var attempted: Dictionary = {"count": 0}
+	model.fusion_started.connect(func(_payload: Dictionary) -> void:
+		attempted.count += 1
+		check(model.try_merge(1003, 1004, true) == "ignored" and not model.start_collection_batch(),
+			"callbacks during an authorized automatic fusion cannot start an independent manual operation"), CONNECT_ONE_SHOT)
+	model.activate_powerup("auto_merge")
+	model.step(6.0)
+	check(attempted.count == 1 and model.merged_count == 3 and not model.powerup_active(),
+		"rejected callback input leaves the paid merge chain intact")
+	model.purchase_powerup = Callable()
+	for trigger: String in ["feedback", "arrival"]:
+		for kind: String in (["auto_merge", "fragments"] if trigger == "feedback" else ["fragments"]):
+			model = _powerup_model(kind)
+			var payments: Array = _accept_powerup_payments(model)
+			var after_callback: Dictionary = {}
+			if trigger == "feedback":
+				model.powerup_feedback.connect(func(_kind: String, success: bool) -> void:
+					if success:
+						check(model.configure([_word("sunflower")], 3, 9),
+							"success feedback may replace the round after silently draining the accepted purchase")
+						after_callback.merge(model.snapshot(), true), CONNECT_ONE_SHOT)
+			else:
+				model.powerup_fragment_arrived.connect(func(_payload: Dictionary) -> void:
+					check(model.configure([_word("sunflower")], 3, 9),
+						"a fragment impact callback may replace the round after silently delivering its remaining purchase")
+					after_callback.merge(model.snapshot(), true), CONNECT_ONE_SHOT)
+			model.activate_powerup(kind)
+			if trigger == "arrival":
+				model.step(2.0)
+			check(not after_callback.is_empty() and model.snapshot() == after_callback and payments.size() == 1
+				and not model.powerup_active() and model.fusions.is_empty() and model._merge_history.is_empty(),
+				"generation replacement from a paid presentation prevents all stale follow-on effects and time consumption")
+			check(model.generated_tiles == Model.INITIAL_SETTLED_TILES and model.merged_count == 0
+				and model.collected_coins == 0 and model.fragment_count == 0,
+				"a presentation callback starts the replacement round with clean supply, history, and rewards")
+			model.purchase_powerup = Callable()
+	for outer_action: String in ["configure", "finish"]:
+		model = _powerup_model("auto_merge")
+		var payments: Array = _accept_powerup_payments(model)
+		model.activate_powerup("auto_merge")
+		var replacement: Dictionary = {}
+		model.changed.connect(func() -> void:
+			check(model.configure([_word("sunflower")], 3, 9),
+				"the final silent-drain change notification can install a replacement round")
+			replacement.merge(model.snapshot(), true), CONNECT_ONE_SHOT)
+		if outer_action == "configure":
+			check(not model.configure([_word("dog")], 3, 13),
+				"an outer configure call stops when its paid drain callback has already replaced the round")
+		else:
+			model.finish_round()
+		check(not replacement.is_empty() and model.snapshot() == replacement and model.phase == "playing"
+			and payments.size() == 1 and not model.powerup_active(),
+			"an outer lifecycle call cannot reset or finish a newer round installed by its drain callback")
+		model.purchase_powerup = Callable()
 
 
 func _test_configuration() -> void:

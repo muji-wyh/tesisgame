@@ -9,12 +9,26 @@ const WordTile = preload("res://scripts/word_jelly_tile.gd")
 const Palette = preload("res://scripts/word_jelly_palette.gd")
 const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
 const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
+const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
+const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 
 var credit_collection: Callable:
 	set(value):
 		credit_collection = value
 		game.credit_collection = value
+var purchase_powerup: Callable:
+	set(value):
+		purchase_powerup = value
+		game.purchase_powerup = value
+var coin_balance: Callable
+var powerup_buttons: Dictionary = {}
+var _powerup_effects: PowerupEffects
+var _powerup_arrivals: Array[Dictionary] = []
+var _powerup_frame_end: float = -1.0
+var _powerup_frame_receipt: String = ""
+var _powerup_frame_generation: int = -1
 var _collection_origins: Dictionary = {}
 var _rest_rects: Dictionary = {}
 var _reflow: Dictionary = {}
@@ -45,6 +59,9 @@ func _init() -> void:
 	game.collection_started.connect(_collection_started)
 	game.chest_milestone.connect(_chest_milestone)
 	game.finished.connect(_finished)
+	game.powerup_feedback.connect(_powerup_feedback)
+	game.powerup_fragment_arrived.connect(_powerup_fragment_arrived)
+	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
 		tile.free()
@@ -66,6 +83,15 @@ func _init() -> void:
 	collect_button.pressed.connect(_collect_all)
 	collect_button.z_index = 5
 	add_child(collect_button)
+	for kind: String in WordModel.POWERUP_PRICES:
+		var button := PowerupButton.new()
+		button.configure(kind, int(WordModel.POWERUP_PRICES[kind]), reduced_motion)
+		button.pressed.connect(_activate_powerup.bind(kind))
+		button.z_index = 5
+		add_child(button)
+		powerup_buttons[kind] = button
+	_powerup_effects = PowerupEffects.new()
+	add_child(_powerup_effects)
 	_placement_tile = WordTile.new()
 	_placement_tile.name = "WordJellyPlacement"
 	_placement_tile.disabled = true
@@ -75,6 +101,13 @@ func _init() -> void:
 	add_child(_placement_tile)
 
 func stop() -> void:
+	game.finish_powerup()
+	_powerup_arrivals.clear()
+	if _powerup_effects != null:
+		_powerup_effects.reset()
+		_powerup_effects.hide()
+	for button: PowerupButton in powerup_buttons.values():
+		button.reset()
 	game.cancel_collection_batch()
 	if collect_button != null:
 		collect_button.reset()
@@ -98,10 +131,16 @@ func pause(value: bool = true) -> void:
 	if value and _word_reveal != null:
 		_word_reveal.reset()
 	super.pause(value)
+	if _powerup_effects != null:
+		_powerup_effects.visible = not value and _can_play()
+	for button: PowerupButton in powerup_buttons.values():
+		button.pause_feedback(value)
 
 func set_reduced_motion(value: bool) -> void:
 	_word_reveal.set_reduced_motion(value)
 	collect_button.set_reduced_motion(value)
+	for kind: String in powerup_buttons:
+		powerup_buttons[kind].configure(kind, int(WordModel.POWERUP_PRICES[kind]), value)
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
@@ -111,6 +150,7 @@ func _visibility_changed() -> void:
 
 func _finished(result: Dictionary) -> void:
 	_word_reveal.reset()
+	_powerup_effects.hide()
 	super._finished(result)
 
 func cancel_input() -> void:
@@ -134,6 +174,8 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 
 func _apply_chest_texture(texture: Texture2D) -> void:
 	super._apply_chest_texture(texture)
+	if powerup_buttons.has("fragments"):
+		powerup_buttons.fragments.set_chest_texture(texture)
 	if _placement_tile != null:
 		_placement_tile.set_chest_texture(texture)
 	for visual: Dictionary in _fusion_visuals.values():
@@ -142,7 +184,7 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 			part.set_chest_texture(texture)
 
 func _input(event: InputEvent) -> void:
-	if game.collection_batch_active():
+	if game.collection_batch_active() or game.powerup_active():
 		return
 	if event.is_action_pressed("ui_cancel") and _keyboard_source >= 0:
 		cancel_input()
@@ -163,7 +205,7 @@ func _input(event: InputEvent) -> void:
 
 func _press(pointer: int, global_point: Vector2) -> bool:
 	# Roots have no pronunciation recording; a completed word keeps its audio.
-	if _pointer != NO_POINTER or not _can_play() or game.collection_batch_active():
+	if _pointer != NO_POINTER or not _can_play() or game.collection_batch_active() or game.powerup_active():
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
@@ -265,7 +307,7 @@ func _refresh_placement() -> void:
 	_placement_tile.show()
 
 func _activate(id: int) -> void:
-	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active():
+	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
 		return
 	_rejection.clear()
 	if _keyboard_source >= 0 and _keyboard_source != id and _tiles.has(_keyboard_source):
@@ -566,6 +608,104 @@ func _sync_positions() -> void:
 			_refresh_marks()
 	_refresh_contact()
 	_refresh_placement()
+	_pose_powerup()
+
+func _activate_powerup(kind: String) -> void:
+	if not _can_play() or _pointer != NO_POINTER or _keyboard_source >= 0 or game.powerup_active():
+		return
+	game.activate_powerup(kind)
+	_refresh_controls()
+	_publish()
+
+func _powerup_feedback(kind: String, success: bool) -> void:
+	if powerup_buttons.has(kind):
+		powerup_buttons[kind].feedback(success)
+	_rejection.clear()
+	_refresh_controls()
+	_publish()
+
+func _powerup_fragment_arrived(event: Dictionary) -> void:
+	var id: int = int(event.tile_id)
+	if _tiles.has(id):
+		_configure_tile(_tiles[id], _cell(id))
+	var age: float = 0.0
+	if _powerup_frame_end >= 0.0 and _powerup_frame_generation == _generation and str(event.receipt_id) == _powerup_frame_receipt:
+		var state: Dictionary = game.powerup_snapshot()
+		var at: float = float(state.arrivals[int(event.index)].at)
+		age = maxf(0.0, _powerup_frame_end - at)
+	if age < 0.48:
+		_powerup_arrivals.append({"tile_id": id, "elapsed": age, "index": int(event.index)})
+
+func _powerup_fusion_started(fusion: Dictionary) -> void:
+	if not game.powerup_active() or str(fusion.operation) != "merge":
+		return
+	# The ordinary liquid union starts where the automatic drag has arrived.
+	var visual: Dictionary = _ensure_fusion_visual(fusion)
+	var destination: Vector2 = _tile_rect(fusion.b).get_center()
+	visual["powerup_anchor"] = true
+	visual.origin_a = destination
+	visual.origin_b = destination
+	visual.start = destination
+
+func _powerup_stamp(stamps: Array[Dictionary], texture: Texture2D, center: Vector2, extent: Vector2, color: Color = Color.WHITE, angle: float = 0.0) -> void:
+	stamps.append({"texture": texture, "center": center, "size": extent, "color": color, "rotation": angle})
+
+func _pose_powerup() -> void:
+	if _powerup_effects == null:
+		return
+	_powerup_effects.visible = _can_play()
+	var state: Dictionary = game.powerup_snapshot()
+	var stamps: Array[Dictionary] = []
+	var unit: float = maxf(8.0, _pitch)
+	if bool(state.get("active", false)) and str(state.get("stage", "")) == "drag":
+		var source: Dictionary = state.get("source", {})
+		var target: Dictionary = state.get("target", {})
+		var id: int = int(state.get("source_id", -1))
+		if not source.is_empty() and not target.is_empty() and _tiles.has(id):
+			var from: Rect2 = _tile_rect(source)
+			var to: Vector2 = _tile_rect(target).get_center()
+			var t: float = clampf(float(state.elapsed) / maxf(0.01, float(state.duration)), 0.0, 1.0)
+			var p: float = t if reduced_motion else smoothstep(0.0, 1.0, t)
+			var lift: float = 0.0 if reduced_motion else sin(p * PI) * minf(unit * 0.65, from.get_center().distance_to(to) * 0.18)
+			var tile: WordTile = _tiles[id]
+			tile.position = from.get_center().lerp(to, p) - from.size * 0.5 - Vector2(0.0, lift)
+			tile.z_index = 42
+			tile.deform(0.0, 0.0, Vector2.ONE if reduced_motion else Vector2(1.0 + sin(p * PI) * 0.09, 1.0 - sin(p * PI) * 0.05))
+			tile.set_support(lift, 0.0)
+			_powerup_stamp(stamps, COLLECTION_GLOW, to, Vector2.ONE * unit * 1.65, Color(1.0, 0.91, 0.6, 0.30))
+			if not reduced_motion:
+				for index in range(4):
+					var trail: float = maxf(0.0, p - 0.055 * float(index + 1))
+					var point: Vector2 = from.get_center().lerp(to, trail) - Vector2(0.0, sin(trail * PI) * minf(unit * 0.65, from.get_center().distance_to(to) * 0.18))
+					_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * (0.20 - index * 0.03), Color(1.0, 0.92, 0.63, 0.7 - index * 0.14), trail * TAU)
+	elif bool(state.get("active", false)) and str(state.get("kind", "")) == "fragments" and powerup_buttons.has("fragments"):
+		var start: Vector2 = powerup_buttons.fragments.get_rect().get_center()
+		for arrival: Dictionary in state.get("arrivals", []):
+			var id: int = int(arrival.tile_id)
+			var remaining: float = float(arrival.at) - float(state.elapsed)
+			if bool(arrival.get("arrived", false)) or remaining < 0.0 or remaining > 0.42 or not _tiles.has(id):
+				continue
+			var t: float = clampf(1.0 - remaining / 0.42, 0.0, 1.0)
+			var target: Vector2 = _tiles[id].get_rect().get_center()
+			var point: Vector2 = start.lerp(target, smoothstep(0.0, 1.0, t))
+			if not reduced_motion:
+				point += Vector2(sin(t * PI) * unit * 0.4 * (-1.0 if int(arrival.index) % 2 == 0 else 1.0), -sin(t * PI) * unit * 0.55)
+			_powerup_stamp(stamps, COLLECTION_GLOW, point, Vector2.ONE * unit, Color(1.0, 0.85, 0.4, 0.48))
+			_powerup_stamp(stamps, _chest_texture, point, Vector2.ONE * unit * 0.5, Color.WHITE, 0.0 if reduced_motion else sin(t * PI) * 0.25)
+	for arrival: Dictionary in _powerup_arrivals:
+		var id: int = int(arrival.tile_id)
+		if not _tiles.has(id):
+			continue
+		var t: float = clampf(float(arrival.elapsed) / 0.48, 0.0, 1.0)
+		var center: Vector2 = _tiles[id].get_rect().get_center()
+		var envelope: float = 1.0 - t
+		_powerup_stamp(stamps, COLLECTION_GLOW, center, Vector2.ONE * unit * (1.7 if reduced_motion else 1.2 + t), Color(1.0, 0.88, 0.45, envelope * 0.6))
+		for index in range(4):
+			var angle: float = float(index) * TAU / 4.0 + 0.35
+			var radius: float = unit * (0.48 if reduced_motion else 0.30 + t * 0.4)
+			_powerup_stamp(stamps, POWERUP_SPARKLE, center + Vector2.from_angle(angle) * radius,
+				Vector2.ONE * unit * (0.18 if reduced_motion else 0.28 * envelope), Color(1.0, 0.94, 0.65, envelope), angle)
+	_powerup_effects.present(stamps)
 
 func _sync_preview() -> void:
 	var refills: Array[float] = []
@@ -599,7 +739,13 @@ func _preview_pose(index: int) -> Dictionary:
 
 func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
+	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
+		var powerup: Dictionary = game.powerup_snapshot()
+		if bool(powerup.active) and str(powerup.kind) == "fragments":
+			_powerup_frame_end = float(powerup.elapsed) + delta
+			_powerup_frame_receipt = str(powerup.receipt_id)
+			_powerup_frame_generation = _generation
 		_word_reveal.advance(delta)
 		if game.collection_batch_active():
 			# New cards keep their actual 100 ms offsets even when a frame spans several beats.
@@ -607,6 +753,11 @@ func _process(delta: float) -> void:
 			_reveal_frame_batch = game._collection_batch_serial
 			_reveal_frame_generation = _generation
 		collect_button.advance(delta)
+		for button: PowerupButton in powerup_buttons.values():
+			button.advance(delta)
+		for arrival: Dictionary in _powerup_arrivals:
+			arrival.elapsed += delta
+		_powerup_arrivals = _powerup_arrivals.filter(func(item: Dictionary) -> bool: return float(item.elapsed) < 0.48)
 		if _completion_source >= 0:
 			_completion_elapsed += delta
 	var generation: int = _generation
@@ -615,6 +766,7 @@ func _process(delta: float) -> void:
 		previous_rows[int(cell.id)] = int(cell.row)
 	super._process(delta)
 	_reveal_frame_end = -1.0
+	_powerup_frame_end = -1.0
 	if generation != _generation or not _can_play() or game.full_elapsed >= 0.0 or _landing_cooldown > 0.0:
 		return
 	# A long frame can finish collection and pass the new fall's contact time.
@@ -658,10 +810,13 @@ func navigation_controls() -> Array[Control]:
 	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return int(a.row) * WordModel.COLUMNS + int(a.column) < int(b.row) * WordModel.COLUMNS + int(b.column))
 	for cell: Dictionary in ordered:
-		if _settled(cell) and _tiles.has(int(cell.id)) and not game.collection_batch_active():
+		if _settled(cell) and _tiles.has(int(cell.id)) and not game.collection_batch_active() and not game.powerup_active():
 			controls.append(_tiles[int(cell.id)])
 	if not collect_button.disabled:
 		controls.append(collect_button)
+	for button: PowerupButton in powerup_buttons.values():
+		if button.visible and not button.disabled:
+			controls.append(button)
 	if not drop_button.disabled:
 		controls.append(drop_button)
 	if not _chest_tap.disabled:
@@ -788,6 +943,12 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		return
 	var target_size: Vector2 = _tile_rect(fusion.result).size
 	var destination: Vector2 = _tile_rect(fusion.result).get_center()
+	if bool(visual.get("powerup_anchor", false)):
+		# Resolve the automatic contact point against the current responsive board.
+		var contact: Vector2 = _tile_rect(fusion.b).get_center()
+		visual.origin_a = contact
+		visual.origin_b = contact
+		visual.start = contact
 	var joining: float = smoothstep(0.0, 0.68, p)
 	# Let the flowing paint reach the new pair's hue before the skin handover.
 	var from_hue: float = Palette.hue(int(visual.palette_b))
@@ -880,17 +1041,26 @@ func _refresh_hud() -> void:
 	_refresh_collect_button()
 
 func _can_tap_chest() -> bool:
-	return not game.collection_batch_active() and super._can_tap_chest()
+	return not game.collection_batch_active() and not game.powerup_active() and super._can_tap_chest()
 
 func _refresh_controls() -> void:
 	super._refresh_controls()
 	if collect_button == null:
 		return
-	if game.collection_batch_active():
+	if game.collection_batch_active() or game.powerup_active():
 		for tile: Tile in _tiles.values():
 			tile.disabled = true
 		drop_button.disabled = true
 	_refresh_collect_button()
+	_refresh_powerup_buttons()
+
+func _refresh_powerup_buttons() -> void:
+	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else 0
+	for kind: String in powerup_buttons:
+		var button: PowerupButton = powerup_buttons[kind]
+		button.visible = _configured and game.phase == "playing" and not _result_visible
+		button.set_availability(_can_play() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
+			balance >= int(WordModel.POWERUP_PRICES[kind]), game.powerup_active())
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:
@@ -898,7 +1068,7 @@ func _refresh_collect_button() -> void:
 	var batch: Dictionary = game.collection_batch_snapshot()
 	var count: int = game.collectable_ids().size() if _configured else 0
 	collect_button.visible = _configured and game.phase == "playing" and not _result_visible
-	collect_button.disabled = not _can_play() or _pointer != NO_POINTER or bool(batch.active) or count == 0
+	collect_button.disabled = not _can_play() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
 
@@ -915,7 +1085,7 @@ func result_reveal() -> void:
 
 func _refresh_danger() -> void:
 	if _danger_frame != null:
-		_danger_frame.set_warning(_can_play() and float(game.full_elapsed) >= 0.0, float(game.full_elapsed), WordModel.FULL_SECONDS, reduced_motion)
+		_danger_frame.set_warning(_can_play() and not game.powerup_active() and float(game.full_elapsed) >= 0.0, float(game.full_elapsed), WordModel.FULL_SECONDS, reduced_motion)
 
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
@@ -936,7 +1106,7 @@ func _layout() -> void:
 	# Portrait tablets can have a side rail; phones keep treasure above play.
 	var side_hud: bool = (size.x - _pitch * WordModel.COLUMNS) * 0.5 >= edge + hud_gap + hud_width
 	_compact_hud = side_hud
-	var footer_height: float = 0.0 if side_hud else 52.0 / s + edge
+	var footer_height: float = 0.0 if side_hud else 64.0 / s + edge
 	var chest_margin: float = 20.0 / s
 	var top_hud_height: float = 0.0 if side_hud else 44.0 / s + chest_margin * 2.0
 	available.y -= footer_height + top_hud_height
@@ -959,7 +1129,7 @@ func _layout() -> void:
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
-	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 308.0 / s))
+	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 356.0 / s))
 	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
 	var meter_edge: float = (60.0 if side_hud else 44.0) / s
 	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(maxf(hud_x, chest_margin), chest_margin)
@@ -984,13 +1154,19 @@ func _layout() -> void:
 	var local_finish: bool = finish_button.get_parent() == self
 	if local_finish:
 		finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
-		finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge + 8.0 / s)
+		finish_button.position = Vector2(hud_x, group_top + meter_edge + 24.0 / s) if side_hud else Vector2(size.x - edge - finish_button.size.x, chest_margin)
 	if collect_button != null:
-		var finish_width: float = finish_button.size.x + hud_gap if local_finish else 0.0
-		var finish_height: float = finish_button.size.y + 16.0 / s if local_finish else 0.0
 		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - finish_width), 52.0 / s)
-		collect_button.position = Vector2(hud_x, _board.end.y - finish_height - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - finish_width - collect_button.size.x) * 0.5, _board.end.y + edge)
+		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 64.0 / s)
+		collect_button.position = Vector2(hud_x, _board.end.y - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - collect_button.size.x) * 0.5, _board.end.y + edge)
+	for index in range(powerup_buttons.size()):
+		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
+		button.set_ui_scale(s)
+		button.size = Vector2(hud_width, 72.0 / s) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 64.0 / s)
+		button.position = Vector2(_board.end.x + hud_gap, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
+			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge)
+	if _powerup_effects != null:
+		_powerup_effects.size = size
 	# A collected word must not cover the upper chest or its sparkle response.
 	var reveal_left: float = edge if side_hud else _loot_meter.get_rect().end.x + chest_margin
 	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(reveal_left, maxf(0.0, group_top - 42.0 / s - edge))
@@ -1028,13 +1204,21 @@ func snapshot() -> Dictionary:
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
+	state["powerup"] = game.powerup_snapshot()
+	state["powerup_buttons"] = {}
+	for kind: String in powerup_buttons:
+		var button: PowerupButton = powerup_buttons[kind]
+		state.powerup_buttons[kind] = button.snapshot()
+		state.powerup_buttons[kind].merge({"rect": _rect(button.get_global_rect()), "enabled": not button.disabled,
+			"visible": button.is_visible_in_tree()}, true)
+	state["powerup_effect_count"] = _powerup_effects.stamps.size() if _powerup_effects != null else 0
 	state["placement"] = {"visible": _placement_tile != null and _placement_tile.is_visible_in_tree(), "valid": false}
 	if not _placement.is_empty():
 		state.placement.merge(_placement, true)
 		state.placement.rect = _rect(_global_rect(_placement.rect))
 	if collect_button != null:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
-	state.preview.enabled = state.preview.enabled and not game.collection_batch_active()
+	state.preview.enabled = state.preview.enabled and not game.collection_batch_active() and not game.powerup_active()
 	state.drag.selected = _keyboard_source
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
