@@ -119,6 +119,8 @@ for (const mode of ['jelly', 'word_jelly']) {
   for (const pointer of ['mouse', 'touch']) {
     test(`${mode} pull Finish ${pointer} arms only downward, springs back, and cancels safely`, async ({ page }, info) => {
       test.setTimeout(210000);
+      test.skip(info.project.use.isMobile,
+        'Mobile uses a fresh-round core regression so the natural full-board timeout cannot obscure cancellation.');
       test.skip(pointer === 'touch' && info.project.use.browserName !== 'chromium',
         'Real multi-event touch injection uses Chromium; mouse and native touch coverage remain available.');
       const errors = await openGame(page, { reducedMotion: 'no-preference' });
@@ -233,6 +235,72 @@ for (const mode of ['jelly', 'word_jelly']) {
       expect(errors).toEqual([]);
     });
   }
+}
+
+for (const mode of ['jelly', 'word_jelly']) {
+  test(`${mode} mobile pull Finish cancels resize before accepting a fresh release`, async ({ page }, info) => {
+    test.skip(!['android-chromium', 'iphone-webkit'].includes(info.project.name),
+      'The focused mobile regression covers Android touch and the WebKit event bridge.');
+    test.setTimeout(120000);
+    const errors = await openGame(page, { reducedMotion: 'no-preference', mode });
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return state.mode === mode && state.phase === 'playing' &&
+        state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+    }).toBe(true);
+    const before = await jelly(page);
+    expect(before.full_elapsed, 'The regression begins before the natural full-board countdown').toBeLessThan(0);
+    const session = info.project.use.browserName === 'chromium' ? await page.context().newCDPSession(page) : null;
+    const points = point => [{ x: point.x, y: point.y, id: 0, radiusX: 6, radiusY: 6, force: 1 }];
+    const arm = async () => {
+      const state = await jelly(page), bounds = await metrics(page);
+      expect(state.phase, 'Each gesture starts in a live round').toBe('playing');
+      expect(state.full_elapsed, 'No automatic game-over countdown has started').toBeLessThan(0);
+      const from = center(state.finish.rect, bounds);
+      const to = { x: from.x, y: from.y + state.finish.pull.threshold * bounds.scale * 1.15 };
+      if (session) {
+        await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(from) });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(to) });
+      } else {
+        await page.mouse.move(from.x, from.y);
+        await page.mouse.down();
+        await page.mouse.move(to.x, to.y);
+      }
+      await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
+      expect((await jelly(page)).phase, 'Arming alone does not finish the round').toBe('playing');
+    };
+    const release = async () => {
+      if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      else await page.mouse.up();
+    };
+    try {
+      await arm();
+      const viewport = page.viewportSize();
+      await page.setViewportSize({ width: viewport.width - 12, height: viewport.height });
+      await release();
+      await expect.poll(async () => (await jelly(page)).finish.pull.pulling).toBe(false);
+      const canceled = await jelly(page);
+      expect(canceled.phase, 'Resize invalidates the held gesture before its immediate release').toBe('playing');
+      expect(canceled.round_id).toBe(before.round_id);
+      expect(canceled.full_elapsed).toBeLessThan(0);
+      expect(canceled.finish_confirmation.visible).toBe(false);
+      expect(canceled.drag.active).toBe(false);
+      await page.setViewportSize(viewport);
+      await arm();
+      await page.screenshot({ path: info.outputPath(`${mode}-mobile-finish-armed.png`), scale: 'css' });
+      await release();
+      await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
+      await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+      const finished = await jelly(page);
+      expect(finished.finish_confirmation.visible).toBe(false);
+      expect(finished.round_id).toBe(before.round_id);
+      expect(finished.score).toBe(before.score);
+      await info.attach('finish-pull-states', { body: JSON.stringify({ before, canceled, finished }, null, 2), contentType: 'application/json' });
+    } finally {
+      if (session) await session.detach();
+    }
+    expect(errors).toEqual([]);
+  });
 }
 
 function pair(state, { chest = null } = {}) {
