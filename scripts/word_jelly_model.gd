@@ -168,6 +168,11 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	var b: Dictionary = cell(b_id)
 	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b):
 		return "ignored"
+	# Only the dragged prefix followed by this target may form the current word.
+	# Reject before allocating IDs or reserving either body.
+	if not _word_lookup.has(normalize_word(str(a.text) + str(b.text))):
+		cue_requested.emit("wrong")
+		return "wrong"
 	var mass: int = int(a.mass) + int(b.mass)
 	var result: Dictionary = _new_tile(str(a.text) + str(b.text), mass, int(a.fragments) + int(b.fragments))
 	result.skin = int(b.get("skin", b.id))
@@ -692,15 +697,20 @@ func _parts_for_word(word: Dictionary) -> Array[String]:
 				break
 			supplied.append(str(part).to_lower())
 		if supplied.size() >= 2 and "".join(supplied) == text:
-			return supplied
-	var count: int = 3 if text.length() >= 7 else 2
-	var parts: Array[String] = []
-	var start: int = 0
-	for index in range(count):
-		var end: int = ceili(float(text.length()) * float(index + 1) / float(count))
-		parts.append(text.substr(start, end - start))
-		start = end
-	return parts
+			# Exact-word merging needs one complementary pair, even for long words.
+			# Preserve authored boundaries by joining adjacent pieces on each side.
+			var split: int = 1
+			var prefix_length: int = supplied[0].length()
+			var best_balance: int = absi(text.length() - prefix_length * 2)
+			for index in range(1, supplied.size() - 1):
+				prefix_length += supplied[index].length()
+				var balance: int = absi(text.length() - prefix_length * 2)
+				if balance < best_balance:
+					best_balance = balance
+					split = index + 1
+			return ["".join(supplied.slice(0, split)), "".join(supplied.slice(split))]
+	var midpoint: int = ceili(float(text.length()) / 2.0)
+	return [text.left(midpoint), text.substr(midpoint)]
 
 
 func _new_tile(text: String, mass: int, fragments: int) -> Dictionary:

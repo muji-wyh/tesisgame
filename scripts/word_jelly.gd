@@ -171,6 +171,7 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	var id: int = _tile_at(point)
 	if id < 0:
 		return false
+	_rejection.clear()
 	_keyboard_source = -1
 	_pointer = pointer
 	_gesture_serial += 1
@@ -266,6 +267,7 @@ func _refresh_placement() -> void:
 func _activate(id: int) -> void:
 	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active():
 		return
+	_rejection.clear()
 	if _keyboard_source >= 0 and _keyboard_source != id and _tiles.has(_keyboard_source):
 		var source: int = _keyboard_source
 		_keyboard_source = -1
@@ -362,7 +364,11 @@ func _collected(event_id: String, word: Dictionary, coins: int, fragments: int) 
 	_refresh_hud()
 
 func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_source: bool = false) -> void:
-	if game.try_merge(first, second, held_source) == "merged":
+	var generation: int = _generation
+	var result: String = game.try_merge(first, second, held_source)
+	if generation != _generation or not _can_play():
+		return
+	if result == "merged":
 		for fusion: Dictionary in game.fusions:
 			if int(fusion.a_id) == first and int(fusion.b_id) == second:
 				var visual: Dictionary = _ensure_fusion_visual(fusion)
@@ -374,7 +380,13 @@ func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_
 				break
 		_snapbacks.erase(first)
 		_snapbacks.erase(second)
+		_rejection.clear()
 	else:
+		if result == "wrong":
+			var direction: Vector2 = held.get("direction", Vector2.ZERO)
+			if direction.length_squared() < 0.1:
+				direction = (_tile_rect(_cell(second)).get_center() - _tile_rect(_cell(first)).get_center()).normalized()
+			_rejection = {"a": first, "b": second, "elapsed": 0.0, "direction": direction}
 		_snap_back(first, from)
 	_sync_tiles()
 	_refresh_fusion()
@@ -660,18 +672,20 @@ func navigation_controls() -> Array[Control]:
 
 func _contact_state() -> Dictionary:
 	var state := {"kind": "none", "source": -1, "target": -1, "strength": 0.0, "direction": Vector2.ZERO}
-	if bool(_rejection.get("split", false)):
-		state.merge({"kind": "mismatch", "source": int(_rejection.a),
-			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": Vector2.RIGHT}, true)
+	if not _can_play():
 		return state
-	if not _can_play() or not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
+	if not _rejection.is_empty():
+		state.merge({"kind": "mismatch", "source": int(_rejection.a), "target": int(_rejection.b),
+			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": _rejection.direction}, true)
+		return state
+	if not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
 		return state
 	var source: Dictionary = _cell(_source)
 	var target: Dictionary = _cell(_target)
 	if not _settled(source) or not _settled(target):
 		return state
 	# All painted bodies respond to pressure. Only a forward word earns the
-	# separate completion highlight; freeform contact is neither right nor wrong.
+	# separate completion highlight. A failed drop is rejected only on release.
 	var completing: bool = Palette.completes(source, target, game._word_lookup)
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
 	if direction.length_squared() < 0.1:
@@ -1027,6 +1041,11 @@ func snapshot() -> Dictionary:
 		item["completion_hint"] = tile.completion_hint
 		item["completion_scale"] = tile.completion_scale
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
+		item["label_text"] = tile._label.text
+		item["label_line_count"] = tile._label.get_line_count()
+		item["label_visible_line_count"] = tile._label.get_visible_line_count()
+		item["label_line_height"] = tile._label.get_line_height()
+		item["label_height"] = tile._label.size.y
 		item["fragment_badges"] = tile.visible_fragment_badges()
 		item["coins"] = WordModel.coins_for_tile(item)
 		item["splittable"] = game.can_split(item)

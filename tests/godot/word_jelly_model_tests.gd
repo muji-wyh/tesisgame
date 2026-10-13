@@ -21,6 +21,7 @@ func _run() -> void:
 	_test_configuration()
 	_test_merging_and_collection()
 	_test_current_age_validation()
+	_test_rejected_merge_atomicity()
 	_test_repeated_merge_and_fragments()
 	_test_collection_timeline_and_pause()
 	_test_collection_batch_rhythm()
@@ -73,6 +74,7 @@ func _run() -> void:
 	_test_lifecycle_reentry()
 	_test_supply_and_determinism()
 	_test_supply_packets()
+	_test_all_age_complementary_supply()
 	_test_supply_preview_stability()
 	_test_arrival_timing()
 	_test_arrival_readiness_and_pause()
@@ -169,6 +171,39 @@ func _merge(model, source: int, target: int) -> Dictionary:
 	return model.cell(result_id)
 
 
+func _legacy_parent(model, source: int, target: int) -> Dictionary:
+	# Install a historical invalid merge and its actual ancestry directly.
+	# New gameplay must pass try_merge's current-age, forward-word validation.
+	model.step(Model.SETTLE_SECONDS)
+	for boundary in range(Model.ROWS + 2):
+		if model.is_settled(model.cell(source)) and model.is_settled(model.cell(target)):
+			break
+		model.step(Model.SETTLE_SECONDS)
+	var a: Dictionary = model.cell(source).duplicate(true)
+	var b: Dictionary = model.cell(target).duplicate(true)
+	var parent: Dictionary = model._new_tile(str(a.text) + str(b.text), int(a.mass) + int(b.mass), int(a.fragments) + int(b.fragments))
+	check(parent.word.is_empty(), "a legacy fixture explicitly represents an unrecognized historical parent")
+	var excluded: Array[int] = [source, target]
+	var destination: Vector2i = model._position_near(model._occupied(excluded), int(parent.width), int(parent.height), b)
+	if destination.x < 0:
+		parent.width = b.width
+		parent.height = b.height
+		destination = Vector2i(int(b.column), int(b.row))
+	parent.column = destination.x
+	parent.row = destination.y
+	parent.skin = int(b.get("skin", b.id))
+	parent.age = 0.0
+	parent.settling = true
+	model.cells.assign(model.cells.filter(func(tile: Dictionary) -> bool: return int(tile.id) not in [source, target]))
+	model.cells.append(parent)
+	model._merge_history[int(parent.id)] = [a, b]
+	model.merged_count += 1
+	model._restore_growth(int(parent.id))
+	model._gravity_pending = true
+	model._resume_pending_motion()
+	return model.cell(int(parent.id))
+
+
 func _assert_board(model, label: String) -> void:
 	var ids: Dictionary = {}
 	var occupied: Dictionary = {}
@@ -263,8 +298,8 @@ func _test_current_age_validation() -> void:
 	model.configure([_word("cat"), _word("rocket", 6)], 6, 2)
 	model.spawn_interval = 10000.0
 	_board(model, ["ca", "t", "roc", "ket"])
-	var younger: Dictionary = _merge(model, 1000, 1001)
-	check(younger.word.is_empty() and not model.collect(int(younger.id)), "a lower-age word does not become collectible")
+	check(model.try_merge(1000, 1001) == "wrong" and model.fusions.is_empty(),
+		"a lower-age word is rejected before either part can merge")
 	var current: Dictionary = _merge(model, 1002, 1003)
 	check(current.word.id == "rocket", "current-age word resolves its image")
 	model = _model([_word("ice cream")])
@@ -273,20 +308,106 @@ func _test_current_age_validation() -> void:
 	check(spaced.word.id == "ice cream" and spaced.text == "ice cream", "multiword vocabulary preserves its separator")
 	model = _model([_word("cat")])
 	_board(model, ["t", "ca"])
-	var backwards: Dictionary = _merge(model, 1000, 1001)
-	check(backwards.text == "tca" and backwards.word.is_empty(), "source-target ordering is meaningful")
-	check(not model.collect(int(backwards.id)), "unrecognized merged text remains on the board")
+	check(model.try_merge(1000, 1001) == "wrong" and model.cells.size() == 2 and model.fusions.is_empty(),
+		"a reverse-only word keeps both original parts separate")
+
+
+func _rejection_state(model) -> Dictionary:
+	return {"snapshot": model.snapshot(), "history": model._merge_history.duplicate(true),
+		"receipts": model._collection_event_ids.duplicate(true), "next_tile": model._next_tile_id,
+		"next_event": model._next_event_id, "held": model._held_tile_id,
+		"growth": model._growth_pending, "gravity": model._gravity_pending,
+		"generation": model._generation, "rng": model._rng.state,
+		"supply": model._supply.duplicate(true), "pending_supply": model._supply_pending.duplicate(true)}
+
+
+func _test_rejected_merge_atomicity() -> void:
+	var model = _model([_word("small"), _word("sleep"), _word("cat")])
+	var events: Dictionary = _observe(model)
+	var emitted: Dictionary = {"changed": 0, "fusion": 0, "payments": 0}
+	model.changed.connect(func() -> void: emitted.changed += 1)
+	model.fusion_started.connect(func(_payload: Dictionary) -> void: emitted.fusion += 1)
+	model.credit_collection = func(_id: String, _coins: int) -> Dictionary:
+		emitted.payments += 1
+		return {"ok": true}
+	for pair: Array in [["ll", "sma"], ["sa", "sleep"], ["ca", "te"], ["cat", "er"]]:
+		var pieces: Array[String] = []
+		pieces.assign(pair)
+		_board(model, pieces, [2, 3])
+		model.set_held_tile(1000)
+		emitted.changed = 0
+		var before: Dictionary = _rejection_state(model)
+		var cues_before: int = events.cues.size()
+		check(model.try_merge(1000, 1001, true) == "wrong", "only an exact forward current-age spelling can merge: " + str(pair))
+		check(_rejection_state(model) == before, "rejection preserves all board, reward, history, held, reservation, clock, and ID state")
+		check(events.cues.size() == cues_before + 1 and events.cues.back() == "wrong",
+			"an eligible rejected attempt requests one negative cue")
+	check(events.attempts.is_empty() and events.collections.is_empty() and events.completed.is_empty()
+		and emitted == {"changed": 0, "fusion": 0, "payments": 0}, "rejected words cause no learning penalty, fusion, payout, or board change event")
+	_board(model, ["sma", "ll"], [2, 3])
+	check(model.try_merge(1000, 1001, true) == "merged" and model.fusions[0].result.text == "small"
+		and model.fusions[0].result.fragments == 5, "the same complementary pieces succeed in forward order and retain all fragments")
+	model.credit_collection = Callable()
+	model = _model()
+	model.configure([_word("cat", 3), _word("rocket", 6), _word("advanced", 12)], 6, 42)
+	for pair: Array in [["ca", "t"], ["adva", "nced"]]:
+		var pieces: Array[String] = []
+		pieces.assign(pair)
+		_board(model, pieces, [1, 1])
+		var before: Dictionary = _rejection_state(model)
+		check(model.try_merge(1000, 1001) == "wrong" and _rejection_state(model) == before,
+			"both younger and older dictionary spellings reject atomically at the current age")
+	model = _model([_word("cat")])
+	_board(model, ["ca", "t", "ll", "sma"], [1, 1, 2, 3])
+	check(model.try_merge(1000, 1001) == "merged", "independent valid fusion begins before rejection")
+	var before: Dictionary = _rejection_state(model)
+	events = _observe(model)
+	check(model.try_merge(1002, 1003) == "wrong" and _rejection_state(model) == before,
+		"rejecting another pair preserves every concurrent fusion and frozen destination")
+	check(model.try_merge(1000, 1003) == "ignored" and model.try_merge(1002, 1002) == "ignored"
+		and model.try_merge(-99, 1003) == "ignored" and events.cues == ["wrong"], "reserved, self, and missing targets are ignored without extra negative cues")
+	model.set_paused(true)
+	check(model.try_merge(1002, 1003) == "ignored" and events.cues == ["wrong"], "pause rejects input without a negative cue")
+	model = _model([_word("cat")])
+	_board(model, ["ca", "t", "er"], [2, 3, 4])
+	var word: Dictionary = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS)
+	model.credit_collection = func(_id: String, _coins: int) -> Dictionary: return {"ok": false}
+	check(model.collect(int(word.id)), "a formed word can have an outstanding wallet retry before rejection")
+	model.step(Model.COLLECT_SECONDS)
+	check(not model._merge_history.is_empty() and not model._collection_event_ids.is_empty(),
+		"rejection history fixture contains real ancestry and a persisted retry identity")
+	model.set_held_tile(int(word.id))
+	before = _rejection_state(model)
+	events = _observe(model)
+	check(model.try_merge(int(word.id), 1002, true) == "wrong" and _rejection_state(model) == before
+		and events.cues == ["wrong"] and events.attempts.is_empty(),
+		"rejected growth preserves a completed word, its ancestry, retry receipt, held anchor, and every carried fragment")
+	model.credit_collection = Callable()
+	for replace_round: bool in [false, true]:
+		var lifecycle_model = _model([_word("cat")])
+		_board(lifecycle_model, ["t", "ca"], [2, 3])
+		var after_callback: Dictionary = {}
+		lifecycle_model.cue_requested.connect(func(cue: String) -> void:
+			check(cue == "wrong", "reentrant rejection delivers the negative cue")
+			if replace_round:
+				lifecycle_model.configure([_word("cat")], 3, 19)
+			else:
+				lifecycle_model.finish_round()
+			after_callback.assign(_rejection_state(lifecycle_model)), CONNECT_ONE_SHOT)
+		check(lifecycle_model.try_merge(1000, 1001) == "wrong" and _rejection_state(lifecycle_model) == after_callback,
+			"ending or replacing the round in the negative cue leaves no stale merge work afterward")
 
 
 func _test_repeated_merge_and_fragments() -> void:
-	var model = _model([_word("cat"), _word("caterpillar")])
+	var model = _model([_word("cat"), _word("cater"), _word("caterpillar")])
 	_board(model, ["ca", "t", "er", "pillar"], [1, 1, 1, 1])
 	var first: Dictionary = _merge(model, 1000, 1001)
 	check(first.word.id == "cat", "first merge already forms a word")
 	var second: Dictionary = _merge(model, int(first.id), 1002)
-	check(second.text == "cater" and second.word.is_empty(), "valid word can merge further and lose its current match")
+	check(second.text == "cater" and second.word.id == "cater", "a valid word can grow only into another current-age word")
 	var third: Dictionary = _merge(model, int(second.id), 1003)
-	check(third.text == "caterpillar" and third.word.id == "caterpillar", "larger compound can become a valid word again")
+	check(third.text == "caterpillar" and third.word.id == "caterpillar", "repeated exact forward words can build a larger compound")
 	check(third.mass == 4 and third.fragments == 4, "every root and fragment survives repeated merges")
 	check(Model.coins_for_tile(third) > Model.coins_for_tile(first), "larger jellies earn more coins")
 	model.step(Model.SETTLE_SECONDS)
@@ -432,7 +553,7 @@ func _test_gravity_held_stack() -> void:
 func _test_gravity_reserved_operations() -> void:
 	var model = _model([_word("cat")])
 	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
-		_placed_tile(1001, "a", 0, 6), _placed_tile(1002, "b", 1, 6), _placed_tile(1003, "x", 0, 4)])
+		_placed_tile(1001, "ca", 0, 6), _placed_tile(1002, "t", 1, 6), _placed_tile(1003, "x", 0, 4)])
 	check(model.try_merge(1001, 1002) == "merged" and model.collect(1000), "a lower collection can overlap an upper merge")
 	var destination: Dictionary = model.fusions[0].result.duplicate(true)
 	model.step(Model.COLLECT_SECONDS)
@@ -451,7 +572,7 @@ func _test_gravity_reserved_operations() -> void:
 	model = _model([_word("cat")])
 	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
 		_placed_tile(1001, "a", 0, 6, 1, 1), _placed_tile(1002, "b", 1, 6, 1, 2)])
-	var parent: Dictionary = _merge(model, 1001, 1002)
+	var parent: Dictionary = _legacy_parent(model, 1001, 1002)
 	model.step(Model.SETTLE_SECONDS)
 	check(model.split(int(parent.id)) and model.collect(1000), "a collection can begin beneath already reserved split children")
 	var children: Array = model.fusions[0].results.duplicate(true)
@@ -736,7 +857,7 @@ func _test_collection_batch_rhythm() -> void:
 func _test_collection_batch_candidates() -> void:
 	var model = _model([_word("cat")])
 	_board(model, ["ca", "t", "x", "y"])
-	var invalid: Dictionary = _merge(model, 1002, 1003)
+	var invalid: Dictionary = _legacy_parent(model, 1002, 1003)
 	var valid: Dictionary = _merge(model, 1000, 1001)
 	check(model.collectable_ids() == [int(valid.id)], "only valid merged words are eligible, including their final wobble")
 	check(model.start_collection_batch() and model.fusions.is_empty(), "a just-merged word can queue while its finishing wobble settles")
@@ -1005,7 +1126,11 @@ func _test_chests() -> void:
 
 
 func _test_packing_and_growth() -> void:
-	var model = _model()
+	# Synthetic exact-word chain isolates mass and packing mechanics.
+	var vocabulary: Array = []
+	for length in range(2, 11):
+		vocabulary.append(_word("a".repeat(length)))
+	var model = _model(vocabulary)
 	var parts: Array[String] = []
 	for index in range(12):
 		parts.append("a")
@@ -1103,7 +1228,7 @@ func _test_automatic_support_settlement() -> void:
 	_assert_supported_tiles(model, [1002], "support removed by merge")
 	model = _model()
 	_board(model, ["t", "ca"])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	parent.column = 0
 	parent.row = 5
 	parent.age = Model.SETTLE_SECONDS
@@ -1291,7 +1416,7 @@ func _test_reposition_reservations_and_guards() -> void:
 	check(not model.reposition(1001, 3, 3), "a live fusion source cannot be repositioned")
 	model = _model()
 	_board(model, ["t", "ca"])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	parent.column = 0
 	parent.row = 1
 	parent.age = Model.SETTLE_SECONDS
@@ -1349,7 +1474,7 @@ func _test_reposition_history_and_rewards() -> void:
 	_board(model, ["t", "ca"], [2, 3])
 	check(model.reposition(1000, 0, 2) and model.reposition(1001, 2, 2), "both original parts can have explicit placements before a merge")
 	model.step(Model.SETTLE_SECONDS)
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	check(not bool(parent.placement_locked), "a new merged body cannot inherit either source's explicit placement lock")
 	model.step(Model.SETTLE_SECONDS * 2.0)
 	check(model.reposition(int(parent.id), 1, 3), "the merged invalid word can receive its own explicit placement")
@@ -1515,7 +1640,7 @@ func _test_splitting() -> void:
 	model.cells[1].skin = 5
 	var originals: Array = model.cells.duplicate(true)
 	check(not model.can_split(originals[0]) and not model.split(1000), "a single root cannot split")
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	var id: int = int(parent.id)
 	check(model.can_split(parent) and not model.split(id), "invalid history is discoverable but waits for its merge to settle")
 	model.step(Model.SETTLE_SECONDS)
@@ -1568,8 +1693,8 @@ func _test_nested_splits() -> void:
 	var model = _model([_word("cat")])
 	_board(model, ["ca", "t", "er", "x"], [1, 2, 3, 4])
 	var word: Dictionary = _merge(model, 1000, 1001)
-	var inner: Dictionary = _merge(model, int(word.id), 1002)
-	var outer: Dictionary = _merge(model, int(inner.id), 1003)
+	var inner: Dictionary = _legacy_parent(model, int(word.id), 1002)
+	var outer: Dictionary = _legacy_parent(model, int(inner.id), 1003)
 	model.step(Model.SETTLE_SECONDS)
 	check(model.split(int(outer.id)), "nested invalid merge can split once")
 	model.step(Model.SPLIT_SECONDS)
@@ -1612,8 +1737,8 @@ func _constrain_split_board(model, parent_id: int, origin: Vector2i, gaps: Array
 func _test_split_placement() -> void:
 	var model = _model()
 	_board(model, ["a", "b", "c"])
-	var sibling: Dictionary = _merge(model, 1001, 1002)
-	var parent: Dictionary = _merge(model, 1000, int(sibling.id))
+	var sibling: Dictionary = _legacy_parent(model, 1001, 1002)
+	var parent: Dictionary = _legacy_parent(model, 1000, int(sibling.id))
 	_constrain_split_board(model, int(parent.id), Vector2i(2, 3), [Vector2i(3, 3), Vector2i(0, 3)])
 	check(model.split(int(parent.id)), "joint search finds a full-size pair in a corridor plus singleton")
 	var planned: Array = model.fusions[0].results.duplicate(true)
@@ -1631,7 +1756,7 @@ func _test_split_placement() -> void:
 	a.width = 2
 	b.width = 1
 	model.cells.assign([a, b])
-	parent = _merge(model, 1000, 1001)
+	parent = _legacy_parent(model, 1000, 1001)
 	_constrain_split_board(model, int(parent.id), Vector2i(2, 3), [Vector2i(3, 3), Vector2i(5, 3)])
 	check(model.split(int(parent.id)), "prior saved footprints remain available when preferred sizes cannot fit")
 	planned = model.fusions[0].results.duplicate(true)
@@ -1641,7 +1766,7 @@ func _test_split_placement() -> void:
 	_assert_board(model, "saved split footprints")
 	model = _model()
 	model.cells.assign([_placed_tile(1000, "a", 0, 7, 2, 2), _placed_tile(1001, "b", 2, 7, 3, 3)])
-	parent = _merge(model, 1000, 1001)
+	parent = _legacy_parent(model, 1000, 1001)
 	_constrain_split_board(model, int(parent.id), Vector2i(0, 0), [Vector2i(5, 7)])
 	check(model.split(int(parent.id)), "split searches below a top-row parent when only a distant cell is free")
 	planned = model.fusions[0].results.duplicate(true)
@@ -1653,7 +1778,7 @@ func _test_split_placement() -> void:
 	_assert_board(model, "isolated split footprints")
 	model = _model()
 	_board(model, ["a", "b"])
-	parent = _merge(model, 1000, 1001)
+	parent = _legacy_parent(model, 1000, 1001)
 	_constrain_split_board(model, int(parent.id), Vector2i(0, 0), [])
 	var before: Dictionary = model.snapshot()
 	var history: Dictionary = model._merge_history.duplicate(true)
@@ -1669,7 +1794,7 @@ func _test_split_placement() -> void:
 func _test_split_supported_destinations() -> void:
 	var model = _model()
 	_board(model, ["na", "ba"], [1, 2])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	parent.column = 1
 	parent.row = 5
 	parent.age = Model.SETTLE_SECONDS
@@ -1698,7 +1823,7 @@ func _test_split_supported_destinations() -> void:
 func _test_split_vertical_landing_tie() -> void:
 	var model = _model()
 	_board(model, ["na", "ba"])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	parent.column = 1
 	parent.row = 5
 	parent.age = Model.SETTLE_SECONDS
@@ -1719,7 +1844,7 @@ func _test_split_vertical_landing_tie() -> void:
 func _test_split_sibling_support() -> void:
 	var model = _model()
 	_board(model, ["na", "ba"])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	_constrain_split_board(model, int(parent.id), Vector2i(2, 2),
 		[Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 3), Vector2i(2, 4), Vector2i(2, 5), Vector2i(2, 6), Vector2i(2, 7)])
 	check(model.split(int(parent.id)), "two split children can settle together in a single-column opening")
@@ -1761,8 +1886,8 @@ func _assert_supported_tiles(model, tile_ids: Array[int], label: String) -> void
 func _test_split_concurrent_support() -> void:
 	var model = _model()
 	_board(model, ["na", "ba", "te", "ra"])
-	var lower: Dictionary = _merge(model, 1000, 1001)
-	var upper: Dictionary = _merge(model, 1002, 1003)
+	var lower: Dictionary = _legacy_parent(model, 1000, 1001)
+	var upper: Dictionary = _legacy_parent(model, 1002, 1003)
 	for parent: Dictionary in [lower, upper]:
 		parent.column = 1
 		parent.row = 5 if int(parent.id) == int(lower.id) else 4
@@ -1792,9 +1917,9 @@ func _test_split_concurrent_support() -> void:
 
 func _test_split_reservations() -> void:
 	var model = _model()
-	_board(model, ["a", "b", "c", "d", "e", "f"])
-	var a: Dictionary = _merge(model, 1000, 1001)
-	var b: Dictionary = _merge(model, 1002, 1003)
+	_board(model, ["a", "b", "c", "d", "ca", "t"])
+	var a: Dictionary = _legacy_parent(model, 1000, 1001)
+	var b: Dictionary = _legacy_parent(model, 1002, 1003)
 	model.step(Model.SETTLE_SECONDS)
 	check(model.split(int(a.id)) and model.split(int(b.id)), "disjoint parents can split concurrently")
 	var destinations: Array = model.fusions[0].results.duplicate(true)
@@ -1820,7 +1945,7 @@ func _test_split_reservations() -> void:
 func _test_growth_after_split() -> void:
 	var model = _model()
 	model.cells.assign([_placed_tile(1000, "a", 0, 2, 4), _placed_tile(1001, "b", 0, 3, 4)])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	parent.column = 0
 	parent.row = 2
 	parent.age = Model.SETTLE_SECONDS
@@ -1858,8 +1983,8 @@ func _test_split_determinism() -> void:
 	for sliced: bool in [false, true]:
 		var model = _model()
 		_board(model, ["a", "b", "c", "d"])
-		var a: Dictionary = _merge(model, 1000, 1001)
-		var b: Dictionary = _merge(model, 1002, 1003)
+		var a: Dictionary = _legacy_parent(model, 1000, 1001)
+		var b: Dictionary = _legacy_parent(model, 1002, 1003)
 		model.step(Model.SETTLE_SECONDS)
 		model.split(int(a.id))
 		model.split(int(b.id))
@@ -1892,7 +2017,7 @@ func _test_split_wallet_history() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	var cat_receipt: String = str(model._collection_event_ids[int(cat.id)])
 	var dog_receipt: String = str(model._collection_event_ids[int(dog.id)])
-	var parent: Dictionary = _merge(model, int(cat.id), 1002)
+	var parent: Dictionary = _legacy_parent(model, int(cat.id), 1002)
 	model.step(Model.SETTLE_SECONDS)
 	check(model.split(int(parent.id)), "failed collection can merge and then undo without losing its child")
 	model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
@@ -1912,7 +2037,7 @@ func _test_split_wallet_history() -> void:
 	model.credit_collection = func(_receipt: String, _coins: int) -> Dictionary: return {"ok": false}
 	model.collect(int(cat.id))
 	model.step(Model.COLLECT_SECONDS)
-	parent = _merge(model, int(cat.id), 1002)
+	parent = _legacy_parent(model, int(cat.id), 1002)
 	var final_word: Dictionary = _merge(model, int(parent.id), 1003)
 	check(model._merge_history.size() == 3 and model._collection_event_ids.has(int(cat.id)), "merged tree retains nested histories and prior failed receipts until terminal collection")
 	model.credit_collection = Callable()
@@ -1927,7 +2052,7 @@ func _test_split_lifecycle() -> void:
 	for replace_round: bool in [false, true]:
 		var model = _model()
 		_board(model, ["a", "b"])
-		var parent: Dictionary = _merge(model, 1000, 1001)
+		var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 		model.step(Model.SETTLE_SECONDS)
 		var events: Dictionary = _observe(model)
 		model.fusion_started.connect(func(_payload: Dictionary) -> void:
@@ -1946,7 +2071,7 @@ func _test_split_lifecycle() -> void:
 				and model.finish_round().coins == 0, "cancelled split leaves its original parent intact and grants nothing")
 	var model = _model()
 	_board(model, ["a", "b"])
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.fusion_completed.connect(func(_payload: Dictionary, awarded: int) -> void:
 		check(not model.cell(1000).is_empty() and not model.cell(1001).is_empty()
@@ -1963,7 +2088,7 @@ func _test_split_danger() -> void:
 	for index in range(Model.CAPACITY):
 		pieces.append("a")
 	_board(model, pieces)
-	var parent: Dictionary = _merge(model, 1000, 1001)
+	var parent: Dictionary = _legacy_parent(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS + 2.0)
 	var elapsed: float = model.full_elapsed
 	check(elapsed >= 2.0 and model.split(int(parent.id)), "full board permits undo while its existing danger deadline is running")
@@ -1971,11 +2096,11 @@ func _test_split_danger() -> void:
 	check(is_equal_approx(model.full_elapsed, elapsed + Model.SPLIT_SECONDS), "split cannot restart a full-board deadline when it frees no occupied cell")
 	model.step(Model.SETTLE_SECONDS)
 	elapsed = model.full_elapsed
-	check(model.try_merge(1000, 1001) == "merged", "restored roots can merge again while danger remains active")
+	check(model.try_merge(1000, 1001) == "wrong", "restored invalid roots reject a new merge while danger remains active")
 	model.step(Model.FUSION_SECONDS)
-	check(is_equal_approx(model.full_elapsed, elapsed + Model.FUSION_SECONDS), "merge after undo also preserves a full-board deadline without occupancy relief")
+	check(is_equal_approx(model.full_elapsed, elapsed + Model.FUSION_SECONDS), "a rejected merge after undo preserves the full-board deadline without occupancy relief")
 	model.step(Model.FULL_SECONDS - model.full_elapsed)
-	check(model.phase == "finished", "repeated merge and undo cannot postpone a full board's expiry")
+	check(model.phase == "finished", "undo and rejected attempts cannot postpone a full board's expiry")
 
 
 func _test_full_board() -> void:
@@ -1983,6 +2108,8 @@ func _test_full_board() -> void:
 	var parts: Array[String] = []
 	for index in range(Model.CAPACITY):
 		parts.append("a")
+	parts[0] = "ca"
+	parts[1] = "t"
 	_board(model, parts)
 	check(not model.can_drop_now(), "full board blocks manual supply")
 	var merged: Dictionary = _merge(model, 1000, 1001)
@@ -2112,7 +2239,7 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 		check(group_id > 0 and not source.is_empty(), label + ": every root identifies its source-word emission")
 		if group_id <= 0 or source.is_empty():
 			continue
-		var expected_parts: Array = source.jelly_parts
+		var expected_parts: Array = source.get("expected_parts", source.jelly_parts)
 		check(int(root.get("supply_parts", 0)) == expected_parts.size(), label + ": the complete source part count survives mixing")
 		check(part_index >= 0 and part_index < expected_parts.size(), label + ": original part indexes stay in range")
 		if part_index < 0 or part_index >= expected_parts.size():
@@ -2136,7 +2263,7 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 	for index in range(group_ids.size()):
 		var group_id: int = int(group_ids[index])
 		var group: Dictionary = groups[group_id]
-		var expected_parts: Array = group.source.jelly_parts
+		var expected_parts: Array = group.source.get("expected_parts", group.source.jelly_parts)
 		var complete: bool = group.parts.size() == expected_parts.size()
 		check(group_id == index + 1, label + ": FIFO source emissions are conserved without gaps")
 		check(complete or (allow_partial_tail and index == group_ids.size() - 1),
@@ -2160,6 +2287,8 @@ func _test_supply_packets() -> void:
 	var dog: Dictionary = _curated_word("dog", ["d", "og"])
 	var rainbow: Dictionary = _curated_word("rainbow", ["rain", "b", "ow"])
 	var sunflower: Dictionary = _curated_word("sunflower", ["sun", "flow", "er"])
+	rainbow.expected_parts = ["rain", "bow"]
+	sunflower.expected_parts = ["sun", "flower"]
 	var vocabularies: Array = [[cat, dog], [rainbow, sunflower], [cat, rainbow, dog]]
 	for vocabulary_index in range(vocabularies.size()):
 		var words: Array = vocabularies[vocabulary_index]
@@ -2201,7 +2330,52 @@ func _test_supply_packets() -> void:
 				for group: Dictionary in groups.values():
 					if group.packets.size() > 1:
 						crossed_groups += 1
-				check(crossed_groups > 0, label + ": mixed two- and three-part words exercise six-root packet boundaries")
+				check(crossed_groups == 0, label + ": every complementary pair fits wholly inside its six-root packet")
+
+
+func _test_all_age_complementary_supply() -> void:
+	var vocabulary: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	check(vocabulary is Array and not vocabulary.is_empty(), "the complete production vocabulary loads for the supply audit")
+	if not vocabulary is Array or vocabulary.is_empty():
+		return
+	var audited: int = 0
+	var expected_total: int = 0
+	for age in range(3, 13):
+		var model := Model.new()
+		check(model.configure(vocabulary, age, 42), "every supported age has an eligible Jelly Words supply")
+		var age_count: int = 0
+		var expected_age: int = 0
+		for word: Dictionary in vocabulary:
+			if int(word.min_age) == age and not str(word.image).is_empty() and not str(word.audio).is_empty() and str(word.text).length() >= 2:
+				expected_age += 1
+			if not model._eligible(word, age):
+				continue
+			var parts: Array[String] = model._parts_for_word(word)
+			check(parts.size() == 2 and not parts[0].strip_edges().is_empty() and not parts[1].strip_edges().is_empty()
+				and "".join(parts) == Model.normalize_word(str(word.text)),
+				"every production word has two nonempty complementary chunks: age %d %s" % [age, str(word.id)])
+			if parts.size() != 2:
+				continue
+			model.fusions.clear()
+			_board(model, parts)
+			check(model.try_merge(1000, 1001) == "merged" and str(model.fusions[0].word.id) == str(word.id),
+				"each production pair completes in one legal forward merge: " + str(word.id))
+			age_count += 1
+		check(age_count > 0 and age_count == expected_age, "each age's complete eligible production word set is audited")
+		audited += age_count
+		expected_total += expected_age
+	check(audited == expected_total, "the supply audit covers every production entry with word art, audio, and at least two letters")
+	var model = _model()
+	for fixture: Dictionary in [
+		{"text": "rainbow", "parts": ["rain", "b", "ow"], "expected": ["rain", "bow"]},
+		{"text": "sunflower", "parts": ["sun", "flow", "er"], "expected": ["sun", "flower"]},
+		{"text": "ice cream", "parts": ["i", "ce ", "cre", "am"], "expected": ["ice ", "cream"]},
+		{"text": "cat", "parts": ["wrong", "parts"], "expected": ["ca", "t"]},
+		{"text": "cat", "parts": ["c", "", "at"], "expected": ["ca", "t"]}
+	]:
+		var word: Dictionary = _word(str(fixture.text))
+		word.jelly_parts = fixture.parts
+		check(model._parts_for_word(word) == fixture.expected, "authored chunks preserve meaningful boundaries or fall back to a complete pair: " + str(fixture))
 
 
 func _test_supply_preview_stability() -> void:
@@ -2291,6 +2465,11 @@ func _test_arrival_readiness_and_pause() -> void:
 	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
 	var first_id: int = int(by_readiness.front().id)
 	var last_id: int = int(by_readiness.back().id)
+	var incoming_is_prefix: bool = str(model.cell(first_id).text) == "ca"
+	for tile: Dictionary in model.cells:
+		if model.is_settled(tile) and str(tile.text) == ("t" if incoming_is_prefix else "ca"):
+			target_id = int(tile.id)
+			break
 	var first_contact: float = Model.arrival_contact_at(model.cell(first_id))
 	var first_ready: float = Model.settle_duration(model.cell(first_id))
 	var last_ready: float = Model.settle_duration(model.cell(last_id))
@@ -2315,7 +2494,7 @@ func _test_arrival_readiness_and_pause() -> void:
 	check(model.can_drop_now(), "supply releases again only after the complete batch is ready")
 	for id in incoming:
 		check(model.is_settled(model.cell(id)) and not bool(model.cell(id).settling), "each arrived root completes its settling flag and readiness together")
-	check(model.try_merge(first_id, target_id) == "merged", "an arrived root can merge after recovery")
+	check(model.try_merge(first_id if incoming_is_prefix else target_id, target_id if incoming_is_prefix else first_id) == "merged", "an arrived root can merge in word order after recovery")
 	model.step(Model.FUSION_SECONDS)
 	var merged: Dictionary = model.cells.back()
 	check(not bool(merged.arrival) and is_equal_approx(Model.settle_duration(merged), Model.SETTLE_SECONDS),

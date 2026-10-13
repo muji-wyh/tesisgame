@@ -10,13 +10,20 @@ the [Kenney layered garden](jelly-garden.md), and the
 | Word pictures and pronunciation | Existing current-age vocabulary packs; individual acquisition and license records remain in the vocabulary asset manifests | The normal WordArt loader supplies the exact dictionary picture only after a valid word is built. Existing animated word artwork remains supported. |
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
 | Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. Existing clear combines rubberduck and Aeva CC0 recordings; exact provenance in the Jelly Match records | Contact fires on first painted-body contact, merge on commitment, and the unchanged clear cue on collection release. No new recording or processing. |
+| Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
 
 The six-column board starts with eighteen settled chunks in three full bottom
-rows. Letter chunks concatenate in drag-source then drop-target order. Only an
-exact word in the selected learning-age dictionary is
-collectible. Its picture and warm gel rim indicate readiness without adding a
+rows. Letter chunks concatenate in drag-source then drop-target order. A merge
+is accepted only when that exact spelling is in the selected learning-age
+dictionary; reverse-only matches and incomplete prefixes are rejected.
+Each supplied word has two complementary chunks at every age, so it can be
+completed in one valid merge. Authored longer chunk sequences combine adjacent
+parts at a balanced boundary. A completed word is collectible, and its picture
+and warm gel rim indicate readiness without adding a
 floating instruction label. Each original chunk adds mass and 50 coins; merging
 preserves all fragment markers, while tapping the complete word collects them.
+Long spellings fit their actual wrapped font lines so a two-part body keeps
+every letter visible beside its picture.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
@@ -66,8 +73,14 @@ spelling: holding `sma` lights `ll` for `small`, while holding `ll` does not lig
 `sma`. Every other physical contact still compresses both painted skins and
 adds a soft cream glint, with the existing contact sound on first touch. This
 neutral pressure cue does not show a red error rim or a completion glow. Moving
-apart or canceling clears it; reduced motion keeps the static glint. Freeform
-invalid merges remain available and can still be split.
+apart or canceling clears it; reduced motion keeps the static glint. Releasing
+an invalid pair returns the source to its supported position, with a short
+elastic separation and a 340 ms rejection accent on both skins. The existing
+wrong-answer sound starts once at that release; hovering or canceling does not
+play it. Reduced motion uses the same outcome with a steady brief accent.
+The next pickup, pause, round finish or navigation stops the previous sound tail.
+Rejection preserves both bodies, carried fragments and rewards without recording
+a learning attempt. Historical incomplete merged bodies can still be split.
 
 Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
@@ -85,7 +98,7 @@ rows, with one pickup every 100 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
-fragment transaction. Invalid combinations remain available for splitting.
+fragment transaction. Historical incomplete combinations remain available for splitting.
 Existing movement settles before the first pickup; queued words then keep their
 places so gravity and deferred growth cannot delay the following beats.
 The current batch finishes before another can begin; pause freezes its clock,

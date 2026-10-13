@@ -140,6 +140,98 @@ func check_finish_header(app, view) -> void:
 	check(view.finish_button.is_visible_in_tree(), "Returning to Jelly Words restores its own Finish control")
 
 
+func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
+	var cues: Array[String] = []
+	var spoken: Array[Dictionary] = []
+	var observe_cue: Callable = func(cue: String) -> void: cues.append(cue)
+	var observe_word: Callable = func(value: Dictionary) -> void: spoken.append(value)
+	view.audio_requested.connect(observe_cue)
+	view.word_requested.connect(observe_word)
+	var parts: Array[String] = view.game._parts_for_word(word)
+	check(parts.size() == 2 and parts[1] + parts[0] != str(word.text),
+		"The flow fixture supplies an exact two-piece word whose reversed order is invalid")
+	var wallet_before: int = app.coin_wallet.balance
+	var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate(true)
+	for interruption: String in ["next_pick", "home", "finish_confirmation", "mute", "page_hidden", "round_end"]:
+		var game = view.game
+		game.cells.clear()
+		var children: Array[Dictionary] = []
+		for index in range(2):
+			var child: Dictionary = game._new_tile(parts[index], 1, index + 1)
+			child.column = index * 4
+			child.row = game.ROWS - 1
+			game.cells.append(child)
+			children.append(child.duplicate(true))
+		view._sync_tiles()
+		view._layout()
+		game.spawn_interval = 10000.0
+		app.audio.set_muted(false)
+		# Direct board calls bypass GameUI's trusted-input audio activation.
+		app.audio.interact(app.model.theme_id, false)
+		check(app.audio.active, interruption + ": the fixture activates audio through the trusted interaction route")
+		cues.clear()
+		var source: int = int(children[1].id)
+		var target: int = int(children[0].id)
+		var from: Vector2 = view._tiles[source].get_global_rect().get_center()
+		var to: Vector2 = view._tiles[target].get_global_rect().get_center()
+		check(view._press(-1, from), interruption + ": a real held root starts the rejection flow")
+		view._move(to)
+		check(view._contact_state().kind == "touch" and cues.count("wrong") == 0
+			and not app.audio.pair_feedback.playing, interruption + ": hover uses physical contact without a negative sound")
+		view.cancel_input()
+		view._release(to)
+		check(cues.count("wrong") == 0 and game.fusions.is_empty(), interruption + ": cancellation never sounds or commits a wrong merge")
+		view._press(-1, from)
+		view._move(to)
+		view._release(to)
+		check(cues.count("wrong") == 1 and cues.count("merge") == 0 and cues.count("pop") == 0,
+			interruption + ": committed rejection emits exactly one negative cue and no merge or disappearance cue")
+		check(app.audio.pair_feedback.playing
+			and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/wrong.wav"),
+			interruption + ": the application plays the existing negative feedback recording")
+		check(not app.audio.voice.playing and spoken.is_empty(), interruption + ": rejection adds no spoken correction")
+		check(game.fusions.is_empty() and game.cells.size() == 2 and game.collected_coins == 0 and game.fragment_count == 0
+			and app.coin_wallet.balance == wallet_before and app.growth.snapshot().streaks == growth_before,
+			interruption + ": failed merges cannot change wallet, learning progress, or chest progress")
+		for child: Dictionary in children:
+			var current: Dictionary = game.cell(int(child.id))
+			check(current.text == child.text and current.mass == child.mass and current.fragments == child.fragments
+				and view._tiles[int(child.id)].visible_fragment_badges() == int(child.fragments),
+				interruption + ": rejection keeps each original body and its own chest fragments")
+		match interruption:
+			"next_pick":
+				check(view._press(-1, from), "A new pick can begin immediately after a rejected drop")
+				view.cancel_input()
+			"home": app._show_mode_menu()
+			"finish_confirmation": view.finish_button.pressed.emit()
+			"mute": app.audio.set_muted(true)
+			"page_hidden": app.on_page_hidden()
+			"round_end": game.finish_round()
+		check(not app.audio.pair_feedback.playing, interruption + ": interruption stops the negative recording immediately")
+		check(cues.count("wrong") == 1 and spoken.is_empty(), interruption + ": stopping feedback never replays it or speaks a correction")
+		match interruption:
+			"home": app._hide_mode_menu()
+			"finish_confirmation":
+				check(app._finish_confirmation_open(), "Finish opens the existing confirmation while stopping feedback")
+				app._finish_confirmation.keep_playing_button.pressed.emit()
+			"mute": app.audio.set_muted(false)
+			"page_hidden": app.on_page_visible()
+			"round_end":
+				check(game.phase == "finished" and not app._round_result.is_empty(),
+					"Ending the round routes through the application result before silencing feedback")
+				view.replay_button.pressed.emit()
+				view.set_process(false)
+		check(game.phase == "playing" and not game.paused, interruption + ": continuing returns to the same playable word round")
+		view.cancel_input()
+		view._process(0.0)
+	view.audio_requested.disconnect(observe_cue)
+	view.word_requested.disconnect(observe_word)
+	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405),
+		"The integration fixture restores its real current-age supply after the rejection checks")
+	app._sync_jelly()
+	view.set_process(false)
+
+
 func check_finish_visibility_stable(view, expected_visible: bool, context: String) -> void:
 	var changes: Array[bool] = []
 	var observe: Callable = func() -> void: changes.append(view.finish_button.visible)
@@ -181,6 +273,7 @@ func _run() -> void:
 	view.word_requested.emit(word)
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio)), "The new mode routes a complete word to its exact pronunciation")
 	app.audio.halt()
+	check_rejected_drop_flow(app, view, word)
 	app.audio.set_muted(true)
 	var game = view.game
 	game.spawn_interval = 10000.0

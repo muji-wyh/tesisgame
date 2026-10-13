@@ -1531,6 +1531,8 @@ func _sync_jelly() -> void:
 	_jelly_backdrop.set_ambient_active(allowed and _active_jelly().game.phase == "playing")
 	if not allowed:
 		audio.stop_jelly_sounds()
+		if _mode_id == "word_jelly":
+			audio.stop_pair_feedback()
 	if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 		_jelly_rewards.resume()
 	_publish_jelly(_active_jelly().snapshot())
@@ -1552,6 +1554,8 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 	elif cue == "chest":
 		audio.play_jelly_cue("fragment")
 	else:
+		if cue == "pick" and _mode_id == "word_jelly":
+			audio.stop_pair_feedback()
 		audio.play_jelly_cue(cue)
 
 
@@ -1598,6 +1602,8 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 	var tier: int = int(result.get("chest_tier", 0))
 	_jelly_reward_theme = JellyRewardProgress.theme_for_tier(tier) if tier > 0 else model.theme_id
 	audio.stop_jelly_sounds()
+	if _mode_id == "word_jelly":
+		audio.stop_pair_feedback()
 	var count: int = int(result.get("chest_count", 0))
 	if count > 0:
 		_save_jelly_round_reward()

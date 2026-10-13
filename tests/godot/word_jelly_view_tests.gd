@@ -56,6 +56,7 @@ func _run() -> void:
 		attempts.append({"id": id, "words": ids, "correct": correct}))
 	_check_opening_and_bounds(view)
 	_check_paused_resize(view)
+	await _check_long_word_label_visibility(view)
 	_check_root_tap(view)
 	_check_edge_drag(view)
 	_check_reposition_release(view)
@@ -79,6 +80,8 @@ func _run() -> void:
 	_check_completion_hints(view)
 	_check_ordered_completion_contact(view)
 	_check_neutral_contact_targets(view)
+	_check_invalid_body_combinations(view)
+	_check_rejection_rim_reset(view)
 	_check_neutral_contact_lifecycle(view)
 	_check_completion_hint_targets(view)
 	_check_completion_hint_lifecycle(view)
@@ -96,6 +99,7 @@ func _run() -> void:
 	_check_reduced_motion(view)
 	_check_wallet_failure(view)
 	_check_keyboard(view)
+	_check_keyboard_rejection(view)
 	_check_arrival_packet(view)
 	_check_staggered_preview_refill(view)
 	_check_arrival_land_timing(view)
@@ -288,6 +292,52 @@ func _check_paused_resize(view) -> void:
 		_check_supply_layout(view)
 		_check_preview_label_height(view)
 	view.pause(false)
+
+
+func _check_long_word_label_visibility(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	var quadrilateral: Dictionary = {}
+	for word: Dictionary in data.words:
+		if str(word.id) == "quadrilateral":
+			quadrilateral = word.duplicate(true)
+	check(not quadrilateral.is_empty(), "long two-piece label coverage uses the production quadrilateral word")
+	if quadrilateral.is_empty():
+		return
+	words = [quadrilateral]
+	for dimensions: Vector2 in [Vector2(1473, 1175), Vector2(1000, 720), Vector2(390, 844), Vector2(320, 568), Vector2(568, 320)]:
+		view.size = dimensions
+		_reset(view, true, int(quadrilateral.min_age))
+		var parts: Array[String] = view.game._parts_for_word(quadrilateral)
+		check(parts.size() == 2 and parts[0] + parts[1] == "quadrilateral", "the long word has exactly two playable source blocks")
+		var ids: Array[int] = _install(view, parts, [0, 1])
+		await process_frame
+		for id: int in ids:
+			_assert_complete_label(view._tiles[id], str(view.game.cell(id).text), "long root at %s" % dimensions)
+		for fragments: int in [0, 2]:
+			ids = _install(view, ["quadrilateral"], [fragments], [2])
+			await process_frame
+			var body = view._tiles[ids[0]]
+			check(view.game.cell(ids[0]).width == 2 and body.valid_word and body._picture.is_visible_in_tree(),
+				"the long-word regression keeps a real two-block pictured word instead of widening its footprint")
+			_assert_complete_label(body, "quadrilateral", "pictured word at %s with %d fragments" % [dimensions, fragments])
+	words = original_words
+	view.size = Vector2(1000, 720)
+
+
+func _assert_complete_label(body, expected: String, context: String) -> void:
+	var label: Label = body._label
+	var lines: int = label.get_line_count()
+	var rounded_height: float = 0.0
+	for line in range(lines):
+		rounded_height += ceilf(label.get_line_height(line))
+	check(label.visible and label.text == expected and label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING,
+		context + ": the label retains the full spelling without ellipsis")
+	check(lines > 0 and label.get_visible_line_count() == lines,
+		context + ": every native-shaped line is visible, including the final letters")
+	check(rounded_height <= label.size.y + 0.01,
+		context + ": rounded native line heights fit the label box (%.2f <= %.2f)" % [rounded_height, label.size.y])
+	check(Rect2(Vector2.ZERO, body.size).grow(0.01).encloses(label.get_rect()),
+		context + ": complete spelling remains inside the jelly's painted footprint")
 
 
 func _check_root_tap(view) -> void:
@@ -548,7 +598,7 @@ func _check_reposition_lifecycle(view) -> void:
 
 func _check_reposition_ancestry(view) -> void:
 	_reset(view)
-	var fixture: Dictionary = _invalid_merge(view)
+	var fixture: Dictionary = _legacy_invalid_merge(view)
 	_advance(view, Model.SETTLE_SECONDS + 0.01)
 	var tile: Dictionary = view.game.cell(fixture.id)
 	var release: Vector2 = _placement_point(view, tile, 1, 2)
@@ -1285,11 +1335,11 @@ func _assert_completion_hints(view, expected: Array[int], context: String) -> vo
 	_assert_completion_effect(view._placement_tile, false, context + " placement")
 
 
-func _completion_board(view, pieces: Array[String]) -> Array[int]:
+func _completion_board(view, pieces: Array[String], fragments: Array[int] = []) -> Array[int]:
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for text: String in pieces:
-		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		var tile: Dictionary = view.game._new_tile(text, 1, fragments[ids.size()] if ids.size() < fragments.size() else 0)
 		tile.column = ids.size() % Model.COLUMNS
 		tile.row = Model.ROWS - 1 - floori(float(ids.size()) / Model.COLUMNS)
 		ids.append(int(tile.id))
@@ -1372,9 +1422,16 @@ func _check_ordered_completion_contact(view) -> void:
 		for reduced: bool in [false, true]:
 			for pairing: Dictionary in pairings:
 				_reset(view, reduced, 6)
-				var ids: Array[int] = _completion_board(view, ["sma", "ll", "ller", "llest", "x"])
+				var fragments: Array[int] = [0, 0, 0, 0, 0]
+				fragments[int(pairing.source)] = 1
+				fragments[int(pairing.target)] = 2
+				var ids: Array[int] = _completion_board(view, ["sma", "ll", "ller", "llest", "x"], fragments)
 				var source_id: int = ids[int(pairing.source)]
 				var target_id: int = ids[int(pairing.target)]
+				check(view.game.cell(source_id).fragments == 1 and view.game.cell(target_id).fragments == 2,
+					"ordered merge fixtures contain distinct carried fragments")
+				view._sync_tiles()
+				var originals: Array = view.game.cells.duplicate(true)
 				var source = view._tiles[source_id]
 				var target = view._tiles[target_id]
 				var center: Vector2 = _center(view, source_id)
@@ -1413,26 +1470,69 @@ func _check_ordered_completion_contact(view) -> void:
 					check(not view._tiles[ids[1]].highlighted and view._tiles[ids[1]]._contact_kind == "none"
 						and view._tiles[ids[1]].completion_hint,
 						context + ": changing target clears old contact feedback while retaining the valid candidate glow")
-				check(cues.count("contact") == contacts and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
-					context + ": neutral physical contact gives no learning credit or reward")
+				check(cues.count("contact") == contacts and cues.count("wrong") == 0 and heard.is_empty()
+					and payouts.is_empty() and attempts.is_empty(),
+					context + ": held physical contact has no negative cue, learning credit, or reward")
 				for repeat in range(5):
 					_pointer_event(view, pointer, "move", destination)
 				_advance(view, 0.3)
 				check(cues.count("contact") == contacts and view.game.fusions.is_empty(),
 					context + ": holding and repeated movement at one contact never repeat its sound or merge early")
 				_pointer_event(view, pointer, "up", destination)
-				check(view.game.fusions.size() == 1 and cues.count("merge") == 1,
-					context + ": release still accepts forward, reverse, and out-of-age merges")
-				var merged_id: int = _merged_id(view)
-				_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-				var merged: Dictionary = view.game.cell(merged_id)
-				check(str(merged.get("text", "")) == str(pairing.text)
-					and view.game.is_valid_word(merged) == bool(pairing.complete),
-					context + ": the result preserves source order and recognizes only the current-age word")
+				if bool(pairing.complete):
+					check(view.game.fusions.size() == 1 and cues.count("merge") == 1 and cues.count("wrong") == 0,
+						context + ": an exact forward word commits one merge without rejection")
+					var merged_id: int = _merged_id(view)
+					_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+					var merged: Dictionary = view.game.cell(merged_id)
+					check(str(merged.get("text", "")) == str(pairing.text) and view.game.is_valid_word(merged)
+						and int(merged.fragments) == 3, context + ": the valid result keeps both inputs' fragments")
+				else:
+					_assert_rejected_merge(view, originals, source_id, target_id, reduced, context)
+					_pointer_event(view, pointer, "up", destination)
+					check(cues.count("wrong") == 1, context + ": a repeated pointer release cannot replay the rejection cue")
 				_assert_completion_hints(view, [], context + " released")
 				check(payouts.is_empty() and attempts.is_empty(), context + ": merging alone never collects or awards credit")
 	view.size = Vector2(1000, 720)
 	words = original_words
+
+
+func _assert_rejected_merge(view, originals: Array, source_id: int, target_id: int, reduced: bool, context: String) -> void:
+	check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and cues.count("wrong") == 1
+		and cues.count("merge") == 0 and cues.count("pop") == 0,
+		context + ": one failed committed merge produces one wrong cue with no fusion or collection effect")
+	check(view._contact_state().kind == "mismatch" and int(view._rejection.a) == source_id and int(view._rejection.b) == target_id,
+		context + ": rejection marks precisely the attempted source and target")
+	check(not view.snapshot().word_reveal.visible and payouts.is_empty() and attempts.is_empty() and heard.is_empty()
+		and view.game.collected_coins == 0 and view.game.fragment_count == 0 and view.game.cleared_pairs == 0,
+		context + ": rejection cannot pronounce, reveal, teach, collect fragments, or grant coins")
+	_advance(view, 0.12)
+	for id: int in [source_id, target_id]:
+		var body = view._tiles[id]
+		var rim: Color = body._gel.get_shader_parameter("rim_color")
+		check(body._contact_kind == "mismatch" and rim.is_equal_approx(Color("#b54649")) and not body.highlighted,
+			context + ": both failed inputs carry the temporary negative rim")
+		if reduced:
+			check(body._surface.position.is_zero_approx() and body._surface.scale.is_equal_approx(Vector2.ONE)
+				and is_zero_approx(float(body._gel.get_shader_parameter("contact_strength")))
+				and body.get_rect().is_equal_approx(view._tile_rect(view.game.cell(id))),
+				context + ": reduced-motion rejection stays static at the original body rectangle")
+		else:
+			check(float(body._gel.get_shader_parameter("contact_strength")) > 0.0,
+				context + ": failed inputs show elastic rejection while the source returns")
+	_advance(view, 0.3)
+	check(view.game.cells.size() == originals.size() and view.game.fusions.is_empty() and view._rejection.is_empty()
+		and view._snapbacks.is_empty() and view._contact_state().kind == "none" and cues.count("wrong") == 1,
+		context + ": rejection and snapback finish without consuming bodies or replaying audio")
+	for original: Dictionary in originals:
+		var tile: Dictionary = view.game.cell(int(original.id))
+		check(not tile.is_empty(), context + ": every original tile identity survives")
+		for field: String in ["text", "mass", "parts_count", "fragments", "chest", "word", "kind", "skin"]:
+			check(tile.get(field) == original.get(field), context + ": rejection preserves " + field)
+		check(view._tiles[int(tile.id)].visible_fragment_badges() == int(tile.fragments),
+			context + ": carried fragments stay on their original artwork")
+		check(view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(tile)),
+			context + ": final painted bodies agree with their retained model rectangles")
 
 
 func _assert_contact_surfaces(view, source_id: int, target_id: int, kind: String, reduced: bool, context: String) -> void:
@@ -1498,8 +1598,63 @@ func _check_neutral_contact_targets(view) -> void:
 				view.cancel_input()
 				_advance(view, 0.2)
 				check(cues.count("contact") == 2 and view.game.fusions.is_empty() and heard.is_empty()
-					and payouts.is_empty() and attempts.is_empty(), context + ": cancelling contact never collects, pronounces, or rewards the complete word")
+					and payouts.is_empty() and attempts.is_empty() and cues.count("wrong") == 0
+					and cues.count("merge") == 0 and cues.count("pop") == 0,
+					context + ": cancelling contact never rejects, merges, collects, pronounces, or rewards the complete word")
 	view.size = Vector2(1000, 720)
+
+
+func _check_invalid_body_combinations(view) -> void:
+	for pointer: int in [-1, 7]:
+		for reduced: bool in [false, true]:
+			for fixture: Dictionary in [{"pieces": ["x", "cat"], "masses": [1, 2]},
+				{"pieces": ["cat", "x"], "masses": [2, 1]}, {"pieces": ["x", "caterpillar"], "masses": [1, 7]}]:
+				_reset(view, reduced)
+				var pieces: Array[String] = []
+				pieces.assign(fixture.pieces)
+				var masses: Array[int] = []
+				masses.assign(fixture.masses)
+				var ids: Array[int] = _install(view, pieces, [1, 2], masses)
+				var originals: Array = view.game.cells.duplicate(true)
+				var destination: Vector2 = _center(view, ids[1])
+				_pointer_event(view, pointer, "down", _center(view, ids[0]))
+				_pointer_event(view, pointer, "move", destination)
+				check(view._contact_state().kind == "touch" and cues.count("wrong") == 0,
+					"roots, valid words, and wrapped words all retain neutral physical contact while held")
+				_pointer_event(view, pointer, "up", destination)
+				_assert_rejected_merge(view, originals, ids[0], ids[1], reduced,
+					"invalid body combination %s + %s" % pieces)
+
+
+func _check_rejection_rim_reset(view) -> void:
+	for reduced: bool in [false, true]:
+		for fixture: Dictionary in [{"pieces": ["t", "ca"], "masses": [1, 1]},
+			{"pieces": ["x", "cat"], "masses": [1, 2]}, {"pieces": ["cat", "x"], "masses": [2, 1]}]:
+			_reset(view, reduced)
+			var pieces: Array[String] = []
+			pieces.assign(fixture.pieces)
+			var masses: Array[int] = []
+			masses.assign(fixture.masses)
+			var ids: Array[int] = _install(view, pieces, [], masses)
+			var idle: Dictionary = {}
+			for id: int in ids:
+				var body = view._tiles[id]
+				body.release_focus()
+				idle[id] = {"color": body._gel.get_shader_parameter("rim_color"),
+					"strength": body._gel.get_shader_parameter("rim_strength"), "width": body._gel.get_shader_parameter("rim_width")}
+			_drag(view, ids[0], ids[1])
+			_advance(view, 0.339)
+			check(view._contact_state().kind == "mismatch", "the rejection rim remains active until its feedback window ends")
+			_advance(view, 0.002)
+			check(view._contact_state().kind == "none" and view._rejection.is_empty(),
+				"the rejection contact clears immediately after 340 milliseconds")
+			for id: int in ids:
+				var body = view._tiles[id]
+				var color: Color = body._gel.get_shader_parameter("rim_color")
+				check(body._contact_kind == "none" and not body.has_focus() and color.is_equal_approx(idle[id].color)
+					and is_equal_approx(float(body._gel.get_shader_parameter("rim_strength")), float(idle[id].strength))
+					and is_equal_approx(float(body._gel.get_shader_parameter("rim_width")), float(idle[id].width)),
+					"plain roots and valid merged words restore their exact idle rim after rejection")
 
 
 func _check_neutral_contact_lifecycle(view) -> void:
@@ -1526,8 +1681,9 @@ func _check_neutral_contact_lifecycle(view) -> void:
 		for body in view._tiles.values():
 			check(body._contact_kind == "none" and body._surface.position.is_zero_approx(),
 				interruption + ": no surviving jelly keeps collision pressure or an offset")
-		check(view.game.fusions.is_empty() and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
-			interruption + ": a cancelled contact never commits a merge or collects a word")
+		check(view.game.fusions.is_empty() and heard.is_empty() and payouts.is_empty() and attempts.is_empty()
+			and cues.count("wrong") == 0 and cues.count("merge") == 0 and cues.count("pop") == 0,
+			interruption + ": a cancelled contact never rejects, commits a merge, or collects a word")
 		view.interaction_allowed = Callable()
 		view.show()
 		view.pause(false)
@@ -1543,12 +1699,12 @@ func _check_completion_hint_targets(view) -> void:
 			check(int(view.game.cell(ids[1]).height) > 1, "completion guidance covers a genuinely wrapped target")
 		view.cancel_input()
 	_reset(view)
-	var ids: Array[int] = _completion_board(view, ["ca", "t", "t", "t", "x", "t"])
+	var ids: Array[int] = _completion_board(view, ["ca", "t", "t", "t", "ca", "t"])
 	var airborne: Dictionary = view._cell(ids[2])
 	airborne.age = 0.0
 	airborne.arrival = true
 	airborne.arrival_delay = 1.0
-	view._merge(ids[3], ids[4], view._tiles[ids[3]].position)
+	view._merge(ids[4], ids[3], view._tiles[ids[4]].position)
 	check(view.game.is_fusing(ids[3]) and not view._settled(airborne), "completion fixture has both fusing and airborne partners")
 	view._activate(ids[0])
 	_assert_completion_hints(view, [ids[1], ids[5]], "only settled actionable partners")
@@ -1638,18 +1794,20 @@ func _check_partial_word_colors(view) -> void:
 				!= _palette_item(view, ids[second]).get("palette_index", -1),
 				"incomplete prefixes of a three-part word do not pretend to be exact word pairs")
 	_drag(view, ids[0], ids[1])
-	var partial_id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	check(view.game.cell(partial_id).text == "caterpil" and not view.game.is_valid_word(view.game.cell(partial_id)),
-		"the first two chunks form an actual incomplete persistent word")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and cues.count("merge") == 0,
+		"new input rejects an incomplete prefix instead of creating a persistent partial word")
+	_advance(view, 0.4)
+	var partial: Dictionary = _install_legacy_parent(view, [view.game.cell(ids[0]).duplicate(true), view.game.cell(ids[1]).duplicate(true)] as Array[Dictionary])
+	var partial_id: int = int(partial.id)
+	check(partial.text == "caterpil" and not view.game.is_valid_word(partial),
+		"an explicitly restored legacy board can still contain a recoverable partial word")
 	check(_palette_item(view, partial_id).get("palette_index", -1) == _palette_item(view, ids[2]).get("palette_index", -2),
-		"a merged partial word shares a hint color with the remaining exact completion")
+		"a legacy partial word shares a hint color with its remaining exact completion")
 	_drag(view, partial_id, ids[2])
 	var completed_id: int = _merged_id(view)
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cell(completed_id).text == "caterpillar" and view._tiles[completed_id]._picture.is_visible_in_tree(),
-		"following the partial-word color hint produces its pictured vocabulary word")
-
+		"following the legacy partial-word hint still produces its pictured vocabulary word")
 
 func _hue_distance(first: float, second: float) -> float:
 	return absf(fposmod(first - second + 0.5, 1.0) - 0.5)
@@ -1657,10 +1815,11 @@ func _hue_distance(first: float, second: float) -> float:
 
 func _check_fusion_palette_handover(view) -> void:
 	var original_words: Array = words.duplicate(true)
-	var bat: Dictionary = original_words[0].duplicate(true)
-	bat.id = "view-fixture-bat"
-	bat.text = "bat"
-	words.append(bat)
+	for text: String in ["at", "bat"]:
+		var word: Dictionary = original_words[0].duplicate(true)
+		word.id = "view-fixture-" + text
+		word.text = text
+		words.append(word)
 	_reset(view)
 	view.game.cells.clear()
 	var ids: Dictionary = {}
@@ -1694,7 +1853,7 @@ func _check_fusion_palette_handover(view) -> void:
 	view.cancel_input()
 	words = original_words
 	_reset(view)
-	var fixture: Dictionary = _invalid_merge(view)
+	var fixture: Dictionary = _legacy_invalid_merge(view)
 	var prefixes: Array[int] = []
 	for column in range(2):
 		var prefix: Dictionary = view.game._new_tile("ca", 1, 0)
@@ -1817,22 +1976,44 @@ func _check_merge_handover_stability(view) -> void:
 			"merging leaves unrelated settled jelly positions unchanged")
 
 
-func _invalid_merge(view) -> Dictionary:
-	var ids: Array[int] = _install(view, ["t", "ca"], [1, 2])
-	var inputs: Array[Dictionary] = [view.game.cell(ids[0]), view.game.cell(ids[1])]
-	_drag(view, ids[0], ids[1])
-	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	check(view.game.cell(id).text == "tca" and not view.game.is_valid_word(view.game.cell(id)),
-		"split fixture is an actual incorrect merge with two distinct chest-bearing inputs")
-	return {"id": id, "ids": ids, "inputs": inputs}
+func _install_legacy_parent(view, children: Array[Dictionary]) -> Dictionary:
+	var text := ""
+	var mass := 0
+	var fragments := 0
+	var ids: Array[int] = []
+	for child: Dictionary in children:
+		text += str(child.text)
+		mass += int(child.mass)
+		fragments += int(child.fragments)
+		ids.append(int(child.id))
+	var parent: Dictionary = view.game._new_tile(text, mass, fragments)
+	parent.skin = int(children[1].get("skin", children[1].id))
+	parent.column = mini(int(children[1].column), Model.COLUMNS - int(parent.width))
+	parent.row = Model.ROWS - int(parent.height)
+	for index in range(view.game.cells.size() - 1, -1, -1):
+		if int(view.game.cells[index].id) in ids:
+			view.game.cells.remove_at(index)
+	# Imported legacy boards may contain invalid parents; new input cannot create one.
+	view.game._merge_history[int(parent.id)] = children.duplicate(true)
+	view.game.cells.append(parent)
+	view._sync_tiles()
+	view._layout()
+	return parent
 
+
+func _legacy_invalid_merge(view) -> Dictionary:
+	var ids: Array[int] = _install(view, ["t", "ca"], [1, 2])
+	var inputs: Array[Dictionary] = [view.game.cell(ids[0]).duplicate(true), view.game.cell(ids[1]).duplicate(true)]
+	var parent: Dictionary = _install_legacy_parent(view, inputs)
+	check(parent.text == "tca" and not view.game.is_valid_word(parent) and view.game.can_split(parent),
+		"the explicit legacy fixture preserves an invalid parent's two chest-bearing children")
+	return {"id": int(parent.id), "ids": ids, "inputs": inputs}
 
 func _check_split_pointer_recovery(view) -> void:
 	for reduced: bool in [false, true]:
 		for pointer: int in [-1, 7]:
 			_reset(view, reduced)
-			var fixture: Dictionary = _invalid_merge(view)
+			var fixture: Dictionary = _legacy_invalid_merge(view)
 			var center: Vector2 = _center(view, fixture.id)
 			check(view.game.can_split(view.game.cell(fixture.id)), "an invalid merged word can return to its last two inputs")
 			check(view._press(pointer, center), "mouse and touch can press an invalid merged jelly")
@@ -1918,7 +2099,7 @@ func _has_support(cells: Array, child: Dictionary) -> bool:
 
 func _check_split_cancel_and_pause(view) -> void:
 	_reset(view)
-	var fixture: Dictionary = _invalid_merge(view)
+	var fixture: Dictionary = _legacy_invalid_merge(view)
 	var center: Vector2 = _center(view, fixture.id)
 	view._press(-1, center)
 	view.cancel_input()
@@ -1967,28 +2148,28 @@ func _check_split_cancel_and_pause(view) -> void:
 
 func _check_split_keyboard_and_nested_merge(view) -> void:
 	_reset(view)
-	var fixture: Dictionary = _invalid_merge(view)
+	var fixture: Dictionary = _legacy_invalid_merge(view)
 	var extra: Dictionary = view.game._new_tile("x", 1, 1)
 	extra.column = 0
-	extra.row = 6
+	extra.row = Model.ROWS - 1
 	view.game.cells.append(extra)
 	view._sync_tiles()
 	view._activate(int(extra.id))
 	view._activate(fixture.id)
-	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge",
-		"an existing keyboard source merges into an invalid word instead of splitting the target")
-	var nested: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	view._activate(nested)
-	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "keyboard activation without a held source splits an invalid word")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and view.game.can_split(view.game.cell(fixture.id)),
+		"an existing keyboard source rejects an invalid combination without splitting or consuming its legacy target")
+	_advance(view, 0.4)
+	var nested: Dictionary = _install_legacy_parent(view, [extra.duplicate(true), view.game.cell(fixture.id).duplicate(true)] as Array[Dictionary])
+	view._activate(int(nested.id))
+	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split",
+		"keyboard activation without a held source splits an explicitly restored nested legacy word")
 	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
-	check(view.game.cells.size() == 2 and view.game.can_split(view.game.cell(fixture.id)), "one split restores its invalid merged child with its nested ancestry")
+	check(view.game.cells.size() == 2 and view.game.can_split(view.game.cell(fixture.id)),
+		"one legacy split restores its invalid merged child with nested ancestry intact")
 	_drag(view, fixture.id, int(extra.id))
-	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge", "dragging a restored invalid merged child continues to merge")
-	var remerged: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	view._activate(remerged)
-	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 2 and view.game.can_split(view.game.cell(fixture.id)),
+		"a restored legacy child cannot create a new invalid parent and retains its own undo history")
+	_advance(view, 0.4)
 	view._activate(fixture.id)
 	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
 	var actual_ids: Array[int] = []
@@ -2002,18 +2183,17 @@ func _check_split_keyboard_and_nested_merge(view) -> void:
 	actual_ids.sort()
 	expected_ids.sort()
 	check(actual_ids == expected_ids and mass == 3 and fragments == 4,
-		"nested split and remerge restores each original root once and conserves all mass and fragments")
+		"nested legacy recovery restores each original root once and conserves all mass and fragments")
 	check(view.game.collected_coins == 0 and view.game.fragment_count == 0 and heard.is_empty()
-		and payouts.is_empty() and attempts.is_empty(), "nested recovery never grants coins, chest progress, or learning credit")
-
+		and payouts.is_empty() and attempts.is_empty(), "nested recovery and rejection never grant coins, chest progress, or learning credit")
 
 func _check_split_keyboard_source_shortcut(view) -> void:
 	for keycode: Key in [KEY_ENTER, KEY_SPACE]:
 		_reset(view)
-		var fixture: Dictionary = _invalid_merge(view)
+		var fixture: Dictionary = _legacy_invalid_merge(view)
 		var extra: Dictionary = view.game._new_tile("x", 1, 0)
 		extra.column = 0
-		extra.row = 6
+		extra.row = Model.ROWS - 1
 		view.game.cells.append(extra)
 		view._sync_tiles()
 		view._tiles[fixture.id].grab_focus()
@@ -2023,15 +2203,15 @@ func _check_split_keyboard_source_shortcut(view) -> void:
 		event.shift_pressed = true
 		view._input(event)
 		check(view._keyboard_source == fixture.id and view.game.fusions.is_empty(),
-			"Shift+Enter and Shift+Space select an invalid merged jelly as a source without splitting")
+			"Shift+Enter and Shift+Space select a legacy merged jelly as a source without splitting")
 		view._activate(int(extra.id))
-		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge"
-			and int(view.game.fusions[0].a_id) == fixture.id, "the next keyboard activation merges the selected invalid source")
-		var merged: int = _merged_id(view)
-		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-		view._activate(merged)
-		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "plain activation still splits after keyboard source selection is consumed")
-
+		check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and view._keyboard_source == -1
+			and view.game.can_split(view.game.cell(fixture.id)) and not view.game.cell(int(extra.id)).is_empty(),
+			"the next keyboard activation rejects an invalid source-target word and preserves both bodies")
+		_advance(view, 0.4)
+		view._activate(fixture.id)
+		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split",
+			"plain activation still splits the original legacy parent after rejection consumes source selection")
 
 func _check_repeat_merge_and_wrap(view) -> void:
 	_reset(view)
@@ -2057,15 +2237,17 @@ func _check_repeat_merge_and_wrap(view) -> void:
 	view.game.cells.append(extra)
 	view._sync_tiles()
 	_drag(view, id, int(extra.id))
-	var again: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	check(view.game.cell(again).text == "caterpillarextra" and view.game.cell(again).word.is_empty(), "a large valid jelly can merge onward into an unfinished build")
-	check(not view._tiles[again]._picture.visible and view._tiles[again].visible_fragment_badges() == 6, "unfinished larger build hides its old image while preserving six markers")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a large valid word rejects an invalid extension")
+	_advance(view, 0.4)
+	check(view.game.cell(id).text == "caterpillar" and view.game.is_valid_word(view.game.cell(id))
+		and view.game.cell(int(extra.id)).text == "extra", "rejected extensions preserve the original valid word and separate root")
+	check(view._tiles[id]._picture.visible and view._tiles[id].visible_fragment_badges() == 5
+		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "rejection retains the word image and each body's own chest markers")
 
 
 func _check_variable_outline(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["cat", "t"], [], [3, 1])
+	var ids: Array[int] = _install(view, ["ca", "t"], [], [3, 1])
 	var source = view._tiles[ids[0]]
 	var target = view._tiles[ids[1]]
 	var source_outline: PackedVector2Array = source.contact_outline()
@@ -2172,6 +2354,32 @@ func _check_keyboard(view) -> void:
 	view._activate(id)
 	_advance(view, Model.COLLECT_SECONDS)
 	check(payouts.size() == 1 and view.game.collected_coins == 100, "keyboard activation can collect a valid merged word")
+
+
+func _check_keyboard_rejection(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		var ids: Array[int] = _completion_board(view, ["t", "ca"], [1, 2])
+		check(view.game.cell(ids[0]).fragments == 1 and view.game.cell(ids[1]).fragments == 2,
+			"keyboard rejection fixtures contain distinct carried fragments")
+		view._sync_tiles()
+		var originals: Array = view.game.cells.duplicate(true)
+		view._tiles[ids[0]].pressed.emit()
+		check(view._keyboard_source == ids[0] and cues.count("wrong") == 0,
+			"keyboard source selection alone never produces negative feedback")
+		view._tiles[ids[1]].pressed.emit()
+		check(view._keyboard_source == -1, "a failed keyboard merge releases the selected source")
+		_assert_rejected_merge(view, originals, ids[0], ids[1], reduced, "keyboard reversed word")
+		view._tiles[ids[1]].pressed.emit()
+		check(view._keyboard_source == ids[1] and view._rejection.is_empty(),
+			"keyboard retry can immediately select the correct prefix")
+		view._tiles[ids[0]].pressed.emit()
+		check(view.game.fusions.size() == 1 and cues.count("merge") == 1 and cues.count("wrong") == 1,
+			"forward keyboard retry merges once and adds no second negative cue")
+		var id: int = _merged_id(view)
+		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+		check(view.game.cell(id).text == "cat" and view.game.cell(id).fragments == 3,
+			"keyboard correction preserves the word and every rejected input's fragments")
 
 
 func _check_arrival_packet(view) -> void:
