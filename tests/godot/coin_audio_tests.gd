@@ -70,13 +70,13 @@ func _check_flight_timing() -> void:
 	var flight = state.flight
 	flight.present("word", _reward(0), Vector2(100, 100))
 	check(state.times.is_empty() and state.counter.target == 0,
-		"Saving and launching a collected word cannot sound before its visible arrival")
+		"A flight that omits release audio waits for its visible arrival")
 	for delta: float in [0.0, -1.0, INF, NAN]:
 		_advance(state, delta)
 	check(state.times.is_empty(), "Invalid clock updates cannot produce a coin sound")
 	_advance(state, Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.001)
 	check(state.times.is_empty() and state.counter.target == 0,
-		"The complete burst and flight remain silent until the first coin reaches the HUD")
+		"Opting out of release audio keeps the burst silent until the first coin reaches the HUD")
 	_advance(state, 0.002)
 	check(state.times.size() == 1 and state.counter.target > 0 and state.counter.target < 50,
 		"The first real coin arrival starts one deposit cue with its counter increment")
@@ -91,7 +91,7 @@ func _check_flight_timing() -> void:
 			"Every audible beat accompanies newly arrived value")
 	check(state.counter.target == 50 and not flight.snapshot().active,
 		"Sound cadence cannot delay or change the earned balance")
-	check(state.release_times.is_empty(), "Collected words never request a chest release sound")
+	check(state.release_times.is_empty(), "The explicit release-audio opt-out remains available")
 	var sounds: int = state.times.size()
 	flight.present("word", _reward(0), Vector2.ZERO)
 	_advance(state, 10.0)
@@ -194,16 +194,18 @@ func _check_chest_release_cadence() -> void:
 func _check_overlapping_and_reduced() -> void:
 	var state := _flight_fixture()
 	for index in range(12):
-		state.flight.present("collect-%d" % index, _reward(index * 100, 100), Vector2.ZERO)
+		state.flight.present("collect-%d" % index, _reward(index * 100, 100), Vector2.ZERO, true)
 		for frame in range(10):
 			_advance(state, 0.01)
+	check(state.release_times.size() == 12,
+		"Twelve word receipts at 100 millisecond intervals each sound when their coins appear")
 	for frame in range(200):
 		_advance(state, 0.01)
 	check(state.times.size() > 8 and state.times.size() < 30,
 		"Collecting twelve words every 100 milliseconds creates a bounded continuous coin rhythm")
-	for index in range(1, state.times.size()):
-		check(float(state.times[index]) - float(state.times[index - 1]) >= 0.10 - 0.00001,
-			"Overlapping word rewards share the same maximum sound cadence")
+	for index in range(1, state.sound_times.size()):
+		check(float(state.sound_times[index]) - float(state.sound_times[index - 1]) >= 0.10 - 0.00001,
+			"Overlapping word releases and deposits share the same maximum sound cadence")
 	check(state.counter.target == 1200 and not state.flight.snapshot().active,
 		"Overlapping sounds preserve every word's full reward")
 	var sounds: int = state.times.size()
@@ -222,10 +224,13 @@ func _check_overlapping_and_reduced() -> void:
 	check(state.times.size() == sounds and state.counter.target == 1750 and state.settlements == 2,
 		"Silent settlement cancels arrivals and neither a retry nor restored receipt can sound")
 	state.flight.reduced_motion = true
-	state.flight.present("reduced", _reward(1750, 100), Vector2.ZERO)
-	_advance(state, 0.239)
-	check(state.times.size() == sounds, "Reduced motion retains its short silent acknowledgement before arrival")
-	_advance(state, 0.002)
+	var releases: int = state.release_times.size()
+	state.flight.present("reduced", _reward(1750, 100), Vector2.ZERO, true)
+	_advance(state, 0.016)
+	check(state.release_times.size() == releases + 1 and state.times.size() == sounds
+		and state.counter.target == 1750,
+		"Reduced motion sounds its visible coin acknowledgement before any balance arrives")
+	_advance(state, 0.225)
 	check(state.times.size() == sounds + 1 and state.counter.displayed == 1850.0
 		and not state.flight.snapshot().active,
 		"Reduced motion coalesces all arriving sprites into one sound and settles immediately")
@@ -379,8 +384,12 @@ func _check_application_routes() -> void:
 	var word: Dictionary = app._credit_word_jelly("audio-word", 100)
 	app._word_jelly_collected("audio-word", {}, 100, 0, Vector2.ZERO)
 	check(word.ok and app.coin_wallet.balance == 150 and not _coin_playing(app.audio),
-		"Jelly Words uses the same silent launch and durable credit route")
-	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS + 0.001)
+		"Jelly Words saves its reward before the first visible coin frame")
+	app._coin_flight.advance(0.016)
+	check(_coin_playing(app.audio) and app._coin_counter.target == 50,
+		"A collected Jelly Word sounds when its coins appear, before they reach the counter")
+	app.audio.stop_coin_sounds()
+	app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.015)
 	check(_coin_playing(app.audio), "A collected Jelly Word uses the shared coin arrival sound")
 	app._show_collection()
 	check(_coin_players_silent(app.audio) and not app._coin_flight.snapshot().active,
@@ -393,7 +402,11 @@ func _check_application_routes() -> void:
 	app.set_reduced_motion(true)
 	word = app._credit_word_jelly("audio-reduced", 100)
 	app._word_jelly_collected("audio-reduced", {}, 100, 0, Vector2.ZERO)
-	app._coin_flight.advance(0.25)
+	app._coin_flight.advance(0.016)
+	check(word.ok and _coin_playing(app.audio) and app._coin_counter.target == 150,
+		"Reduced-motion Jelly Words retains the coin-appearance sound")
+	app.audio.stop_coin_sounds()
+	app._coin_flight.advance(0.225)
 	check(word.ok and _coin_playing(app.audio) and app._coin_counter.displayed == 250.0,
 		"Reduced-motion gameplay still acknowledges a real coin deposit audibly")
 	app.on_page_hidden()
@@ -402,9 +415,89 @@ func _check_application_routes() -> void:
 	app._coin_flight.advance(10.0)
 	check(_coin_players_silent(app.audio) and app.coin_wallet.balance == 250,
 		"Resuming the page never replays the already settled deposit")
+	_check_collect_application_route(app)
+	_check_interrupted_word_release(app)
 	app.audio.halt()
 	app.queue_free()
 	await process_frame
+
+
+func _check_collect_application_route(app) -> void:
+	app.set_reduced_motion(false)
+	app.audio.interact(app.model.theme_id, false)
+	app.audio.stop_voice()
+	var view = app._word_jelly
+	var game = view.game
+	game.spawn_interval = 10000.0
+	game.cells.clear()
+	for index in range(12):
+		var tile: Dictionary = game._new_tile(str(game._words[0].text), 2, 0)
+		tile.column = (index % 3) * 2
+		tile.row = game.ROWS - 1 - floori(float(index) / 3.0)
+		game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	var before: int = app.coin_wallet.balance
+	var voice_request: int = app.audio._playback_requests.get(app.audio.voice, 0)
+	var observed := {"time": 0.0, "releases": [], "receipts": []}
+	var on_release := func() -> void: observed.releases.append(observed.time)
+	var on_collected := func(id: String, _word: Dictionary, _coins: int, _fragments: int, _origin: Vector2) -> void:
+		observed.receipts.append(id)
+	app._coin_flight.release_sound.connect(on_release)
+	view.collected.connect(on_collected)
+	view.collect_button.pressed.emit()
+	check(game.collection_batch_active() and game.collection_batch_snapshot().total == 12,
+		"The real Collect button queues twelve valid merged jellies")
+	for frame in range(130):
+		observed.time += 0.01
+		view._process(0.01)
+		app._coin_flight.advance(0.01)
+	check(observed.receipts.size() == 12 and observed.releases.size() == 12
+		and not game.collection_batch_active() and _coin_playing(app.audio),
+		"Every removed jelly in a rapid Collect run launches one audible coin appearance")
+	for index in range(1, observed.releases.size()):
+		check(is_equal_approx(float(observed.releases[index]) - float(observed.releases[index - 1]), 0.10),
+			"The real Collect button retains a 100 millisecond coin-appearance rhythm")
+	check(app.coin_wallet.balance == before + 1200 and not app.audio.voice.playing
+		and app.audio._playback_requests.get(app.audio.voice, 0) == voice_request,
+		"Collect credits every word once and coin audio never adds batch pronunciation")
+	var release_count: int = observed.releases.size()
+	for id: String in observed.receipts:
+		var duplicate: Dictionary = app._credit_word_jelly(id, 100)
+		app._word_jelly_collected(id, {}, 100, 0, Vector2.ZERO)
+		check(duplicate.ok and duplicate.duplicate,
+			"A retried Collect receipt retains the wallet's idempotent result")
+	app._coin_flight.advance(10.0)
+	check(app.coin_wallet.balance == before + 1200 and app._coin_counter.target == before + 1200
+		and observed.releases.size() == release_count and not app._coin_flight.snapshot().active,
+		"Retries cannot duplicate release sounds or coins and all overlapping flights settle their full value")
+	app._coin_flight.release_sound.disconnect(on_release)
+	view.collected.disconnect(on_collected)
+
+
+func _check_interrupted_word_release(app) -> void:
+	for interruption: String in ["mute", "background"]:
+		app._coin_flight.sync(app.coin_wallet.balance)
+		app.audio.interact(app.model.theme_id, false)
+		var before: int = app.coin_wallet.balance
+		var id: String = "audio-interrupted-" + interruption
+		var reward: Dictionary = app._credit_word_jelly(id, 100)
+		app._word_jelly_collected(id, {}, 100, 0, Vector2.ZERO)
+		if interruption == "mute":
+			app.audio.set_muted(true)
+			app._coin_flight.advance(0.016)
+			check(_coin_players_silent(app.audio), "Muted jelly elimination suppresses the coin-appearance cue")
+			app.audio.set_muted(false)
+			app._coin_flight.advance(0.016)
+			check(_coin_players_silent(app.audio), "Unmuting cannot replay a missed jelly coin-appearance cue")
+			app._coin_flight.sync(app.coin_wallet.balance)
+		else:
+			app.on_page_hidden()
+			app.on_page_visible()
+			app._coin_flight.advance(10.0)
+			check(_coin_players_silent(app.audio), "Backgrounding before the first coin frame cancels its pending appearance cue")
+		check(reward.ok and app.coin_wallet.balance == before + 100 and app._coin_counter.target == before + 100,
+			"%s preserves the committed Jelly Word reward without replaying feedback" % interruption)
 
 
 func _run() -> void:

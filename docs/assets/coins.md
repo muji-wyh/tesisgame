@@ -126,9 +126,10 @@ The full recording is retained at its original pitch, downmixed and resampled,
 with 2 ms / 12 ms edge fades and a peak level of 0.8. Runtime gain is 0.60,
 with a further 6 dB reduction during word pronunciation.
 
-Every reward mode shares the same coin-flight audio. Chest payouts play one
-accent as the coins emerge, followed by accents when they reach the balance
-counter. Word collection retains only its arrival accents. Release and arrival
+Every reward mode shares the same coin-flight audio. Chest payouts and Jelly
+Words collections play one accent as the coins emerge, followed by accents when
+they reach the balance counter. Both a single word and each word in Collect use
+the visible release cue. Release and arrival
 cues share a limit of once per rendered update and at least 100 ms apart.
 Four fixed channels let the brief tails overlap;
 skipped accents are never queued. The Jelly Words Collect cadence and voice

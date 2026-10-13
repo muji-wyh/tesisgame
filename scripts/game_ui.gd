@@ -1583,7 +1583,7 @@ func _word_jelly_collected(event_id: String, _word: Dictionary, _amount: int, _f
 	_word_jelly_credits.erase(event_id)
 	if not _page_hidden and not collection_page.visible and not _mode_menu_open():
 		_coin_flight.reduced_motion = reduced_motion
-		_coin_flight.present(_round_id + ":" + event_id, reward, origin)
+		_coin_flight.present(_round_id + ":" + event_id, reward, origin, true)
 	else:
 		_coin_flight.sync(coin_wallet.balance)
 	if int(reward.get("amount", 0)) > 0:

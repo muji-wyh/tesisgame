@@ -37,7 +37,7 @@ func sync(balance: int) -> void:
 	queue_redraw()
 
 
-func present(id: String, reward: Dictionary, source: Vector2, from_chest: bool = false) -> void:
+func present(id: String, reward: Dictionary, source: Vector2, with_release_sound: bool = false) -> void:
 	if _seen.has(id) or int(reward.get("amount", 0)) <= 0:
 		return
 	_seen[id] = true
@@ -50,7 +50,7 @@ func present(id: String, reward: Dictionary, source: Vector2, from_chest: bool =
 		counter.sync(_visual_total)
 	var count: int = clampi(7 + int(reward.amount) / 50, 8, 14)
 	_events.append({"id": id, "amount": int(reward.amount), "source": source,
-		"elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": from_chest})
+		"elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": with_release_sound})
 	queue_redraw()
 
 

@@ -131,8 +131,32 @@ function expectNoPronunciation(sounds, words) {
   }
 }
 
+function expectReleaseAndArrival(sounds, timeline, balance, reducedMotion, maximum) {
+  const launches = timeline.filter((frame, index, frames) => frame.active && frame.balance >
+    (index ? frames[index - 1].balance : balance));
+  const arrivals = timeline.filter((frame, index, frames) => index > 0 &&
+    frame.arrived_balance > frames[index - 1].arrived_balance);
+  expect(launches.length, 'A visual coin flight begins for the collected word').toBeGreaterThan(0);
+  expect(arrivals.length, 'The same flight eventually deposits its coins').toBeGreaterThan(0);
+  expect(sounds.length, 'Coin appearance and later arrival both have feedback').toBeGreaterThanOrEqual(2);
+  expect(sounds.length, 'Launches and dense arrivals share one bounded cadence').toBeLessThanOrEqual(maximum);
+  expect(Math.abs(sounds[0].at - launches[0].at),
+    'The first Kenney accent accompanies the appearing coins, including publication latency').toBeLessThan(180);
+  expect(arrivals[0].at - sounds[0].at,
+    'The initial accent is audible before the later HUD deposit').toBeGreaterThan(reducedMotion === 'reduce' ? 50 : 650);
+  expect(sounds.some(sound => arrivals.some(frame => Math.abs(frame.at - sound.at) < 180)),
+    'The later HUD deposit retains its own Kenney accent').toBe(true);
+  for (const [index, sound] of sounds.entries()) {
+    expect([...launches, ...arrivals].some(frame => Math.abs(frame.at - sound.at) < 180),
+      'Each coin accent belongs to a visible launch or actual HUD deposit').toBe(true);
+    if (index) expect(sound.at - sounds[index - 1].at,
+      'Release and arrival share the existing 100 ms cadence without per-frame restarts').toBeGreaterThanOrEqual(75);
+  }
+  return { launches, arrivals };
+}
+
 for (const reducedMotion of ['no-preference', 'reduce']) {
-  test(`coin deposits play bundled Kenney feedback with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
+  test(`Jelly coin appearance and deposits play bundled Kenney feedback with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
     test.setTimeout(180000);
     const requests = watchAudioRequests(page), evidence = { reducedMotion };
     await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
@@ -140,17 +164,39 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     const available = await page.evaluate(() => window.audioObservation.available);
     if (browserName === 'chromium') expect(available).toBe(true);
     test.skip(!available, 'This browser runtime has no WebAudio.');
-    const words = [];
-    for (let index = 0; index < 3; index++) words.push(await makeWord(page));
-    // Wait for the final merge cue to finish before delimiting Collect audio.
+    const single = await makeWord(page);
     await page.waitForTimeout(400);
-    const balance = (await wallet(page)).balance;
+    const singleBalance = (await wallet(page)).balance;
     await observeWallet(page);
-    const from = await playbackIndex(page);
+    const singleFrom = await playbackIndex(page);
     await context.setOffline(true);
     try {
+      // A deliberate tap uses the real valid-word collection path. Its normal
+      // word pronunciation remains separate from the new coin launch accent.
+      await pressRect(page, single.rect);
+      evidence.recording = await expectRecording(page, singleFrom, COIN_CLIP);
+      evidence.singleOutput = await expectOutputEnergy(page);
+      await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(singleBalance + 100);
+      await expect.poll(async () => (await wallet(page)).active).toBe(false);
+      await page.waitForTimeout(450);
+      evidence.single = { playbacks: await playbacksSince(page, singleFrom),
+        timeline: await page.evaluate(() => window.coinAudioTimeline), word: single.word.id };
+      evidence.single.coinSounds = matching(evidence.single.playbacks, evidence.recording);
+      evidence.single.events = expectReleaseAndArrival(evidence.single.coinSounds,
+        evidence.single.timeline, singleBalance, reducedMotion, reducedMotion === 'reduce' ? 2 : 6);
+      expect((await wallet(page)).balance, 'A tapped word credits its coins once').toBe(singleBalance + 100);
+
+      const words = [];
+      for (let index = 0; index < 3; index++) words.push(await makeWord(page));
+      // Wait for the final merge cue to finish before delimiting Collect audio.
+      await page.waitForTimeout(400);
+      const balance = (await wallet(page)).balance;
+      await observeWallet(page);
+      const from = await playbackIndex(page);
       await collect(page, 3);
-      evidence.recording = await expectRecording(page, from, COIN_CLIP);
+      const batchRecording = await expectRecording(page, from, COIN_CLIP);
+      expect(batchRecording.fingerprint, 'Single taps and Collect use the same bundled Kenney recording')
+        .toBe(evidence.recording.fingerprint);
       expect(evidence.recording.fingerprint, 'The bundled recording has observed PCM identity').toBeTruthy();
       expect(evidence.recording.peak, 'The selected Kenney recording contains nonzero samples').toBeGreaterThan(0.01);
       evidence.output = await expectOutputEnergy(page);
@@ -164,24 +210,8 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       expect(batch.completed).toBe(3);
       expect(batch.elapsed, 'Coin feedback preserves the 100 ms word collection rhythm').toBeCloseTo(0.3, 6);
       expectNoPronunciation(evidence.playbacks, words.map(tile => tile.word));
-      expect(evidence.coinSounds.length).toBeGreaterThanOrEqual(reducedMotion === 'reduce' ? 1 : 3);
-      expect(evidence.coinSounds.length, 'Dense sprite arrivals share a bounded set of coin cues').toBeLessThanOrEqual(7);
-      const arrivals = evidence.timeline.filter((frame, index, frames) => index > 0 &&
-        frame.arrived_balance > frames[index - 1].arrived_balance);
-      expect(arrivals.length).toBeGreaterThan(0);
-      for (const [index, sound] of evidence.coinSounds.entries()) {
-        expect(arrivals.some(frame => Math.abs(frame.at - sound.at) < 180),
-          'Every cue coincides with an actual HUD deposit, allowing status publication latency').toBe(true);
-        if (index) expect(sound.at - evidence.coinSounds[index - 1].at,
-          'Rapid arrivals cannot restart a coin cue every frame').toBeGreaterThanOrEqual(75);
-      }
-      if (reducedMotion === 'reduce') expect(evidence.coinSounds.length,
-        'Reduced-motion simultaneous sprites coalesce instead of creating a sound burst').toBeLessThanOrEqual(3);
-      else {
-        const firstCredit = evidence.timeline.find(frame => frame.balance > balance);
-        expect(evidence.coinSounds[0].at - firstCredit.at,
-          'The coin sound waits for travel to the HUD instead of playing at wallet commit').toBeGreaterThan(650);
-      }
+      evidence.events = expectReleaseAndArrival(evidence.coinSounds, evidence.timeline, balance,
+        reducedMotion, reducedMotion === 'reduce' ? 5 : 10);
       const finishedFrom = await playbackIndex(page);
       await page.waitForTimeout(400);
       expect(matching(await playbacksSince(page, finishedFrom), evidence.recording),
