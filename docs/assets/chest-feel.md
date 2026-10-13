@@ -45,8 +45,15 @@ Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
 The rainbow is a translucent light arc behind the chest. Overlapping spectral
-bands have feathered edges and fading ends; its brightness follows actual hold
-progress. The recessed track, white bevel, moving cursor and three fixed stars
+bands have feathered edges and fading ends. The bow reveals from its left foot,
+over the crown, to its right foot as actual hold and opening progress advances.
+The soft leading edge continues through the chest's brief held pose and reaches
+the right end exactly at lid release, then the complete arc fades with the
+release light. The arc fits around the closed chest's stable resting silhouette
+so taller lids leave the early progress visible. Reduced motion retains the same
+readable earned progress without drift. Its brightness keeps the existing
+restrained buildup. The recessed track,
+white bevel, moving cursor and three fixed stars
 are removed. Seven small glints drift upward from the chest and disappear with
 the light. There is no visible phase or percentage label; semantic progress
 remains available to screen readers.

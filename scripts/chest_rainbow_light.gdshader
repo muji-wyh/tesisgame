@@ -5,12 +5,20 @@ uniform vec2 ellipse_radius = vec2(0.8, 0.8);
 uniform float band_width = 0.13;
 uniform float strength = 0.0;
 uniform float light_phase = 0.0;
+uniform float reveal_progress : hint_range(0.0, 1.0) = 0.0;
 
 void fragment() {
 	vec2 position = (UV * 2.0 - 1.0) / max(ellipse_radius, vec2(0.001));
 	float radius = length(position);
 	float angle = atan(-position.y, position.x);
 	float ends = smoothstep(0.02, 0.40, angle) * (1.0 - smoothstep(2.74, 3.12, angle));
+	// Follow the bow from the left foot, over its crown, to the right foot.
+	// Feather the moving light front without drawing an unearned track or cursor.
+	float arc_progress = 1.0 - angle / 3.14159265359;
+	float progress = clamp(reveal_progress, 0.0, 1.0);
+	float revealed = (1.0 - smoothstep(progress - 0.025, progress + 0.025, arc_progress))
+		* smoothstep(0.0, 0.025, progress);
+	if (progress >= 1.0) revealed = 1.0;
 	float spectrum = (1.0 + band_width * 0.5 - radius) / max(band_width, 0.001);
 	// Overlapping optical bands have no painted edges, bevel or unfilled rail.
 	vec3 light = vec3(0.0);
@@ -34,6 +42,6 @@ void fragment() {
 	vec4 cloud = texture(TEXTURE, cloud_uv);
 	float veil = mix(0.78, 1.0, cloud.a);
 	float feather = exp(-pow((spectrum - 0.5) / 0.68, 4.0));
-	float alpha = min(weight, 1.0) * feather * ends * veil * strength;
+	float alpha = min(weight, 1.0) * feather * ends * veil * strength * revealed;
 	COLOR = vec4(light, alpha);
 }

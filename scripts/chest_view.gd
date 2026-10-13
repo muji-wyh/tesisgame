@@ -423,6 +423,24 @@ func _update_charge() -> void:
 	_charge_unit = minf(pixel, minf(available, available_height) / 100.0)
 	_charge_center = Vector2(size.x * 0.5, top + available_height * 0.52)
 	_charge_radius = Vector2(maxf(0, available * 0.37 - 18.0 * _charge_unit), maxf(0, available_height * 0.39 - 18.0 * _charge_unit))
+	if _motion_bounds.size.x > 0.0 and _motion_bounds.size.y > 0.0:
+		# Tall lids can hide the first earned quarter. Fit around the resting
+		# silhouette so the optical bow stays steady while the chest rocks.
+		var art_top: float = margin + 4.0 * pixel
+		var art_height: float = maxf(0.0, size.y - 7.0 * pixel - art_top)
+		var rest_scale: float = maxf(0.0, minf(size.x * 0.79 / _motion_bounds.size.x,
+			art_height * 0.87 / _motion_bounds.size.y))
+		var rest_center := Vector2(size.x * 0.5, art_top + art_height * 0.54)
+		var silhouette := Rect2(rest_center + (_bounds.position - _motion_bounds.get_center()) * rest_scale,
+			_bounds.size * rest_scale)
+		var quarter_y: float = _charge_center.y - _charge_radius.y * sqrt(0.5)
+		if quarter_y > silhouette.position.y - 8.0 * _charge_unit:
+			var half_width: float = maxf(_charge_center.x - silhouette.position.x, silhouette.end.x - _charge_center.x)
+			var max_radius_x: float = maxf(0.0, (available * 0.5 - 18.0 * _charge_unit) / 1.13)
+			_charge_radius.x = minf(max_radius_x, maxf(_charge_radius.x, half_width + 14.0 * _charge_unit))
+			var safe_center_y: float = margin + _charge_radius.y * 1.13 + 18.0 * _charge_unit
+			_charge_center.y = maxf(safe_center_y, minf(_charge_center.y,
+				silhouette.position.y - 12.0 * _charge_unit + _charge_radius.y * sqrt(0.5)))
 	# Every halo and drifting glint stays in this measured rectangle, including
 	# the one-shot release. The parent stage can safely keep clipping enabled.
 	var extent: Vector2 = _charge_radius * 1.13 + Vector2.ONE * 18.0 * _charge_unit
@@ -434,8 +452,14 @@ func _update_charge() -> void:
 	_rainbow_material.set_shader_parameter("ellipse_radius", _charge_radius / extent.max(Vector2.ONE * 0.001))
 	_rainbow_material.set_shader_parameter("band_width", minf(0.34, 14.0 * _charge_unit / maxf(1.0, minf(_charge_radius.x, _charge_radius.y))))
 	_rainbow_material.set_shader_parameter("strength", _rainbow_strength())
+	_rainbow_material.set_shader_parameter("reveal_progress", _rainbow_progress())
 	_rainbow_material.set_shader_parameter("light_phase", 0.0 if reduced_motion else _crown_flow_phase())
 	_charge.queue_redraw()
+
+
+func _rainbow_progress() -> float:
+	# The bow follows earned time even while the chest briefly holds its pose.
+	return clampf(performance_progress(), 0.0, 1.0) if _charge.visible else 0.0
 
 
 func _rainbow_strength() -> float:
@@ -767,7 +791,7 @@ func hold_effect_snapshot() -> Dictionary:
 		"pulse_motion": _pulse_motion(),
 		"crown_clock": _crown_clock(), "crown_flow_phase": _crown_flow_phase(),
 		"crown_streaks": [], "crown_milestones": [], "crown_crest": _crown_crest(),
-		"rainbow_strength": _rainbow_strength(), "rainbow_motes": _rainbow_motes(),
+		"rainbow_strength": _rainbow_strength(), "rainbow_progress": _rainbow_progress(), "rainbow_motes": _rainbow_motes(),
 		"crown_effect_bounds": {"x": crown_bounds.position.x, "y": crown_bounds.position.y,
 			"width": crown_bounds.size.x, "height": crown_bounds.size.y},
 		"buildup_intensity": _buildup_intensity(), "buildup_glow": _buildup_glow(),

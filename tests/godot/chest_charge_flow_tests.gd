@@ -73,7 +73,9 @@ func _check_cancelled(app, pieces: int, reason: String) -> void:
 	check(not app._coin_flight.snapshot().active,
 		reason + " leaves no coin flight from the cancelled opening")
 	check(not app._holding_chest and is_zero_approx(app._hold_elapsed)
-		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
+		and not app.chest.hold_effect_snapshot().active and is_zero_approx(app.chest.hold_effect_snapshot().release_flash)
+		and is_zero_approx(app.chest.hold_effect_snapshot().rainbow_progress)
+		and is_zero_approx(float(app.chest._rainbow_material.get_shader_parameter("reveal_progress"))),
 		reason + " clears the hold and visible progress immediately")
 	check(not app.audio._chest_charge_active and not app.audio.chest_charge.playing
 		and app.audio.chest_charge.stream == null
@@ -125,6 +127,9 @@ func _run() -> void:
 	var state: Dictionary = app.chest.hold_effect_snapshot()
 	check(app._holding_chest and state.active and state.phase == "holding" and state.percent == 0,
 		"The real button-down signal immediately displays zero-percent charging")
+	check(is_zero_approx(state.rainbow_progress)
+		and is_zero_approx(float(app.chest._rainbow_material.get_shader_parameter("reveal_progress"))),
+		"The real chest press starts its rainbow reveal at zero")
 	check(app.audio._chest_charge_active and app.audio.chest_charge.playing
 		and app.audio.chest_charge.stream == app.audio._chest_charge_loop,
 		"The same button-down arms the audible charge loop")
@@ -150,6 +155,9 @@ func _run() -> void:
 	var halfway_percent: int = floori(100.0 * Feel.HOLD_SECONDS * 0.5 / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME))
 	check(app.chest.hold_effect_snapshot().percent == halfway_percent and app.audio.chest_charge.pitch_scale > pitch,
 		"Confirmation advances its real share of the complete progress and rising audio pitch")
+	check(is_equal_approx(app.chest.hold_effect_snapshot().rainbow_progress,
+		Feel.HOLD_SECONDS * 0.5 / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME)),
+		"The controller drives the rainbow's reveal from the same earned hold time")
 	var first_milestone_time: float = (Feel.HOLD_SECONDS + Feel.RELEASE_TIME) / 3.0
 	app._advance_ui(first_milestone_time - 0.01 - app._hold_elapsed)
 	check(not cues.any(func(item): return item[1] == "charge_step"),
@@ -161,6 +169,9 @@ func _run() -> void:
 	state = app.chest.hold_effect_snapshot()
 	check(app.model.chest_state == "opening" and state.phase == "gathering" and state.percent == floori(Feel.progress(0.0) * 100.0),
 		"Completing confirmation keeps the gesture held while gathering advances")
+	check(is_equal_approx(state.rainbow_progress, Feel.progress(0.0))
+		and is_equal_approx(float(app.chest._rainbow_material.get_shader_parameter("reveal_progress")), state.rainbow_progress),
+		"The real hold-to-opening handoff preserves earned rainbow progress on the renderer")
 	check(app._holding_chest and not app.chest_button.disabled,
 		"The opening keeps both its held gesture and button release path active")
 	check(cues.filter(func(item): return item[1] == "charge_step") == [[RewardProgress.theme_for_tier(1), "charge_step", 1]],

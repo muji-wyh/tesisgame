@@ -60,6 +60,7 @@ func _run() -> void:
 	_check_release_commitment(data)
 	_check_hold_feedback(data)
 	_check_crown_effects(data)
+	_check_rainbow_progress(data)
 	_check_buildup_glow(data)
 	_check_hold_bounds(data)
 	_check_opened_flourish(data)
@@ -934,6 +935,92 @@ func _advance_crown_to(chest, elapsed: float) -> Dictionary:
 			chest.start_open(false)
 		chest._advance_animation(elapsed - Feel.HOLD_SECONDS - chest.hold_effect_snapshot().opening_time)
 	return chest.hold_effect_snapshot()
+
+
+func _check_rainbow_progress(data) -> void:
+	var chest = load("res://scripts/chest_view.gd").new()
+	root.add_child(chest)
+	chest.size = Vector2(440, 360)
+	for theme in data.THEMES:
+		chest.clear()
+		chest.reduced_motion = false
+		chest.configure_skin(data.theme(theme), data.chests)
+		check(is_zero_approx(chest.hold_effect_snapshot().rainbow_progress)
+			and is_zero_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress"))),
+			theme + " leaves the rainbow unrevealed before a hold begins")
+		chest.begin_hold()
+		check(is_zero_approx(chest.hold_effect_snapshot().rainbow_progress),
+			theme + " begins the rainbow at its left edge with zero completed progress")
+		var previous: float = 0.0
+		for fraction in [0.12, 0.33, 0.7, 1.0]:
+			chest.set_hold_progress(fraction)
+			var state: Dictionary = chest.hold_effect_snapshot()
+			var expected: float = fraction * Feel.HOLD_SECONDS / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
+			check(state.rainbow_progress > previous and is_equal_approx(state.rainbow_progress, expected)
+				and is_equal_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress")), expected),
+				"%s reveals only the earned share of the bow at %.0f percent of confirmation" % [theme, fraction * 100.0])
+			previous = state.rainbow_progress
+		chest.set_hold_progress(0.2)
+		chest._advance_animation(0.2)
+		check(is_equal_approx(chest.hold_effect_snapshot().rainbow_progress, previous),
+			theme + " cannot rewind or invent reveal progress from stale hold input or decorative animation time")
+		chest.start_open(false)
+		check(is_equal_approx(chest.hold_effect_snapshot().rainbow_progress, previous)
+			and is_equal_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress")), previous),
+			theme + " carries the exact revealed bow through confirmation into automatic opening")
+		for elapsed in [0.10, 0.35, Feel.ANTICIPATION_TIME, Feel.PAUSE_START_TIME,
+			(Feel.PAUSE_START_TIME + Feel.RELEASE_TIME) * 0.5, Feel.RELEASE_TIME - 0.001, Feel.RELEASE_TIME]:
+			chest._advance_animation(elapsed - float(chest.hold_effect_snapshot().opening_time))
+			var state: Dictionary = chest.hold_effect_snapshot()
+			check(state.rainbow_progress > previous and is_equal_approx(state.rainbow_progress, state.progress)
+				and is_equal_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress")), state.progress),
+				"%s advances its rainbow on actual progress, including the held breath, at %.3f seconds" % [theme, elapsed])
+			previous = state.rainbow_progress
+		check(is_equal_approx(previous, 1.0) and chest.opening_committed(),
+			theme + " reveals the complete rainbow only when the physical release is reached")
+		chest._advance_animation(0.04)
+		check(is_equal_approx(chest.hold_effect_snapshot().rainbow_progress, 1.0),
+			theme + " keeps its fully revealed bow intact while the release light fades")
+		for cancellation in ["hold", "opening", "hidden", "clear"]:
+			chest.clear()
+			chest.configure_skin(data.theme(theme), data.chests)
+			chest.begin_hold()
+			chest.set_hold_progress(0.75)
+			match cancellation:
+				"hold": chest.cancel_hold()
+				"opening":
+					chest.set_hold_progress(1.0)
+					chest.start_open(false)
+					chest._advance_animation(Feel.ANTICIPATION_TIME * 0.5)
+					chest.cancel_open(true)
+				"hidden": chest.hide()
+				"clear": chest.clear()
+			check(not chest.hold_effect_snapshot().active and is_zero_approx(chest.hold_effect_snapshot().rainbow_progress)
+				and is_zero_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress"))),
+				"%s clears the rainbow reveal after %s cancellation" % [theme, cancellation])
+			chest.show()
+			chest.begin_hold()
+			check(is_zero_approx(chest.hold_effect_snapshot().rainbow_progress),
+				"%s starts its next rainbow from the left after %s cancellation" % [theme, cancellation])
+		chest.clear()
+		chest.reduced_motion = true
+		chest.configure_skin(data.theme(theme), data.chests)
+		chest.begin_hold()
+		for fraction in [0.15, 0.5, 0.9, 1.0]:
+			chest.set_hold_progress(fraction)
+			var before: Dictionary = chest.hold_effect_snapshot()
+			chest._advance_animation(0.25)
+			var after: Dictionary = chest.hold_effect_snapshot()
+			check(is_equal_approx(before.rainbow_progress, fraction)
+				and is_equal_approx(after.rainbow_progress, before.rainbow_progress)
+				and is_equal_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress")), fraction)
+				and is_zero_approx(float(chest._rainbow_material.get_shader_parameter("light_phase"))),
+				"%s retains static but accurate left-to-right progress with reduced motion at %.0f percent" % [theme, fraction * 100.0])
+		chest.cancel_hold()
+		check(is_zero_approx(chest.hold_effect_snapshot().rainbow_progress)
+			and is_zero_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress"))),
+			theme + " also resets the static rainbow when reduced-motion confirmation is cancelled")
+	chest.free()
 
 
 func _check_buildup_glow(data) -> void:
