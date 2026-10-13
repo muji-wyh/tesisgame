@@ -94,17 +94,25 @@ async function merge(page, sourceId, targetId) {
     const state = await jelly(page);
     result = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
       tile.text === source.text + target.text && tile.mass === source.mass + target.mass);
-    return state.merged_count === before.merged_count + 1 && Boolean(result?.settled);
+    return state.merged_count === before.merged_count + 1 && Boolean(result?.settled) &&
+      before.tiles.filter(tile => tile.id !== sourceId && tile.id !== targetId).every(original =>
+        state.tiles.some(tile => tile.id === original.id && tile.settled));
   }, { message: 'The union settles into a persistent larger jelly in source-then-target order' }).toBe(true);
   const after = await jelly(page);
   expect(after.tiles.some(tile => tile.id === sourceId || tile.id === targetId)).toBe(false);
   expect(after.cleared_pairs, 'Merging does not automatically collect a word').toBe(before.cleared_pairs);
   expect(after.fragment_count, 'Carried fragments are collected only after a valid word is tapped').toBe(before.fragment_count);
   expect(result.fragments).toBe(source.fragments + target.fragments);
-  expect(result.row, 'A merged jelly stays at the target row or grows upward without sinking').toBeLessThanOrEqual(target.row);
+  expect(result.placement_locked, 'Automatic merging releases any previous manual placement').toBe(false);
+  expectSupportedChild(after, result);
   for (const original of before.tiles.filter(tile => tile.id !== sourceId && tile.id !== targetId && tile.settled)) {
     const unchanged = after.tiles.find(tile => tile.id === original.id);
     expect(unchanged, 'Merging preserves every unrelated jelly').toBeTruthy();
+    if (original.placement_locked) {
+      expect([unchanged.column, unchanged.row, unchanged.width, unchanged.height], 'Merging preserves an unrelated player placement')
+        .toEqual([original.column, original.row, original.width, original.height]);
+      continue;
+    }
     const expanded = unchanged.width !== original.width || unchanged.height !== original.height;
     if (expanded) {
       const compressed = original.width < Math.min(before.columns, original.mass) ||
@@ -112,13 +120,14 @@ async function merge(page, sourceId, targetId) {
       expect(compressed, 'Only an already compressed jelly can expand when a merge frees space').toBe(true);
       expect(unchanged.width).toBeGreaterThanOrEqual(original.width);
       expect(unchanged.height).toBeGreaterThanOrEqual(original.height);
-      expect(unchanged.row, 'Restored growth cannot make an unrelated jelly sink').toBeLessThanOrEqual(original.row);
+      expectSupportedChild(after, unchanged);
       continue;
     }
-    expect([unchanged.column, unchanged.row], 'A merge leaves unrelated occupied cells in place')
-      .toEqual([original.column, original.row]);
-    for (let axis = 0; axis < original.rect.length; axis++)
-      expect(unchanged.rect[axis], 'Unrelated settled jelly positions and sizes remain visually stable')
+    expect(unchanged.column, 'Automatic gravity preserves an unrelated jelly column').toBe(original.column);
+    expect(unchanged.row, 'An unsupported neighbor can descend after merging removes its support').toBeGreaterThanOrEqual(original.row);
+    expectSupportedChild(after, unchanged);
+    for (const axis of [0, 2, 3])
+      expect(unchanged.rect[axis], 'Automatic settlement preserves unrelated horizontal positions and sizes')
         .toBeCloseTo(original.rect[axis], 3);
   }
   return result;
@@ -187,11 +196,11 @@ function expectSupportedChild(state, child) {
   const bottom = child.row + child.height;
   const supported = bottom === state.rows || state.tiles.some(other => other.id !== child.id &&
     other.row === bottom && other.column < child.column + child.width && other.column + other.width > child.column);
-  expect(supported, `Restored part ${child.text} touches the floor or an occupied footprint immediately below`).toBe(true);
+  expect(supported, `Jelly ${child.text} touches the floor or an occupied footprint immediately below`).toBe(true);
   for (const other of state.tiles.filter(tile => tile.id !== child.id)) {
     const overlaps = child.column < other.column + other.width && child.column + child.width > other.column &&
       child.row < other.row + other.height && child.row + child.height > other.row;
-    expect(overlaps, `Restored part ${child.text} cannot overlap jelly ${other.id}`).toBe(false);
+    expect(overlaps, `Jelly ${child.text} cannot overlap jelly ${other.id}`).toBe(false);
   }
 }
 
@@ -375,6 +384,7 @@ test('manual and automatic preview packets naturally fall into the well', async 
 });
 
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
+  test.setTimeout(180000);
   const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
   const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1)
     .sort((a, b) => a.column - b.column);
@@ -384,20 +394,25 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   let completed = await merge(page, roots[0].id, roots[1].id);
   for (const root of roots.slice(2)) completed = await merge(page, completed.id, root.id);
   expect(completed.word.id).toBe(word.id);
-  const before = await jelly(page);
-  // Joining separated floor roots can move their larger body upward. Their old
-  // columns stay in place until collection initiates the ordinary gravity pass.
-  const stack = before.tiles.filter(tile => tile.row === before.rows - 2 && tile.mass === 1 &&
-    roots.some(root => root.column === tile.column) &&
-    !before.tiles.some(support => support.id !== completed.id && support.row === before.rows - 1 &&
-      support.column <= tile.column && support.column + support.width > tile.column));
-  expect(stack.length, 'At least one original upper root will lose its floor support after collection').toBeGreaterThan(0);
-  for (const tile of stack) {
-    const original = opening.tiles.find(root => root.id === tile.id);
-    expect(tile.settled, 'Merging keeps the suspended upper root still until collection').toBe(true);
-    expect([tile.column, tile.row]).toEqual([original.column, original.row]);
-    expect(tile.rect).toEqual(original.rect);
+  const supportedStack = state => {
+    const support = state.tiles.find(tile => tile.id === completed.id);
+    return state.tiles.filter(tile => tile.mass === 1 && tile.settled && !tile.placement_locked &&
+      tile.row + tile.height === support.row && tile.column < support.column + support.width &&
+      tile.column + tile.width > support.column);
+  };
+  let before = await jelly(page);
+  // Merging now settles every unsupported body immediately. Use the ordinary
+  // supply to form a real supported stack above the completed word if needed.
+  for (let packet = 0; packet < 2 && !supportedStack(before).length; packet++) {
+    await expect.poll(async () => (await jelly(page)).preview.enabled).toBe(true);
+    await pressRect(page, before.preview.rect);
+    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    before = await jelly(page);
   }
+  const stack = supportedStack(before);
+  expect(stack.length, 'At least one ordinary upper root rests directly on the word being collected').toBeGreaterThan(0);
+  for (const tile of stack) expectSupportedChild(before, tile);
+  completed = before.tiles.find(tile => tile.id === completed.id);
   await page.evaluate(stack => {
     const status = document.getElementById('game-status');
     window.wordJellyGravityTimeline = [];
@@ -411,9 +426,11 @@ test('collecting a lower word makes the stack above it visibly fall onto support
         y: tile.rect[1], settled: tile.settled, falling: tile.falling, age: tile.age, time: performance.now() })));
       const first = tracked.find(tile => tile.id === stack[0].id);
       if (first?.falling && !first.settled && first.rect[1] > stack[0].rect[1] &&
-        first.rect[1] < stack[0].rect[1] + state.board_rect[3] / state.rows)
+        first.rect[1] < stack[0].rect[1] + (first.row - stack[0].row) * state.board_rect[3] / state.rows)
         descentPositions.add(first.rect[1]);
-      if (!capturePending && descentPositions.size > 1) {
+      // The 100 ms bridge may publish only one strictly intermediate pose in
+      // this short fall; capture that pose instead of waiting past the landing.
+      if (!capturePending && descentPositions.size > 0) {
         capturePending = true;
         // Encoding a full device-resolution PNG synchronously can stall the short fall on WebKit.
         document.getElementById('canvas').toBlob(blob => {
@@ -433,13 +450,14 @@ test('collecting a lower word makes the stack above it visibly fall onto support
     const state = await jelly(page);
     return state.cleared_pairs === before.cleared_pairs + 1 && stack.every(original => {
       const tile = state.tiles.find(tile => tile.id === original.id);
-      return tile?.settled && tile.row === original.row + 1;
+      return tile?.settled && tile.row > original.row;
     });
-  }, { message: 'Removing the lower word lets every supported upper jelly settle one row lower' }).toBe(true);
+  }, { message: 'Removing the lower word lets every supported upper jelly fall to its next support' }).toBe(true);
   const after = await jelly(page), bounds = await metrics(page);
   for (const original of stack) {
     const landed = after.tiles.find(tile => tile.id === original.id);
-    expect([landed.column, landed.row]).toEqual([original.column, original.row + 1]);
+    expect(landed.column).toBe(original.column);
+    expect(landed.row).toBeGreaterThanOrEqual(original.row + 1);
     expect({ text: landed.text, mass: landed.mass, fragments: landed.fragments })
       .toEqual({ text: original.text, mass: original.mass, fragments: original.fragments });
     expect(landed.fragment_badges).toBe(original.fragments);
@@ -455,9 +473,16 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   const timeline = await page.evaluate(() => window.wordJellyGravityTimeline);
   await info.attach('word-jelly-gravity-timeline.json', { body: JSON.stringify(timeline, null, 2), contentType: 'application/json' });
   const original = stack[0], landed = after.tiles.find(tile => tile.id === original.id);
-  const descent = timeline.flat().filter(tile => tile.id === original.id && !tile.settled &&
-    tile.y > original.rect[1] && tile.y < landed.rect[1]);
-  expect(new Set(descent.map(tile => tile.y)).size, 'Collection gravity has multiple visible descent positions').toBeGreaterThan(1);
+  const travel = timeline.flat().filter(tile => tile.id === original.id);
+  const descent = travel.filter(tile => !tile.settled && tile.y > original.rect[1] && tile.y < landed.rect[1]);
+  expect(descent.length, 'Collection gravity has an observed in-flight pose between its supported start and landing').toBeGreaterThan(0);
+  expect(new Set(travel.map(tile => tile.y)).size, 'The browser observes distinct start, intermediate and landing positions').toBeGreaterThanOrEqual(3);
+  let previousY = original.rect[1];
+  for (const frame of travel) {
+    expect(frame.y, 'The sampled fall moves downward without returning to its unsupported start').toBeGreaterThanOrEqual(previousY - 0.05);
+    expect(frame.y).toBeLessThanOrEqual(landed.rect[1] + 0.05);
+    previousY = frame.y;
+  }
   await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyGravityFrame)),
     { message: 'The asynchronous intermediate-frame capture finishes without stalling the descent' }).toBe(true);
   const frame = await page.evaluate(() => window.wordJellyGravityFrame);
@@ -466,6 +491,145 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + completed.mass * 50);
   expect(after.collected_coins).toBe(before.collected_coins + completed.mass * 50);
   expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
+  expect(errors).toEqual([]);
+});
+
+test('roots and merged words stay at player placements and keep their contents through invalid drops and splitting', async ({ page }, info) => {
+  test.setTimeout(240000);
+  const errors = await startWordJelly(page), bounds = await metrics(page);
+  const { roots, word } = await availableWord(page, 3, 2, { markedOnly: true });
+  const opening = await jelly(page), startingWallet = await wallet(page);
+  const read = () => page.evaluate(() => JSON.parse(document.getElementById('game-status').dataset.jelly));
+  const content = tile => ({ id: tile.id, text: tile.text, mass: tile.mass, parts: tile.parts_count,
+    word: tile.word, coins: tile.coins, fragments: tile.fragments,
+    picture: tile.picture_visible, badges: tile.fragment_badges });
+  const footprint = tile => [tile.column, tile.row, tile.width, tile.height];
+  const vacant = (state, tile) => {
+    for (let row = 1; row < state.rows - tile.height; row++) for (let column = 0; column <= state.columns - tile.width; column++) {
+      if (column === tile.column && row === tile.row) continue;
+      // Include one empty row below the footprint, proving this is an explicit
+      // player placement rather than an ordinary resting surface.
+      if (!state.tiles.some(other => other.id !== tile.id && other.column < column + tile.width &&
+        other.column + other.width > column && other.row < row + tile.height + 1 && other.row + other.height > row))
+        return { column, row };
+    }
+    throw new Error('The ordinary board needs an empty footprint with free space below for this placement check.');
+  };
+  const dropPoint = (state, tile, placement) => ({
+    x: state.board_rect[0] + (placement.column + tile.width / 2) * state.board_rect[2] / state.columns,
+    y: state.board_rect[1] + (placement.row + tile.height / 2) * state.board_rect[3] / state.rows
+  });
+  const drag = async (id, point, ready, screenshot) => {
+    const state = await read(), tile = state.tiles.find(item => item.id === id);
+    expect(tile?.settled, 'The player grabs a settled body').toBe(true);
+    const from = center(tile.rect, bounds), to = center([point.x, point.y, 0, 0], bounds);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    try {
+      await expect.poll(async () => (await read()).drag.source).toBe(id);
+      await page.mouse.move(to.x, to.y, { steps: 3 });
+      await expect.poll(async () => ready(await read()), { message: 'The ordinary drag presents the expected drop affordance' }).toBe(true);
+      if (screenshot) await capture(page, info, screenshot);
+    } finally {
+      await page.mouse.up();
+    }
+    await expect.poll(async () => (await read()).drag.active).toBe(false);
+  };
+  const park = async (id, screenshot) => {
+    const state = await read(), tile = state.tiles.find(item => item.id === id), placement = vacant(state, tile);
+    const point = dropPoint(state, tile, placement);
+    if (screenshot) {
+      point.x += state.board_rect[2] / state.columns * 0.2;
+      point.y -= state.board_rect[3] / state.rows * 0.15;
+    }
+    await drag(id, point, current => current.placement.visible && current.placement.valid &&
+      current.placement.tile_id === id && current.placement.column === placement.column && current.placement.row === placement.row,
+    screenshot);
+    await expect.poll(async () => {
+      const moved = (await read()).tiles.find(item => item.id === id);
+      return moved?.settled && moved.placement_locked && moved.column === placement.column && moved.row === placement.row;
+    }).toBe(true);
+    await page.waitForTimeout(900);
+    const moved = (await read()).tiles.find(item => item.id === id);
+    expect(footprint(moved), 'A released player placement remains exactly where it was dropped')
+      .toEqual([placement.column, placement.row, tile.width, tile.height]);
+    expect(content(moved), 'Relocating changes neither the word nor its reward and fragment contents').toEqual(content(tile));
+    return moved;
+  };
+  const join = async (sourceId, targetId) => {
+    const state = await read(), source = state.tiles.find(tile => tile.id === sourceId), target = state.tiles.find(tile => tile.id === targetId);
+    const point = { x: target.rect[0] + target.rect[2] / 2, y: target.rect[1] + target.rect[3] / 2 };
+    await drag(sourceId, point, current => current.drag.target === targetId && !current.placement.visible);
+    await expect.poll(async () => {
+      const current = await read();
+      return current.merged_count === state.merged_count + 1 && current.tiles.some(tile =>
+        !state.tiles.some(old => old.id === tile.id) && tile.text === source.text + target.text && tile.settled);
+    }).toBe(true);
+    const current = await read(), merged = current.tiles.find(tile =>
+      !state.tiles.some(old => old.id === tile.id) && tile.text === source.text + target.text);
+    expect(merged.mass).toBe(source.mass + target.mass);
+    expect(merged.fragments).toBe(source.fragments + target.fragments);
+    expect(merged.placement_locked, 'A new automatic merge resumes ordinary gravity').toBe(false);
+    expectSupportedChild(current, merged);
+    return merged;
+  };
+
+  await park(roots[0].id);
+  const merged = await join(roots[0].id, roots[1].id);
+  expect(merged.word.id).toBe(word.id);
+  expect(merged.width).toBeGreaterThan(1);
+  expect(merged.picture_visible).toBe(true);
+  const placed = await park(merged.id, 'word-jelly-valid-empty-placement');
+  await capture(page, info, 'word-jelly-placed-word-over-empty-space');
+
+  const beforeInvalid = await read();
+  const returnedToPlacement = async () => {
+    const tile = (await read()).tiles.find(item => item.id === placed.id);
+    return JSON.stringify(footprint(tile)) === JSON.stringify(footprint(placed)) &&
+      tile.rect.every((value, axis) => Math.abs(value - placed.rect[axis]) < 0.05);
+  };
+  const overflow = { x: beforeInvalid.board_rect[0] + beforeInvalid.board_rect[2] * (1 - 0.3 / beforeInvalid.columns),
+    y: beforeInvalid.board_rect[1] + beforeInvalid.board_rect[3] * 0.5 / beforeInvalid.rows };
+  await drag(placed.id, overflow, current => current.drag.target === -1 && current.placement.visible && !current.placement.valid);
+  await expect.poll(returnedToPlacement, { message: 'A footprint crossing the edge visibly returns to its parked position' }).toBe(true);
+  const outside = { x: beforeInvalid.board_rect[0] - 12 / bounds.scale, y: overflow.y };
+  await drag(placed.id, outside, current => current.drag.target === -1 && !current.placement.valid);
+  await expect.poll(returnedToPlacement, { message: 'A pointer released outside the well visibly returns to its parked position' }).toBe(true);
+  const returned = await read();
+  expect(content(returned.tiles.find(tile => tile.id === placed.id))).toEqual(content(placed));
+  expect(returned.merged_count, 'A rejected empty or outside drop never starts a merge').toBe(beforeInvalid.merged_count);
+  expect(returned.collected_coins).toBe(opening.collected_coins);
+  expect(returned.fragment_count).toBe(opening.fragment_count);
+
+  const words = new Set(vocabulary.filter(item => item.min_age === 3).map(item => normalize(item.text)));
+  const extra = returned.tiles.find(tile => tile.id !== placed.id && tile.mass === 1 && tile.settled &&
+    !words.has(normalize(tile.text + placed.text)));
+  expect(extra, 'An ordinary unfinished root can join the moved word').toBeTruthy();
+  const invalid = await join(extra.id, placed.id);
+  expect(invalid.word).toEqual({});
+  expect(invalid.splittable).toBe(true);
+  const parkedInvalid = await park(invalid.id);
+  await pressRect(page, parkedInvalid.rect);
+  await expect.poll(async () => {
+    const state = await read();
+    return !state.tiles.some(tile => tile.id === invalid.id) && [extra.id, placed.id].every(id =>
+      state.tiles.some(tile => tile.id === id && tile.settled && tile.visible));
+  }, { message: 'Splitting a moved parent restores the exact original word and root identities' }).toBe(true);
+  const restored = await read();
+  for (const original of [extra, placed]) {
+    const child = restored.tiles.find(tile => tile.id === original.id);
+    expect(content(child), 'Relocation keeps the complete split ancestry and carried rewards').toEqual(content(original));
+    expect(child.placement_locked, 'Automatic split children settle onto support').toBe(false);
+    expectSupportedChild(restored, child);
+  }
+  expect((await wallet(page)).balance, 'Dragging, merging and splitting do not collect word coins').toBe(startingWallet.balance);
+  await capture(page, info, 'word-jelly-restored-moved-word-and-root');
+  const restoredWord = restored.tiles.find(tile => tile.id === placed.id);
+  await pressRect(page, restoredWord.rect);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + placed.coins);
+  const final = await read();
+  expect(final.cleared_pairs).toBe(opening.cleared_pairs + 1);
+  expect(final.fragment_count).toBe(opening.fragment_count + placed.fragments);
   expect(errors).toEqual([]);
 });
 
@@ -880,7 +1044,8 @@ test('an incorrect merged word splits into its original parts and can be correct
   await expect.poll(async () => {
     const state = await jelly(page);
     return !state.tiles.some(tile => tile.id === incorrect.id) &&
-      roots.every(root => state.tiles.some(tile => tile.id === root.id && tile.visible && tile.settled));
+      roots.every(root => state.tiles.some(tile => tile.id === root.id && tile.visible && tile.settled)) &&
+      state.tiles.every(tile => tile.settled);
   }, { message: 'Tapping an incorrect merge restores its two original roots after separation' }).toBe(true);
   const restored = await jelly(page), bounds = await metrics(page);
   expect(new Set(restored.tiles.map(tile => tile.id)).size, 'No split can duplicate a child identity').toBe(restored.tiles.length);
@@ -894,8 +1059,9 @@ test('an incorrect merged word splits into its original parts and can be correct
   }
   for (const original of before.tiles.filter(tile => tile.id !== incorrect.id)) {
     const unchanged = restored.tiles.find(tile => tile.id === original.id);
-    expect([unchanged.column, unchanged.row], 'Splitting leaves unrelated occupied cells in place')
-      .toEqual([original.column, original.row]);
+    expect(unchanged.column, 'Splitting preserves unrelated columns').toBe(original.column);
+    expect(unchanged.row, 'An unrelated root can descend when splitting removes its support').toBeGreaterThanOrEqual(original.row);
+    expectSupportedChild(restored, unchanged);
   }
   expect(restored.cleared_pairs).toBe(before.cleared_pairs);
   expect(restored.fragment_count).toBe(before.fragment_count);
@@ -919,7 +1085,8 @@ test('an incorrect merged word splits into its original parts and can be correct
   expect(errors).toEqual([]);
 });
 
-test('splitting a raised incorrect merge places both original roots on solid support', async ({ page }, info) => {
+test('an automatically settled incorrect merge splits both original roots onto solid support', async ({ page }, info) => {
+  test.setTimeout(180000);
   const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
   const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
   const bottom = opening.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && tile.row === opening.rows - 1);
@@ -929,22 +1096,18 @@ test('splitting a raised incorrect merge places both original roots on solid sup
     source.fragments + target.fragments > 0 && !words.has(normalize(source.text + target.text)));
   expect(pair, 'The real starter board offers a marked, nonadjacent bottom-to-upper incorrect merge').toBeTruthy();
   const { source, target } = pair;
-  const raised = await merge(page, source.id, target.id);
-  expect(raised.word).toEqual({});
-  expect(raised.row, 'The two-wide merge must remain raised above the crowded target row').toBeLessThan(target.row);
+  const merged = await merge(page, source.id, target.id);
+  expect(merged.word).toEqual({});
+  expect(merged.placement_locked, 'An automatic merge is free to settle onto support').toBe(false);
   const beforeSplit = await jelly(page);
-  const lowerRow = raised.row + raised.height;
-  const hasHoleBelow = Array.from({ length: raised.width }, (_, offset) => raised.column + offset)
-    .some(column => !beforeSplit.tiles.some(tile => tile.id !== raised.id &&
-      tile.column <= column && tile.column + tile.width > column && tile.row <= lowerRow && tile.row + tile.height > lowerRow));
-  expect(hasHoleBelow, 'The raised parent straddles an empty cell left by the nonadjacent merge').toBe(true);
-  await capture(page, info, 'word-jelly-raised-parent-over-gap');
-  await pressRect(page, raised.rect);
+  for (const tile of beforeSplit.tiles.filter(tile => tile.settled && !tile.placement_locked)) expectSupportedChild(beforeSplit, tile);
+  await capture(page, info, 'word-jelly-automatic-merge-on-support');
+  await pressRect(page, merged.rect);
   await expect.poll(async () => {
     const state = await jelly(page);
-    return !state.tiles.some(tile => tile.id === raised.id) && [source, target].every(original =>
+    return !state.tiles.some(tile => tile.id === merged.id) && [source, target].every(original =>
       state.tiles.some(tile => tile.id === original.id && tile.settled && tile.visible));
-  }, { message: 'Splitting the raised parent restores two settled children with supported destinations' }).toBe(true);
+  }, { message: 'Splitting the automatic parent restores two settled children with supported destinations' }).toBe(true);
   const restored = await jelly(page), bounds = await metrics(page);
   for (const original of [source, target]) {
     const child = restored.tiles.find(tile => tile.id === original.id);

@@ -58,6 +58,10 @@ func _run() -> void:
 	_check_paused_resize(view)
 	_check_root_tap(view)
 	_check_edge_drag(view)
+	_check_reposition_release(view)
+	_check_reposition_rejection(view)
+	_check_reposition_lifecycle(view)
+	_check_reposition_ancestry(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
 	_check_collect_button_growth(view)
@@ -313,10 +317,229 @@ func _check_edge_drag(view) -> void:
 		view._release(view.get_global_transform() * touch)
 		check(view.game.fusions.size() == 1 and cues.count("merge") == 1, "edge release commits one fusion")
 		var id: int = _merged_id(view)
-		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 		check(view.game.cell(id).text == "cat" and view._tiles.has(id), "edge merge becomes one persistent word")
 		check(view._tiles[id]._picture.is_visible_in_tree() and view._tiles[id]._picture.texture != null, "a valid merge displays its production word image")
 		check(payouts.is_empty() and attempts.is_empty(), "revealing the image grants nothing until the word is collected")
+
+
+func _placement_point(view, tile: Dictionary, column: int, row: int) -> Vector2:
+	var center: Vector2 = view._board.position + Vector2(column, row) * view._pitch \
+		+ Vector2(int(tile.width), int(tile.height)) * view._pitch * 0.5
+	return view.get_global_transform() * center
+
+
+func _pointer_event(view, pointer: int, phase: String, position: Vector2, canceled: bool = false) -> void:
+	var event: InputEvent
+	if pointer >= 0:
+		if phase == "move":
+			event = InputEventScreenDrag.new()
+		else:
+			event = InputEventScreenTouch.new()
+			event.pressed = phase == "down"
+			event.canceled = canceled
+		event.index = pointer
+	else:
+		if phase == "move":
+			event = InputEventMouseMotion.new()
+			event.button_mask = MOUSE_BUTTON_MASK_LEFT
+		else:
+			event = InputEventMouseButton.new()
+			event.button_index = MOUSE_BUTTON_LEFT
+			event.pressed = phase == "down"
+			event.canceled = canceled
+	event.position = position
+	view._input(event)
+
+
+func _reposition_fixture(view, mass: int = 1) -> Dictionary:
+	view.game.cells.clear()
+	var text: String = "ca" if mass == 1 else "cat" if mass == 2 else "caterpillar"
+	var tile: Dictionary = view.game._new_tile(text, mass, 2)
+	tile.column = 0
+	tile.row = Model.ROWS - int(tile.height)
+	view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	return tile
+
+
+func _check_reposition_release(view) -> void:
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700)]:
+		view.size = dimensions
+		for reduced: bool in [false, true]:
+			for pointer: int in [-1, 7]:
+				for mass: int in [1, 2, 7]:
+					_reset(view, reduced)
+					var tile: Dictionary = _reposition_fixture(view, mass)
+					var original: Dictionary = tile.duplicate(true)
+					var id: int = int(tile.id)
+					var column: int = 0 if mass == 7 else 2
+					var motion: Vector2 = _placement_point(view, tile, column, 1)
+					var release: Vector2 = _placement_point(view, tile, column, 3)
+					_pointer_event(view, pointer, "down", _center(view, id))
+					_pointer_event(view, pointer, "move", motion)
+					check(view._dragging and view._target == -1, "mouse and touch drag roots, words, and wrapped bodies over an empty destination")
+					var preview: Dictionary = view.snapshot().placement
+					check(preview.visible and preview.valid and int(preview.tile_id) == id and int(preview.column) == column and int(preview.row) == 1,
+						"the placement skin previews the whole valid snapped destination before release")
+					check(int(view.game.cell(id).column) == int(original.column) and int(view.game.cell(id).row) == int(original.row)
+						and not bool(view.game.cell(id).get("placement_locked", false)),
+						"previewing a destination cannot mutate the live body or claim its new cells before release")
+					check(view._placement_tile is Jelly.WordTile and view._placement_tile.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+						"placement reuses the painted jelly artwork without intercepting mouse or touch ownership")
+					_pointer_event(view, pointer, "up", release)
+					var placed: Dictionary = view.game.cell(id)
+					check(int(placed.column) == column and int(placed.row) == 3 and bool(placed.get("placement_locked", false)),
+						"placement uses the final pointer-up cell, including a newer coordinate than the last motion event")
+					check(placed.text == original.text and placed.word == original.word and placed.mass == original.mass
+						and placed.fragments == original.fragments and placed.width == original.width and placed.height == original.height,
+						"repositioning preserves identity, spelling, picture, mass, full footprint, and every fragment")
+					check(view.game.fusions.is_empty() and not view._settled(placed), "placing a body starts its short input settling window without merging or collecting it")
+					check(not view.snapshot().placement.visible, "a committed placement removes its temporary destination skin")
+					check(not view._press(pointer, _center(view, id)), "a newly placed body cannot accept a competing tap during its settle")
+					if reduced:
+						check(view._tiles[id].get_rect().is_equal_approx(view._tile_rect(placed)) and view._tiles[id].scale == Vector2.ONE,
+							"reduced motion places the body at the exact snapped cell without a moving or scaled target")
+					_advance(view, Model.SETTLE_SECONDS + 0.01)
+					placed = view.game.cell(id)
+					check(view._settled(placed) and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(placed)),
+						"the settled body and its hit target agree at the player's chosen position")
+					check(view._tiles[id].visible_fragment_badges() == 2 and view._board.encloses(view._tiles[id].get_rect()),
+						"a relocated root or wrapped word retains its chest artwork inside the well")
+					view.game._settle_collected_stack()
+					_advance(view, 1.0)
+					check(int(placed.row) == 3 and int(placed.column) == column,
+						"later gravity respects an intentional player placement instead of pulling it to the floor")
+					check(payouts.is_empty() and attempts.is_empty() and heard.is_empty()
+						and view.game.collected_coins == 0 and view.game.fragment_count == 0,
+						"moving even a completed word never pays coins, collects fragments, teaches, or pronounces it")
+					check(not view.snapshot().word_reveal.visible and cues.count("pop") == 0 and cues.count("merge") == 0,
+						"a positional drop cannot trigger the collection overlay, pop, or merge sound")
+	view.size = Vector2(1000, 720)
+
+
+func _check_reposition_rejection(view) -> void:
+	for pointer: int in [-1, 7]:
+		for destination: Vector2i in [Vector2i(-1, 2), Vector2i(1, 2), Vector2i(0, -1), Vector2i(0, 7)]:
+			_reset(view)
+			var tile: Dictionary = _reposition_fixture(view, 7)
+			var original: Rect2 = view._tile_rect(tile)
+			var release: Vector2 = _placement_point(view, tile, destination.x, destination.y)
+			_pointer_event(view, pointer, "down", _center(view, int(tile.id)))
+			_pointer_event(view, pointer, "move", release)
+			_pointer_event(view, pointer, "up", release)
+			_advance(view, Model.SETTLE_SECONDS + 0.1)
+			check(view._tiles[int(tile.id)].get_rect().is_equal_approx(original) and not bool(tile.get("placement_locked", false)),
+				"a wrapped body whose footprint crosses any well edge returns home even when its pointer is inside")
+			check(view.game.fusions.is_empty() and payouts.is_empty(), "an out-of-bounds drop cannot consume or collect a word")
+		_reset(view)
+		var tile: Dictionary = _reposition_fixture(view, 2)
+		var original: Rect2 = view._tile_rect(tile)
+		var blocker: Dictionary = view.game._new_tile("t", 1, 0)
+		blocker.column = 3
+		blocker.row = 2
+		blocker.age = 0.0
+		blocker.settling = true
+		view.game.cells.append(blocker)
+		view._sync_tiles()
+		var occupied: Vector2 = _placement_point(view, tile, 2, 2)
+		_pointer_event(view, pointer, "down", _center(view, int(tile.id)))
+		_pointer_event(view, pointer, "move", occupied)
+		check(view._target == -1, "a moving occupant cannot become a merge target")
+		check(view.snapshot().placement.visible and not view.snapshot().placement.valid,
+			"a blocked footprint gets visual rejection while leaving the held jelly under pointer control")
+		_pointer_event(view, pointer, "up", occupied)
+		_advance(view, Model.SETTLE_SECONDS + 0.1)
+		check(view._tiles[int(tile.id)].get_rect().is_equal_approx(original) and not bool(tile.get("placement_locked", false)),
+			"an occupied tail cell rejects the whole wider footprint instead of checking only its origin")
+		check(view.game.cells.size() == 2 and view.game.fusions.is_empty(), "a rejected occupied drop preserves both bodies")
+		_reset(view)
+		tile = _reposition_fixture(view)
+		var a: Dictionary = view.game._new_tile("ca", 1, 0)
+		a.column = 3
+		a.row = 2
+		var b: Dictionary = view.game._new_tile("t", 1, 0)
+		b.column = 4
+		b.row = 2
+		view.game.cells.append(a)
+		view.game.cells.append(b)
+		view._sync_tiles()
+		view._merge(int(a.id), int(b.id), view._tiles[int(a.id)].position)
+		check(view.game.fusions.size() == 1, "reservation fixture has an active neighboring merge")
+		var reserved: Dictionary = view.game.fusions[0].result
+		occupied = _placement_point(view, tile, int(reserved.column), int(reserved.row))
+		_pointer_event(view, pointer, "down", _center(view, int(tile.id)))
+		_pointer_event(view, pointer, "move", occupied)
+		_pointer_event(view, pointer, "up", occupied)
+		check(int(tile.column) == 0 and int(tile.row) == Model.ROWS - 1 and not bool(tile.get("placement_locked", false)),
+			"dropping into a fusion's future footprint is rejected before its new body appears")
+		check(view.game.fusions.size() == 1 and payouts.is_empty(), "reserved-space rejection leaves the original fusion and rewards untouched")
+
+
+func _check_reposition_lifecycle(view) -> void:
+	for pointer: int in [-1, 7]:
+		for interruption: String in ["cancel", "pointer_cancel", "pause", "resize", "focus"]:
+			_reset(view)
+			var tile: Dictionary = _reposition_fixture(view, 2)
+			var release: Vector2 = _placement_point(view, tile, 2, 2)
+			_pointer_event(view, pointer, "down", _center(view, int(tile.id)))
+			_pointer_event(view, pointer, "move", release)
+			match interruption:
+				"cancel": view.cancel_input()
+				"pointer_cancel": _pointer_event(view, pointer, "up", release, true)
+				"pause": view.pause(true)
+				"resize":
+					view.size = Vector2(390, 700)
+					view._layout()
+					check(view._board.encloses(view._tiles[int(tile.id)].get_rect())
+						and view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(tile)),
+						"resizing a held body immediately fits its artwork and hit target into the new well")
+				"focus": view._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+			_pointer_event(view, pointer, "up", release)
+			if interruption == "pause":
+				view.pause(false)
+			_advance(view, Model.SETTLE_SECONDS + 0.1)
+			check(int(tile.column) == 0 and int(tile.row) == Model.ROWS - 1 and not bool(tile.get("placement_locked", false)),
+				"%s cancels an uncommitted mouse or touch placement" % interruption)
+			check(view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(tile)) and view.game.fusions.is_empty(),
+				"%s restores artwork to its current board rectangle without a stale destination" % interruption)
+			check(not view.snapshot().placement.visible, "%s removes the stale placement preview" % interruption)
+			check(payouts.is_empty() and heard.is_empty() and attempts.is_empty(), "interrupted placement cannot become an accidental collection tap")
+			view.size = Vector2(1000, 720)
+		_reset(view)
+		var tile: Dictionary = _reposition_fixture(view, 2)
+		var origin: Vector2 = _center(view, int(tile.id))
+		_pointer_event(view, pointer, "down", origin)
+		_pointer_event(view, pointer, "move", _placement_point(view, tile, 2, 2))
+		_pointer_event(view, pointer, "up", origin)
+		_advance(view, Model.SETTLE_SECONDS)
+		check(not bool(tile.get("placement_locked", false)) and view.game.fusions.is_empty() and payouts.is_empty(),
+			"returning a dragged word to its own cell is a no-op without pinning or collecting it")
+
+
+func _check_reposition_ancestry(view) -> void:
+	_reset(view)
+	var fixture: Dictionary = _invalid_merge(view)
+	_advance(view, Model.SETTLE_SECONDS + 0.01)
+	var tile: Dictionary = view.game.cell(fixture.id)
+	var release: Vector2 = _placement_point(view, tile, 1, 2)
+	_pointer_event(view, 7, "down", _center(view, fixture.id))
+	_pointer_event(view, 7, "move", release)
+	_pointer_event(view, 7, "up", release)
+	_advance(view, Model.SETTLE_SECONDS + 0.01)
+	tile = view.game.cell(fixture.id)
+	check(view.game.can_split(tile) and bool(tile.get("placement_locked", false)), "moving an invalid merged word retains its undo ancestry")
+	var center: Vector2 = _center(view, fixture.id)
+	_pointer_event(view, 7, "down", center)
+	_pointer_event(view, 7, "up", center)
+	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "a later tap still splits the relocated invalid word")
+	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS * 2.0)
+	for id: int in fixture.ids:
+		var restored: Dictionary = view.game.cell(id)
+		check(not restored.is_empty() and not bool(restored.get("placement_locked", false)) and _has_support(view.game.cells, restored),
+			"splitting a moved parent restores naturally supported original children without inherited placement locks")
+	check(payouts.is_empty() and attempts.is_empty() and heard.is_empty(), "moving and undoing an invalid word preserves rewards and learning state")
 
 
 func _check_collect_and_fragments(view) -> void:
@@ -324,7 +547,7 @@ func _check_collect_and_fragments(view) -> void:
 	var ids: Array[int] = _install(view, ["ca", "t"], [1, 1])
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	var tile = view._tiles[id]
 	check(tile.visible_fragment_badges() == 2 and tile._fragment_badges[0].visible and tile._fragment_badges[1].visible, "both source chest markers remain independently visible on the merge")
 	check(tile._label.text.to_lower() == "cat" and tile._label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING, "merged word label remains complete")
@@ -819,12 +1042,12 @@ func _check_release_after_support_collection(view) -> void:
 	view._layout()
 	view._activate(int(support.id))
 	check(view._press(-1, _center(view, int(upper.id))), "an upper root can be held while its lower support is collecting")
-	var empty_point: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 4.5, view._pitch * 3.5))
+	var empty_point: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 7.0, view._pitch * 3.5))
 	view._move(empty_point)
 	_advance(view, Model.COLLECT_SECONDS + 0.01)
 	check(view.game.cell(int(support.id)).is_empty() and int(view.game.cell(int(upper.id)).row) == Model.ROWS - 2,
 		"the removed support defers gravity until the player's held upper root is released")
-	check(view._target == -1, "the held-root continuity fixture releases over actual empty space")
+	check(view._target == -1, "the held-root continuity fixture releases outside the well without a new placement")
 	view._release(empty_point)
 	var target: Vector2 = view._tile_rect(view.game.cell(int(upper.id))).position
 	var previous_distance: float = view._tiles[int(upper.id)].position.distance_to(target)
@@ -961,14 +1184,14 @@ func _check_partial_word_colors(view) -> void:
 				"incomplete prefixes of a three-part word do not pretend to be exact word pairs")
 	_drag(view, ids[0], ids[1])
 	var partial_id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cell(partial_id).text == "caterpil" and not view.game.is_valid_word(view.game.cell(partial_id)),
 		"the first two chunks form an actual incomplete persistent word")
 	check(_palette_item(view, partial_id).get("palette_index", -1) == _palette_item(view, ids[2]).get("palette_index", -2),
 		"a merged partial word shares a hint color with the remaining exact completion")
 	_drag(view, partial_id, ids[2])
 	var completed_id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cell(completed_id).text == "caterpillar" and view._tiles[completed_id]._picture.is_visible_in_tree(),
 		"following the partial-word color hint produces its pictured vocabulary word")
 
@@ -1086,7 +1309,7 @@ func _check_merge_handover_stability(view) -> void:
 		var target_rect: Rect2 = view._tile_rect(target)
 		var neighbor: Dictionary = view.game._new_tile("stay", 1, 0)
 		neighbor.column = 1
-		neighbor.row = 1
+		neighbor.row = Model.ROWS - 1
 		view.game.cells.append(neighbor)
 		view._sync_tiles()
 		var neighbor_rect: Rect2 = view._tiles[int(neighbor.id)].get_rect()
@@ -1101,7 +1324,7 @@ func _check_merge_handover_stability(view) -> void:
 		var rest: Rect2 = view._tile_rect(tile)
 		var rendered: Rect2 = view._tiles[id].get_rect()
 		check(int(tile.row) == int(target.row) and is_equal_approx(rendered.position.y, target_rect.position.y),
-			"a sparse upper target keeps its merged word on the same row instead of sinking into empty rows")
+			"a sparse upper merge hands its artwork over on the target row before support settlement")
 		check(rendered.is_equal_approx(final_fusion_rect) and rendered.is_equal_approx(rest),
 			"handover from fusion to the persistent body keeps exactly the same position and size")
 		check(not view.game.is_settled(tile) and not view._settled(tile),
@@ -1109,14 +1332,30 @@ func _check_merge_handover_stability(view) -> void:
 		check(not view._press(-1, view.get_global_transform() * rendered.get_center()),
 			"a tap cannot collect the newly handed-over word before input settles")
 		view.cancel_input()
+		_advance(view, Model.SETTLE_SECONDS * 0.45)
+		tile = view.game.cell(id)
+		check(not view.game.is_settled(tile) and view._tiles[id].get_rect().is_equal_approx(final_fusion_rect),
+			"the first landing wobble retains the merge handover before a separate natural fall")
+		_advance(view, Model.SETTLE_SECONDS * 0.75)
+		tile = view.game.cell(id)
+		check(int(tile.row) == Model.ROWS - int(tile.height) and bool(tile.get("falling", false)) and not view._settled(tile),
+			"an unsupported merged body reserves the nearest supported row after its handover settles")
+		if reduced:
+			check(view._tiles[id].get_rect().is_equal_approx(view._tile_rect(tile)),
+				"reduced motion moves the unsupported merge directly to its supported rectangle")
+		else:
+			check(view._tiles[id].position.y > final_fusion_rect.position.y and view._tiles[id].position.y < view._tile_rect(tile).position.y,
+				"normal motion visibly accelerates the unsupported merged body through the empty space")
 		_advance(view, Model.SETTLE_SECONDS)
 		tile = view.game.cell(id)
-		check(view.game.is_settled(tile) and view._tiles[id].get_rect().is_equal_approx(final_fusion_rect),
-			"the input settling window cannot move the body away from its fusion destination")
+		check(view.game.is_settled(tile) and _has_support(view.game.cells, tile)
+			and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(tile)),
+			"the merged body's final artwork, support, and interactive target agree after landing")
 		check(view._press(-1, _center(view, id)), "settled merged body accepts input at its visible position")
 		view.cancel_input()
 		_advance(view, 0.6)
-		check(view._tiles[id].get_rect().is_equal_approx(final_fusion_rect), "a completed merge remains at its chosen height after settling")
+		check(view._tiles[id].get_rect().is_equal_approx(view._tile_rect(tile)) and _has_support(view.game.cells, tile),
+			"a completed automatic merge stays grounded after its landing ends")
 		var unchanged: Dictionary = view.game.cell(int(neighbor.id))
 		check(int(unchanged.column) == int(neighbor.column) and int(unchanged.row) == int(neighbor.row)
 			and view._tiles[int(neighbor.id)].get_rect().is_equal_approx(neighbor_rect),
@@ -1128,7 +1367,7 @@ func _invalid_merge(view) -> Dictionary:
 	var inputs: Array[Dictionary] = [view.game.cell(ids[0]), view.game.cell(ids[1])]
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cell(id).text == "tca" and not view.game.is_valid_word(view.game.cell(id)),
 		"split fixture is an actual incorrect merge with two distinct chest-bearing inputs")
 	return {"id": id, "ids": ids, "inputs": inputs}
@@ -1198,7 +1437,7 @@ func _check_split_pointer_recovery(view) -> void:
 				"split conserves rewards without collecting the carried fragments")
 			_drag(view, fixture.ids[1], fixture.ids[0])
 			var corrected: int = _merged_id(view)
-			_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+			_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 			check(view.game.cell(corrected).text == "cat" and not view.game.can_split(view.game.cell(corrected)),
 				"the restored inputs can be corrected into a valid collectible word")
 			center = _center(view, corrected)
@@ -1240,7 +1479,7 @@ func _check_split_cancel_and_pause(view) -> void:
 	view._move(empty_point)
 	view._release(empty_point)
 	check(view.game.fusions.is_empty() and not view.game.cell(fixture.id).is_empty(), "dragging an invalid word into empty space never acts as a split tap")
-	_advance(view, 0.3)
+	_advance(view, Model.SETTLE_SECONDS + 0.01)
 	center = _center(view, fixture.id)
 	view._press(7, center)
 	view._release(center)
@@ -1284,7 +1523,7 @@ func _check_split_keyboard_and_nested_merge(view) -> void:
 	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge",
 		"an existing keyboard source merges into an invalid word instead of splitting the target")
 	var nested: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	view._activate(nested)
 	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "keyboard activation without a held source splits an invalid word")
 	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
@@ -1292,7 +1531,7 @@ func _check_split_keyboard_and_nested_merge(view) -> void:
 	_drag(view, fixture.id, int(extra.id))
 	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge", "dragging a restored invalid merged child continues to merge")
 	var remerged: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	view._activate(remerged)
 	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
 	view._activate(fixture.id)
@@ -1334,7 +1573,7 @@ func _check_split_keyboard_source_shortcut(view) -> void:
 		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "merge"
 			and int(view.game.fusions[0].a_id) == fixture.id, "the next keyboard activation merges the selected invalid source")
 		var merged: int = _merged_id(view)
-		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 		view._activate(merged)
 		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "plain activation still splits after keyboard source selection is consumed")
 
@@ -1345,10 +1584,13 @@ func _check_repeat_merge_and_wrap(view) -> void:
 	check(view.game.is_valid_word(view.game.cell(ids[0])), "a prebuilt valid word remains eligible to drag")
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	var cell: Dictionary = view.game.cell(id)
 	check(cell.text == "caterpillar" and cell.mass == 7 and cell.fragments == 5, "dragging a merged word builds a larger persistent word and retains every fragment")
 	check(cell.height == 2 and view._tiles[id].size.x > view._tiles[id].size.y, "large jelly grows across multiple grid rows")
+	check(_has_support(view.game.cells, cell) and not bool(cell.get("placement_locked", false))
+		and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(cell)),
+		"a wrapped automatic merge lands on support with its full painted footprint and no implicit position lock")
 	check(view._tiles[id]._label.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART and view._tiles[id]._label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING,
 		"large jelly uses wrapping without ellipsis")
 	check(view._tiles[id].visible_fragment_badges() == 5 and view._board.encloses(view._tiles[id].get_rect()), "large body and its fragment stack stay in the six-column board")
@@ -1361,7 +1603,7 @@ func _check_repeat_merge_and_wrap(view) -> void:
 	view._sync_tiles()
 	_drag(view, id, int(extra.id))
 	var again: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cell(again).text == "caterpillarextra" and view.game.cell(again).word.is_empty(), "a large valid jelly can merge onward into an unfinished build")
 	check(not view._tiles[again]._picture.visible and view._tiles[again].visible_fragment_badges() == 6, "unfinished larger build hides its old image while preserving six markers")
 
@@ -1413,7 +1655,7 @@ func _check_cancel_and_pause(view) -> void:
 	check(view.game.fusions.size() == 1 and is_equal_approx(float(view.game.fusions[0].elapsed), before), "pause freezes fusion presentation and model time")
 	check(not view._press(-1, _center(view, ids[0])), "paused view rejects new pointer input")
 	view.pause(false)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	check(view.game.cells.size() == 1 and view.game.cell(id).text == "cat", "fusion resumes to its persistent word")
 	view._press(-1, _center(view, id))
 	view.pause(true)
@@ -1432,7 +1674,7 @@ func _check_reduced_motion(view) -> void:
 	_advance(view, 0.2)
 	check(view._fusion_visuals.size() == 1 and not view._fusion_visuals.values()[0].art.visible, "reduced motion removes the animated liquid union shader")
 	check(view._fusion_visuals.values()[0].merged.visible and view._fusion_visuals.values()[0].merged.scale == Vector2.ONE, "reduced motion keeps the prospective word readable at steady scale")
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	var center: Vector2 = _center(view, id)
 	view._press(-1, center)
 	view._release(center)
@@ -1468,7 +1710,7 @@ func _check_keyboard(view) -> void:
 	view._activate(ids[1])
 	check(view.game.fusions.size() == 1 and view._keyboard_source == -1, "keyboard second activation merges in source-target order")
 	var id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	view._activate(id)
 	_advance(view, Model.COLLECT_SECONDS)
 	check(payouts.size() == 1 and view.game.collected_coins == 100, "keyboard activation can collect a valid merged word")

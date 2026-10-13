@@ -25,6 +25,8 @@ var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
 var _word_reveal: WordReveal
 var collect_button: CollectButton
+var _placement_tile: WordTile
+var _placement: Dictionary = {}
 
 func _init() -> void:
 	super()
@@ -59,6 +61,13 @@ func _init() -> void:
 	collect_button.pressed.connect(_collect_all)
 	collect_button.z_index = 5
 	add_child(collect_button)
+	_placement_tile = WordTile.new()
+	_placement_tile.name = "WordJellyPlacement"
+	_placement_tile.disabled = true
+	_placement_tile.focus_mode = Control.FOCUS_NONE
+	_placement_tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_placement_tile.hide()
+	add_child(_placement_tile)
 
 func stop() -> void:
 	game.cancel_collection_batch()
@@ -75,6 +84,10 @@ func stop() -> void:
 	_palette_indices.clear()
 	_palette_cache.clear()
 	_arrival_origins.clear()
+	_placement.clear()
+	_placement_tile.tile_id = -1
+	_placement_tile._picture.texture = null
+	_placement_tile.hide()
 
 func pause(value: bool = true) -> void:
 	if value and _word_reveal != null:
@@ -102,6 +115,8 @@ func cancel_input() -> void:
 	_sync_positions()
 
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
+	if _placement_tile != null:
+		_placement_tile.tile_id = -1
 	super.apply_theme(theme, chests)
 	for fusion: Dictionary in game.fusions:
 		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
@@ -114,6 +129,8 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 
 func _apply_chest_texture(texture: Texture2D) -> void:
 	super._apply_chest_texture(texture)
+	if _placement_tile != null:
+		_placement_tile.set_chest_texture(texture)
 	for visual: Dictionary in _fusion_visuals.values():
 		visual.merged.set_chest_texture(texture)
 		for part: WordTile in visual.get("parts", []):
@@ -180,6 +197,59 @@ func _release(global_point: Vector2) -> void:
 		_tap_tile(source)
 	game.set_held_tile(_keyboard_source)
 	_sync_positions()
+
+func _release_empty_space(source: int, from: Vector2) -> void:
+	var destination: Dictionary = _placement_at(source, from, _drag_point)
+	var generation: int = _generation
+	if bool(destination.get("valid", false)) and game.reposition(source, int(destination.column), int(destination.row)):
+		if generation != _generation or not _can_play():
+			return
+		_snapbacks.erase(source)
+		_reflow.erase(source)
+		_sync_positions()
+		_refresh_hud()
+		queue_redraw()
+		audio_requested.emit("release")
+	else:
+		super._release_empty_space(source, from)
+
+func _placement_at(id: int, from: Vector2, pointer: Vector2) -> Dictionary:
+	if _pitch <= 0.0 or not _board.has_point(pointer) or not _tiles.has(id):
+		return {}
+	# Snap the held body's origin, preserving where the finger grabbed it.
+	var grid: Vector2 = (from - _board.position - Vector2.ONE * _gap * 0.5) / _pitch
+	var column: int = roundi(grid.x)
+	var row: int = roundi(grid.y)
+	var cell: Dictionary = game.cell(id)
+	if cell.is_empty():
+		return {}
+	cell.column = column
+	cell.row = row
+	return {"tile_id": id, "column": column, "row": row, "valid": game.can_reposition(id, column, row),
+		"rect": _tile_rect(cell)}
+
+func _refresh_placement() -> void:
+	_placement.clear()
+	if _placement_tile == null:
+		return
+	_placement_tile.hide()
+	if not _can_play() or not _dragging or _source < 0 or _target >= 0 or not _tiles.has(_source):
+		return
+	_placement = _placement_at(_source, _tiles[_source].position, _drag_point)
+	if _placement.is_empty():
+		return
+	if _placement_tile.tile_id != _source:
+		_configure_tile(_placement_tile, _cell(_source))
+	_apply_palette(_placement_tile, _source)
+	_placement_tile.position = _placement.rect.position
+	_placement_tile.size = _placement.rect.size
+	_placement_tile.set_projection(true)
+	_placement_tile.set_support(0.0, 0.0, false)
+	_placement_tile.modulate = Color(1.0, 1.0, 1.0, 0.42 if _placement.valid else 0.24)
+	_placement_tile._gel.set_shader_parameter("rim_color", Color("#398b72") if _placement.valid else Color("#ce655b"))
+	_placement_tile._gel.set_shader_parameter("rim_strength", 1.0)
+	_placement_tile._gel.set_shader_parameter("rim_width", 1.5)
+	_placement_tile.show()
 
 func _activate(id: int) -> void:
 	if not _can_play() or _pointer != NO_POINTER or not _settled(_cell(id)) or game.collection_batch_active():
@@ -466,6 +536,7 @@ func _sync_positions() -> void:
 			_contact_elapsed = 0.0
 			_refresh_marks()
 	_refresh_contact()
+	_refresh_placement()
 
 func _sync_preview() -> void:
 	var refills: Array[float] = []
@@ -804,6 +875,8 @@ func _layout() -> void:
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
+		if _dragging:
+			cancel_input()
 		_rest_rects.clear()
 		_reflow.clear()
 		_snapbacks.clear()
@@ -868,6 +941,10 @@ func snapshot() -> Dictionary:
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
+	state["placement"] = {"visible": _placement_tile != null and _placement_tile.is_visible_in_tree(), "valid": false}
+	if not _placement.is_empty():
+		state.placement.merge(_placement, true)
+		state.placement.rect = _rect(_global_rect(_placement.rect))
 	if collect_button != null:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
 	state.preview.enabled = state.preview.enabled and not game.collection_batch_active()

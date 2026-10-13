@@ -560,12 +560,15 @@ func _release(global_point: Vector2) -> void:
 		if target >= 0:
 			_merge(source, target, from, held, true)
 		else:
-			_snap_back(source, from)
-			audio_requested.emit("release")
+			_release_empty_space(source, from)
 	if generation != _generation or not _allowed():
 		return
 	_refresh_marks()
 	_publish()
+
+func _release_empty_space(source: int, from: Vector2) -> void:
+	_snap_back(source, from)
+	audio_requested.emit("release")
 
 func _drop_next(expected_first_id: int = -1) -> void:
 	if not _can_play() or _pointer != NO_POINTER:

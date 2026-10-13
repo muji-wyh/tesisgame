@@ -45,6 +45,11 @@ func _run() -> void:
 	_test_packing_and_growth()
 	_test_target_placement()
 	_test_edge_placement()
+	_test_automatic_support_settlement()
+	_test_reposition_bounds_and_locks()
+	_test_reposition_support_and_growth()
+	_test_reposition_reservations_and_guards()
+	_test_reposition_history_and_rewards()
 	_test_fusion_reservations()
 	_test_deferred_growth()
 	_test_growth_after_settlement()
@@ -150,6 +155,10 @@ func _assert_reservations(model, label: String) -> void:
 
 func _merge(model, source: int, target: int) -> Dictionary:
 	model.step(Model.SETTLE_SECONDS)
+	for boundary in range(Model.ROWS + 2):
+		if model.is_settled(model.cell(source)) and model.is_settled(model.cell(target)):
+			break
+		model.step(Model.SETTLE_SECONDS)
 	check(model.try_merge(source, target) == "merged", "available jellies can merge")
 	if model.fusions.is_empty():
 		return {}
@@ -1010,13 +1019,20 @@ func _test_target_placement() -> void:
 	var merge_obstacles: Dictionary = model._occupied()
 	check(int(planned.row) + int(planned.height) < Model.ROWS and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column))
 		and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column) + 1),
-		"split support rules do not make an unsupported upper merge sink toward the floor")
+		"the fusion reserves its upper endpoint before any later support settlement")
 	model.step(Model.FUSION_SECONDS)
 	var merged: Dictionary = model.cell(int(planned.id))
 	check(_footprint(merged) == _footprint(planned), "fusion handover commits the exact preannounced destination")
-	check(_footprint(model.cell(1002)) == neighbor, "merging does not move an unrelated jelly")
+	check(model.cell(1002).column == neighbor.position.x and model.cell(1002).row == Model.ROWS - 1
+		and bool(model.cell(1002).falling), "merge completion also settles an unrelated unsupported jelly")
 	check(merged.mass == 2 and merged.fragments == 3 and merged.text == "cat", "target placement preserves all merged content and fragments")
 	model.step(Model.SETTLE_SECONDS)
+	check(model.cell(int(planned.id)).column == planned.column and model.cell(int(planned.id)).row == Model.ROWS - 1
+		and bool(model.cell(int(planned.id)).falling) and not model.is_settled(model.cell(int(planned.id))),
+		"an unsupported merged word begins a natural vertical fall after its handover wobble")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.is_settled(model.cell(int(planned.id))) and not model._gravity_pending,
+		"the merged word finishes on actual support without requiring a later collection")
 	model.cells.append(_placed_tile(1003, "cat", 0, 7, 2, 0, _word("cat")))
 	check(model.collect(1003), "a lower word can be collected underneath the upper merge")
 	model.step(Model.COLLECT_SECONDS)
@@ -1052,7 +1068,211 @@ func _test_edge_placement() -> void:
 			"top and bottom edge destinations remain inside the well")
 		model.step(Model.FUSION_SECONDS)
 		check(_footprint(model.cell(int(planned.id))) == _footprint(planned), "edge fusion and final footprint share one placement")
+		model.step(Model.SETTLE_SECONDS * 2.0)
+		check(model.cell(int(planned.id)).row == Model.ROWS - 2 and model.is_settled(model.cell(int(planned.id))),
+			"a large wrapped merge finishes on the floor after its reserved handover")
 		_assert_board(model, "wrapped edge placement")
+
+
+func _test_automatic_support_settlement() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 4, 7),
+		_placed_tile(1002, "x", 0, 6)])
+	check(model.try_merge(1000, 1001) == "merged", "moving a lower root into a merge can remove its old support")
+	model.step(Model.FUSION_SECONDS)
+	check(model.cell(1002).row == 7 and bool(model.cell(1002).falling),
+		"a merge settles the unsupported stack left behind by its source")
+	model.step(Model.SETTLE_SECONDS)
+	_assert_supported_tiles(model, [1002], "support removed by merge")
+	model = _model()
+	_board(model, ["t", "ca"])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	parent.column = 0
+	parent.row = 5
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent, _placed_tile(2000, "x", 0, 4)])
+	check(model.split(int(parent.id)), "an upper invalid word can split into supported lower destinations")
+	model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+	_assert_supported_tiles(model, [1000, 1001, 2000], "support removed by split")
+	check(model.cell(2000).row > 4, "splitting settles a neighbor that loses the parent's old support")
+	model = _model()
+	var compressed: Dictionary = _placed_tile(1000, "large", 2, 2, 7, 3)
+	compressed.width = 2
+	compressed.height = 1
+	model.cells.assign([compressed])
+	model._restore_growth()
+	check(model.cell(1000).width == 6 and model.cell(1000).height == 2 and model._gravity_pending,
+		"automatic wrapped growth schedules support settlement for its enlarged body")
+	model.step(Model.SETTLE_SECONDS * 2.0)
+	check(_footprint(model.cell(1000)) == Rect2i(0, 6, 6, 2) and model.is_settled(model.cell(1000))
+		and not model._gravity_pending, "a grown wrapped body cannot remain suspended above empty rows")
+	_assert_board(model, "automatic wrapped growth and fall")
+
+
+func _test_reposition_bounds_and_locks() -> void:
+	var model = _model([_word("cat")])
+	var original: Dictionary = _placed_tile(1000, "cat", 0, 7, 2, 3, _word("cat"))
+	original.skin = 4
+	model.cells.assign([original, _placed_tile(1001, "x", 4, 3)])
+	var events: Dictionary = _observe(model)
+	var before: Dictionary = model.snapshot()
+	for position: Vector2i in [Vector2i(-1, 0), Vector2i(5, 0), Vector2i(0, -1), Vector2i(0, 8), Vector2i(3, 3), Vector2i(0, 7)]:
+		check(not model.can_reposition(1000, position.x, position.y)
+			and not model.reposition(1000, position.x, position.y), "invalid, occupied, and unchanged full-body placements are rejected")
+		check(model.snapshot() == before, "a rejected placement leaves position, locks, clocks, and rewards unchanged")
+	check(not model.can_reposition(-1, 2, 1) and not model.reposition(-1, 2, 1), "missing tile IDs cannot reserve a placement")
+	check(model.can_reposition(1000, 2, 1) and model.reposition(1000, 2, 1), "an entire wide jelly can be placed in a fitting empty space")
+	var moved: Dictionary = model.cell(1000)
+	check(_footprint(moved) == Rect2i(2, 1, 2, 1) and bool(moved.placement_locked)
+		and not model.is_settled(moved) and bool(moved.settling) and not bool(moved.falling),
+		"explicit placement locks the exact grid position and starts ordinary handover settlement")
+	for key: String in ["id", "text", "word", "mass", "parts_count", "fragments", "chest", "kind", "skin"]:
+		check(moved[key] == original[key], "reposition preserves the jelly's " + key)
+	check(events.collections.is_empty() and events.attempts.is_empty() and events.cues.is_empty()
+		and model.collected_coins == 0 and model.fragment_count == 0 and model.merged_count == 0,
+		"manual reposition emits no collection, learning, sound, fragment, or coin reward")
+	model.step(Model.SETTLE_SECONDS - 0.001)
+	check(not model.is_settled(model.cell(1000)), "manual handover remains unavailable until its last settling millisecond")
+	model.step(0.001)
+	check(model.is_settled(model.cell(1000)), "manual handover completes at the ordinary settle boundary")
+	model.step(2.0)
+	check(_footprint(model.cell(1000)) == Rect2i(2, 1, 2, 1) and not model._gravity_pending and not model._growth_pending,
+		"an explicitly placed unsupported word stays chosen without keeping pending-motion flags alive")
+	before = model.snapshot()
+	check(not model.reposition(1000, 2, 1) and model.snapshot() == before,
+		"releasing an already locked word at its current coordinate preserves its existing state")
+	check(model.reposition(1000, 3, 1), "a moved footprint may overlap its own old cells when the full destination is free")
+	model.step(Model.SETTLE_SECONDS)
+	_assert_board(model, "locked manual wide placement")
+	model = _model()
+	model.cells.assign([_placed_tile(1000, "wrapped", 0, 6, 7, 2)])
+	check(not model.can_reposition(1000, 1, 0) and not model.reposition(1000, 0, 7),
+		"wrapped placement validates both the six-column width and the second occupied row")
+	check(model.reposition(1000, 0, 0), "a wrapped jelly can be placed at the top when its complete body fits")
+	model.step(Model.SETTLE_SECONDS * 2.0)
+	check(_footprint(model.cell(1000)) == Rect2i(0, 0, 6, 2) and bool(model.cell(1000).placement_locked),
+		"a manually placed multirow body retains both its full size and chosen height")
+	_assert_board(model, "locked manual wrapped placement")
+
+
+func _test_reposition_support_and_growth() -> void:
+	var model = _gravity_tower()
+	model.set_held_tile(1001)
+	model.collect(1000)
+	model.step(Model.COLLECT_SECONDS)
+	check(model.cell(1001).row == 6 and model.cell(1002).row == 5, "held source keeps its old stack stable while support is collected")
+	check(model.reposition(1001, 3, 3), "a held source can commit its explicit destination after lower support changes")
+	check(model.cell(1001).row == 3 and bool(model.cell(1001).placement_locked)
+		and model.cell(1002).row == 7 and bool(model.cell(1002).falling),
+		"manual relocation keeps its own chosen position while the abandoned upper stack drops naturally")
+	model.set_held_tile(-1)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.cell(1001).row == 3 and model.is_settled(model.cell(1001)) and not model._gravity_pending,
+		"releasing the drag anchor cannot undo a successful explicit placement")
+	model.cells.append(_placed_tile(9000, "x", 3, 1))
+	model._gravity_pending = true
+	model.step(Model.SETTLE_SECONDS)
+	check(model.cell(9000).row == 2 and model.cell(1001).row == 3,
+		"a locked body remains physical support for naturally falling neighbors")
+	_assert_board(model, "manual position supports a falling neighbor")
+	model = _model()
+	var compressed: Dictionary = _placed_tile(1000, "large", 0, 7, 7, 2)
+	compressed.width = 2
+	compressed.height = 1
+	model.cells.assign([compressed])
+	check(model.reposition(1000, 2, 2), "the actual compressed body can move where its complete current footprint fits")
+	model.step(Model.SETTLE_SECONDS)
+	model._restore_growth()
+	model._gravity_pending = true
+	model.step(2.0)
+	check(_footprint(model.cell(1000)) == Rect2i(2, 2, 2, 1) and bool(model.cell(1000).placement_locked)
+		and not model._gravity_pending and not model._growth_pending,
+		"deferred automatic growth cannot resize or displace an explicit compressed placement")
+
+
+func _test_reposition_reservations_and_guards() -> void:
+	var model = _model([_word("cat")])
+	model.cells.assign([_placed_tile(1000, "x", 5, 7), _placed_tile(1001, "ca", 0, 1), _placed_tile(1002, "t", 2, 1)])
+	check(model.try_merge(1001, 1002) == "merged", "a concurrent merge reserves a new neighboring cell")
+	check(not model.reposition(1000, 1, 1), "reposition cannot occupy an empty-looking cell reserved by a future merge body")
+	check(not model.reposition(1001, 3, 3), "a live fusion source cannot be repositioned")
+	model = _model()
+	_board(model, ["t", "ca"])
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	parent.column = 0
+	parent.row = 1
+	parent.age = Model.SETTLE_SECONDS
+	parent.settling = false
+	model.cells.assign([parent, _placed_tile(2000, "x", 5, 7)])
+	check(model.split(int(parent.id)), "a split reserves empty cells below its original body")
+	var child: Dictionary = model.fusions[0].results[0]
+	check(not model.reposition(2000, int(child.column), int(child.row)), "reposition honors every pending split child destination")
+	model = _model([_word("cat")])
+	_batch_board(model, 3)
+	model.start_collection_batch()
+	check(not model.can_reposition(1002, 3, 2) and not model.reposition(1002, 3, 2), "a batch keeps all explicit placement input gated")
+	model.step(0.30)
+	check(model.cleared_pairs == 3 and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 0.30),
+		"rejected manual movement preserves the three exact 100 ms batch transactions")
+	model = _model()
+	_board(model, ["x"])
+	model.set_paused(true)
+	check(not model.reposition(1000, 2, 2), "paused play cannot change an explicit position")
+	model.set_paused(false)
+	model.cells[0].age = 0.0
+	model.cells[0].settling = true
+	check(not model.reposition(1000, 2, 2), "an unheld settling body cannot be moved")
+	model.set_held_tile(1000)
+	check(model.reposition(1000, 2, 2), "the currently held source may finish a deliberate placement during recovery")
+	model.finish_round()
+	check(not model.reposition(1000, 3, 2), "finished rounds cannot accept a late drag release")
+	model.configure([_word("cat")], 3, 42)
+	check(model.cells.all(func(tile: Dictionary) -> bool: return not bool(tile.get("placement_locked", false))),
+		"new rounds discard explicit placement locks")
+
+
+func _test_reposition_history_and_rewards() -> void:
+	var model = _model([_word("cat")])
+	_board(model, ["ca", "t"], [2, 3])
+	var word: Dictionary = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS)
+	var receipts: Array[String] = []
+	model.credit_collection = func(receipt: String, _amount: int) -> Dictionary:
+		receipts.append(receipt)
+		return {"ok": receipts.size() > 1}
+	check(model.collect(int(word.id)), "a valid word can retain a failed payment receipt before moving")
+	model.step(Model.COLLECT_SECONDS)
+	var ancestry: Array = model._merge_history[int(word.id)].duplicate(true)
+	check(model.reposition(int(word.id), 2, 2), "a word with a failed payment can be moved without losing its retry")
+	check(model._merge_history[int(word.id)] == ancestry and receipts.size() == 1,
+		"reposition preserves merge ancestry and never calls wallet persistence")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.collect(int(word.id)), "a positioned word remains collectable after its handover")
+	model.step(Model.COLLECT_SECONDS)
+	check(receipts.size() == 2 and receipts[0] == receipts[1] and model.collected_coins == 100
+		and model.fragment_count == 5 and model.cells.is_empty(), "manual reposition preserves exact retry identity and once-only coin and fragment rewards")
+	model.credit_collection = Callable()
+	model = _model()
+	_board(model, ["t", "ca"], [2, 3])
+	check(model.reposition(1000, 0, 2) and model.reposition(1001, 2, 2), "both original parts can have explicit placements before a merge")
+	model.step(Model.SETTLE_SECONDS)
+	var parent: Dictionary = _merge(model, 1000, 1001)
+	check(not bool(parent.placement_locked), "a new merged body cannot inherit either source's explicit placement lock")
+	model.step(Model.SETTLE_SECONDS * 2.0)
+	check(model.reposition(int(parent.id), 1, 3), "the merged invalid word can receive its own explicit placement")
+	model.step(Model.SETTLE_SECONDS)
+	check(model.split(int(parent.id)), "reposition preserves the invalid word's original split ancestry")
+	for planned: Dictionary in model.fusions[0].results:
+		check(not bool(planned.placement_locked), "split destinations clear historical source placement locks before presentation")
+	model.step(Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
+	for id: int in [1000, 1001]:
+		check(not bool(model.cell(id).placement_locked), "restored split children use natural support rather than their old explicit locks")
+	check(model.cell(1000).text == "t" and model.cell(1001).text == "ca"
+		and model.cell(1000).fragments == 2 and model.cell(1001).fragments == 3,
+		"moving, merging, moving again, and splitting preserves the original parts and separate fragments")
+	_assert_supported_tiles(model, [1000, 1001], "split after explicit placement")
+	_assert_board(model, "split ancestry after explicit placement")
 
 
 func _test_fusion_reservations() -> void:

@@ -46,7 +46,7 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 			tile.chest = int(tile.fragments) > 0
 	check(game.try_merge(pair[0], pair[1]) == "merged", "The gameplay model accepts a word-building merge")
 	var result_id: int = int(game.fusions.back().result.id)
-	game.step(game.FUSION_SECONDS + game.SETTLE_SECONDS)
+	game.step(game.FUSION_SECONDS + game.SETTLE_SECONDS * 2.0)
 	var result: Dictionary = game.cell(result_id)
 	check(not result.is_empty() and result.word.id == word.id, "The resulting word persists on the board")
 	return result

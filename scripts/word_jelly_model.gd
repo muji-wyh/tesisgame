@@ -513,6 +513,46 @@ func set_held_tile(tile_id: int = -1) -> void:
 	changed.emit()
 
 
+func can_reposition(tile_id: int, column: int, row: int) -> bool:
+	if phase != "playing" or paused or collection_batch_active() or is_fusing(tile_id):
+		return false
+	var tile: Dictionary = cell(tile_id)
+	if tile.is_empty() or (tile_id != _held_tile_id and not is_settled(tile)):
+		return false
+	if column == int(tile.column) and row == int(tile.row):
+		return false
+	var width: int = int(tile.width)
+	var height: int = int(tile.height)
+	if column < 0 or row < 0 or column + width > COLUMNS or row + height > ROWS:
+		return false
+	return _fits(_occupied([tile_id]), column, row, width, height)
+
+
+func reposition(tile_id: int, column: int, row: int) -> bool:
+	if not can_reposition(tile_id, column, row):
+		return false
+	var tile: Dictionary = cells[_index_for_id(tile_id)]
+	tile.column = column
+	tile.row = row
+	tile.placement_locked = true
+	tile.age = 0.0
+	tile.settling = true
+	tile.arrival = false
+	tile.falling = false
+	tile.falling_rows = 0
+	if _held_tile_id == tile_id:
+		_held_tile_id = -1
+	# The player owns this exact placement. Bodies left above the old position
+	# still settle naturally, and newly opened room can restore compressed peers.
+	_growth_pending = true
+	_gravity_pending = true
+	_resume_pending_motion()
+	if _has_free_cell():
+		full_elapsed = -1.0
+	changed.emit()
+	return true
+
+
 func can_drop_now() -> bool:
 	return phase == "playing" and not paused and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
 
@@ -661,7 +701,7 @@ func _new_tile(text: String, mass: int, fragments: int) -> Dictionary:
 		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "root",
 		"column": 0, "row": ROWS - size.y, "width": size.x, "height": size.y,
 		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "arrival_index": 0, "arrival_delay": 0.0,
-		"falling": false, "falling_rows": 0
+		"falling": false, "falling_rows": 0, "placement_locked": false
 	}
 	_next_tile_id += 1
 	return tile
@@ -815,6 +855,7 @@ func _complete_merge(completed: Dictionary) -> void:
 	result.arrival = false
 	result.falling = false
 	result.falling_rows = 0
+	result.placement_locked = false
 	cells.append(result)
 	if _held_tile_id in [int(a.id), int(b.id)]:
 		_held_tile_id = -1
@@ -822,6 +863,7 @@ func _complete_merge(completed: Dictionary) -> void:
 	# recursively duplicate the entire tree on every frame or animation event.
 	_merge_history[int(result.id)] = [completed.a.duplicate(true), completed.b.duplicate(true)]
 	_restore_growth(int(result.id))
+	_gravity_pending = true
 	merged_count += 1
 	if _has_free_cell():
 		full_elapsed = -1.0
@@ -848,6 +890,7 @@ func _complete_split(completed: Dictionary) -> void:
 		restored.arrival = false
 		restored.falling = false
 		restored.falling_rows = 0
+		restored.placement_locked = false
 		cells.append(restored)
 	if _held_tile_id == parent_id:
 		_held_tile_id = -1
@@ -856,6 +899,7 @@ func _complete_split(completed: Dictionary) -> void:
 	# Wrapped parents may release padding cells. Reconsider compressed neighbors
 	# only after both frozen split destinations have finished settling.
 	_growth_pending = true
+	_gravity_pending = true
 	# A split does not restart an existing full-board deadline.
 	if _has_free_cell():
 		full_elapsed = -1.0
@@ -928,12 +972,14 @@ func _complete_collection(completed: Dictionary) -> void:
 
 
 func _restore_growth(excluded_id: int = -1) -> void:
-	# Growth can reuse nearby space without moving ordinary neighbors. A
-	# successful collection separately schedules vertical stack settlement.
+	# Growth can reuse nearby space. Its settled result and any neighbors that
+	# lose support then fall, while explicit player placements stay unchanged.
 	_growth_pending = false
 	for tile in cells:
 		var extent: Vector2i = _preferred_size(int(tile.mass))
 		if int(tile.width) == extent.x and int(tile.height) == extent.y:
+			continue
+		if bool(tile.get("placement_locked", false)):
 			continue
 		if is_fusing(int(tile.id)):
 			continue
@@ -953,6 +999,7 @@ func _restore_growth(excluded_id: int = -1) -> void:
 		tile.arrival = false
 		tile.falling = false
 		tile.falling_rows = 0
+		_gravity_pending = true
 
 
 func _resume_pending_motion() -> void:
@@ -976,9 +1023,11 @@ func _settle_collected_stack() -> void:
 			return int(a.column) < int(b.column)
 		return int(a.id) < int(b.id))
 	for tile: Dictionary in ordered:
+		if bool(tile.get("placement_locked", false)):
+			continue
 		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
 			# Keep fusion endpoints, held anchors and queued pickups intact. A later
-			# operation or settlement boundary retries the collection's gravity.
+			# operation or settlement boundary retries their support settlement.
 			_gravity_pending = true
 			continue
 		var occupied: Dictionary = _occupied([int(tile.id)])
@@ -1060,6 +1109,7 @@ func _split_placements(parent: Dictionary) -> Array[Dictionary]:
 			child.arrival = false
 			child.falling = false
 			child.falling_rows = 0
+			child.placement_locked = false
 			results.append(child)
 		return results
 	return []
@@ -1115,8 +1165,8 @@ func _position_near(occupied: Dictionary, width: int, height: int, anchor: Dicti
 	var center := Vector2(float(anchor.column) + float(anchor.width) * 0.5, float(anchor.row) + float(anchor.height) * 0.5)
 	var nearest := Vector2i(-1, -1)
 	var distance: float = INF
-	# Prefer the target's height and nearest horizontal fit. Growth can wrap
-	# upward when space is tight, but never sends a merged body down the well.
+	# Reserve the nearest fusion or growth endpoint first. Unsupported bodies
+	# fall only after that visual handover finishes its settling window.
 	for row in range(mini(int(anchor.row), ROWS - height), -1, -1):
 		for column in range(COLUMNS - width + 1):
 			var candidate := Vector2(column + width * 0.5, row + height * 0.5)

@@ -31,7 +31,7 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 		_visual.add_child(_fragment_overflow)
 	while _fragment_badges.size() < mini(fragments, 6):
 		_fragment_badges.append(_texture())
-	set("accessibility_name", "%s. %s Shift+Enter selects this jelly to merge with another.%s" % [str(cell.get("text", "")),
+	set("accessibility_name", "%s. %s Drag to a fitting empty space to move it. Shift+Enter selects this jelly to merge with another.%s" % [str(cell.get("text", "")),
 		"Word complete. Press to collect %d coins, or drag to keep building." % (int(cell.get("mass", 1)) * 50) if valid_word
 		else "Press to split the last merge, or drag to keep building." if int(cell.get("mass", 1)) > 1
 		else "Drag this part before another part to build a word.",
