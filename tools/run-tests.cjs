@@ -16,7 +16,7 @@ const groups = {
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests',
       'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
-      'memory_peek_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests', 'hover_tooltip_tests',
+      'memory_peek_tests', 'memory_peek_payment_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests', 'hover_tooltip_tests',
       'phrase_model_tests', 'phrase_scene_tests'
     ],
     node: [

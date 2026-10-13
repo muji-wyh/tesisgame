@@ -6,6 +6,7 @@ const Style = preload("res://scripts/ui_style.gd")
 var checks := 0
 var failures := 0
 var words: Array = []
+var purchases: Array[Dictionary] = []
 
 
 func _initialize() -> void:
@@ -27,6 +28,7 @@ func _run() -> void:
 			words.append(word)
 	await _test_face_tween()
 	var view = load("res://scripts/memory_garden.gd").new()
+	_fund_peeks(view)
 	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Native Memory has explicit hold/release entry points")
 	if view.has_method("begin_peek") and view.has_method("end_peek"):
 		view.pause(true)
@@ -37,6 +39,7 @@ func _run() -> void:
 		root.add_child(view)
 		view.size = Vector2(456, 400)
 		await _test_hold_inputs(view)
+		await _test_denied_hold_inputs(view)
 		await _test_cancel_and_reverse(view)
 		await _test_scaled_layout(view)
 		view.queue_free()
@@ -46,6 +49,12 @@ func _run() -> void:
 	await _test_external_toolbar()
 	print("Memory peek: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _fund_peeks(view) -> void:
+	view.purchase_peek = func(ordinal: int, price: int) -> Dictionary:
+		purchases.append({"ordinal": ordinal, "price": price})
+		return {"ok": true, "duplicate": false}
 
 
 func _test_face_tween() -> void:
@@ -127,9 +136,12 @@ func _test_hold_inputs(view) -> void:
 	await process_frame
 	var positions: Array = _rects(view)
 	var board: Array = view.memory.cards.duplicate(true)
+	var initial_purchases: int = purchases.size()
 	view.study_button.button_down.emit()
 	view.begin_peek()
 	check(view.memory.studying and view.study_button.engaged and view.memory.attempts == 0, "Repeated button-down/hold activation is idempotent")
+	check(view.memory.peeks == 1 and purchases.size() == initial_purchases,
+		"Repeated activation of the first free reveal never calls the purchase callback")
 	view.study_button.pressed.emit()
 	check(view.memory.studying, "Pressed does not toggle a held eye")
 	view.study_button.button_up.emit()
@@ -138,11 +150,14 @@ func _test_hold_inputs(view) -> void:
 	view.study_button.pressed.emit()
 	check(not view.memory.studying, "A pressed-only event cannot latch the eye")
 	for key in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+		var paid_before: int = purchases.size()
 		view.study_button.grab_focus()
 		await _key(key, true)
 		check(view.memory.studying and view.study_button.engaged, "Native key-down begins a hold: " + str(key))
 		await _key(key, true, true)
 		check(view.memory.studying, "Key repeat cannot toggle a held eye")
+		check(purchases.size() == paid_before + 1,
+			"Native button and keyboard-repeat callbacks charge only once for the paid hold")
 		await _key(key, false)
 		check(_all_hidden(view) and not view.study_button.engaged, "Native key-up releases the eye: " + str(key))
 	await _mouse(view.study_button.get_global_rect().get_center(), true)
@@ -183,6 +198,54 @@ func _test_hold_inputs(view) -> void:
 		"All physical hold/cancel paths preserve identity, score and input geometry")
 
 
+func _test_denied_hold_inputs(view) -> void:
+	view.start_round(words, Data.theme("spring"), 83)
+	view.begin_peek()
+	view.end_peek()
+	var denied: Array = []
+	view.purchase_peek = func(ordinal: int, price: int) -> Dictionary:
+		denied.append([ordinal, price])
+		return {"ok": false, "reason": "insufficient"}
+	view.study_button.grab_focus()
+	for repeat_hold in range(2):
+		var before: int = denied.size()
+		await _key(KEY_SPACE, true)
+		await _key(KEY_SPACE, true, true)
+		view.begin_peek()
+		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1,
+			"A denied keyboard hold and its repeat attempt one payment without advancing the price")
+		await _key(KEY_SPACE, false)
+	var center: Vector2 = view.study_button.get_global_rect().get_center()
+	for touch_first: bool in [true, false]:
+		var before: int = denied.size()
+		for touch: bool in [touch_first, not touch_first]:
+			if touch:
+				await _touch(40, center, true)
+			else:
+				await _mouse(center, true, false, InputEvent.DEVICE_ID_EMULATION)
+		await _touch(41, center, true)
+		await _touch(41, center, false)
+		view.begin_peek()
+		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1,
+			"A denied touch, its mouse emulation, and another finger produce one purchase attempt")
+		view.release_peek_pointer(40, true)
+		await _touch(40, center, false)
+		await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
+		await _touch(42, center, true)
+		check(denied.size() == before + 2,
+			"An owning fallback release clears a denied hold so a fresh touch can retry")
+		await _touch(42, center, false)
+	for repeat_hold in range(2):
+		var before: int = denied.size()
+		await _mouse(center, true)
+		view.begin_peek()
+		check(denied.size() == before + 1 and _all_hidden(view), "A denied mouse hold remains latched until its owning release")
+		await _mouse(center, false)
+	check(view.memory.peek_price() == 100 and denied.all(func(entry: Array) -> bool: return entry == [2, 100]),
+		"Every denied physical retry retains the same unpaid ordinal and 100-coin price")
+	_fund_peeks(view)
+
+
 func _test_touch_release(view) -> void:
 	var center: Vector2 = view.study_button.get_global_rect().get_center()
 	await _touch(20, center, true)
@@ -196,6 +259,7 @@ func _test_touch_release(view) -> void:
 	for touch_first: bool in [true, false]:
 		for release_touch_first: bool in [true, false]:
 			var before_peeks: int = view.memory.peeks
+			var paid_before: int = purchases.size()
 			var label := "touch-first=%s release-touch-first=%s" % [touch_first, release_touch_first]
 			for touch: bool in [touch_first, not touch_first]:
 				if touch:
@@ -204,6 +268,8 @@ func _test_touch_release(view) -> void:
 					await _mouse(center, true, false, InputEvent.DEVICE_ID_EMULATION)
 			check(view.memory.studying and view._peek_touch == 21 and view.memory.peeks == before_peeks + 1,
 				"Paired touch and mouse emulation open one owned peek: " + label)
+			check(purchases.size() == paid_before + 1,
+				"Paired touch and emulated mouse purchase only one reveal: " + label)
 			for touch: bool in [release_touch_first, not release_touch_first]:
 				if touch:
 					await _touch(21, center, false)
@@ -399,6 +465,7 @@ func _test_external_toolbar() -> void:
 	root.size = Vector2i(960, 720)
 	var script = load("res://scripts/memory_garden.gd")
 	var view = script.new()
+	_fund_peeks(view)
 	root.add_child(view)
 	view.position = Vector2(12, 72)
 	view.size = Vector2(456, 600)

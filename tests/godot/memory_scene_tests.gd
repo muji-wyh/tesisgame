@@ -30,6 +30,9 @@ func _run() -> void:
 	root.add_child(app)
 	await process_frame
 	await process_frame
+	check(app.coin_wallet.credit("fixture:memory-peek-funding", 1000).ok,
+		"Fund repeated Memory holds through the isolated wallet's real credit API")
+	app._coin_flight.sync(app.coin_wallet.balance)
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	app.choose_theme("spring")
@@ -52,9 +55,14 @@ func _run() -> void:
 		"The Memory board has no redundant instruction or progress row")
 	check(app.model.lesson_words == lesson and app.model.theme_id == "spring", "Memory retains the lesson and selected world")
 	check(not app.grid.visible and not app._pop.visible, "Memory hides the other mode boards")
+	var pip_pixels: float = app._header_duck_art_slot.size.x * app.Style.ui_scale(app)
+	var profile_bounds: Rect2 = app._header_duck_slot.get_global_rect().grow(0.1)
 	check(app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null
-		and is_equal_approx(app._header_duck_slot.size.x, ceilf(52 / app.Style.ui_scale(app))),
-		"Memory keeps Pip's compact header without progress or mistake counters")
+		and pip_pixels >= 44.0 and pip_pixels <= 56.0
+		and is_equal_approx(app._header_duck_art_slot.size.x, app._header_duck_art_slot.size.y)
+		and profile_bounds.encloses(app._header_duck_art_slot.get_global_rect())
+		and profile_bounds.encloses(app._growth_button.get_global_rect()),
+		"Memory fits a compact square Pip and growth control in its profile without obsolete mode counters")
 	check(app._status_announcement.contains("Memory") and app._status_announcement.contains("0 of 5"), "Memory announces its own goal and progress")
 	var board: Array = view.memory.cards.duplicate(true)
 	var target_rects: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
@@ -167,33 +175,40 @@ func _run() -> void:
 	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
 	check(not view.visible and app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "The completed Memory board presents its unopened chest")
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
+	var coins_before_chest: int = app.coin_wallet.balance
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "Memory grants one ordinary piece in the selected world")
-	var memory_gift: Dictionary = app.chest.hold_effect_snapshot().surprise
+	var chest_receipt: String = "pair:memory:" + app._round_id
+	var earned_receipts: Dictionary = app.coin_wallet._receipts.duplicate()
 	app.chest._advance_animation(60.0)
-	check(memory_gift.active and app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.kind == memory_gift.kind,
-		"The Memory result retains its revealed gift after the opening effects finish")
+	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
+		and app.coin_wallet.balance == coins_before_chest + 50 and earned_receipts.get(chest_receipt, 0) == 50
+		and not app.chest.hold_effect_snapshot().surprise.active,
+		"The opened Memory chest retains its earned piece and one saved coin receipt without an extra gift panel")
 	app.on_page_hidden()
 	app.chest._advance_animation(60.0)
-	check(app.chest.hold_effect_snapshot().surprise.active,
-		"Backgrounding Memory keeps its earned gift instead of clearing it")
+	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
+		and app.medal_progress.count_for("ocean-1") == 1 and app.coin_wallet._receipts == earned_receipts
+		and app.coin_wallet.balance == coins_before_chest + 50,
+		"Backgrounding Memory preserves its opened chest, earned piece, and exact saved coin award")
 	app.on_page_visible()
 	app.chest._advance_animation(60.0)
-	check(app.chest.hold_effect_snapshot().surprise.active
-		and app.chest.hold_effect_snapshot().surprise.kind == memory_gift.kind
-		and app.chest.hold_effect_snapshot().surprise.play_count == memory_gift.play_count,
-		"Returning to Memory keeps the same gift without replaying its reveal")
+	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
+		and app.medal_progress.count_for("ocean-1") == 1 and app.coin_wallet._receipts == earned_receipts
+		and app.coin_wallet.balance == coins_before_chest + 50 and not app.chest.hold_effect_snapshot().surprise.active,
+		"Returning to Memory retains the same opened result without replaying or paying another reward")
 	view.continue_feedback()
 	view.round_finished.emit(true, lesson)
 	app._on_chest_opened()
 	app._open_chest()
-	check(app.medal_progress.count_for("ocean-1") == 1, "Duplicate completion and chest callbacks cannot award extra pieces")
+	check(app.medal_progress.count_for("ocean-1") == 1 and app.coin_wallet._receipts == earned_receipts
+		and app.coin_wallet.balance == coins_before_chest + 50,
+		"Duplicate completion and chest callbacks cannot award extra pieces or coins")
 	var reloaded = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(reloaded.load_progress() and reloaded.count_for("ocean-1") == 1, "Memory rewards survive storage reload")
 	check(app.new_round(-1, true), "A same-lesson internal reset prepares another Memory fixture")
 	check(not app.chest.hold_effect_snapshot().surprise.active,
-		"A new Memory round clears the previous result's gift")
+		"A new Memory round cannot expose an extra gift from the previous result")
 	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
 		"The internal Memory fixture reset preserves its mode, lesson, and world")
 	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")

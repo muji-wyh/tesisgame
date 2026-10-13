@@ -28,6 +28,7 @@ func _run() -> void:
 	_test_feedback_and_completion(model)
 	_test_matched_visibility(model)
 	_test_study_and_stop(model)
+	_test_peek_prices(model)
 	_test_rejected_resets(model)
 	_test_runtime_library(model)
 	print("Memory model: %d assertions, %d failures" % [checks, failures])
@@ -54,7 +55,7 @@ func _snapshot(model) -> Dictionary:
 	return {"cards": model.cards.duplicate(true), "selected": model.selected_indices.duplicate(),
 		"matched": model.matched_word_ids.duplicate(), "feedback": model.feedback_words.duplicate(true),
 		"attempts": model.attempts, "mistakes": model.mistakes, "last_correct": model.last_correct,
-		"phase": model.phase, "studying": model.studying}
+		"phase": model.phase, "studying": model.studying, "peeks": model.peeks}
 
 
 func _pair(model, id: String) -> void:
@@ -216,6 +217,28 @@ func _test_study_and_stop(model) -> void:
 	model.set_study(true)
 	model.stop()
 	check(not model.studying and not model.is_revealed(0), "Stopping a Study session clears its global reveal")
+
+
+func _test_peek_prices(model) -> void:
+	model.reset(_words(), 83)
+	check(model.peeks == 0 and model.peek_price() == 0, "Every Memory round starts with one free peek")
+	for price: int in [0, 100, 200, 300, 300, 300]:
+		check(model.peek_price() == price, "The next accepted reveal follows the capped per-round price schedule")
+		var before: int = model.peeks
+		check(model.set_study(true) and model.peeks == before + 1,
+			"Only a newly accepted reveal increments the per-round peek count")
+		check(not model.set_study(true) and model.peeks == before + 1,
+			"Repeated hold activation cannot advance the next reveal price")
+		check(model.set_study(false) and not model.set_study(false) and model.peeks == before + 1,
+			"Releasing or cancelling a held peek retains the price of the next use")
+	var used: int = model.peeks
+	_pair(model, "cat")
+	check(not model.set_study(true) and model.peeks == used and model.peek_price() == 300,
+		"Unresolved model feedback cannot silently consume another peek")
+	model.stop()
+	check(not model.set_study(true) and model.peeks == used, "Stopped rounds cannot consume paid reveal uses")
+	check(model.reset(_words(), 84) and model.peeks == 0 and model.peek_price() == 0,
+		"Starting a new game resets the reveal price to free")
 
 
 func _test_rejected_resets(model) -> void:

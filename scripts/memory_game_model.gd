@@ -113,6 +113,10 @@ func set_study(value: bool) -> bool:
 	return true
 
 
+func peek_price() -> int:
+	return mini(peeks, 3) * 100
+
+
 func is_revealed(index: int) -> bool:
 	if index < 0 or index >= cards.size():
 		return false

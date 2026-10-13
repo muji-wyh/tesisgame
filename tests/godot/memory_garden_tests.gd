@@ -32,6 +32,7 @@ func _run() -> void:
 		_finish()
 		return
 	var view = script.new()
+	view.purchase_peek = func(_ordinal: int, _price: int) -> Dictionary: return {"ok": true, "duplicate": false}
 	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Memory exposes held reveal and release, not a Study toggle")
 	check(not view.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "feedback_view"),
 		"Memory no longer owns a lesson feedback footer")
@@ -61,7 +62,8 @@ func _run() -> void:
 	check(view.study_button.text.is_empty() and view.study_button.symbol == view.study_button.Symbol.EYE,
 		"The sole reveal control is a drawn eye without toggle text")
 	check(view.study_button.tooltip_text.is_empty()
-		and view.study_button.accessibility_name == "Hold to reveal all cards. Release to hide unmatched cards.",
+		and view.study_button.accessibility_name.contains("Hold to reveal all cards")
+		and view.study_button.accessibility_name.contains("Release to hide unmatched cards"),
 		"The eye retains accessible hold instructions without a hover popup")
 	check(view.find_child("MemoryFeedback", true, false) == null and view.find_child("MemoryReviewHint", true, false) == null,
 		"No correction footer or reserved hint area exists")

@@ -674,6 +674,8 @@ func _build_controls() -> void:
 	_memory.answer_chosen.connect(_memory_answer)
 	_memory.round_finished.connect(_memory_finished)
 	_memory.prompt_ready.connect(_memory_prompt)
+	_memory.purchase_peek = _purchase_memory_peek
+	_memory.peek_feedback.connect(_memory_peek_feedback)
 	_memory.hide()
 	column.add_child(_memory)
 	_memory.study_button.reparent(_toolbar)
@@ -2249,6 +2251,38 @@ func _memory_status() -> String:
 	return "Memory. %d of 5 pairs grown. %d attempts. %s" % [_memory.memory.matched_word_ids.size(), _memory.memory.attempts, _memory.status_label.text]
 
 
+func _purchase_memory_peek(ordinal: int, price: int) -> Dictionary:
+	if _mode_id != "memory" or _rebuilding or _page_hidden or _mode_menu_open() \
+		or collection_page.visible or _round_id.is_empty() or model.phase == "won" \
+		or not _memory._can_begin_peek() or _memory.memory.studying \
+		or ordinal != _memory.memory.peeks + 1 or price <= 0 or price != _memory.memory.peek_price():
+		return {"ok": false, "error": "This reveal cannot be used yet."}
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var receipt: String = _round_id + ":memory-peek:" + str(ordinal)
+	var result: Dictionary = coin_wallet.spend(receipt, price)
+	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
+	if bool(result.get("ok", false)):
+		# The ordinal also recovers an already-paid reveal after interrupted input.
+		_coin_flight.sync(coin_wallet.balance)
+	elif str(result.get("reason", "")) == "insufficient":
+		_announce_status("Not enough coins. This reveal costs %d coins." % price)
+	else:
+		_announce_status("Your reveal could not be saved. No coins were spent.")
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	_publish_coins()
+	return result
+
+
+func _memory_peek_feedback(success: bool, price: int) -> void:
+	if _mode_id != "memory" or _page_hidden or _mode_menu_open() or collection_page.visible:
+		return
+	if not success or price > 0:
+		audio.play_pair_feedback(success)
+	_publish_growth_view()
+
+
 func _sync_memory_selection() -> void:
 	if _host == null:
 		return
@@ -3546,8 +3580,9 @@ func _controller_accept() -> void:
 		_pop_rewards.begin_hold(focused)
 		return
 	if _mode_id == "memory" and focused == _memory.study_button and _valid_focus(focused):
+		# A declined purchase still owns the hold until controller release.
+		_controller_peeking = true
 		_memory.begin_peek()
-		_controller_peeking = _memory.memory.studying
 		return
 	if focused == chest_button and model.phase == "won" and model.chest_state == "closed":
 		_controller_holding_chest = true
@@ -4767,6 +4802,13 @@ func _publish_growth_view() -> void:
 	state.pip["action"] = duck._idle_action
 	state.pip["signature_actions"] = duck.age_actions()
 	state["vocabulary"] = _vocabulary_snapshot()
+	if _mode_id == "memory":
+		var price_area: Rect2 = _memory.study_button.price_rect()
+		price_area.position += _memory.study_button.global_position
+		state["memory"] = {"peek": {"count": _memory.memory.peeks,
+			"next_price": _memory.memory.peek_price(), "price_text": str(_memory.study_button.cost),
+			"price_rect": [price_area.position.x, price_area.position.y, price_area.size.x, price_area.size.y],
+			"studying": _memory.memory.studying, "round_id": _round_id}}
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		controls.append(_growth_control(_vocabulary_retry))
 		controls.append(_growth_control(_vocabulary_back))
