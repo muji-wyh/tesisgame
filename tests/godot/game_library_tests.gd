@@ -34,49 +34,74 @@ func check_mode_previews(library: Library) -> void:
 	library.configure("word_jelly", false, false)
 	await settle()
 	await move_pointer(Vector2(1, 1))
+	library.pip.grab_focus()
+	await settle()
 	var initial_requests: int = mode_requests
+	var initial_phases: Array[float] = []
+	for entry: Dictionary in library._tiles:
+		initial_phases.append(entry.preview._elapsed)
 	for tile: Dictionary in library._tiles:
 		var preview: Control = tile.preview
 		check(preview.mouse_filter == Control.MOUSE_FILTER_IGNORE and preview.focus_mode == Control.FOCUS_NONE,
 			"%s: the decorative preview cannot intercept pointer or keyboard focus" % tile.entry.title)
+		check(preview.is_processing() and not preview.highlighted,
+			"%s: the gameplay demonstration runs without hover or focus" % tile.entry.title)
+		var before_loop: float = preview._elapsed
+		preview._process(preview.DURATION * 3.0 + 0.125)
+		check(preview.is_processing() and preview._elapsed >= 0.0 and preview._elapsed < preview.DURATION
+			and not is_equal_approx(preview._elapsed, before_loop),
+			"%s: its timeline keeps advancing after several complete demonstrations" % tile.entry.title)
 		tile.button.grab_focus()
 		await settle()
-		check(tile.button.has_focus() and preview.is_processing(),
-			"%s: focusing its game button starts the demonstration" % tile.entry.title)
-		preview._process(preview.DURATION + 0.1)
-		await settle()
-		check(not preview.is_processing(),
-			"%s: the demonstration settles while the card remains focused" % tile.entry.title)
-		tile.button.grab_focus()
-		await settle()
-		check(not preview.is_processing(),
-			"%s: unchanged focus cannot loop the demonstration" % tile.entry.title)
+		check(tile.button.has_focus() and preview.highlighted and preview.is_processing(),
+			"%s: the parent game button retains keyboard focus while its scene loops" % tile.entry.title)
 		library.pip.grab_focus()
 		await settle()
-		check(not preview.highlighted and not preview.is_processing(),
-			"%s: moving focus away clears the demonstration highlight" % tile.entry.title)
+		check(not preview.highlighted and preview.is_processing(),
+			"%s: moving focus away clears its highlight without freezing the scene" % tile.entry.title)
+	var distinct_phases: Array[float] = []
+	for phase: float in initial_phases:
+		if not distinct_phases.any(func(other: float) -> bool: return absf(other - phase) < 0.05):
+			distinct_phases.append(phase)
+	check(distinct_phases.size() >= 4, "The home scenes start at varied phases instead of all striking the same beat")
 	check(mode_requests == initial_requests, "Previewing all six games never starts a game")
 	var tile: Dictionary = library._tiles[0]
 	var point: Vector2 = tile.preview.get_global_rect().get_center()
 	await move_pointer(point)
-	check(tile.button.is_hovered() and tile.preview.is_processing(),
-		"Hovering the miniature scene starts its parent card's demonstration")
+	check(tile.button.is_hovered() and tile.preview.highlighted and tile.preview.is_processing(),
+		"Hovering the miniature scene belongs to the parent game card")
 	await move_pointer(Vector2(1, 1))
-	check(not tile.preview.highlighted and not tile.preview.is_processing(),
-		"Moving the pointer off an unfocused card stops its demonstration")
-	tile.button.grab_focus()
-	await settle()
+	check(not tile.preview.highlighted and tile.preview.is_processing(),
+		"Moving the pointer away keeps the automatic demonstration running")
 	library.hide()
 	await settle()
 	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
 		"Leaving Home stops every preview")
+	var hidden_phases: Array[float] = []
+	for entry: Dictionary in library._tiles:
+		hidden_phases.append(entry.preview._elapsed)
+	await settle()
+	for index in range(library._tiles.size()):
+		check(is_equal_approx(library._tiles[index].preview._elapsed, hidden_phases[index]),
+			"%s: its timeline stays still while Home is hidden" % library._tiles[index].entry.title)
 	library.show()
 	await settle()
-	check(not tile.preview.is_processing(), "Returning Home does not replay an interrupted preview automatically")
-	library.pip.grab_focus()
-	tile.button.grab_focus()
+	check(library._tiles.all(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Returning Home restarts every scene without another hover or focus gesture")
+	library.finish_previews()
 	await settle()
-	check(tile.preview.is_processing(), "A new focus gesture can replay a completed or interrupted preview")
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Backgrounding the page can suspend all demonstrations immediately")
+	library.configure("word_jelly", false, false)
+	tile.button.grab_focus()
+	await move_pointer(point)
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"A settings refresh or focus change cannot restart a suspended page")
+	library.hide()
+	library.show()
+	await settle()
+	check(library._tiles.all(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"A visible Home visit resumes demonstrations after suspension")
 	library.configure("word_jelly", false, true)
 	await settle()
 	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
@@ -84,6 +109,11 @@ func check_mode_previews(library: Library) -> void:
 	library.pip.grab_focus()
 	await move_pointer(point)
 	check(not tile.preview.is_processing(), "Reduced motion preserves a static scene even when hovered")
+	library.hide()
+	library.show()
+	await settle()
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Returning Home honors reduced motion for all six scenes")
 	var press := InputEventMouseButton.new()
 	press.button_index = MOUSE_BUTTON_LEFT
 	press.position = point
@@ -100,6 +130,11 @@ func check_mode_previews(library: Library) -> void:
 		"Clicking inside a preview selects its game exactly once through the parent button")
 	await move_pointer(Vector2(1, 1))
 	library.pip.grab_focus()
+	library.configure("word_jelly", false, false)
+	await settle()
+	check(library._tiles.all(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Turning reduced motion off starts all scenes without interaction")
+	library.configure("word_jelly", false, true)
 
 func check_label_fits(label: Label, context: String) -> void:
 	check(label.get_minimum_size().y <= label.size.y + 1.0,

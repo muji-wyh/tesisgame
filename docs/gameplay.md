@@ -37,8 +37,10 @@ a picture and word, turning Memory cards, speaking to pop a flying word card,
 ordering phrase pieces, merging a Jelly Match pair, or building and collecting
 a Jelly Words word. These decorative examples use fixed interface artwork and
 do not select curriculum words, load another age's vocabulary, or earn rewards.
-Hovering or focusing a card plays a short, silent demonstration. Other cards
-stay still, and the system reduced-motion setting keeps every example static.
+All six cards automatically loop silent demonstrations with staggered timing,
+readable result holds and soft resets. Pointer and keyboard focus still belong
+to the whole card. Hidden Home and background tabs pause the examples; returning
+resumes them. The system reduced-motion setting keeps every example static.
 The reused artwork and source rights are recorded in the
 [mode illustration attribution](../assets/images/ui/modes/ATTRIBUTION.md).
 

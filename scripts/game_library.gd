@@ -364,6 +364,11 @@ func finish_previews() -> void:
 		tile.preview.finish_demo()
 
 
+func resume_previews() -> void:
+	for tile: Dictionary in _tiles:
+		tile.preview.resume_demo()
+
+
 func ensure_mode_visible(id: String) -> void:
 	for tile: Dictionary in _tiles:
 		if tile.entry.id == id:
@@ -537,7 +542,8 @@ func snapshot() -> Dictionary:
 	var previews: Array = []
 	for tile: Dictionary in _tiles:
 		previews.append({"mode": tile.entry.id, "rect": _rect_values(tile.preview.get_global_rect()),
-			"animating": tile.preview.is_processing(), "reduced_motion": tile.preview.reduced_motion})
+			"animating": tile.preview.is_processing(), "reduced_motion": tile.preview.reduced_motion,
+			"elapsed": tile.preview._elapsed, "duration": tile.preview.DURATION})
 	var viewport: Rect2 = scroll.get_global_rect()
 	for button: Button in theme_buttons + buttons + [collection_button, sound_button]:
 		var rect: Rect2 = button.get_global_rect()

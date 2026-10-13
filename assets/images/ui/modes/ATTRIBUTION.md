@@ -28,10 +28,15 @@ they neither choose curriculum words nor award learning progress or rewards.
 The existing painted gel skins retain their acquired CC0 provenance in the
 [Jelly Match asset record](../../../../docs/assets/jelly-match.md).
 
-Each scene has a short, silent demonstration while its card is hovered or
-keyboard focused. Unfocused cards and the system reduced-motion setting use a
-static composition. This movement is authored by the game's interface renderer,
-not a claim that the source pictures contain character animation.
+Each scene automatically loops a silent 5.8-second gameplay demonstration on
+Home, with staggered phases, a readable outcome hold and a soft reset. Match
+selects its pair, Memory flips two cards, Voice Pop shows speech and a sliced
+card, Phrase Builder slides a word into place, and both jelly modes join and
+collect their pieces. Hidden Home and background browser tabs pause the loops;
+the system reduced-motion setting uses static compositions. This movement is
+authored by the game's interface renderer, not a claim that the source pictures
+contain character animation. The reused gold coin retains its existing
+[treasure asset provenance](../../../../docs/assets/coins.md).
 
 ## Retained Twemoji illustrations
 

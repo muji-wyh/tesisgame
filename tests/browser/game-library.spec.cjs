@@ -29,47 +29,108 @@ async function captureHome(page, testInfo, name) {
 
 const jellyState = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 
-test('Home previews explain all six games without taking over card input', async ({ page }, testInfo) => {
-  test.setTimeout(180000);
+async function previewPixels(page, mode) {
+  return page.locator('#canvas').evaluate(async (canvas, id) => {
+    const state = JSON.parse(document.getElementById('game-status').dataset.library);
+    const [x, y, width, height] = state.previews.find(item => item.mode === id).rect;
+    const image = new Image();
+    image.src = canvas.toDataURL('image/png');
+    await image.decode();
+    const sample = document.createElement('canvas');
+    sample.width = 96;
+    sample.height = 48;
+    const context = sample.getContext('2d');
+    const scale = canvas.width / state.rect[2];
+    context.drawImage(image, x * scale, y * scale, width * scale, height * scale, 0, 0, 96, 48);
+    return { png: sample.toDataURL('image/png').split(',')[1], pixels: Array.from(context.getImageData(0, 0, 96, 48).data) };
+  }, mode);
+}
+
+function changedPreviewPixels(before, after) {
+  let changed = 0;
+  for (let index = 0; index < before.length; index += 4) {
+    if (Math.abs(before[index] - after[index]) + Math.abs(before[index + 1] - after[index + 1]) +
+      Math.abs(before[index + 2] - after[index + 2]) > 30) changed++;
+  }
+  return changed;
+}
+
+test('Home previews loop through all six games automatically without changing gameplay or taking card input', async ({ page }, testInfo) => {
+  test.setTimeout(240000);
   const errors = await openHome(page, { reducedMotion: 'no-preference' });
-  // The loading-screen click can leave the pointer over a game card.
-  // Keep hover separate from this keyboard-focus demonstration check.
+  // Do not hover or focus any game: the illustrations should already be alive.
   await page.mouse.move(1, 1);
   await rendered(page);
   expect((await metrics(page)).library.previews.map(item => item.mode)).toEqual(MODES);
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.animating && !item.reduced_motion),
+    { message: 'All six gameplay illustrations run without hover or keyboard focus' }).toBe(true);
+  const before = await metrics(page);
+  const growthBefore = await page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot));
+  await page.waitForTimeout(6200);
+  const looping = (await metrics(page)).library;
+  expect(looping.previews.every(item => item.animating), 'Every illustration continues beyond one complete demonstration').toBe(true);
+  expect(looping.visible).toBe(true);
+  expect(looping.current).toBe(before.library.current);
+  const clocks = looping.previews.map(item => item.elapsed);
+  expect(looping.previews.every(item => Number.isFinite(item.elapsed) && item.duration > 0)).toBe(true);
+  await expect.poll(async () => (await metrics(page)).library.previews.every((item, index) => Math.abs(item.elapsed - clocks[index]) > 0.05),
+    { message: 'All six animation clocks continue advancing after a full loop' }).toBe(true);
+
   for (const mode of MODES) {
-    const name = `Mode_${mode}`;
-    if ((await metrics(page)).library.controls.find(item => item.name === name).focused) {
-      await page.locator('#canvas').press('Shift+Tab');
-      await rendered(page);
-    }
-    for (let step = 0; step < 28; step++) {
-      if ((await metrics(page)).library.controls.find(item => item.name === name).focused) break;
-      await page.locator('#canvas').press('Tab');
-      await rendered(page);
-    }
-    expect((await metrics(page)).library.controls.find(item => item.name === name).focused).toBe(true);
-    await expect.poll(async () => (await metrics(page)).library.previews.find(item => item.mode === mode).animating,
-      { message: `${mode} demonstrates its action when the card is focused` }).toBe(true);
-    expect((await metrics(page)).library.visible, 'Previewing a game does not enter it').toBe(true);
-    if (mode === 'match' || mode === 'phrase') await captureHome(page, testInfo, `mechanics-${mode}`);
+    await libraryControl(page, `Mode_${mode}`);
+    await rendered(page);
+    const first = await previewPixels(page, mode);
+    fs.writeFileSync(testInfo.outputPath(`preview-${mode}-before.png`), Buffer.from(first.png, 'base64'));
+    let later;
+    await expect.poll(async () => {
+      later = await previewPixels(page, mode);
+      return changedPreviewPixels(first.pixels, later.pixels);
+    }, { timeout: 8000, intervals: [300, 600, 800], message: `${mode} visibly changes inside its illustration, beyond the card decoration` }).toBeGreaterThan(30);
+    fs.writeFileSync(testInfo.outputPath(`preview-${mode}-after.png`), Buffer.from(later.png, 'base64'));
+    expect((await metrics(page)).library.visible, 'Watching a game does not enter it').toBe(true);
   }
+  expect((await metrics(page)).library.coins, 'The miniature collection demonstrations do not award coins').toBe(before.library.coins);
+  expect(await page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot)),
+    'The demonstrations do not answer real words or change learning progress').toEqual(growthBefore);
+  await captureHome(page, testInfo, 'home-animated-gameplay-previews');
+
+  await chooseMode(page, 'word_jelly');
+  await expect.poll(async () => {
+    const state = await jellyState(page);
+    return state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
+  }).toBe(true);
+  await openModeMenu(page);
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.animating),
+    { message: 'Returning Home restarts the automatic illustrations' }).toBe(true);
+  await expect.poll(async () => (await jellyState(page)).paused).toBe(true);
+  const pausedGame = await jellyState(page);
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));
   });
   await expect.poll(async () => (await metrics(page)).library.previews.every(item => !item.animating),
-    { message: 'Backgrounding the browser ends every preview' }).toBe(true);
+    { message: 'Backgrounding the browser pauses every preview' }).toBe(true);
+  const hiddenClocks = (await metrics(page)).library.previews.map(item => item.elapsed);
+  await page.waitForTimeout(350);
+  expect((await metrics(page)).library.previews.map(item => item.elapsed), 'Backgrounded illustrations do no animation work').toEqual(hiddenClocks);
   await page.evaluate(() => {
     delete document.hidden;
     document.dispatchEvent(new Event('visibilitychange'));
   });
-  await rendered(page);
-  expect((await metrics(page)).library.previews.every(item => !item.animating), 'Returning does not replay an interrupted scene').toBe(true);
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.animating),
+    { message: 'Returning to the browser resumes the automatic illustrations' }).toBe(true);
+  expect((await jellyState(page)).tiles, 'Home animations and browser visibility changes preserve the paused board').toEqual(pausedGame.tiles);
+  expect((await jellyState(page)).generated_tiles).toBe(pausedGame.generated_tiles);
+  expect((await jellyState(page)).spawn_elapsed).toBe(pausedGame.spawn_elapsed);
+
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.reduced_motion && !item.animating),
     { message: 'The device motion setting keeps every illustration static' }).toBe(true);
   const card = await libraryControl(page, 'Mode_match');
+  await rendered(page);
+  const still = await previewPixels(page, 'match');
+  await page.waitForTimeout(400);
+  expect(changedPreviewPixels(still.pixels, (await previewPixels(page, 'match')).pixels), 'Reduced-motion artwork stays still').toBe(0);
   const preview = (await metrics(page)).library.previews.find(item => item.mode === 'match');
   const [x, y, w, h] = preview.rect;
   expect(card.fully_visible).toBe(true);

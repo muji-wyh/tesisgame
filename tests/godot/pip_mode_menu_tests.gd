@@ -129,6 +129,7 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	await settle()
+	await _check_home_preview_lifecycle(app)
 	await _check_startup(app)
 	await _check_home_touch_gestures(app)
 	await _check_modes_and_pause(app)
@@ -145,6 +146,29 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Home navigation: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+func _check_home_preview_lifecycle(app) -> void:
+	var before := _round_snapshot(app)
+	app.set_reduced_motion(false)
+	await settle()
+	check(app._mode_panel.snapshot().previews.all(func(entry: Dictionary) -> bool: return entry.animating),
+		"All six gameplay scenes animate on Home without hover or selection")
+	app.on_page_hidden()
+	await settle()
+	check(app._mode_panel.snapshot().previews.all(func(entry: Dictionary) -> bool: return not entry.animating),
+		"The host's background notification stops every decorative scene")
+	app.on_page_visible()
+	await settle()
+	check(app._mode_panel.snapshot().previews.all(func(entry: Dictionary) -> bool: return entry.animating),
+		"The host's foreground notification resumes visible Home scenes automatically")
+	check(_round_snapshot(app) == before and app._mode_menu_open() and not app._has_entered_game,
+		"Animating and backgrounding Home never selects a mode or changes gameplay state")
+	app.set_reduced_motion(true)
+	app.on_page_hidden()
+	app.on_page_visible()
+	await settle()
+	check(app._mode_panel.snapshot().previews.all(func(entry: Dictionary) -> bool: return entry.reduced_motion and not entry.animating),
+		"Returning from a background tab still honors reduced motion")
 
 func _check_startup(app) -> void:
 	check(app._mode_menu_open() and app._mode_panel.is_visible_in_tree(), "The application starts on Home")

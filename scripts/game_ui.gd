@@ -3284,6 +3284,7 @@ func on_page_visible() -> void:
 	_refresh_hint_link()
 	duck.set_idle_paused(false)
 	_mode_panel.pip.set_idle_paused(false)
+	_mode_panel.resume_previews()
 	feedback_timer.paused = collection_page.visible or _mode_menu_open()
 	_memory.pause(collection_page.visible or _mode_menu_open())
 	_resume_phrase()
