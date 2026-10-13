@@ -40,7 +40,8 @@ const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 const POWERUP_PRICES: Dictionary = {"auto_merge": 1500, "fragments": 500}
-const POWERUP_DRAG_SECONDS: float = 0.40
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.08
+const POWERUP_DRAG_SECONDS: float = POWERUP_MERGE_BEAT_SECONDS
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
 const POWERUP_FRAGMENT_STAGGER: float = 0.18
 const POWERUP_FRAGMENT_RECOVERY: float = 0.35
@@ -195,7 +196,7 @@ func powerup_snapshot() -> Dictionary:
 	return _powerup.duplicate(true) if not _powerup.is_empty() else {
 		"active": false, "kind": "", "receipt_id": "", "stage": "", "elapsed": 0.0,
 		"duration": 0.0, "source_id": -1, "target_id": -1, "source": {}, "target": {},
-		"completed": 0, "total": 0, "arrivals": []}
+		"completed": 0, "total": 0, "arrivals": [], "clock": 0.0, "started_at": 0.0}
 
 
 func can_activate_powerup(kind: String) -> bool:
@@ -231,7 +232,8 @@ func activate_powerup(kind: String) -> bool:
 		_powerup_ids.append(int(tile.id))
 	_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
 		"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
-		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": []}
+		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [],
+		"clock": 0.0, "started_at": 0.0, "contact_played": false, "contact_pending": false}
 	if kind == "fragments":
 		_prepare_powerup_fragments()
 	# The paid obligation exists before any user callback may pause or leave.
@@ -287,14 +289,22 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 
 func _powerup_pair(captured_only: bool = true) -> Array[int]:
 	for source: Dictionary in cells:
-		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source):
+		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source) \
+			or is_fusing(int(source.id)) or _reserved_for_powerup(int(source.id)):
 			continue
 		for target: Dictionary in cells:
-			if int(source.id) == int(target.id) or (captured_only and not _powerup_ids.has(int(target.id))) or not is_settled(target):
+			if int(source.id) == int(target.id) or (captured_only and not _powerup_ids.has(int(target.id))) or not is_settled(target) \
+				or is_fusing(int(target.id)) or _reserved_for_powerup(int(target.id)):
 				continue
 			if _word_lookup.has(normalize_word(str(source.text) + str(target.text))):
 				return [int(source.id), int(target.id)]
 	return []
+
+
+func _reserved_for_powerup(tile_id: int) -> bool:
+	return bool(_powerup.get("active", false)) and str(_powerup.get("kind", "")) == "auto_merge" \
+		and (str(_powerup.get("stage", "")) == "drag" or bool(_powerup.get("contact_pending", false))) \
+		and tile_id in [int(_powerup.source_id), int(_powerup.target_id)]
 
 
 func _prepare_powerup_fragments() -> void:
@@ -343,43 +353,56 @@ func _advance_powerup() -> void:
 			_complete_powerup()
 		return
 	var stage: String = str(_powerup.stage)
-	if stage == "drag":
-		if float(_powerup.elapsed) + EPSILON < POWERUP_DRAG_SECONDS:
+	if stage == "drag" or bool(_powerup.contact_pending):
+		if stage == "drag" and float(_powerup.elapsed) + EPSILON < POWERUP_DRAG_SECONDS:
 			return
-		_powerup.stage = "fusion"
-		_powerup.elapsed = 0.0
-		_powerup.duration = FUSION_SECONDS
-		cue_requested.emit("contact")
+		# Keep both endpoints reserved if an audio callback pauses the round.
+		# Resume the same arrival without replaying its contact cue.
+		if not bool(_powerup.contact_played):
+			_powerup.stage = "fusion"
+			_powerup.elapsed = 0.0
+			_powerup.duration = FUSION_SECONDS
+			_powerup.contact_pending = true
+			_powerup.contact_played = true
+			cue_requested.emit("contact")
+			if not _same_powerup(generation, receipt_id) or paused:
+				return
+		_powerup.contact_pending = false
+		_powerup.stage = "ready"
+		_powerup_committing = true
+		try_merge(int(_powerup.source_id), int(_powerup.target_id), true)
+		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-		_powerup_committing = true
-		var accepted: String = try_merge(int(_powerup.source_id), int(_powerup.target_id), true)
-		_powerup_committing = false
-		if not _same_powerup(generation, receipt_id):
-			return
-		if accepted != "merged":
-			_powerup.stage = "ready"
-		return
-	if not fusions.is_empty():
-		return
-	if _settling_remaining() > EPSILON:
-		if str(_powerup.stage) != "settling":
-			_powerup.stage = "settling"
-			_powerup.elapsed = 0.0
-		_powerup.duration = float(_powerup.elapsed) + _settling_remaining()
-		return
+	# Independent stable pairs can start on the next 80 ms beat while earlier
+	# fusions keep their full elastic animation. Only unavailable pairs wait.
 	var pair: Array[int] = _powerup_pair()
 	if pair.is_empty():
+		_held_tile_id = -1
+		if not fusions.is_empty():
+			_powerup.stage = "fusion"
+			_powerup.elapsed = float(fusions[0].elapsed)
+			_powerup.duration = float(fusions[0].duration)
+			return
+		if _settling_remaining() > EPSILON:
+			if str(_powerup.stage) != "settling":
+				_powerup.stage = "settling"
+				_powerup.elapsed = 0.0
+			_powerup.duration = float(_powerup.elapsed) + _settling_remaining()
+			return
 		_complete_powerup()
 		return
 	_powerup.stage = "drag"
 	_powerup.elapsed = 0.0
 	_powerup.duration = POWERUP_DRAG_SECONDS
+	_powerup.started_at = float(_powerup.clock)
+	_powerup.contact_played = false
+	_powerup.contact_pending = false
 	_powerup.source_id = pair[0]
 	_powerup.target_id = pair[1]
 	_powerup.source = cell(pair[0])
 	_powerup.target = cell(pair[1])
-	_powerup.total = int(_powerup.completed) + 1
+	_powerup.total = int(_powerup.total) + 1
 	_held_tile_id = pair[0]
 	powerup_drag_started.emit(powerup_snapshot())
 	if _same_powerup(generation, receipt_id) and not paused:
@@ -396,8 +419,8 @@ func _powerup_boundary() -> float:
 		return maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
 	if str(_powerup.stage) == "drag":
 		return maxf(0.0, POWERUP_DRAG_SECONDS - float(_powerup.elapsed))
-	if _settling_remaining() > EPSILON:
-		return _settling_remaining()
+	if _next_settlement() > EPSILON:
+		return _next_settlement()
 	return INF
 
 
@@ -727,6 +750,7 @@ func step(delta: float) -> void:
 			active.elapsed = float(active.elapsed) + consumed
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
+			_powerup.clock = float(_powerup.clock) + consumed
 		if collection_batch_active():
 			_collection_batch_elapsed += consumed
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
@@ -1179,9 +1203,10 @@ func _complete_merge(completed: Dictionary) -> void:
 		_powerup_ids.erase(int(b.id))
 		_powerup_ids.append(int(result.id))
 		_powerup.completed = int(_powerup.completed) + 1
-		_powerup.stage = "settling"
-		_powerup.elapsed = 0.0
-		_powerup.duration = SETTLE_SECONDS
+		if str(_powerup.stage) != "drag":
+			_powerup.stage = "settling"
+			_powerup.elapsed = 0.0
+			_powerup.duration = SETTLE_SECONDS
 	if _has_free_cell():
 		full_elapsed = -1.0
 	completed.result = cell(int(result.id))
@@ -1300,7 +1325,8 @@ func _restore_growth(excluded_id: int = -1) -> void:
 			continue
 		if is_fusing(int(tile.id)):
 			continue
-		if int(tile.id) == excluded_id or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
+		if int(tile.id) == excluded_id or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) \
+			or _reserved_for_powerup(int(tile.id)) or not is_settled(tile):
 			# Another collection may free space during this body's final wobble.
 			_growth_pending = true
 			continue
@@ -1340,7 +1366,8 @@ func _settle_collected_stack() -> void:
 			return int(a.column) < int(b.column)
 		return int(a.id) < int(b.id))
 	for tile: Dictionary in ordered:
-		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) or not is_settled(tile):
+		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) \
+			or _reserved_for_powerup(int(tile.id)) or not is_settled(tile):
 			# Keep fusion endpoints, held anchors and queued pickups intact. A later
 			# operation or settlement boundary retries their support settlement.
 			_gravity_pending = true

@@ -135,6 +135,8 @@ async function beginTrace(page, label) {
       if (powerup.kind === 'fragments' && powerup.completed > 0 && state.powerup_effect_count >= 5) capture('fragment-arrival');
       if (powerup.active && powerup.stage === 'drag' && powerup.elapsed / powerup.duration > 0.2 && powerup.elapsed / powerup.duration < 0.8)
         capture('auto-midpoint');
+      if (powerup.active && powerup.kind === 'auto_merge' && state.fusions?.length > 1)
+        capture('auto-overlap');
     };
     window.wordJellyPowerupObserver = new MutationObserver(record);
     window.wordJellyPowerupObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
@@ -159,6 +161,36 @@ function recordingCount(sounds, relative) {
   const timing = recordingTiming(relative);
   return sounds.filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
 }
+
+test('Auto merge transfers pairs on the 80 ms beat while earlier fusions remain visible', async ({ page }, info) => {
+  const { errors } = await start(page, info, 5000);
+  const before = await jelly(page), saved = await savedGrowth(page);
+  await beginTrace(page, 'auto-merge-80ms');
+  await pressRect(page, before.powerup_buttons.auto_merge.rect);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(3500);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete';
+  }, { timeout: 20000 }).toBe(true);
+  const after = await jelly(page);
+  const evidence = await retainTrace(page, info, 'auto-merge-80ms', ['auto-midpoint', 'auto-overlap']);
+  const moving = evidence.timeline.filter(frame => frame.powerup.stage === 'drag');
+  expect(moving.length, 'The browser renders the automatic transfer').toBeGreaterThan(0);
+  for (const frame of moving) expect(frame.powerup.duration).toBeCloseTo(0.08, 6);
+  expect(evidence.timeline.some(frame => frame.fusions.length > 1),
+    'Earlier liquid unions remain visible as subsequent pairs arrive').toBe(true);
+  expect(after.powerup.completed).toBeGreaterThan(1);
+  expect(after.powerup.total).toBe(after.powerup.completed);
+  expect(after.merged_count - before.merged_count).toBe(after.powerup.completed);
+  expect(forwardPairs(after)).toEqual([]);
+  expect(progress(after), 'Auto merge leaves the resulting words for manual collection').toEqual(progress(before));
+  expect(fragmentTotal(after)).toBe(fragmentTotal(before));
+  expect(await savedGrowth(page)).toBe(saved);
+  const persisted = await storedWallet(page);
+  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-1500]);
+  await capture(page, info, 'auto-merge-80ms-complete');
+  expect(errors).toEqual([]);
+});
 
 test('powerup prices stay visible and unaffordable purchases give feedback without changing the board or wallet', async ({ page }, info) => {
   test.setTimeout(180000);

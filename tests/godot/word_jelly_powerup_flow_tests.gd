@@ -135,6 +135,18 @@ func _check_auto_merge(app) -> void:
 		and halfway.x > minf(from.x, to.x) and halfway.x < maxf(from.x, to.x)
 		and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
 		"The source jelly travels through an intermediate position with light effects before union")
+	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
+	var following: Dictionary = game.powerup_snapshot()
+	check(game.fusions.size() == 1 and following.stage == "drag" and int(following.source_id) != int(state.source_id)
+		and not game.is_fusing(int(following.source_id)) and not game.is_fusing(int(following.target_id)),
+		"At 80 ms the next independent source starts while the first liquid union continues")
+	var next_from: Vector2 = view._tile_rect(following.source).get_center()
+	var next_to: Vector2 = view._tile_rect(following.target).get_center()
+	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
+	var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
+	check(game.fusions.size() == 1 and next_halfway.distance_to(next_from) > 2.0
+		and next_halfway.distance_to(next_to) > 2.0 and view._powerup_effects.stamps.size() > 0,
+		"The next source visibly travels with its own light trail while the previous fusion remains animated")
 	_drain(view)
 	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2,
 		"One automatic purchase completes each available forward word pair on the captured board")

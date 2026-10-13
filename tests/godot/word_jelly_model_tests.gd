@@ -87,6 +87,8 @@ func _run() -> void:
 	_test_powerup_eligibility()
 	_test_powerup_payment_atomicity()
 	_test_powerup_auto_timeline()
+	_test_powerup_auto_rhythm()
+	_test_powerup_auto_completion_during_drag()
 	_test_powerup_auto_chain()
 	_test_powerup_manual_guards()
 	_test_powerup_fragment_timeline()
@@ -425,13 +427,14 @@ func _test_powerup_auto_timeline() -> void:
 	active.target.fragments = 999
 	check(model.powerup_snapshot().source.text == "ca" and model.cell(1000).fragments == 2,
 		"presentation snapshots cannot mutate the captured power or live bodies")
-	model.step(0.399)
+	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.08), "automatic drags use the requested 80 ms beat")
+	model.step(0.079)
 	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
-		"both bodies remain separate for the complete first 399 ms of the paid drag")
+		"both bodies remain separate for the complete first 79 ms of the paid drag")
 	model.step(0.001)
 	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
 		and model.fusions[0].a_id == 1001 and model.fusions[0].b_id == 1000,
-		"400 ms starts the normal fusion using the advertised ordered endpoints")
+		"80 ms starts the normal fusion using the advertised ordered endpoints")
 	model.step(Model.FUSION_SECONDS - 0.001)
 	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps the ordinary full fusion duration")
 	model.step(0.001)
@@ -447,6 +450,81 @@ func _test_powerup_auto_timeline() -> void:
 		and regular_events.collections.is_empty() and regular_events.attempts.is_empty()
 		and regular_events.cues.count("pop") == 0,
 		"automatic fusion neither collects words nor grants coins, chest progress, or learning credit")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_rhythm() -> void:
+	var model = _model([_word("cat"), _word("dog"), _word("sun")])
+	_board(model, ["ca", "t", "do", "g", "su", "n"], [1, 2, 3, 4, 5, 6])
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var regular_events: Dictionary = _observe(model)
+	check(model.activate_powerup("auto_merge") and events.drags.size() == 1,
+		"the first automatic source starts immediately after its saved purchase")
+	var reserved: Dictionary = {}
+	for beat in range(3):
+		var drag: Dictionary = events.drags.back()
+		for id: int in [int(drag.source_id), int(drag.target_id)]:
+			check(not reserved.has(id), "an in-flight automatic endpoint cannot be reserved by another pair")
+			reserved[id] = true
+		model.step(0.079)
+		check(model.fusions.size() == beat and events.drags.size() == beat + 1,
+			"the next automatic contact cannot run before its 80 ms beat")
+		model.step(0.001)
+		check(model.fusions.size() == beat + 1 and model.merged_count == 0,
+			"each 80 ms beat starts another liquid fusion while earlier unions remain visible")
+		check(events.drags.size() == mini(3, beat + 2),
+			"independent sources launch exactly at 0, 80, and 160 ms without waiting for prior fusion")
+		_assert_reservations(model, "automatic 80 ms beat")
+	check(reserved.size() == 6 and payments.size() == 1,
+		"one purchase schedules the three independent pairs exactly once")
+	model.step(Model.FUSION_SECONDS - 0.16 - 0.001)
+	check(model.merged_count == 0 and regular_events.completed.is_empty(),
+		"the faster launch rhythm preserves the full first fusion animation")
+	for beat in range(3):
+		model.step(0.001)
+		check(model.merged_count == beat + 1 and regular_events.completed.size() == beat + 1,
+			"completed words arrive on the same 80 ms rhythm as their independent launches")
+		if beat < 2:
+			model.step(0.079)
+			check(model.merged_count == beat + 1,
+				"the next completed word cannot appear before its own 80 ms boundary")
+	model.finish_powerup(true)
+	check(not model.powerup_active() and model.fusions.is_empty() and model.collectable_ids().size() == 3,
+		"all overlapping automatic unions settle into three manually collectable words")
+	check(_board_fragments(model) == 21 and model.collected_coins == 0 and model.fragment_count == 0
+		and regular_events.collections.is_empty() and regular_events.attempts.is_empty(),
+		"the fast automatic rhythm preserves carried treasure and never automatically collects or credits learning")
+	_assert_board(model, "automatic 80 ms final board")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_completion_during_drag() -> void:
+	var model = _model([_word("cat")])
+	var pieces: Array[String] = []
+	for index in range(24):
+		pieces.append("ca" if index % 2 == 0 else "t")
+	_board(model, pieces)
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	check(model.activate_powerup("auto_merge"), "a larger board starts one paid automatic stream")
+	model.step(0.83)
+	var held: Dictionary = model.powerup_snapshot()
+	check(events.drags.size() == 11 and held.stage == "drag" and is_equal_approx(float(held.elapsed), 0.03),
+		"the eleventh source is already moving before the first liquid union completes")
+	model.step(0.02)
+	var continued: Dictionary = model.powerup_snapshot()
+	check(model.merged_count == 1 and continued.stage == "drag" and continued.source_id == held.source_id
+		and continued.target_id == held.target_id and is_equal_approx(float(continued.elapsed), 0.05),
+		"an older fusion completing mid-drag cannot replace the current endpoints or reset its 80 ms clock")
+	model.step(0.03)
+	check(events.drags.size() == 12 and model.powerup_snapshot().stage == "drag",
+		"the next source still starts at 880 ms despite an earlier completion between beats")
+	model.finish_powerup(true)
+	check(not model.powerup_active() and model.merged_count == 12 and model.collectable_ids().size() == 12
+		and payments.size() == 1 and model.collected_coins == 0,
+		"the overlapping stream completes all twelve pairs once without extra payment or automatic collection")
+	_assert_board(model, "automatic stream across concurrent completions")
 	model.purchase_powerup = Callable()
 
 
@@ -822,7 +900,7 @@ func _test_powerup_presentation_reentry() -> void:
 			else:
 				model.finish_round())
 		check(model.activate_powerup("auto_merge"), "automatic power accepts before a reentrant contact callback")
-		model.step(0.40)
+		model.step(Model.POWERUP_DRAG_SECONDS)
 		check(handled.contact, "the original pair reaches its contact boundary")
 		if action == "pause":
 			check(model.paused and model.powerup_active() and model.fusions.is_empty(),
