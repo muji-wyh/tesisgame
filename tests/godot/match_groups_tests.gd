@@ -70,6 +70,7 @@ func _run() -> void:
 			"A long-word Match lesson starts normally")
 		await settle()
 		check(app._default_focus().card_data.kind == "image", "Board focus starts with a picture")
+		check(app.coin_wallet.credit("fixture:group-hint:%d" % seed_value, 4).ok, "Fund this board's paid grouping hint")
 		app._request_hint()
 		var first: String = app.model.hint_ids[0]
 		var partner: String = app.model.hint_ids[1]

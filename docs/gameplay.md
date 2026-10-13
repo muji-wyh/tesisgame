@@ -60,7 +60,11 @@ available for pronunciation. A mismatch resets both involved words' streaks;
 the player can correct it and continue until all five pairs match. There is no
 three-mistake loss or visible correct/error counter. Card positions stay stable.
 
-Three hints per round highlight matching partners. Completed cards can replay
+The Hint item costs 200 coins per use, with up to three uses per round. Its button
+shows the coin price and remaining uses. Payment must save before matching
+partners are highlighted; insufficient coins or a save failure preserves the
+board and allowance. Repeated input cannot charge again for an active hint.
+Completed cards can replay
 the word without adding mastery. The optional microphone interface can select
 words through speech; it follows the same successful-pair boundary.
 

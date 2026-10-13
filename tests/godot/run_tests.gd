@@ -654,6 +654,7 @@ func _test_play_improvements(app) -> void:
 		and not has_property(app, "_mistakes") and not has_property(app, "_match_caption"),
 		"The board has a reachable hint without retained counters or a redundant caption")
 	if has_property(app, "hint_button") and app.model.has_method("request_hint"):
+		check(app.coin_wallet.credit("fixture:play-improvement-hints", 16).ok, "Fund the four paid hints in the native input fixture")
 		app.new_round(6)
 		check(app.hint_button.text.is_empty() and app.hint_button.count == 3 and not app.hint_button.disabled,
 			"A new Match round shows all three hints")

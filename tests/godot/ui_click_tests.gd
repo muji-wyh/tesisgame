@@ -183,8 +183,9 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	var first: Dictionary = app.model.cards[0]
 	app.cards[first.id].pressed.emit()
 	app._controller_back()
+	check(app.coin_wallet.credit("fixture:ui-click-hint", 4).ok, "Fund the gameplay hint sound fixture")
 	app.hint_button.pressed.emit()
-	check(app.audio.click_count == count, "Match cards, deselection and hints keep their gameplay sounds only")
+	check(app.model.hints_remaining == 2 and app.audio.click_count == count, "Match cards, deselection and paid hints keep their gameplay sounds only")
 	PlayerFixture.enter_mode(app, "memory")
 	app._memory.card_buttons[0].pressed.emit()
 	app._memory.study_button.button_down.emit()

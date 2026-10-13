@@ -62,6 +62,7 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	app.choose_mode("match")
+	check(app.coin_wallet.credit("fixture:theme-review-hint", 4).ok, "Fund the hint preserved while reviewing themes")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var round_id: String = app._round_id

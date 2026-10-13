@@ -121,6 +121,7 @@ func _run() -> void:
 	app.size = Vector2(960, 720)
 	await settle()
 	Fixture.enter_mode(app, "match")
+	check(app.coin_wallet.credit("fixture:layout-hint", 4).ok, "Fund the active hint used by the resize fixture")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var cards: Array = app.model.cards.duplicate(true)

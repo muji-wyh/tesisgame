@@ -205,24 +205,31 @@ func _spoken_pair(word_id: String) -> Array[String]:
 func request_hint() -> bool:
 	if hints_remaining <= 0 or not hint_ids.is_empty() or not phase in ["waiting", "matching"]:
 		return false
+	var pair: Array[String] = available_hint_pair()
+	if pair.is_empty():
+		return false
+	hint_ids.assign(pair)
+	hints_remaining -= 1
+	if not selected_id.is_empty() and not hint_ids.has(selected_id):
+		selected_id = ""
+		phase = "waiting"
+	changed.emit()
+	return true
+
+
+func available_hint_pair() -> Array[String]:
 	# Scan this small board for partners instead of maintaining a separate pair index.
 	var candidates: Array[Dictionary] = cards.duplicate()
 	if not selected_id.is_empty():
 		candidates.push_front(card_by_id(selected_id))
 	for card in candidates:
-		if matched_ids.has(card.id):
+		if card.is_empty() or matched_ids.has(card.id):
 			continue
 		var partner_id: String = card.word.id + (":image" if card.kind == "word" else ":word")
-		if card_by_id(partner_id).is_empty():
+		if card_by_id(partner_id).is_empty() or matched_ids.has(partner_id):
 			continue
-		hint_ids.assign([card.id, partner_id])
-		hints_remaining -= 1
-		if not selected_id.is_empty() and not hint_ids.has(selected_id):
-			selected_id = ""
-			phase = "waiting"
-		changed.emit()
-		return true
-	return false
+		return [card.id, partner_id]
+	return []
 
 
 func select(id: String, notify: bool = true) -> String:

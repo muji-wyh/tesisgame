@@ -10,7 +10,7 @@ const groups = {
   growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [
-      'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
+      'run_tests', 'match_hint_payment_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
       'pair_chest_progress_tests', 'pair_chest_reward_tests', 'pair_chest_flow_tests',
       'coin_wallet_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests', 'coin_audio_tests',
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',

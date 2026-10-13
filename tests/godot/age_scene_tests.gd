@@ -120,6 +120,7 @@ func _run() -> void:
 	for number in range(Growth.MASTERY_STREAK):
 		check(app.growth.record_attempt("notebook-seed-%d" % number, ["cat"], true).save_ok, "Isolated fixture records each correct practice event")
 	app._refresh_growth()
+	check(app.coin_wallet.credit("fixture:age-scene-hint", 4).ok, "Fund the hint preserved across age-page navigation")
 	app._request_hint()
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var cards: Array = app.model.cards.duplicate(true)

@@ -115,6 +115,7 @@ func _test_callback_and_ignored_results(app) -> void:
 		check((app.model.matched_ids.size() / 2) == 0 and app.model.phase == "waiting"
 			and app._speech_queue.is_empty() and not app._voice_match_link.active and not _sound_playing(app),
 			"Interim, unknown and empty results cannot create scoring or feedback")
+	check(app.coin_wallet.credit("fixture:voice-feedback-hint", 4).ok, "Fund the manual hint before spoken feedback")
 	app._request_hint()
 	var hints_left: int = app.model.hints_remaining
 	check(hints_left == 2 and app._hint_link.active, "A real paid hint is active before the spoken success")

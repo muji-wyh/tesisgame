@@ -63,6 +63,7 @@ func _match(app) -> void:
 	named([app._mode_heading_button, app._growth_button, app.hint_button, app._voice_button, app.duck], "Game header")
 	scan(app, "Match board")
 	Fixture.reserve_pair_chest(app)
+	check(app.coin_wallet.credit("fixture:hover-match-hints", 12).ok, "Fund all three Match hint presentation states")
 	for word: Dictionary in app.model.lesson_words.duplicate(true):
 		if app.model.hints_remaining > 0:
 			app.hint_button.pressed.emit()

@@ -15,6 +15,7 @@ var count: int = -1:
 	set(value):
 		count = value
 		queue_redraw()
+var count_anchor := Vector2(0.78, 0.78)
 
 
 func _draw() -> void:
@@ -73,7 +74,7 @@ func _draw() -> void:
 					var point := center + Vector2(side * unit * 0.65, unit * (0.55 if side == 0 else 0.36))
 					draw_line(point, point + Vector2(side * unit * 0.2, unit * 0.35), ink, stroke, true)
 	if count >= 0:
-		var badge := size * 0.78
+		var badge := size * count_anchor
 		draw_circle(badge, minf(size.x, size.y) * 0.17, Color.WHITE)
 		var font: Font = get_theme_font("font")
 		var font_size: int = maxi(1, roundi(size.y * 0.27))

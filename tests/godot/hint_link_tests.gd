@@ -107,6 +107,7 @@ func hue_distance(first: Color, second: Color) -> float:
 func check_theme_switches(app) -> void:
 	app.new_round(21, false, "", "match")
 	await settle()
+	check(app.coin_wallet.credit("fixture:hint-link", 4).ok, "Fund the electric-link presentation's paid hint")
 	app._request_hint()
 	await settle()
 	var hinted: Array = app.model.hint_ids.duplicate()

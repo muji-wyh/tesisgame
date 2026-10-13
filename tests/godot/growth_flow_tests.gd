@@ -304,8 +304,9 @@ func _load_failure(directory: String) -> void:
 
 func _match(app) -> void:
 	var word: Dictionary = app.model.lesson_words[0]
+	check(app.coin_wallet.credit("fixture:growth-match-hint", 4).ok, "Fund the paid hint used to verify mastery evidence")
 	app.hint_button.pressed.emit()
-	check(app.growth.streak(word.id) == 0, "Hints do not create evidence")
+	check(app.model.hints_remaining == 2 and app.growth.streak(word.id) == 0, "Purchased hints do not create evidence")
 	app.cards[word.id + ":word"].pressed.emit()
 	check(app.growth.streak(word.id) == 0, "First Match selection is neutral")
 	app.cards[word.id + ":image"].pressed.emit()

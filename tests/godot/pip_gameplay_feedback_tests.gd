@@ -330,9 +330,12 @@ func _check_match_audio_tail(app) -> void:
 					break
 			app.cards[next].pressed.emit()
 		else:
+			check(app.coin_wallet.credit("fixture:hint-audio-tail", 4).ok, "Fund the paid hint that replaces the previous answer sound")
 			app._request_hint()
-		check(not app.audio.pair_feedback.playing,
-			"The next deliberate card or hint stops the previous answer tail")
+		check(not app.audio.pair_feedback.playing if correct else app.audio.pair_feedback.playing
+			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true])
+			and app.model.hints_remaining == 2,
+			"The next card stops the previous answer tail; a paid hint replaces it with its purchase success cue")
 	_start(app, "match")
 	for card in app.model.cards:
 		if card.kind != "word":

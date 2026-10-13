@@ -55,6 +55,7 @@ func _run() -> void:
 	app._hide_collection()
 	var words: Array[Dictionary] = _pairs(app)
 	check(words.size() == 5, "The scene starts with five matchable words")
+	check(app.coin_wallet.credit("fixture:adventure-hint", 4).ok, "Fund the adventure's paid hint")
 	app._request_hint()
 	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2,
 		"The adventure spends the first of three hints")

@@ -67,6 +67,7 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.choose_mode("match")
+	check(app.coin_wallet.credit("fixture:steady-match-hints", 48).ok, "Fund the twelve accepted hints exercised by the Match feedback and layout cases")
 	app._controller_mode = true
 	await check_feedback_hints(app)
 	for dimensions in [Vector2i(480, 480), Vector2i(854, 480), Vector2i(480, 720), Vector2i(480, 1038)]:
