@@ -168,6 +168,18 @@ func check_growth_states(library: Library) -> void:
 	var next_texture := library._next_pip.texture as AtlasTexture
 	check(next_texture != null and next_texture.atlas.resource_path.ends_with("pip-lv7.png"),
 		"The destination preview uses the actual next Pip appearance")
+	var near_goal := {"ready": true, "completed": false, "age": 0, "learning_age": 3,
+		"mastered": 69, "total": 80, "progress": 69.0 / 80.0, "lifetime_mastered": 69}
+	library.configure_growth(near_goal)
+	check(library._journey_heading.text == "11 more words to grow"
+		and library._journey_count.text.contains("69") and library._journey_count.text.contains("80"),
+		"Near the next growth stage, Home explains the remaining goal alongside the mastered count")
+	near_goal.mastered = 79
+	near_goal.progress = 79.0 / 80.0
+	library.configure_growth(near_goal)
+	check(library._journey_heading.text == "1 more word to grow"
+		and library._journey_count.text.contains("79") and library._journey_count.text.contains("80"),
+		"The final word uses a singular growth goal without losing the cohort count")
 	var completed := {"ready": true, "completed": true, "age": 12, "learning_age": 12,
 		"mastered": 180, "total": 200, "progress": 0.9, "lifetime_mastered": 1550}
 	library.configure_growth(completed)
@@ -222,7 +234,7 @@ func _run() -> void:
 	library.collection_button.pressed.emit()
 	check(collection_visits == 1, "Home requests the collection once")
 	await check_mode_previews(library)
-	for dimensions: Vector2 in [Vector2(320, 320), Vector2(390, 420), Vector2(390, 600), Vector2(390, 844), Vector2(844, 390), Vector2(1280, 800)]:
+	for dimensions: Vector2 in [Vector2(320, 320), Vector2(390, 420), Vector2(390, 600), Vector2(390, 844), Vector2(768, 1024), Vector2(844, 390), Vector2(1280, 800)]:
 		root.size = dimensions
 		library.position = Vector2.ZERO
 		library.fit(dimensions, 1.0)
@@ -233,16 +245,21 @@ func _run() -> void:
 		check(bounds.grow(1).encloses(library.get_global_rect()) and library.size.is_equal_approx(dimensions),
 			"%s: Home fills the viewport without overflowing" % dimensions)
 		var hero_bounds: Rect2 = library._hero.get_global_rect()
-		for child: Control in [library.pip, library.heading, library._intro, library._journey]:
-			check(hero_bounds.grow(1).encloses(child.get_global_rect()),
-				"%s: the growth hero contains %s" % [dimensions, child.name])
-		check(not library.pip.get_global_rect().intersects(library.heading.get_global_rect()),
-			"%s: the companion does not cover the growth headline" % dimensions)
-		check(not library.heading.get_global_rect().intersects(library._intro.get_global_rect()),
-			"%s: the growth headline and explanation have separate space" % dimensions)
-		check(not library._intro.get_global_rect().intersects(library._journey.get_global_rect()),
-			"%s: the growth explanation and progress have separate space" % dimensions)
-		for label: Label in [library.heading, library._intro, library._journey_heading, library._journey_count, library._next_label]:
+		var journey_bounds: Rect2 = library._journey.get_global_rect()
+		check(hero_bounds.grow(1).encloses(journey_bounds),
+			"%s: the unified growth panel stays inside the Home hero" % dimensions)
+		var journey_content: Array[Control] = [library.pip, library.heading, library._journey_heading,
+			library._journey_count, library._journey_bar, library._next_pip]
+		for child: Control in journey_content + [library._pip_caption, library._next_label]:
+			check(journey_bounds.grow(1).encloses(child.get_global_rect()),
+				"%s: the unified growth panel contains %s" % [dimensions, child.name])
+		for first in range(journey_content.size()):
+			for second in range(first + 1, journey_content.size()):
+				check(not journey_content[first].get_global_rect().intersects(journey_content[second].get_global_rect()),
+					"%s: %s and %s have separate readable space" % [dimensions, journey_content[first].name, journey_content[second].name])
+		check(not library.heading.text.contains("\n"),
+			"%s: the growth headline avoids an unnecessary forced line break" % dimensions)
+		for label: Label in [library.heading, library._journey_heading, library._journey_count, library._pip_caption, library._next_label]:
 			check_label_fits(label, "%s: %s" % [dimensions, label.name])
 		for index in range(library.theme_buttons.size()):
 			var button: Button = library.theme_buttons[index]
@@ -288,9 +305,12 @@ func _run() -> void:
 	root.size = Vector2i(640, 400)
 	library.fit(Vector2(640, 400), 2.0)
 	await settle()
-	check(library.pip.size.is_equal_approx(Vector2(92, 92))
-		and library.pip.get_global_rect().end.x < library.heading.get_global_rect().position.x,
-		"A scaled Home portrait keeps its authored CSS size and clear separation from the welcome text")
+	var portrait_css_size := library.pip.size * 2.0
+	check(portrait_css_size.x >= 96.0 and portrait_css_size.x <= 208.0
+		and portrait_css_size.is_equal_approx(Vector2.ONE * portrait_css_size.x)
+		and library._journey.get_global_rect().grow(1).encloses(library.pip.get_global_rect())
+		and not library.pip.get_global_rect().intersects(library.heading.get_global_rect()),
+		"A scaled Home portrait stays recognizable, enclosed by the growth panel and clear of the welcome text")
 	library.queue_free()
 	await process_frame
 	print("Game homepage: %d checks, %d failures" % [checks, failures])
