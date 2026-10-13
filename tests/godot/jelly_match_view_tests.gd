@@ -3,6 +3,7 @@ extends SceneTree
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
 
@@ -508,7 +509,7 @@ func _check_preview_controller(view) -> void:
 func _preview_window(interval: float, start: float, finish: float) -> Dictionary:
 	var energy: float = 0.0
 	var samples: int = 0
-	for index in range(4):
+	for index in range(WordModel.UPCOMING_COUNT):
 		for sample_index in range(81):
 			var progress: float = lerpf(start, finish, float(sample_index) / 80.0)
 			var pose: Dictionary = Motion.preview(progress * interval, interval, index)
@@ -558,7 +559,8 @@ func _preview_content_transforms(view) -> Array:
 
 
 func _check_preview_motion(view) -> void:
-	for interval: float in [view.game.INITIAL_SPAWN_INTERVAL, view.game.MIN_SPAWN_INTERVAL]:
+	for interval: float in [view.game.INITIAL_SPAWN_INTERVAL, view.game.MIN_SPAWN_INTERVAL,
+		WordModel.INITIAL_SPAWN_INTERVAL, WordModel.MIN_SPAWN_INTERVAL]:
 		var early: Dictionary = _preview_window(interval, 0.05, 0.20)
 		var middle: Dictionary = _preview_window(interval, 0.40, 0.55)
 		var late: Dictionary = _preview_window(interval, 0.84, 0.99)
@@ -573,19 +575,19 @@ func _check_preview_motion(view) -> void:
 			var elapsed: float = interval * float(step) / 100.0
 			var pose: Dictionary = Motion.preview(elapsed, interval, 0)
 			check(float(pose.intensity) >= previous_intensity and float(pose.intensity) <= 1.0
-				and float(pose.pressure) >= -0.021 and float(pose.pressure) <= 0.066 and absf(float(pose.sway)) <= 0.0121
+				and float(pose.pressure) >= -0.075 and float(pose.pressure) <= 0.23 and absf(float(pose.sway)) <= 0.075
 				and not pose.has("offset") and not pose.has("stretch") and not pose.has("bend"),
-				"Preview urgency grows inside a small strain envelope without affine motion at %d percent" % step)
+				"Preview urgency stays within the expressive skin envelope without affine motion at %d percent" % step)
 			previous_intensity = float(pose.intensity)
-			var still: Dictionary = Motion.preview(elapsed, interval, step % 4, true)
+			var still: Dictionary = Motion.preview(elapsed, interval, step % WordModel.UPCOMING_COUNT, true)
 			check(is_zero_approx(float(still.pressure)) and is_zero_approx(float(still.sway))
 				and is_zero_approx(float(still.beat)) and is_zero_approx(float(still.intensity)),
 				"Reduced motion has a neutral preview pose throughout the supply beat")
-			for index in range(1, 4):
+			for index in range(1, WordModel.UPCOMING_COUNT):
 				var other: Dictionary = Motion.preview(elapsed, interval, index)
 				different_slots = different_slots or not is_equal_approx(float(other.pressure), float(pose.pressure))
-		check(different_slots, "The four queued skins have staggered pressure impulses instead of moving as a rigid group")
-		for index in range(4):
+		check(different_slots, "The supply retains staggered pressure impulses instead of moving as a rigid group")
+		for index in range(WordModel.UPCOMING_COUNT):
 			var reset: Dictionary = Motion.preview(0.0, interval, index)
 			check(is_zero_approx(float(reset.pressure)) and is_zero_approx(float(reset.sway)),
 				"A newly queued skin starts exactly at rest rather than inheriting the previous beat")
@@ -593,14 +595,20 @@ func _check_preview_motion(view) -> void:
 			var maximum_rate: Vector2 = Vector2.ZERO
 			var minimum_pressure: float = 0.0
 			var maximum_pressure: float = 0.0
+			var maximum_sway: float = 0.0
 			for sample_index in range(1, 2001):
 				var current: Dictionary = Motion.preview(interval * float(sample_index) / 2000.0, interval, index)
 				var rate := Vector2(absf(float(current.pressure) - float(previous.pressure)), absf(float(current.sway) - float(previous.sway))) / (interval / 2000.0)
 				maximum_rate = maximum_rate.max(rate)
 				minimum_pressure = minf(minimum_pressure, float(current.pressure))
 				maximum_pressure = maxf(maximum_pressure, float(current.pressure))
+				maximum_sway = maxf(maximum_sway, absf(float(current.sway)))
 				previous = current
-			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 1.0,
+			check(minimum_pressure >= -0.075 and maximum_pressure <= 0.23 and maximum_sway <= 0.075,
+				"Preview %d stays inside the authored skin's safe envelope throughout the %.2f-second cycle" % [index + 1, interval])
+			check(maximum_pressure > 0.11 and maximum_sway > 0.018,
+				"Preview %d builds to a visibly exaggerated compression and sideways wobble in the %.2f-second cycle" % [index + 1, interval])
+			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 2.5,
 				"Preview %d compresses and elastically recovers through continuous bounded pressure without a phase-boundary snap" % (index + 1))
 	_reset(view, false, false)
 	var first: Array = view.snapshot().preview.slots.duplicate(true)

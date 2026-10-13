@@ -793,9 +793,9 @@ test('preview pressure builds through fusion and pauses only with the menu', asy
       const slot = state.preview.slots[index];
       expect(slot.rect, 'The queued tile keeps a fixed origin and hit rectangle').toEqual(early.preview.slots[index].rect);
       expect(Object.keys(slot.motion).sort()).toEqual(['beat', 'intensity', 'pressure', 'sway']);
-      expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.021);
-      expect(slot.motion.pressure).toBeLessThanOrEqual(0.066);
-      expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.0121);
+      expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.075);
+      expect(slot.motion.pressure).toBeLessThanOrEqual(0.23);
+      expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.075);
     }
     expect({ pressure: after.pressure, sway: after.sway }, 'The gel skin changes strain without moving its contents')
       .not.toEqual({ pressure: before.pressure, sway: before.sway });

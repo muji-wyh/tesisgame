@@ -37,7 +37,8 @@ void fragment() {
 	// Anticipation deforms the acquired skin above its painted contact point.
 	// The lower lobe spreads under pressure; the crown follows a little later.
 	float height = clamp((0.890625 - UV.y) / 0.784375, 0.0, 1.0);
-	float bulge = sin(height * 3.14159265) * preview_pressure * 0.48;
+	// Leave a transparent margin even at the final exaggerated crouch.
+	float bulge = sin(height * 3.14159265) * preview_pressure * 0.28;
 	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge);
 	sample_uv.x -= preview_sway * height * height;
 	sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);

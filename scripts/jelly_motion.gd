@@ -34,8 +34,8 @@ static func preview(elapsed: float, interval: float, index: int, reduced: bool =
 	var duration: float = maxf(0.1, interval)
 	var progress: float = clampf(elapsed / duration, 0.0, 1.0)
 	var time: float = progress * duration
-	# The supply clock schedules increasingly close pressure impulses. Each skin
-	# keeps its own short physical recovery instead of speeding up a rigid shake.
+	# Alternating squishes let the crown swing behind the planted belly. The
+	# supply clock brings these elastic beats closer together before the drop.
 	var acceleration: float = 2.15 / duration
 	var phase: float = 0.65 * time + 0.5 * acceleration * time * time
 	var stagger: float = 0.18 + float(index) * 0.095
@@ -45,18 +45,24 @@ static func preview(elapsed: float, interval: float, index: int, reduced: bool =
 	for pulse in range(maxi(0, latest - 2), latest + 1):
 		var onset: float = (sqrt(0.65 * 0.65 + 2.0 * acceleration * (float(pulse) + stagger)) - 0.65) / acceleration
 		var age: float = maxf(0.0, time - onset)
-		var strength: float = lerpf(0.009, 0.06, pow(onset / duration, 2.4))
-		if age < 0.07:
-			pressure += strength * smoothstep(0.0, 0.07, age)
+		var strength: float = lerpf(0.022, 0.17, pow(onset / duration, 1.8))
+		if age < 0.085:
+			pressure += strength * smoothstep(0.0, 0.085, age)
 		else:
-			var release: float = age - 0.07
-			# Zero velocity at release, then one small overshoot and a dying tail.
-			pressure += strength * exp(-10.5 * release) * (cos(23.0 * release) + 10.5 / 23.0 * sin(23.0 * release))
+			var release: float = age - 0.085
+			# The belly rebounds first, with a slower side-to-side follow-through.
+			pressure += strength * exp(-7.8 * release) * (cos(19.0 * release) + 7.8 / 19.0 * sin(19.0 * release))
 			var lag: float = maxf(0.0, release - 0.025)
 			var direction: float = -1.0 if (pulse + index) % 2 == 0 else 1.0
-			sway += direction * strength * 0.30 * exp(-8.0 * lag) * sin(20.0 * lag)
+			sway += direction * strength * 0.75 * exp(-6.0 * lag) * sin(16.0 * lag)
+	# Finish with a readable crouch rather than cutting a random wiggle short.
+	# Each queued body leans its own way; Words carries this pose into departure.
+	var gather_start: float = duration - minf(0.5 + float(index) * 0.012, duration * 0.35)
+	var gather: float = smoothstep(gather_start, duration - minf(0.07, duration * 0.05), time)
+	pressure = lerpf(pressure, 0.18 + float(index % 3) * 0.012, gather)
+	sway = lerpf(sway, -0.025 if index % 2 == 0 else 0.025, gather)
 	return {"pressure": pressure, "sway": sway, "beat": phase * TAU,
-		"intensity": lerpf(0.12, 1.0, pow(progress, 2.4))}
+		"intensity": lerpf(0.12, 1.0, pow(progress, 1.8))}
 
 
 static func sample(cell: Dictionary) -> Dictionary:
