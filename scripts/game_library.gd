@@ -79,7 +79,7 @@ func _init() -> void:
 	scroll = ResultScroll.new()
 	scroll.name = "HomeScroll"
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	scroll.follow_focus = true
 	scroll.scroll_deadzone = 8
 	_stage.add_child(scroll)
