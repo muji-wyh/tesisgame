@@ -691,6 +691,99 @@ test('word pair colors distinguish exact completion targets and preserve source 
   expect(errors).toEqual([]);
 });
 
+for (const reducedMotion of ['no-preference', 'reduce']) {
+  test(`drag completion hints follow exact source order and clear with the gesture (${reducedMotion})`, async ({ page }, info) => {
+    test.setTimeout(180000);
+    const errors = await startWordJelly(page, { reducedMotion });
+    const pair = await availableWord(page, 3, 2, { invalidReverse: true });
+    const opening = await jelly(page), bounds = await metrics(page);
+    const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
+    const hintedIds = state => state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b);
+    const expectedIds = (state, source) => state.tiles.filter(tile => tile.id !== source.id && tile.settled &&
+      words.has(normalize(source.text + tile.text))).map(tile => tile.id).sort((a, b) => a - b);
+    const expectQuiet = state => {
+      expect(hintedIds(state), 'Idle, canceled and paused jellies do not advertise a held prefix').toEqual([]);
+      for (const tile of state.tiles) expect(tile.completion_scale).toBe(1);
+    };
+    const safePoint = center([opening.board_rect[0] + opening.board_rect[2] * 0.25,
+      opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
+    const beginDrag = async source => {
+      const point = center((await jelly(page)).tiles.find(tile => tile.id === source.id).rect, await metrics(page));
+      await page.mouse.move(point.x, point.y);
+      await page.mouse.down();
+      await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
+      expectQuiet(await jelly(page));
+      await page.mouse.move(safePoint.x, safePoint.y, { steps: 8 });
+      await expect.poll(async () => (await jelly(page)).drag.active).toBe(true);
+      await expect.poll(async () => {
+        const state = await jelly(page);
+        return JSON.stringify(hintedIds(state)) === JSON.stringify(expectedIds(state, source));
+      }).toBe(true);
+    };
+    expectQuiet(opening);
+    await capture(page, info, 'word-jelly-completion-idle');
+    await beginDrag(pair.roots[0]);
+    try {
+      const samples = [];
+      for (let frame = 0; frame < 8; frame++) {
+        const state = await jelly(page);
+        expect(hintedIds(state), 'Only exact current-age source-plus-target words receive a completion effect')
+          .toEqual(expectedIds(state, pair.roots[0]));
+        for (const tile of state.tiles.filter(tile => tile.id !== pair.roots[0].id)) {
+          const original = opening.tiles.find(item => item.id === tile.id);
+          if (original) expect(tile.rect, 'Breathing changes the jelly skin without moving its hit box or text layout').toEqual(original.rect);
+          expect(tile.completion_scale).toBeGreaterThanOrEqual(1);
+          expect(tile.completion_scale).toBeLessThanOrEqual(1.065);
+          if (reducedMotion === 'reduce' || !tile.completion_hint) expect(tile.completion_scale).toBe(1);
+        }
+        samples.push(state.tiles.find(tile => tile.id === pair.roots[1].id).completion_scale);
+        await page.waitForTimeout(120);
+      }
+      if (reducedMotion === 'no-preference') {
+        expect(Math.max(...samples), 'A compatible target softly grows during an actual drag').toBeGreaterThan(1.01);
+        expect(Math.max(...samples) - Math.min(...samples), 'The target breathes gently rather than snapping to one size')
+          .toBeGreaterThan(0.003);
+      }
+      await capture(page, info, 'word-jelly-completion-active');
+      await info.attach('word-jelly-completion-samples.json', {
+        body: JSON.stringify({ reducedMotion, prefix: pair.roots[0].text, suffix: pair.roots[1].text,
+          opening, active: await jelly(page), scales: samples }, null, 2), contentType: 'application/json'
+      });
+      await page.keyboard.press('Escape');
+      await expect.poll(async () => (await jelly(page)).drag.active).toBe(false);
+      expectQuiet(await jelly(page));
+    } finally {
+      await page.mouse.up();
+    }
+    await beginDrag(pair.roots[1]);
+    try {
+      const reversed = await jelly(page);
+      expect(reversed.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint,
+        'Dragging a suffix never highlights the original prefix when their reversed spelling is invalid').toBe(false);
+      const outside = center([opening.board_rect[0] - 20 / bounds.scale,
+        opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
+      await page.mouse.move(outside.x, outside.y, { steps: 5 });
+    } finally {
+      await page.mouse.up();
+    }
+    await expect.poll(async () => (await jelly(page)).drag.active).toBe(false);
+    expectQuiet(await jelly(page));
+    await beginDrag(pair.roots[0]);
+    try {
+      await openModeMenu(page);
+      await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+      expectQuiet(await jelly(page));
+    } finally {
+      await page.mouse.up();
+    }
+    await chooseMode(page, 'word_jelly');
+    await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+    expectQuiet(await jelly(page));
+    await capture(page, info, 'word-jelly-completion-cleared');
+    expect(errors).toEqual([]);
+  });
+}
+
 test('six columns build a pictured word and a deliberate tap credits its coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   expect(opening.tiles).toHaveLength(18);

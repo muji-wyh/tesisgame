@@ -8,6 +8,44 @@ var _fragment_texture: Texture2D
 var _fragment_overflow: Label
 var _unit: float = 60.0
 var palette_index: int = -1
+const COMPLETION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
+var completion_hint: bool = false
+var completion_scale: float = 1.0
+var _completion_glow: TextureRect
+
+func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
+	var was_active: bool = completion_hint
+	completion_hint = active and not _projection
+	if not completion_hint and not was_active:
+		return
+	var previous_scale: float = completion_scale
+	var enter: float = smoothstep(0.0, 0.14, elapsed)
+	var breath: float = (1.0 - cos(maxf(0.0, elapsed - 0.14) * TAU / 1.45)) * 0.5
+	completion_scale = 1.0 + enter * (0.035 + breath * 0.02) if completion_hint and not reduced else 1.0
+	# Only the painted skin breathes. Letters, badges, layout and contact stay fixed.
+	_base_stretch *= completion_scale / previous_scale
+	_surface.scale *= completion_scale / previous_scale
+	_gel.set_shader_parameter("completion_strength", (0.9 if reduced else 0.6 + enter * 0.4) if completion_hint else 0.0)
+	_gel.set_shader_parameter("completion_glint", -2.0 if reduced else -0.3 + fposmod(elapsed, 1.8) * 1.6)
+	if completion_hint and _completion_glow == null:
+		_completion_glow = TextureRect.new()
+		_completion_glow.texture = COMPLETION_GLOW
+		_completion_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_completion_glow.stretch_mode = TextureRect.STRETCH_SCALE
+		_completion_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_completion_glow.z_index = -1
+		add_child(_completion_glow)
+		move_child(_completion_glow, 0)
+	if _completion_glow != null:
+		_completion_glow.visible = completion_hint
+		_completion_glow.size = size * Vector2(1.24, 1.26)
+		_completion_glow.position = (size - _completion_glow.size) * 0.5 - Vector2(0.0, size.y * 0.04)
+		_completion_glow.modulate = Color(1.0, 0.84, 0.38, 0.38 if reduced else 0.2 + enter * (0.15 + breath * 0.14))
+	if completion_hint or was_active:
+		_refresh_feedback()
+
+func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
+	super.deform(amount, beat, stretch * completion_scale)
 
 func set_palette(index: int, hue: float) -> void:
 	palette_index = index
@@ -46,7 +84,11 @@ func set_chest_texture(texture: Texture2D) -> void:
 
 func _refresh_feedback(reset_motion: bool = false) -> void:
 	super._refresh_feedback(reset_motion)
-	if valid_word and _mark == 0 and _contact_kind == "none":
+	if completion_hint and _mark < 2 and _contact_kind == "none":
+		_gel.set_shader_parameter("rim_color", Color("#ebba4c"))
+		_gel.set_shader_parameter("rim_strength", 1.0)
+		_gel.set_shader_parameter("rim_width", 1.45)
+	elif valid_word and _mark == 0 and _contact_kind == "none":
 		_gel.set_shader_parameter("rim_color", Color("#de9b29"))
 		_gel.set_shader_parameter("rim_strength", 0.85)
 		_gel.set_shader_parameter("rim_width", 1.1)

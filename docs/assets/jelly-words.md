@@ -39,6 +39,20 @@ feeds the three opening rows. Word provenance, part order, and fragment markers
 stay attached to each root; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
+Once a drag begins, every settled target that completes a current-age word in
+source-then-target order receives a warm local glow, a slow light sweep across
+the acquired gel paint, and a gentle 3.5-5.5 percent breathing enlargement of
+its skin. Keyboard source selection shows the same candidates. The cue reuses
+the acquired `portal_glow.png` from Bobardo's Modern 2D Animated Chests, under
+the Standard Unity Asset Store EULA documented in
+[treasure assets](../voice-pop-treasure.md), with its source mapping in
+`assets/chests/manifest.json`.
+Both source textures are static; these cues are runtime animation. No new
+artwork or audio was acquired. Lettering, pictures, fragment markers, hit areas
+and rewards stay unchanged. Pressing without dragging does not start the cue;
+release, cancellation or leaving play clears it. Reduced motion keeps static
+light and the painted rim without a sweep or enlargement.
+
 Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
 after landing. Shared entry lanes retain extra clearance so a later root cannot

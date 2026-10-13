@@ -27,6 +27,8 @@ var _word_reveal: WordReveal
 var collect_button: CollectButton
 var _placement_tile: WordTile
 var _placement: Dictionary = {}
+var _completion_source: int = -1
+var _completion_elapsed: float = 0.0
 
 func _init() -> void:
 	super()
@@ -461,6 +463,7 @@ func _arrival_delay(cell: Dictionary) -> float:
 	return WordModel.arrival_delay(cell)
 
 func _sync_positions() -> void:
+	_refresh_completion_hints()
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
 		if not _tiles.has(id):
@@ -571,6 +574,8 @@ func _process(delta: float) -> void:
 	if _can_play() and delta <= 0.5:
 		_word_reveal.advance(delta)
 		collect_button.advance(delta)
+		if _completion_source >= 0:
+			_completion_elapsed += delta
 	var generation: int = _generation
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:
@@ -592,6 +597,19 @@ func _refresh_marks() -> void:
 	_refresh_palette()
 	if _keyboard_source >= 0 and _tiles.has(_keyboard_source):
 		_tiles[_keyboard_source].set_marked(false, true, _can_play(), reduced_motion)
+	_refresh_completion_hints()
+
+func _refresh_completion_hints() -> void:
+	var source: int = (_source if _dragging else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
+	if source != _completion_source:
+		_completion_source = source
+		_completion_elapsed = 0.0
+	var prefix: Dictionary = _cell(source)
+	for id: int in _tiles:
+		var target: Dictionary = _cell(id)
+		var eligible: bool = not prefix.is_empty() and _settled(prefix) and _settled(target) \
+			and Palette.completes(prefix, target, game._word_lookup)
+		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
 func navigation_controls() -> Array[Control]:
 	if not _can_play():
@@ -950,6 +968,8 @@ func snapshot() -> Dictionary:
 	state.drag.selected = _keyboard_source
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
+		item["completion_hint"] = tile.completion_hint
+		item["completion_scale"] = tile.completion_scale
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
 		item["fragment_badges"] = tile.visible_fragment_badges()
 		item["coins"] = WordModel.coins_for_tile(item)

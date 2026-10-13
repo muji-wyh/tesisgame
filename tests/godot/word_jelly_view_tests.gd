@@ -75,6 +75,10 @@ func _run() -> void:
 	_check_release_after_support_collection(view)
 	_check_coarse_frame_collection_landing(view)
 	_check_word_pair_colors(view)
+	_check_completion_hints(view)
+	_check_completion_hint_targets(view)
+	_check_completion_hint_lifecycle(view)
+	_check_completion_hint_reduced_motion(view)
 	_check_partial_word_colors(view)
 	_check_fusion_palette_handover(view)
 	_check_crowded_palette_separation(view)
@@ -1163,6 +1167,163 @@ func _check_word_pair_colors(view) -> void:
 			and is_equal_approx(float(slot.get("palette_hue", -1.0)), float(view._preview_tiles[index]._gel.get_shader_parameter("palette_hue"))),
 			"upcoming parts publish the same hint hue that their actual gel renders")
 	words = original_words
+
+
+func _assert_completion_hints(view, expected: Array[int], context: String) -> void:
+	for tile: Dictionary in view.snapshot().tiles:
+		var active: bool = int(tile.id) in expected
+		var body = view._tiles[int(tile.id)]
+		check(tile.has("completion_hint") and bool(tile.get("completion_hint", false)) == active
+			and bool(body.completion_hint) == active, "%s: completion hint follows the live eligible target" % context)
+		check(tile.has("completion_scale") and is_equal_approx(float(tile.get("completion_scale", -1.0)), float(body.completion_scale)),
+			"%s: diagnostic scale matches the rendered completion feedback" % context)
+		if not active:
+			check(is_equal_approx(float(body.completion_scale), 1.0), "%s: inactive bodies have no residual completion enlargement" % context)
+	for preview in view._preview_tiles:
+		check(not preview.completion_hint and is_equal_approx(float(preview.completion_scale), 1.0),
+			"%s: upcoming parts never advertise an actionable completion" % context)
+	check(not view._placement_tile.completion_hint, "%s: placement projection never acts as a second completion target" % context)
+
+
+func _completion_board(view, pieces: Array[String]) -> Array[int]:
+	view.game.cells.clear()
+	var ids: Array[int] = []
+	for text: String in pieces:
+		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		tile.column = ids.size() % Model.COLUMNS
+		tile.row = Model.ROWS - 1 - floori(float(ids.size()) / Model.COLUMNS)
+		ids.append(int(tile.id))
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	view._layout()
+	return ids
+
+
+func _check_completion_hints(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	for text: String in ["can", "car"]:
+		var word: Dictionary = original_words[0].duplicate(true)
+		word.id = "view-completion-" + text
+		word.text = text
+		word.min_age = 4 if text == "car" else 3
+		words.append(word)
+	for pointer: int in [-1, 7]:
+		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
+		_reset(view)
+		var ids: Array[int] = _completion_board(view, ["ca", "t", "n", "t", "r", "x"])
+		var target = view._tiles[ids[1]]
+		var rectangle: Rect2 = target.get_rect()
+		var outline: PackedVector2Array = target.contact_outline()
+		var center: Vector2 = _center(view, ids[0])
+		check(not view.game._word_lookup.has("car"), "completion candidates use only the current age vocabulary")
+		_assert_completion_hints(view, [], "idle")
+		_pointer_event(view, pointer, "down", center)
+		_assert_completion_hints(view, [], "press before dragging")
+		_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
+		check(not view._dragging, "small mouse or touch jitter does not activate completion guidance")
+		_assert_completion_hints(view, [], "pointer below drag threshold")
+		_pointer_event(view, pointer, "move", center + Vector2(0.0, -12.0))
+		check(view._dragging, "moving beyond the threshold starts completion guidance")
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "ordered current-age completions")
+		_advance(view, 0.22)
+		for id: int in [ids[1], ids[2], ids[3]]:
+			check(float(view._tiles[id].completion_scale) > 1.0 and float(view._tiles[id].completion_scale) <= 1.065,
+				"every exact target receives only a small completion enlargement")
+		check(target.get_rect().is_equal_approx(rectangle) and target.contact_outline() == outline,
+			"completion animation preserves the target's layout, hit rectangle, and contact outline")
+		check(cues == ["pick"] and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
+			"completion guidance adds no audio, learning credit, or rewards before a merge")
+		view.cancel_input()
+		view._activate(ids[1])
+		_assert_completion_hints(view, [], "reverse-only source")
+		view.cancel_input()
+		view._activate(ids[0])
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "keyboard source selection")
+		view._tiles[ids[1]].grab_focus()
+		var change_source := InputEventKey.new()
+		change_source.keycode = KEY_ENTER
+		change_source.pressed = true
+		change_source.shift_pressed = true
+		view._input(change_source)
+		check(view._keyboard_source == ids[1], "keyboard shortcut can replace the active source without merging")
+		_assert_completion_hints(view, [], "source changed to a reverse-only partner")
+		view.cancel_input()
+	view.size = Vector2(1000, 720)
+	words = original_words
+
+
+func _check_completion_hint_targets(view) -> void:
+	for mass: int in [2, 7]:
+		_reset(view)
+		var ids: Array[int] = _install(view, ["c", "at" if mass == 2 else "aterpillar"], [], [1, mass])
+		view._activate(ids[0])
+		_assert_completion_hints(view, [ids[1]], "merged and wrapped completion targets")
+		if mass == 7:
+			check(int(view.game.cell(ids[1]).height) > 1, "completion guidance covers a genuinely wrapped target")
+		view.cancel_input()
+	_reset(view)
+	var ids: Array[int] = _completion_board(view, ["ca", "t", "t", "t", "x", "t"])
+	var airborne: Dictionary = view._cell(ids[2])
+	airborne.age = 0.0
+	airborne.arrival = true
+	airborne.arrival_delay = 1.0
+	view._merge(ids[3], ids[4], view._tiles[ids[3]].position)
+	check(view.game.is_fusing(ids[3]) and not view._settled(airborne), "completion fixture has both fusing and airborne partners")
+	view._activate(ids[0])
+	_assert_completion_hints(view, [ids[1], ids[5]], "only settled actionable partners")
+	for visual: Dictionary in view._fusion_visuals.values():
+		check(not visual.merged.completion_hint, "temporary fusion artwork is not a selectable completion")
+	view.cancel_input()
+
+
+func _check_completion_hint_lifecycle(view) -> void:
+	for interruption: String in ["release", "merge", "cancel", "pointer_cancel", "pause", "hide", "focus", "blocked", "stop", "reconfigure"]:
+		_reset(view)
+		var ids: Array[int] = _install(view, ["ca", "t"])
+		var target = view._tiles[ids[1]]
+		var center: Vector2 = _center(view, ids[0])
+		_pointer_event(view, 7, "down", center)
+		_pointer_event(view, 7, "move", center + Vector2(12.0, 0.0))
+		_advance(view, 0.2)
+		check(target.completion_hint and float(target.completion_scale) > 1.0, "%s starts from an animated completion target" % interruption)
+		match interruption:
+			"release": _pointer_event(view, 7, "up", center)
+			"merge": _pointer_event(view, 7, "up", _center(view, ids[1]))
+			"cancel": view.cancel_input()
+			"pointer_cancel": _pointer_event(view, 7, "up", center, true)
+			"pause": view.pause(true)
+			"hide": view.hide()
+			"focus": view._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+			"blocked":
+				view.interaction_allowed = func() -> bool: return false
+				view._process(0.01)
+			"stop": view.stop()
+			"reconfigure": _reset(view)
+		check(not target.completion_hint and is_equal_approx(float(target.completion_scale), 1.0),
+			"%s immediately removes the old target's light and enlargement" % interruption)
+		_assert_completion_hints(view, [], interruption)
+		view.interaction_allowed = Callable()
+		view.show()
+		view.pause(false)
+		check(heard.is_empty() and payouts.is_empty(), "%s cannot turn completion feedback into an unintended collection" % interruption)
+
+
+func _check_completion_hint_reduced_motion(view) -> void:
+	_reset(view, true)
+	var ids: Array[int] = _install(view, ["ca", "t"])
+	view._activate(ids[0])
+	_assert_completion_hints(view, [ids[1]], "reduced motion retains static completion guidance")
+	_advance(view, 0.3)
+	check(is_equal_approx(float(view._tiles[ids[1]].completion_scale), 1.0), "reduced-motion completion guidance never scales the body")
+	view.set_reduced_motion(false)
+	_advance(view, 0.2)
+	check(view._tiles[ids[1]].completion_hint and float(view._tiles[ids[1]].completion_scale) > 1.0,
+		"reenabling motion restores subtle movement for the still-active target")
+	view.set_reduced_motion(true)
+	_assert_completion_hints(view, [ids[1]], "changing reduced motion keeps completion semantics")
+	check(is_equal_approx(float(view._tiles[ids[1]].completion_scale), 1.0), "switching reduced motion on immediately resets target enlargement")
+	view.cancel_input()
+	_assert_completion_hints(view, [], "reduced-motion cancellation")
 
 
 func _check_partial_word_colors(view) -> void:
