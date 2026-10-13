@@ -2,18 +2,22 @@ extends Control
 ## A visual receipt: every arriving sprite releases its share to the counter.
 
 signal arrived(value: int)
+signal arrival_sound
+signal settled
 signal completed
 const Style = preload("res://scripts/ui_style.gd")
 const COINS = preload("res://assets/coins/gold-coins.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const BURST_SECONDS: float = 0.46
 const TRAVEL_SECONDS: float = 0.68
+const SOUND_INTERVAL: float = 0.10
 var counter: Control
 var reduced_motion: bool = false
 var _events: Array[Dictionary] = []
 var _seen: Dictionary = {}
 var _visual_total: int = 0
 var _elapsed: float = 0.0
+var _sound_cooldown: float = 0.0
 
 
 func _init() -> void:
@@ -24,6 +28,8 @@ func _init() -> void:
 
 func sync(balance: int) -> void:
 	_events.clear()
+	_sound_cooldown = 0.0
+	settled.emit()
 	_visual_total = balance
 	if is_instance_valid(counter):
 		counter.sync(balance)
@@ -52,6 +58,8 @@ func advance(delta: float) -> void:
 		return
 	counter.reduced_motion = reduced_motion
 	_elapsed += delta
+	_sound_cooldown = maxf(0.0, _sound_cooldown - delta)
+	var has_arrivals: bool = false
 	for event in _events:
 		event.elapsed += delta
 		var count: int = event.count
@@ -64,6 +72,12 @@ func advance(delta: float) -> void:
 			event.arrivals += 1
 			counter.arrive(_visual_total)
 			arrived.emit(_visual_total)
+			has_arrivals = true
+	# A dense batch, reduced motion or a stalled frame gets one current beat.
+	# Skipped accents are never queued, so audio cannot outlive the coin flight.
+	if has_arrivals and _sound_cooldown <= 0.000001:
+		_sound_cooldown = SOUND_INTERVAL
+		arrival_sound.emit()
 	var had_events: bool = not _events.is_empty()
 	_events = _events.filter(func(event: Dictionary) -> bool: return event.arrivals < event.count)
 	if had_events and _events.is_empty():

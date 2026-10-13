@@ -100,3 +100,38 @@ or larger better preserves the metal highlights. All four edges are transparent
 and free of a rectangular matte. Integrated captures check the chest burst, flight,
 arrival and settled balance at 1000 x 800, 390 x 844, 320 x 568 and 568 x 320.
 Lifecycle tests verify arrival-gated counting, persistence and interrupted flights.
+
+## Coin deposit sound
+
+The deposit sound is Kenney's `handleCoins2.ogg` from **RPG Audio 1.0**,
+acquired from the user's local **Kenney Game Assets All-in-1 3.7.0** collection
+under `Audio/RPG Audio/Audio/`. The creator and distributor is
+[Kenney](https://kenney.nl/assets/rpg-audio). The original pack license is
+**CC0-1.0**, copied to `assets/audio/coins/LICENSE.txt`. This recording is
+integrated in the game, not a source preview; it has no associated animation.
+
+The two RPG coin recordings and five Retro Sounds 2 coin recordings were
+inspected for format and duration. The shorter RPG recording was selected for
+its authored coin-material identity and 0.338-second duration. Decoded signal
+statistics were checked; automated inspection is not a listening review.
+`assets/audio/coins/manifest.json` records source and output SHA-256 hashes.
+
+Reproduce the mono 44,100 Hz PCM16 runtime WAV with:
+
+```powershell
+node tools/import-coin-audio.cjs 'Q:/uwok/Kenney Game Assets All-in-1 3.7.0/Audio/RPG Audio/Audio/handleCoins2.ogg'
+```
+
+The full recording is retained at its original pitch, downmixed and resampled,
+with 2 ms / 12 ms edge fades and a peak level of 0.8. Runtime gain is 0.60,
+with a further 6 dB reduction during word pronunciation.
+
+Every reward mode shares the same coin-flight arrival signal. An accent plays
+only when coins reach the balance counter, at most once per rendered update
+and at least 100 ms apart. Four fixed channels let the brief tails overlap;
+skipped accents are never queued. The Jelly Words Collect cadence and voice
+behavior are unchanged. Reduced motion coalesces simultaneous deposits.
+Mute, backgrounding, Home, Library, and silent balance synchronization cancel
+the coin channels, including pending stream requests. Restore and duplicate
+receipts do not replay the sound. The WAV is a required startup-pack resource,
+so deposits never make an additional audio download.

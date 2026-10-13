@@ -103,6 +103,7 @@ func make_app(mode: String, storage = null):
 	app._pop.set_process(false)
 	app._jelly.set_process(false)
 	app.chest.set_process(false)
+	Fixture.enter_mode(app, mode)
 	app.set_meta("coin_test_storage", host)
 	return app
 
@@ -391,7 +392,7 @@ func check_startup_pending_memory_retry() -> void:
 		and app._coin_flight.snapshot().displayed == 50.0,
 		"Recovered startup coins synchronize the HUD without replaying an opening flight")
 	app._retry_storage()
-	app.choose_mode("memory")
+	Fixture.enter_mode(app, "memory")
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app._memory._paused
 		and app._memory.memory.phase == "waiting" and not app._pair_save_failed,
 		"After generic recovery the player can switch directly into a fresh playable Memory round")

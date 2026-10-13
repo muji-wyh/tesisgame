@@ -18,6 +18,10 @@ const PAIR_FEEDBACK_PATHS := {
 const PAIR_FEEDBACK_GAIN := 0.48
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
+const COIN_PATH := "res://assets/audio/coins/collect.wav"
+const COIN_CHANNELS := 4
+const COIN_GAIN := 0.60
+const COIN_SPEECH_DB := -6.0
 const JELLY_PATHS := {
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
@@ -109,6 +113,8 @@ var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
+var _coin_players: Array[AudioStreamPlayer] = []
+var _coin_next_player: int = 0
 
 
 func _ready() -> void:
@@ -142,6 +148,7 @@ func _ready() -> void:
 		_stream(path)
 	ui_click = _player(UI_CLICK_GAIN)
 	_stream(UI_CLICK_PATH)
+	_stream(COIN_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -223,6 +230,33 @@ func stop_ui_click() -> void:
 	if ui_click != null:
 		_stop(ui_click)
 		ui_click.stream = null
+
+
+func play_coin_arrival() -> void:
+	if muted or not active or not available:
+		return
+	if _coin_players.is_empty():
+		for index in range(COIN_CHANNELS):
+			_coin_players.append(_player(COIN_GAIN))
+	# Four short tails can overlap without stealing chest cues or pronunciation.
+	var player: AudioStreamPlayer = _coin_players[_coin_next_player]
+	_coin_next_player = (_coin_next_player + 1) % COIN_CHANNELS
+	_update_coin_gain()
+	_play(player, COIN_PATH)
+	set_process(true)
+
+
+func stop_coin_sounds() -> void:
+	for player: AudioStreamPlayer in _coin_players:
+		_stop(player)
+		player.stream = null
+	_coin_next_player = 0
+
+
+func _update_coin_gain() -> void:
+	var duck: float = COIN_SPEECH_DB if voice != null and voice.playing else 0.0
+	for player: AudioStreamPlayer in _coin_players:
+		player.volume_db = linear_to_db(COIN_GAIN) + duck
 
 
 func play_jelly_cue(cue_name: String) -> void:
@@ -331,7 +365,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty())
+	set_process(not _jelly_players.is_empty() or not _coin_players.is_empty())
 	_update_music_gain()
 
 
@@ -346,13 +380,18 @@ func _process(_delta: float) -> void:
 	if muted or not active or not available:
 		stop_round_celebration()
 		stop_jelly_sounds()
+		stop_coin_sounds()
 		set_process(false)
 		return
 	var jelly_playing: bool = false
 	for player: AudioStreamPlayer in _jelly_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
-	if _round_celebration_id.is_empty() and not jelly_playing:
+	var coin_playing: bool = false
+	for player: AudioStreamPlayer in _coin_players:
+		coin_playing = coin_playing or player.playing
+	_update_coin_gain()
+	if _round_celebration_id.is_empty() and not jelly_playing and not coin_playing:
 		set_process(false)
 		return
 	# Actual playback, including a natural word ending, controls the cue mix.
@@ -776,6 +815,7 @@ func _update_music_gain() -> void:
 		var celebration_db: float = ROUND_CELEBRATION_MUSIC_DB if not _round_celebration_id.is_empty() else 0.0
 		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
 	_update_round_celebration_gain()
+	_update_coin_gain()
 
 
 func set_muted(value: bool) -> void:
@@ -804,6 +844,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 		stop_pair_feedback()
 	stop_pop_sounds()
 	stop_jelly_sounds()
+	stop_coin_sounds()
 	stop_round_celebration()
 	stop_chest_performance()
 	if music != null:

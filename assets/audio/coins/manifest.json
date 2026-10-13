@@ -1,0 +1,27 @@
+{
+  "creator": "Kenney",
+  "pack": "RPG Audio 1.0",
+  "sourceUrl": "https://kenney.nl/assets/rpg-audio",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "acquisition": "Acquired from the user-provided local Kenney Game Assets All-in-1 3.7.0 collection; integrated.",
+  "source": "Audio/RPG Audio/Audio/handleCoins2.ogg",
+  "sourceSha256": "32d79ea56ff22e6d74c4dd541674c95f5adbcff01300b9f99694627e3e9fdbfe",
+  "destination": "assets/audio/coins/collect.wav",
+  "sha256": "685a03cd00eff3d63aa29711cbadf0a463a3102929273b8b0deca15e9f0b4fb0",
+  "sampleRate": 44100,
+  "channels": 1,
+  "bitDepth": 16,
+  "seconds": 0.3382086167800454,
+  "processing": {
+    "downmix": "mono",
+    "resample": 44100,
+    "fadeInFrames": 88,
+    "fadeOutFrames": 529,
+    "peak": 0.8,
+    "gain": 2.2578475999407184,
+    "trimming": "none",
+    "pitch": "unchanged"
+  },
+  "animations": "Not applicable; audio only."
+}

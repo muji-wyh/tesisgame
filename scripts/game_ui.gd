@@ -880,6 +880,8 @@ func _build_controls() -> void:
 	_outcome.hide()
 	_coin_flight = CoinFlight.new()
 	_coin_flight.counter = _coin_counter
+	_coin_flight.arrival_sound.connect(audio.play_coin_arrival)
+	_coin_flight.settled.connect(audio.stop_coin_sounds)
 	add_child(_coin_flight)
 	_coin_flight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_reward_confetti = RewardConfetti.new()

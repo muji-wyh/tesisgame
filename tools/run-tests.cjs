@@ -5,14 +5,14 @@ const { runGodot } = require('./run-godot.cjs');
 const root = path.resolve(__dirname, '..');
 const groups = {
   vocabulary: { godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests'], node: ['vocabulary-loader', 'vocabulary-packs'] },
-  jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
-  'word-jelly': { godot: ['word_jelly_model_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_flow_tests', 'coin_wallet_tests', 'game_library_tests'] },
+  jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_match_flow_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'coin_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
+  'word-jelly': { godot: ['word_jelly_model_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_flow_tests', 'coin_wallet_tests', 'coin_audio_tests', 'game_library_tests'] },
   growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary'] },
   core: {
     godot: [
       'run_tests', 'adventure_model_tests', 'adventure_scene_tests', 'medal_progress_tests',
       'pair_chest_progress_tests', 'pair_chest_reward_tests', 'pair_chest_flow_tests',
-      'coin_wallet_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests',
+      'coin_wallet_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests', 'coin_audio_tests',
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests',
       'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
@@ -51,7 +51,7 @@ const groups = {
   'pip-audio': { godot: ['pip_audio_tests'] },
   'pip-feedback': { godot: ['reward_confetti_tests', 'pip_gameplay_motion_tests', 'pip_gameplay_feedback_tests', 'pip_expression_tests',
     'round_celebration_tests', 'round_celebration_audio_tests', 'round_celebration_flow_tests'] },
-  'chest-charge': { godot: ['chest_models_tests', 'chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
+  'chest-charge': { godot: ['chest_models_tests', 'chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'coin_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
 };
 
 const allGroups = Object.keys(groups);

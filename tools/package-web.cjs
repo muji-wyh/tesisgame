@@ -150,6 +150,7 @@ function collectRequiredAudio(root) {
   }
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
+    'assets/audio/coins/collect.wav',
     ...['clear', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
