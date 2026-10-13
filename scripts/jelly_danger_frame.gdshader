@@ -38,8 +38,9 @@ void fragment() {
 	vec2 straight = frame_half - vec2(radius);
 	vec2 q = abs(p) - straight;
 	float distance_to_rim = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - radius;
-	// Radiate outward; the learning faces and interaction geometry stay clear.
-	if (distance_to_rim < -5.0 || distance_to_rim > glow_extent) {
+	// A short interior spill accompanies the much wider exterior corona.
+	float inner_extent = mix(10.0, 24.0, urgency);
+	if (distance_to_rim < -inner_extent || distance_to_rim > glow_extent) {
 		discard;
 	}
 	float perimeter = 4.0 * (straight.x + straight.y + radius * 1.57079633);
@@ -72,5 +73,18 @@ void fragment() {
 	warm = mix(warm, vec3(0.98, 0.075, 0.16), smoothstep(0.48, 1.0, urgency));
 	vec3 highlight = mix(vec3(1.0, 0.96, 0.68), vec3(1.0, 0.82, 0.63), urgency);
 	vec3 tint = mix(warm, highlight, clamp(moving_glint * 0.92 + stream * 0.28, 0.0, 1.0));
-	COLOR = vec4(tint, clamp(energy, 0.0, 0.96) * inner_mask * outer_mask);
+	// Keep the strong traveling rim outside; only soft, textured light enters play.
+	float inner_depth = max(-distance_to_rim, 0.0);
+	float inner_falloff = exp(-inner_depth / mix(3.5, 8.0, urgency));
+	inner_falloff *= 1.0 - smoothstep(inner_extent * 0.55, inner_extent, inner_depth);
+	float inner_light = inner_falloff * mix(0.15, 0.30, urgency) * breath * (0.78 + light * 0.22);
+	// The same warning beat sends a faint echo inward, without another clock.
+	float inner_wave_distance = mix(inner_extent * 0.78, 2.0, pulse);
+	float inner_wave = exp(-pow((inner_depth - inner_wave_distance) / mix(2.0, 4.5, urgency), 2.0));
+	inner_light += moving ? inner_wave * inner_falloff * pulse * mix(0.02, 0.06, urgency) : 0.0;
+	float rim_alpha = clamp(energy, 0.0, 0.96) * inner_mask * outer_mask;
+	float inner_alpha = inner_light * (1.0 - inner_mask);
+	float alpha = rim_alpha + inner_alpha;
+	vec3 lit_tint = (tint * rim_alpha + warm * inner_alpha) / max(alpha, 0.0001);
+	COLOR = vec4(lit_tint, alpha);
 }

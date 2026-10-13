@@ -317,22 +317,26 @@ including entry. The board's rim light uses that same eight-second clock. Its
 primary beat holds for 180 ms and fades by 550 ms; a weaker second beat gradually
 enters during the latter half of the countdown. Amber progresses through hot
 orange to scarlet, and two bright highlights accelerate around the rounded rim.
-Quiet intervals separate the flashes. Light fades within five interior screen
-pixels of the edge, leaving the learning faces clear; the board and its
+Quiet intervals separate the flashes. A faint inner glow fades into the board,
+leaving the learning faces clear; the board and its
 input geometry do not move. No full-screen flash or additional warning label is
 introduced. Reduced motion removes traveling highlights and repeated flashes,
 retaining a stationary glow with gradual color and intensity changes.
 
 Jelly Match and Jelly Words share this escalating warning presentation. The
 exterior light footprint grows from 12 to 72 screen pixels within an 80-pixel
-drawing margin. Its textured corona grows broader and brighter while the inner
-mask continues to protect the word faces. Two traveling glints leave luminous
+drawing margin. Its textured corona grows broader and brighter. A softer interior
+spill reaches 10 to 24 screen pixels inward as urgency rises, using an exponential
+falloff so the word faces stay legible. The inner spill reuses the same acquired
+light texture and amber-to-scarlet color; it joins the rim without extending the
+strong exterior glints over the jellies. Two traveling glints leave luminous
 tails that lengthen with speed, growing from a deliberate 0.07 to 0.72 laps per
 second. The continuous orbit integrates a quadratic speed curve using the real
 normalized rescue clock, so both modes reach the same urgency without phase
-jumps. Each existing beat sends a soft wave outward; the second beat enters
-later for the final buildup. Reduced motion removes glints, tails, waves and
-flashes while retaining gradual outward growth and color change. The eight-second
+jumps. Each existing beat sends a soft wave outward and a faint echo inward; the
+second beat enters later for the final buildup. Reduced motion removes glints,
+tails, waves and flashes while retaining gradual inner and outer glow growth
+and color change. The eight-second
 Match and ten-second Words rescue windows and audio stay unchanged.
 
 The rim reuses the acquired `portal_glow.png` from Bobardo's Modern 2D Animated
