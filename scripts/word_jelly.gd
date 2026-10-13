@@ -3,6 +3,8 @@ extends "res://scripts/jelly_match.gd"
 ## Six-column word construction, with the established jelly input and rewards.
 
 signal collected(event_id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2)
+signal word_merged(word: Dictionary)
+signal batch_collection_started
 
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const WordTile = preload("res://scripts/word_jelly_tile.gd")
@@ -387,7 +389,8 @@ func _collect_all() -> void:
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or game.collection_batch_active():
 		return
 	cancel_input()
-	game.start_collection_batch()
+	if game.start_collection_batch():
+		batch_collection_started.emit()
 	_refresh_controls()
 	_refresh_fusion()
 	_publish()
@@ -406,7 +409,7 @@ func _collection_started(fusion: Dictionary) -> void:
 		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
 		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
 	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age)
-	# Batch pickups keep their pop rhythm; pronunciation belongs to direct taps.
+	# Batch pickups keep their pop rhythm without additional pronunciation.
 	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
 	_refresh_controls()
@@ -1048,6 +1051,9 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 		if not visual.is_empty():
 			_snapbacks[int(fusion.result.id)] = {"from": visual.merged.position, "elapsed": 0.0}
 	_refresh_hud()
+	if str(fusion.get("operation", "")) == "merge" and _can_play() \
+		and not game.collection_batch_active() and game.is_valid_word(fusion.get("result", {})):
+		word_merged.emit(fusion.word)
 
 func _landing_contact_at(cell: Dictionary) -> float:
 	if bool(cell.get("arrival", false)):

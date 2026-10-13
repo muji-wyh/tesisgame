@@ -168,8 +168,10 @@ func _check_auto_merge(app) -> void:
 		"One automatic purchase completes each available forward word pair on the captured board")
 	check(game.collected_coins == 0 and game.fragment_count == 0 and game.cleared_pairs == 0
 		and app.coin_wallet.balance == before - 2000 and app.growth.snapshot().streaks == growth
-		and not app._coin_flight.snapshot().active and not app.audio.voice.playing,
-		"Automatic merging leaves words for manual collection without rewards, mastery, coin flights, or narration")
+		and not app._coin_flight.snapshot().active,
+		"Automatic merging leaves words for manual collection without rewards, mastery, or coin flights")
+	check(app.audio.voice.playing and app.audio._voice_queue.size() == 1,
+		"Two completed automatic merges pronounce one word and queue the next without interrupting it")
 	check(not view.collect_button.disabled and not view.powerup_buttons.fragments.disabled,
 		"The three-action area returns control after the paid sequence")
 	var duplicate: Dictionary = app._purchase_word_jelly_powerup(str(state.receipt_id), "auto_merge", 2000)

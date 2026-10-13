@@ -764,6 +764,8 @@ func _build_controls() -> void:
 	_word_jelly.coin_balance = func() -> int: return coin_wallet.balance
 	_word_jelly.collected.connect(_word_jelly_collected)
 	_word_jelly.word_requested.connect(_jelly_hear.bind("word_jelly"))
+	_word_jelly.word_merged.connect(_word_jelly_merged)
+	_word_jelly.batch_collection_started.connect(func() -> void: audio.stop_voice())
 	_word_jelly.audio_requested.connect(_jelly_audio.bind("word_jelly"))
 	_word_jelly.word_attempted.connect(_jelly_growth_answer.bind("word_jelly"))
 	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
@@ -1557,6 +1559,12 @@ func _jelly_hear(word: Dictionary, source_mode: String = "") -> void:
 		audio.say("res://" + str(word.audio))
 
 
+func _word_jelly_merged(word: Dictionary) -> void:
+	if _mode_id == "word_jelly" and _jelly_interaction_allowed():
+		audio.interact(model.theme_id)
+		audio.say_queued("res://" + str(word.audio))
+
+
 func _jelly_audio(cue: String, source_mode: String = "") -> void:
 	if (not source_mode.is_empty() and source_mode != _mode_id) or not _jelly_interaction_allowed():
 		return
@@ -1646,6 +1654,7 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 	audio.stop_jelly_sounds()
 	if _mode_id == "word_jelly":
 		audio.stop_pair_feedback()
+		audio.stop_voice()
 	var count: int = int(result.get("chest_count", 0))
 	if count > 0:
 		_save_jelly_round_reward()
