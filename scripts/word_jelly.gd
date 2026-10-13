@@ -877,7 +877,7 @@ func _layout() -> void:
 	var edge: float = 8.0 / s
 	var bottom_padding: float = 12.0 / s
 	var padding: float = 5.0 / s
-	var feed_gap: float = 10.0 / s
+	var feed_gap: float = 4.0 / s
 	var hud_width: float = 108.0 / s
 	var hud_gap: float = 12.0 / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - padding * 2.0 - feed_gap)
