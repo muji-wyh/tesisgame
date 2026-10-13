@@ -1,0 +1,442 @@
+{
+  "collection": "Kenney Game Assets All-in-1 3.7.0 / Audio",
+  "sources": [
+    {
+      "id": "wood",
+      "path": "Impact Sounds/Audio/impactWood_light_000.ogg",
+      "sha256": "dced23f4708dbe08ae517902a4a4b2357ab0b88d737477f18560fbffee0a7a31",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "wood-detail",
+      "path": "Impact Sounds/Audio/impactWood_light_004.ogg",
+      "sha256": "506caa98d6dbca245fb922853b16471412458a7b9a88423b0adc17916caf4582",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "wood-stop",
+      "path": "Impact Sounds/Audio/impactWood_medium_002.ogg",
+      "sha256": "d8ed153af39b7715ccc66683dacb9334a102a64c9c3ec95646bbfed717925f55",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "latch",
+      "path": "RPG Audio/Audio/metalLatch.ogg",
+      "sha256": "ea762526168b6ebeeefeb5a620be2b95a8da53e71ba8d7a2b736560ee00011d0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "friction",
+      "path": "RPG Audio/Audio/creak1.ogg",
+      "sha256": "fa75b1d17d327d7e0001d249d468493b59f3865b00a2582c21f7da2287728728",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "hinge",
+      "path": "RPG Audio/Audio/doorOpen_1.ogg",
+      "sha256": "a3f9deb5ac1b6e1cbb8f6a5de93f1940d4d00eb4a4424ae4f2f3f7a9170dd9b0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "air",
+      "path": "Foley Sounds/Audio/Woosh/woosh8.ogg",
+      "sha256": "f1a3f112932df2d1e67e5574196f4bc6003c72cf35cb5d5296ce616ce2b0a3e7",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/foley-sounds",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "bloom",
+      "path": "Music Jingles/Audio (Steeldrum)/jingles-steel_00.ogg",
+      "sha256": "fc31c3d8f9086aaca1787be7e85a9e7d01fdedd99529cb94eaf16ebd6be8c7b5",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/music-jingles",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    },
+    {
+      "id": "receipt",
+      "path": "Interface Sounds/Audio/confirmation_002.ogg",
+      "sha256": "9f3a15ffd9d8e031e2afa17539baa4ef3655b2ad06fcf9d44e5d3bd0d0ec64e2",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "status": "Acquired from user-provided local collection; processed and integrated",
+      "animations": "Not applicable (audio)"
+    }
+  ],
+  "processing": "FFmpeg float decode/filter, NumPy source layering/fades/peak scaling, mono PCM16 at 44100 Hz",
+  "review": "Source metadata, waveform/envelope and actual runtime output measured. Direct auditory review unavailable in the agent tools; engine-mixed preview provided for listening.",
+  "assets": [
+    {
+      "id": "press",
+      "destination": "assets/audio/chest-kenney/press.wav",
+      "sha256": "c99e41cc1c2eb1f689b909a1d4c9dc31be3377ef496b1365529c4faa84a80f30",
+      "bytes": 9746,
+      "seconds": 0.11,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -7.9587,
+      "rmsDbfs": -24.1884,
+      "layers": [
+        {
+          "source": "wood",
+          "start": 0,
+          "seconds": 0.11,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=130,lowpass=f=3200",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.4,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "charge",
+      "destination": "assets/audio/chest-kenney/charge.wav",
+      "sha256": "7b63abe5f799e55a7238949317068c1876a5caae9d5f96599373a6d0cacc403f",
+      "bytes": 70604,
+      "seconds": 0.8,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -6.7447,
+      "rmsDbfs": -18.2249,
+      "layers": [
+        {
+          "source": "friction",
+          "start": 0.12,
+          "seconds": 0.26,
+          "filters": "highpass=f=400,lowpass=f=2200",
+          "processing": "Eight periodic overlap-add grains, 100 ms hop, squared-sine window, normalized overlap weights"
+        }
+      ],
+      "outputPeak": 0.46,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "step",
+      "destination": "assets/audio/chest-kenney/step.wav",
+      "sha256": "8fa5a7916cc24daa75d15d7beb4e13e69125050212e13ebd5dd7ef522f773bcb",
+      "bytes": 10628,
+      "seconds": 0.12,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.7314,
+      "rmsDbfs": -21.3388,
+      "layers": [
+        {
+          "source": "wood",
+          "start": 0,
+          "seconds": 0.12,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=130,lowpass=f=3200",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.58,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "step-detail",
+      "destination": "assets/audio/chest-kenney/step-detail.wav",
+      "sha256": "321770bcb24e69730ad280ce0613079cafb2c232f59951f7ec9724e14ec84caf",
+      "bytes": 13274,
+      "seconds": 0.15,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.4371,
+      "rmsDbfs": -22.3998,
+      "layers": [
+        {
+          "source": "wood-detail",
+          "start": 0,
+          "seconds": 0.15,
+          "at": 0,
+          "peak": 0.85,
+          "filters": "highpass=f=130,lowpass=f=3800",
+          "attack": 0.001,
+          "release": 0.012
+        },
+        {
+          "source": "latch",
+          "start": 0.032,
+          "seconds": 0.095,
+          "at": 0.004,
+          "peak": 0.2,
+          "filters": "lowpass=f=3800",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.6,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "step-roll",
+      "destination": "assets/audio/chest-kenney/step-roll.wav",
+      "sha256": "8f794e7dfe8ef458c415ae575deed681362fe8934ca5b4f3d0980e76c6df7c32",
+      "bytes": 15920,
+      "seconds": 0.18,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.0133,
+      "rmsDbfs": -22.4553,
+      "layers": [
+        {
+          "source": "wood-detail",
+          "start": 0,
+          "seconds": 0.18,
+          "at": 0,
+          "peak": 0.8,
+          "filters": "highpass=f=130,lowpass=f=4200",
+          "attack": 0.001,
+          "release": 0.012
+        },
+        {
+          "source": "latch",
+          "start": 0.032,
+          "seconds": 0.105,
+          "at": 0.003,
+          "peak": 0.33,
+          "filters": "lowpass=f=4200",
+          "attack": 0.001,
+          "release": 0.012
+        },
+        {
+          "source": "air",
+          "start": 0.105,
+          "seconds": 0.09,
+          "at": 0.009,
+          "peak": 0.09,
+          "filters": "lowpass=f=3000",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.63,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "cancel",
+      "destination": "assets/audio/chest-kenney/cancel.wav",
+      "sha256": "3983e6b66bf5148d26b9aa963073d8f16d637b58247136039c2198b2e81b52e7",
+      "bytes": 20330,
+      "seconds": 0.23,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -8.874,
+      "rmsDbfs": -27.79,
+      "layers": [
+        {
+          "source": "wood-stop",
+          "start": 0,
+          "seconds": 0.23,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=150,lowpass=f=1700",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.36,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "opening",
+      "destination": "assets/audio/chest-kenney/opening.wav",
+      "sha256": "34f2dc719ae50aae64356d14a840540e583e101d1b17f77451bf71b6ec51fb25",
+      "bytes": 18566,
+      "seconds": 0.21,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -12.3959,
+      "rmsDbfs": -29.5835,
+      "layers": [
+        {
+          "source": "air",
+          "start": 0.107,
+          "seconds": 0.21,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "lowpass=f=2100",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.24,
+      "envelope": "Exponential 22 ms brake"
+    },
+    {
+      "id": "unlock",
+      "destination": "assets/audio/chest-kenney/unlock.wav",
+      "sha256": "e1ccad1f12234a0772369ad80e5432016e08735d939ae10549be5ef9eddaccac",
+      "bytes": 6660,
+      "seconds": 0.075,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -3.3497,
+      "rmsDbfs": -22.2327,
+      "layers": [
+        {
+          "source": "latch",
+          "start": 0.032,
+          "seconds": 0.075,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=700,lowpass=f=4300",
+          "attack": 0.001,
+          "release": 0.01
+        }
+      ],
+      "outputPeak": 0.68,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "release",
+      "destination": "assets/audio/chest-kenney/release.wav",
+      "sha256": "a76acfadc371d13f0f0c293cd439b60c258bc720f88c65eadd1fc68a6e3dacb9",
+      "bytes": 127052,
+      "seconds": 1.44,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -2.8534,
+      "rmsDbfs": -18.3067,
+      "layers": [
+        {
+          "source": "wood",
+          "start": 0,
+          "seconds": 0.12,
+          "at": 0,
+          "peak": 0.52,
+          "filters": "highpass=f=120,lowpass=f=3000",
+          "attack": 0.001,
+          "release": 0.012
+        },
+        {
+          "source": "hinge",
+          "start": 0.12,
+          "seconds": 0.56,
+          "at": 0.006,
+          "peak": 0.25,
+          "filters": "highpass=f=170,lowpass=f=3300",
+          "attack": 0.004,
+          "release": 0.08
+        },
+        {
+          "source": "air",
+          "start": 0.087,
+          "seconds": 0.3,
+          "at": 0.018,
+          "peak": 0.2,
+          "filters": "highpass=f=300,lowpass=f=3500",
+          "attack": 0.008,
+          "release": 0.06
+        },
+        {
+          "source": "bloom",
+          "start": 0,
+          "seconds": null,
+          "at": 0.025,
+          "peak": 0.66,
+          "filters": "highpass=f=170,lowpass=f=5000",
+          "attack": 0.014,
+          "release": 0.045
+        }
+      ],
+      "outputPeak": 0.72,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "settle",
+      "destination": "assets/audio/chest-kenney/settle.wav",
+      "sha256": "8ed9ee4e04bd5034fda0298c9df822092f7170c6433e47035fe5c74894d4b96b",
+      "bytes": 22976,
+      "seconds": 0.26,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -6.3753,
+      "rmsDbfs": -25.568,
+      "layers": [
+        {
+          "source": "wood-stop",
+          "start": 0,
+          "seconds": 0.26,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=130,lowpass=f=2400",
+          "attack": 0.001,
+          "release": 0.012
+        }
+      ],
+      "outputPeak": 0.48,
+      "envelope": "Source envelope with boundary fades"
+    },
+    {
+      "id": "reward",
+      "destination": "assets/audio/chest-kenney/reward.wav",
+      "sha256": "3b951e35c313a97a12530965a8021439bbabb247f7d424a4df01c0fe6edc7275",
+      "bytes": 49436,
+      "seconds": 0.56,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "peakDbfs": -4.4371,
+      "rmsDbfs": -18.8017,
+      "layers": [
+        {
+          "source": "receipt",
+          "start": 0,
+          "seconds": null,
+          "at": 0,
+          "peak": 1.0,
+          "filters": "highpass=f=200,lowpass=f=4800",
+          "attack": 0.001,
+          "release": 0.032
+        }
+      ],
+      "outputPeak": 0.6,
+      "envelope": "Source envelope with boundary fades"
+    }
+  ]
+}

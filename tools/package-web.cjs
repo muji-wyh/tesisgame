@@ -5,6 +5,7 @@ const { brotliCompressSync, brotliDecompressSync, constants } = require('node:zl
 const { patchWebEngine } = require('./patch-web-engine.cjs');
 const { readUiClickAudio } = require('./ui-click-audio.cjs');
 const { readChestReferenceAudio } = require('./chest-reference-audio.cjs');
+const { readChestKenneyAudio } = require('./chest-kenney-audio.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const CHEST_CUES = ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle'];
@@ -131,6 +132,10 @@ function collectChestReferenceAudio(root) {
   return readChestReferenceAudio(root).map(({ asset }) => importedAudio(root, asset.destination));
 }
 
+function collectChestKenneyAudio(root) {
+  return readChestKenneyAudio(root).map(({ asset }) => importedAudio(root, asset.destination));
+}
+
 // These formerly separate downloads are required resources in the game pack.
 // Keep an explicit chest inventory so a missing cue cannot silently pass export.
 function collectRequiredAudio(root) {
@@ -160,7 +165,8 @@ function collectRequiredAudio(root) {
   ];
   const uiClick = readUiClickAudio(root);
   return [...sources.map(source => importedAudio(root, source)), importedAudio(root, uiClick.asset.destination),
-    ...collectPairFeedbackAudio(root), ...collectChestReferenceAudio(root), ...collectPopReferenceAudio(root)];
+    ...collectPairFeedbackAudio(root), ...collectChestReferenceAudio(root), ...collectChestKenneyAudio(root),
+    ...collectPopReferenceAudio(root)];
 }
 
 function removeRetiredVoiceAssets(directory) {
@@ -303,4 +309,5 @@ function packageWebExport(directory, vocabularyPacks = {}) {
   return downloadBytes;
 }
 
-module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, collectPairFeedbackAudio, collectChestReferenceAudio, compressWebAsset };
+module.exports = { packageWebExport, collectRequiredAudio, collectPopReferenceAudio, collectPairFeedbackAudio,
+  collectChestReferenceAudio, collectChestKenneyAudio, compressWebAsset };

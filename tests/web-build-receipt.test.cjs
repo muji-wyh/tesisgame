@@ -111,6 +111,17 @@ test('changing the shared chest audio contract or validator rejects an older exp
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*chest-reference-audio\.cjs/);
 });
 
+test('changing the Kenney chest manifest, validator or import recipe rejects an older export', t => {
+  const { root, write, record } = fixture(t);
+  const sources = ['docs/assets/chest-kenney-audio.json', 'tools/chest-kenney-audio.cjs', 'tools/import-chest-kenney.py'];
+  for (const source of sources) write(source, 'original Kenney chest contract');
+  for (const source of sources) {
+    record();
+    write(source, 'revised Kenney chest contract');
+    assert.throws(() => verifyBuildReceipt(root), error => error.message.includes('Stale Web build') && error.message.includes(source));
+  }
+});
+
 test('changing the vocabulary motion manifest, source map or validator invalidates an older export', t => {
   const { root, write, record } = fixture(t);
   const sources = ['data/word-motion.json', 'docs/assets/word-library-motion.json',

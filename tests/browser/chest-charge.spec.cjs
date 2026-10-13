@@ -14,6 +14,13 @@ test.use({
   trace: 'off'
 });
 
+test.beforeEach(async ({ page }) => {
+  // Two saved dry rounds guarantee a chest through the normal pity rule,
+  // keeping these opening/audio tests independent of random pair rewards.
+  await page.addInitScript(() => localStorage.setItem('wordBuddies.medalProgress',
+    '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n'));
+});
+
 const HOLD_SECONDS = 0.65;
 const OPEN_SECONDS = 2.0;
 const CUE_TIMES = { anticipation: 0.76, unlock: 0.86, release: 0.94, settle: 1.28 };
@@ -21,10 +28,13 @@ const HOLD_PULSE_TIMES = [0.08, 0.30, 0.50];
 const PULSE_TIMES = [0.05, 0.18, 0.30, 0.41, 0.51, 0.60, 0.67, 0.72];
 const isRhythmCue = event => ['hold_pulse', 'tension_pulse'].includes(event.cue);
 const hasDuration = (sound, duration) => Math.abs(sound.duration - duration) < 0.001;
-const RELEASE_DURATION = 1.5;
-const REWARD_DURATION = 1.2;
-const isChestSound = sound => [0.19, 0.22, 0.24, 0.31, 0.48, 0.8, RELEASE_DURATION, REWARD_DURATION]
-  .some(duration => hasDuration(sound, duration));
+const CHEST_DURATIONS = Object.fromEntries(require('../../docs/assets/chest-kenney-audio.json').assets
+  .map(asset => [asset.id, asset.seconds]));
+const RELEASE_DURATION = CHEST_DURATIONS.release;
+const REWARD_DURATION = CHEST_DURATIONS.reward;
+const hasCue = (sound, cue) => hasDuration(sound, CHEST_DURATIONS[cue]);
+const isChestSound = sound => Object.keys(CHEST_DURATIONS).some(cue => hasCue(sound, cue));
+const isStrike = sound => ['step', 'step-detail', 'step-roll'].some(cue => hasCue(sound, cue));
 const audioOnset = sound => sound.at + Math.max(0, sound.scheduledAt - sound.contextTime) * 1000;
 const audioStop = sound => sound.stoppedAt + Math.max(0, sound.stopScheduledAt - sound.stopContextTime) * 1000;
 
@@ -32,7 +42,7 @@ function expectBedChain(bed, { press, stop, opening }) {
   expect(bed.length, 'A press starts a sustained material bed').toBeGreaterThan(0);
   expect(bed.every(sound => typeof sound.fingerprint === 'string')).toBe(true);
   expect(new Set(bed.map(sound => sound.fingerprint)).size,
-    'Every manually looped source retains the same themed material sample').toBe(1);
+    'Every manually looped source retains the same recorded Kenney material sample').toBe(1);
   expect(Math.abs(audioOnset(bed[0]) - press.at), 'The bed responds to the initial press').toBeLessThanOrEqual(100);
   // Godot loops samples by replacing naturally ended buffer sources. Native
   // source.loop is false; only the final cycle should receive an explicit stop.
@@ -378,7 +388,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     expect(meanRms(heldOutput), 'The held pose has a quieter sound bed than the preceding roll')
       .toBeLessThan(meanRms(rollOutput) * 0.70);
     expect(Math.max(...payoffOutput.filter(sample => sample.at < release.at + RELEASE_DURATION * 1000).map(sample => sample.rms)),
-      'The recorded rising shimmer restores audible contrast after the held breath').toBeGreaterThan(meanRms(heldOutput) * 2);
+      'The recorded opening flourish restores audible contrast after the held breath').toBeGreaterThan(meanRms(heldOutput) * 2);
     await testInfo.attach('chest-payoff-output', { body: JSON.stringify(payoffOutput, null, 2), contentType: 'application/json' });
     const allSounds = await page.evaluate(() => window.audioObservation.playbacks);
     await testInfo.attach('all-audio', { body: JSON.stringify(allSounds, null, 2), contentType: 'application/json' });
@@ -393,10 +403,10 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     const startsAt = cues[0].at - 100;
     const chestSounds = allSounds.filter(sound => sound.at >= startsAt && isChestSound(sound));
     await testInfo.attach('chest-audio', { body: JSON.stringify(chestSounds, null, 2), contentType: 'application/json' });
-    expect(chestSounds.filter(sound => Math.abs(sound.duration - 0.19) < 0.001)).toHaveLength(2);
-    expect(chestSounds.filter(sound => Math.abs(sound.duration - 0.22) < 0.001)).toHaveLength(1);
-    for (const duration of [0.31, 0.48, RELEASE_DURATION, REWARD_DURATION]) {
-      expect(chestSounds.filter(sound => Math.abs(sound.duration - duration) < 0.001)).toHaveLength(1);
+    expect(chestSounds.filter(sound => hasCue(sound, 'press'))).toHaveLength(2);
+    expect(chestSounds.filter(sound => hasCue(sound, 'cancel'))).toHaveLength(1);
+    for (const cue of ['unlock', 'settle', 'release', 'reward']) {
+      expect(chestSounds.filter(sound => hasCue(sound, cue))).toHaveLength(1);
     }
     const reward = chestSounds.find(sound => hasDuration(sound, REWARD_DURATION));
     expect(reward.at - opening.at).toBeGreaterThanOrEqual(OPEN_SECONDS * 1000 - 100);
@@ -415,8 +425,8 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
         .toBeGreaterThanOrEqual(duration * 1000 - 100);
     }
     expect(audioOnset(recordedRelease) + RELEASE_DURATION * 1000,
-      'The recorded shimmer continues past physical completion without being cut off').toBeGreaterThan(completed.at);
-    const beds = chestSounds.filter(sound => hasDuration(sound, 0.8));
+      'The recorded opening flourish continues past physical completion without being cut off').toBeGreaterThan(completed.at);
+    const beds = chestSounds.filter(sound => hasCue(sound, 'charge'));
     const cancel = cues.find(event => event.cue === 'cancel');
     const cancelledBed = beds.filter(sound => audioOnset(sound) < acceptedPress.at - 100);
     const acceptedBed = beds.filter(sound => audioOnset(sound) >= acceptedPress.at - 100);
@@ -424,9 +434,9 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     expectBedChain(acceptedBed, { press: acceptedPress, stop: release, opening });
     expect(audioStop(acceptedBed.at(-1)), 'The pressure bed continues through unlocking until release')
       .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
-    // Recorded shakes and the themed anticipation breath share a duration;
-    // physical cue order and separate fingerprints distinguish their roles.
-    const attacks = chestSounds.filter(sound => hasDuration(sound, 0.24));
+    // Each imported texture has its own duration; physical cue order and PCM
+    // fingerprints also distinguish the accelerating strikes from anticipation.
+    const attacks = chestSounds.filter(sound => isStrike(sound) || hasCue(sound, 'opening'));
     const attackCues = cues.filter(event => isRhythmCue(event) || event.cue === 'anticipation');
     expect(attacks, 'Every body beat has one source, followed by one final gathered breath').toHaveLength(attackCues.length);
     for (const [index, sound] of attacks.entries()) {
@@ -449,7 +459,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
     }
     const textures = acceptedStrikes.map(sound => sound.fingerprint)
       .filter((fingerprint, index, all) => index === 0 || fingerprint !== all[index - 1]);
-    expect(textures, 'The buildup advances through the three recorded shake textures').toHaveLength(3);
+    expect(textures, 'The buildup advances through three recorded material textures').toHaveLength(3);
     expect(new Set(textures).size, 'Each of the three buildup textures has distinct audible content').toBe(3);
     expect(textures.includes(transition.fingerprint), 'The held breath has its own material texture').toBe(false);
     const transitionEnd = transition.stoppedAt === undefined ?
@@ -458,8 +468,8 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
       .toBeGreaterThan(cues.find(event => event.cue === 'unlock').at);
     expect(transitionEnd, 'The transition resolves into the physical release instead of replaying later')
       .toBeLessThanOrEqual(release.at + 150);
-    const alignment = [['unlock', 0.31], ['release', RELEASE_DURATION], ['settle', 0.48]].map(([cue, duration]) => ({
-      cue, milliseconds: audioOnset(chestSounds.find(sound => hasDuration(sound, duration))) - cues.find(event => event.cue === cue).at
+    const alignment = ['unlock', 'release', 'settle'].map(cue => ({
+      cue, milliseconds: audioOnset(chestSounds.find(sound => hasCue(sound, cue))) - cues.find(event => event.cue === cue).at
     }));
     await testInfo.attach('chest-audio-alignment', { body: JSON.stringify(alignment, null, 2), contentType: 'application/json' });
     for (const sound of alignment) expect(Math.abs(sound.milliseconds), `${sound.cue} audio follows its physical cue`).toBeLessThanOrEqual(100);
@@ -682,7 +692,7 @@ for (const interruption of ['background', 'focus loss']) {
     if (await page.evaluate(() => window.audioObservation.available)) {
       const cues = await page.evaluate(() => window.chestObservation.cues);
       const opening = cues.find(cue => cue.cue === 'opening'), press = cues.find(cue => cue.cue === 'press');
-      const bed = playbacks.filter(sound => hasDuration(sound, 0.8) && audioOnset(sound) >= press.at - 100);
+      const bed = playbacks.filter(sound => hasCue(sound, 'charge') && audioOnset(sound) >= press.at - 100);
       expectBedChain(bed, { press, stop: interrupted, opening });
     }
     expect(await rewardSave(page)).toBe(unopenedSave);
@@ -750,7 +760,7 @@ test('background after the opening flash silently saves once without replay on r
   if (await page.evaluate(() => window.audioObservation.available)) {
     const press = cues.find(cue => cue.cue === 'press'), opening = cues.find(cue => cue.cue === 'opening');
     const release = cues.find(cue => cue.cue === 'release');
-    const bed = playbacks.filter(sound => hasDuration(sound, 0.8) && audioOnset(sound) >= press.at - 100);
+    const bed = playbacks.filter(sound => hasCue(sound, 'charge') && audioOnset(sound) >= press.at - 100);
     expectBedChain(bed, { press, stop: release, opening });
   }
   await expect(status).toHaveText('Chest opened! Ready for another adventure?');
@@ -762,15 +772,15 @@ test('background after the opening flash silently saves once without replay on r
   expect(errors).toEqual([]);
 });
 
-test('bundled themed and reference chest samples stay audible offline without delaying rewards', async ({ page, context, browserName }, testInfo) => {
+test('bundled Kenney chest samples stay audible offline without delaying rewards', async ({ page, context, browserName }, testInfo) => {
   const requests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await context.setOffline(true);
   try {
-    // Visit an unplayed world only after disconnecting. Its themed support and
-    // shared recordings must already be in the pack, including the material bed.
+    // Visit an unplayed world only after disconnecting. All shared Kenney
+    // recordings must already be in the pack, including the material bed.
     await chooseTheme(page, 5);
     await winMatch(page);
     const baseline = await pieces(page);
@@ -789,15 +799,15 @@ test('bundled themed and reference chest samples stay audible offline without de
     if (available) {
       const playbacks = await page.evaluate(() => window.audioObservation.playbacks);
       const feedback = playbacks.filter(sound => sound.at >= cues[0].at - 100 && isChestSound(sound));
-      expect(feedback.filter(sound => hasDuration(sound, 0.19)), 'Both presses play the authored sample').toHaveLength(2);
-      for (const duration of [0.22, 0.31, RELEASE_DURATION, 0.48, REWARD_DURATION]) {
-        expect(feedback.filter(sound => hasDuration(sound, duration)), 'Cancel, unlock, release, settle and reward each play once').toHaveLength(1);
+      expect(feedback.filter(sound => hasCue(sound, 'press')), 'Both presses play the authored sample').toHaveLength(2);
+      for (const cue of ['cancel', 'unlock', 'release', 'settle', 'reward']) {
+        expect(feedback.filter(sound => hasCue(sound, cue)), `${cue} plays once`).toHaveLength(1);
       }
-      expect(feedback.filter(sound => hasDuration(sound, 0.8)).length, 'The authored charge bed loops while offline').toBeGreaterThanOrEqual(2);
+      expect(feedback.filter(sound => hasCue(sound, 'charge')).length, 'The authored charge bed loops while offline').toBeGreaterThanOrEqual(2);
       const acceptedPress = cues.filter(cue => cue.cue === 'press').at(-1);
       expect(cues.filter(cue => cue.at >= acceptedPress.at && isRhythmCue(cue)), 'The complete offline buildup retains every beat')
         .toHaveLength(HOLD_PULSE_TIMES.length + PULSE_TIMES.length);
-      expect(feedback.filter(sound => hasDuration(sound, 0.24)), 'Every offline body beat and anticipation breath remains audible')
+      expect(feedback.filter(sound => isStrike(sound) || hasCue(sound, 'opening')), 'Every offline body beat and anticipation breath remains audible')
         .toHaveLength(cues.filter(cue => isRhythmCue(cue) || cue.cue === 'anticipation').length);
       for (const sound of feedback) {
         expect(sound.contextState).toBe('running');

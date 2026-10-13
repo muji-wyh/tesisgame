@@ -58,6 +58,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'assets/audio/bgm/spring.wav',
     'assets/audio/chests/spring-settle.wav', 'assets/audio/voice/spring-theme.wav',
     ...['step', 'step-detail', 'step-roll', 'release', 'reward'].map(cue => `assets/imported-audio/chest-reference/${cue}.wav`),
+    ...require('../tools/chest-kenney-audio.cjs').CHEST_KENNEY_CUES.map(cue => `assets/audio/chest-kenney/${cue}.wav`),
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
     'assets/imported-audio/ui-click/select.wav'
   ]) {
@@ -220,11 +221,13 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'phrases.json'), JSON.stringify(phrases));
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
+  fixture.writeImport('assets/audio/coins/collect.wav');
   for (const cue of ['clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
   const chest = require('./helpers/chest-reference-assets.cjs').chestReferenceFixture(fixture.directory, fixture.writeImport);
+  const kenney = require('./helpers/chest-kenney-assets.cjs').chestKenneyFixture(fixture.directory, fixture.writeImport);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
     for (const cue of ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle']) {
@@ -232,7 +235,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 404);
+  assert.equal(required.length, 416);
   assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction)\//.test(asset.source)).length, 5,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);
@@ -246,6 +249,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     'Native menu feedback ships in the startup pack without a later fetch');
   assert.deepEqual(required.filter(asset => asset.source.includes('/chest-reference/')).map(asset => asset.source),
     chest.assets.map(asset => `res://${asset.destination}`), 'Five shared chest recordings each ship once in the pack');
+  assert.deepEqual(required.filter(asset => asset.source.includes('/chest-kenney/')).map(asset => asset.source),
+    kenney.assets.map(asset => `res://${asset.destination}`), 'All eleven Kenney chest cues ship once for every theme');
   assert.deepEqual(required.filter(asset => asset.source.includes('/voice/phrase-')).map(asset => asset.source),
     phrases.map(phrase => `res://${phrase.audio}`), 'Every whole-phrase recording is verified as a required resource');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),
@@ -304,6 +309,84 @@ test('shared chest recordings are required and reject incomplete, extra, tampere
   chest.assets[0].sha256 = require('node:crypto').createHash('sha256').update(invalid).digest('hex');
   chest.writeManifest();
   assert.throws(() => collectChestReferenceAudio(fixture.directory), /Invalid mono PCM16/);
+});
+
+test('Kenney chest cues require all eleven imports and reject missing, extra or tampered recordings', t => {
+  const fixture = referenceBankFixture(t, false);
+  const { collectChestKenneyAudio } = require('../tools/package-web.cjs');
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /ENOENT/);
+  const kenney = require('./helpers/chest-kenney-assets.cjs').chestKenneyFixture(fixture.directory, fixture.writeImport);
+  assert.deepEqual(collectChestKenneyAudio(fixture.directory).map(asset => asset.source),
+    kenney.assets.map(asset => `res://${asset.destination}`));
+  const filename = path.join(fixture.directory, kenney.assets[0].destination);
+  const original = fs.readFileSync(filename);
+  fs.unlinkSync(filename);
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /requires exactly/);
+  fs.writeFileSync(filename, original);
+  const extra = path.join(path.dirname(filename), 'extra.wav');
+  fs.writeFileSync(extra, original);
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /requires exactly/);
+  fs.unlinkSync(extra);
+  const changed = Buffer.from(original);
+  changed[changed.length - 2] ^= 1;
+  fs.writeFileSync(filename, changed);
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /hash mismatch/);
+  fs.writeFileSync(filename, original);
+  fs.unlinkSync(`${filename}.import`);
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /press\.wav\.import/);
+});
+
+test('Kenney chest metadata and PCM structure cannot redirect, duplicate or truncate cues', t => {
+  const fixture = referenceBankFixture(t, false);
+  const kenney = require('./helpers/chest-kenney-assets.cjs').chestKenneyFixture(fixture.directory, fixture.writeImport);
+  const { collectChestKenneyAudio } = require('../tools/package-web.cjs');
+  for (const change of [
+    { destination: '../outside.wav' }, { seconds: null }, { seconds: 0 }, { seconds: 6 },
+    { channels: 2 }, { sampleRate: 48000 }, { bitDepth: 8 }, { sha256: 'invalid' }, { bytes: -1 }
+  ]) {
+    fs.writeFileSync(kenney.manifestPath, JSON.stringify({ assets: [{ ...kenney.assets[0], ...change }, ...kenney.assets.slice(1)] }));
+    assert.throws(() => collectChestKenneyAudio(fixture.directory), /Invalid Kenney chest audio manifest entry/);
+  }
+  for (const assets of [[], [...kenney.assets, kenney.assets[0]],
+    [kenney.assets[0], ...kenney.assets.slice(2), kenney.assets[0]],
+    [{ ...kenney.assets[0], id: 'unknown' }, ...kenney.assets.slice(1)]]) {
+    fs.writeFileSync(kenney.manifestPath, JSON.stringify({ assets }));
+    assert.throws(() => collectChestKenneyAudio(fixture.directory), /exactly all eleven/);
+  }
+  kenney.writeManifest();
+  const filename = path.join(fixture.directory, kenney.assets[0].destination);
+  const original = fs.readFileSync(filename);
+  const originalMetadata = { ...kenney.assets[0] };
+  const digest = bytes => require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+  for (const change of [
+    bytes => bytes.writeUInt16LE(2, 22),
+    bytes => bytes.writeUInt32LE(48000, 24),
+    bytes => bytes.writeUInt32LE(88202, 28),
+    bytes => bytes.writeUInt16LE(1, 32),
+    bytes => bytes.writeUInt16LE(8, 34),
+    bytes => bytes.writeUInt32LE(bytes.length, 40),
+    bytes => bytes.writeUInt32LE(bytes.length, 4)
+  ]) {
+    const malformed = Buffer.from(original);
+    change(malformed);
+    fs.writeFileSync(filename, malformed);
+    Object.assign(kenney.assets[0], originalMetadata, { sha256: digest(malformed) });
+    kenney.writeManifest();
+    assert.throws(() => collectChestKenneyAudio(fixture.directory), /Invalid mono PCM16/);
+  }
+  const truncated = Buffer.from(original.subarray(0, original.length - 2));
+  truncated.writeUInt32LE(truncated.length - 8, 4);
+  truncated.writeUInt32LE(truncated.length - 44, 40);
+  fs.writeFileSync(filename, truncated);
+  Object.assign(kenney.assets[0], originalMetadata, { sha256: digest(truncated), bytes: truncated.length });
+  kenney.writeManifest();
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /Invalid mono PCM16/,
+    'Even one missing frame must fail when the header and hash have been updated');
+  fs.writeFileSync(filename, original);
+  Object.assign(kenney.assets[0], originalMetadata, { bytes: original.length + 2 });
+  kenney.writeManifest();
+  assert.throws(() => collectChestKenneyAudio(fixture.directory), /Invalid mono PCM16/,
+    'Manifest byte counts must match the exact reviewed WAV');
 });
 
 test('shared chest metadata cannot redirect, truncate or ambiguously declare the required recordings', t => {
@@ -578,7 +661,7 @@ test('Pip growth preview stays local and is removed from an older Web export wit
     fs.writeFileSync(filename, bytes);
   };
   // Keep all cache and stale-output fixtures outside the real source and export.
-  for (const name of ['package-web.cjs', 'patch-web-engine.cjs', 'ui-click-audio.cjs', 'chest-reference-audio.cjs']) {
+  for (const name of ['package-web.cjs', 'patch-web-engine.cjs', 'ui-click-audio.cjs', 'chest-reference-audio.cjs', 'chest-kenney-audio.cjs']) {
     write(fixture, `tools/${name}`, fs.readFileSync(path.join(root, 'tools', name)));
   }
   const catalog = JSON.parse(fs.readFileSync(path.join(original, 'stages.json'), 'utf8'));

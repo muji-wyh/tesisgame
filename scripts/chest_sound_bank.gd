@@ -3,6 +3,11 @@ extends RefCounted
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const CUES := ["press", "charge", "step", "step-detail", "step-roll", "cancel", "opening", "unlock", "release", "settle", "reward"]
 const REFERENCE_CUES := ["step", "step-detail", "step-roll", "release", "reward"]
+const KENNEY_DURATIONS := {
+	"press": 0.11, "charge": 0.8, "step": 0.12, "step-detail": 0.15,
+	"step-roll": 0.18, "cancel": 0.23, "opening": 0.21, "unlock": 0.075,
+	"release": 1.44, "settle": 0.26, "reward": 0.56,
+}
 const SAMPLE_RATE := 11025
 const BODY_FREQUENCIES := {
 	"spring": 112.0, "summer": 98.0, "autumn": 82.0, "winter": 128.0,
@@ -40,12 +45,10 @@ static func theme_id(value: String) -> String:
 	return value if value in THEMES else "spring"
 
 
-static func path_for(theme: String, cue: String) -> String:
+static func path_for(_theme: String, cue: String) -> String:
 	if cue not in CUES:
 		return ""
-	if cue in REFERENCE_CUES:
-		return "res://assets/imported-audio/chest-reference/%s.wav" % cue
-	return "res://assets/audio/chests/%s-%s.wav" % [theme_id(theme), cue]
+	return "res://assets/audio/chest-kenney/%s.wav" % cue
 
 
 static func pulse_cue(energy: float) -> String:
@@ -80,7 +83,7 @@ static func _shimmer(time: float, duration: float, base: float, spread: float, a
 static func fallback(theme: String, cue: String) -> AudioStreamWAV:
 	# A small, deterministic material texture covers missing bundled recordings.
 	# It is rendered only on first use and never schedules a later replacement.
-	# The authored Foley assets contain the more detailed leaf/hinge/air layers.
+	# The bundled Kenney recordings supply the normal wood/latch/hinge layers.
 	theme = theme_id(theme)
 	var profile: Array = PROFILES[theme]
 	var duration: float = 0.64 if cue == "charge" else (0.74 if cue == "reward" else 0.2)

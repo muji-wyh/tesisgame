@@ -1013,7 +1013,7 @@ test('completes matches and opens a one-shot reward with bundled audio offline',
     await expect(page.locator('#game-status')).toHaveText(earned);
     expect((await rewardState(page)).medals).toBe(saved);
     if (await page.evaluate(() => window.audioObservation.available)) {
-      const reward = await expectRecording(page, beforeChest, 'assets/imported-audio/chest-reference/reward.wav');
+      const reward = await expectRecording(page, beforeChest, 'assets/audio/chest-kenney/reward.wav');
       expect(reward.peak).toBeGreaterThan(0.01);
       await expect(page.locator('#audio-status')).toBeEmpty();
     }

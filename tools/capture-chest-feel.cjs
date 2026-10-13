@@ -21,7 +21,7 @@ const cueTimes = { anticipation: 0.76, unlock: 0.86, release: 0.94, settle: 1.28
 const pauseStartTime = 0.8;
 const brakeSeconds = pauseStartTime - cueTimes.anticipation;
 const heldBreathSeconds = cueTimes.release - pauseStartTime;
-const releaseTailSeconds = 1.5;
+const releaseTailSeconds = require('../docs/assets/chest-kenney-audio.json').assets.find(asset => asset.id === 'release').seconds;
 
 function visualStages(captured) {
   const press = captured.cues.filter(cue => cue.cue === 'press').at(-1).time;
@@ -68,7 +68,8 @@ function run(binary, args) {
 
 function provenance() {
   const files = ['scripts/chest_view.gd', 'scripts/chest_surface.gdshader', 'scripts/chest_feel.gd', 'scripts/game_audio.gd',
-    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/rigs.json', 'docs/assets/chest-reference-audio.json'];
+    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/rigs.json', 'docs/assets/chest-kenney-audio.json',
+    ...require('../docs/assets/chest-kenney-audio.json').assets.map(asset => asset.destination)];
   return Object.fromEntries(files.map(file => [file,
     crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
 }

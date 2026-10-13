@@ -187,13 +187,20 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     fs.writeFileSync(path.join(directory, `${source}.import`), `path="res://.godot/imported/${imported}"\n`);
     fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC chest reference fixture');
   });
-  expected.push(click.asset.destination, ...pair.assets.map(asset => asset.destination), ...chest.assets.map(asset => asset.destination));
+  const kenney = require('./helpers/chest-kenney-assets.cjs').chestKenneyFixture(directory, source => {
+    const imported = `chest-kenney-${path.basename(source)}.sample`;
+    fs.writeFileSync(path.join(directory, `${source}.import`), `path="res://.godot/imported/${imported}"\n`);
+    fs.writeFileSync(path.join(directory, '.godot/imported', imported), 'RSRC Kenney chest fixture');
+  });
+  expected.push(click.asset.destination, ...pair.assets.map(asset => asset.destination), ...chest.assets.map(asset => asset.destination),
+    ...kenney.assets.map(asset => asset.destination));
   const audio = collectRequiredAudio(directory);
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
   assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 48);
   assert.equal(audio.filter(file => file.source.includes('/chest-reference/')).length, 5);
+  assert.equal(audio.filter(file => file.source.includes('/chest-kenney/')).length, 11);
   assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 330);
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-detail.wav')));
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
@@ -237,6 +244,12 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.throws(() => collectRequiredAudio(directory), /chest-reference.*release\.wav\.import/,
     'The shared chest release cannot disappear silently from the startup pack');
   fs.writeFileSync(chestImport, chestMetadata);
+  const kenneyImport = path.join(directory, `${kenney.assets.find(asset => asset.id === 'release').destination}.import`);
+  const kenneyMetadata = fs.readFileSync(kenneyImport);
+  fs.unlinkSync(kenneyImport);
+  assert.throws(() => collectRequiredAudio(directory), /chest-kenney.*release\.wav\.import/,
+    'The reviewed opening release cannot silently disappear from the startup pack');
+  fs.writeFileSync(kenneyImport, kenneyMetadata);
   for (const id of added) {
     const sources = audio.map(file => file.source);
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));

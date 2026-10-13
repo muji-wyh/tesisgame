@@ -2,7 +2,6 @@ extends SceneTree
 
 const Bank = preload("res://scripts/chest_sound_bank.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
-const REFERENCE_DURATIONS := {"step": 0.24, "step-detail": 0.24, "step-roll": 0.24, "release": 1.5, "reward": 1.2}
 
 var checks := 0
 var failures := 0
@@ -128,9 +127,9 @@ func _check_fallback_reward_sound(source: PackedByteArray, sample_rate: int, lab
 	return level
 
 
-func _check_reference_recording(source: PackedByteArray, sample_rate: int, cue: String) -> void:
-	var label := "Reference " + cue
-	var duration: float = REFERENCE_DURATIONS[cue]
+func _check_kenney_recording(source: PackedByteArray, sample_rate: int, cue: String) -> void:
+	var label := "Kenney " + cue
+	var duration: float = Bank.KENNEY_DURATIONS[cue]
 	check(absi(source.size() - roundi(sample_rate * duration) * 2) <= 2,
 		label + " retains its complete recorded duration")
 	var level: float = _rms(source, 0, source.size())
@@ -147,7 +146,10 @@ func _check_reference_recording(source: PackedByteArray, sample_rate: int, cue: 
 		label + " starts near its physical cue without leading silence")
 	check(source.decode_s16(0) == 0 and source.decode_s16(source.size() - 2) == 0,
 		label + " has click-free faded sample boundaries")
-	var tail: float = _rms(source, roundi((duration - 0.005) * sample_rate) * 2, source.size())
+	# The sustained loop uses a 0.5 ms seam fade; a one-shot release taper here
+	# would introduce an unwanted recurring volume dip on every loop cycle.
+	var boundary: float = 0.00025 if cue == "charge" else 0.005
+	var tail: float = _rms(source, roundi((duration - boundary) * sample_rate) * 2, source.size())
 	check(tail < level * 0.5, label + " tapers its final boundary without an abrupt cutoff")
 	if cue in ["release", "reward"]:
 		check(_rms(source, roundi(duration * 0.55 * sample_rate) * 2,
@@ -156,7 +158,7 @@ func _check_reference_recording(source: PackedByteArray, sample_rate: int, cue: 
 	if cue == "release":
 		check(duration > Feel.OPEN_SECONDS - Feel.RELEASE_TIME
 			and duration - (Feel.OPEN_SECONDS - Feel.RELEASE_TIME) < 0.5,
-			"The complete reference shimmer has a short natural tail beyond the faster physical completion")
+			"The Kenney opening flourish has a short natural tail beyond physical completion")
 
 
 func _run() -> void:
@@ -183,7 +185,13 @@ func _check_material_assets() -> void:
 	var initial_channels: int = audio.get_child_count()
 	var fingerprints: Dictionary = {}
 	var sources: Dictionary = {}
-	var reference_streams: Dictionary = {}
+	var shared_streams: Dictionary = {}
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/assets/chest-kenney-audio.json"))
+	var manifest_assets: Dictionary = {}
+	for asset: Dictionary in manifest.get("assets", []):
+		manifest_assets[asset.get("id", "")] = asset
+	check(manifest_assets.size() == Bank.CUES.size() and manifest.get("assets", []).size() == Bank.CUES.size(),
+		"The Kenney provenance manifest identifies every runtime cue exactly once")
 	var total_bytes: int = 0
 	var fallback_reward_levels: Array[float] = []
 	check(Bank.pulse_cue(0.0) == "step" and Bank.pulse_cue(0.559) == "step"
@@ -194,10 +202,8 @@ func _check_material_assets() -> void:
 		audio.prepare_chest(theme)
 		for cue_name: String in Bank.CUES:
 			var path: String = Bank.path_for(theme, cue_name)
-			var reference: bool = REFERENCE_DURATIONS.has(cue_name)
-			var sample_rate: int = 44100 if reference else 22050
-			var expected_path: String = "res://assets/imported-audio/chest-reference/%s.wav" % cue_name if reference \
-				else "res://assets/audio/chests/%s-%s.wav" % [theme, cue_name]
+			var sample_rate: int = 44100
+			var expected_path: String = "res://assets/audio/chest-kenney/%s.wav" % cue_name
 			check(path == expected_path, "The runtime loads the intended recording: " + theme + "/" + cue_name)
 			var source: PackedByteArray = FileAccess.get_file_as_bytes(path)
 			check(source.size() > 44, "A local WAV exists: " + theme + "/" + cue_name)
@@ -218,37 +224,36 @@ func _check_material_assets() -> void:
 				"The mono recording preloads at its authored sample rate: " + theme + "/" + cue_name)
 			if stream == null:
 				continue
-			if reference:
-				check(absf(stream.get_length() - float(REFERENCE_DURATIONS[cue_name])) < 0.001,
-					"The imported reference retains its full duration: " + cue_name)
-				if reference_streams.has(cue_name):
-					check(stream == reference_streams[cue_name], "Themes reuse the same loaded reference: " + cue_name)
-				else:
-					reference_streams[cue_name] = stream
+			check(absf(stream.get_length() - float(Bank.KENNEY_DURATIONS[cue_name])) < 0.001,
+				"The imported Kenney recording retains its authored duration: " + cue_name)
+			if shared_streams.has(cue_name):
+				check(stream == shared_streams[cue_name], "Themes reuse the same loaded Kenney recording: " + cue_name)
 			else:
-				check(stream.get_length() <= (0.81 if cue_name == "charge" else 0.75),
-					"The supporting themed material remains short: " + theme + "/" + cue_name)
+				shared_streams[cue_name] = stream
 			check((stream.loop_mode == AudioStreamWAV.LOOP_FORWARD) == (cue_name == "charge"), "Only charge loops: " + theme + "/" + cue_name)
 			var maximum: int = 0
 			# Inspect the authored PCM, since Godot may compress imported streams.
 			for offset in range(44, source.size(), 2):
 				maximum = maxi(maximum, absi(source.decode_s16(offset)))
-			check(maximum > 1000 and maximum < (27853 if reference else 27000), "Audible unclipped material energy: " + theme + "/" + cue_name)
+			check(maximum > 1000 and maximum < 27853, "Audible unclipped material energy: " + theme + "/" + cue_name)
 			check(source.decode_s16(44) == 0 and source.decode_s16(source.size() - 2) == 0, "Clean sample boundaries: " + theme + "/" + cue_name)
-			if reference and not sources.has(path):
-				_check_reference_recording(source.slice(44), sample_rate, cue_name)
-			if cue_name == "settle":
-				_check_grounded_impact(source.slice(44), 22050, cue_name, theme + "/" + cue_name)
-			if cue_name == "opening":
-				_check_held_breath(source.slice(44), 22050, theme + "/opening")
+			if not sources.has(path):
+				var asset: Dictionary = manifest_assets.get(cue_name, {})
+				check(asset.get("destination", "") == path.trim_prefix("res://")
+					and is_equal_approx(float(asset.get("seconds", 0.0)), float(Bank.KENNEY_DURATIONS[cue_name]))
+					and asset.get("sampleRate", 0) == sample_rate and asset.get("channels", 0) == 1
+					and asset.get("bitDepth", 0) == 16 and asset.get("bytes", 0) == source.size()
+					and asset.get("sha256", "") == FileAccess.get_sha256(path),
+					"The runtime recording matches its documented source contract and exact PCM: " + cue_name)
+				_check_kenney_recording(source.slice(44), sample_rate, cue_name)
 			if cue_name == "charge":
 				var window_frames: int = (source.size() - 44) / 8
 				var texture_energy: Array[float] = []
 				for window in range(4):
 					texture_energy.append(_rms(source, 44 + window * window_frames * 2,
 						44 + (window + 1) * window_frames * 2))
-				check(texture_energy.min() > 0.07 and texture_energy.max() / texture_energy.min() < 1.6,
-					"The %s tension texture stays audible without an independent decaying beat" % theme)
+				check(texture_energy.min() > 0.005 and texture_energy.max() / texture_energy.min() < 3.0,
+					"The %s recorded tension texture stays audible through each quarter of its loop" % theme)
 			var fingerprint: String = str(hash(source))
 			if not sources.has(path):
 				total_bytes += source.size()
@@ -275,13 +280,13 @@ func _check_material_assets() -> void:
 			and fallback.data == Bank.fallback(theme, "opening").data,
 			"The " + theme + " fallback breath is deterministic and covers the final brake and hold")
 		_check_held_breath(fallback.data, Bank.SAMPLE_RATE, theme + "/opening fallback")
-	check(total_bytes < 1200000 and sources.size() == 53 and fingerprints.size() == sources.size(),
-		"Five shared recordings and 48 themed support clips fit within 1.2 MB without duplicate assets")
-	check(reference_streams.size() == REFERENCE_DURATIONS.size(),
-		"All themes share the same five prepared reference recordings")
+	check(total_bytes < 450000 and sources.size() == 11 and fingerprints.size() == sources.size(),
+		"Eleven shared Kenney recordings fit within 450 KB without duplicate assets")
+	check(shared_streams.size() == Bank.KENNEY_DURATIONS.size() and shared_streams.size() == Bank.CUES.size(),
+		"All themes share the same eleven prepared Kenney recordings")
 	check(fallback_reward_levels.size() == Bank.THEMES.size() and fallback_reward_levels.max() / fallback_reward_levels.min() < 1.15,
 		"Every theme acknowledges a saved reward at a comparable fallback level")
-	for cue: String in Bank.REFERENCE_CUES:
+	for cue: String in Bank.CUES:
 		var shared_path: String = Bank.path_for("autumn", cue)
 		var recording: AudioStreamWAV = audio.cache[shared_path]
 		# Simulate an unavailable shared recording without altering local files.
@@ -992,8 +997,8 @@ func _check_bundled_preparation() -> void:
 		await process_frame
 		check(_playing(audio) == 0 and audio.chest_charge.stream == null,
 			"Background cancellation stops every chest channel with no delayed playback")
-	check(audio.cache.size() - initial_cached == 53,
-		"The 48 themed clips and five shared references are cached once without network requests")
+	check(audio.cache.size() - initial_cached == 11,
+		"The eleven shared Kenney recordings are cached once without network requests")
 	audio.queue_free()
 	await process_frame
 

@@ -98,14 +98,27 @@ func _verify() -> void:
 			required.append(path)
 	var themes := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 	var chest_bank = load("res://scripts/chest_sound_bank.gd")
+	for cue: String in chest_bank.CUES:
+		var cue_path: String = "res://assets/audio/chest-kenney/%s.wav" % cue
+		var cue_stream: AudioStreamWAV = load(cue_path) if ResourceLoader.exists(cue_path) else null
+		if cue_stream == null or cue_stream.stereo or cue_stream.mix_rate != 44100 \
+			or cue_stream.format != AudioStreamWAV.FORMAT_16_BITS or cue_stream.loop_mode != AudioStreamWAV.LOOP_DISABLED \
+			or absf(cue_stream.get_length() - float(chest_bank.KENNEY_DURATIONS[cue])) > 1.0 / 44100.0:
+			printerr("A Kenney chest cue is missing or invalid in the startup pack: " + cue_path)
+			failures += 1
+		for theme: String in themes:
+			if chest_bank.path_for(theme, cue) != cue_path:
+				printerr("Every theme must use the reviewed Kenney chest bank: %s / %s" % [theme, cue])
+				failures += 1
+	# Jelly and celebration feedback still use these supplied recordings directly.
 	for cue: String in chest_bank.REFERENCE_CUES:
-		var cue_path: String = chest_bank.path_for("spring", cue)
+		var cue_path: String = "res://assets/imported-audio/chest-reference/%s.wav" % cue
 		var cue_stream: AudioStreamWAV = load(cue_path) if ResourceLoader.exists(cue_path) else null
 		var cue_seconds: float = 1.5 if cue == "release" else (1.2 if cue == "reward" else 0.24)
 		if cue_stream == null or cue_stream.stereo or cue_stream.mix_rate != 44100 \
 			or cue_stream.format != AudioStreamWAV.FORMAT_16_BITS or cue_stream.loop_mode != AudioStreamWAV.LOOP_DISABLED \
 			or absf(cue_stream.get_length() - cue_seconds) > 1.0 / 44100.0:
-			printerr("A supplied chest recording is missing or invalid in the startup pack: " + cue_path)
+			printerr("A retained supplied feedback recording is missing or invalid in the startup pack: " + cue_path)
 			failures += 1
 		for theme: String in themes:
 			var retired_path: String = "res://assets/audio/chests/%s-%s.wav" % [theme, cue]
