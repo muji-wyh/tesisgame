@@ -54,6 +54,7 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 
 func check_finish_header(app, view) -> void:
 	var original_size: Vector2i = root.size
+	var reveal_word: Dictionary = app._learning_words()[0]
 	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(320, 480), Vector2i(568, 320), Vector2i(844, 390)]:
 		root.size = dimensions
 		await settle()
@@ -74,6 +75,32 @@ func check_finish_header(app, view) -> void:
 		var bottom: float = maxf(view._global_rect(view._board).end.y, maxf(collect.end.y, view._loot_meter.get_global_rect().end.y))
 		check(absf(bottom - (playfield.end.y - 12.0 / s)) < 0.1,
 			"The board and collection controls retain twelve-pixel bottom padding" + context)
+		var chest: Rect2 = view._loot_meter.get_global_rect()
+		var icon: Rect2 = view._loot_icon.get_global_rect()
+		check(chest.is_equal_approx(view._chest_tap.get_global_rect()) and chest.encloses(icon)
+			and chest.get_center().distance_to(icon.get_center()) < 0.1
+			and chest.size.x * s >= 44.0 - 0.1 and chest.size.y * s >= 44.0 - 0.1,
+			"The chest artwork remains centered inside its full-size meter and tap target" + context)
+		check(view._reward_presentation._anchor.is_equal_approx(view._loot_icon.get_rect()),
+			"The milestone flight returns to the current local chest artwork anchor" + context)
+		if not view._compact_hud:
+			check(chest.position.y <= playfield.position.y + 24.0 / s
+				and chest.end.y + 12.0 / s <= view.drop_button.global_position.y + 0.1,
+				"Phone treasure sits near the top with room above the supply tray" + context)
+			check(absf(collect.get_center().x - view._global_rect(view._board).get_center().x) < 0.1,
+				"Hosted Collect remains centered beneath the phone board" + context)
+			view._word_reveal.set_reduced_motion(false)
+			view._word_reveal.present(reveal_word, view._picture(reveal_word), app.Style.GOOD)
+			view._word_reveal.advance(view.WordReveal.PEAK_SECONDS)
+			check(view._word_reveal.is_visible_in_tree()
+				and not view._word_reveal._surface.get_global_rect().intersects(chest),
+				"The collected-word reveal stays clear of the chest at its animated peak" + context)
+			view._word_reveal.reset()
+			view._word_reveal.set_reduced_motion(view.reduced_motion)
+		if dimensions == Vector2i(393, 852):
+			check(absf(view._board.size.x - (view.size.x - 16.0 / s)) < 0.1
+				and is_equal_approx(view._board.size.x / view._pitch, 6.0),
+				"The taller phone retains all six columns at their full available width")
 	root.size = original_size
 	await settle()
 	var source: Vector2 = view._tiles[int(view.game.cells[0].id)].get_global_rect().get_center()

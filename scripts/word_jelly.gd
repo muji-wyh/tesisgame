@@ -883,11 +883,13 @@ func _layout() -> void:
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - padding * 2.0 - feed_gap)
 	_pitch = _fit_layout_pitch(available, s)
 	# The well determines the supply columns and the available HUD gutter.
-	# Portrait tablets can have a side rail; narrow phones use a shared footer.
+	# Portrait tablets can have a side rail; phones keep treasure above play.
 	var side_hud: bool = (size.x - _pitch * WordModel.COLUMNS) * 0.5 >= edge + hud_gap + hud_width
 	_compact_hud = side_hud
 	var footer_height: float = 0.0 if side_hud else 52.0 / s + edge
-	available.y -= footer_height
+	var chest_margin: float = 20.0 / s
+	var top_hud_height: float = 0.0 if side_hud else 44.0 / s + chest_margin * 2.0
+	available.y -= footer_height + top_hud_height
 	_pitch = _fit_layout_pitch(available, s)
 	_gap = maxf(3.0 / s, _pitch * 0.09)
 	var preview_size: float = _pitch - _gap
@@ -910,7 +912,7 @@ func _layout() -> void:
 	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 308.0 / s))
 	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
 	var meter_edge: float = (60.0 if side_hud else 44.0) / s
-	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(hud_x, _board.end.y + edge + 8.0 / s)
+	_loot_meter.position = Vector2(hud_x + (hud_width - meter_edge) * 0.5, group_top) if side_hud else Vector2(maxf(hud_x, chest_margin), chest_margin)
 	_loot_meter.size = Vector2.ONE * meter_edge
 	_loot_icon.size = Vector2.ONE * meter_edge * 0.67
 	_loot_icon.position = _loot_meter.position + (_loot_meter.size - _loot_icon.size) * 0.5
@@ -934,20 +936,22 @@ func _layout() -> void:
 		finish_button.size = Vector2(hud_width if side_hud else 84.0 / s, 44.0 / s)
 		finish_button.position = Vector2(hud_x, _board.end.y - finish_button.size.y) if side_hud else Vector2(hud_x + footer_width - finish_button.size.x, _board.end.y + edge + 8.0 / s)
 	if collect_button != null:
-		var finish_width: float = finish_button.size.x if local_finish else 0.0
+		var finish_width: float = finish_button.size.x + hud_gap if local_finish else 0.0
 		var finish_height: float = finish_button.size.y + 16.0 / s if local_finish else 0.0
 		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - meter_edge - finish_width - 20.0 / s), 52.0 / s)
-		collect_button.position = Vector2(hud_x, _board.end.y - finish_height - collect_button.size.y) if side_hud else Vector2(hud_x + meter_edge + (footer_width - meter_edge - finish_width - collect_button.size.x) * 0.5, _board.end.y + edge)
-	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(_board.position.x, maxf(0.0, group_top - 42.0 / s - edge))
-	_notice.size = Vector2(hud_width if side_hud else _board.size.x, 42.0 / s)
+		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2(minf(136.0 / s, footer_width - finish_width), 52.0 / s)
+		collect_button.position = Vector2(hud_x, _board.end.y - finish_height - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - finish_width - collect_button.size.x) * 0.5, _board.end.y + edge)
+	# A collected word must not cover the upper chest or its sparkle response.
+	var reveal_left: float = edge if side_hud else _loot_meter.get_rect().end.x + chest_margin
+	_notice.position = Vector2(hud_x, _loot_detail.position.y + _loot_detail.size.y + edge) if side_hud else Vector2(reveal_left, maxf(0.0, group_top - 42.0 / s - edge))
+	_notice.size = Vector2(hud_width if side_hud else size.x - reveal_left - edge, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_result.position = Vector2.ZERO
 	_result.size = size
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(_loot_icon.get_rect())
 	if _word_reveal != null:
-		_word_reveal.configure_layout(Rect2(Vector2(edge, edge), Vector2(size.x - edge * 2.0, minf(180.0 / s, size.y * 0.36))), s)
+		_word_reveal.configure_layout(Rect2(Vector2(reveal_left, edge), Vector2(size.x - reveal_left - edge, minf(180.0 / s, size.y * 0.36))), s)
 	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
