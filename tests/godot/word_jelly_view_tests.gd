@@ -76,6 +76,7 @@ func _run() -> void:
 	_check_coarse_frame_collection_landing(view)
 	_check_word_pair_colors(view)
 	_check_completion_hints(view)
+	_check_ordered_completion_contact(view)
 	_check_completion_hint_targets(view)
 	_check_completion_hint_lifecycle(view)
 	_check_completion_hint_reduced_motion(view)
@@ -103,8 +104,8 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
-func _reset(view, reduced: bool = false) -> void:
-	check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42), "Word Jelly configures with real art")
+func _reset(view, reduced: bool = false, age: int = 3) -> void:
+	check(view.configure(words, age, Data.theme("spring"), data.chests, reduced, 42), "Word Jelly configures with real art")
 	view.set_process(false)
 	view.game.spawn_interval = 10000.0
 	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": true}
@@ -315,7 +316,7 @@ func _check_edge_drag(view) -> void:
 		check(view._target == -1 and cues.count("contact") == 0, "separated silhouettes cannot trigger contact")
 		view._move(view.get_global_transform() * touch)
 		check(view._target == ids[1] and not target.get_rect().has_point(touch), "slight body overlap selects the target before pointer entry")
-		check(view._contact_state().kind == "match" and cues.count("contact") == 1, "any two parts show a merge contact response")
+		check(view._contact_state().kind == "match" and cues.count("contact") == 1, "an ordered completion shows a match contact response")
 		_advance(view, 0.1)
 		check(view.game.fusions.is_empty() and cues.count("contact") == 1, "held touch waits for release without repeating the contact cue")
 		view._release(view.get_global_transform() * touch)
@@ -1169,12 +1170,26 @@ func _check_word_pair_colors(view) -> void:
 	words = original_words
 
 
+func _assert_completion_effect(body, active: bool, context: String) -> void:
+	check((body._completion_glow != null and body._completion_glow.visible) == active,
+		"%s: the visible halo follows completion eligibility" % context)
+	var visible_glints: int = 0
+	for glint: TextureRect in body._completion_glints:
+		if glint.visible:
+			visible_glints += 1
+	check(visible_glints == (2 if active else 0), "%s: only eligible targets display both shoulder sparkles" % context)
+	var strength: Variant = body._gel.get_shader_parameter("completion_strength")
+	check((strength != null and float(strength) > 0.0) == active,
+		"%s: the rendered completion light clears with its halo and sparkles" % context)
+
+
 func _assert_completion_hints(view, expected: Array[int], context: String) -> void:
 	for tile: Dictionary in view.snapshot().tiles:
 		var active: bool = int(tile.id) in expected
 		var body = view._tiles[int(tile.id)]
 		check(tile.has("completion_hint") and bool(tile.get("completion_hint", false)) == active
 			and bool(body.completion_hint) == active, "%s: completion hint follows the live eligible target" % context)
+		_assert_completion_effect(body, active, context)
 		check(tile.has("completion_scale") and is_equal_approx(float(tile.get("completion_scale", -1.0)), float(body.completion_scale)),
 			"%s: diagnostic scale matches the rendered completion feedback" % context)
 		if not active:
@@ -1182,7 +1197,9 @@ func _assert_completion_hints(view, expected: Array[int], context: String) -> vo
 	for preview in view._preview_tiles:
 		check(not preview.completion_hint and is_equal_approx(float(preview.completion_scale), 1.0),
 			"%s: upcoming parts never advertise an actionable completion" % context)
+		_assert_completion_effect(preview, false, context + " preview")
 	check(not view._placement_tile.completion_hint, "%s: placement projection never acts as a second completion target" % context)
+	_assert_completion_effect(view._placement_tile, false, context + " placement")
 
 
 func _completion_board(view, pieces: Array[String]) -> Array[int]:
@@ -1218,12 +1235,12 @@ func _check_completion_hints(view) -> void:
 		check(not view.game._word_lookup.has("car"), "completion candidates use only the current age vocabulary")
 		_assert_completion_hints(view, [], "idle")
 		_pointer_event(view, pointer, "down", center)
-		_assert_completion_hints(view, [], "press before dragging")
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "press before dragging")
 		_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
-		check(not view._dragging, "small mouse or touch jitter does not activate completion guidance")
-		_assert_completion_hints(view, [], "pointer below drag threshold")
+		check(not view._dragging, "small mouse or touch jitter leaves the source pressed without dragging")
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "pointer below drag threshold")
 		_pointer_event(view, pointer, "move", center + Vector2(0.0, -12.0))
-		check(view._dragging, "moving beyond the threshold starts completion guidance")
+		check(view._dragging, "moving beyond the threshold keeps completion guidance while dragging")
 		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "ordered current-age completions")
 		_advance(view, 0.22)
 		for id: int in [ids[1], ids[2], ids[3]]:
@@ -1248,6 +1265,90 @@ func _check_completion_hints(view) -> void:
 		check(view._keyboard_source == ids[1], "keyboard shortcut can replace the active source without merging")
 		_assert_completion_hints(view, [], "source changed to a reverse-only partner")
 		view.cancel_input()
+	view.size = Vector2(1000, 720)
+	words = original_words
+
+
+func _check_ordered_completion_contact(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	for fixture: Dictionary in [{"text": "small", "age": 6}, {"text": "smaller", "age": 5}, {"text": "smallest", "age": 7}]:
+		var word: Dictionary = original_words[0].duplicate(true)
+		word.id = "view-ordered-contact-" + str(fixture.text)
+		word.text = fixture.text
+		word.min_age = fixture.age
+		words.append(word)
+	var pairings: Array[Dictionary] = [
+		{"source": 0, "target": 1, "text": "small", "complete": true},
+		{"source": 1, "target": 0, "text": "llsma", "complete": false},
+		{"source": 0, "target": 2, "text": "smaller", "complete": false},
+		{"source": 0, "target": 3, "text": "smallest", "complete": false}
+	]
+	for pointer: int in [-1, 7]:
+		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
+		for reduced: bool in [false, true]:
+			for pairing: Dictionary in pairings:
+				_reset(view, reduced, 6)
+				var ids: Array[int] = _completion_board(view, ["sma", "ll", "ller", "llest", "x"])
+				var source_id: int = ids[int(pairing.source)]
+				var target_id: int = ids[int(pairing.target)]
+				var source = view._tiles[source_id]
+				var target = view._tiles[target_id]
+				var center: Vector2 = _center(view, source_id)
+				var destination: Vector2 = _center(view, target_id)
+				var expected: Array[int] = []
+				if int(pairing.source) == 0:
+					expected.append(ids[1])
+				var context: String = "%s with %s%s" % [pairing.text, "mouse" if pointer < 0 else "touch", " and reduced motion" if reduced else ""]
+				check(view.game._word_lookup.has("small") and not view.game._word_lookup.has("smaller")
+					and not view.game._word_lookup.has("smallest"), context + ": completion vocabulary excludes younger and older ages")
+				_pointer_event(view, pointer, "down", center)
+				_assert_completion_hints(view, expected, context + " press")
+				check(source.selected and not target.highlighted and view._contact_state().kind == "none",
+					context + ": pressing previews the ordered candidates without pretending they touch")
+				check((source.palette_index == target.palette_index) == bool(pairing.complete),
+					context + ": selected colors follow source-then-target order and current age")
+				_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
+				check(not view._dragging, context + ": a small pointer movement keeps the press below the drag threshold")
+				_assert_completion_hints(view, expected, context + " small movement")
+				var contacts: int = 1
+				if int(pairing.source) == 0 and not bool(pairing.complete):
+					_pointer_event(view, pointer, "move", _center(view, ids[1]))
+					check(view._contact_state().kind == "match" and view._tiles[ids[1]].highlighted,
+						context + ": the gesture first touches the valid current-age completion")
+					contacts += 1
+				_pointer_event(view, pointer, "move", destination)
+				_advance(view, 0.16)
+				check(view._dragging and view._target == target_id and source.selected,
+					context + ": the physical target remains available for an ordered merge")
+				_assert_completion_hints(view, expected, context + " contact")
+				var kind: String = "match" if bool(pairing.complete) else "none"
+				check(view._contact_state().kind == kind and bool(target.highlighted) == bool(pairing.complete),
+					context + ": only an exact forward word receives target and contact highlighting")
+				for body in [source, target]:
+					check(body._contact_kind == kind
+						and (body._gel.get_shader_parameter("contact_match") == true) == bool(pairing.complete),
+						context + ": both rendered skins agree with ordered contact eligibility")
+					if not bool(pairing.complete):
+						var strength: Variant = body._gel.get_shader_parameter("contact_strength")
+						check(strength == null or is_zero_approx(float(strength)),
+							context + ": an ineligible contact has no residual success deformation")
+				if int(pairing.source) == 0 and not bool(pairing.complete):
+					check(not view._tiles[ids[1]].highlighted and view._tiles[ids[1]]._contact_kind == "none"
+						and view._tiles[ids[1]].completion_hint,
+						context + ": changing target clears old contact feedback while retaining the valid candidate glow")
+				check(cues.count("contact") == contacts and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
+					context + ": neutral physical contact gives no learning credit or reward")
+				_pointer_event(view, pointer, "up", destination)
+				check(view.game.fusions.size() == 1 and cues.count("merge") == 1,
+					context + ": release still accepts forward, reverse, and out-of-age merges")
+				var merged_id: int = _merged_id(view)
+				_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+				var merged: Dictionary = view.game.cell(merged_id)
+				check(str(merged.get("text", "")) == str(pairing.text)
+					and view.game.is_valid_word(merged) == bool(pairing.complete),
+					context + ": the result preserves source order and recognizes only the current-age word")
+				_assert_completion_hints(view, [], context + " released")
+				check(payouts.is_empty() and attempts.is_empty(), context + ": merging alone never collects or awards credit")
 	view.size = Vector2(1000, 720)
 	words = original_words
 
@@ -1301,6 +1402,7 @@ func _check_completion_hint_lifecycle(view) -> void:
 			"reconfigure": _reset(view)
 		check(not target.completion_hint and is_equal_approx(float(target.completion_scale), 1.0),
 			"%s immediately removes the old target's light and enlargement" % interruption)
+		_assert_completion_effect(target, false, interruption + " old target")
 		_assert_completion_hints(view, [], interruption)
 		view.interaction_allowed = Callable()
 		view.show()
@@ -1313,8 +1415,20 @@ func _check_completion_hint_reduced_motion(view) -> void:
 	var ids: Array[int] = _install(view, ["ca", "t"])
 	view._activate(ids[0])
 	_assert_completion_hints(view, [ids[1]], "reduced motion retains static completion guidance")
+	var target = view._tiles[ids[1]]
+	var halo_rect: Rect2 = target._completion_glow.get_rect()
+	var halo_color: Color = target._completion_glow.modulate
+	var glints: Array[Dictionary] = []
+	for glint: TextureRect in target._completion_glints:
+		glints.append({"transform": glint.get_transform(), "color": glint.modulate})
 	_advance(view, 0.3)
 	check(is_equal_approx(float(view._tiles[ids[1]].completion_scale), 1.0), "reduced-motion completion guidance never scales the body")
+	check(target._completion_glow.get_rect().is_equal_approx(halo_rect) and target._completion_glow.modulate.is_equal_approx(halo_color),
+		"reduced-motion completion halo remains steady over time")
+	for index in range(glints.size()):
+		var glint: TextureRect = target._completion_glints[index]
+		check(glint.get_transform().is_equal_approx(glints[index].transform) and glint.modulate.is_equal_approx(glints[index].color),
+			"reduced-motion shoulder sparkles stay still and keep constant brightness")
 	view.set_reduced_motion(false)
 	_advance(view, 0.2)
 	check(view._tiles[ids[1]].completion_hint and float(view._tiles[ids[1]].completion_scale) > 1.0,

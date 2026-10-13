@@ -593,14 +593,19 @@ func _process(delta: float) -> void:
 			break
 
 func _refresh_marks() -> void:
-	super._refresh_marks()
+	var feedback_enabled: bool = _can_play()
+	var completing: bool = _contact_state().kind == "match"
+	for id: int in _tiles:
+		_tiles[id].set_marked(id == _target and completing, id == _source,
+			feedback_enabled and not game.is_fusing(id), reduced_motion)
+	_refresh_contact()
 	_refresh_palette()
 	if _keyboard_source >= 0 and _tiles.has(_keyboard_source):
 		_tiles[_keyboard_source].set_marked(false, true, _can_play(), reduced_motion)
 	_refresh_completion_hints()
 
 func _refresh_completion_hints() -> void:
-	var source: int = (_source if _dragging else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
+	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
 	if source != _completion_source:
 		_completion_source = source
 		_completion_elapsed = 0.0
@@ -638,6 +643,11 @@ func _contact_state() -> Dictionary:
 			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": Vector2.RIGHT}, true)
 		return state
 	if not _can_play() or not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
+		return state
+	var source: Dictionary = _cell(_source)
+	var target: Dictionary = _cell(_target)
+	# Every physical target can still merge; only a forward word earns match feedback.
+	if not _settled(source) or not _settled(target) or not Palette.completes(source, target, game._word_lookup):
 		return state
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
 	state.merge({"kind": "match", "source": _source, "target": _target,

@@ -718,7 +718,10 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       await page.mouse.move(point.x, point.y);
       await page.mouse.down();
       await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
-      expectQuiet(await jelly(page));
+      const held = await jelly(page);
+      expect(hintedIds(held), 'Holding a prefix immediately lights its forward completions before dragging')
+        .toEqual(expectedIds(held, source));
+      await capture(page, info, `word-jelly-completion-held-${source.id}`);
       await page.mouse.move(safePoint.x, safePoint.y, { steps: 8 });
       await expect.poll(async () => (await jelly(page)).drag.active).toBe(true);
       await expect.poll(async () => {
@@ -766,6 +769,13 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       const reversed = await jelly(page);
       expect(reversed.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint,
         'Dragging a suffix never highlights the original prefix when their reversed spelling is invalid').toBe(false);
+      const reverseTarget = center(reversed.tiles.find(tile => tile.id === pair.roots[0].id).rect, bounds);
+      await page.mouse.move(reverseTarget.x, reverseTarget.y, { steps: 8 });
+      await expect.poll(async () => (await jelly(page)).drag.target).toBe(pair.roots[0].id);
+      const touching = await jelly(page);
+      expect(touching.contact.kind, 'Physical contact cannot falsely advertise a reversed word as a match').toBe('none');
+      expect(touching.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint).toBe(false);
+      await capture(page, info, 'word-jelly-completion-reverse-contact');
       const outside = center([opening.board_rect[0] - 20 / bounds.scale,
         opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
       await page.mouse.move(outside.x, outside.y, { steps: 5 });
