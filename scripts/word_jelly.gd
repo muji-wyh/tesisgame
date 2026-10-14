@@ -582,7 +582,7 @@ func _sync_positions() -> void:
 		tile.size = rect.size
 		tile._surface.show()
 		tile.modulate.a = 1.0
-		tile.visible = not _result_visible
+		tile.visible = true
 		var dragging: bool = id == _source and _dragging
 		tile.z_index = 40 if dragging else 1
 		var stretch: Vector2 = Vector2.ONE
@@ -761,7 +761,7 @@ func _sync_preview() -> void:
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		var refill: float = refills[index]
-		var available: bool = _configured and not _result_visible and index < game.upcoming.size()
+		var available: bool = _configured and index < game.upcoming.size()
 		preview.visible = available and refill > 0.0
 		if not available:
 			continue
@@ -1123,7 +1123,7 @@ func _refresh_powerup_buttons() -> void:
 		var button: PowerupButton = powerup_buttons[kind]
 		var price: int = game.powerup_price(kind)
 		button.set_price(price)
-		button.visible = _configured and game.phase == "playing" and not _result_visible
+		button.visible = _configured and game.phase == "playing"
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
 			balance >= price, game.powerup_active())
 
@@ -1132,7 +1132,7 @@ func _refresh_collect_button() -> void:
 		return
 	var batch: Dictionary = game.collection_batch_snapshot()
 	var count: int = game.collectable_ids().size() if _configured else 0
-	collect_button.visible = _configured and game.phase == "playing" and not _result_visible
+	collect_button.visible = _configured and game.phase == "playing"
 	collect_button.disabled = not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
@@ -1142,12 +1142,6 @@ func _reward_pickup_ready() -> bool:
 	# takes the screen's focal position. Fragment credit remains immediate.
 	return not game.collection_batch_active() and super._reward_pickup_ready()
 
-func result_reveal() -> void:
-	_word_reveal.reset()
-	super.result_reveal()
-	_result_caption.text = "%d words · %d coins" % [game.cleared_pairs, game.collected_coins]
-	_publish()
-
 func _refresh_danger() -> void:
 	if _danger_frame != null:
 		_danger_frame.set_warning(_can_play() and not game.powerup_active() and float(game.full_elapsed) >= 0.0, float(game.full_elapsed), WordModel.FULL_SECONDS, reduced_motion)
@@ -1156,9 +1150,6 @@ func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
 		return
 	var s: float = Style.ui_scale(self)
-	var accent: Color = _theme.get("accent", Style.GOOD)
-	Style.action_button(chests_button, accent, true)
-	Style.action_button(replay_button, accent)
 	var edge: float = 6.0 / s
 	var bottom_padding: float = 12.0 / s
 	var padding: float = 4.0 / s
@@ -1239,8 +1230,6 @@ func _layout() -> void:
 	_notice.position = Vector2(edge, notice_y)
 	_notice.size = Vector2(size.x - edge * 2.0, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
-	_result.position = Vector2.ZERO
-	_result.size = size
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _word_reveal != null:
@@ -1249,7 +1238,6 @@ func _layout() -> void:
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
 			[chest_meter_rect().grow(10.0 / s)])
-	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()

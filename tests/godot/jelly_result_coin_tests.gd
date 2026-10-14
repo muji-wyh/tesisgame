@@ -141,28 +141,26 @@ func finish_result(app, tier: int) -> void:
 		"Finishing keeps only the final synthesized chest tier")
 	check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
 		"Earning a result chest alone does not credit or animate coins")
+	check(app._jelly_rewards_shown and app._jelly_game_over.is_visible_in_tree()
+		and app._jelly_game_over.is_ancestor_of(app._jelly_rewards) and not app._round_celebration.is_active(),
+		"Every Finish immediately opens settlement inside the modal without an intermission")
+	check(app._jelly_backdrop.is_visible_in_tree() and app._jelly.is_visible_in_tree(),
+		"Interactive settlement keeps the frozen Jelly board behind its shade")
+	check_result_context(app, score, tier)
 	if tier > 0:
-		check(app._round_celebration.is_active() and not app._jelly_rewards_shown,
-			"The reward celebration gates the interactive result chest")
-		Fixture.finish_celebration(app)
-		check(app._jelly_rewards_shown and app._jelly_rewards.is_visible_in_tree()
-			and not app._round_celebration.is_active(),
-			"Celebration leads directly to an interactive result chest without an Open chest navigation step")
-		check(app._jelly_backdrop.is_visible_in_tree(), "Interactive Jelly results retain the woodland background")
-		check_result_context(app, score, tier)
 		check(app._jelly_rewards._cards.size() > 0 and not app._jelly_rewards._cards[0].button.disabled,
-			"The earned chest can be held directly on the result screen")
+			"The earned chest can be held directly inside the settlement modal")
 	else:
-		check(not app._round_celebration.is_active() and app._jelly.is_visible_in_tree()
-			and app._jelly.replay_button.is_visible_in_tree(),
-			"A zero-chest finish exposes its ordinary result and immediate replay without a false reward")
+		check(app._jelly_rewards._cards.is_empty() and app._jelly_rewards._home.is_visible_in_tree()
+			and app._jelly_rewards._back.is_visible_in_tree(),
+			"An empty Finish offers Home and Play again in the modal without a false reward")
 
 
 func check_result_context(app, score: int, tier: int) -> void:
 	var room = app._jelly_rewards
 	check(int(room.snapshot().result_context.get("score", -1)) == score and int(room.snapshot().result_context.get("chest_tier", -1)) == tier,
 		"The result room retains the actual round score and earned tier")
-	check(room._heading.text == "Round results" and room._heading.is_visible_in_tree()
+	check(room._heading.text == "Round complete" and room._heading.is_visible_in_tree()
 		and room._result_score.text == str(score) and room._result_score.is_visible_in_tree(),
 		"Score and result heading remain visible alongside the interactive chest")
 	check(room._back.text == "Play again" and room._back.is_visible_in_tree(),
@@ -188,7 +186,7 @@ func check_new_board(app, old_round: String, amount: int) -> void:
 	var fresh_id: String = app._round_id
 	var writes: int = app.get_meta("result_test_storage").coin_writes
 	app._jelly_rewards.replay_requested.emit()
-	app._jelly.replay_button.pressed.emit()
+	app._jelly_rewards._back.pressed.emit()
 	app._coin_flight.advance(10.0)
 	check(app._round_id == fresh_id and app.coin_wallet.balance == amount
 		and app.get_meta("result_test_storage").coin_writes == writes and not app._coin_flight.snapshot().active,
@@ -260,7 +258,7 @@ func check_zero_replay() -> void:
 	var app = await make_app()
 	finish_result(app, 0)
 	var old_round: String = app._round_id
-	app._jelly.replay_button.pressed.emit()
+	app._jelly_rewards._back.pressed.emit()
 	check_new_board(app, old_round, 0)
 	check(app.get_meta("result_test_storage").coin_writes == 0, "A zero-chest replay never writes a phantom coin receipt")
 	await dispose(app)

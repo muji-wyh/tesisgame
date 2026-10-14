@@ -425,9 +425,8 @@ func _check_layout(view) -> void:
 func _check_results_and_restart(view) -> void:
 	_reset(view, 2)
 	view.game.finish_round()
-	view.result_reveal()
-	check(not bool(_progress(view).visible) and not view._loot_icon.visible and not view._loot_detail.visible,
-		"The gameplay treasure meter leaves the screen when the result page appears")
+	check(bool(_progress(view).visible) and view._loot_icon.visible and not view.snapshot().result.visible,
+		"The completed board preserves its earned treasure meter behind the owner settlement modal")
 	_reset(view)
 	if not _merge_marked(view):
 		return

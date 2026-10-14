@@ -187,30 +187,18 @@ func _run() -> void:
 	earn_fragments(app._jelly, 4)
 	var earned_score: int = game.cleared_pairs
 	game.finish_round()
-	check(app._round_celebration.is_active() and not app._jelly.visible, "A positive result enters the shared Pip celebration")
-	check(not app._jelly_backdrop.visible, "The shared reward presentation owns its own background")
-	var summary: Dictionary = app._round_celebration.snapshot()
-	check(app._round_result.score == earned_score and summary.score == earned_score and summary.title == "Round results"
-		and summary.chest_tier == 1 and summary.caption == "Score: %d · Chest Lv. 1" % earned_score
-		and is_equal_approx(app._round_celebration._heading.modulate.a, 1.0)
-		and is_equal_approx(app._round_celebration._caption.modulate.a, 1.0),
-		"The real result reports its actual score and single synthesized chest tier")
+	check(not app._round_celebration.is_active() and app._jelly.visible and app._jelly_game_over.is_visible_in_tree(),
+		"An earned Finish opens settlement over the frozen board without a celebration intermission")
+	check(app._jelly_backdrop.visible, "The settlement modal retains the woodland setting")
 	check(app._jelly_rewards.has_pending() and FileAccess.file_exists(app.jelly_reward_save_path), "Earned treasure is durable before its result action")
-	app._show_jelly_rewards()
-	check(not app._jelly_rewards_shown, "Treasure cannot open through the celebration gate")
 	var receipt: String = app._round_id
 	game.finish_round()
 	check(app._round_id == receipt and app._jelly_rewards.snapshot().chest_count == 1, "Finishing twice preserves one reward batch")
-	app._round_celebration.set_process(false)
-	app._round_celebration.advance(1.9)
-	check(app._reward_confetti.snapshot().visible, "Jelly's earned chest receives the shared screen confetti burst")
-	Fixture.finish_celebration(app)
-	check(app._jelly_rewards.is_visible_in_tree() and not app._round_celebration.is_active() and app._reward_confetti.is_active(),
-		"The interactive chest result appears while the independent screen paper finishes falling")
-	check(app._jelly_backdrop.visible, "Jelly's settlement returns to its woodland setting")
-	check(app._jelly_rewards.snapshot().result_context.score == earned_score and app._jelly_rewards._heading.text == "Round results"
+	check(app._jelly_rewards.is_visible_in_tree() and app._jelly_game_over.is_ancestor_of(app._jelly_rewards),
+		"The interactive chest belongs to the modal instead of a separate result page")
+	check(app._jelly_rewards.snapshot().result_context.score == earned_score and app._jelly_rewards._heading.text == "Round complete"
 		and app._jelly_rewards._result_score.text == str(earned_score) and app._jelly_rewards.snapshot().result_context.chest_tier == 1,
-		"The persistent interactive result retains the same score and chest tier after the animation")
+		"The interactive settlement reports the actual score and single synthesized chest tier")
 	check(not app.new_round(52, false, "", "jelly") and app._jelly_rewards_shown, "Mode navigation resumes pending treasure before starting a new board")
 	check(app._jelly_backdrop.visible, "The interactive chest result retains Jelly's gameplay scenery")
 	await settle()
@@ -231,11 +219,11 @@ func _run() -> void:
 	game = app._jelly.game
 	game.finish_round()
 	check(not app._round_celebration.is_active() and app._jelly.visible, "Zero loot shows a result without a false reward celebration")
-	check(app._round_result.score == 0 and app._jelly.snapshot().result.title == "Round results"
-		and app._jelly.snapshot().result.caption == "Score: 0 · Fragments: 0 / 4",
+	check(app._round_result.score == 0 and app._jelly_rewards._heading.text == "Round complete"
+		and app._jelly_rewards.snapshot().result_context.fragment_count == 0 and app._jelly_game_over.is_visible_in_tree(),
 		"A new zero-loot round reports its own zero totals without stale score or victory copy")
 	var zero_round_id: String = app._round_id
-	app._jelly.replay_button.pressed.emit()
+	app._jelly_rewards._back.pressed.emit()
 	check(app._round_id != zero_round_id and app._jelly.game.phase == "playing", "The zero-loot Play again button immediately starts another board")
 	app._jelly.set_process(false)
 	game = app._jelly.game
@@ -245,7 +233,7 @@ func _run() -> void:
 		and app._round_result.chest_tier == 0 and not app._round_celebration.is_active()
 		and not app._jelly_rewards.has_pending(),
 		"Ending below four fragments shows an honest result without saving or celebrating a chest")
-	app._jelly.replay_button.pressed.emit()
+	app._jelly_rewards._back.pressed.emit()
 	app._jelly.set_process(false)
 	game = app._jelly.game
 	earn_fragments(app._jelly, 4)
@@ -526,14 +514,14 @@ func _reward_conflict_checks(directory: String) -> void:
 				and not room.has_pending() and app.coin_wallet.balance == coins_before + 150,
 				"Play again collects the older and current chest coins before immediately starting a playable board")
 			var replay_id: String = app._round_id
-			app._jelly.replay_button.pressed.emit()
+			app._jelly_rewards._back.pressed.emit()
 			app._replay_jelly()
 			check(app._round_id == replay_id, "Repeated replay activation cannot reset the new board")
 			app._jelly.set_process(false)
 			app._jelly.game.finish_round()
 			await settle()
 			check(not app._round_celebration.is_active() and app._round_result.chest_count == 0
-				and not app._jelly.chests_button.visible and not room.has_pending(),
+				and room._cards.is_empty() and app._jelly_game_over.is_visible_in_tree() and not room.has_pending(),
 				"A zero-loot follow-up reports its own totals without offering already collected treasure")
 		else:
 			check(app.new_round(93, false, "", next_mode) and app._mode_id == "memory", "Mode exit is safe once the combined reward is durable")

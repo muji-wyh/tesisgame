@@ -8,6 +8,7 @@ const MASTERY_STREAK = 3;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const treasure = page => page.locator('#jelly-reward-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
+const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const growthSave = page => page.evaluate(() => localStorage.getItem('growWithPip.growth.v1'));
 
 async function pressRect(page, rect) {
@@ -36,6 +37,25 @@ async function finishRound(page, control) {
   await page.mouse.move(from.x, from.y + distance, { steps: 4 });
   await page.mouse.up();
   await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
+}
+
+async function expectFinishModal(page) {
+  await expect.poll(async () => (await treasure(page)).visible,
+    { message: 'Finish opens settlement directly over the frozen board' }).toBe(true);
+  const state = await jelly(page), room = await treasure(page);
+  expect(state.result).toEqual({ visible: false, retired: true });
+  expect(state.game_over).toMatchObject({ visible: true, title: 'Round complete' });
+  expect(room).toMatchObject({ visible: true, heading: 'Round complete' });
+  expect(room.result_context).toMatchObject({ reason: 'finished', score: state.score,
+    chest_count: state.chest_count, fragment_count: state.fragment_count });
+  expect((await celebrationState(page)).active, 'Settlement has no interstitial celebration').toBe(false);
+  return room;
+}
+
+async function replayFromModal(page) {
+  await expect.poll(async () => (await treasure(page)).visible).toBe(true);
+  const replay = (await treasure(page)).actions.find(action => action.text === 'Play again');
+  await pressControl(page, replay);
 }
 
 async function libraryControl(page, name) {
@@ -96,9 +116,8 @@ test('opening and replay wait for the first batch while manual release stays ava
   const arrived = await jelly(page);
   expect(arrived.tiles.slice(12).map(tile => tile.id)).toEqual(advertised);
   await finishRound(page, arrived.finish);
-  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
-  const result = await jelly(page);
-  await pressControl(page, result.result.replay);
+  await expectFinishModal(page);
+  await replayFromModal(page);
   await expect.poll(async () => (await jelly(page)).round_id).not.toBe(opening.round_id);
   const replay = await jelly(page);
   expect(replay.generated_tiles, 'Replay also starts with three settled rows and no automatic batch').toBe(12);
@@ -192,8 +211,9 @@ for (const mode of ['jelly', 'word_jelly']) {
     await info.attach('finish-tap-timeline', { path: timelinePath, contentType: 'application/json' });
     await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-settled.png`), scale: 'css' });
     await finishRound(page);
+    await expectFinishModal(page);
     expect((await jelly(page)).finish_confirmation.visible,
-      'A subsequent deliberate pull still goes directly to results').toBe(false);
+      'A subsequent deliberate pull goes directly to modal settlement').toBe(false);
     expect(errors).toEqual([]);
   });
 }
@@ -308,8 +328,8 @@ for (const mode of ['jelly', 'word_jelly']) {
         expect((await jelly(page)).phase, 'Arming waits for release').toBe('playing');
         await release();
         await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
-        await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
-        expect((await jelly(page)).finish_confirmation.visible, 'A deliberate armed release goes directly to results').toBe(false);
+        await expectFinishModal(page);
+        expect((await jelly(page)).finish_confirmation.visible, 'A deliberate armed release goes directly to modal settlement').toBe(false);
         expect((await jelly(page)).round_id).toBe(before.round_id);
         expect((await jelly(page)).score).toBe(before.score);
       } finally {
@@ -373,7 +393,7 @@ for (const mode of ['jelly', 'word_jelly']) {
       await page.screenshot({ path: info.outputPath(`${mode}-mobile-finish-armed.png`), scale: 'css' });
       await release();
       await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
-      await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+      await expectFinishModal(page);
       const finished = await jelly(page);
       expect(finished.finish_confirmation.visible).toBe(false);
       expect(finished.round_id).toBe(before.round_id);
@@ -805,8 +825,7 @@ test.describe('manual jelly supply', () => {
           if (index > 0) {
             const previous = await jelly(page);
             if (previous.phase === 'playing') await finishRound(page, previous.finish);
-            await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
-            await pressControl(page, (await jelly(page)).result.replay);
+            await replayFromModal(page);
             await expect.poll(async () => (await jelly(page)).round_id).not.toBe(previous.round_id);
           }
           const bounds = await metrics(page);
@@ -1219,7 +1238,7 @@ test('Finish remains available during fusion and settles only completed pairs', 
   await page.mouse.down();
   await page.mouse.move(finish.x, finish.y + before.finish.pull.threshold * bounds.scale + 10);
   await page.mouse.up();
-  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  await expectFinishModal(page);
   const timeline = await page.evaluate(() => window.jellyObservedTimeline);
   expect(timeline.some(frame => frame.fusion && !frame.finishDisabled && frame.cleared === before.cleared_pairs),
     'The accepted drop leaves Finish usable while its independent animation is pending').toBe(true);
@@ -1276,30 +1295,21 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   await page.screenshot({ path: info.outputPath('jelly-earned-chest.png'), scale: 'css' });
 
   await finishRound(page);
-  await expect.poll(async () => (await celebrationState(page)).active,
-    { message: 'Earned loot receives the shared Pip celebration' }).toBe(true);
-  const summary = await celebrationState(page);
-  expect(summary.title).toBe('Round results');
-  expect(summary.score).toBe(finalScore);
-  expect(summary.caption).toBe(`Score: ${finalScore} · Chest Lv. 1`);
-  expect((await jelly(page)).result.visible, 'Results cannot be used during the celebration').toBe(false);
-  await expect.poll(async () => (await jelly(page)).result.visible,
-    { timeout: 15000, message: 'The performance naturally reveals the Jelly result' }).toBe(true);
+  const settlement = await expectFinishModal(page);
   const result = await jelly(page);
   expect(result.phase).toBe('finished');
   expect(result.score).toBe(finalScore);
-  expect(result.result.title).toBe('Round results');
-  expect(result.result.caption).toBe(`Score: ${finalScore} · Chest Lv. 1`);
+  expect(settlement.score_text).toBe(String(finalScore));
+  expect(settlement.result_context).toMatchObject({ reason: 'finished', score: finalScore, chest_tier: 1 });
   expect(result.chest_count).toBe(1);
   expect(result.chest_tier).toBe(1);
-  expect(result.result.open.text).toBe('Open chest');
-  expectInCanvas(result.result.open.rect, await metrics(page), 'The earned-chest action fits the screen');
-  expectInCanvas(result.result.replay.rect, await metrics(page), 'The replay action fits the screen');
+  for (const action of settlement.actions.filter(action => action.visible)) {
+    expectInCanvas(action.rect, await metrics(page), 'The settlement action fits the screen');
+  }
   const saved = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
-  expect(saved, 'The earned batch is saved before opening the reward room').toContain(result.round_id);
-  await page.screenshot({ path: info.outputPath('jelly-results.png'), scale: 'css' });
+  expect(saved, 'The earned batch is saved before displaying modal settlement').toContain(result.round_id);
+  await page.screenshot({ path: info.outputPath('jelly-finish-settlement.png'), scale: 'css' });
 
-  await pressControl(page, result.result.open);
   await expect.poll(async () => {
     const room = await treasure(page);
     return { visible: room.visible, chests: room.chest_count, opened: room.opened_count, failed: room.save_failed };
@@ -1334,7 +1344,7 @@ test('real drag and touch pairs earn learning once, then reveal and open their e
   expect(errors).toEqual([]);
 });
 
-test('Play again starts immediately and preserves unopened treasure for a later result', async ({ page }, info) => {
+test('Play again settles unopened treasure once before starting a fresh board', async ({ page }, info) => {
   test.setTimeout(120000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const marked = await availablePair(page, { chest: true });
@@ -1347,71 +1357,53 @@ test('Play again starts immediately and preserves unopened treasure for a later 
   expect(earned.chest_count).toBe(1);
   expect(earned.chest_tier).toBe(1);
 
+  const startingCoins = (await wallet(page)).balance;
   await finishRound(page, earned.finish);
-  await expect.poll(async () => (await celebrationState(page)).active,
-    { message: 'The earned chest completes its ordinary celebration before replay' }).toBe(true);
-  await expect.poll(async () => (await jelly(page)).result.visible, { timeout: 15000 }).toBe(true);
+  const firstModal = await expectFinishModal(page);
   const firstResult = await jelly(page);
-  expect(firstResult.result.caption).toBe(`Score: ${earned.score} · Chest Lv. 1`);
+  expect(firstModal.result_context).toMatchObject({ score: earned.score, chest_tier: 1 });
+  expect(firstModal.opened_count).toBe(0);
   const savedTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
   expect(savedTreasure).toContain(firstResult.round_id);
 
-  await pressControl(page, firstResult.result.replay);
+  const replayAction = firstModal.actions.find(action => action.text === 'Play again');
+  await pressControl(page, replayAction);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.round_id !== firstResult.round_id && state.visible && state.phase === 'playing' &&
       state.tiles.length === 12 && state.tiles.every(tile => tile.settled) && !state.result.visible;
   }, { timeout: 10000, message: 'Play again immediately creates a playable fresh board' }).toBe(true);
   const replay = await jelly(page);
-  expect((await treasure(page)).visible, 'Unopened rewards do not interrupt replay').toBe(false);
+  expect((await treasure(page)).visible, 'Settled rewards do not interrupt replay').toBe(false);
   expect((await metrics(page)).library.visible, 'Replay does not send the player to mode selection').toBe(false);
   expect(replay.score).toBe(0);
   expect(replay.fragment_count).toBe(0);
   expect(replay.chest_tier).toBe(0);
   expect(replay.chest_count).toBe(0);
-  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS),
-    'Starting the next board leaves the earned treasure durable').toBe(savedTreasure);
+  await expect.poll(async () => (await wallet(page)).balance,
+    { message: 'Replay settles the tier-one chest exactly once' }).toBe(startingCoins + 50);
+  const settledTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
+  expect(settledTreasure).not.toBe(savedTreasure);
+  expect(settledTreasure).toContain(firstResult.round_id);
 
-  // A second activation at the old result action cannot launch another round.
-  await pressRect(page, firstResult.result.replay.rect);
+  // A second activation at the old modal action cannot launch another round.
+  await pressRect(page, replayAction.rect);
   await page.waitForTimeout(400);
   expect((await jelly(page)).round_id).toBe(replay.round_id);
   expect((await jelly(page)).phase).toBe('playing');
   await page.screenshot({ path: info.outputPath('jelly-direct-replay.png'), scale: 'css' });
 
   await finishRound(page);
-  await expect.poll(async () => (await jelly(page)).result.visible).toBe(true);
+  const secondModal = await expectFinishModal(page);
   const secondResult = await jelly(page);
   expect(secondResult.round_id).toBe(replay.round_id);
   expect(secondResult.score).toBe(0);
   expect(secondResult.chest_count).toBe(0);
-  expect(secondResult.result.caption).toBe('Score: 0 · Fragments: 0 / 4');
-  expect(secondResult.result.open.visible, 'A zero-loot result still offers the saved unopened chest').toBe(true);
-  expect(secondResult.result.open.text).toBe('Open chest');
-  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(savedTreasure);
-
-  await page.screenshot({ path: info.outputPath('jelly-retained-chest-result.png'), scale: 'css' });
-  await pressControl(page, secondResult.result.open);
-  await expect.poll(async () => {
-    const room = await treasure(page);
-    return { visible: room.visible, chests: room.chest_count, opened: room.opened_count, failed: room.save_failed };
-  }, { timeout: 45000 }).toEqual({ visible: true, chests: 1, opened: 0, failed: false });
-  const room = await treasure(page), chest = room.chests[0].rect, viewport = room.scroll_rect;
-  const left = Math.max(chest.x, viewport.x), right = Math.min(chest.x + chest.width, viewport.x + viewport.width);
-  const top = Math.max(chest.y, viewport.y), bottom = Math.min(chest.y + chest.height, viewport.y + viewport.height);
-  expect(right - left).toBeGreaterThan(20);
-  expect(bottom - top).toBeGreaterThan(20);
-  const position = center([left, top, right - left, bottom - top], await metrics(page));
-  await page.mouse.move(position.x, position.y);
-  await page.mouse.down();
-  try {
-    await expect.poll(async () => (await treasure(page)).opened_count,
-      { timeout: 15000, message: 'The earlier round chest remains fully openable after replay' }).toBe(1);
-  } finally {
-    await page.mouse.up();
-  }
-  await expect.poll(async () => (await treasure(page)).pending, { timeout: 12000 }).toBe(false);
-  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toContain(firstResult.round_id);
+  expect(secondModal).toMatchObject({ score_text: '0', chest_count: 0, empty_result: true });
+  expect(secondModal.pending).toBe(false);
+  expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(settledTreasure);
+  expect((await wallet(page)).balance, 'A later empty round cannot award the earlier chest again').toBe(startingCoins + 50);
+  await page.screenshot({ path: info.outputPath('jelly-empty-finish-settlement.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });
 
@@ -1494,8 +1486,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(ended.game_over).toMatchObject({ visible: true, title: 'Game over' });
   expect(ended.result.visible, 'The frozen board remains behind the settlement dialog').toBe(false);
   expect(ended.chest_count).toBe(0);
-  expect(ended.result.open.visible).toBe(false);
-  expect(ended.result.replay.visible).toBe(false);
+  expect(ended.result.retired).toBe(true);
   const settlement = await treasure(page);
   expect(settlement).toMatchObject({ visible: true, heading: 'Game over', score_text: '1',
     chest_count: 0, visible_chest_count: 0, empty_result: true, replay_action: true });

@@ -12,6 +12,7 @@ var _palette: Dictionary = {}
 var _reduced_motion: bool = false
 var _entrance: Tween
 var _has_chest: bool = false
+var _title: String = "Game over"
 
 
 func _init() -> void:
@@ -31,11 +32,12 @@ func _init() -> void:
 	hide()
 
 
-func configure(room: Control, palette: Dictionary, motion_reduced: bool, has_chest: bool) -> void:
+func configure(room: Control, palette: Dictionary, motion_reduced: bool, has_chest: bool, title: String = "Game over") -> void:
 	_room = room
 	_palette = palette.duplicate()
 	_reduced_motion = motion_reduced
 	_has_chest = has_chest
+	_title = title
 	if _room.get_parent() != panel:
 		_room.reparent(panel, false)
 	_layout()
@@ -87,6 +89,6 @@ func _layout() -> void:
 
 func snapshot() -> Dictionary:
 	var rect: Rect2 = panel.get_global_rect()
-	return {"visible": is_visible_in_tree(), "title": "Game over",
+	return {"visible": is_visible_in_tree(), "title": _title,
 		"panel_rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y],
 		"reduced_motion": _reduced_motion}

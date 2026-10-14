@@ -43,9 +43,15 @@ happy pose with no moving halo or confetti.
 `GameUI` owns the round identity, interruptions and input gate. Match, Memory
 and Phrase Builder wait for both the performance and the final pronunciation
 before offering `Open chest`. Phrase accepts completion only at that action.
-Voice Pop and Jelly Match save the score and final upgraded chest first, then
-restore their complete result page after celebration. Their zero-chest rounds
-go straight to results. Match and Memory celebrate completion even without a
+Voice Pop saves the score and final upgraded chest first, then restores its
+complete result page after celebration. Its zero-chest rounds go straight to
+results. Jelly Match and Jelly Words immediately show a settlement modal over
+the frozen board, with or without a chest. Finish uses `Round complete`; danger
+expiry uses `Game over`. They have no standalone results page and do not run
+this completion celebration. Earned chests open inside the modal. `Play again`
+saves and collects pending chest coins before starting a new round, while
+`Home` returns to the mode menu and preserves pending treasure. Match and Memory
+celebrate completion even without a
 chest, omit the chest artwork and confetti, and offer Play again. Presentation
 never saves rewards or opens a chest.
 

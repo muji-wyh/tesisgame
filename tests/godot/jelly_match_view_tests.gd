@@ -343,9 +343,8 @@ func _check_supply_preview(view) -> void:
 	check(view.snapshot().upcoming == supply and view.game.cells.size() == count,
 		"A seeded replacement round restores its own committed supply without the old arrival")
 	view.game.finish_round()
-	view.result_reveal()
-	check(not bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty(),
-		"Results hide the supply preview and all landing guidance")
+	check(bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty() and not view.drop_button.visible,
+		"Finished play preserves the supply as a frozen backdrop without actionable drop guidance")
 	view.stop()
 	check(not bool(view.snapshot().preview.visible) and view.snapshot().landing_ghosts.is_empty(),
 		"Stopping the mode leaves no visible supply or ghost")
@@ -471,7 +470,6 @@ func _check_preview_lifecycle_gates(view) -> void:
 					"The manual-release guard is exercised on a live full board")
 			"results":
 				view.game.finish_round()
-				view.result_reveal()
 			"stopped":
 				view.stop()
 			"drag":
@@ -1694,8 +1692,7 @@ func _check_danger_reduced_motion_and_end(view) -> void:
 	check(view.game.phase == "finished" and finishes.size() == 1 and cues.count("danger") == 8 and not cues.has("tick"),
 		"The eight-second deadline finishes once after exactly eight warning sounds")
 	_check_danger_hidden(view, "Reaching the deadline")
-	view.result_reveal()
-	_check_danger_hidden(view, "Revealing the completed result")
+	_check_danger_hidden(view, "Keeping the completed board behind settlement")
 	view.stop()
 	_check_danger_hidden(view, "Stopping the mode")
 	_reset(view)
@@ -2034,44 +2031,29 @@ func _earn_fragments(view, total: int) -> void:
 
 func _check_result_gate(view) -> void:
 	_reset(view)
-	var opened: Array[int] = []
-	var replayed: Array[int] = []
-	view.chests_requested.connect(func() -> void: opened.append(1))
-	view.replay_requested.connect(func() -> void: replayed.append(1))
 	_earn_fragments(view, 4)
 	var score_before: int = view.game.score()
+	var cells_before: Array = view.game.cells.duplicate(true)
 	view._finish_round()
 	check(finishes.size() == 1 and view.game.phase == "finished", "Finish emits a settled result once")
-	view._open_chests()
-	view._replay()
-	check(opened.is_empty() and replayed.is_empty() and not view._result.visible,
-		"Result actions stay hidden and inert while the shared celebration runs")
-	view.result_reveal()
-	check(view._result.visible and view.chests_button.visible and view.replay_button.visible,
-		"The root explicitly reveals the complete result after celebration")
-	check(view.snapshot().score == score_before and view.snapshot().result.title == "Round results"
-		and view.snapshot().result.caption == "Score: %d · Chest Lv. 1" % score_before,
-		"The settled result reports completed pairs and the single unlocked chest's level")
+	check(view.snapshot().result == {"visible": false, "retired": true} and view.snapshot().score == score_before,
+		"The view delegates settlement without creating a standalone result page")
+	check(not view.has_method("result_reveal") and not view.has_signal("replay_requested") and not view.has_signal("chests_requested"),
+		"The retired result page has no alternate reveal or action route")
+	check(not view.finish_button.visible and not view.drop_button.visible and view.navigation_controls().is_empty(),
+		"Finished gameplay has no active Finish, Next or board navigation")
 	for dimensions: Vector2 in [Vector2(390, 640), Vector2(844, 235), Vector2(320, 260)]:
 		view.size = dimensions
 		view._layout()
-		check(Rect2(Vector2.ZERO, dimensions).encloses(view.chests_button.get_rect()), "Result actions fit %s" % dimensions)
-		check(not view.chests_button.get_rect().intersects(view.replay_button.get_rect()), "Result actions never overlap at %s" % dimensions)
-		for label: Label in [view._result_title, view._result_caption]:
-			check(Rect2(Vector2.ZERO, dimensions).encloses(label.get_rect()), "Result facts fit %s" % dimensions)
-		for image: TextureRect in view._result_chests:
-			if image.visible:
-				check(not image.get_rect().intersects(view.chests_button.get_rect()), "Result treasure and actions stay separate at %s" % dimensions)
-	view._open_chests()
-	view._open_chests()
-	view._replay()
-	check(opened.size() == 1 and replayed.is_empty(), "Repeated result activation produces a single transition")
+		check(view.game.cells == cells_before and view._tiles.values().all(func(tile: Control) -> bool: return tile.disabled),
+			"The ended board remains frozen and disabled at %s" % dimensions)
+	view._finish_round()
+	view.game.finish_round()
+	check(finishes.size() == 1 and view.game.score() == score_before, "Repeated Finish cannot emit or settle twice")
 	_reset(view)
 	view._finish_round()
-	view.result_reveal()
-	check(not view.chests_button.visible and view.replay_button.visible, "A zero-chest round offers replay without a false opening action")
-	check(view.snapshot().score == 0 and view.snapshot().result.caption == "Score: 0 · Fragments: 0 / 4",
-		"An empty round explicitly reports zero score and its incomplete fragment collection")
+	check(view.snapshot().score == 0 and view.snapshot().result.retired and view.game.chest_count == 0,
+		"An empty round keeps honest zero totals without constructing a result page")
 	view.size = Vector2(1000, 720)
 
 

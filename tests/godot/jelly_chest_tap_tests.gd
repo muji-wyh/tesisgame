@@ -148,7 +148,6 @@ func _check_input_gates(view) -> void:
 				view.interaction_allowed = func() -> bool: return false
 			"result":
 				view.game.finish_round()
-				view.result_reveal()
 			"reward":
 				view._chest_milestone(0, 1)
 		var model: Dictionary = view.game.snapshot().duplicate(true)

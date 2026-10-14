@@ -195,7 +195,8 @@ func check_interrupted_confirmation_taps(app, mode: String) -> void:
 		check(view.game.snapshot() == saved and app._finish_confirmation_open(),
 			mode + ": a fresh Finish tap after " + interruption + " still waits for release")
 		pointer_button(button, false)
-		check(view.game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty(),
+		check(view.game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty()
+			and app._jelly_game_over.is_visible_in_tree() and not app._active_jelly().snapshot().result.visible,
 			mode + ": a fresh ordinary tap after " + interruption + " confirms normally")
 
 
@@ -265,7 +266,8 @@ func check_danger(app, mode: String) -> void:
 		mode + ": the full-board deadline freezes while choosing")
 	app._finish_confirmation.keep_playing_button.pressed.emit()
 	game.step(game.FULL_SECONDS)
-	check(game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty(),
+	check(game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty()
+		and app._jelly_game_over.is_visible_in_tree() and not app._active_jelly().snapshot().result.visible,
 		mode + ": automatic expiry still finishes directly after continuation")
 
 

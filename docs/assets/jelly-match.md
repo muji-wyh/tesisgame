@@ -136,13 +136,15 @@ deadline wins. Finish cancels unfinished pairs without crediting them, while
 retaining completed scores, learning attempts and fragments. Gravity responds to
 each completed pair immediately, including when other fusions are still active.
 
-In both Jelly modes, Finish first opens a centered confirmation card using the
-existing typography and theme palette. Keep playing receives default focus;
-Escape or controller Back also resumes the round. Supply, fusions, collection
-beats, danger clocks, chest effects and confetti pause while the player decides,
-including across page backgrounding.
-Only the separate Finish action commits the result. Automatic full-board expiry
-and internal round settlement retain their existing immediate behavior.
+In both Jelly modes, pull Finish downward until it glows, then release to end
+the round. An early release returns the button and keeps playing. Keyboard and
+controller activation use a centered confirmation card with the existing
+typography and theme palette. Keep playing receives default focus; Escape or
+controller Back also resumes the round. Supply, fusions, collection beats,
+danger clocks, chest effects and confetti pause while the player decides,
+including across page backgrounding. Committing Finish immediately opens the
+settlement modal over the frozen board. Automatic full-board expiry opens the
+same modal after its warning completes.
 
 The control has the accessible name `Drop the next jellies` without a hover popup, while
 the visible layout retains its four previews without a `Next` label or progress
@@ -257,11 +259,15 @@ WebKit runs cover real input, completed fusion, learning credit, chest opening,
 portrait and short landscape. These are local renders and simulated browser
 devices, not physical phone or subjective audio approval.
 
-Each fully cleared pair earns one point. The round summary displays the score
-and final chest tier, or the fragment total when no chest was unlocked. Four
-fragments unlock one chest; every five more upgrade it. Rounds with treasure
-keep Pip's existing reward presentation before revealing the opening action;
-the summary uses `Round results` rather than a level-completion message. See
+Each fully cleared pair earns one point. Both Jelly modes settle immediately
+in a modal over the frozen board, with no standalone results page or intervening
+Pip celebration. Finish uses `Round complete`; danger expiry uses `Game over`.
+The modal displays the score, completed word count, and final chest tier or
+`No chest this round`. Four fragments unlock one chest; every five more upgrade
+it. Hold the earned chest to open it inside the modal. `Play again` saves and
+collects pending chest coins before starting a new round; save failures retain
+the modal for retry. `Home` returns to the mode menu and preserves pending
+treasure. See
 [chest fragments](jelly-fragments.md) for the reward and animation details.
 
 | Event | Runtime path | Original source | Duration | Peak |

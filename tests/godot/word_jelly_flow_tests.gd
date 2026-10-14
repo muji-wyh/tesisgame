@@ -142,9 +142,9 @@ func check_finish_header(app, view) -> void:
 		"A deliberate header Finish pauses the round for confirmation")
 	app._finish_confirmation.finish_button.pressed.emit()
 	await settle()
-	check(view.game.phase == "finished" and view._result_visible and not view.finish_button.is_visible_in_tree(),
-		"Confirming Finish opens results and removes the round action")
-	view.replay_button.pressed.emit()
+	check(view.game.phase == "finished" and app._jelly_game_over.is_visible_in_tree() and not view.snapshot().result.visible and not view.finish_button.is_visible_in_tree(),
+		"Confirming Finish opens the settlement modal and removes the round action")
+	app._jelly_rewards._back.pressed.emit()
 	await settle()
 	view._process(0.0)
 	check(view.game.phase == "playing" and view.finish_button.is_visible_in_tree(), "Replay restores Finish to the active header")
@@ -262,7 +262,7 @@ func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
 			"round_end":
 				check(game.phase == "finished" and not app._round_result.is_empty(),
 					"Ending the round routes through the application result before silencing feedback")
-				view.replay_button.pressed.emit()
+				app._jelly_rewards._back.pressed.emit()
 				view.set_process(false)
 		check(game.phase == "playing" and not game.paused, interruption + ": continuing returns to the same playable word round")
 		view.cancel_input()

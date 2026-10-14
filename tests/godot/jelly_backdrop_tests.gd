@@ -224,7 +224,7 @@ func check_application(mode: String) -> void:
 	app._finish_confirmation.finish_button.pressed.emit()
 	check(view.game.phase == "finished", mode + ": Finish ends the active round")
 	await check_frozen(backdrop, mode + " finished round")
-	view.replay_button.pressed.emit()
+	app._jelly_rewards._back.pressed.emit()
 	view.set_process(false)
 	check(view.game.phase == "playing", mode + ": Play again starts a new round")
 	await check_advances(backdrop, mode + " replay")

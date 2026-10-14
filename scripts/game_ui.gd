@@ -746,12 +746,6 @@ func _build_controls() -> void:
 	_jelly.word_attempted.connect(_jelly_growth_answer.bind("jelly"))
 	_jelly.round_finished.connect(_jelly_finished.bind("jelly"))
 	_jelly.finish_requested.connect(_request_jelly_finish.bind("jelly"))
-	_jelly.chests_requested.connect(func() -> void:
-		if _mode_id == "jelly":
-			_show_jelly_rewards())
-	_jelly.replay_requested.connect(func() -> void:
-		if _mode_id == "jelly":
-			_replay_jelly())
 	_jelly.changed.connect(_publish_jelly.bind("jelly"))
 	_jelly.hide()
 	column.add_child(_jelly)
@@ -774,12 +768,6 @@ func _build_controls() -> void:
 	_word_jelly.word_attempted.connect(_jelly_growth_answer.bind("word_jelly"))
 	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
 	_word_jelly.finish_requested.connect(_request_jelly_finish.bind("word_jelly"))
-	_word_jelly.chests_requested.connect(func() -> void:
-		if _mode_id == "word_jelly":
-			_show_jelly_rewards())
-	_word_jelly.replay_requested.connect(func() -> void:
-		if _mode_id == "word_jelly":
-			_replay_jelly())
 	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
@@ -1680,24 +1668,9 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 		_jelly_rewards.pause()
 	if _jelly_settling:
 		return
-	if _jelly_ended_in_danger():
-		_show_jelly_rewards()
-		_announce_status("Game over. " + _jelly_result_summary())
-	elif count > 0:
-		_begin_round_celebration(count)
-	else:
-		_show_jelly_result()
-		_announce_status(_jelly_result_summary())
+	_show_jelly_rewards()
+	_announce_status(("Game over. " if str(result.get("reason", "")) == "danger" else "Round complete. ") + _jelly_result_summary())
 	_refresh()
-
-
-func _show_jelly_result() -> void:
-	if _jelly_ended_in_danger():
-		_show_jelly_rewards()
-		return
-	_active_jelly().result_reveal()
-	if int(_round_result.get("chest_count", 0)) > 0 or _jelly_rewards.has_pending():
-		_show_jelly_rewards()
 
 
 func _jelly_result_summary() -> String:
@@ -1754,48 +1727,45 @@ func _show_jelly_rewards() -> void:
 		return
 	if int(_round_result.get("chest_count", 0)) > 0:
 		_save_jelly_round_reward()
-	elif _jelly_ended_in_danger():
+	elif _jelly_round_ended():
 		_jelly_rewards.configure_empty_result(_round_id, data.chests, reduced_motion)
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
 	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {})
-	if _jelly_ended_in_danger():
+	if _jelly_round_ended():
 		_jelly_game_over.configure(_jelly_rewards, Data.theme(model.theme_id), reduced_motion,
-			int(_round_result.get("chest_count", 0)) > 0)
+			int(_round_result.get("chest_count", 0)) > 0,
+			"Game over" if str(_round_result.get("reason", "")) == "danger" else "Round complete")
 		_stop_controller_actions()
 		_controller_accept_needs_release = _controller_accept_is_pressed()
 	_active_jelly().cancel_input()
 	audio.halt()
 	_jelly_rewards_shown = true
-	if _jelly_ended_in_danger() and not _mode_menu_open():
+	if _jelly_round_ended() and not _mode_menu_open():
 		_jelly_game_over.open(true)
 	_refresh()
 	_default_focus().grab_focus()
 
 
 func _hide_jelly_rewards() -> void:
-	if _jelly_ended_in_danger():
+	if _jelly_round_ended():
 		_show_mode_menu()
 		return
 	_coin_flight.sync(coin_wallet.balance)
 	_jelly_rewards.pause()
 	_controller_holding_jelly_chest = false
 	_jelly_rewards_shown = false
-	if _active_jelly().game.phase == "finished" and not _round_result.is_empty():
-		_active_jelly().result_reveal()
-		_refresh()
+	# A restored reward batch precedes a fresh board.
+	if _jelly_rewards.has_pending():
+		_show_mode_menu()
 	else:
-		# A restored reward batch precedes a fresh board.
-		if _jelly_rewards.has_pending():
-			_show_mode_menu()
-		else:
-			_refresh()
+		_refresh()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
 	_default_focus().grab_focus()
 
 
-func _jelly_ended_in_danger() -> bool:
-	return _is_jelly_mode() and str(_round_result.get("reason", "")) == "danger"
+func _jelly_round_ended() -> bool:
+	return _is_jelly_mode() and not _round_result.is_empty() and _active_jelly().game.phase == "finished"
 
 
 func _jelly_game_over_open() -> bool:
@@ -1805,7 +1775,7 @@ func _jelly_game_over_open() -> bool:
 func _sync_jelly_game_over() -> void:
 	if not is_instance_valid(_jelly_game_over):
 		return
-	if _jelly_ended_in_danger() and _jelly_rewards_shown and not _mode_menu_open() \
+	if _jelly_round_ended() and _jelly_rewards_shown and not _mode_menu_open() \
 		and not collection_page.visible and not _page_hidden:
 		_jelly_game_over.open()
 	else:
@@ -2169,7 +2139,7 @@ func _on_round_celebration_finished(round_id: String) -> void:
 	if _mode_id in ["pop", "jelly", "word_jelly"]:
 		_stop_round_celebration()
 		if _is_jelly_mode():
-			_show_jelly_result()
+			_show_jelly_rewards()
 		_refresh()
 		_announce_status(_jelly_result_summary() if _is_jelly_mode() else "Round complete. View your results or open your earned chests.")
 	else:
@@ -2467,13 +2437,10 @@ func _refresh() -> void:
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown and not celebrating
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_pop.set_pending_chests(_pop_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
-	var keep_ended_board: bool = _jelly_ended_in_danger()
+	var keep_ended_board: bool = _jelly_round_ended()
 	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
 	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
 	_jelly_rewards.visible = playing and _is_jelly_mode() and not collection_page.visible and _jelly_rewards_shown
-	var pending_jelly_chests: int = _jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size()
-	_jelly.set_pending_chests(pending_jelly_chests)
-	_word_jelly.set_pending_chests(pending_jelly_chests)
 	_sync_jelly()
 	_message.hide()
 	_outcome.visible = not playing and not celebrating

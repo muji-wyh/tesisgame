@@ -197,8 +197,9 @@ func _result_context_checks() -> void:
 	var room = _make_jelly_room(Storage.new())
 	check(room.configure("result-room", 1, "ocean", _manifest, false, 3), "Prepare a live tier-three result chest")
 	room.set_result_context({"score": 420, "chest_tier": 3, "chest_count": 1})
-	check(room._heading.text == "Round results" and room._result_score.text == "420"
-		and room._progress.text == "Chest Lv. 3" and room._back.text == "Play again",
+	check(room._heading.text == "Round complete" and room._result_score.text == "420"
+		and room._progress.text == "0 words completed\nChest Lv. 3" and room._back.text == "Play again"
+		and room._home.visible,
 		"Result context presents the score, earned tier and replay action")
 	var actions: Array[String] = []
 	room.replay_requested.connect(func() -> void: actions.append("replay"))

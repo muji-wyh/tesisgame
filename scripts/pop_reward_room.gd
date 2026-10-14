@@ -115,7 +115,7 @@ func _ready() -> void:
 	Style.action_button(_home, Style.GOOD)
 	_home.hide()
 	_home.pressed.connect(func() -> void:
-		if _is_danger_result() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+		if _is_jelly_result() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
 			home_requested.emit())
 	_retry = Button.new()
 	UiClick.bind_button(_retry)
@@ -207,8 +207,12 @@ func _is_danger_result() -> bool:
 	return str(_result_context.get("reason", "")) == "danger"
 
 
+func _is_jelly_result() -> bool:
+	return storage_kind == "jelly" and not _result_context.is_empty()
+
+
 func _effective_page_size() -> int:
-	return 1 if _is_danger_result() else maxi(1, page_size)
+	return 1 if _is_jelly_result() else maxi(1, page_size)
 
 
 func collect_all_coins() -> bool:
@@ -803,17 +807,17 @@ func _refresh() -> void:
 	var state: Dictionary = snapshot()
 	var result_mode: bool = not _result_context.is_empty()
 	var danger_result: bool = _is_danger_result()
-	_home.visible = danger_result
+	_home.visible = _is_jelly_result()
 	_home.disabled = _paused
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	if result_mode:
-		_heading.text = "Game over" if danger_result else "Round results"
+		_heading.text = "Game over" if danger_result else "Round complete" if _is_jelly_result() else "Round results"
 		_result_score.text = str(maxi(0, int(_result_context.get("score", 0))))
 		_result_score.accessibility_name = "Score: " + _result_score.text
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		_progress.text = JellyRewardProgress.title_for_tier(tier) if tier > 0 else "No chest this round"
-		if danger_result:
+		if _is_jelly_result():
 			var completed: int = maxi(0, int(_result_context.get("cleared_pairs", 0)))
 			_progress.text = "%d word%s completed\n%s" % [completed, "" if completed == 1 else "s", _progress.text]
 	else:
@@ -862,11 +866,11 @@ func _layout() -> void:
 	var h: float = size.y
 	if w <= 0.0 or h <= 0.0:
 		return
-	if _is_danger_result():
-		_layout_danger_result(s, w, h)
+	if _is_jelly_result():
+		_layout_jelly_result(s, w, h)
 		return
 	if _back.get_meta("result_appearance", []) != [s, false]:
-		# Restore ordinary result actions after leaving a danger modal, including
+		# Restore ordinary result actions after leaving a Jelly modal, including
 		# physical font and button minimums when the viewport scale changes.
 		Style.action_button(_back, Style.GOOD)
 		Style.action_button(_retry, Style.GOOD, true)
@@ -964,7 +968,7 @@ func _layout() -> void:
 	_update_navigation(columns)
 
 
-func _layout_danger_result(s: float, w: float, h: float) -> void:
+func _layout_jelly_result(s: float, w: float, h: float) -> void:
 	var appearance: Array = [s, true]
 	if _back.get_meta("result_appearance", []) != appearance:
 		Style.action_button(_back, Style.GOOD, true)

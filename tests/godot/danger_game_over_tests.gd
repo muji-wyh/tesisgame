@@ -126,22 +126,23 @@ func fill_and_expire(app, mode: String, held_accept: bool = false) -> void:
 			mode + ": an accept key held before timeout cannot activate the new dialog")
 
 
-func check_modal(app, mode: String, chests: int) -> void:
+func check_modal(app, mode: String, chests: int, reason: String = "danger") -> void:
 	var view = app._active_jelly()
 	var modal = app._jelly_game_over
 	var room = app._jelly_rewards
-	check(modal.is_visible_in_tree() and modal.snapshot().visible and modal.snapshot().title == "Game over",
-		mode + ": the expired warning immediately opens a Game over dialog")
+	var title: String = "Game over" if reason == "danger" else "Round complete"
+	check(modal.is_visible_in_tree() and modal.snapshot().visible and modal.snapshot().title == title,
+		mode + ": " + reason + " immediately opens its settlement dialog")
 	check(app._jelly_rewards_shown and room.is_visible_in_tree() and modal.is_ancestor_of(room)
-		and view.is_visible_in_tree() and not view._result_visible,
+		and view.is_visible_in_tree() and not view.snapshot().result.visible and view.snapshot().result.retired,
 		mode + ": settlement stays inside the overlay above the frozen board")
-	check(not app._round_celebration.is_active() and room._heading.text == "Game over"
+	check(not app._round_celebration.is_active() and room._heading.text == title
 		and room.snapshot().result_context == app._round_result,
-		mode + ": game over keeps its actual round totals without a victory intermission")
+		mode + ": settlement keeps its actual round totals without a victory intermission")
 	check(int(app._round_result.chest_count) == chests and room._cards.size() == chests,
 		mode + ": the dialog shows only the earned chest count")
 	check(not app._jelly_interaction_allowed() and not view.finish_button.is_visible_in_tree(),
-		mode + ": the expired board and its Finish action no longer accept play")
+		mode + ": the ended board and its Finish action no longer accept play")
 	for control: Control in app._focus_candidates():
 		check(modal.is_ancestor_of(control), mode + ": focus cannot escape the settlement overlay")
 	check(modal.is_ancestor_of(app._default_focus()), mode + ": default focus belongs to the settlement")
@@ -154,7 +155,7 @@ func check_modal(app, mode: String, chests: int) -> void:
 	view.drop_button.pressed.emit()
 	view.finish_button.accessibility_requested.emit()
 	check(view.game.snapshot() == before and not app._finish_confirmation_open(),
-		mode + ": stale play actions cannot alter an expired round")
+		mode + ": stale play actions cannot alter an ended round")
 
 
 func check_keyboard(app, mode: String) -> void:
@@ -236,14 +237,14 @@ func earn_chest(app, mode: String) -> void:
 		mode + ": actual completed play earns one ordinary chest before timeout")
 
 
-func check_zero_result(mode: String) -> void:
+func check_zero_result(mode: String, reason: String) -> void:
 	var app = await make_app(mode)
-	fill_and_expire(app, mode, true)
+	end_round(app, mode, reason, true)
 	await settle()
-	check_modal(app, mode, 0)
+	check_modal(app, mode, 0, reason)
 	await check_keyboard(app, mode)
 	check(app.coin_wallet.balance == 0 and not app._jelly_rewards.has_pending(),
-		mode + ": timeout creates no coin or chest without completed play")
+		mode + ": ending creates no coin or chest without completed play")
 	await check_layout(app, mode)
 	var old_round: String = app._round_id
 	app.on_page_hidden()
@@ -254,19 +255,19 @@ func check_zero_result(mode: String) -> void:
 		mode + ": returning restores the same finished round")
 	var focus: Control = root.gui_get_focus_owner()
 	check(focus != null and app._jelly_game_over.is_ancestor_of(focus),
-		mode + ": returning to the page restores keyboard focus inside Game over")
+		mode + ": returning to the page restores keyboard focus inside settlement")
 	app._jelly_rewards._back.pressed.emit()
 	check(app._round_id != old_round and app._active_jelly().game.phase == "playing"
 		and not app._jelly_game_over.is_visible_in_tree(), mode + ": Play again dismisses the dialog and starts a fresh board")
 	await dispose(app)
 
 
-func check_earned_result(mode: String) -> void:
+func check_earned_result(mode: String, reason: String) -> void:
 	var app = await make_app(mode)
 	var storage = app.get_meta("danger_storage")
 	earn_chest(app, mode)
 	storage.reward_writable = false
-	fill_and_expire(app, mode)
+	end_round(app, mode, reason)
 	await settle()
 	var room = app._jelly_rewards
 	check(app._jelly_game_over.is_visible_in_tree() and room._save_failed and room._retry.is_visible_in_tree(),
@@ -280,7 +281,7 @@ func check_earned_result(mode: String) -> void:
 	room.retry_save()
 	await settle()
 	check(not room._save_failed and room.has_pending(), mode + ": Retry save preserves the earned chest")
-	check_modal(app, mode, 1)
+	check_modal(app, mode, 1, reason)
 	await check_keyboard(app, mode + " earned chest")
 	await check_layout(app, mode + " earned chest")
 	var amount: int = int(app._round_result.chest_tier) * 50
@@ -298,9 +299,9 @@ func check_earned_result(mode: String) -> void:
 	room._back.pressed.emit()
 	check(app._round_id != old_round and app._active_jelly().game.phase == "playing"
 		and app.coin_wallet.balance == initial_coins + amount, mode + ": replay keeps the settled wallet")
-	fill_and_expire(app, mode)
+	end_round(app, mode, reason)
 	await settle()
-	check_modal(app, mode, 0)
+	check_modal(app, mode, 0, reason)
 	check(room._cards.is_empty(), mode + ": a later empty result never resurrects an opened chest")
 	room.home_requested.emit()
 	check(app._mode_menu_open() and not app._jelly_game_over.is_visible_in_tree(),
@@ -309,25 +310,34 @@ func check_earned_result(mode: String) -> void:
 	app.choose_mode(mode)
 	await settle()
 	check(app._round_id == finished_round and app._jelly_game_over.is_visible_in_tree(),
-		mode + ": choosing the same mode from Home restores its settled Game over")
+		mode + ": choosing the same mode from Home restores its settlement modal")
 	await dispose(app)
 
 
-func check_voluntary_finish(mode: String) -> void:
-	var app = await make_app(mode)
-	app._active_jelly().game.finish_round()
-	await settle()
-	check(app._round_result.get("reason") == "finished" and not app._jelly_game_over.is_visible_in_tree()
-		and app._active_jelly()._result_visible, mode + ": voluntary Finish keeps the ordinary result flow")
-	await dispose(app)
+func end_round(app, mode: String, reason: String, held_accept: bool = false) -> void:
+	if reason == "danger":
+		fill_and_expire(app, mode, held_accept)
+		return
+	var view = app._active_jelly()
+	view.finish_button.accessibility_requested.emit()
+	check(app._finish_confirmation_open() and view.game.phase == "playing",
+		mode + ": accessible Finish pauses the current board before confirmation")
+	app._finish_confirmation.finish_button.pressed.emit()
+	check(view.game.phase == "finished" and app._round_result.get("reason") == "finished"
+		and not app._finish_confirmation_open(), mode + ": confirmed Finish records the voluntary ending reason")
+	var round_id: String = app._round_id
+	app._finish_confirmation.finish_button.pressed.emit()
+	view.game.finish_round()
+	check(app._round_id == round_id and app._jelly_game_over.is_visible_in_tree(),
+		mode + ": repeated completion cannot dismiss or replace the settlement modal")
 
 
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
 	for mode: String in ["jelly", "word_jelly"]:
-		await check_zero_result(mode)
-		await check_earned_result(mode)
-		await check_voluntary_finish(mode)
-	print("Danger game over: %d checks, %d failures" % [checks, failures])
+		for reason: String in ["danger", "finished"]:
+			await check_zero_result(mode, reason)
+			await check_earned_result(mode, reason)
+	print("Jelly settlement modal: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)

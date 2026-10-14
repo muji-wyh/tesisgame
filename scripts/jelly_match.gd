@@ -8,8 +8,6 @@ signal audio_requested(cue: String)
 signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 signal round_finished(result: Dictionary)
 signal finish_requested
-signal chests_requested
-signal replay_requested
 signal changed(state: Dictionary)
 
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
@@ -18,7 +16,6 @@ const FinishButton = preload("res://scripts/jelly_finish_button.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const FusionArt = preload("res://scripts/jelly_fusion.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const UiClick = preload("res://scripts/ui_click.gd")
 const Chest = preload("res://scripts/chest_view.gd")
 const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -35,8 +32,6 @@ const DRAG_STRETCH := Vector2(0.985, 1.06)
 var game = JellyMatchModel.new()
 var interaction_allowed: Callable
 var reduced_motion: bool = false
-var replay_button: Button
-var chests_button: Button
 var finish_button: FinishButton
 var drop_button: Button
 
@@ -83,14 +78,6 @@ var _loot_detail: Label
 var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
 var _notice: Label
-var _result: Control
-var _result_title: Label
-var _result_caption: Label
-var _result_chests: Array[TextureRect] = []
-var _result_visible: bool = false
-var _result_transition: bool = false
-var _pending_chests: int = 0
-var _result_elapsed: float = 0.0
 var _last_published: String = ""
 var _publish_elapsed: float = 0.0
 var _chest_cache: Dictionary = {}
@@ -136,23 +123,9 @@ func _init() -> void:
 	_notice = _label(self, "Match a picture to its word.", 14)
 	_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_result = Control.new()
-	_result.name = "JellyResults"
-	_result.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_result)
-	_result.hide()
-	_result_title = _label(_result, "Round results", 30)
-	_result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_result_caption = _label(_result, "", 17)
-	_result_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_result_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	for index in range(1):
-		_result_chests.append(_image(_result))
 	_reward_presentation = ChestCelebration.new()
 	add_child(_reward_presentation)
 	_reward_presentation.cue_requested.connect(_reward_cue)
-	chests_button = _button("Open chests", "JellyOpenChests", _open_chests)
-	replay_button = _button("Play again", "JellyReplay", _replay)
 	finish_button = FinishButton.new()
 	finish_button.name = "JellyFinish"
 	finish_button.accessibility_requested.connect(_request_finish)
@@ -185,15 +158,6 @@ func _label(parent: Node, value: String, pixels: int) -> Label:
 	parent.add_child(label)
 	return label
 
-func _button(value: String, node_name: String, callback: Callable) -> Button:
-	var button := Button.new()
-	button.text = value
-	button.name = node_name
-	UiClick.bind_button(button)
-	button.pressed.connect(callback)
-	_result.add_child(button)
-	return button
-
 func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, reduced: bool, seed_value: int = -1) -> bool:
 	stop()
 	if _surfaces.is_empty():
@@ -207,9 +171,6 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 	reduced_motion = reduced
 	_displayed_chest_tier = 0
 	_loot_meter.reset()
-	_result_visible = false
-	_result_transition = false
-	_result_elapsed = 0.0
 	_publish_elapsed = 0.0
 	_landing_cooldown = 0.0
 	_paused = false
@@ -226,9 +187,6 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_theme = theme.duplicate(true)
 	_manifest = chests
 	_prepare_chest()
-	var accent: Color = _theme.get("accent", Style.GOOD)
-	Style.action_button(chests_button, accent, true)
-	Style.action_button(replay_button, accent)
 	_style_finish_button()
 	for id in _tiles:
 		_configure_tile(_tiles[id], _cell(int(id)))
@@ -273,8 +231,6 @@ func _reward_texture(tier: int = -1) -> Texture2D:
 func _apply_chest_texture(texture: Texture2D) -> void:
 	_chest_texture = texture
 	_loot_icon.texture = _reward_texture()
-	for chest: TextureRect in _result_chests:
-		chest.texture = _reward_texture()
 	for tile in _tiles.values():
 		tile.set_chest_texture(texture)
 	for preview: Tile in _preview_tiles:
@@ -282,7 +238,7 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 
 func _cache_chest_image(id: String, cache: Dictionary) -> void:
 	# Source chests reserve an opening envelope. Trim the rendered closed pose once
-	# so a tiny treasure marker and a result hero use actual artwork dimensions.
+	# so treasure markers and chest celebrations use actual artwork dimensions.
 	if DisplayServer.get_name() == "headless":
 		return
 	var picture: Image = cache.viewport.get_texture().get_image()
@@ -366,7 +322,6 @@ func set_reduced_motion(value: bool) -> void:
 	_sync_preview()
 	_refresh_fusion()
 	_refresh_contact()
-	_animate_result()
 	queue_redraw()
 	_publish()
 
@@ -377,8 +332,6 @@ func pause(value: bool = true) -> void:
 	game.set_paused(value)
 	_reward_presentation.set_paused(value)
 	cancel_input()
-	if not value:
-		_result_transition = false
 	_refresh_controls()
 	_publish()
 
@@ -399,8 +352,6 @@ func stop() -> void:
 	_configured = false
 	game.paused = true
 	settle()
-	_result_visible = false
-	_result.hide()
 	_clear_fusion_visuals()
 	for ghost: Tile in _ghosts.values():
 		ghost.hide()
@@ -457,8 +408,6 @@ func _cancel_missing_release(pointer: int, serial: int) -> void:
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		cancel_input()
-	else:
-		_result_transition = false
 	_refresh_controls()
 	_publish()
 
@@ -470,7 +419,7 @@ func _allowed() -> bool:
 	return _configured and not _paused and is_visible_in_tree() and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 func _can_play() -> bool:
-	return _allowed() and game.phase == "playing" and not _result_visible
+	return _allowed() and game.phase == "playing"
 
 func _can_tap_chest() -> bool:
 	return _can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and not _reward_presentation.is_active()
@@ -483,7 +432,7 @@ func _tap_chest() -> void:
 	_publish()
 
 func _sync_chest_tap() -> void:
-	var shown: bool = _configured and not _result_visible and not _reward_presentation.visible
+	var shown: bool = _configured and not _reward_presentation.visible
 	if has_header_chest():
 		_header_chest_host.visible = _can_play()
 	_chest_tap.visible = shown
@@ -830,8 +779,8 @@ func _sync_positions() -> void:
 		var lift: float = 6.0 / Style.ui_scale(self) if dragging else maxf(0.0, rect.position.y - position_in_view.y)
 		tile.set_support(lift, 0.0 if reduced_motion or dragging else float(pose.compression))
 		tile.modulate.a = 1.0 if reduced_motion else float(pose.opacity)
-		tile.visible = not _result_visible
-		if airborne and not _result_visible:
+		tile.visible = true
+		if airborne:
 			airborne_ids[id] = true
 			if not _ghosts.has(id):
 				var projection := Tile.new()
@@ -865,7 +814,7 @@ func _sync_positions() -> void:
 func _sync_preview() -> void:
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
-		preview.visible = _configured and not _result_visible and index < game.upcoming.size()
+		preview.visible = _configured and index < game.upcoming.size()
 		if not preview.visible:
 			continue
 		var item: Dictionary = game.upcoming[index]
@@ -980,12 +929,9 @@ func _process(delta: float) -> void:
 		_snapbacks[id].elapsed += delta
 		if float(_snapbacks[id].elapsed) >= 0.24:
 			_snapbacks.erase(id)
-	if _result_visible:
-		_result_elapsed += delta
 	_sync_tiles()
 	_refresh_fusion()
 	_refresh_hud()
-	_animate_result()
 	queue_redraw()
 	_publish_elapsed += delta
 	if _publish_elapsed >= 0.1:
@@ -1071,7 +1017,7 @@ func _clear_fusion_visuals() -> void:
 		_remove_fusion_visual(id)
 
 func _refresh_fusion() -> void:
-	if not _configured or _result_visible or game.phase != "playing":
+	if not _configured or game.phase != "playing":
 		_clear_fusion_visuals()
 		return
 	var live: Dictionary = {}
@@ -1235,46 +1181,6 @@ func _finish_round() -> void:
 	cancel_input()
 	game.finish_round()
 
-func result_reveal() -> void:
-	if not _configured or game.phase != "finished":
-		return
-	cancel_input()
-	_result_visible = true
-	_result_transition = false
-	_result_elapsed = 0.0
-	_result.show()
-	_result_title.text = "Round results"
-	_result_caption.text = "Score: %d · Chest Lv. %d" % [game.score(), game.chest_tier] if game.chest_count > 0 else \
-		"Score: %d · Fragments: %d / 4" % [game.score(), game.fragment_count]
-	for chest: TextureRect in _result_chests:
-		chest.texture = _reward_texture()
-	chests_button.text = "Open chest" if maxi(game.chest_count, _pending_chests) == 1 else "Open chests"
-	_layout()
-	_sync_tiles()
-	_refresh_controls()
-	_focus_result.call_deferred()
-	_publish()
-
-func _focus_result() -> void:
-	if _result_visible and _allowed():
-		default_focus().grab_focus()
-
-func _open_chests() -> void:
-	if not _allowed() or not _result_visible or _result_transition or maxi(game.chest_count, _pending_chests) <= 0:
-		return
-	_result_transition = true
-	_refresh_controls()
-	chests_requested.emit()
-	_publish()
-
-func _replay() -> void:
-	if not _allowed() or not _result_visible or _result_transition:
-		return
-	_result_transition = true
-	_refresh_controls()
-	replay_requested.emit()
-	_publish()
-
 func _refresh_hud() -> void:
 	_refresh_danger()
 	var progress: Dictionary = game.reward_progress(game.fragment_count)
@@ -1294,20 +1200,11 @@ func _refresh_hud() -> void:
 	if _compact_hud and full:
 		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
-	_notice.visible = _configured and not _result_visible and not has_header_chest() and (not _compact_hud or full)
+	_notice.visible = _configured and not has_header_chest() and (not _compact_hud or full)
 	_sync_chest_tap()
-	_loot_meter.visible = _configured and not _result_visible
-	_loot_detail.visible = _configured and not _result_visible and not has_header_chest()
+	_loot_meter.visible = _configured
+	_loot_detail.visible = _configured and not has_header_chest()
 	_sync_preview()
-
-func set_pending_chests(count: int) -> void:
-	if _pending_chests == count:
-		return
-	_pending_chests = count
-	chests_button.text = "Open chest" if maxi(game.chest_count, _pending_chests) == 1 else "Open chests"
-	_refresh_controls()
-	_layout()
-	_publish()
 
 func _refresh_controls() -> void:
 	_sync_chest_tap()
@@ -1315,14 +1212,10 @@ func _refresh_controls() -> void:
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
 			_tiles[int(cell.id)].disabled = not _can_play() or _finish_is_pulling() or not _settled(cell)
-	chests_button.visible = _result_visible and maxi(game.chest_count, _pending_chests) > 0
-	replay_button.visible = _result_visible
-	chests_button.disabled = not _allowed() or _result_transition
-	replay_button.disabled = not _allowed() or _result_transition
 	finish_button.visible = _can_play() if finish_button.get_parent() != self else \
-		_configured and game.phase == "playing" and not _result_visible
+		_configured and game.phase == "playing"
 	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
-	drop_button.visible = _configured and game.phase == "playing" and not _result_visible
+	drop_button.visible = _configured and game.phase == "playing"
 	drop_button.disabled = not _can_play() or _finish_is_pulling() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
 	if drop_button.disabled:
 		_set_preview_pressed(false)
@@ -1331,11 +1224,7 @@ func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
 	if not _allowed():
 		return controls
-	if _result_visible:
-		if maxi(game.chest_count, _pending_chests) > 0:
-			controls.append(chests_button)
-		controls.append(replay_button)
-	elif _can_play():
+	if _can_play():
 		var ordered: Array = game.cells.duplicate()
 		ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.row) * 4 + int(a.column) < int(b.row) * 4 + int(b.column))
 		for cell: Dictionary in ordered:
@@ -1384,9 +1273,6 @@ func _layout() -> void:
 		_layout_hosted()
 		return
 	var scale_factor: float = Style.ui_scale(self)
-	var accent: Color = _theme.get("accent", Style.GOOD)
-	Style.action_button(chests_button, accent, true)
-	Style.action_button(replay_button, accent)
 	var short_board: bool = size.y * scale_factor < 320.0
 	var edge: float = (4.0 if short_board else 8.0) / scale_factor
 	var wide: bool = short_board or size.x > size.y * 1.18
@@ -1443,11 +1329,8 @@ func _layout() -> void:
 	var finish_width: float = minf(hud_width, 112.0 / scale_factor) if wide else 112.0 / scale_factor
 	finish_button.position = Vector2(hud_x + hud_width - finish_width, _board.end.y - 48.0 / scale_factor) if wide else Vector2(_board.end.x - finish_width, _board.end.y + 7.0 / scale_factor)
 	finish_button.size = Vector2(finish_width, 44.0 / scale_factor)
-	_result.position = Vector2.ZERO
-	_result.size = size
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
-	_layout_result(scale_factor, edge)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -1502,69 +1385,13 @@ func _layout_hosted() -> void:
 		_preview_tiles[index].size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2(inset + (index % preview_columns) * (preview_size + preview_gap), padding + floorf(float(index) / preview_columns) * (preview_size + preview_gap))
 	_style_finish_button()
-	_result.position = Vector2.ZERO
-	_result.size = size
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
-	_layout_result(s, edge)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
 	queue_redraw()
 	_publish()
-
-func _layout_result(s: float, edge: float) -> void:
-	var w: float = size.x * s
-	var h: float = size.y * s
-	var count: int = mini(3, int(game.chest_count))
-	var landscape: bool = w >= 600.0 and h < 300.0
-	var compact: bool = h < 320.0
-	var margin: float = edge * s
-	var result_w: float = minf(w - margin * 2.0, 460.0)
-	var result_x: float = (w - result_w) * 0.5
-	var title_h: float = 32.0 if compact else 40.0
-	var caption_h: float = 28.0 if compact else 36.0
-	var gap: float = 4.0 if compact else 8.0
-	var hero: float = minf(180.0 if w >= 600.0 else 140.0, result_w / maxf(1.0, float(count)))
-	hero = minf(hero, maxf(0.0, h - 52.0 - title_h - caption_h - 48.0 - gap * 2.0 - 8.0)) if count > 0 else 0.0
-	var total_h: float = title_h + caption_h + hero + gap * 2.0 + 48.0
-	var top: float = maxf(52.0, (h - total_h) * 0.5)
-	var hero_x: float = (w - hero * count) * 0.5
-	var hero_y: float = top + title_h + caption_h + gap
-	var action_y: float = hero_y + hero + gap
-	if landscape:
-		result_w = minf(w * 0.54 - margin, 440.0)
-		result_x = w * 0.46
-		top = maxf(margin, (h - title_h - caption_h - 48.0 - 12.0) * 0.5)
-		hero = minf(180.0, minf(h - 60.0, (w * 0.44 - margin * 2.0) / maxf(1.0, float(count))))
-		hero_x = (w * 0.44 - hero * count) * 0.5
-		hero_y = 48.0 + (h - 48.0 - hero) * 0.5
-		action_y = top + title_h + caption_h + 12.0
-	_result_title.position = Vector2(result_x, top) / s
-	_result_title.size = Vector2(result_w, title_h) / s
-	_result_title.add_theme_font_size_override("font_size", ceili((24.0 if w < 350.0 else 28.0) / s))
-	_result_caption.position = Vector2(result_x, top + title_h) / s
-	_result_caption.size = Vector2(result_w, caption_h) / s
-	_result_caption.add_theme_font_size_override("font_size", ceili((14.0 if compact else 16.0) / s))
-	for index in range(_result_chests.size()):
-		var image: TextureRect = _result_chests[index]
-		image.visible = _result_visible and index < count
-		image.size = Vector2.ONE * hero / s
-		image.position = Vector2(hero_x + hero * index, hero_y) / s
-	var has_treasure: bool = maxi(game.chest_count, _pending_chests) > 0
-	var action_w: float = (result_w - 10.0) * 0.5 if has_treasure else result_w
-	chests_button.position = Vector2(result_x, action_y) / s
-	chests_button.size = Vector2(action_w, 48.0) / s
-	replay_button.position = Vector2(result_x + action_w + 10.0 if has_treasure else result_x, action_y) / s
-	replay_button.size = Vector2(action_w, 48.0) / s
-
-func _animate_result() -> void:
-	for index in range(_result_chests.size()):
-		var image: TextureRect = _result_chests[index]
-		var p: float = clampf((_result_elapsed - index * 0.1) / 0.55, 0.0, 1.0)
-		image.pivot_offset = image.size * Vector2(0.5, 0.85)
-		image.scale = Vector2.ONE if reduced_motion else Vector2.ONE * (1.0 + sin(p * PI * 2.0) * (1.0 - p) * 0.14)
-		image.modulate.a = 1.0 if reduced_motion else smoothstep(0.0, 0.2, p)
 
 func danger_feedback() -> Dictionary:
 	var active: bool = _can_play() and float(game.full_elapsed) >= 0.0
@@ -1578,7 +1405,7 @@ func _refresh_danger() -> void:
 		float(game.full_elapsed), JellyMatchModel.FULL_SECONDS, reduced_motion)
 
 func _draw() -> void:
-	if not _configured or _result_visible:
+	if not _configured:
 		return
 	var well := Style.box(Color("#fbfff9", 0.90), Color("#78a995", 0.64), 18, 2)
 	well.shadow_color = Color("#2a6954", 0.13)
@@ -1622,7 +1449,7 @@ func snapshot() -> Dictionary:
 			"rect": _rect(visual.merged.get_global_rect()) if visual.merged.visible else []})
 	var first_effect: Dictionary = result.fusion_effects[0] if not result.fusion_effects.is_empty() else {}
 	result["fusion_effect"] = {"visible": first_effect.get("visible", false), "stage": first_effect.get("stage", "none")}
-	result["preview"] = {"visible": is_visible_in_tree() and _configured and not _result_visible,
+	result["preview"] = {"visible": is_visible_in_tree() and _configured,
 		"enabled": _can_play() and game.can_drop_now() and _pointer == NO_POINTER,
 		"control": _control(drop_button), "rect": _rect(_global_rect(_preview_rect)), "slots": []}
 	for index in range(_preview_tiles.size()):
@@ -1643,8 +1470,8 @@ func snapshot() -> Dictionary:
 	result["loot"]["tap"] = _chest_tap.snapshot()
 	result["loot"]["tap"].merge(_control(_chest_tap))
 	result["reward_presentation"] = _reward_presentation.snapshot()
-	result["result"] = {"visible": _result_visible, "title": _result_title.text, "caption": _result_caption.text,
-		"open": _control(chests_button), "replay": _control(replay_button)}
+	# Preserve the published key while settlement belongs to the host modal.
+	result["result"] = {"visible": false, "retired": true}
 	result["finish"] = _control(finish_button)
 	result["finish"]["pull"] = finish_button.snapshot()
 	result["finish"]["focused"] = finish_button.has_focus()
