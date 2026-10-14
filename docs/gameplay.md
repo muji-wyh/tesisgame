@@ -193,7 +193,7 @@ do not advance a price. A fresh round resets prices. See the
 
 A completed merge queues the word's recorded pronunciation once. An accepted
 word tap also presents its picture and spelling above the board and pronounces
-it once. Collect gathers ready words at 100 ms intervals without pronunciation.
+it once. Collect gathers ready words at 120 ms intervals without pronunciation.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist
 and fade independently instead of replacing one another. They do not intercept

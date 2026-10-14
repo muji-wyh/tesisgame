@@ -165,7 +165,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /settlement dialog over the frozen board, even when no chest was earned/);
   assert.match(help, /ca onto t makes cat, but t onto ca cannot merge/);
   assert.match(help, /merge is allowed only when the combined spelling is a complete word/);
-  assert.match(help, /Collect gathers all ready words one at a time at 100 ms intervals, without word pronunciation/);
+  assert.match(help, /Collect gathers all ready words one at a time at 120 ms intervals, without word pronunciation/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);

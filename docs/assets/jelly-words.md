@@ -124,7 +124,7 @@ audio above; it adds no downloaded assets.
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with one pickup every 100 ms. Each batch collection finishes within that
+rows, with one pickup every 120 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and

@@ -765,7 +765,7 @@ func _process(delta: float) -> void:
 			_powerup_frame_generation = _generation
 		_word_reveal.advance(delta)
 		if game.collection_batch_active():
-			# New cards keep their actual 100 ms offsets even when a frame spans several beats.
+			# New cards keep their actual 120 ms offsets even when a frame spans several beats.
 			_reveal_frame_end = float(game.collection_batch_snapshot().elapsed) + delta
 			_reveal_frame_batch = game._collection_batch_serial
 			_reveal_frame_generation = _generation

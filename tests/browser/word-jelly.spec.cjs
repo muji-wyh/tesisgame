@@ -1290,7 +1290,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
         effects: state.fusion_effects, revealed: state.word_reveal, cleared: state.cleared_pairs,
         collectedCoins: state.collected_coins, fragments: state.fragment_count, at: performance.now() });
       const reveal = state.word_reveal;
-      // A 100 ms status publication can skip a whole 100 ms pickup. Capture
+      // Status publications can miss a short pickup during slower frames. Capture
       // playback and the overlapping reading burst, without requiring every transient.
       const index = batch.active && batch.started && state.fusion_effects?.length ? 'active' :
         !batch.active && batch.completed === batch.total && reveal?.entries?.length === batch.total &&
@@ -1370,7 +1370,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   }
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
-  expect(final.collection_batch.elapsed, 'Three 100 ms collections finish in 300 ms of game time').toBeCloseTo(0.3, 6);
+  expect(final.collection_batch.elapsed, 'Three 120 ms collections finish in 360 ms of game time').toBeCloseTo(0.36, 6);
   const readable = timeline.find(frame => !frame.active && frame.revealed?.entries?.length === 3 &&
     frame.revealed.entries.every(entry => entry.content_alpha > 0.9));
   const lastWord = selectedById.get(final.collection_batch.ids.at(-1)).word;

@@ -472,7 +472,7 @@ func _check_collect_application_route(app) -> void:
 	check(not app.audio.voice.playing, "Starting Collect cancels pending pronunciation before the first pickup")
 	check(game.collection_batch_active() and game.collection_batch_snapshot().total == 12,
 		"The real Collect button queues twelve valid merged jellies")
-	for frame in range(130):
+	for frame in range(150):
 		observed.time += 0.01
 		view._process(0.01)
 		app._coin_flight.advance(0.01)
@@ -480,7 +480,7 @@ func _check_collect_application_route(app) -> void:
 		and not game.collection_batch_active(),
 		"Twelve rapid word pickups produce only the one successful rare coin appearance")
 	check(observed.streams.size() == 1 and observed.streams[0] == Audio.COIN_RELEASE_PATH
-		and is_equal_approx(float(observed.releases[0]), 0.10),
+		and is_equal_approx(float(observed.releases[0]), 0.12),
 		"The rare drop uses the appearance recording on its collection beat")
 	check(observed.receipts[0].coins == 50
 		and observed.receipts.slice(1).all(func(receipt: Dictionary) -> bool: return receipt.coins == 0),

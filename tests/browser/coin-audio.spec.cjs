@@ -218,7 +218,7 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
         if (batch) {
           if (available) expectNoPronunciation(sounds, tiles.map(tile => tile.word));
           expect(after.collection_batch.completed).toBe(tiles.length);
-          expect(after.collection_batch.elapsed).toBeCloseTo(tiles.length * 0.1, 6);
+          expect(after.collection_batch.elapsed).toBeCloseTo(tiles.length * 0.12, 6);
         }
         expect((await wallet(page)).balance, 'Presentation frames cannot repeat a lucky reward').toBe(startingWallet.balance + earned);
       };
