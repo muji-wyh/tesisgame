@@ -252,7 +252,7 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 	var safe: Rect2 = view._flight_bounds()
 	check(not safe.get_center().is_equal_approx(view.size * 0.5),
 		"The flight fixture distinguishes the screen center from a bounded game area's center")
-	for previous: int in [0, 1, 4, 5]:
+	for previous: int in range(6):
 		_begin(view, previous, previous + 1)
 		var departure: Dictionary = _pose_at(view, 0.0)
 		var upper: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
@@ -260,6 +260,7 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 		var turned: Dictionary = _pose_at(view, Flight.TURN_END)
 		var returning: Dictionary = _pose_at(view, lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 0.5))
 		var arrived: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
+		_check_reversible_growth(view, "Tier %d at %s" % [previous + 1, root.size])
 		check(Vector2(departure.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(departure.scale), 1.0),
 			"Tier %d departs from its exact chest anchor at the resting size" % (previous + 1))
 		check(absf(float(upper.center.x) - safe.get_center().x) < 0.1 and float(upper.center.y) < safe.position.y + safe.size.y * 0.4,
@@ -280,10 +281,10 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 			check(progress > last_progress and progress < 1.0 and outbound.phase == "depart",
 				"Tier %d at %s advances toward its sole upper destination without an intermediate stop" % [previous + 1, root.size])
 			if previous == 0:
-				check(deviation < 0.1 and is_equal_approx(float(outbound.scale), 1.0)
+				check(deviation < 0.1
 					and is_zero_approx(float(outbound.yaw)) and is_zero_approx(float(outbound.roll))
 					and is_zero_approx(float(outbound.pitch)),
-					"First-chest synthesis retains its straight travel at the resting size and orientation")
+					"First-chest synthesis keeps its straight route and level orientation while growing")
 			max_deviation = maxf(max_deviation, deviation)
 			max_travel_scale = maxf(max_travel_scale, float(outbound.scale))
 			max_yaw = maxf(max_yaw, absf(float(outbound.yaw)))
@@ -300,11 +301,11 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 					"The acquired three-dimensional chest is visible during the upgrade flight")
 		check(is_zero_approx(float(upper.yaw)) and is_zero_approx(float(upper.pitch))
 			and is_zero_approx(float(upper.roll))
-			and (float(upper.scale) > 1.1 if previous > 0 else float(upper.scale) <= 1.05),
-			"The chest levels at the upper destination before its full celebration turn")
+			and float(upper.scale) > 1.3,
+			"The chest reaches its full enlarged size and levels at the upper destination before turning")
 		check(Vector2(peak.center).distance_to(upper.center) < 0.1 and float(peak.scale) > 1.3
 			and float(peak.yaw) > 0.1 and float(peak.yaw) < TAU,
-			"The reveal enlarges and rotates the chest at its upper-screen destination")
+			"The reveal rotates the already enlarged chest at its upper-screen destination")
 		check(is_equal_approx(float(turned.yaw), TAU) and Vector2(turned.center).distance_to(upper.center) < 0.1,
 			"The chest completes a full closed turn before beginning its return")
 		check(Vector2(returning.center).distance_to(anchor.get_center()) < Vector2(upper.center).distance_to(anchor.get_center())
@@ -314,8 +315,9 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 			var return_offset: Vector2 = Vector2(returning.center) - anchor.get_center()
 			var outbound_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
 			check(absf(return_offset.cross(route)) / route.length() > 6.0
-				and Vector2(returning.center).distance_to(outbound_midway.center) > 6.0,
-				"The upgrade returns on its own visible arc instead of reversing the outbound line")
+				and Vector2(returning.center).distance_to(outbound_midway.center) < 0.01
+				and absf(float(returning.scale) - float(outbound_midway.scale)) < 0.0001,
+				"The upgrade retraces the same visible arc with the matching outbound size")
 		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
 			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)) and is_zero_approx(float(arrived.pitch))
 			and is_zero_approx(float(arrived.depth)), "The chest lands exactly at its original anchor without residual bank or depth")
@@ -328,6 +330,43 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 				and absf(float(before.pitch) - float(after.pitch)) < 0.01 and absf(float(before.depth) - float(after.depth)) < 0.01
 				and absf(float(before.model_weight) - float(after.model_weight)) < 0.01,
 				"Tier %d stays continuous across the %.2f-second flight boundary" % [previous + 1, boundary])
+
+
+func _check_reversible_growth(view, label: String, steps: int = 24) -> void:
+	var top: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
+	var raw_top: Dictionary = view._motion(Flight.TOP_SECONDS)
+	var previous_raw_scale: float = 1.0
+	var previous_fitted_scale: float = 1.0
+	for step in range(1, steps + 1):
+		var fraction: float = float(step) / float(steps)
+		var outbound_age: float = Flight.TOP_SECONDS * fraction
+		var return_age: float = lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 1.0 - fraction)
+		var outbound: Dictionary = _pose_at(view, outbound_age)
+		var raw_outbound: Dictionary = view._motion(outbound_age)
+		var returning: Dictionary = _pose_at(view, return_age)
+		var raw_returning: Dictionary = view._motion(return_age)
+		var expected_scale: float = lerpf(1.0, float(raw_top.scale), smoothstep(0.0, 1.0, fraction))
+		check(float(raw_outbound.scale) > previous_raw_scale
+			and absf(float(raw_outbound.scale) - expected_scale) < 0.0001,
+			"%s grows continuously throughout outbound sample %d, reaching its peak on arrival" % [label, step])
+		check(float(outbound.scale) > previous_fitted_scale
+			and float(outbound.scale) <= float(top.scale) + 0.0001,
+			"%s preserves strictly increasing visible size after viewport fitting at sample %d" % [label, step])
+		check(Vector2(raw_outbound.center).distance_to(raw_returning.center) < 0.01
+			and absf(float(raw_outbound.scale) - float(raw_returning.scale)) < 0.0001,
+			"%s samples the same route and size in reverse at sample %d" % [label, step])
+		check(Vector2(outbound.center).distance_to(returning.center) < 0.01
+			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001,
+			"%s retains the same outbound and return route after viewport fitting at sample %d" % [label, step])
+		previous_raw_scale = float(raw_outbound.scale)
+		previous_fitted_scale = float(outbound.scale)
+	for step in range(13):
+		var age: float = lerpf(Flight.TOP_SECONDS, Flight.RETURN_START, float(step) / 12.0)
+		var pose: Dictionary = _pose_at(view, age)
+		var raw: Dictionary = view._motion(age)
+		check(is_equal_approx(float(raw.scale), float(raw_top.scale))
+			and is_equal_approx(float(pose.scale), float(top.scale)),
+			"%s holds its arrival size through the top performance without a second growth phase" % label)
 
 
 func _check_upgrade_containment(view) -> void:
@@ -369,6 +408,13 @@ func _check_upgrade_containment(view) -> void:
 							and is_equal_approx(float(placement.scale), 1.0)
 		check(contained, "Chest transition %d keeps every turned model corner and static fallback inside the viewport" % previous)
 		check(recovered, "Chest transition %d starts and settles at the original HUD position and size" % previous)
+		for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(320, 220), Vector2(844, 235)]:
+			root.size = Vector2i(dimensions)
+			view.position = Vector2(12, 40)
+			view.size = dimensions
+			for screen_anchor: Rect2 in [Rect2(6, 4, 43, 43), Rect2(6, dimensions.y - 36, 38, 32), Rect2(dimensions.x - 49, 4, 43, 43)]:
+				view.set_chest_anchor(Rect2(screen_anchor.position - view.position, screen_anchor.size))
+				_check_reversible_growth(view, "Fitted tier %d at %s from %s" % [previous + 1, dimensions, screen_anchor.position], 12)
 	root.size = Vector2i(1000, 720)
 
 

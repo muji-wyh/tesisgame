@@ -28,6 +28,7 @@ var _paused: bool = false
 var _anchor := Rect2()
 var _models: RewardModel
 var _model_sample: Dictionary = {}
+var _model_bounds := Rect2()
 var _flight_layer := CanvasLayer.new()
 var _flight_surface := Node2D.new()
 
@@ -82,6 +83,7 @@ func clear() -> void:
 	_revealed = false
 	_paused = false
 	_model_sample.clear()
+	_model_bounds = Rect2()
 	_models.clear()
 	hide()
 	_sync_flight_layer()
@@ -128,13 +130,25 @@ func _sync() -> void:
 	visible = is_active() and _started and not _paused
 	_update_model_visibility()
 	_model_sample.clear()
+	_model_bounds = Rect2()
 	if visible and not reduced_motion:
 		var event: Dictionary = _events[0]
 		var age: float = _elapsed - ARRIVAL_SECONDS
 		var tier: int = int(event.tier) if _revealed or int(event.previous_tier) == 0 else int(event.previous_tier)
 		if tier > 0 and int(event.tier) <= 4:
 			var pose: Dictionary = _motion(age)
-			_model_sample = _models.sample(tier, pose.yaw, pose.pitch)
+			# Both shapes share the same fitting envelope before and after the swap.
+			# This keeps an edge-clamped flight reversible when their silhouettes differ.
+			for model_tier: int in [int(event.previous_tier), int(event.tier)]:
+				var model_pose: Dictionary = _models.sample(model_tier, pose.yaw, pose.pitch)
+				if model_pose.is_empty():
+					continue
+				if model_tier == tier:
+					_model_sample = model_pose
+				var framing: Rect2 = model_pose.bounds
+				var turned: Rect2 = model_pose.turn_bounds
+				var unit: float = 1.0 / maxf(framing.size.x, framing.size.y)
+				_model_bounds = _model_bounds.merge(Rect2((turned.position - framing.get_center()) * unit, turned.size * unit))
 	_sync_flight_layer()
 
 
@@ -185,11 +199,8 @@ func _motion(age: float) -> Dictionary:
 
 func _placement(pose: Dictionary, edge: float, _center: Vector2) -> Dictionary:
 	var local := Rect2(Vector2.ONE * -edge * 0.5, Vector2.ONE * edge)
-	if not _model_sample.is_empty():
-		var framing: Rect2 = _model_sample.bounds
-		var turned: Rect2 = _model_sample.turn_bounds
-		var unit: float = edge / maxf(framing.size.x, framing.size.y)
-		local = local.merge(Rect2((turned.position - framing.get_center()) * unit, turned.size * unit))
+	if _model_bounds.has_area():
+		local = local.merge(Rect2(_model_bounds.position * edge, _model_bounds.size * edge))
 	return Flight.fit(pose, local, _flight_bounds())
 
 

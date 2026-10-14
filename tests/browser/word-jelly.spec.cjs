@@ -1795,12 +1795,17 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       (point[1] - anchorCenter[1]) * route[0]) / outboundDistance;
     let previousUpperDistance = Infinity;
     let previousProgress = -Infinity;
+    let previousDepartureScale = 1;
     for (const frame of departure) {
       const currentDistance = distance(frame.motion.center, upperCenter);
       const progress = routeProgress(frame.motion.center);
       expect(progress, `${kind} keeps making forward progress toward its sole upper destination`)
         .toBeGreaterThanOrEqual(previousProgress - 0.001);
       expect(progress, `${kind} has not overshot its upper destination`).toBeLessThanOrEqual(1.001);
+      expect(frame.motion.scale, `${kind} grows continuously while flying toward the showcase`)
+        .toBeGreaterThanOrEqual(previousDepartureScale - 0.0001);
+      expect(frame.motion.scale, `${kind} reserves its largest size for arrival`)
+        .toBeLessThanOrEqual(upper[0].motion.scale + 0.001);
       if (kind === 'synthesis') {
         expect(distance(frame.motion.center, anchorCenter) + currentDistance,
           'First-chest synthesis retains its straight route to the upper destination').toBeLessThanOrEqual(outboundDistance + 1);
@@ -1813,6 +1818,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       }
       previousProgress = progress;
       previousUpperDistance = currentDistance;
+      previousDepartureScale = frame.motion.scale;
     }
     expect(previousUpperDistance, `${kind} makes visible progress toward its upper destination`)
       .toBeLessThan(distance(departure[0].motion.center, upperCenter) - 1);
@@ -1831,21 +1837,34 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
         Math.abs(frame.motion.yaw) > 0.025 && Math.abs(frame.motion.roll) > 0.025),
       'The upgrade shows its real pitched and yawed model while banking through the curve').toBe(true);
     } else {
-      expect(departure.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01 &&
+      expect(departure.every(frame => Math.abs(frame.motion.yaw) < 0.01 &&
         Math.abs(frame.motion.pitch) < 0.01),
-      'First-chest synthesis retains its resting size and orientation during travel').toBe(true);
+      'First-chest synthesis grows without starting its turn during travel').toBe(true);
     }
-    expect(Math.max(...upper.map(frame => frame.motion.scale)), `${kind} clearly enlarges at its destination`).toBeGreaterThan(1.3);
+    const peakScale = Math.max(...upper.map(frame => frame.motion.scale));
+    expect(upper[0].motion.scale, `${kind} reaches full size on arrival`).toBeGreaterThan(1.3);
+    expect(peakScale - upper[0].motion.scale, `${kind} has no second enlargement after arriving`).toBeLessThan(0.001);
+    expect(previousDepartureScale - 1, `${kind} completes most growth during its actual flight`)
+      .toBeGreaterThan((peakScale - 1) * 0.85);
     expect(upper.some(frame => frame.motion.yaw > 0.1 && frame.motion.yaw < 6.1), `${kind} visibly turns while enlarged upstairs`).toBe(true);
     expect(Math.max(...visible.map(frame => frame.motion.yaw)), `${kind} completes its full closed-chest turn by the return journey`).toBeGreaterThan(6.2);
     const returning = visible.filter(frame => frame.motion.phase === 'return');
     expect(returning.length, `${kind} has a visible return journey`).toBeGreaterThan(2);
     let previousDistance = Infinity;
     let previousScale = Infinity;
+    const outboundPoses = [{ center: anchorCenter, scale: 1 }, ...departure.map(frame => frame.motion), upper[0].motion];
     for (const frame of returning) {
       const currentDistance = distance(frame.motion.center, anchorCenter);
       expect(currentDistance, `${kind} returns continuously toward its original anchor`).toBeLessThanOrEqual(previousDistance + 0.1);
       expect(frame.motion.scale, `${kind} shrinks continuously on its return journey`).toBeLessThanOrEqual(previousScale);
+      const next = outboundPoses.findIndex(pose => pose.scale >= frame.motion.scale);
+      expect(next, `${kind} returns through the outbound size range`).toBeGreaterThanOrEqual(0);
+      const a = outboundPoses[Math.max(0, next - 1)], b = outboundPoses[next];
+      const blend = b.scale > a.scale ? (frame.motion.scale - a.scale) / (b.scale - a.scale) : 0;
+      const outboundCenter = a.center.map((value, axis) => value + (b.center[axis] - value) * blend);
+      // Browser status samples are sparse; the native suite checks exact mirrored poses.
+      expect(distance(frame.motion.center, outboundCenter), `${kind} retraces its outbound curve at the same size`)
+        .toBeLessThan(Math.max(3, outboundDistance * 0.025));
       previousDistance = currentDistance;
       previousScale = frame.motion.scale;
     }
@@ -1857,7 +1876,6 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
     }
     expect(previousDistance, `${kind} visibly covers most of the return distance before the HUD icon takes over`)
       .toBeLessThan(Math.max(tolerance, distance(upper.at(-1).motion.center, anchorCenter) * 0.35));
-    const peakScale = Math.max(...upper.map(frame => frame.motion.scale));
     expect(previousScale - 1, `${kind} visibly recovers most of its original size before the HUD icon takes over`)
       .toBeLessThan((peakScale - 1) * 0.35);
     const firstReveal = visible.find(frame => frame.revealed);

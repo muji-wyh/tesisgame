@@ -24,8 +24,8 @@ establish visible beats; they do not constitute a normal-speed audio review.
 
 The adaptation preserves the existing 0.65-second pickup flight and progress
 fill. The whole closed chest travels from its HUD anchor to the upper-center
-area, enlarges and rotates, and flies back to the same anchor. Upgrades follow
-a bowed outward path and a separate, shallower return arc. A gradual perspective
+area, growing throughout its flight, rotates at full size, and retraces the same
+path back to its anchor. Upgrades follow one bowed curve in both directions. A gradual perspective
 enlargement, side turn, forward pitch and gentle bank give travel a sense of depth;
 the acquired 3D model stays visible throughout the journey. The paths respond to
 the HUD position and viewport, without an intermediate stop at screen center.
@@ -39,17 +39,21 @@ model alone owns fragment credit and tier changes.
 
 After pickup, the 2.65-second performance reaches the upper destination at
 0.84 seconds in one smooth flight, without a waypoint at the viewport center.
-Upgrades approach at up to 1.32 times their HUD size; the main enlargement follows arrival. The
+Position and scale share the same eased progress: the chest reaches its maximum
+size exactly on arrival, with no second enlargement at the destination. The
 full turn runs from 0.90 to 1.82 seconds. Material change, local flash, reward
 sound and confetti share the 1.36-second midpoint. This places the Jelly Words
 milestone peak after its 1.95-second word-picture reading beat. The return runs
-from 1.98 to 2.65 seconds, recovering the original position and size without
+from 1.98 to 2.65 seconds, reversing the same curve, scale and travel pose to recover
+the original position and size without
 fading the chest away. First-chest and pair rewards target a 176px silhouette;
 upgrades target 216px, fitted to the available viewport on small screens.
 
 The flight draws on a noninteractive viewport layer, outside gameplay clipping.
 Its source coordinates and actual turned silhouette remain tied to the current
-HUD layout. Hiding the owner, entering Home or the word library, pausing, or
+HUD layout. Both upgrade models share one fitted envelope, so the tier change
+cannot push the return onto a different path at the screen edge.
+Hiding the owner, entering Home or the word library, pausing, or
 clearing the round hides this layer and stops the active model renderers.
 Reduced motion keeps a static chest at its HUD anchor and the same reward gate.
 

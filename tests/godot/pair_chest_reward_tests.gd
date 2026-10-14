@@ -120,6 +120,7 @@ func check_turn(view, data) -> void:
 		var before: float = maxf(view.chest.closed_art_rect().size.x, view.chest.closed_art_rect().size.y)
 		var rest: Dictionary = view.snapshot().motion
 		var resting_chest: Rect2 = view.snapshot().chest_rect
+		check_growth_and_reverse(view, "Modeled pair chest at %s" % dimensions)
 		var departures: Array[Dictionary] = []
 		for step in range(1, 12):
 			view.advance(Flight.TOP_SECONDS * float(step) / 12.0 - float(view.snapshot().elapsed))
@@ -129,8 +130,8 @@ func check_turn(view, data) -> void:
 		var upper: Vector2 = pose.center
 		var screen_upper: Vector2 = view.get_global_transform_with_canvas() * upper
 		check(absf(screen_upper.x - float(dimensions.x) * 0.5) < 0.1 and screen_upper.y < float(dimensions.y) * 0.36
-			and is_equal_approx(float(pose.scale), 1.0) and is_zero_approx(float(pose.yaw)),
-			"%s reaches the upper center before the reward performance" % dimensions)
+			and float(pose.edge) * float(pose.scale) >= before * 3.0 and is_zero_approx(float(pose.yaw)),
+			"%s reaches the upper center already at its full enlarged size before the reward turn" % dimensions)
 		var route: Vector2 = upper - Vector2(rest.center)
 		var last_progress: float = 0.0
 		for departure: Dictionary in departures:
@@ -138,15 +139,15 @@ func check_turn(view, data) -> void:
 			var progress: float = offset.dot(route) / route.length_squared()
 			check(absf(offset.cross(route)) / route.length() < 0.1 and progress > last_progress and progress < 1.0,
 				"%s flies directly from the HUD to the upper center without visiting the screen center" % dimensions)
-			check(departure.phase == "depart" and is_equal_approx(float(departure.scale), 1.0)
+			check(departure.phase == "depart" and float(departure.scale) > 1.0
 				and is_zero_approx(float(departure.yaw)) and is_zero_approx(float(departure.roll)),
-				"The pair reward uses one travel phase before growing or turning")
+				"The pair reward grows during its direct flight and saves its turn for arrival")
 			last_progress = progress
 		view.advance(Flight.REVEAL_SECONDS - float(view.snapshot().elapsed))
 		pose = view.snapshot().motion
 		check(view.snapshot().live_turn and float(pose.edge) * float(pose.scale) >= before * 3.0
 			and Vector2(pose.center).is_equal_approx(upper) and is_equal_approx(float(pose.yaw), PI),
-			"%s enlarges the actual acquired chest silhouette, rather than only its empty layout box" % dimensions)
+			"%s turns the already enlarged acquired chest silhouette at its upper destination" % dimensions)
 		check(view._title.modulate.a < 0.01 and view._surface_layer.modulate.a < 0.01,
 			"The enlarged chest takes visual priority over the compact status pill")
 		var model = view._models._pool[1]
@@ -197,6 +198,65 @@ func check_turn(view, data) -> void:
 		"Clearing the round releases the reusable turned model and viewport overlay")
 
 
+func pair_pose_at(view, age: float) -> Dictionary:
+	view._elapsed = age
+	view._layout()
+	return view.snapshot().motion
+
+
+func pair_pose_contained(view, pose: Dictionary) -> bool:
+	var safe: Rect2 = view.get_viewport_rect().grow(0.01)
+	var local := Rect2(-view._art_rect.size * 0.5, view._art_rect.size)
+	var transform: Transform2D = view.get_global_transform_with_canvas() * Transform2D(
+		float(pose.roll), Vector2.ONE * float(pose.scale), 0.0, pose.center)
+	for point: Vector2 in [local.position, Vector2(local.end.x, local.position.y), local.end,
+		Vector2(local.position.x, local.end.y)]:
+		if not safe.has_point(transform * point):
+			return false
+	if not view._model_sample.is_empty():
+		var model = view._models._pool[view._model_tier]
+		var bounds: Rect2 = model.closed_bounds()
+		var unit: float = float(pose.edge) / maxf(bounds.size.x, bounds.size.y)
+		for corner in range(8):
+			var projected: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
+			if not safe.has_point(transform * ((projected - bounds.get_center()) * unit)):
+				return false
+	return true
+
+
+func check_growth_and_reverse(view, label: String) -> void:
+	# Sample visual placement independently, then restore the owner clock so
+	# the real advance calls still exercise every authored cue and lifecycle.
+	var original_age: float = view._elapsed
+	var cue_count: int = cues.size()
+	var reveal_count: int = reveals.size()
+	var top: Dictionary = pair_pose_at(view, Flight.TOP_SECONDS)
+	var last_scale: float = 1.0
+	for step in range(1, 25):
+		var fraction: float = float(step) / 24.0
+		var outbound: Dictionary = pair_pose_at(view, Flight.TOP_SECONDS * fraction)
+		var contained: bool = pair_pose_contained(view, outbound)
+		var returning: Dictionary = pair_pose_at(view,
+			lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 1.0 - fraction))
+		contained = contained and pair_pose_contained(view, returning)
+		check(float(outbound.scale) > last_scale
+			and absf(float(outbound.scale) - lerpf(1.0, float(top.scale), smoothstep(0.0, 1.0, fraction))) < 0.0001,
+			"%s grows on every outbound sample %d and reaches its full size on arrival" % [label, step])
+		check(Vector2(outbound.center).distance_to(returning.center) < 0.01
+			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001,
+			"%s reverses its exact fitted route and size at sample %d" % [label, step])
+		check(contained, "%s keeps both travel samples %d inside the viewport" % [label, step])
+		last_scale = float(outbound.scale)
+	for step in range(13):
+		var pose: Dictionary = pair_pose_at(view,
+			lerpf(Flight.TOP_SECONDS, Flight.RETURN_START, float(step) / 12.0))
+		check(is_equal_approx(float(pose.scale), float(top.scale)),
+			label + " holds its arrival size through the top turn without growing again")
+	pair_pose_at(view, original_age)
+	check(cues.size() == cue_count and reveals.size() == reveal_count,
+		label + " visual sampling leaves the actual sound and confetti gates untouched")
+
+
 func check_overlay_lifecycle(view, data) -> void:
 	var parent := Control.new()
 	root.add_child(parent)
@@ -229,27 +289,24 @@ func check_overlay_lifecycle(view, data) -> void:
 
 
 func check_sprite_flight(view, data) -> void:
-	root.size = Vector2i(390, 844)
-	view.position = Vector2(8, 80)
-	view.size = Vector2(374, 46)
-	view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
-	view.configure("sprite-flight", "spring", data.chests, false)
-	view.show_pair_result("sprite-flight", true)
-	var contained: bool = true
-	var saw_rotation: bool = false
-	var safe := Rect2(Vector2.ZERO, Vector2(root.size))
-	for frame in range(160):
-		view.advance(1.0 / 60.0)
-		var pose: Dictionary = view.snapshot().motion
-		var local := Rect2(-view._art_rect.size * 0.5, view._art_rect.size)
-		var transform: Transform2D = view.get_global_transform_with_canvas() * Transform2D(
-			float(pose.roll), Vector2.ONE * float(pose.scale), 0.0, pose.center)
-		for point: Vector2 in [local.position, Vector2(local.end.x, local.position.y), local.end,
-			Vector2(local.position.x, local.end.y)]:
-			contained = contained and safe.has_point(transform * point)
-		if float(pose.roll) > PI * 0.5 and float(pose.roll) < PI * 1.5:
-			saw_rotation = true
-	check(contained and saw_rotation and not view.snapshot().live_turn,
-		"Source 2D chest art visibly rotates in its own plane while staying inside the portrait viewport")
-	check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation),
-		"A source sprite returns to its exact authored pose after its full flight")
+	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(390, 844), Vector2i(568, 320)]:
+		root.size = dimensions
+		view.position = Vector2(8, 80)
+		view.size = Vector2(dimensions.x - 16, 46)
+		view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
+		var round_id: String = "sprite-flight-%s" % dimensions
+		view.configure(round_id, "spring", data.chests, false)
+		view.show_pair_result(round_id, true)
+		check_growth_and_reverse(view, "Sprite pair chest at %s" % dimensions)
+		var contained: bool = true
+		var saw_rotation: bool = false
+		for frame in range(160):
+			view.advance(1.0 / 60.0)
+			var pose: Dictionary = view.snapshot().motion
+			contained = contained and pair_pose_contained(view, pose)
+			if float(pose.roll) > PI * 0.5 and float(pose.roll) < PI * 1.5:
+				saw_rotation = true
+		check(contained and saw_rotation and not view.snapshot().live_turn,
+			"Source 2D chest art visibly rotates in its own plane while staying inside the %s viewport" % dimensions)
+		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation),
+			"A source sprite returns to its exact authored pose after its full flight")
