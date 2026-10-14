@@ -40,8 +40,10 @@ func scan(app: Node, context: String) -> void:
 
 func named(controls: Array, context: String) -> void:
 	for control: Control in controls:
-		check(not str(control.get("accessibility_name")).is_empty(),
-			context + " keeps a nonvisual name for " + str(control.name))
+		var has_name: bool = not str(control.get("accessibility_name")).strip_edges().is_empty()
+		var has_button_text: bool = control is Button and not control.text.strip_edges().is_empty()
+		check(has_name or has_button_text,
+			context + " keeps an accessible label for " + str(control.name))
 
 
 func _catalog(app) -> void:
@@ -63,16 +65,22 @@ func _match(app) -> void:
 	named([app._mode_heading_button, app._growth_button, app.hint_button, app._voice_button, app.duck], "Game header")
 	scan(app, "Match board")
 	Fixture.reserve_pair_chest(app)
-	check(app.coin_wallet.credit("fixture:hover-match-hints", 12).ok, "Fund all three Match hint presentation states")
+	check(app.coin_wallet.credit("fixture:hover-match-hints", 17).ok, "Fund a paid hint for each of the five Match pairs")
+	var purchased_hints := 0
 	for word: Dictionary in app.model.lesson_words.duplicate(true):
-		if app.model.hints_remaining > 0:
-			app.hint_button.pressed.emit()
-			scan(app, "Active Match hint")
+		check(not app.hint_button.disabled and app.hint_button.count == -1,
+			"Every remaining pair supports a paid Hint with no use limit badge")
+		app.hint_button.pressed.emit()
+		purchased_hints += 1
+		check(app.model.hints_used == purchased_hints and app.model.hint_ids.size() == 2,
+			"Each accepted purchase highlights a pair, including after the former three-hint limit")
+		scan(app, "Active Match hint %d" % purchased_hints)
 		app.cards[str(word.id) + ":word"].pressed.emit()
 		app.cards[str(word.id) + ":image"].pressed.emit()
 		app._continue_match()
-	check(app.model.phase == "won" and app.model.hints_remaining == 0, "Real pairs exhaust hints and finish Match")
-	scan(app, "Completed Match and exhausted hints")
+	check(app.model.phase == "won" and app.model.hints_used == 5 and app.coin_wallet.balance == 0,
+		"Five paid hints finish Match and debit their prices without a round use limit")
+	scan(app, "Completed Match after five paid hints")
 	Fixture.finish_celebration(app)
 	await settle()
 	check(app.chest_button.is_visible_in_tree(), "The earned chest invitation reaches the chest page")

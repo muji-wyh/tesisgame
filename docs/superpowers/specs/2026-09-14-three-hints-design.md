@@ -2,6 +2,8 @@
 
 > Historical design record. See the [archive index](../README.md) before using this as guidance; its checklist is not the current backlog.
 
+> Superseded: Match Hint now uses coin payment without a per-round use limit. See [current gameplay](../../gameplay.md#match) and the [coin economy](../../coin-economy.md).
+
 ## Goal
 
 Increase Match mode from one hint to three successful hints per round without changing scoring, board rules, or the shared touch, keyboard, and Xbox input path.

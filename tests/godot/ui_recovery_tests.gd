@@ -300,8 +300,8 @@ func _run() -> void:
 		app._single_result.replay_button.pressed.emit()
 		check(_total(app) == before + 1, "Play again after %s preserves the opened chest's saved piece" % mode)
 		check(app.model.phase == "waiting" and app._mode_id == mode and app.model.lesson_words.size() == 5
-			and app.model.lesson_words != completed_lesson and app.model.hints_remaining == 3,
-			"Successful reward preservation starts a fresh five-word %s round with three hints" % mode)
+			and app.model.lesson_words != completed_lesson and app.model.hints_used == 0,
+			"Successful reward preservation starts a fresh five-word %s round with no hint purchases" % mode)
 		var fresh_lesson: Array = app.model.lesson_words.duplicate(true)
 		app._single_result.replay_button.pressed.emit()
 		check(app.model.lesson_words == fresh_lesson and _total(app) == before + 1,

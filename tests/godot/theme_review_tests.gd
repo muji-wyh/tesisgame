@@ -68,7 +68,7 @@ func _run() -> void:
 	var round_id: String = app._round_id
 	var cards: Array = app.model.cards.duplicate(true)
 	var selected: String = app.model.selected_id
-	var hints: int = app.model.hints_remaining
+	var hints: int = app.model.hints_used
 	var growth: Dictionary = app.growth.snapshot().duplicate(true)
 	app._show_mode_menu()
 	await settle()
@@ -95,7 +95,7 @@ func _run() -> void:
 			and app._mode_panel.snapshot().theme_id == app.model.theme_id and button.button_pressed,
 			"Home identifies and applies the selected theme immediately")
 		check(app._round_id == round_id and app.model.cards == cards and app.model.selected_id == selected
-			and app.model.hints_remaining == hints and app.growth.snapshot() == growth,
+			and app.model.hints_used == hints and app.growth.snapshot() == growth,
 			"A Home theme choice preserves the exact round, selection, hints and growth")
 	var save_path: String = app._presentation.path
 	app._presentation.path = directory + "/missing/presentation.cfg"
@@ -131,7 +131,7 @@ func _run() -> void:
 	app.choose_mode("match")
 	await settle()
 	check(app.model.theme_id == "space" and app._round_id == round_id and app.model.cards == cards
-		and app.model.selected_id == selected and app.model.hints_remaining == hints and app.growth.snapshot() == growth,
+		and app.model.selected_id == selected and app.model.hints_used == hints and app.growth.snapshot() == growth,
 		"Resuming Match applies the Home theme without replacing its partial round")
 	await _check_home_only_controls(app)
 	await _check_settlement_themes(app)
@@ -218,7 +218,7 @@ func _check_loading_theme(directory: String) -> void:
 		check(app.duck.theme_id == expected and app._active_palette.id == expected,
 			"Pip and the native scene use the loading theme on the first revealed frame")
 		check(app.model.cards == cards and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
-			and app.model.mistakes == 0 and app.model.hints_remaining == 3
+			and app.model.mistakes == 0 and app.model.hints_used == 0
 			and app.growth.snapshot().streaks == mastery and app.medal_progress.counts == counts,
 			"Loading theme handoff preserves the prepared lesson, mastery and reward progress")
 		check(app.audio.active and app.audio.music.playing

@@ -90,7 +90,7 @@ func check_link(app, image_id: String, word_id: String, columns: int, stage: Str
 
 func round_state(app) -> Array:
 	return [app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
-		app.model.hint_ids.duplicate(), app.model.hints_remaining, app.model.phase, app.model.selected_id,
+		app.model.hint_ids.duplicate(), app.model.hints_used, app.model.phase, app.model.selected_id,
 		app.model.matched_ids.duplicate(), (app.model.matched_ids.size() / 2), app.model.mistakes]
 
 
@@ -115,7 +115,7 @@ func check_theme_switches(app) -> void:
 	app._request_hint()
 	await settle()
 	var hinted: Array = app.model.hint_ids.duplicate()
-	check(hinted.size() == 2 and app.model.hints_remaining == 2 and app.coin_wallet.balance == balance - price
+	check(hinted.size() == 2 and app.model.hints_used == 1 and app.coin_wallet.balance == balance - price
 		and app.coin_wallet._receipts.get(app._round_id + ":match-hint:1", 0) == -price,
 		"Theme switching starts with one real hint and its quoted, durably saved debit")
 	if hinted.size() != 2:

@@ -83,8 +83,8 @@ func _run() -> void:
 	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != lesson,
 		"Play again leaves the opened chest for a fresh Match board")
-	check(app.model.lesson_words.size() == 5 and app.model.theme_id == world and app.model.hints_remaining == 3,
-		"The fresh lesson preserves the world and renews the normal hint allowance")
+	check(app.model.lesson_words.size() == 5 and app.model.theme_id == world and app.model.hints_used == 0,
+		"The fresh lesson preserves the world and clears hint purchase history")
 	var current: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
 		return card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty())[0].word.duplicate()
 	var current_card: Button = app.cards[current.id + ":word"]
@@ -123,7 +123,7 @@ func _run() -> void:
 	current_card.pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + current.audio),
 		"Retrying the visible bundled word restores its actual pronunciation")
-	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app.model.hints_remaining == 3
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app.model.hints_used == 0
 		and app.medal_progress.counts == earned_medals and app.coin_wallet.balance == earned_coins,
 		"Audio recovery neither scores nor spends or awards progress")
 	var stopped_playbacks: Array[WeakRef] = []

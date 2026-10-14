@@ -150,7 +150,7 @@ func _test_mastery_and_repeat(words: Array) -> void:
 
 func _round_snapshot(model) -> Dictionary:
 	var snapshot: Dictionary = {}
-	for property in ["cards", "lesson_words", "matched_ids", "feedback_ids", "hint_ids", "hints_remaining",
+	for property in ["cards", "lesson_words", "matched_ids", "feedback_ids", "hint_ids", "hints_used",
 		"selected_id", "mistakes", "phase", "theme_id", "adventure_id", "adventure_name",
 		"chest_state", "chest_earned", "reward_theme", "reward_id", "last_correct"]:
 		snapshot[property] = model.get(property)

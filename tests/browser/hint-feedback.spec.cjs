@@ -37,11 +37,15 @@ test('Hint saved payment rolls coins down with sound and survives its disabled s
   expect((await hint(page)).disabled).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('hint-paid.png') });
   await expect.poll(async () => (await wallet(page)).displayed).toBe(900);
+  const savedPurchase = await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'));
+  expect((await metrics(page)).growth.match.hint).toMatchObject({ uses: 1, price: 150, active: true });
   const frames = await page.evaluate(() => window.hintWalletFrames);
   expect(frames.some(frame => frame.debit_active && frame.debit_amount === 100)).toBe(true);
   expect(frames.some(frame => frame.displayed > 900 && frame.displayed < 1000)).toBe(true);
   await pressHint(page);
   expect((await wallet(page)).balance).toBe(900);
+  expect(await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'))).toBe(savedPurchase);
+  expect((await metrics(page)).growth.match.hint.uses).toBe(1);
   const timing = recordingTiming(clip);
   const count = await page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from)
     .filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate).length,
@@ -54,6 +58,7 @@ test('Hint saved payment rolls coins down with sound and survives its disabled s
 
 test('Hint insufficient funds shakes without spending or coin audio', async ({ page }, testInfo) => {
   const errors = await start(page, 50);
+  const savedWallet = await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'));
   const from = await page.evaluate(() => window.audioObservation.playbacks.length);
   await pressHint(page);
   await expectRecording(page, from, 'assets/imported-audio/pair-feedback/wrong.wav');
@@ -64,7 +69,8 @@ test('Hint insufficient funds shakes without spending or coin audio', async ({ p
     .filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate).length,
     { from, timing });
   expect(count).toBe(0);
-  expect((await metrics(page)).growth.match.hint.remaining).toBe(3);
+  expect((await metrics(page)).growth.match.hint).toMatchObject({ uses: 0, price: 100, active: false });
+  expect(await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'))).toBe(savedWallet);
   expect(errors).toEqual([]);
 });
 

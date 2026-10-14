@@ -339,13 +339,13 @@ func _check_match_audio_tail(app) -> void:
 			check(app.coin_wallet.credit("fixture:hint-audio-tail", price).ok, "Fund the sound-tail hint at its current quoted price")
 			var balance: int = app.coin_wallet.balance
 			app._request_hint()
-			check(app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2
+			check(app.model.hint_ids.size() == 2 and app.model.hints_used == 1
 				and app.coin_wallet.balance == balance - price
 				and app.coin_wallet._receipts.get(app._round_id + ":match-hint:1", 0) == -price,
 				"The sound-tail fixture accepts one hint and saves exactly its quoted debit")
 		check(not app.audio.pair_feedback.playing if correct else app.audio.pair_feedback.playing
 			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true])
-			and app.model.hints_remaining == 2,
+			and app.model.hints_used == 1,
 			"The next card stops the previous answer tail; a paid hint replaces it with its purchase success cue")
 	_start(app, "match")
 	for card in app.model.cards:

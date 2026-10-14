@@ -604,7 +604,7 @@ func _build_controls() -> void:
 	hint_button.name = "Hint"
 	hint_button.symbol = Icons.Symbol.HINT
 	hint_button.cost = _match_hint_price()
-	_set_accessibility_name(hint_button, "Hint: %d coins, three uses per round (Xbox X)" % _match_hint_price())
+	_set_accessibility_name(hint_button, "Hint: %d coins (Xbox X)" % _match_hint_price())
 	hint_button.pressed.connect(_request_hint)
 	_toolbar.add_child(hint_button)
 	_growth_button = GrowthBadge.new()
@@ -2945,7 +2945,7 @@ func _layout_collection() -> void:
 func _can_request_hint() -> bool:
 	if _rebuilding or _page_hidden or _mode_menu_open() or collection_page.visible or _round_id.is_empty():
 		return false
-	if _mode_id != "match" or model.hints_remaining <= 0 or not model.hint_ids.is_empty() or not model.error.is_empty():
+	if _mode_id != "match" or not model.hint_ids.is_empty() or not model.error.is_empty():
 		return false
 	if model.available_hint_pair().is_empty():
 		return false
@@ -2958,31 +2958,29 @@ func _refresh_hint() -> void:
 	hint_button.visible = _mode_id == "match" and model.phase in ["waiting", "matching", "feedback"]
 	hint_button.disabled = not _can_request_hint()
 	hint_button.focus_mode = Control.FOCUS_NONE if hint_button.disabled else Control.FOCUS_ALL
-	hint_button.count = model.hints_remaining
+	hint_button.count = -1
 	hint_button.cost = _match_hint_price()
 	hint_button.reduced_motion = reduced_motion
 	if not hint_button.is_visible_in_tree() or _page_hidden or _mode_menu_open() or collection_page.visible:
 		hint_button.reset_feedback()
 	var description: String
-	if model.hints_remaining <= 0:
-		description = "No hints left. Start a new round for three more."
-	elif model.phase == "won" or model.matched_ids.size() == model.cards.size():
+	if model.phase == "won" or model.matched_ids.size() == model.cards.size():
 		description = "Round finished. View your result."
 	elif _voice_mode and model.phase == "feedback":
 		description = "Finishing voice matches. Hints will be available afterward."
 	elif not model.hint_ids.is_empty():
 		description = "Hint active. Follow the electric link between the two matching cards."
 	else:
-		description = "Hint: %d coins. %d %s left (Xbox X)" % [_match_hint_price(), model.hints_remaining, "use" if model.hints_remaining == 1 else "uses"]
+		description = "Hint: %d coins (Xbox X)" % _match_hint_price()
 	_set_accessibility_name(hint_button, description)
 
 
 func _match_hint_price() -> int:
-	return Economy.match_hint_price(Model.MAX_HINTS - model.hints_remaining)
+	return Economy.match_hint_price(model.hints_used)
 
 
 func _purchase_match_hint(ordinal: int, price: int) -> Dictionary:
-	if not _can_request_hint() or ordinal != Model.MAX_HINTS - model.hints_remaining + 1 or price != _match_hint_price():
+	if not _can_request_hint() or ordinal != model.hints_used + 1 or price != _match_hint_price():
 		return {"ok": false, "error": "This hint cannot be used yet."}
 	if not coin_wallet.ready or not coin_wallet.error.is_empty():
 		coin_wallet.load_state()
@@ -3007,10 +3005,10 @@ func _request_hint() -> void:
 	_hint_purchasing = true
 	var round_id: String = _round_id
 	var round_model = model
-	var remaining: int = model.hints_remaining
-	var purchase: Dictionary = _purchase_match_hint(Model.MAX_HINTS - remaining + 1, _match_hint_price())
+	var uses: int = model.hints_used
+	var purchase: Dictionary = _purchase_match_hint(uses + 1, _match_hint_price())
 	# A saved receipt can recover this same ordinal if an overlay interrupted payment.
-	if round_id != _round_id or model != round_model or remaining != model.hints_remaining or not _can_request_hint():
+	if round_id != _round_id or model != round_model or uses != model.hints_used or not _can_request_hint():
 		_hint_purchasing = false
 		return
 	if not bool(purchase.get("ok", false)):
@@ -3022,7 +3020,7 @@ func _request_hint() -> void:
 		return
 	if model.phase == "feedback":
 		_continue_match()
-	if round_id != _round_id or model != round_model or remaining != model.hints_remaining or not _can_request_hint():
+	if round_id != _round_id or model != round_model or uses != model.hints_used or not _can_request_hint():
 		_hint_purchasing = false
 		return
 	if not model.request_hint() or round_id != _round_id or model != round_model \
@@ -4902,7 +4900,7 @@ func _publish_growth_view() -> void:
 	elif _mode_id == "match":
 		var price_area: Rect2 = hint_button.price_rect()
 		price_area.position += hint_button.global_position
-		state["match"] = {"hint": {"remaining": model.hints_remaining, "price": _match_hint_price(),
+		state["match"] = {"hint": {"uses": model.hints_used, "price": _match_hint_price(),
 			"price_text": str(hint_button.cost),
 			"price_rect": [price_area.position.x, price_area.position.y, price_area.size.x, price_area.size.y],
 			"active": not model.hint_ids.is_empty(), "round_id": _round_id}}

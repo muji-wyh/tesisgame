@@ -149,7 +149,7 @@ func _voice_requests(app) -> int:
 
 
 func _progress(app) -> Array:
-	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining,
+	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_used,
 		app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true), app.medal_progress.counts.duplicate(true),
 		app.growth.snapshot(), app.growth._streaks.duplicate(true)]
 

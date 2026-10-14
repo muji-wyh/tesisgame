@@ -257,8 +257,8 @@ func _test_parts_of_speech(model_script: GDScript) -> void:
 
 func _test_matching(model_script: GDScript, words: Array) -> void:
 	var model = _board(model_script, words)
-	check(model.request_hint() and model.hints_remaining == 2,
-		"The voice round can consume the first of three hints")
+	check(model.request_hint() and model.hints_used == 1,
+		"The voice round records its first accepted hint")
 	var hint: Array = model.hint_ids.duplicate()
 	check(model.match_spoken_word("fish") == "ignored" and model.match_spoken_word("bear") == "ignored",
 		"Words outside the current board cannot score a spoken match")
@@ -277,12 +277,12 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 		"Spoken matches use normal pair feedback and clear manual selection")
 	check(model.matched_ids == ["doll:word", "doll:image"] and model.last_correct,
 		"Normal select scoring records the actual matched cards")
-	check(model.hints_remaining == 2 and model.hint_ids.is_empty() and not model.request_hint(),
-		"Voice feedback neither refills nor spends another hint")
+	check(model.hints_used == 1 and model.hint_ids.is_empty() and not model.request_hint(),
+		"Voice feedback neither resets nor increments accepted hint purchases")
 	check(model.match_spoken_word("cat") == "ignored" and (model.matched_ids.size() / 2) == 1,
 		"Feedback locks spoken scoring")
 	model.resolve_feedback()
-	check(model.request_hint() and model.hints_remaining == 1,
+	check(model.request_hint() and model.hints_used == 2,
 		"Voice and manual play share the second hint")
 	model.select(model.hint_ids[0])
 	model.select(model.hint_ids[0])
@@ -311,8 +311,8 @@ func _test_matching(model_script: GDScript, words: Array) -> void:
 		"Late recognition candidates are ignored after winning")
 	check(model.match_spoken_word("cat") == "ignored" and (model.matched_ids.size() / 2) == 5,
 		"Late spoken scoring cannot change a won round")
-	check(model.hints_remaining == 1 and not model.request_hint(),
-		"Winning through speech cannot refill or spend the remaining hint")
+	check(model.hints_used == 2 and not model.request_hint(),
+		"Winning through speech cannot reset or accept another hint purchase")
 
 
 func _test_locks(model_script: GDScript, words: Array) -> void:

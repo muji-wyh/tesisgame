@@ -103,10 +103,10 @@ func _run() -> void:
 				and str(button.get("accessibility_name")).begins_with(app.Data.theme(app.model.THEMES[index]).name + ", "),
 				"Home theme icons retain accessible names without hover popups")
 	var cards: Array = app.model.cards.duplicate(true)
-	var hints: int = app.model.hints_remaining
+	var hints: int = app.model.hints_used
 	app.theme_buttons[4].pressed.emit()
 	check(app._mode_menu_open() and app.model.theme_id == "ocean"
-		and app.model.cards == cards and app.model.hints_remaining == hints,
+		and app.model.cards == cards and app.model.hints_used == hints,
 		"A Home theme choice keeps the page open and preserves the current game")
 	app.choose_mode("match")
 	app._single_result.replay_button.pressed.emit()

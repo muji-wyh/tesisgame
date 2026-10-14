@@ -7,7 +7,6 @@ const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
-const MAX_HINTS: int = 3
 const MATCH_PAIR_COUNT: int = 5
 const ROUND_CHEST_CHANCE: float = 0.5
 
@@ -16,7 +15,7 @@ var lesson_words: Array = []
 var matched_ids: Array[String] = []
 var feedback_ids: Array[String] = []
 var hint_ids: Array[String] = []
-var hints_remaining: int = MAX_HINTS
+var hints_used: int = 0
 var selected_id: String = ""
 # Mistakes provide feedback and never end a round.
 var mistakes: int = 0
@@ -101,7 +100,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	matched_ids.clear()
 	feedback_ids.clear()
 	hint_ids.clear()
-	hints_remaining = MAX_HINTS
+	hints_used = 0
 	selected_id = ""
 	mistakes = 0
 	phase = "waiting"
@@ -200,13 +199,13 @@ func _spoken_pair(word_id: String) -> Array[String]:
 
 
 func request_hint() -> bool:
-	if hints_remaining <= 0 or not hint_ids.is_empty() or not phase in ["waiting", "matching"]:
+	if not hint_ids.is_empty() or not phase in ["waiting", "matching"]:
 		return false
 	var pair: Array[String] = available_hint_pair()
 	if pair.is_empty():
 		return false
 	hint_ids.assign(pair)
-	hints_remaining -= 1
+	hints_used += 1
 	if not selected_id.is_empty() and not hint_ids.has(selected_id):
 		selected_id = ""
 		phase = "waiting"

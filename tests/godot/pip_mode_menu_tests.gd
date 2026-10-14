@@ -108,7 +108,7 @@ func _return_home(app) -> void:
 
 func _round_snapshot(app) -> Array:
 	return [app._round_id, app._mode_id, app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
-		app.model.selected_id, app.model.phase, app.model.matched_ids.duplicate(), app.model.mistakes, app.model.hints_remaining]
+		app.model.selected_id, app.model.phase, app.model.matched_ids.duplicate(), app.model.mistakes, app.model.hints_used]
 
 func _game_snapshot(app) -> Array:
 	var state := _round_snapshot(app)

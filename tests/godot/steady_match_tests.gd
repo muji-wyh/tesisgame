@@ -143,10 +143,10 @@ func _run() -> void:
 		check_feedback(app, [next, pairs[2] + ":image"], true)
 		app._continue_match()
 		check(app.model.phase == "waiting" and not app.hint_button.disabled,
-			"The board and unused hints remain active after the third match")
-		var available_hints: int = app.model.hints_remaining
+			"The board and paid Hint remain active after the third match")
+		var previous_hint_uses: int = app.model.hints_used
 		app._request_hint()
-		check(app.model.hints_remaining == available_hints - 1 and app.model.hint_ids.size() == 2,
+		check(app.model.hints_used == previous_hint_uses + 1 and app.model.hint_ids.size() == 2,
 			"The visible Hint action can still guide a remaining pair after three matches")
 		var hinted: Array = app.model.hint_ids.duplicate()
 		if app.model.selected_id != hinted[0]:
@@ -159,10 +159,10 @@ func _run() -> void:
 		app.cards[final_word + ":word"].pressed.emit()
 		app.cards[final_word + ":image"].pressed.emit()
 		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 5, "The fifth pair scores exactly once before the result")
-		var final_hints: int = app.model.hints_remaining
+		var final_hint_uses: int = app.model.hints_used
 		app._request_hint()
-		check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_remaining == final_hints,
-			"Hint cannot bypass the terminal feedback timer or spend unused allowance")
+		check(app.hint_button.disabled and app.model.phase == "feedback" and app.model.hints_used == final_hint_uses,
+			"Hint cannot bypass the terminal feedback timer or charge another purchase")
 		var completed_card: String = final_word + ":word"
 		app.cards[completed_card].pressed.emit()
 		check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 5 and app.model.selected_id.is_empty(),
@@ -262,11 +262,11 @@ func check_feedback_hints(app) -> void:
 					break
 		app.cards[first_hint[0]].pressed.emit()
 		app.cards[other].pressed.emit()
-		check(app.model.phase == "feedback" and app.model.hints_remaining == 2,
-			"The reported screen is feedback with two hints left")
+		check(app.model.phase == "feedback" and app.model.hints_used == 1,
+			"The reported screen is feedback after one hint purchase")
 		check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL
-			and app.hint_button.count == 2,
-			"Both correct and wrong nonfinal feedback keep two hints available")
+			and app.hint_button.count == -1,
+			"Both correct and wrong nonfinal feedback keep paid Hint available without a use limit badge")
 		var successes: int = (app.model.matched_ids.size() / 2)
 		var mistakes: int = app.model.mistakes
 		app._show_collection()
@@ -274,11 +274,11 @@ func check_feedback_hints(app) -> void:
 		check(app.hint_button.focus_mode == Control.FOCUS_NONE,
 			"Relayout cannot expose the covered Hint to keyboard navigation")
 		app._request_hint()
-		check(app.model.phase == "feedback" and app.model.hints_remaining == 2,
+		check(app.model.phase == "feedback" and app.model.hints_used == 1,
 			"A covered Hint cannot dismiss feedback or spend a hint")
 		app._hide_collection()
 		app.hint_button.pressed.emit()
-		check(app.model.phase == "waiting" and app.model.hints_remaining == 1 and app.model.hint_ids.size() == 2,
+		check(app.model.phase == "waiting" and app.model.hints_used == 2 and app.model.hint_ids.size() == 2,
 			"One Hint press acknowledges feedback and highlights a remaining pair")
 		check((app.model.matched_ids.size() / 2) == successes and app.model.mistakes == mistakes,
 			"Hint never scores an extra match or mistake")
@@ -286,7 +286,7 @@ func check_feedback_hints(app) -> void:
 			func(id: String) -> bool: return not app.model.matched_ids.has(id)),
 			"Hint replaces feedback with stars on unmatched cards only")
 		app._request_hint()
-		check(app.model.hints_remaining == 1, "Repeated input cannot charge for the same active hint")
+		check(app.model.hints_used == 2, "Repeated input cannot charge for the same active hint")
 		await settle()
 		check_board(app, before, "Hint from feedback")
 	app.new_round(21, true)
@@ -297,13 +297,13 @@ func check_feedback_hints(app) -> void:
 	check(app.model.phase == "feedback" and app.hint_button.disabled,
 		"Timed voice feedback keeps its queue lock")
 	app._request_hint()
-	check(app.model.phase == "feedback" and app.model.hints_remaining == 2 and not app.feedback_timer.is_stopped(),
-		"Hint cannot interrupt queued speech or spend an allowance")
+	check(app.model.phase == "feedback" and app.model.hints_used == 1 and not app.feedback_timer.is_stopped(),
+		"Hint cannot interrupt queued speech or charge another purchase")
 	app._stop_voice()
 	check(not app.hint_button.disabled and app.hint_button.focus_mode == Control.FOCUS_ALL,
 		"Stopping voice immediately restores the manual feedback Hint")
 	app._request_hint()
-	check(app.model.hints_remaining == 1 and (app.model.matched_ids.size() / 2) == 1,
+	check(app.model.hints_used == 2 and (app.model.matched_ids.size() / 2) == 1,
 		"Hint after leaving voice continues manually without scoring twice")
 	app.new_round(21, true)
 	app._request_hint()
@@ -319,5 +319,5 @@ func check_feedback_hints(app) -> void:
 		if attempt < 4:
 			app._continue_match()
 	app._request_hint()
-	check(app.model.phase == "waiting" and app.model.hints_remaining == 1 and app.model.hint_ids.size() == 2,
-		"Hint clears fifth-mistake feedback and spends one remaining allowance")
+	check(app.model.phase == "waiting" and app.model.hints_used == 2 and app.model.hint_ids.size() == 2,
+		"Hint clears fifth-mistake feedback and records the second paid use")

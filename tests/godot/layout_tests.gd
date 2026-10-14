@@ -126,7 +126,7 @@ func _run() -> void:
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var cards: Array = app.model.cards.duplicate(true)
 	var selected: String = app.model.selected_id
-	var hints_remaining: int = app.model.hints_remaining
+	var hints_used: int = app.model.hints_used
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
 	var progress_before: Array = [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes]
 	check(not selected.is_empty(), "The world-change fixture contains a real selected card")
@@ -141,7 +141,7 @@ func _run() -> void:
 		check(app.model.theme_id == world_id and app._mode_menu_open() and app._presentation.preferred_theme == world_id,
 			"Choosing a world saves the preference and keeps Home open")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
-			and app.model.hints_remaining == hints_remaining and app.model.lesson_words == lesson_before
+			and app.model.hints_used == hints_used and app.model.lesson_words == lesson_before
 			and [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes] == progress_before,
 			"Changing a world on Home preserves the exact round, cards, selection, and hints")
 	app.choose_mode("match")

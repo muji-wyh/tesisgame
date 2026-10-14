@@ -41,14 +41,16 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | --- | --- | --- |
 | Ordinary / tier-one chest | 50 | 50, unchanged |
 | Levelled chest | 50 x level | 50 x level, unchanged |
-| Match Hint | 200 each | 100, 150, 200; at most three uses per round |
+| Match Hint | 200 each | 100, 150, then 200; no per-round use limit |
 | Memory peek | 0, 100, 200, 300, then 300 | Unchanged |
 | Auto Merge | 2000 each | 600, 900, 1200, then 1200 |
 | Treasure | 500 each | 200, 300, 400, then 400 |
 | Treasure fragments | Random 2-8 | Random 2-8, unchanged |
 | Lucky Jelly Words collection | 1%; 50 x original chunk count | 1%; 50 for two chunks, 100 for three or more |
 
-Only successful purchases advance their item's price. Auto Merge and Treasure
+Only successful purchases advance their item's price. Match Hint stays at 200
+coins from the third purchase onward, without a use-count allowance. An active
+hint cannot be purchased again. Auto Merge and Treasure
 have separate counters. A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
 Auto Merge retains its 200 ms launch rhythm and 300 ms automatic drag. It does

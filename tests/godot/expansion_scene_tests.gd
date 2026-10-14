@@ -97,7 +97,7 @@ func _run() -> void:
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
-		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
+		and app.model.mistakes == 0 and app.model.hints_used == 0 and app.model.lesson_words != lesson,
 		"Play again starts a fresh Match board with a normal new attempt")
 	check(app.model.theme_id == "ocean"
 		and app.medal_progress.count_for("ocean-1") == 1,

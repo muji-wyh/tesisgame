@@ -125,7 +125,7 @@ func _run() -> void:
 	app.cards[app.model.hint_ids[0]].pressed.emit()
 	var cards: Array = app.model.cards.duplicate(true)
 	var words: Array = app.model.lesson_words.duplicate(true)
-	var progress: Array = [app.model.selected_id, app.model.hints_remaining, app.model.phase, app.model.matched_ids.size(), app.model.mistakes]
+	var progress: Array = [app.model.selected_id, app.model.hints_used, app.model.phase, app.model.matched_ids.size(), app.model.mistakes]
 	var rewards: Dictionary = app.medal_progress.counts.duplicate(true)
 	var source_words: Array = app.data.words.duplicate(true)
 	var growth_before: Dictionary = app.growth.snapshot().duplicate(true)
@@ -145,7 +145,7 @@ func _run() -> void:
 		check_catalog(app, age_id)
 		check(button.has_focus() and app._age_scroll.scroll_horizontal == scroll, "Choosing a cohort preserves the age rail's focus and position")
 		check(app.model.cards == cards and app.model.lesson_words == words and app.model.age_band_id == "3"
-			and [app.model.selected_id, app.model.hints_remaining, app.model.phase, app.model.matched_ids.size(), app.model.mistakes] == progress,
+			and [app.model.selected_id, app.model.hints_used, app.model.phase, app.model.matched_ids.size(), app.model.mistakes] == progress,
 			"Browsing every age preserves the active round, selection and hints")
 		check(app._age_notice.text.begins_with("Preview only") == (age > 3)
 			and app._age_buttons.values().filter(func(choice: Button) -> bool: return choice.button_pressed).size() == 1,

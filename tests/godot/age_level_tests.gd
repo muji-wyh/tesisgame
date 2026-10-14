@@ -46,7 +46,7 @@ func _initialize() -> void:
 		for seed_value in range(20):
 			var model := Model.new()
 			check(model.reset(words, seed_value, false, "", "", band.id), "Every age can start a complete lesson")
-			check(model.lesson_words.size() == 5 and model.cards.size() == 10 and model.hints_remaining == 3, "Age selection preserves five pairs and three hints")
+			check(model.lesson_words.size() == 5 and model.cards.size() == 10 and model.hints_used == 0, "Age selection preserves five pairs and starts with no hint purchases")
 			check(model.lesson_words.all(func(word: Dictionary): return eligible.has(word)), "The entire board stays within its unlocked pictured vocabulary")
 			for first in range(model.lesson_words.size()):
 				for second in range(first + 1, model.lesson_words.size()):

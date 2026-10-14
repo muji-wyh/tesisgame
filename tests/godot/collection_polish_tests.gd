@@ -45,8 +45,8 @@ func _run() -> void:
 		and app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
 		"Choosing Match from Home opens its playable board")
 	check(app.find_child("Mode_match", true, false).button_pressed and app.find_child("Mode_learn", true, false) == null
-		and app.cards.size() == 10 and app.model.hints_remaining == 3 and not app._voice_mode,
-		"Match starts selected with a ready board, three hints, and no microphone")
+		and app.cards.size() == 10 and app.model.hints_used == 0 and not app._voice_mode,
+		"Match starts selected with a ready board, no hint purchases, and no microphone")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	PlayerFlow.earn_pair_chest(app)
 	app.model.phase = "won"

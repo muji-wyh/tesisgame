@@ -73,7 +73,7 @@ func _state(app) -> Dictionary:
 	return {"cards": app.model.cards.duplicate(true), "selected": app.model.selected_id,
 		"matched": app.model.matched_ids.duplicate(), "feedback": app.model.feedback_ids.duplicate(),
 		"correct": app.model.last_correct, "mistakes": app.model.mistakes, "phase": app.model.phase,
-		"hints": app.model.hint_ids.duplicate(), "remaining": app.model.hints_remaining}
+		"hints": app.model.hint_ids.duplicate(), "uses": app.model.hints_used}
 
 
 func _receipt(app, ordinal: int) -> String:
@@ -117,8 +117,8 @@ func _joy(pressed: bool) -> void:
 
 func _check_insufficient(app) -> void:
 	await _prepare(app, 50)
-	check(app._match_hint_price() == 100 and app.hint_button.cost == 100 and app.hint_button.count == 3,
-		"Match shows its first 100-coin price separately from its three-use allowance")
+	check(app._match_hint_price() == 100 and app.hint_button.cost == 100 and app.hint_button.count == -1,
+		"Match shows its first 100-coin price without a remaining-use badge")
 	check(Rect2(Vector2.ZERO, app.hint_button.size).encloses(app.hint_button.price_rect())
 		and str(app.hint_button.get("accessibility_name")).contains("100"),
 		"The visible price fits its button and is included in the accessible action name")
@@ -130,7 +130,7 @@ func _check_insufficient(app) -> void:
 	app.hint_button.pressed.emit()
 	check(_state(app) == before and app.coin_wallet.balance == 50 and storage.text == saved and storage.writes == writes
 		and app._match_hint_price() == 100,
-		"Insufficient coins preserve selection, cards, hints, allowance, and the complete saved wallet")
+		"Insufficient coins preserve selection, cards, hints, accepted uses, and the complete saved wallet")
 	check(app.hint_button._feedback_left > 0.0 and not app.hint_button._accepted
 		and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
 		"An unaffordable hint produces negative button feedback and its negative sound")
@@ -141,15 +141,16 @@ func _check_insufficient(app) -> void:
 		"An unaffordable hint never starts a debit animation or a coin spending sound")
 
 
-func _check_native_inputs_and_limit(app) -> void:
-	await _prepare(app, 800)
+func _check_native_inputs_without_limit(app) -> void:
+	await _prepare(app, 1000)
 	var initial_writes: int = storage.writes
 	var spent: int = 0
-	for ordinal in range(1, 4):
-		var price: int = [100, 150, 200][ordinal - 1]
-		check(app.hint_button.cost == price, "The next visible hint price matches its purchase ordinal")
+	for ordinal in range(1, 6):
+		var price: int = [100, 150, 200, 200, 200][ordinal - 1]
+		check(app.hint_button.cost == price and app.hint_button.count == -1,
+			"The next visible hint price matches its purchase ordinal without an allowance badge")
 		match ordinal:
-			1:
+			1, 4:
 				app.hint_button.pressed.emit()
 			2:
 				app.hint_button.grab_focus()
@@ -157,15 +158,15 @@ func _check_native_inputs_and_limit(app) -> void:
 				await process_frame
 				_key(false)
 				await _settle()
-			3:
+			3, 5:
 				_joy(true)
 				_joy(false)
 				await _settle()
 		spent += price
-		check(app.model.hint_ids.size() == 2 and app.model.hints_remaining == 3 - ordinal
-			and app.hint_button.count == 3 - ordinal and app.hint_button.cost == [150, 200, 200][ordinal - 1],
-			"Button, native keyboard, and Xbox X consume the same three-use hint allowance")
-		check(app.coin_wallet.balance == 800 - spent and storage.writes == initial_writes + ordinal
+		check(app.model.hint_ids.size() == 2 and app.model.hints_used == ordinal
+			and app.hint_button.count == -1 and app.hint_button.cost == (150 if ordinal == 1 else 200),
+			"Button, native keyboard, and Xbox X share unlimited paid hints with a capped coin price")
+		check(app.coin_wallet.balance == 1000 - spent and storage.writes == initial_writes + ordinal
 			and app.coin_wallet._receipts.get(_receipt(app, ordinal), 0) == -price,
 			"Each accepted native action persists exactly one escalating debit under its next ordinal")
 		check(app.hint_button._feedback_left > 0.0 and app.hint_button._accepted
@@ -177,22 +178,32 @@ func _check_native_inputs_and_limit(app) -> void:
 		var writes: int = storage.writes
 		app._request_hint()
 		app.hint_button.pressed.emit()
-		check(_state(app) == before and storage.writes == writes and app.coin_wallet.balance == 800 - spent,
-			"Duplicate callbacks while a hint is active cannot spend or consume another allowance")
+		check(_state(app) == before and storage.writes == writes and app.coin_wallet.balance == 1000 - spent,
+			"Duplicate callbacks while a hint is active cannot spend or increment accepted purchases")
 		check(spend_sounds == ordinal, "Repeated active-hint input cannot replay its coin spending sound")
 		_clear_hint(app)
-	var exhausted: Dictionary = _state(app)
+		check(not app.hint_button.disabled and app.hint_button.count == -1,
+			"Clearing any active hint restores the paid action without a per-round use limit")
+		before = _state(app)
+		var stale: Dictionary = app._purchase_match_hint(ordinal, price)
+		check(not bool(stale.get("ok", false)) and _state(app) == before
+			and storage.writes == writes and app.coin_wallet.balance == 1000 - spent and spend_sounds == ordinal,
+			"A completed purchase ordinal cannot be replayed after its hint is cleared")
+	var unaffordable: Dictionary = _state(app)
+	var saved: Variant = storage.text
 	app._request_hint()
 	_joy(true)
 	_joy(false)
 	await _settle()
-	check(_state(app) == exhausted and app.coin_wallet.balance == 350 and app.hint_button.disabled,
-		"The fourth hint remains blocked even with enough coins for another purchase")
-	check(spend_sounds == 3, "Exhausted hints cannot create a fourth coin spending cue")
+	check(_state(app) == unaffordable and app.coin_wallet.balance == 150 and storage.text == saved
+		and not app.hint_button.disabled and app.hint_button.count == -1,
+		"After five hints, insufficient coins reject the next purchase without exhausting the action")
+	check(spend_sounds == 5 and not app.hint_button._accepted,
+		"An unaffordable later hint produces negative feedback without a sixth spending cue")
 	var reloaded := Wallet.new("user://unused-match-hint-wallet.cfg", storage)
-	check(reloaded.load_state() and reloaded.balance == 350 and reloaded._receipts == app.coin_wallet._receipts,
-		"The three hint debits survive a real wallet reload")
-	check(app.new_round(2900, false, "", "match") and app.hint_button.cost == 100,
+	check(reloaded.load_state() and reloaded.balance == 150 and reloaded._receipts == app.coin_wallet._receipts,
+		"All five hint debits survive a real wallet reload")
+	check(app.new_round(2900, false, "", "match") and app.hint_button.cost == 100 and app.model.hints_used == 0,
 		"A fresh board restores the first hint price without altering past debits")
 
 
@@ -206,7 +217,7 @@ func _check_feedback_payment(app) -> void:
 		storage.fail_write = true
 		app._request_hint()
 		check(_state(app) == before and app.coin_wallet.balance == 100 and storage.text == saved,
-			"A failed durable save preserves answer feedback, selection, allowance, and coins")
+			"A failed durable save preserves answer feedback, selection, accepted uses, and coins")
 		check(not app.feedback_timer.is_stopped() and is_equal_approx(app.feedback_timer.time_left, timer_left),
 			"Payment failure neither dismisses nor restarts the correct or wrong feedback timer")
 		check(not app._coin_counter.available and not app.coin_wallet.error.is_empty()
@@ -218,7 +229,7 @@ func _check_feedback_payment(app) -> void:
 		check(app.coin_wallet.balance == 0 and app._coin_counter.available
 			and app.coin_wallet._receipts.get(_receipt(app, 1), 0) == -100,
 			"A retry saves exactly the same 100-coin ordinal after storage recovers")
-		check(app.model.phase == "waiting" and app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2
+		check(app.model.phase == "waiting" and app.model.hint_ids.size() == 2 and app.model.hints_used == 1
 			and app.model.matched_ids == before.matched and app.model.mistakes == before.mistakes
 			and app.feedback_timer.is_stopped(), "Successful payment continues feedback once and hints without scoring the answer twice")
 		check(spend_sounds == 1, "A successful storage retry emits its coin spending cue exactly once")
@@ -338,11 +349,11 @@ func _check_blocked_states(app) -> void:
 	var writes: int = storage.writes
 	app._request_hint()
 	check(_state(app) == before and app.coin_wallet.balance == 100 and storage.writes == writes,
-		"A hint blocked by queued voice feedback does not charge or consume allowance")
+		"A hint blocked by queued voice feedback does not charge or increment accepted uses")
 	check(spend_sounds == 0, "Queued voice feedback cannot start a Hint coin spending cue")
 	app._on_voice_state([false, false, "Voice off"])
 	app._request_hint()
-	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0,
+	check(app.model.hints_used == 1 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0,
 		"Leaving voice feedback restores the same paid manual hint route")
 	await _prepare(app, 100)
 	for word: Dictionary in app.model.lesson_words.duplicate(true):
@@ -381,21 +392,21 @@ func _check_receipt_recovery(app) -> void:
 		app._request_hint()
 		app.hint_button.pressed.emit()
 	app._request_hint()
-	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0
+	check(app.model.hints_used == 1 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0
 		and storage.writes == 2, "Reentrant input during persistence saves and accepts only one paid hint")
 	check(spend_sounds == 1, "Reentrant payment input emits only one coin spending cue")
 	await _prepare(app, 100)
 	var initial_writes: int = storage.writes
 	storage.after_save = func() -> void: app._show_mode_menu()
 	app._request_hint()
-	check(app._mode_menu_open() and app.model.hint_ids.is_empty() and app.model.hints_remaining == 3
+	check(app._mode_menu_open() and app.model.hint_ids.is_empty() and app.model.hints_used == 0
 		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.get(_receipt(app, 1), 0) == -100,
 		"A page interruption during payment leaves the saved ordinal unconsumed instead of showing a hint behind Home")
 	check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
 		"A navigation interruption suppresses payment effects on the covered Match page")
 	app._hide_mode_menu()
 	app._request_hint()
-	check(app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2 and app.coin_wallet.balance == 0
+	check(app.model.hint_ids.size() == 2 and app.model.hints_used == 1 and app.coin_wallet.balance == 0
 		and storage.writes == initial_writes + 1, "Returning consumes the already-paid ordinal once without requiring another 100 coins")
 	check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
 		"Recovering an already-paid ordinal cannot animate or sound a second debit")
@@ -405,7 +416,7 @@ func _check_receipt_recovery(app) -> void:
 		and storage.writes == initial_writes + 1, "An already-used host callback cannot spend or apply the hint twice")
 	_clear_hint(app)
 	app._request_hint()
-	check(app.model.hint_ids.is_empty() and app.model.hints_remaining == 2 and app.coin_wallet.balance == 0,
+	check(app.model.hint_ids.is_empty() and app.model.hints_used == 1 and app.coin_wallet.balance == 0,
 		"A recovered ordinal cannot be reused as the next unpaid hint")
 
 
@@ -423,7 +434,7 @@ func _run() -> void:
 	Fixture.enter_mode(app, "match")
 	app._coin_flight.spend_sound.connect(func() -> void: spend_sounds += 1)
 	await _check_insufficient(app)
-	await _check_native_inputs_and_limit(app)
+	await _check_native_inputs_without_limit(app)
 	await _check_feedback_payment(app)
 	await _check_debit_animation(app)
 	await _check_debit_cancellation(app)

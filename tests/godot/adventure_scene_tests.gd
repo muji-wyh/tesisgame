@@ -58,8 +58,8 @@ func _run() -> void:
 	check(words.size() == 5, "The scene starts with five matchable words")
 	check(app.coin_wallet.credit("fixture:adventure-hint", 4).ok, "Fund the adventure's paid hint")
 	app._request_hint()
-	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2,
-		"The adventure spends the first of three hints")
+	check(app.model.hints_used == 1 and app.model.hint_ids.size() == 2,
+		"The adventure records its first paid hint")
 	app._controller_mode = true
 	for word in words:
 		_match(app, word)
@@ -100,8 +100,8 @@ func _run() -> void:
 	app.new_round(17)
 	check(app.model.adventure_name == adventure and app.grid.is_visible_in_tree(),
 		"The same seed restores the same adventure and playable board")
-	check(not app._single_result.replay_button.is_visible_in_tree() and app.model.hints_remaining == 3,
-		"Reset hides the result action and renews all three hints")
+	check(not app._single_result.replay_button.is_visible_in_tree() and app.model.hints_used == 0,
+		"Reset hides the result action and clears hint purchase history")
 	app.medal_progress.counts["spring-1"] = 3
 	app.choose_theme("spring")
 	check(app.medal_progress.next_fragment("spring").medal_id == "spring-2",

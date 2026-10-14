@@ -118,8 +118,8 @@ func _test_callback_and_ignored_results(app) -> void:
 			"Interim, unknown and empty results cannot create scoring or feedback")
 	check(app.coin_wallet.credit("fixture:voice-feedback-hint", 4).ok, "Fund the manual hint before spoken feedback")
 	app._request_hint()
-	var hints_left: int = app.model.hints_remaining
-	check(hints_left == 2 and app._hint_link.active, "A real paid hint is active before the spoken success")
+	var hint_uses: int = app.model.hints_used
+	check(hint_uses == 1 and app._hint_link.active, "A real paid hint is active before the spoken success")
 	app._on_voice_result(["I see a " + str(word.text), true])
 	app.feedback_timer.paused = true
 	check((app.model.matched_ids.size() / 2) == 1 and app.model.mistakes == 0 and app.model.phase == "feedback"
@@ -127,7 +127,7 @@ func _test_callback_and_ignored_results(app) -> void:
 		"The browser's final callback scores exactly its real word-picture pair")
 	check(is_equal_approx(app._voice_match_left, 1.0) and is_equal_approx(app.feedback_timer.wait_time, 1.0)
 		and not app.feedback_timer.is_stopped(), "Spoken success starts a full one-second effect and feedback Timer")
-	check(app.model.hints_remaining == hints_left and app.model.hint_ids.is_empty() and not app._hint_link.active,
+	check(app.model.hints_used == hint_uses and app.model.hint_ids.is_empty() and not app._hint_link.active,
 		"A success clears the old hint without spending or refunding another hint")
 	check(_sound_playing(app) and app.audio.pair_feedback.stream == load(Audio.PAIR_FEEDBACK_PATHS[true]),
 		"The supplied right cue starts with the actual successful final callback")

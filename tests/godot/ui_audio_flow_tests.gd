@@ -932,7 +932,7 @@ func _pop_hit_visible_word(app, elapsed: float = 0.0) -> bool:
 
 
 func _match_progress(app) -> Array:
-	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_remaining,
+	return [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.hints_used,
 		app.model.selected_id, app.model.matched_ids.duplicate(),
 		app.medal_progress.counts.duplicate(), app.growth.snapshot().streaks.duplicate()]
 

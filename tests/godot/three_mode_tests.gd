@@ -68,13 +68,13 @@ func _run() -> void:
 	app.cards[pairs[0] + ":image"].pressed.emit()
 	check(not app.feedback_timer.is_stopped(), "Correct feedback continues automatically without a footer button")
 	var word: Dictionary = app.model.card_by_id(pairs[0] + ":word").word
-	var hints: int = app.model.hints_remaining
+	var hints: int = app.model.hints_used
 	app.audio.halt()
 	check(not app.cards[pairs[0] + ":word"].disabled, "A matched word remains an available pronunciation target")
 	app.cards[pairs[0] + ":word"].pressed.emit()
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + word.audio),
 		"A matched card pronounces its exact word")
-	check((app.model.matched_ids.size() / 2) == 1 and app.model.hints_remaining == hints, "Replaying a matched card cannot score or spend hints")
+	check((app.model.matched_ids.size() / 2) == 1 and app.model.hints_used == hints, "Replaying a matched card cannot score or spend hints")
 	app._show_collection()
 	await create_timer(0.8).timeout
 	check(app.model.phase == "feedback" and (app.model.matched_ids.size() / 2) == 1, "More pauses automatic Match feedback")

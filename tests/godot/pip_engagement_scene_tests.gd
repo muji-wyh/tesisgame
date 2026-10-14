@@ -70,11 +70,11 @@ func _run() -> void:
 	app.duck.settle()
 	app._update_duck()
 	check(app.duck._proactive_allowed, "Normal play explicitly enables Pip's quiet invitations")
-	var original: Array = [app.model.cards.duplicate(true), app.model.hints_remaining,
+	var original: Array = [app.model.cards.duplicate(true), app.model.hints_used,
 		(app.model.matched_ids.size() / 2), app.model.mistakes, app._status_announcement, app.growth.snapshot()]
 	check(not observe_idle(app, 5.5) and observe_idle(app, 3.6)
 		and app.duck._idle_action in app.duck.age_actions(), "Pip offers its age-specific motion within six to nine quiet seconds")
-	check([app.model.cards, app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes,
+	check([app.model.cards, app.model.hints_used, (app.model.matched_ids.size() / 2), app.model.mistakes,
 		app._status_announcement, app.growth.snapshot()] == original and not app.audio.voice.playing,
 		"Invitations never change the game, choices, status or audio")
 	app.duck._idle_action = "wave"

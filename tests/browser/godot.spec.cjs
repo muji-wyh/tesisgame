@@ -5,7 +5,7 @@ const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, chooseMode, openRewards, enterGame,
-  contentBounds, headerPoint, headerIconRect, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
+  contentBounds, headerPoint, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -58,7 +58,7 @@ function resultScreenPoint(metrics, key = 'chest') {
 const firstCard = (metrics) => cardPoint(metrics, 0);
 
 const HINT_WALLET_KEY = 'growWithPip.coinWallet.v1';
-const MATCH_HINT_STATUS = /^(?:(?:Chest found!|No chest this pair\.) )?Hint: match the ([a-z]+) cards\.$/;
+const MATCH_HINT_STATUS = /^(?:(?:You found a hidden treasure chest!|No chest this pair\.) )?Hint: match the ([a-z]+) cards\.$/;
 
 async function fundMatchHints(page, balance) {
   await page.addInitScript(({ key, balance }) => {
@@ -84,7 +84,7 @@ async function expectMatchHintPrice(page) {
   const bounds = await logicalMetrics(page), state = bounds.growth.match.hint;
   const button = bounds.growth.controls.find(control => control.name === 'Hint' && control.visible);
   expect(button, 'The priced hint stays visible in the Match header').toBeTruthy();
-  const expectedPrice = [100, 150, 200, 200][3 - state.remaining];
+  const expectedPrice = [100, 150, 200][Math.min(state.uses, 2)];
   expect(state).toMatchObject({ price: expectedPrice, price_text: String(expectedPrice) });
   const [x, y, width, height] = button.rect;
   const [px, py, pw, ph] = state.price_rect;
@@ -115,28 +115,14 @@ async function buyMatchHint(page, activate) {
   expect(receipts.map(([, amount]) => amount), 'One accepted hint saves one debit at its quoted price').toEqual([-previousHint.price]);
   expect(Object.entries(before.receipts).every(([id, amount]) => after.receipts[id] === amount),
     'Hint purchases preserve earlier wallet receipts').toBe(true);
-  expect(receipts[0][0]).toBe(`${previousHint.round_id}:match-hint:${4 - previousHint.remaining}`);
-  await expect.poll(async () => (await matchHintState(page)).remaining).toBe(previousHint.remaining - 1);
-  const nextPrice = [100, 150, 200, 200][4 - previousHint.remaining];
+  expect(receipts[0][0]).toBe(`${previousHint.round_id}:match-hint:${previousHint.uses + 1}`);
+  await expect.poll(async () => (await matchHintState(page)).uses).toBe(previousHint.uses + 1);
+  const nextPrice = [100, 150, 200][Math.min(previousHint.uses + 1, 2)];
   expect(await matchHintState(page)).toMatchObject({ price: nextPrice, price_text: String(nextPrice),
     active: true, round_id: previousHint.round_id });
   await expect.poll(async () => page.locator('#coin-status').evaluate(node =>
     JSON.parse(node.dataset.snapshot || '{}').balance)).toBe(after.balance);
   return after;
-}
-
-async function hintImage(page, countOnly = false) {
-  const bounds = await logicalMetrics(page), icon = headerIconRect(bounds, 'hint');
-  const clip = countOnly ? { x: icon.x + icon.width * 0.67, y: icon.y + icon.height * 0.04,
-    width: icon.width * 0.28, height: icon.height * 0.28 } : icon;
-  await page.mouse.move(0, 0);
-  // Compare the remaining-use digit after the short payment response settles.
-  if (countOnly) await page.waitForTimeout(720);
-  await rendered(page);
-  return page.screenshot({ scale: 'css', clip: {
-    x: bounds.x + clip.x * bounds.scale, y: bounds.y + clip.y * bounds.scale,
-    width: clip.width * bounds.scale, height: clip.height * bounds.scale
-  } });
 }
 
 async function boltColors(page, screenshot) {
@@ -642,13 +628,13 @@ test('world changes keep bundled music audible offline without Pip welcome narra
   }
 });
 
-test('three hints per round are shared by touch and Xbox', async ({ page }, testInfo) => {
-  // This scenario visits four worlds, completes a round, and buys a hint in the next round.
+test('paid hints have no round limit across touch and Xbox', async ({ page }, testInfo) => {
+  // Buy a hint for all five pairs, preserve purchases across worlds, then reset the next round's price.
   test.setTimeout(240000);
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await fundMatchHints(page, 800);
+  await fundMatchHints(page, 1200);
   await page.addInitScript(() => localStorage.setItem('wordBuddies.medalProgress',
     '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n'));
   await page.goto('/');
@@ -668,7 +654,6 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
   expect(await matchHintWallet(page), 'Tapping an active hint cannot charge again').toEqual(firstPurchase);
-  const twoLeft = await hintImage(page);
   await page.screenshot({ path: testInfo.outputPath('hint-direct.png'), scale: 'css' });
   await page.waitForTimeout(160);
   await page.screenshot({ path: testInfo.outputPath('hint-direct-next.png'), scale: 'css' });
@@ -683,12 +668,13 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   })).equals(current), { timeout: 3000, intervals: [200], message: 'The direct electric bolt flickers between the hinted cards.' }).toBe(false);
   const initialTheme = THEME_COLORS.indexOf(await page.locator('meta[name="theme-color"]').getAttribute('content'));
   const initialSelection = await page.locator('#selection-status').textContent();
-  const remainingHints = await hintImage(page, true);
+  const paidHint = await matchHintState(page);
   for (const [theme, index, color] of [['autumn', 2, 'warm'], ['ocean', 4, 'cool'], ['space', 5, 'purple'], ['candy', 7, 'pink']]) {
     await chooseSeason(page, index);
     await expect(page.locator('#game-status')).toHaveText(firstHint);
     await expect(page.locator('#selection-status')).toHaveText(initialSelection);
-    expect((await hintImage(page, true)).equals(remainingHints), `${theme} preserves the remaining hint count.`).toBe(true);
+    expect(await matchHintState(page), `${theme} preserves the paid hint and its next price.`)
+      .toMatchObject({ uses: paidHint.uses, price: paidHint.price, active: true, round_id: paidHint.round_id });
     const themed = await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}-bolt.png`), clip: linkClip, scale: 'css' });
     expect((await boltColors(page, themed))[color], `${theme} recolors the active bolt to its ${color} palette.`).toBeGreaterThan(4);
     await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}.png`), scale: 'css' });
@@ -711,8 +697,6 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   await pressGamepad(page, 2);
   await expect(page.locator('#game-status')).toHaveText(secondHint);
   expect(await matchHintWallet(page), 'Repeating Xbox X on an active hint cannot charge again').toEqual(secondPurchase);
-  const oneLeft = await hintImage(page);
-  expect(oneLeft.equals(twoLeft), 'The native digit badge changes from two remaining hints to one.').toBe(false);
   await page.screenshot({ path: testInfo.outputPath('hint-direct-second.png'), scale: 'css' });
   await page.waitForTimeout(160);
   await page.screenshot({ path: testInfo.outputPath('hint-direct-second-next.png'), scale: 'css' });
@@ -722,7 +706,6 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   }
   await continueMatch(page);
   await chooseSeason(page, 1);
-  const beforeLastHint = await hintImage(page);
   const thirdPurchase = await buyMatchHint(page, () => page.touchscreen.tap(hintPoint.x, hintPoint.y));
   const thirdHint = await page.locator('#game-status').textContent();
   const thirdWord = thirdHint.match(MATCH_HINT_STATUS)[1];
@@ -731,38 +714,44 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
   expect(used.size).toBe(3);
   await page.touchscreen.tap(hintPoint.x, hintPoint.y);
   await expect(page.locator('#game-status')).toHaveText(thirdHint);
-  expect(await matchHintWallet(page), 'Repeating the last active hint cannot save a fourth debit').toEqual(thirdPurchase);
-  expect((await hintImage(page)).equals(beforeLastHint), 'The last hint visibly changes the native badge to zero.').toBe(false);
+  expect(await matchHintWallet(page), 'Repeating an active third hint cannot save another debit').toEqual(thirdPurchase);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.screenshot({ path: testInfo.outputPath('hint-used.png'), scale: 'css' });
+  await page.screenshot({ path: testInfo.outputPath('hint-third.png'), scale: 'css' });
   for (const index of [thirdPair.Word, thirdPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
   }
   await continueMatch(page);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  const exhausted = await page.locator('#game-status').textContent();
-  const exhaustedWallet = await matchHintWallet(page);
-  await pressGamepad(page, 2);
-  await expect(page.locator('#game-status'), 'Three hints do not cover all five pairs, and exhausted hints cannot change the board.').toHaveText(exhausted);
-  expect(await matchHintWallet(page), 'Exhausted hints cannot charge coins').toEqual(exhaustedWallet);
-  const remaining = [...discovered].filter(([word]) => !used.has(word));
-  expect(remaining).toHaveLength(2);
-  for (const [index, [, pair]] of remaining.entries()) {
+  for (const ordinal of [4, 5]) {
+    const activate = ordinal === 4 ? () => pressGamepad(page, 2)
+      : () => page.touchscreen.tap(hintPoint.x, hintPoint.y);
+    const purchase = await buyMatchHint(page, activate);
+    const status = await page.locator('#game-status').textContent();
+    const word = status.match(MATCH_HINT_STATUS)[1];
+    expect(used.has(word), `Purchase ${ordinal} hints an unmatched pair`).toBe(false);
+    used.add(word);
+    expect(await matchHintState(page)).toMatchObject({ uses: ordinal, price: 200, active: true });
+    await activate();
+    await expect(page.locator('#game-status')).toHaveText(status);
+    expect(await matchHintWallet(page), `Repeated input on hint ${ordinal} cannot debit again`).toEqual(purchase);
+    await page.screenshot({ path: testInfo.outputPath(`hint-${ordinal}.png`), scale: 'css' });
+    const pair = discovered.get(word);
     for (const card of [pair.Word, pair.Picture]) {
       const point = cardPoint(metrics, card);
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === remaining.length - 1 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(ordinal === 5 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
   }
+  expect(used.size).toBe(5);
   await acceptCelebration(page);
   await holdControllerChest(page);
   await pressGamepad(page, 0);
   await ready(page);
   const newRoundPurchase = await buyMatchHint(page, () => pressGamepad(page, 2));
   expect(Object.values(newRoundPurchase.receipts).filter(amount => amount < 0).sort((a, b) => a - b))
-    .toEqual([-200, -150, -100, -100]);
+    .toEqual([-200, -200, -200, -150, -100, -100]);
   // Pip's static speech indicator can change when the hint recording ends.
   const top = contentBounds(await logicalMetrics(page)).top * scale;
   const boardClip = { x: metrics.x, y: metrics.y + top, width: metrics.width, height: metrics.height - top };

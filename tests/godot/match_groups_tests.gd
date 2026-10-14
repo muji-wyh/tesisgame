@@ -67,7 +67,7 @@ func _finish(app, directory: String) -> void:
 func state(app) -> Array:
 	return [app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
 		app.model.selected_id, app.model.matched_ids.duplicate(), app.model.hint_ids.duplicate(),
-		app.model.hints_remaining, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.phase,
+		app.model.hints_used, (app.model.matched_ids.size() / 2), app.model.mistakes, app.model.phase,
 		app.model.age_band_id, app.model.theme_id]
 
 

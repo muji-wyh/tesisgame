@@ -69,7 +69,7 @@ func _run() -> void:
 	lesson = app.model.lesson_words.duplicate(true)
 	app._single_result.replay_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "A repeated result click cannot start another lesson")
-	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_used == 0
 		and app.medal_progress.counts == earned_medals and app.coin_wallet.balance == earned_coins,
 		"Starting a lesson preserves earned rewards, grants no extra rewards, and initializes a normal attempt")
 	var storage := BrowserStorage.new()
