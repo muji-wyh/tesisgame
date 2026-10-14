@@ -120,18 +120,28 @@ func check_turn(view, data) -> void:
 		var before: float = maxf(view.chest.closed_art_rect().size.x, view.chest.closed_art_rect().size.y)
 		var rest: Dictionary = view.snapshot().motion
 		var resting_chest: Rect2 = view.snapshot().chest_rect
-		view.advance(Flight.CENTER_SECONDS)
-		var pose: Dictionary = view.snapshot().motion
-		var screen_center: Vector2 = view.get_global_transform_with_canvas() * Vector2(pose.center)
-		check(screen_center.is_equal_approx(Vector2(dimensions) * 0.5)
-			and is_equal_approx(float(pose.scale), 1.0) and is_zero_approx(float(pose.yaw)),
-			"%s reaches the screen center before growing or turning" % dimensions)
+		var departures: Array[Dictionary] = []
+		for step in range(1, 12):
+			view.advance(Flight.TOP_SECONDS * float(step) / 12.0 - float(view.snapshot().elapsed))
+			departures.append(view.snapshot().motion)
 		view.advance(Flight.TOP_SECONDS - float(view.snapshot().elapsed))
-		pose = view.snapshot().motion
+		var pose: Dictionary = view.snapshot().motion
 		var upper: Vector2 = pose.center
-		check((view.get_global_transform_with_canvas() * upper).y < float(dimensions.y) * 0.36
+		var screen_upper: Vector2 = view.get_global_transform_with_canvas() * upper
+		check(absf(screen_upper.x - float(dimensions.x) * 0.5) < 0.1 and screen_upper.y < float(dimensions.y) * 0.36
 			and is_equal_approx(float(pose.scale), 1.0) and is_zero_approx(float(pose.yaw)),
-			"%s moves to the upper area before the reward performance" % dimensions)
+			"%s reaches the upper center before the reward performance" % dimensions)
+		var route: Vector2 = upper - Vector2(rest.center)
+		var last_progress: float = 0.0
+		for departure: Dictionary in departures:
+			var offset: Vector2 = Vector2(departure.center) - Vector2(rest.center)
+			var progress: float = offset.dot(route) / route.length_squared()
+			check(absf(offset.cross(route)) / route.length() < 0.1 and progress > last_progress and progress < 1.0,
+				"%s flies directly from the HUD to the upper center without visiting the screen center" % dimensions)
+			check(departure.phase == "depart" and is_equal_approx(float(departure.scale), 1.0)
+				and is_zero_approx(float(departure.yaw)) and is_zero_approx(float(departure.roll)),
+				"The pair reward uses one travel phase before growing or turning")
+			last_progress = progress
 		view.advance(Flight.REVEAL_SECONDS - float(view.snapshot().elapsed))
 		pose = view.snapshot().motion
 		check(view.snapshot().live_turn and float(pose.edge) * float(pose.scale) >= before * 3.0
@@ -199,7 +209,7 @@ func check_overlay_lifecycle(view, data) -> void:
 	view.set_toast_bounds(Rect2(Vector2.ZERO, view.size))
 	view.configure("clipped-parent", "jungle", data.chests, false)
 	view.show_pair_result("clipped-parent", true)
-	view.advance(Flight.CENTER_SECONDS)
+	view.advance(Flight.TOP_SECONDS * 0.5)
 	check(view._overlay.layer == 70 and view.snapshot().overlay_visible
 		and view._overlay.transform.is_equal_approx(view.get_global_transform_with_canvas())
 		and view.chest.get_parent() == view._overlay,

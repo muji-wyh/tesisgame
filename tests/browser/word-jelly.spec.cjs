@@ -1610,6 +1610,45 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
   test.skip(!['desktop-chromium', 'iphone-webkit'].includes(info.project.name), 'The complete milestone route covers desktop and phone renderers.');
   test.setTimeout(300000);
   const errors = await startWordJelly(page, { reducedMotion: 'no-preference' });
+  const mergeForMilestone = async (sourceId, targetId) => {
+    const before = await jelly(page), bounds = await metrics(page);
+    const source = before.tiles.find(tile => tile.id === sourceId);
+    const targetText = before.tiles.find(tile => tile.id === targetId).text;
+    const from = center(source.rect, bounds);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    try {
+      await expect.poll(async () => (await jelly(page)).drag.source).toBe(sourceId);
+      // Lifting a supporting jelly can make its destination fall. Aim at the
+      // live settled body instead of the pre-lift rectangle on a moving board.
+      await expect.poll(async () => {
+        const target = (await jelly(page)).tiles.find(tile => tile.id === targetId);
+        return Boolean(target?.settled);
+      }).toBe(true);
+      await expect.poll(async () => {
+        const state = await jelly(page), target = state.tiles.find(tile => tile.id === targetId);
+        expect(target, 'The real destination remains on the board during the lift').toBeTruthy();
+        if (state.drag.target === targetId) return true;
+        const to = center(target.rect, bounds);
+        await page.mouse.move(to.x, to.y, { steps: 6 });
+        return false;
+      }, { message: 'The pointer follows the settled destination before releasing the pair' }).toBe(true);
+    } finally {
+      await page.mouse.up();
+    }
+    let completed;
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      completed = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
+        tile.text === source.text + targetText && tile.word?.id);
+      return state.merged_count === before.merged_count + 1 && Boolean(completed?.settled) &&
+        state.tiles.every(tile => tile.settled);
+    }, { message: 'The ordinary merge settles before its word is collected for a milestone' }).toBe(true);
+    return completed;
+  };
+  await page.exposeFunction('saveWordJellyFlight', (key, encoded) => {
+    fs.writeFileSync(info.outputPath(`word-jelly-chest-${key}.png`), Buffer.from(encoded, 'base64'));
+  });
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
     window.wordJellyMilestones = [];
@@ -1625,7 +1664,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
           const reader = new FileReader();
           reader.onload = () => {
             window.wordJellyFlightFrames[key] = reader.result.split(',')[1];
-            resolve();
+            window.saveWordJellyFlight(key, window.wordJellyFlightFrames[key]).then(resolve, resolve);
           };
           reader.onerror = resolve;
           reader.readAsDataURL(blob);
@@ -1642,8 +1681,10 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
         wordRevealVisible: state.word_reveal.visible });
       if (presentation.visible && presentation.motion?.center) {
         const motion = presentation.motion, kind = presentation.kind;
-        if (motion.phase === 'center') captureFlight(`${kind}-departure`);
-        if (motion.phase === 'rise') captureFlight(`${kind}-screen-center`);
+        if (motion.phase === 'depart') {
+          captureFlight(`${kind}-departure`);
+          if (presentation.elapsed >= 0.65 + 0.84 / 2) captureFlight(`${kind}-direct-transit`);
+        }
         if (motion.phase === 'celebrate' && !presentation.revealed) captureFlight(`${kind}-upper-arrival`);
         if (presentation.revealed && motion.phase === 'celebrate') captureFlight(`${kind}-enlarged-turn`);
         if (motion.phase === 'return') captureFlight(`${kind}-return`);
@@ -1668,7 +1709,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
       continue;
     }
-    const completed = await merge(page, found.roots[0].id, found.roots[1].id);
+    const completed = await mergeForMilestone(found.roots[0].id, found.roots[1].id);
     await pressRect(page, completed.rect);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
     const after = await jelly(page);
@@ -1695,7 +1736,9 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
     await Promise.all(window.wordJellyFlightCaptures);
     return { milestones: window.wordJellyMilestones, keyframes: window.wordJellyFlightFrames };
   });
-  await info.attach('word-jelly-chest-milestones.json', { body: JSON.stringify(milestones, null, 2), contentType: 'application/json' });
+  const milestonesPath = info.outputPath('word-jelly-chest-milestones.json');
+  fs.writeFileSync(milestonesPath, JSON.stringify(milestones, null, 2));
+  await info.attach('word-jelly-chest-milestones.json', { path: milestonesPath, contentType: 'application/json' });
   for (const [name, encoded] of Object.entries(keyframes)) {
     if (encoded) fs.writeFileSync(info.outputPath(`word-jelly-chest-${name}.png`), Buffer.from(encoded, 'base64'));
   }
@@ -1714,36 +1757,36 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
     // endpoints can fall between samples. Check the observed journey here;
     // native route tests cover exact start/end poses and timing boundaries.
     const phases = visible.map(frame => frame.motion.phase).filter((phase, index, all) => index === 0 || phase !== all[index - 1]);
-    expect(phases, `${kind} flies to screen center, rises, celebrates, and returns in order`).toEqual(['center', 'rise', 'celebrate', 'return']);
-    const departure = visible.filter(frame => frame.motion.phase === 'center');
-    expect(departure.length, `${kind} has several observed poses on its outbound journey`).toBeGreaterThan(1);
-    const outboundDistance = distance(anchorCenter, screenCenter);
-    let previousCenterDistance = Infinity;
-    for (const frame of departure) {
-      const currentDistance = distance(frame.motion.center, screenCenter);
-      expect(distance(frame.motion.center, anchorCenter) + currentDistance,
-        `${kind} departs along the route from its HUD chest to screen center`).toBeLessThanOrEqual(outboundDistance + 1);
-      expect(currentDistance, `${kind} moves closer to screen center`).toBeLessThanOrEqual(previousCenterDistance + 0.1);
-      previousCenterDistance = currentDistance;
-    }
-    expect(previousCenterDistance, `${kind} makes visible progress toward screen center`)
-      .toBeLessThan(distance(departure[0].motion.center, screenCenter) - 1);
-    const centered = visible.filter(frame => ['center', 'rise'].includes(frame.motion.phase));
-    expect(Math.min(...centered.map(frame => distance(frame.motion.center, screenCenter))),
-      `${kind} visibly travels through the actual screen center`).toBeLessThan(tolerance);
+    expect(phases, `${kind} flies directly upstairs, celebrates, and returns in order`).toEqual(['depart', 'celebrate', 'return']);
     const upper = visible.filter(frame => frame.motion.phase === 'celebrate');
     expect(upper.length, `${kind} has an upper-screen presentation beat`).toBeGreaterThan(2);
-    let previousHeight = screenCenter[1];
-    for (const frame of visible.filter(frame => frame.motion.phase === 'rise')) {
-      expect(Math.abs(frame.motion.center[0] - screenCenter[0]), `${kind} rises from the horizontal screen center`).toBeLessThan(1);
-      expect(frame.motion.center[1], `${kind} moves upward before celebrating`).toBeLessThanOrEqual(previousHeight + 0.1);
-      previousHeight = frame.motion.center[1];
+    const upperCenter = upper[0].motion.center;
+    const departure = visible.filter(frame => frame.motion.phase === 'depart');
+    expect(departure.length, `${kind} has several observed poses on its outbound journey`).toBeGreaterThan(1);
+    const outboundDistance = distance(anchorCenter, upperCenter);
+    let previousUpperDistance = Infinity;
+    for (const frame of departure) {
+      const currentDistance = distance(frame.motion.center, upperCenter);
+      expect(distance(frame.motion.center, anchorCenter) + currentDistance,
+        `${kind} departs on the direct route from its HUD chest to the upper destination`).toBeLessThanOrEqual(outboundDistance + 1);
+      for (const axis of [0, 1]) {
+        expect(frame.motion.center[axis], `${kind} never detours past either destination axis toward screen center`)
+          .toBeGreaterThanOrEqual(Math.min(anchorCenter[axis], upperCenter[axis]) - 1);
+        expect(frame.motion.center[axis], `${kind} remains between its anchor and upper destination`)
+          .toBeLessThanOrEqual(Math.max(anchorCenter[axis], upperCenter[axis]) + 1);
+      }
+      expect(currentDistance, `${kind} moves continuously closer to its upper destination`).toBeLessThanOrEqual(previousUpperDistance + 0.1);
+      previousUpperDistance = currentDistance;
     }
+    expect(previousUpperDistance, `${kind} makes visible progress toward its upper destination`)
+      .toBeLessThan(distance(departure[0].motion.center, upperCenter) - 1);
+    expect(previousUpperDistance, `${kind} completes most of its direct flight before the upper celebration`)
+      .toBeLessThan(Math.max(tolerance, outboundDistance * 0.15));
     for (const frame of upper) {
       expect(Math.abs(frame.motion.center[0] - screenCenter[0]), `${kind} stays horizontally centered upstairs`).toBeLessThan(1);
       expect(frame.motion.center[1], `${kind} celebrates in the upper portion of the screen`).toBeLessThan(bounds[1] + bounds[3] * 0.4);
     }
-    expect(centered.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01),
+    expect(departure.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01),
       `${kind} travels to its upper destination before enlarging and turning`).toBe(true);
     expect(Math.max(...upper.map(frame => frame.motion.scale)), `${kind} clearly enlarges at its destination`).toBeGreaterThan(1.3);
     expect(upper.some(frame => frame.motion.yaw > 0.1 && frame.motion.yaw < 6.1), `${kind} visibly turns while enlarged upstairs`).toBe(true);
@@ -1766,7 +1809,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       .toBeLessThan((peakScale - 1) * 0.35);
     const firstReveal = visible.find(frame => frame.revealed);
     expect(firstReveal.wordRevealVisible, 'The chest peak follows the completed word-picture reading beat').toBe(false);
-    expect(['departure', 'screen-center', 'upper-arrival', 'enlarged-turn', 'return']
+    expect(['departure', 'direct-transit', 'upper-arrival', 'enlarged-turn', 'return']
       .every(phase => Boolean(keyframes[`${kind}-${phase}`])), `${kind} records all five real rendered flight keyframes`).toBe(true);
   }
   expect(errors).toEqual([]);

@@ -32,16 +32,17 @@ header and tighter outer spacing to preserve 44-pixel card targets even with
 speech controls visible. Menu, notebook and background pauses hide and freeze
 the inline effect.
 
-A new earned chest enlarges to a visible silhouette up to 128 CSS pixels wide
-or tall, lifts and makes one full vertical-axis turn before settling beside
+A new earned chest flies directly to the upper-center showcase, enlarges to a
+visible silhouette up to 176 CSS pixels wide or tall, and makes one full
+vertical-axis turn before returning to settle beside
 "Chest ready". The ordinary Meadow Explorer chest uses the same acquired closed
 3D model and turn renderer as Jelly Match and Voice Pop. The compact status pill
 fades during the enlargement so the chest remains the focal point. A local flash,
 rotating rays and seven short star glints follow its moving center. The
-0.12-second reveal drives the `reward` cue, light accent and shared viewport
+1.36-second reveal drives the `reward` cue, light accent and shared viewport
 confetti. GameUI keeps the paper in its own
 CanvasLayer for a 6.4-second burst, including over four seconds of slow descent.
-The compact chest presentation still ends at 1.95 seconds; the paper tail continues
+The chest presentation ends at 2.65 seconds; the paper tail continues
 through the same round's result and opening screens. The closed chest then remains
 as "Chest ready" until the host clears the round. Later pair callbacks cannot
 restart the earned chest or overwrite it with an unsuccessful drop.

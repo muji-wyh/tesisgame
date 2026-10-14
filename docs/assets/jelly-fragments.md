@@ -23,8 +23,8 @@ second and the relevant sequences at five frames per second. These samples
 establish visible beats; they do not constitute a normal-speed audio review.
 
 The adaptation preserves the existing 0.65-second pickup flight and progress
-fill. The whole closed chest then travels from its HUD anchor to the actual
-viewport center, rises to the upper area, enlarges and rotates, and flies back
+fill. The whole closed chest then travels directly from its HUD anchor to the
+upper-center area, enlarges and rotates, and flies back
 to the same anchor. Match and Memory share the same flight choreography.
 Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn.
 Transitions to Royal and Crystal rotate their original 2D artwork in the screen
@@ -32,8 +32,9 @@ plane without inventing rear geometry. No new artwork or sound is acquired.
 Intermediate chests never run final opening or saving callbacks; the gameplay
 model alone owns fragment credit and tier changes.
 
-After pickup, the 2.65-second performance reaches the center at 0.44 seconds
-and the upper destination at 0.84 seconds. Enlargement follows arrival; the
+After pickup, the 2.65-second performance reaches the upper destination at
+0.84 seconds in one smooth flight, without a waypoint at the viewport center.
+Enlargement follows arrival; the
 full turn runs from 0.90 to 1.82 seconds. Material change, local flash, reward
 sound and confetti share the 1.36-second midpoint. This places the Jelly Words
 milestone peak after its 1.95-second word-picture reading beat. The return runs
@@ -257,7 +258,7 @@ all four 3D tiers stay closed and inside a fixed camera envelope through a full
 turn, use at most two 512px surfaces, and stop rendering when hidden or cleared.
 The original chest-opening mechanism remains independent.
 
-The screen-flight revision was inspected in local native renders at 1366 x 768,
+The earlier two-stage screen flight was inspected in local native renders at 1366 x 768,
 390 x 844 and 568 x 320 for Jelly Words, Voice Pop and Memory. These are muted
 visual fixtures with sampled center, rise, turn, reveal and return frames, not
 physical-device or acoustic playback evidence. Focused route and lifecycle tests

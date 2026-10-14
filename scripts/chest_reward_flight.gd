@@ -1,7 +1,6 @@
 extends RefCounted
 ## One readable route for every earned chest, sampled by its owner's clock.
 
-const CENTER_SECONDS: float = 0.44
 const TOP_SECONDS: float = 0.84
 const TURN_START: float = 0.90
 const REVEAL_SECONDS: float = 1.36
@@ -15,12 +14,9 @@ static func sample(age: float, rest: Vector2, safe: Rect2, edge: float, peak_edg
 	var peak: float = maxf(edge, minf(peak_edge, minf(safe.size.x * 0.46, safe.size.y * 0.40)))
 	var upper := Vector2(middle.x, safe.position.y + maxf(safe.size.y * 0.22, peak * 0.72))
 	var center: Vector2 = rest
-	var phase: String = "center"
-	if age < CENTER_SECONDS:
-		center = rest.lerp(middle, smoothstep(0.0, CENTER_SECONDS, age))
-	elif age < TOP_SECONDS:
-		phase = "rise"
-		center = middle.lerp(upper, smoothstep(CENTER_SECONDS, TOP_SECONDS, age))
+	var phase: String = "depart"
+	if age < TOP_SECONDS:
+		center = rest.lerp(upper, smoothstep(0.0, TOP_SECONDS, age))
 	elif age < RETURN_START:
 		phase = "celebrate"
 		center = upper

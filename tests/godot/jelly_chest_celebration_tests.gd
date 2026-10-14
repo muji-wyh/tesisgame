@@ -195,50 +195,22 @@ func _pose_at(view, age: float) -> Dictionary:
 
 
 func _check_flight_route(view) -> void:
+	for layout: Dictionary in [
+		{"viewport": Vector2i(1000, 720), "position": Vector2(164, 200), "size": Vector2(672, 480), "anchor": Rect2(20, 408, 44, 44)},
+		{"viewport": Vector2i(390, 844), "position": Vector2(8, 188), "size": Vector2(374, 640), "anchor": Rect2(20, 580, 36, 36)},
+		{"viewport": Vector2i(844, 390), "position": Vector2(80, 80), "size": Vector2(684, 290), "anchor": Rect2(20, 230, 36, 36)},
+	]:
+		root.size = layout.viewport
+		view.position = layout.position
+		view.size = layout.size
+		view.set_chest_anchor(layout.anchor)
+		_check_direct_flight(view, layout.anchor)
 	root.size = Vector2i(1000, 720)
 	view.position = Vector2(164, 200)
 	view.size = Vector2(672, 480)
-	var anchor := Rect2(20, 408, 44, 44)
-	view.set_chest_anchor(anchor)
-	var safe: Rect2 = view._flight_bounds()
-	check(not safe.get_center().is_equal_approx(view.size * 0.5),
-		"The flight fixture distinguishes the screen center from a bounded game area's center")
-	for previous: int in [0, 1, 4, 5]:
-		_begin(view, previous, previous + 1)
-		var departure: Dictionary = _pose_at(view, 0.0)
-		var central: Dictionary = _pose_at(view, Flight.CENTER_SECONDS)
-		var upper: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
-		var peak: Dictionary = _pose_at(view, Flight.REVEAL_SECONDS)
-		var turned: Dictionary = _pose_at(view, Flight.TURN_END)
-		var returning: Dictionary = _pose_at(view, lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 0.5))
-		var arrived: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
-		check(Vector2(departure.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(departure.scale), 1.0),
-			"Tier %d departs from its exact chest anchor at the resting size" % (previous + 1))
-		check(Vector2(central.center).distance_to(safe.get_center()) < 0.1,
-			"Tier %d first reaches the actual screen center" % (previous + 1))
-		check(absf(float(upper.center.x) - safe.get_center().x) < 0.1 and float(upper.center.y) < safe.position.y + safe.size.y * 0.4,
-			"Tier %d then reaches a separate centered point in the upper screen" % (previous + 1))
-		check(is_zero_approx(float(central.yaw)) and is_zero_approx(float(upper.yaw)) and float(upper.scale) <= 1.05,
-			"The chest finishes traveling upward before its enlargement and turn")
-		check(Vector2(peak.center).distance_to(upper.center) < 0.1 and float(peak.scale) > 1.3
-			and float(peak.yaw) > 0.1 and float(peak.yaw) < TAU,
-			"The reveal enlarges and rotates the chest at its upper-screen destination")
-		check(is_equal_approx(float(turned.yaw), TAU) and Vector2(turned.center).distance_to(upper.center) < 0.1,
-			"The chest completes a full closed turn before beginning its return")
-		check(Vector2(returning.center).distance_to(anchor.get_center()) < Vector2(upper.center).distance_to(anchor.get_center())
-			and float(returning.scale) < float(peak.scale),
-			"The return visibly approaches the anchor while recovering the resting size")
-		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
-			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)), "The chest lands exactly at its original anchor without residual roll")
-		for boundary: float in [Flight.CENTER_SECONDS, Flight.TOP_SECONDS, Flight.TURN_START,
-			Flight.REVEAL_SECONDS, Flight.TURN_END, Flight.RETURN_START, Flight.PERFORMANCE_SECONDS]:
-			var before: Dictionary = _pose_at(view, boundary - 0.0001)
-			var after: Dictionary = _pose_at(view, boundary + 0.0001)
-			check(Vector2(before.center).distance_to(after.center) < 0.1 and absf(float(before.scale) - float(after.scale)) < 0.01
-				and absf(float(before.yaw) - float(after.yaw)) < 0.01 and absf(float(before.roll) - float(after.roll)) < 0.01,
-				"Tier %d stays continuous across the %.2f-second flight boundary" % [previous + 1, boundary])
+	view.set_chest_anchor(Rect2(20, 408, 44, 44))
 	_begin(view, 1, 2)
-	view.advance(Celebration.ARRIVAL_SECONDS + Flight.CENTER_SECONDS * 0.5)
+	view.advance(Celebration.ARRIVAL_SECONDS + Flight.TOP_SECONDS * 0.5)
 	var elapsed: float = view._elapsed
 	var cue_count: int = heard.size()
 	root.size = Vector2i(390, 844)
@@ -248,9 +220,14 @@ func _check_flight_route(view) -> void:
 	view.set_chest_anchor(resized_anchor)
 	check(is_equal_approx(view._elapsed, elapsed) and heard.size() == cue_count,
 		"A viewport and anchor change during departure cannot restart the clock or its sound")
-	var resized_center: Dictionary = _pose_at(view, Flight.CENTER_SECONDS)
-	check(Vector2(resized_center.center).distance_to(view._flight_bounds().get_center()) < 0.1,
-		"An in-flight resize targets the resized screen center")
+	var resized_upper: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
+	var resized_safe: Rect2 = view._flight_bounds()
+	check(absf(float(resized_upper.center.x) - resized_safe.get_center().x) < 0.1
+		and float(resized_upper.center.y) < resized_safe.position.y + resized_safe.size.y * 0.4,
+		"An in-flight resize keeps the only destination in the resized upper screen")
+	var resized_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
+	check(Vector2(resized_midway.center).distance_to(resized_anchor.get_center().lerp(resized_upper.center, 0.5)) < 0.1,
+		"The resized departure still takes a direct route from its current anchor to the upper destination")
 	var resized_arrival: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
 	check(Vector2(resized_arrival.center).is_equal_approx(resized_anchor.get_center())
 		and is_equal_approx(float(resized_arrival.scale), 1.0), "The resized flight returns to the current chest anchor")
@@ -262,6 +239,55 @@ func _check_flight_route(view) -> void:
 	root.size = Vector2i(1000, 720)
 	view.position = Vector2(24, 60)
 	view.size = Vector2(952, 636)
+
+
+func _check_direct_flight(view, anchor: Rect2) -> void:
+	var safe: Rect2 = view._flight_bounds()
+	check(not safe.get_center().is_equal_approx(view.size * 0.5),
+		"The flight fixture distinguishes the screen center from a bounded game area's center")
+	for previous: int in [0, 1, 4, 5]:
+		_begin(view, previous, previous + 1)
+		var departure: Dictionary = _pose_at(view, 0.0)
+		var upper: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
+		var peak: Dictionary = _pose_at(view, Flight.REVEAL_SECONDS)
+		var turned: Dictionary = _pose_at(view, Flight.TURN_END)
+		var returning: Dictionary = _pose_at(view, lerpf(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, 0.5))
+		var arrived: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
+		check(Vector2(departure.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(departure.scale), 1.0),
+			"Tier %d departs from its exact chest anchor at the resting size" % (previous + 1))
+		check(absf(float(upper.center.x) - safe.get_center().x) < 0.1 and float(upper.center.y) < safe.position.y + safe.size.y * 0.4,
+			"Tier %d reaches its only destination in the upper screen" % (previous + 1))
+		var route: Vector2 = Vector2(upper.center) - anchor.get_center()
+		var last_progress: float = 0.0
+		for step in range(1, 24):
+			var outbound: Dictionary = _pose_at(view, Flight.TOP_SECONDS * float(step) / 24.0)
+			var offset: Vector2 = Vector2(outbound.center) - anchor.get_center()
+			var progress: float = offset.dot(route) / route.length_squared()
+			check(absf(offset.cross(route)) / route.length() < 0.1 and progress > last_progress and progress < 1.0,
+				"Tier %d at %s departs directly toward the upper destination without a center detour or pause" % [previous + 1, root.size])
+			check(outbound.phase == "depart" and is_equal_approx(float(outbound.scale), 1.0)
+				and is_zero_approx(float(outbound.yaw)) and is_zero_approx(float(outbound.roll)),
+				"Travel keeps one departure phase with its resting size and orientation")
+			last_progress = progress
+		check(is_zero_approx(float(upper.yaw)) and float(upper.scale) <= 1.05,
+			"The chest finishes traveling upward before its enlargement and turn")
+		check(Vector2(peak.center).distance_to(upper.center) < 0.1 and float(peak.scale) > 1.3
+			and float(peak.yaw) > 0.1 and float(peak.yaw) < TAU,
+			"The reveal enlarges and rotates the chest at its upper-screen destination")
+		check(is_equal_approx(float(turned.yaw), TAU) and Vector2(turned.center).distance_to(upper.center) < 0.1,
+			"The chest completes a full closed turn before beginning its return")
+		check(Vector2(returning.center).distance_to(anchor.get_center()) < Vector2(upper.center).distance_to(anchor.get_center())
+			and float(returning.scale) < float(peak.scale),
+			"The return visibly approaches the anchor while recovering the resting size")
+		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
+			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)), "The chest lands exactly at its original anchor without residual roll")
+		for boundary: float in [Flight.TOP_SECONDS, Flight.TURN_START,
+			Flight.REVEAL_SECONDS, Flight.TURN_END, Flight.RETURN_START, Flight.PERFORMANCE_SECONDS]:
+			var before: Dictionary = _pose_at(view, boundary - 0.0001)
+			var after: Dictionary = _pose_at(view, boundary + 0.0001)
+			check(Vector2(before.center).distance_to(after.center) < 0.1 and absf(float(before.scale) - float(after.scale)) < 0.01
+				and absf(float(before.yaw) - float(after.yaw)) < 0.01 and absf(float(before.roll) - float(after.roll)) < 0.01,
+				"Tier %d stays continuous across the %.2f-second flight boundary" % [previous + 1, boundary])
 
 
 func _check_upgrade_containment(view) -> void:
