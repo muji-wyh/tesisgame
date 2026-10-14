@@ -458,7 +458,7 @@ func _upgraded_reward_checks(directory: String) -> void:
 	var first_page: Dictionary = room.snapshot()
 	check(app._jelly_rewards_shown and first_page.chest_count == 1 and first_page.page_count == 1
 		and first_page.page == 0 and first_page.visible_chest_count == 1 and first_page.chests[0].tier == 4
-		and first_page.heading == "Game over" and room._progress.text.ends_with("Chest Lv. 4"),
+		and first_page.heading == "Game over" and room._cards[0].tier_label.text == "Chest Lv. 4",
 		"The result itself presents only the final upgraded chest to open")
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)

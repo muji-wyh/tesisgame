@@ -331,6 +331,9 @@ func _collect_all_checks() -> void:
 		and room.rewards.entries.size() == 5 and room._cards.size() == 3,
 		"Current results retain all unopened off-page legacy chests and the final upgraded chest")
 	room.set_result_context({"score": 80, "chest_tier": 3, "chest_count": 1})
+	check(room._cards.size() == 1 and room._cards[0].tier == 3
+		and room._cards[0].reward_id == "jelly:bulk-current:0" and room._cards[0].entry_index == 4,
+		"Settlement selects this round's final chest before older unopened treasure without reordering its saved index")
 	var cues: Array[String] = []
 	room.chest_audio_requested.connect(func(action: String, _theme: String, _amount: float) -> void: cues.append(action))
 	_hold(room, 0, Feel.HOLD_SECONDS * 0.3)

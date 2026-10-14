@@ -1724,7 +1724,7 @@ func _show_jelly_rewards() -> void:
 		_jelly_rewards.configure_empty_result(_round_id, data.chests, reduced_motion)
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
-	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {})
+	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {}, _round_id)
 	if _jelly_round_ended():
 		_jelly_game_over.configure(_jelly_rewards, Data.theme(model.theme_id), reduced_motion,
 			int(_round_result.get("chest_count", 0)) > 0,

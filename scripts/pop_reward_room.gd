@@ -57,6 +57,7 @@ var _next_page: Button
 var _page_label: Label
 var _page_index: int = 0
 var _result_context: Dictionary = {}
+var _result_reward_id: String = ""
 var _empty_result_id: String = ""
 var _result_score: Label
 var _collecting: bool = false
@@ -175,17 +176,35 @@ func has_pending() -> bool:
 	return _save_failed or _unsaved_index >= 0 or rewards.has_pending()
 
 
-func set_result_context(result: Dictionary) -> void:
+func set_result_context(result: Dictionary, earned_round_id: String = "") -> void:
 	var previous_page_size: int = _effective_page_size()
 	var had_empty_result: bool = not _empty_result_id.is_empty()
+	var previous_reward_id: String = _result_reward_id
 	_result_context = result.duplicate(true)
+	_result_reward_id = ""
+	if _is_jelly_result() and int(result.get("chest_count", 0)) > 0:
+		_result_reward_id = rewards._reward_id(earned_round_id if not earned_round_id.is_empty() else _configured_id, 0)
 	if result.is_empty():
 		_empty_result_id = ""
-	if is_instance_valid(_scroll) and (previous_page_size != _effective_page_size() or (had_empty_result and _empty_result_id.is_empty())):
+	if is_instance_valid(_scroll) and (previous_page_size != _effective_page_size()
+		or previous_reward_id != _result_reward_id or (had_empty_result and _empty_result_id.is_empty())):
 		_page_index = 0
+		_select_result_chest()
 		_build_cards()
 		return
 	_refresh()
+
+
+func _select_result_chest() -> void:
+	if _result_reward_id.is_empty():
+		return
+	# Retained treasure stays in storage order. Settlement starts on this round's
+	# final reward, independent of older chests or unfinished upgrade animations.
+	var entries: Array[Dictionary] = _batch_entries()
+	for index in range(entries.size()):
+		if str(entries[index].get("reward_id", "")) == _result_reward_id:
+			_page_index = floori(float(index) / _effective_page_size())
+			return
 
 
 func configure_empty_result(id: String, manifest: Dictionary, reduce: bool) -> bool:
@@ -327,6 +346,7 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 		if not bool(rewards.entries[index].opened):
 			_page_index = floori(float(index) / _effective_page_size())
 			break
+	_select_result_chest()
 	_build_cards()
 	resume()
 	return not _save_failed
@@ -704,6 +724,7 @@ func retry_save() -> void:
 		_save_failed = not rewards.create_batch(_configured_id, _draft_themes, _draft_tiers)
 		if not _save_failed:
 			_sync_saved_batch()
+			_select_result_chest()
 			_build_cards()
 	_refresh()
 
@@ -1195,7 +1216,8 @@ func snapshot() -> Dictionary:
 		var rect: Rect2 = card.button.get_global_rect()
 		var art_rect: Rect2 = card.art.get_global_rect()
 		var hint_rect: Rect2 = card.hint.get_global_rect()
-		entries.append({"index": card.entry_index, "theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
+		entries.append({"index": card.entry_index, "reward_id": card.reward_id,
+			"theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"tier": int(card.tier),
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
