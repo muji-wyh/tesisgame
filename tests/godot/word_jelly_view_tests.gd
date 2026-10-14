@@ -108,6 +108,7 @@ func _run() -> void:
 	_check_keyboard_rejection(view)
 	_check_arrival_packet(view)
 	_check_staggered_preview_refill(view)
+	_check_immediate_preview_packets(view)
 	_check_arrival_land_timing(view)
 	_check_danger_ends_when_collecting(view)
 	_check_danger_ends_when_merge_frees_space(view)
@@ -2764,8 +2765,52 @@ func _check_staggered_preview_refill(view) -> void:
 			if not reduced:
 				check(waiting >= 2 and refilled >= 1,
 					"staggered release visibly combines falling, waiting, and replenished roots")
-			check(not view.game.can_drop_now(), "partially refilled supply cannot release a second batch during descent")
+			check(view.game.can_drop_now() and not view.drop_button.disabled and bool(view.snapshot().preview.enabled),
+				"partially refilled supply remains immediately available during descent")
+			var old_cells: Array = view.game.cells.duplicate(true)
+			var next_packet: Array = view.game.upcoming.duplicate(true)
+			view._drop_next(int(next_packet[0].id))
+			check(view.game.cells.size() == old_cells.size() + Model.DROP_COUNT
+				and view.game.cells.slice(0, old_cells.size()) == old_cells,
+				"a second packet starts without moving, restarting, or dropping any earlier arrival")
 	view.size = Vector2(1000, 720)
+
+
+func _check_immediate_preview_packets(view) -> void:
+	for reduced: bool in [false, true]:
+		_reset(view, reduced)
+		var first: Array = view.game.upcoming.duplicate(true)
+		view._drop_next(int(first[0].id))
+		var previous: Array = view.game.cells.duplicate(true)
+		var previous_rects: Dictionary = {}
+		for tile: Dictionary in first:
+			previous_rects[int(tile.id)] = view._tiles[int(tile.id)].get_rect()
+		var second: Array = view.game.upcoming.duplicate(true)
+		check(view.game.can_drop_now() and not view.drop_button.disabled,
+			"a new packet is available in the same frame as the first departure")
+		view._drop_next(int(second[0].id))
+		check(view.game.cells.size() == previous.size() + Model.DROP_COUNT
+			and view.game.cells.slice(0, previous.size()) == previous,
+			"zero-time preview activations preserve the earlier batch and commit each root once")
+		for original: Dictionary in first:
+			check(view._tiles[int(original.id)].get_rect().is_equal_approx(previous_rects[int(original.id)]),
+				"a second packet cannot teleport or restart the first packet's painted bodies")
+		for index in range(second.size()):
+			var id: int = int(second[index].id)
+			var cell: Dictionary = view.game.cell(id)
+			var expected: Rect2 = view._tile_rect(cell) if reduced else Rect2(view._preview_origins[index], view._preview_tiles[index].size)
+			check(not cell.is_empty() and view._tiles[id].get_rect().is_equal_approx(expected)
+				and view._tiles[id]._label.text == str(second[index].text),
+				"every immediately repeated root starts from its own tray slot with the correct letters")
+			if not reduced:
+				var visible_waiting: int = 0
+				for body: Dictionary in view.game.cells:
+					if bool(body.get("arrival", false)) and int(body.arrival_index) == index \
+						and float(body.age) <= Model.arrival_delay(body) and view._tiles[int(body.id)].visible:
+						visible_waiting += 1
+				check(visible_waiting <= 1, "each preview source shows at most one waiting body during rapid releases")
+		check(cues.count("pick") == 2 and payouts.is_empty() and attempts.is_empty(),
+			"two accepted preview activations emit two pick cues without granting rewards or learning credit")
 
 
 func _check_arrival_land_timing(view) -> void:

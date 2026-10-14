@@ -180,8 +180,7 @@ func step(delta: float) -> void:
 
 func can_drop_now() -> bool:
 	return phase == "playing" and not paused \
-		and cells.size() < CAPACITY and not upcoming.is_empty() \
-		and _settling_remaining() <= EPSILON
+		and cells.size() < CAPACITY and not upcoming.is_empty()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -314,6 +313,13 @@ func _eligible(word: Dictionary, level: int) -> bool:
 func _spawn_drop() -> void:
 	var used_columns: Array[int] = []
 	var column_counts: Dictionary = {}
+	# Accept another batch immediately, placing each new arrival above any
+	# body still entering its lane instead of overlapping the previous wave.
+	for tile: Dictionary in cells:
+		if bool(tile.get("arrival", false)) and not is_settled(tile):
+			var column: int = int(tile.column)
+			var entry_offset: int = maxi(0, ceili(float(Motion.sample(tile).lift_rows) - float(tile.row)))
+			column_counts[column] = maxi(int(column_counts.get(column, 0)), entry_offset)
 	for index in range(mini(DROP_COUNT, CAPACITY - cells.size())):
 		var column: int = _spawn_column(used_columns)
 		var ordinal: int = int(column_counts.get(column, 0))

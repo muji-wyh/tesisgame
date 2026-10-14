@@ -28,6 +28,7 @@ const DROP_COUNT: int = 6
 const UPCOMING_COUNT: int = 6
 const SETTLE_SECONDS: float = 0.36
 const ARRIVAL_STAGGER: float = 0.15
+const ARRIVAL_SLOT_CLEARANCE: float = 0.36
 const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
 const FUSION_SECONDS: float = 0.76
 const SPLIT_SECONDS: float = 0.45
@@ -1049,7 +1050,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell() and _settling_remaining() <= EPSILON
+	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -1298,11 +1299,22 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 
 func _spawn_drop() -> void:
 	var column_delays: Dictionary = {}
+	var slot_delays: Dictionary = {}
+	# Concurrent batches reserve their destinations immediately. Preserve the
+	# entry spacing of earlier arrivals without delaying the next input.
+	for tile: Dictionary in cells:
+		if bool(tile.get("arrival", false)) and not is_settled(tile):
+			var column: int = int(tile.column)
+			var slot: int = int(tile.get("arrival_index", 0))
+			var departure: float = arrival_delay(tile) - float(tile.age)
+			column_delays[column] = maxf(float(column_delays.get(column, -INF)), departure)
+			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)), departure + ARRIVAL_SLOT_CLEARANCE)
 	for index in range(DROP_COUNT):
 		if not _spawn_tile(true, index):
 			break
 		var tile: Dictionary = cells.back()
 		var column: int = int(tile.column)
+		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
 		if column_delays.has(column):
 			# Give the preceding root at least one row of clearance before the
 			# next root starts down the same entry lane. A shared lane keeps its

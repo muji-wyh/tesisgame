@@ -300,13 +300,11 @@ func _check_supply_preview(view) -> void:
 			"Preview slot %d retains the queued learning artwork, word kind and treasure marker" % (index + 1))
 		check(preview.disabled and preview.focus_mode == Control.FOCUS_NONE and preview.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 			"Upcoming artwork %d stays decorative inside its shared release control" % (index + 1))
-		check(not view._press(4, _rect(slot.rect).get_center()), "An airborne wave keeps preview presses disabled")
 		view._activate(int(slot.id))
 	check(heard.is_empty() and cues.is_empty() and attempts.is_empty() and int(view.snapshot().drag.selected) == -1,
-		"Disabled preview interaction cannot pronounce, select, answer, or release another wave")
-	for control: Control in view.navigation_controls():
-		check(not control.get_global_rect().intersects(_rect(before.preview.rect)),
-			"Keyboard navigation excludes the preview while an existing wave is airborne")
+		"Decorative preview tile activation cannot pronounce, select, answer, or release another wave")
+	check(view.navigation_controls().has(view.drop_button),
+		"Keyboard navigation keeps the shared preview control available while an existing wave is airborne")
 	view._layout()
 	view.apply_theme(Data.theme("spring"), data.chests)
 	view._refresh_hud()
@@ -391,15 +389,18 @@ func _check_manual_preview_drop(view) -> void:
 				and arrival.age == 0.0 and not view._settled(arrival)
 				and view._tiles.has(int(arrival.id)) and not _ghost(view, int(arrival.id)).is_empty(),
 				"A manually released jelly immediately renders its advertised content, normal descent, and landing shadow")
-		check(not bool(view.snapshot().preview.enabled) and view.drop_button.disabled
-			and not view.navigation_controls().has(view.drop_button)
+		check(bool(view.snapshot().preview.enabled) and not view.drop_button.disabled
+			and view.navigation_controls().has(view.drop_button)
 			and int(view.snapshot().drag.pointer) == Jelly.NO_POINTER,
-			"The released wave returns pointer ownership and temporarily disables another release")
+			"The released wave returns pointer ownership and leaves the next release immediately available")
 		var dispatched: Dictionary = view.game.snapshot()
 		view._release(release)
-		view.drop_button.pressed.emit()
 		check(view.game.snapshot() == dispatched and cues == ["pick"],
-			"Repeated release or controller events cannot stack another falling wave")
+			"A duplicate release without a fresh press cannot dispatch another batch")
+		check(view._press(pointer, point), "A fresh pointer press is accepted while the preceding batch falls")
+		view._release(point)
+		check(view.game.generated_tiles == int(dispatched.generated_tiles) + 4 and cues == ["pick", "pick"],
+			"Each fresh pointer gesture immediately releases its own batch and tactile cue")
 	_reset(view)
 
 
@@ -453,8 +454,8 @@ func _check_preview_cancel_and_rollover(view) -> void:
 
 
 func _check_preview_lifecycle_gates(view) -> void:
-	for state: String in ["airborne", "paused", "hidden", "full", "results", "stopped", "drag"]:
-		_reset(view, false, state != "airborne")
+	for state: String in ["paused", "hidden", "full", "results", "stopped", "drag"]:
+		_reset(view)
 		var point: Vector2 = _rect(view.snapshot().preview.rect).get_center()
 		match state:
 			"paused":
@@ -501,8 +502,9 @@ func _check_preview_controller(view) -> void:
 		check(not view._cell(int(tile.id)).is_empty(), "Controller release uses the same committed preview as pointer release")
 	for index in range(8):
 		view.drop_button.pressed.emit()
-	check(view.game.generated_tiles == count + 4 and cues == ["pick"],
-		"Repeated controller signals cannot bypass the airborne-wave gate or duplicate its cue")
+	check(view.game.cells.size() == view.game.CAPACITY and view.game.generated_tiles == view.game.CAPACITY
+		and cues == ["pick", "pick"],
+		"Repeated controller activations fill each available batch immediately and stop at reserved capacity")
 	_reset(view)
 
 
@@ -2126,7 +2128,8 @@ func _check_picture_disposal(view) -> void:
 	var previous: Array[WeakRef] = _picture_references(view)
 	check(not previous.is_empty(), "The disposal fixture has cached board and supply artwork")
 	var next_words: Array = data.words.filter(func(word: Dictionary) -> bool:
-		return not str(word.get("image", "")).is_empty() and not previous_paths.has(str(word.image))).slice(0, 12)
+		return int(word.min_age) <= 3 and not str(word.get("image", "")).is_empty() \
+			and not previous_paths.has(str(word.image))).slice(0, 12)
 	check(view.configure(next_words, 3, Data.theme("spring"), data.chests, false, 81),
 		"The next round can use a disjoint set of vocabulary pictures")
 	view.set_process(false)

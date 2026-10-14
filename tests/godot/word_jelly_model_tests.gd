@@ -88,6 +88,7 @@ func _run() -> void:
 	_test_supply_packets()
 	_test_all_age_complementary_supply()
 	_test_supply_preview_stability()
+	_test_immediate_manual_batches()
 	_test_arrival_timing()
 	_test_arrival_readiness_and_pause()
 	_test_arrival_automatic_timing()
@@ -1602,7 +1603,7 @@ func _test_collection_gravity() -> void:
 			"falling publishes a fresh settlement and exact vertical travel for the view")
 	check(model.cell(1001).skin == 3 and _footprint(model.cell(1003)) == Rect2i(5, 7, 1, 1),
 		"collection gravity preserves skins and already-supported neighboring bodies")
-	check(model.try_merge(1001, 1002) == "ignored" and not model.can_drop_now(), "falling bodies and supply wait until their landing finishes")
+	check(model.try_merge(1001, 1002) == "ignored" and model.can_drop_now(), "falling bodies wait for landing while supply remains available")
 	check(model.collected_coins == 50 and model.fragment_count == 4 and model.chest_tier == 1
 		and events.collections.size() == 1 and events.attempts.size() == 1 and events.milestones == [[0, 1]],
 		"falling leaves the original word's single coin, fragment, learning, and chest payout unchanged")
@@ -3521,7 +3522,7 @@ func _test_supply_and_determinism() -> void:
 	check(a.drop_now(int(preview[0].id)), "committed preview can release manually")
 	for tile in preview:
 		check(not a.cell(int(tile.id)).is_empty(), "manual batch releases precisely the advertised roots")
-	check(not a.can_drop_now(), "supply waits for prior batch to settle")
+	check(a.can_drop_now(), "manual supply remains available while the prior batch falls")
 	a.step(Model.SETTLE_SECONDS)
 	_assert_board(a, "manual drop")
 	var whole := Model.new()
@@ -3711,7 +3712,7 @@ func _test_supply_packets() -> void:
 				model.step(ready)
 				repeated.step(ready)
 				check(model.snapshot() == repeated.snapshot(), label + ": packet mixing and arrival remain deterministic across rounds of supply")
-				check(model.can_drop_now(), label + ": the next packet waits only for the completed batch recovery")
+				check(model.can_drop_now(), label + ": the next packet remains available after batch recovery")
 			var groups: Dictionary = _assert_supply_conservation(emitted, words, label)
 			if vocabulary_index == 2:
 				var crossed_groups: int = 0
@@ -3779,9 +3780,35 @@ func _test_supply_preview_stability() -> void:
 	model.set_paused(false)
 	check(model.drop_now(int(preview[0].id)), "resuming releases the exact packet advertised before pause")
 	var following: Array = model.upcoming.duplicate(true)
-	check(not model.drop_now() and model.upcoming == following, "a blocked overlapping drop cannot reshuffle the following packet")
+	check(not model.drop_now(int(preview[0].id)) and model.upcoming == following, "a stale token cannot consume the following packet while its predecessor is falling")
 	model.step(_latest_arrival_ready(model))
 	check(model.upcoming == following, "settling the current packet preserves the next advertised packet byte for byte")
+
+
+func _test_immediate_manual_batches() -> void:
+	var model = _model([_word("cat")])
+	var previous: Array = model.cells.duplicate(true)
+	for batch in range(5):
+		var advertised: Array = model.upcoming.duplicate(true)
+		check(model.can_drop_now() and model.drop_now(int(advertised[0].id)),
+			"each immediate Next activation accepts its committed packet before earlier arrivals land")
+		check(model.cells.slice(0, previous.size()) == previous and is_zero_approx(model.spawn_elapsed),
+			"a rapid packet does not rewind or relocate any previously released body")
+		for item: Dictionary in advertised:
+			var arrival: Dictionary = model.cell(int(item.id))
+			check(not arrival.is_empty() and arrival.text == item.text and arrival.fragments == item.fragments
+				and is_zero_approx(float(arrival.age)), "rapid packets preserve every root and carried chest fragment exactly once")
+		previous = model.cells.duplicate(true)
+		_assert_board(model, "rapid packet %d" % batch)
+	check(model.cells.size() == Model.CAPACITY and model.full_elapsed < 0.0,
+		"rapid packets reserve a full board while danger still waits for landing")
+	var full: Dictionary = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == full,
+		"rapid dispatch still refuses to consume roots when every entry lane is reserved")
+	_assert_arrival_lane_clearance(model, "rapid packets")
+	model.step(_latest_arrival_ready(model))
+	check(is_zero_approx(model.full_elapsed), "danger begins only after the last rapid packet recovers")
+	_assert_board(model, "rapid packets after landing")
 
 
 func _arrival_ids(model) -> Array[int]:
@@ -3866,7 +3893,7 @@ func _test_arrival_readiness_and_pause() -> void:
 		"touching support does not enable a jelly while it is still compressing")
 	check(model.try_merge(first_id, target_id) == "ignored" and model.try_merge(target_id, first_id) == "ignored",
 		"a falling or recovering root cannot be used as a merge source or target")
-	check(not model.can_drop_now() and not model.drop_now(), "a new batch cannot overlap the current arrival recovery")
+	check(model.can_drop_now(), "Next remains available while earlier roots recover")
 	var frozen: Dictionary = model.snapshot()
 	model.set_paused(true)
 	model.step(5.0)
@@ -3874,12 +3901,12 @@ func _test_arrival_readiness_and_pause() -> void:
 		"pause freezes arrival positions, stagger ages, and the next supply clock")
 	model.set_paused(false)
 	model.step(first_ready - first_contact - 0.001)
-	check(not model.is_settled(model.cell(first_id)) and not model.can_drop_now(), "input remains blocked until the final recovery millisecond")
+	check(not model.is_settled(model.cell(first_id)) and model.can_drop_now(), "the body's input waits for recovery without blocking Next")
 	model.step(0.001)
 	check(model.is_settled(model.cell(first_id)) and not bool(model.cell(first_id).settling), "first root becomes ready at its own exact recovery boundary")
-	check(not model.is_settled(model.cell(last_id)) and not model.can_drop_now(), "the last staggered root retains its later readiness deadline")
+	check(not model.is_settled(model.cell(last_id)) and model.can_drop_now(), "the last staggered root retains its later readiness deadline independently of Next")
 	model.step(last_ready - first_ready)
-	check(model.can_drop_now(), "supply releases again only after the complete batch is ready")
+	check(model.can_drop_now(), "Next remains available after the complete batch recovers")
 	for id in incoming:
 		check(model.is_settled(model.cell(id)) and not bool(model.cell(id).settling), "each arrived root completes its settling flag and readiness together")
 	check(model.try_merge(first_id if incoming_is_prefix else target_id, target_id if incoming_is_prefix else first_id) == "merged", "an arrived root can merge in word order after recovery")
@@ -4025,11 +4052,11 @@ func _test_arrival_same_lane_spacing() -> void:
 	var last_id: int = int(by_readiness.back().id)
 	var last_ready: float = Model.settle_duration(model.cell(last_id))
 	model.step(last_ready - 0.001)
-	check(not model.can_drop_now() and not model.is_settled(model.cell(last_id)),
-		"long lane stagger remains part of the authoritative input lock")
+	check(model.can_drop_now() and not model.is_settled(model.cell(last_id)),
+		"long lane stagger delays the body interaction without disabling available supply")
 	model.step(0.001)
 	check(model.can_drop_now() and model.is_settled(model.cell(last_id)),
-		"the next supply unlocks after the last same-lane root recovers")
+		"the next supply stays available after the last same-lane root recovers")
 	_assert_board(model, "same-lane arrival settlement")
 
 

@@ -136,11 +136,11 @@ func _run() -> void:
 	check(game.cells.size() == tile_count + 4
 		and game.cells.filter(func(cell: Dictionary) -> bool: return bool(cell.arrival) and is_zero_approx(float(cell.age))).size() == 4,
 		"GameUI controller activation immediately drops the four advertised jellies")
-	check(is_zero_approx(float(game.spawn_elapsed)) and app._jelly.drop_button.disabled,
-		"Manual supply resets the full interval and blocks another activation while falling")
+	check(is_zero_approx(float(game.spawn_elapsed)) and not app._jelly.drop_button.disabled,
+		"Manual supply resets the full interval and keeps the next activation available while falling")
 	app._controller_accept()
-	check(game.cells.size() == tile_count + 4,
-		"A repeated controller activation cannot dispatch another airborne batch")
+	check(game.cells.size() == tile_count + 8,
+		"A repeated controller activation dispatches a second batch immediately while the first falls")
 	for tile: Dictionary in advertised:
 		check(game.cells.any(func(cell: Dictionary) -> bool: return (int(cell.id) == int(tile.id)
 			and cell.word == tile.word and cell.kind == tile.kind and cell.chest == tile.chest)),

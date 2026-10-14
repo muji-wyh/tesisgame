@@ -554,6 +554,18 @@ func _arrival_delay(cell: Dictionary) -> float:
 
 func _sync_positions() -> void:
 	_refresh_completion_hints()
+	var preview_owners: Dictionary = {}
+	if not reduced_motion:
+		for cell: Dictionary in game.cells:
+			var id: int = int(cell.id)
+			if not bool(cell.get("arrival", false)) or not _arrival_origins.has(id):
+				continue
+			var departure: float = _arrival_delay(cell) - float(cell.age)
+			if departure + WordModel.ARRIVAL_SLOT_CLEARANCE <= 0.0:
+				continue
+			var slot: int = int(_arrival_origins[id].slot)
+			if not preview_owners.has(slot) or departure < float(preview_owners[slot].departure):
+				preview_owners[slot] = {"id": id, "departure": departure}
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
 		if not _tiles.has(id):
@@ -581,6 +593,11 @@ func _sync_positions() -> void:
 		if not dragging:
 			tile.position = rect.position
 			if arrival and not reduced_motion:
+				# A rapid release may reserve another body in the same tray slot.
+				# Let its predecessor leave before showing the waiting replacement.
+				var slot: int = int(_arrival_origins.get(id, {}).get("slot", -1))
+				if float(cell.age) < _arrival_delay(cell) and preview_owners.has(slot):
+					tile.visible = tile.visible and int(preview_owners[slot].id) == id
 				var source: Rect2 = _arrival_rect(cell)
 				var age: float = maxf(0.0, float(cell.age) - _arrival_delay(cell))
 				var contact: float = WordModel.arrival_contact_at(cell) - _arrival_delay(cell)
@@ -744,10 +761,13 @@ func _sync_preview() -> void:
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		var refill: float = refills[index]
-		preview.visible = _configured and not _result_visible and index < game.upcoming.size() and refill > 0.0
-		if not preview.visible:
+		var available: bool = _configured and not _result_visible and index < game.upcoming.size()
+		preview.visible = available and refill > 0.0
+		if not available:
 			continue
 		var item: Dictionary = game.upcoming[index]
+		# A rapid tap can release a refilling slot before it becomes visible.
+		# Keep its identity current so that departure still owns the right origin.
 		if preview.tile_id != int(item.id):
 			_configure_tile(preview, item)
 		_apply_palette(preview, int(item.id))

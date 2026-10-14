@@ -787,11 +787,11 @@ test('four previews predict simultaneous batches through a full board with stabl
 
 test.describe('manual jelly supply', () => {
   // Keep mobile CSS geometry while avoiding high-DPR software-renderer stalls
-  // in the brief falling interval that must reject repeated dispatch taps.
+  // in the brief falling interval used to verify repeated dispatch taps.
   test.use({ deviceScaleFactor: 1 });
 
   for (const pointer of ['mouse', 'touch']) {
-    test(`tapping preview tiles and background drops one queued batch with ${pointer}`, async ({ page }, info) => {
+    test(`tapping preview tiles and background drops each queued batch without cooldown with ${pointer}`, async ({ page }, info) => {
       test.setTimeout(90000);
       const errors = await startJelly(page, { reducedMotion: 'no-preference' });
       await observeSupply(page);
@@ -833,32 +833,31 @@ test.describe('manual jelly supply', () => {
           requests.push({ area, point, before: { roundId: before.round_id, generated: before.generated_tiles,
             spawnElapsed: before.spawn_elapsed, ids } });
           await press(point);
-          // Two more actual releases arrive while the first batch is airborne.
-          await press(point);
+          // A second actual release arrives while the first batch is airborne.
           await press(point);
           await expect.poll(async () => (await jelly(page)).generated_tiles,
-            { intervals: [30], message: 'One manual request consumes exactly the current four previews' })
-            .toBe(before.generated_tiles + 4);
+            { intervals: [30], message: 'Each manual request consumes its own four committed previews' })
+            .toBe(before.generated_tiles + 8);
           await expect.poll(async () => {
             const state = await jelly(page);
             return state.preview.enabled && ids.every(id => state.tiles.some(tile => tile.id === id && tile.settled));
-          }, { intervals: [50], message: 'The manually requested batch falls naturally and enables the next request only after landing' }).toBe(true);
+          }, { intervals: [50], message: 'The manually requested batches fall naturally with Next still available' }).toBe(true);
           const after = await jelly(page);
           expectPreviewLayout(after, bounds);
-          expect(after.generated_tiles, 'Repeated taps during the fall cannot queue another batch').toBe(before.generated_tiles + 4);
+          expect(after.generated_tiles, 'Repeated taps during the fall each dispatch another batch').toBe(before.generated_tiles + 8);
           expect(after.upcoming.map(tile => tile.id), 'The displayed queue advances after a manual drop').not.toEqual(ids);
           expect(after.drag).toMatchObject({ active: false, source: -1, target: -1, selected: -1 });
           expect(after.cleared_pairs).toBe(before.cleared_pairs);
           expect(after.chest_count).toBe(before.chest_count);
           expect(await growthSave(page), 'Requesting supply never submits a learning attempt').toBe(savedGrowth);
           const frames = (await page.evaluate(() => window.jellySupplyTimeline))
-            .filter(frame => frame.roundId === before.round_id && frame.generated === before.generated_tiles + 4);
+            .filter(frame => frame.roundId === before.round_id && frame.generated >= before.generated_tiles + 4);
           expect(frames[0].spawnElapsed, 'Manual dispatch restarts the supply clock').toBeLessThan(0.5);
           const falling = frames.filter(frame => ids.some(id => frame.tiles.some(tile => tile.id === id && !tile.settled)));
           expect(falling.length, 'Manual dispatch exposes multiple falling poses rather than teleporting tiles').toBeGreaterThanOrEqual(2);
+          expect(falling.some(frame => frame.previewEnabled && !frame.previewControl.disabled),
+            'The next dispatch remains available between gestures during the falling batches').toBe(true);
           for (const frame of falling) {
-            expect(frame.previewEnabled).toBe(false);
-            expect(frame.previewControl.disabled).toBe(true);
             expect(frame.drag.source, 'Decorative preview tiles never become held board tiles').toBe(-1);
           }
           for (const id of ids) {

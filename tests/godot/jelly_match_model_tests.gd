@@ -24,6 +24,7 @@ func _run() -> void:
 	_test_supply_and_gravity()
 	_test_queue_contract()
 	_test_manual_drop()
+	_test_immediate_manual_batches()
 	_test_manual_drop_guards()
 	_test_manual_drop_partial_batch()
 	_test_partial_and_stacked_drops()
@@ -334,10 +335,8 @@ func _test_manual_drop() -> void:
 			and arrival.kind == advertised[index].kind and arrival.chest == advertised[index].chest
 			and arrival.age == 0.0 and arrival.arrival,
 			"Manual dispatch preserves every advertised identity and starts its ordinary fall at zero")
-	var dispatched: Dictionary = model.snapshot()
-	check(not model.can_drop_now() and not model.drop_now()
-		and model.snapshot() == dispatched and change_count[0] == 1,
-		"Repeated clicks cannot stack another airborne wave or publish a change")
+	check(model.can_drop_now() and change_count[0] == 1,
+		"Airborne supply keeps the next manual batch ready without changing the automatic cadence")
 	model.step(Model.INITIAL_SPAWN_INTERVAL - 0.001)
 	check(model.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT and model.can_drop_now(),
 		"The automatic cadence restarts with a full interval after an early manual batch")
@@ -347,16 +346,42 @@ func _test_manual_drop() -> void:
 	_assert_board(model, "Manual dispatch and resumed cadence")
 
 
+func _test_immediate_manual_batches() -> void:
+	var model = Model.new()
+	model.configure(_vocabulary(), 3, 73)
+	var previous: Array = model.cells.duplicate(true)
+	for batch in range(3):
+		var advertised: Array = model.upcoming.duplicate(true)
+		check(model.can_drop_now() and model.drop_now(int(advertised[0].id)),
+			"Each immediate preview activation releases a fresh batch without advancing time")
+		check(model.cells.slice(0, previous.size()) == previous and is_zero_approx(model.spawn_elapsed),
+			"Rapid release preserves every earlier body and its existing fall clock")
+		for index in range(advertised.size()):
+			var item: Dictionary = advertised[index]
+			var arrival: Dictionary = model.cells[previous.size() + index]
+			check(arrival.id == item.id and arrival.word == item.word and arrival.kind == item.kind
+				and arrival.chest == item.chest and is_zero_approx(float(arrival.age)),
+				"Rapid release consumes the exact advertised identity and preserves its carried fragment")
+		previous = model.cells.duplicate(true)
+		_assert_board(model, "Immediate batch %d" % batch)
+	check(model.cells.size() == Model.CAPACITY and model.full_elapsed < 0.0,
+		"Rapid clicks reserve the full board without starting danger before landing")
+	var full: Dictionary = model.snapshot()
+	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == full,
+		"A full reserved board still rejects extra clicks without consuming the queue")
+	model.step(_settle_remaining(model))
+	check(is_zero_approx(model.full_elapsed), "The rapid fill starts danger only after every batch lands")
+	_assert_board(model, "Immediate batches after landing")
+
+
 func _test_manual_drop_guards() -> void:
 	var model = Model.new()
 	model.configure(_vocabulary(), 3, 73)
 	check(model.can_drop_now() and model.drop_now(), "The opening preview can release a batch before the first automatic interval")
-	var blocked: Dictionary = model.snapshot()
-	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
-		"Manually released airborne tiles block another release without changing the board")
+	check(model.can_drop_now(), "Manually released airborne tiles do not block the next preview request")
 	model.step(Model.SETTLE_SECONDS)
 	model.set_paused(true)
-	blocked = model.snapshot()
+	var blocked: Dictionary = model.snapshot()
 	check(not model.can_drop_now() and not model.drop_now() and model.snapshot() == blocked,
 		"A paused round rejects manual release without changing its timer or queue")
 	model.set_paused(false)
