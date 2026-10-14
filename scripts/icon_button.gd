@@ -18,11 +18,15 @@ var count: int = -1:
 var count_anchor := Vector2(0.78, 0.78)
 
 
+func _icon_color() -> Color:
+	return get_theme_color("font_disabled_color" if disabled else "font_pressed_color" if button_pressed else "font_color")
+
+
 func _draw() -> void:
 	var center := size * 0.5
 	var unit: float = minf(size.x, size.y) * (0.27 if symbol == Symbol.VOICE else 0.24)
 	var stroke: float = maxf(1, unit * 0.17)
-	var ink: Color = get_theme_color("font_disabled_color" if disabled else "font_pressed_color" if button_pressed else "font_color")
+	var ink: Color = _icon_color()
 	match symbol:
 		Symbol.BACK:
 			draw_polyline(PackedVector2Array([

@@ -131,7 +131,7 @@ async function hintImage(page, countOnly = false) {
     width: icon.width * 0.28, height: icon.height * 0.28 } : icon;
   await page.mouse.move(0, 0);
   // Compare the remaining-use digit after the short payment response settles.
-  if (countOnly) await page.waitForTimeout(420);
+  if (countOnly) await page.waitForTimeout(720);
   await rendered(page);
   return page.screenshot({ scale: 'css', clip: {
     x: bounds.x + clip.x * bounds.scale, y: bounds.y + clip.y * bounds.scale,

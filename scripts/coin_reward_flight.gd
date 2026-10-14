@@ -4,11 +4,14 @@ extends Control
 signal arrived(value: int)
 signal release_sound
 signal arrival_sound
+signal spend_sound
 signal settled
 signal completed
 const Style = preload("res://scripts/ui_style.gd")
 const COINS = preload("res://assets/coins/gold-coins.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const COIN = preload("res://assets/coins/gold-coin.png")
+const DEBIT_SECONDS: float = 0.76
 const BURST_SECONDS: float = 0.46
 const TRAVEL_SECONDS: float = 0.68
 const SOUND_INTERVAL: float = 0.10
@@ -19,6 +22,7 @@ var _seen: Dictionary = {}
 var _visual_total: int = 0
 var _elapsed: float = 0.0
 var _sound_cooldown: float = 0.0
+var _debit: Dictionary = {}
 
 
 func _init() -> void:
@@ -29,11 +33,24 @@ func _init() -> void:
 
 func sync(balance: int) -> void:
 	_events.clear()
+	_debit.clear()
 	_sound_cooldown = 0.0
 	settled.emit()
 	_visual_total = balance
 	if is_instance_valid(counter):
 		counter.sync(balance)
+	queue_redraw()
+
+
+func spend(receipt: Dictionary, destination: Vector2) -> void:
+	if not receipt.get("ok", false) or receipt.get("duplicate", false) or int(receipt.get("amount", 0)) >= 0:
+		return
+	# Reconcile pending deposits before presenting this already-saved debit.
+	sync(int(receipt.after))
+	counter.reduced_motion = reduced_motion
+	counter.debit(int(receipt.before), int(receipt.after))
+	_debit = {"amount": -int(receipt.amount), "destination": destination, "elapsed": 0.0}
+	spend_sound.emit()
 	queue_redraw()
 
 
@@ -60,6 +77,11 @@ func advance(delta: float) -> void:
 	counter.reduced_motion = reduced_motion
 	_elapsed += delta
 	_sound_cooldown = maxf(0.0, _sound_cooldown - delta)
+	var had_debit: bool = not _debit.is_empty()
+	if had_debit:
+		_debit.elapsed += delta
+		if float(_debit.elapsed) >= DEBIT_SECONDS:
+			_debit.clear()
 	var has_release: bool = false
 	var has_arrivals: bool = false
 	for event in _events:
@@ -92,12 +114,13 @@ func advance(delta: float) -> void:
 	if had_events and _events.is_empty():
 		completed.emit()
 	counter.advance(delta)
-	if had_events:
+	if had_events or had_debit:
 		queue_redraw()
 
 
 func snapshot() -> Dictionary:
-	return {"active": not _events.is_empty(), "flights": _events.size(),
+	return {"active": not _events.is_empty() or not _debit.is_empty(), "flights": _events.size(),
+		"debit_active": not _debit.is_empty(), "debit_amount": int(_debit.get("amount", 0)),
 		"arrived_balance": _visual_total, "displayed": counter.displayed if is_instance_valid(counter) else 0.0,
 		"target": counter.target if is_instance_valid(counter) else 0}
 
@@ -107,6 +130,7 @@ func _draw() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var destination: Vector2 = counter.icon_center() - global_position
+	_draw_debit(destination, s)
 	for event in _events:
 		var source: Vector2 = event.source - global_position
 		var age: float = event.elapsed
@@ -146,3 +170,32 @@ func _draw() -> void:
 			draw_set_transform(point, 0.0 if reduced_motion else sin(local_age * 4 + index) * 0.24)
 			draw_texture_rect_region(COINS, Rect2(-Vector2.ONE * side * 0.5, Vector2.ONE * side), region)
 			draw_set_transform(Vector2.ZERO)
+
+
+func _draw_debit(source: Vector2, s: float) -> void:
+	if _debit.is_empty():
+		return
+	var t: float = clampf(float(_debit.elapsed) / DEBIT_SECONDS, 0.0, 1.0)
+	var alpha: float = minf(1.0, (1.0 - t) / 0.30)
+	var label: String = "−%d" % int(_debit.amount)
+	var width: float = 100.0 / s
+	var at: Vector2 = counter.global_position - global_position + Vector2(counter.size.x * 0.5 - width * 0.5, counter.size.y + 15.0 / s)
+	var stacked: bool = float(_debit.destination.y) > counter.global_position.y + counter.size.y
+	if stacked:
+		# Phone headers put Hint beneath the wallet; keep its bulb unobscured.
+		at = counter.global_position - global_position + Vector2(-width + 18.0 / s, counter.size.y * 0.5 + 5.0 / s)
+	if not reduced_motion:
+		at.y += sin(t * PI * 0.5) * (-4.0 if stacked else 7.0) / s
+	draw_string_outline(Style.HEADING_FONT, at, label, HORIZONTAL_ALIGNMENT_CENTER, width, ceili(16 / s), ceili(3 / s), Color("#fff7df", alpha))
+	draw_string(Style.HEADING_FONT, at, label, HORIZONTAL_ALIGNMENT_CENTER, width, ceili(16 / s), Color("#a36628", alpha))
+	if reduced_motion:
+		return
+	var p: float = clampf(float(_debit.elapsed) / 0.38, 0.0, 1.0)
+	if p >= 1.0:
+		return
+	var end: Vector2 = _debit.destination - global_position
+	var bend: Vector2 = (source + end) * 0.5 - Vector2(0, 22.0 / s)
+	var point: Vector2 = source.lerp(bend, p).lerp(bend.lerp(end, p), p)
+	var side: float = lerpf(17.0, 9.0, p) / s
+	draw_texture_rect(GLOW, Rect2(point - Vector2.ONE * side, Vector2.ONE * side * 2.0), false, Color("#ffd781", 0.28))
+	draw_texture_rect(COIN, Rect2(point - Vector2.ONE * side * 0.5, Vector2.ONE * side), false, Color(1, 1, 1, minf(1.0, (1.0 - p) / 0.18)))

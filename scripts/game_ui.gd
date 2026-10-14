@@ -903,6 +903,7 @@ func _build_controls() -> void:
 	_coin_flight.counter = _coin_counter
 	_coin_flight.release_sound.connect(audio.play_coin_release)
 	_coin_flight.arrival_sound.connect(audio.play_coin_arrival)
+	_coin_flight.spend_sound.connect(audio.play_coin_spend)
 	_coin_flight.settled.connect(audio.stop_coin_sounds)
 	add_child(_coin_flight)
 	_coin_flight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -3085,6 +3086,7 @@ func _request_hint() -> void:
 		return
 	if not bool(purchase.get("ok", false)):
 		hint_button.feedback(false)
+		audio.interact(model.theme_id, not _voice_mode)
 		audio.play_pair_feedback(false)
 		_hint_purchasing = false
 		_publish_growth_view()
@@ -3100,10 +3102,12 @@ func _request_hint() -> void:
 		return
 	duck.react("happy")
 	audio.stop_pair_feedback()
+	audio.interact(model.theme_id, not _voice_mode)
 	hint_button.feedback(true)
 	audio.play_pair_feedback(true)
+	_coin_flight.reduced_motion = reduced_motion
+	_coin_flight.spend(purchase, hint_button.global_position + hint_button.size * Vector2(0.5, 0.32))
 	if not _voice_mode:
-		audio.interact(model.theme_id)
 		audio.cue("select")
 		audio.say("res://" + model.card_by_id(model.hint_ids[0]).word.audio)
 	var next_id: String = model.hint_ids[1] if model.selected_id == model.hint_ids[0] else model.hint_ids[0]

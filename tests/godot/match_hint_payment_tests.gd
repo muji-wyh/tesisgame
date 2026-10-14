@@ -7,6 +7,7 @@ var checks: int = 0
 var failures: int = 0
 var round_seed: int = 1900
 var storage: BrowserStorage
+var spend_sounds: int = 0
 
 
 class BrowserStorage extends RefCounted:
@@ -50,20 +51,22 @@ func _settle() -> void:
 
 func _prepare(app, coins: int = 0) -> void:
 	round_seed += 1
+	# Settle the previous round against its own wallet before isolating this case.
+	check(app.new_round(round_seed, false, "", "match"), "The real scene starts a fresh Match round")
+	await _settle()
 	storage = BrowserStorage.new()
 	app.coin_wallet = Wallet.new("user://unused-match-hint-wallet.cfg", storage)
 	check(app.coin_wallet.load_state(), "The paid Match fixture loads an isolated empty wallet")
 	if coins > 0:
 		check(app.coin_wallet.credit("fixture:hint-funding", coins / Wallet.COINS_PER_TIER).ok,
 			"Fund only this paid Match scenario through the durable credit API")
-	check(app.new_round(round_seed, false, "", "match"), "The real scene starts a fresh Match round")
-	await _settle()
 	app.audio.set_muted(false)
 	app.audio.interact(app.model.theme_id, false)
 	app.audio.stop_pair_feedback()
 	app.set_reduced_motion(true)
 	app.hint_button.reset_feedback()
 	app._coin_flight.sync(app.coin_wallet.balance)
+	spend_sounds = 0
 
 
 func _state(app) -> Dictionary:
@@ -133,6 +136,9 @@ func _check_insufficient(app) -> void:
 		"An unaffordable hint produces negative button feedback and its negative sound")
 	check(app.coin_wallet.ready and app.coin_wallet.error.is_empty() and app._coin_counter.available,
 		"Insufficient coins leave otherwise healthy storage available")
+	check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active
+		and app._coin_counter.displayed == 50.0,
+		"An unaffordable hint never starts a debit animation or a coin spending sound")
 
 
 func _check_native_inputs_and_limit(app) -> void:
@@ -165,12 +171,15 @@ func _check_native_inputs_and_limit(app) -> void:
 		check(app.hint_button._feedback_left > 0.0 and app.hint_button._accepted
 			and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true]),
 			"A saved hint starts positive visual feedback and the purchase success sound")
+		check(spend_sounds == ordinal and app.hint_button.disabled,
+			"Every paid hint emits one coin spending cue while its success response survives disabled input")
 		var before: Dictionary = _state(app)
 		var writes: int = storage.writes
 		app._request_hint()
 		app.hint_button.pressed.emit()
 		check(_state(app) == before and storage.writes == writes and app.coin_wallet.balance == 800 - spent,
 			"Duplicate callbacks while a hint is active cannot spend or consume another allowance")
+		check(spend_sounds == ordinal, "Repeated active-hint input cannot replay its coin spending sound")
 		_clear_hint(app)
 	var exhausted: Dictionary = _state(app)
 	app._request_hint()
@@ -179,6 +188,7 @@ func _check_native_inputs_and_limit(app) -> void:
 	await _settle()
 	check(_state(app) == exhausted and app.coin_wallet.balance == 350 and app.hint_button.disabled,
 		"The fourth hint remains blocked even with enough coins for another purchase")
+	check(spend_sounds == 3, "Exhausted hints cannot create a fourth coin spending cue")
 	var reloaded := Wallet.new("user://unused-match-hint-wallet.cfg", storage)
 	check(reloaded.load_state() and reloaded.balance == 350 and reloaded._receipts == app.coin_wallet._receipts,
 		"The three hint debits survive a real wallet reload")
@@ -201,6 +211,8 @@ func _check_feedback_payment(app) -> void:
 			"Payment failure neither dismisses nor restarts the correct or wrong feedback timer")
 		check(not app._coin_counter.available and not app.coin_wallet.error.is_empty()
 			and not app.hint_button._accepted, "Failed persistence reports unavailable storage and negative purchase feedback")
+		check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
+			"A failed durable save does not pretend to spend coins visually or audibly")
 		storage.fail_write = false
 		app._request_hint()
 		check(app.coin_wallet.balance == 0 and app._coin_counter.available
@@ -209,6 +221,111 @@ func _check_feedback_payment(app) -> void:
 		check(app.model.phase == "waiting" and app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2
 			and app.model.matched_ids == before.matched and app.model.mistakes == before.mistakes
 			and app.feedback_timer.is_stopped(), "Successful payment continues feedback once and hints without scoring the answer twice")
+		check(spend_sounds == 1, "A successful storage retry emits its coin spending cue exactly once")
+
+
+func _check_debit_animation(app) -> void:
+	for balance: int in [1000, 100]:
+		await _prepare(app, balance)
+		app.set_reduced_motion(false)
+		var expected: int = balance - 100
+		app.hint_button.pressed.emit()
+		var state: Dictionary = app._coin_flight.snapshot()
+		check(app.coin_wallet.balance == expected and state.target == expected
+			and state.displayed == float(balance) and state.debit_active and state.active
+			and state.debit_amount == 100 and spend_sounds == 1,
+			"A committed hint debit starts at the previous visible balance while saving its final balance immediately")
+		var previous: float = state.displayed
+		for step in range(4):
+			app._coin_flight.advance(0.12)
+			state = app._coin_flight.snapshot()
+			check(state.displayed < previous and state.displayed > float(expected) and state.target == expected,
+				"The visible wallet counts downward without skipping its digit boundary or overshooting zero")
+			previous = state.displayed
+		app._coin_flight.advance(0.8)
+		state = app._coin_flight.snapshot()
+		check(state.displayed == float(expected) and not state.debit_active and not state.active
+			and spend_sounds == 1,
+			"The wallet settles exactly at the paid total without a delayed second spending cue")
+
+
+func _check_debit_cancellation(app) -> void:
+	await _prepare(app, 1000)
+	app.set_reduced_motion(false)
+	app.hint_button.pressed.emit()
+	app._coin_flight.advance(0.12)
+	check(app._coin_flight.snapshot().debit_active and app._coin_counter.displayed > 900.0,
+		"Page cancellation begins during a live paid debit")
+	app.on_page_hidden()
+	var state: Dictionary = app._coin_flight.snapshot()
+	check(not state.debit_active and not state.active and state.displayed == 900.0 and state.target == 900
+		and app.hint_button._feedback_left == 0.0,
+		"Hiding the page clears Hint feedback and reconciles the paid wallet without refunding it")
+	app.on_page_visible()
+	app._coin_flight.advance(1.0)
+	check(not app._coin_flight.snapshot().debit_active and app._coin_counter.displayed == 900.0
+		and spend_sounds == 1,
+		"Returning to the page does not resume or replay the old debit")
+
+
+func _check_reduced_debit(app) -> void:
+	await _prepare(app, 1000)
+	app.hint_button.pressed.emit()
+	check(app._coin_counter.displayed == 900.0 and app._coin_counter.target == 900
+		and app.hint_button._feedback_left > 0.0 and app.hint_button._accepted and spend_sounds == 1,
+		"Reduced motion acknowledges the purchase while the wallet immediately shows its exact paid total")
+	for delta: float in [0.1, 0.2, 1.0]:
+		app._coin_flight.advance(delta)
+		check(app._coin_counter.displayed == 900.0 and app._coin_counter.target == 900,
+			"Reduced-motion debit feedback never drifts the wallet number")
+	check(not app._coin_flight.snapshot().debit_active and spend_sounds == 1,
+		"Reduced-motion feedback finishes without queuing a late spending sound")
+
+
+func _coin_sound_playing(app) -> bool:
+	for player: AudioStreamPlayer in app.audio._coin_players:
+		if player.playing and player.stream == load(app.audio.COIN_PATH):
+			return true
+	return false
+
+
+func _check_voice_payment_audio(app) -> void:
+	for balance: int in [50, 100]:
+		await _prepare(app, balance)
+		app._on_voice_state([true, true, "Listening"])
+		check(app._voice_mode and not app.audio.active and not app.audio.pair_feedback.playing
+			and not _coin_sound_playing(app),
+			"Enabling the microphone leaves Hint payment audio cold before this real purchase attempt")
+		app.hint_button.pressed.emit()
+		var accepted: bool = balance >= 100
+		check(app.hint_button._accepted == accepted and app.hint_button._feedback_left > 0.0
+			and app.audio.active and app.audio.pair_feedback.playing
+			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[accepted]),
+			"A voice-mode Hint attempt activates its matching success or failure sound from cold audio")
+		check(not app.audio.music.playing and not app.audio.voice.playing,
+			"Microphone-mode purchase feedback does not start music or a competing word pronunciation")
+		check(_coin_sound_playing(app) == accepted and spend_sounds == (1 if accepted else 0)
+			and app.coin_wallet.balance == (0 if accepted else 50),
+			"Only a paid microphone-mode Hint plays the physical coin spending sound and changes the balance")
+
+
+func _check_muted_payment(app) -> void:
+	for balance: int in [50, 100]:
+		await _prepare(app, balance)
+		app.audio.set_muted(true)
+		app.hint_button.pressed.emit()
+		var accepted: bool = balance >= 100
+		check(app.hint_button._accepted == accepted and app.hint_button._feedback_left > 0.0
+			and app.coin_wallet.balance == (0 if accepted else 50)
+			and spend_sounds == (1 if accepted else 0),
+			"Muting preserves positive or negative purchase visuals and the exact durable payment result")
+		check(not app.audio.active and not app.audio.pair_feedback.playing
+			and not _coin_sound_playing(app) and not app.audio.music.playing and not app.audio.voice.playing,
+			"Neither a successful nor rejected muted Hint can restart any payment, music or speech audio")
+		app.audio.set_muted(false)
+		app._coin_flight.advance(1.0)
+		check(not _coin_sound_playing(app) and not app.audio.pair_feedback.playing,
+			"Unmuting after a purchase does not replay the muted payment feedback")
 
 
 func _check_blocked_states(app) -> void:
@@ -222,6 +339,7 @@ func _check_blocked_states(app) -> void:
 	app._request_hint()
 	check(_state(app) == before and app.coin_wallet.balance == 100 and storage.writes == writes,
 		"A hint blocked by queued voice feedback does not charge or consume allowance")
+	check(spend_sounds == 0, "Queued voice feedback cannot start a Hint coin spending cue")
 	app._on_voice_state([false, false, "Voice off"])
 	app._request_hint()
 	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0,
@@ -249,6 +367,8 @@ func _check_blocked_states(app) -> void:
 		app._request_hint()
 		check(_state(app) == before and app.coin_wallet.balance == 100 and storage.writes == writes,
 			"A covered " + covered + " page cannot buy a stale Match hint")
+		check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
+			"A covered " + covered + " page cannot emit stale spending feedback")
 		match covered:
 			"home": app._hide_mode_menu()
 			"library": app._hide_collection()
@@ -263,6 +383,7 @@ func _check_receipt_recovery(app) -> void:
 	app._request_hint()
 	check(app.model.hints_remaining == 2 and app.model.hint_ids.size() == 2 and app.coin_wallet.balance == 0
 		and storage.writes == 2, "Reentrant input during persistence saves and accepts only one paid hint")
+	check(spend_sounds == 1, "Reentrant payment input emits only one coin spending cue")
 	await _prepare(app, 100)
 	var initial_writes: int = storage.writes
 	storage.after_save = func() -> void: app._show_mode_menu()
@@ -270,10 +391,14 @@ func _check_receipt_recovery(app) -> void:
 	check(app._mode_menu_open() and app.model.hint_ids.is_empty() and app.model.hints_remaining == 3
 		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.get(_receipt(app, 1), 0) == -100,
 		"A page interruption during payment leaves the saved ordinal unconsumed instead of showing a hint behind Home")
+	check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
+		"A navigation interruption suppresses payment effects on the covered Match page")
 	app._hide_mode_menu()
 	app._request_hint()
 	check(app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2 and app.coin_wallet.balance == 0
 		and storage.writes == initial_writes + 1, "Returning consumes the already-paid ordinal once without requiring another 100 coins")
+	check(spend_sounds == 0 and not app._coin_flight.snapshot().debit_active,
+		"Recovering an already-paid ordinal cannot animate or sound a second debit")
 	var before: Dictionary = _state(app)
 	var stale: Dictionary = app._purchase_match_hint(1, 100)
 	check(not stale.is_empty() and _state(app) == before and app.coin_wallet.balance == 0
@@ -296,9 +421,15 @@ func _run() -> void:
 	root.add_child(app)
 	await _settle()
 	Fixture.enter_mode(app, "match")
+	app._coin_flight.spend_sound.connect(func() -> void: spend_sounds += 1)
 	await _check_insufficient(app)
 	await _check_native_inputs_and_limit(app)
 	await _check_feedback_payment(app)
+	await _check_debit_animation(app)
+	await _check_debit_cancellation(app)
+	await _check_reduced_debit(app)
+	await _check_voice_payment_audio(app)
+	await _check_muted_payment(app)
 	await _check_blocked_states(app)
 	await _check_receipt_recovery(app)
 	app.audio.halt()

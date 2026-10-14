@@ -148,3 +148,30 @@ Mute, backgrounding, Home, Library, and silent balance synchronization cancel
 the coin channels, including pending stream requests. Restore and duplicate
 receipts do not replay the sound. Both WAVs are required startup-pack resources,
 so neither event makes an additional audio download.
+
+## Match Hint payments
+
+A newly saved Hint payment rolls the balance downward over 550 ms and shows
+the exact negative amount for 760 ms, below the wallet on desktop and beside
+it in a stacked phone header to keep the Hint bulb clear. One existing front-facing gold coin
+travels from the wallet to the Hint along a short arc. It reuses the acquired
+coin texture above and the integrated Modern 2D Animated Chests
+`particles/portal_glow.png` (source and Unity Asset Store license recorded in
+`assets/chests/SOURCE.txt`). These are static textures with game-authored motion;
+no new asset acquisition or animation clip is claimed.
+
+The Hint bulb pops and lights up for 660 ms, with three existing Toon FX
+`milestone/sparkle.png` glints. The glint's creator, license and integration are
+recorded in [Jelly powerups](jelly-powerups.md). Its authored point shape and
+soft alpha are retained. A rejected purchase uses a 480 ms damped sideways
+recoil and warm red light. Only the Hint presentation changes; Memory keeps
+its existing priced-eye feedback. Button bounds and price placement stay fixed,
+and a just-used disabled Hint retains full-strength feedback until it settles.
+
+Successful payment plays the existing Kenney `handleCoins2` coin-handling
+recording once alongside the established Hint acceptance cue. Failed or already
+paid receipts never emit this coin cue or animate another debit. Mute and
+navigation stop it through the existing coin channel lifecycle. Reduced motion
+sets the balance immediately, retaining a stationary negative amount and local
+light with no flying coin, shaking, scaling or rotation. Failed persistence
+leaves the balance and Hint allowance intact.

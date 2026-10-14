@@ -10,6 +10,8 @@ var available: bool = true
 var _from: float = 0.0
 var _elapsed: float = 0.4
 var _pulse: float = 0.0
+var _duration: float = 0.4
+var _spending: bool = false
 
 
 func _init() -> void:
@@ -23,11 +25,15 @@ func sync(value: int) -> void:
 	displayed = float(value)
 	_elapsed = 0.4
 	_pulse = 0.0
+	_duration = 0.4
+	_spending = false
 	_update_description()
 	queue_redraw()
 
 
 func arrive(value: int) -> void:
+	_duration = 0.4
+	_spending = false
 	_from = displayed
 	target = value
 	_elapsed = 0.0
@@ -38,16 +44,30 @@ func arrive(value: int) -> void:
 	queue_redraw()
 
 
+func debit(before: int, after: int) -> void:
+	sync(after)
+	if before <= after:
+		return
+	_from = float(before)
+	displayed = float(after if reduced_motion else before)
+	_elapsed = 0.0
+	_duration = 0.55
+	_spending = true
+	_pulse = 1.0
+	queue_redraw()
+
+
 func advance(delta: float) -> void:
-	_elapsed = minf(0.4, _elapsed + delta)
+	var was_pulsing: bool = _pulse > 0.0
+	_elapsed = minf(_duration, _elapsed + delta)
 	_pulse = maxf(0.0, _pulse - delta * 3.8)
 	if displayed != float(target):
-		var p: float = _elapsed / 0.4
+		var p: float = _elapsed / _duration
 		displayed = lerpf(_from, float(target), 1.0 - pow(1.0 - p, 3.0))
-		if _elapsed >= 0.4:
+		if _elapsed >= _duration or reduced_motion:
 			displayed = float(target)
 		queue_redraw()
-	elif _pulse > 0.0:
+	elif was_pulsing:
 		queue_redraw()
 
 
@@ -61,12 +81,13 @@ func icon_center() -> Vector2:
 
 func _draw() -> void:
 	var s: float = Style.ui_scale(self)
-	var background := Style.box(Color("#fff2cd"), Color("#d5b370"), ceili(size.y * 0.5), maxi(1, roundi(1 / s)))
+	var fill: Color = Color("#fff2cd").lerp(Color("#ffe0b5"), _pulse if _spending else 0.0)
+	var background := Style.box(fill, Color("#d5b370"), ceili(size.y * 0.5), maxi(1, roundi(1 / s)))
 	draw_style_box(background, Rect2(Vector2.ZERO, size))
-	var coin_size: float = size.y * (0.92 + 0.08 * _pulse)
+	var coin_size: float = size.y * (0.92 + (-0.10 if _spending else 0.08) * _pulse * (0.0 if reduced_motion else 1.0))
 	draw_texture_rect(COIN, Rect2(Vector2(size.y * 0.52, size.y * 0.5) - Vector2.ONE * coin_size * 0.5, Vector2.ONE * coin_size), false)
 	var font: Font = Style.HEADING_FONT
-	var text: String = str(maxi(0, target)) if available else "—"
+	var text: String = str(maxi(0, floori(displayed) if _spending else target)) if available else "—"
 	var digits: int = text.length()
 	var pixels: int = ceili(14 / s)
 	var width: float = maxf(1.0, size.x - size.y - 8 / s)

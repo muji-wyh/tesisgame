@@ -257,6 +257,11 @@ func play_coin_arrival() -> void:
 	_play_coin(COIN_PATH)
 
 
+func play_coin_spend() -> void:
+	# Handling the saved payment shares the acquired physical coin recording.
+	_play_coin(COIN_PATH)
+
+
 func _play_coin(path: String) -> void:
 	if muted or not active or not available:
 		return
