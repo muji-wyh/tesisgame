@@ -184,11 +184,14 @@ async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotio
   }
   await expect.poll(async () => {
     const state = await jelly(page);
-    return !state.drag.active && state.contact.kind === 'none' && [source, target].every(original => {
+    return !state.drag.active && state.contact.kind === 'none' && before.tiles.every(original => {
       const tile = state.tiles.find(item => item.id === original.id);
-      return tile?.settled && tile.rect.every((value, axis) => Math.abs(value - original.rect[axis]) < 0.1);
+      if (!tile?.settled || tile.lifted) return false;
+      const pitch = state.board_rect[2] / state.columns;
+      return Math.abs(tile.rect[0] + tile.rect[2] / 2 - state.board_rect[0] - (tile.column + tile.width / 2) * pitch) < 0.1 &&
+        Math.abs(tile.rect[1] + tile.rect[3] / 2 - state.board_rect[1] - (tile.row + tile.height / 2) * pitch) < 0.1;
     });
-  }, { message: 'The rejected pair visibly separates and returns to its supported positions' }).toBe(true);
+  }, { message: 'The rejected pair separates and every original body visibly rests on its current supported footprint' }).toBe(true);
   const after = await jelly(page);
   const evidence = await page.evaluate(() => {
     window.wordJellyRejectionObserver.disconnect();
@@ -209,16 +212,28 @@ async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotio
     expect(frame.fragments).toBe(before.fragment_count);
     expect(frame.fusions, 'A rejected release never creates a merge or collection operation').toEqual([]);
   }
-  for (const original of before.tiles) expect(after.tiles.some(tile => tile.id === original.id), 'Rejection never consumes an original body').toBe(true);
-  for (const original of [source, target]) expectSupportedChild(after, after.tiles.find(tile => tile.id === original.id));
-  const heldSource = held.tiles.find(tile => tile.id === sourceId);
-  const separation = rect => Math.hypot(rect[0] + rect[2] / 2 - target.rect[0] - target.rect[2] / 2,
-    rect[1] + rect[3] / 2 - target.rect[1] - target.rect[3] / 2);
+  for (const original of before.tiles) {
+    const retained = after.tiles.find(tile => tile.id === original.id);
+    expect(retained, 'Rejection never consumes an original body').toBeTruthy();
+    expect(contents(retained), 'Rejection preserves every original body and its contents').toEqual(contents(original));
+    expectSupportedChild(after, retained);
+  }
+  const returnedSource = after.tiles.find(tile => tile.id === sourceId), returnedTarget = after.tiles.find(tile => tile.id === targetId);
+  if (returnedSource.column !== source.column || returnedSource.row !== source.row) {
+    expect(after.tiles.some(other => other.id !== sourceId &&
+      source.column < other.column + other.width && source.column + source.width > other.column &&
+      source.row < other.row + other.height && source.row + source.height > other.row),
+    'A rejected source changes its return position only when its former space was occupied after lifting').toBe(true);
+  }
+  const heldSource = held.tiles.find(tile => tile.id === sourceId), heldTarget = held.tiles.find(tile => tile.id === targetId);
+  const separation = (a, b) => Math.hypot(a[0] + a[2] / 2 - b[0] - b[2] / 2,
+    a[1] + a[3] / 2 - b[1] - b[3] / 2);
   const poses = evidence.timeline.map(frame => frame.tiles.find(tile => tile.id === sourceId).rect);
-  expect(separation(source.rect), 'The source finishes visibly separated from the rejected target').toBeGreaterThan(separation(heldSource.rect));
+  expect(separation(returnedSource.rect, returnedTarget.rect), 'The source finishes visibly separated from the rejected target')
+    .toBeGreaterThan(separation(heldSource.rect, heldTarget.rect));
   if (reducedMotion !== 'reduce') expect(poses.some(rect =>
     Math.hypot(rect[0] - heldSource.rect[0], rect[1] - heldSource.rect[1]) > 0.5 &&
-    Math.hypot(rect[0] - source.rect[0], rect[1] - source.rect[1]) > 0.5),
+    Math.hypot(rect[0] - returnedSource.rect[0], rect[1] - returnedSource.rect[1]) > 0.5),
   'The rejected body has a visible separating pose before it returns').toBe(true);
   if (info) {
     await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyRejection.frame)),
@@ -1506,19 +1521,25 @@ test('only forward dictionary words merge while rejected pairs separate without 
   test.setTimeout(180000);
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
-  // Ordinary saved progress makes cat the next real word without a runtime test hook.
-  await seedGrowth(page, 3, { unmastered: ['cat'] });
-  const errors = await startWordJelly(page, { reducedMotion, preseededGrowth: true });
+  const errors = await startWordJelly(page, { reducedMotion });
   const opening = await jelly(page), startingWallet = await wallet(page);
-  const roots = opening.tiles.filter(tile => tile.source_word_id === 'cat').sort((a, b) => a.supply_part - b.supply_part);
-  expect(roots.map(root => root.text)).toEqual(['ca', 't']);
+  const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
+  // Mastery only changes sampling odds. Exercise the actual supply, using two
+  // floor-supported roots so lifting either one cannot move its destination.
+  const pair = rootsForWord({ ...opening, tiles: opening.tiles.filter(tile => tile.row + tile.height === opening.rows) },
+    3, 2, false, true);
+  expect(pair, 'The real opening supplies a current-age word whose reverse order is invalid').toBeTruthy();
+  const { roots, word } = pair;
+  expect(roots.map(root => root.text).join('')).toBe(word.text);
+  expect(word.min_age).toBe(3);
+  expect(words.has(normalize(roots[1].text + roots[0].text))).toBe(false);
   const negativePath = 'assets/imported-audio/pair-feedback/wrong.wav';
   const negativeTiming = recordingTiming(negativePath);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   const playbackIndex = () => page.evaluate(() => window.audioObservation.playbacks.length);
   const negativeSounds = from => page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).filter(sound =>
     Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate), { from, timing: negativeTiming });
-  const evidence = { reducedMotion, audioAvailable, negativePath, trials: [] };
+  const evidence = { reducedMotion, audioAvailable, negativePath, word, roots, trials: [] };
   const retain = () => fs.writeFileSync(info.outputPath('word-jelly-rejection-audio.json'), JSON.stringify(evidence, null, 2));
   const attempt = async (sourceId, targetId, label) => {
     const audioFrom = await playbackIndex();
@@ -1566,9 +1587,8 @@ test('only forward dictionary words merge while rejected pairs separate without 
     return rejection;
   };
 
-  await attempt(roots[1].id, roots[0].id, 'word-jelly-reversed-cat-rejection');
+  await attempt(roots[1].id, roots[0].id, 'word-jelly-reversed-word-rejection');
   const state = await jelly(page);
-  const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
   const marked = state.tiles.filter(tile => tile.fragments > 0 && tile.mass === 1 && tile.settled);
   const unrelated = marked.flatMap(source => marked.map(target => ({ source, target }))).find(({ source, target }) =>
     source.id !== target.id && source.row === state.rows - 1 && target.row < source.row &&
@@ -1581,8 +1601,9 @@ test('only forward dictionary words merge while rejected pairs separate without 
 
   const beforeValid = await jelly(page), audioFrom = await playbackIndex();
   const completed = await merge(page, roots[0].id, roots[1].id);
-  expect(completed.text).toBe('cat');
-  expect(completed.word.id).toBe('cat');
+  expect(completed.text).toBe(word.text);
+  expect(completed.word.id).toBe(word.id);
+  expect(completed.word.min_age).toBe(3);
   expect(completed.picture_visible).toBe(true);
   expect(completed.fragments).toBe(roots[0].fragments + roots[1].fragments);
   expect(completed.fragment_badges).toBe(completed.fragments);
@@ -1590,7 +1611,7 @@ test('only forward dictionary words merge while rejected pairs separate without 
     evidence.validMergeSound = await expectRecording(page, audioFrom, 'assets/imported-audio/jelly-interaction/merge-together-v3.wav');
     expect(await negativeSounds(audioFrom), 'A valid forward merge never plays the negative cue').toEqual([]);
   }
-  await capture(page, info, 'word-jelly-forward-cat-after-rejections');
+  await capture(page, info, 'word-jelly-forward-word-after-rejections');
   expect((await wallet(page)).balance).toBe(startingWallet.balance);
   await pressRect(page, completed.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + 1);
@@ -1816,11 +1837,47 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
 });
 
 test('older-age words remain completable from two blocks and roll the same rare collection reward', async ({ page }, info) => {
-  await seedGrowth(page, 12, { unmastered: ['quadrilateral'] });
+  test.setTimeout(300000);
+  await seedGrowth(page, 12);
   const errors = await startWordJelly(page, { age: 12, reducedMotion: 'reduce', preseededGrowth: true });
-  const word = vocabulary.find(candidate => candidate.id === 'quadrilateral');
-  const roots = (await jelly(page)).tiles.filter(tile => tile.source_word_id === word.id)
-    .sort((a, b) => a.supply_part - b.supply_part);
+  const currentWords = new Map(jellyWordsForAge(12).map(word => [word.id, word]));
+  const suppliedPairs = state => {
+    const groups = new Map();
+    for (const tile of state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1)) {
+      if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
+      groups.get(tile.supply_group).push(tile);
+    }
+    return [...groups.values()].filter(roots => roots.length === 2).map(roots => {
+      roots.sort((a, b) => a.supply_part - b.supply_part);
+      return { roots, word: currentWords.get(roots[0].source_word_id) };
+    }).filter(pair => pair.word && pair.roots.map(root => root.text).join('') === pair.word.text)
+      .sort((a, b) => b.word.text.length - a.word.text.length);
+  };
+  let selected;
+  // Use the longest naturally supplied word. If needed, clear short words and
+  // request the next packet through normal controls, keeping room for arrivals.
+  for (let packet = 0; packet < Math.ceil(currentWords.size / 3); packet++) {
+    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    selected = suppliedPairs(await jelly(page)).find(pair => pair.word.text.length >= 10);
+    if (selected) break;
+    for (let cleared = 0; cleared < 3; cleared++) {
+      const state = await jelly(page);
+      const short = suppliedPairs(state).find(pair => pair.word.text.length < 10);
+      expect(short, 'The ordinary supply has a complete short word to clear before requesting more').toBeTruthy();
+      const completed = await merge(page, short.roots[0].id, short.roots[1].id);
+      await pressRect(page, completed.rect);
+      await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
+      await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    }
+    const state = await jelly(page);
+    expect(state.preview.enabled, 'Clearing three words leaves room for the next ordinary packet').toBe(true);
+    await pressRect(page, state.preview.rect);
+    await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
+  }
+  expect(selected, 'Normal current-age supply includes a long word for full-label coverage').toBeTruthy();
+  const { word, roots } = selected;
+  expect(word.min_age).toBe(12);
+  expect(word.text.length, 'The label test exercises at least ten letters instead of an arbitrary short word').toBeGreaterThanOrEqual(10);
   expect(roots, 'A long current-age word arrives as exactly two completable blocks').toHaveLength(2);
   expect(roots.map(root => root.text).join('')).toBe(word.text);
   const labelEvidence = { roots };

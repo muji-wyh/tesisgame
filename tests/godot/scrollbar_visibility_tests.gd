@@ -98,7 +98,8 @@ func _check_touch_drag(scroll: ScrollContainer, target: Control, context: String
 
 
 func _check_gate(app, context: String) -> void:
-	app.choose_mode("pop")
+	PlayerFixture.enter_mode(app, "pop")
+	check(app._mode_id == "pop" and not app._mode_menu_open(), context + " enters Voice Pop through Home")
 	PlayerFixture.choose_pop_player(app)
 	await settle()
 	var view = app._pop
@@ -138,7 +139,8 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 	app._layout()
 	await settle()
 	var context := str(dimensions)
-	app.choose_mode("match")
+	PlayerFixture.enter_mode(app, "match")
+	check(app._mode_id == "match" and not app._mode_menu_open(), context + " enters Match through Home")
 	await settle()
 	_check_bars(app, context + " Match")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
@@ -148,7 +150,8 @@ func _check_surfaces(app, dimensions: Vector2i) -> void:
 	app._refresh()
 	await settle()
 	_check_bars(app, context + " Match review")
-	app.choose_mode("memory")
+	PlayerFixture.enter_mode(app, "memory")
+	check(app._mode_id == "memory" and not app._mode_menu_open(), context + " enters Memory through Home")
 	await settle()
 	_check_bars(app, context + " Memory")
 	app._show_collection()

@@ -135,7 +135,6 @@ var _collection_margins: MarginContainer
 var _age_choices: VBoxContainer
 var _age_row: HBoxContainer
 var _age_scroll: ReviewScroll
-var _age_label: Label
 var _age_buttons: Dictionary = {}
 var _age_notice: Label
 var _age_catalog: AgeWordCatalog
@@ -158,7 +157,6 @@ var _voice_mode: bool = false
 var _mode_id: String = "match"
 var _has_entered_game: bool = false
 var _collection_from_home: bool = false
-var _mode_row: GridContainer
 var _mode_buttons: Array[Button] = []
 var _mode_menu: Control
 var _mode_panel: GameLibrary
@@ -946,7 +944,6 @@ func _build_mode_menu() -> void:
 		return _mode_menu_open() and not _page_hidden and not collection_page.visible \
 			and not (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible)
 	_mode_menu.add_child(_mode_panel)
-	_mode_row = _mode_panel.grid
 	_mode_buttons = _mode_panel.buttons
 	theme_buttons = _mode_panel.theme_buttons
 	_mode_panel.theme_requested.connect(_choose_world)
@@ -1238,10 +1235,6 @@ func _sync_collected_rewards() -> void:
 			collected_rewards[id] = true
 
 
-func _piece_count(id: String) -> int:
-	return 3 if medal_progress.legacy_rewards.has(id) else medal_progress.count_for(id)
-
-
 func _refresh_collection() -> void:
 	_sync_collected_rewards()
 	_refresh_age_choices()
@@ -1272,7 +1265,7 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_jelly_treasure: bool = true) -> bool:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_saved_treasure: bool = true) -> bool:
 	_close_finish_confirmation(true, false)
 	if not growth.ready:
 		_growth_save_failed = true
@@ -1280,7 +1273,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		_layout()
 		return false
 	if not vocabulary_loader.is_ready(growth.learning_age()):
-		_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_jelly_treasure])
+		_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_saved_treasure])
 		return false
 	_coin_flight.sync(coin_wallet.balance)
 	if not _settle_pair_reward():
@@ -1290,7 +1283,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_pop_reward():
 		return false
-	if resume_jelly_treasure and _is_jelly_mode() and (next_mode.is_empty() or next_mode == _mode_id) and _jelly_rewards.has_pending():
+	if resume_saved_treasure and _is_jelly_mode() and (next_mode.is_empty() or next_mode == _mode_id) and _jelly_rewards.has_pending():
 		_hide_mode_menu(false, false)
 		_stop_round_celebration()
 		_show_jelly_rewards()
@@ -1388,7 +1381,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			return false
 	if _mode_id == "pop":
 		_configure_pop(seed_value)
-		if _pop_rewards.has_pending():
+		if resume_saved_treasure and _pop_rewards.has_pending():
 			_pop_rewards.configure_saved(data.chests, reduced_motion)
 			_pop_rewards_shown = true
 	if _is_jelly_mode():
@@ -1397,7 +1390,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_rebuilding = false
 			_show_error(_active_jelly().game.error)
 			return false
-		if resume_jelly_treasure and _jelly_rewards.has_pending():
+		if resume_saved_treasure and _jelly_rewards.has_pending():
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
 			_jelly_rewards_shown = true
 	_rebuilding = false
@@ -1819,7 +1812,8 @@ func _start_pop_listening() -> void:
 	if _mode_id != "pop" or _round_celebration_active() or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
 		return
 	if _pop.game.phase == "finished":
-		if not new_round(-1, false, "", "pop"):
+		# Replay keeps unopened rewards saved without restoring the treasure room.
+		if not new_round(-1, false, "", "pop", "", false):
 			return
 	audio.halt()
 	duck.settle()
@@ -2064,23 +2058,24 @@ func _round_celebration_allowed() -> bool:
 
 
 func _begin_round_celebration(chest_count: int) -> void:
-	if (chest_count <= 0 and _mode_id not in ["match", "memory"]) or _round_id.is_empty() or _celebration_seen_id == _round_id:
+	if _mode_id not in ["match", "memory", "phrase", "pop"] \
+		or (chest_count <= 0 and _mode_id not in ["match", "memory"]) or _round_id.is_empty() or _celebration_seen_id == _round_id:
 		return
 	_celebration_seen_id = _round_id
 	_celebration_suspended = false
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
-	var score: int = int(_round_result.get("score", 0)) if _mode_id in ["pop", "jelly", "word_jelly"] else -1
-	var theme_id: String = _jelly_reward_theme if _is_jelly_mode() else _pop_reward_theme if _mode_id == "pop" else model.theme_id
+	var score: int = int(_round_result.get("score", 0)) if _mode_id == "pop" else -1
+	var theme_id: String = _pop_reward_theme if _mode_id == "pop" else model.theme_id
 	if _mode_id in ["match", "memory"] and not model.reward_theme.is_empty():
 		theme_id = model.reward_theme
-	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id in ["pop", "jelly", "word_jelly"] else 0
-	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id in ["pop", "jelly", "word_jelly"], score, chest_tier, _mode_id in ["match", "memory"] and model.chest_earned)
+	var chest_tier: int = int(_round_result.get("chest_tier", 0)) if _mode_id == "pop" else 0
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, _mode_id == "pop", score, chest_tier, _mode_id in ["match", "memory"] and model.chest_earned)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
-		_announce_status(_jelly_result_summary() if _mode_id in ["pop", "jelly", "word_jelly"] else \
+		_announce_status(_jelly_result_summary() if _mode_id == "pop" else \
 			"Every word matched!" if chest_count == 0 else "You did it! Pip is celebrating. You earned a treasure chest!")
 	_sync_round_celebration()
 	_publish_round_celebration()
@@ -2136,12 +2131,10 @@ func _on_round_celebration_finished(round_id: String) -> void:
 		return
 	audio.stop_round_celebration()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
-	if _mode_id in ["pop", "jelly", "word_jelly"]:
+	if _mode_id == "pop":
 		_stop_round_celebration()
-		if _is_jelly_mode():
-			_show_jelly_rewards()
 		_refresh()
-		_announce_status(_jelly_result_summary() if _is_jelly_mode() else "Round complete. View your results or open your earned chests.")
+		_announce_status("Round complete. View your results or open your earned chests.")
 	else:
 		_announce_status("You earned a treasure chest! Choose Open chest." if model.chest_earned else "Every word matched! Choose Play again.")
 	var target: Control = _default_focus()
@@ -2384,9 +2377,9 @@ func _refresh() -> void:
 	_mode_panel.configure_theme(model.theme_id,
 		model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()), _journey_save_failed)
 	var mode_changed: bool = theme_changed or _styled_mode_id != _mode_id
-	for index in range(_mode_buttons.size()):
-		var button: Button = _mode_buttons[index]
-		button.button_pressed = MODES.keys()[index] == _mode_id
+	var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _has_entered_game else null
+	for button: Button in _mode_buttons:
+		button.set_pressed_no_signal(button == current_mode_button)
 		button.disabled = model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty())
 		if mode_changed:
 			Style.quiet_button(button, palette.accent)
@@ -3892,7 +3885,8 @@ func _default_focus() -> Control:
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		return _vocabulary_retry if _vocabulary_retry.visible else _vocabulary_back
 	if _mode_menu_open():
-		return _mode_buttons[MODES.keys().find(_mode_id)]
+		var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _has_entered_game else null
+		return current_mode_button if current_mode_button != null else _mode_buttons[0]
 	if collection_page.visible:
 		return _collection_back
 	if _round_celebration_active():

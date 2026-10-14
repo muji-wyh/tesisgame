@@ -511,48 +511,60 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   expect(errors).toEqual([]);
 });
 
-test('Match homophones score the canonical flower once with its voice hit feedback', async ({ page }, testInfo) => {
+test('Match normalizes a displayed word once with its voice hit feedback', async ({ page }, testInfo) => {
   await observeAudio(page);
-  const otherWords = catalog.filter(word => word.min_age === 4 && word.image && word.id !== 'flower').slice(0, 4).map(word => word.id);
-  await seedGrowth(page, 4, { unmastered: ['flower', ...otherWords] });
+  await seedGrowth(page, 4);
   const errors = await openGame(page);
   const { pairs } = await discoverBoard(page);
-  expect(pairs.some(([word]) => word === 'flower'), 'The saved learning priorities supply a real flower pair').toBe(true);
+  // Mastery only changes sampling weight. Exercise the real dealt board;
+  // exact flower/flour and other reviewed homophones are deterministic in voice_model_tests.gd.
+  const homophones = new Map([
+    ['horse', 'hoarse'], ['bear', 'bare'], ['bee', 'be'], ['ant', 'aunt'],
+    ['pear', 'pair'], ['carrot', 'carat'], ['rain', 'reign'], ['flower', 'flour'],
+    ['plane', 'plain'], ['bowl', 'bole'], ['four', 'for'], ['here', 'hear'],
+    ['hear', 'here'], ['see', 'sea']
+  ]);
+  const homophonePair = pairs.find(([word]) => homophones.has(word)
+    && !pairs.some(([other]) => other === homophones.get(word)));
+  const [canonical] = homophonePair || pairs[0];
+  const target = catalog.find(word => word.text === canonical);
+  const spoken = homophonePair ? homophones.get(canonical) : canonical;
+  expect(target, 'Recognition targets a complete word-picture pair on the actual board').toBeTruthy();
   await listen(page);
   await observeVoiceMatchLinks(page);
   await expect(page.locator('#speech-successes')).toHaveCount(0);
   const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
-  await page.evaluate(() => window.speechFixture.emit('flour', false));
-  await expect(page.locator('#speech-transcript')).toHaveText('flour');
+  await page.evaluate(text => window.speechFixture.emit(text, false), spoken);
+  await expect(page.locator('#speech-transcript')).toHaveText(spoken);
   await rendered(page);
   await expect(page.locator('#speech-successes')).toHaveCount(0);
   expect((await voiceMatchLink(page)).active, 'Match still waits for a final result').toBe(false);
-  for (const text of ['flours', 'floury']) {
+  for (const text of [`_${spoken}`, `${spoken}2`]) {
     await page.evaluate(text => window.speechFixture.emit(text, true), text);
     await rendered(page);
-    expect((await voiceMatchLink(page)).active, 'Similar unrecognized words cannot match the flower pair.').toBe(false);
+    expect((await voiceMatchLink(page)).active, 'A larger token cannot manufacture a match for the displayed word.').toBe(false);
   }
-  const recognized = 'The FLOUR!';
+  const recognized = `${spoken.toUpperCase()}!`;
   await page.evaluate(text => window.speechFixture.emit(text, true), recognized);
   await expect(page.locator('#speech-transcript')).toHaveText(recognized);
   await expect(page.locator('#speech-successes')).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.voiceMatchLinks.filter(link => link.active).length)).toBe(1);
   const link = await page.evaluate(() => window.voiceMatchLinks.find(link => link.active));
-  expect(link.source.id).toBe('flower:image');
-  expect(link.target.id).toBe('flower:word');
+  expect(link.source.id).toBe(`${target.id}:image`);
+  expect(link.target.id).toBe(`${target.id}:word`);
   expect(link.duration).toBe(1);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (audioAvailable) await expectRecording(page, audioFrom, voiceHitRecording);
   await expect.poll(async () => (await voiceMatchLink(page)).active).toBe(false);
   await expect(page.locator('#game-status')).toContainText('Find 5 word');
-  await page.evaluate(() => window.speechFixture.emit('flower flour flower', true));
+  await page.evaluate(text => window.speechFixture.emit(text, true), `${canonical} ${spoken} ${canonical.toUpperCase()}`);
   await rendered(page);
   await expect(page.locator('#speech-successes')).toHaveCount(0);
   expect((await voiceMatchLink(page)).serial, 'Equivalent spellings cannot replay the scored pair').toBe(link.serial);
   const playbacks = await page.evaluate(from => window.audioObservation.playbacks.slice(from), audioFrom);
-  if (audioAvailable) expect(playbacks, 'The canonical and homophone spellings share one right sound').toHaveLength(1);
-  await testInfo.attach('match-homophone-feedback', {
-    body: JSON.stringify({ recognized, canonical: 'flower', link, playbacks }), contentType: 'application/json'
+  if (audioAvailable) expect(playbacks, 'Equivalent recognized spellings share one right sound').toHaveLength(1);
+  await testInfo.attach('match-normalized-feedback', {
+    body: JSON.stringify({ recognized, canonical, spoken, link, playbacks }), contentType: 'application/json'
   });
   await toggleVoice(page);
   expect(errors).toEqual([]);

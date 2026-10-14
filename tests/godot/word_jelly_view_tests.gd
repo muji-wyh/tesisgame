@@ -66,7 +66,7 @@ func _run() -> void:
 	_check_reposition_release(view)
 	_check_reposition_rejection(view)
 	_check_reposition_lifecycle(view)
-	_check_reposition_ancestry(view)
+	_check_reposition_completed_word(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
 	_check_ordinary_collection(view)
@@ -96,10 +96,6 @@ func _run() -> void:
 	_check_partial_word_colors(view)
 	_check_fusion_palette_handover(view)
 	_check_crowded_palette_separation(view)
-	_check_split_pointer_recovery(view)
-	_check_split_cancel_and_pause(view)
-	_check_split_keyboard_and_nested_merge(view)
-	_check_split_keyboard_source_shortcut(view)
 	_check_repeat_merge_and_wrap(view)
 	_check_variable_outline(view)
 	_check_cancel_and_pause(view)
@@ -753,28 +749,29 @@ func _check_reposition_lifecycle(view) -> void:
 			"returning a dragged word to its own cell is a no-op without pinning or collecting it")
 
 
-func _check_reposition_ancestry(view) -> void:
+func _check_reposition_completed_word(view) -> void:
 	_reset(view)
-	var fixture: Dictionary = _legacy_invalid_merge(view)
-	_advance(view, Model.SETTLE_SECONDS + 0.01)
-	var tile: Dictionary = view.game.cell(fixture.id)
+	var ids: Array[int] = _install(view, ["ca", "t"], [2, 3])
+	_drag(view, ids[0], ids[1])
+	var id: int = _merged_id(view)
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+	var tile: Dictionary = view.game.cell(id)
 	var release: Vector2 = _placement_point(view, tile, 1, 2)
-	_pointer_event(view, 7, "down", _center(view, fixture.id))
+	_pointer_event(view, 7, "down", _center(view, id))
 	_pointer_event(view, 7, "move", release)
 	_pointer_event(view, 7, "up", release)
-	_advance(view, Model.SETTLE_SECONDS + 0.01)
-	tile = view.game.cell(fixture.id)
-	check(view.game.can_split(tile) and _has_support(view.game.cells, tile), "moving an invalid merged word retains its undo ancestry after landing")
-	var center: Vector2 = _center(view, fixture.id)
+	_advance(view, Model.SETTLE_SECONDS * 2.0)
+	tile = view.game.cell(id)
+	check(view.game.is_valid_word(tile) and tile.mass == 2 and tile.fragments == 5 and _has_support(view.game.cells, tile),
+		"moving a completed word preserves its full body and fragments while landing on support")
+	var center: Vector2 = _center(view, id)
 	_pointer_event(view, 7, "down", center)
 	_pointer_event(view, 7, "up", center)
-	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split", "a later tap still splits the relocated invalid word")
-	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	for id: int in fixture.ids:
-		var restored: Dictionary = view.game.cell(id)
-		check(not restored.is_empty() and not bool(restored.get("placement_locked", false)) and _has_support(view.game.cells, restored),
-			"splitting a moved parent restores naturally supported original children without inherited placement locks")
-	check(payouts.is_empty() and attempts.is_empty() and heard.is_empty(), "moving and undoing an invalid word preserves rewards and learning state")
+	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "collect",
+		"tapping the relocated completed word starts ordinary collection")
+	_advance(view, Model.COLLECT_SECONDS)
+	check(view.game.cell(id).is_empty() and view.game.fragment_count == 5 and payouts.size() == 1,
+		"the moved word collects exactly once with all carried fragments")
 
 
 func _check_collect_and_fragments(view) -> void:
@@ -949,7 +946,7 @@ func _check_batch_collection(view) -> void:
 		view.collect_button.pressed.emit()
 		view._activate(ids[1])
 		check(not view._press(-1, _center(view, retained[0])),
-			"batch playback cannot start a competing drag or split")
+			"batch playback cannot start a competing drag or merge")
 		check(view.game.fusions.size() == 1 and payouts.is_empty(),
 			"repeated button and tile activation cannot overlap the first collection")
 		var generated: int = int(view.game.generated_tiles)
@@ -2124,17 +2121,6 @@ func _check_partial_word_colors(view) -> void:
 	check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and cues.count("merge") == 0,
 		"new input rejects an incomplete prefix instead of creating a persistent partial word")
 	_advance(view, 0.4)
-	var partial: Dictionary = _install_legacy_parent(view, [view.game.cell(ids[0]).duplicate(true), view.game.cell(ids[1]).duplicate(true)] as Array[Dictionary])
-	var partial_id: int = int(partial.id)
-	check(partial.text == "caterpil" and not view.game.is_valid_word(partial),
-		"an explicitly restored legacy board can still contain a recoverable partial word")
-	check(_palette_item(view, partial_id).get("palette_index", -1) == _palette_item(view, ids[2]).get("palette_index", -2),
-		"a legacy partial word shares a hint color with its remaining exact completion")
-	_drag(view, partial_id, ids[2])
-	var completed_id: int = _merged_id(view)
-	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-	check(view.game.cell(completed_id).text == "caterpillar" and view._tiles[completed_id]._picture.is_visible_in_tree(),
-		"following the legacy partial-word hint still produces its pictured vocabulary word")
 
 func _hue_distance(first: float, second: float) -> float:
 	return absf(fposmod(first - second + 0.5, 1.0) - 0.5)
@@ -2179,42 +2165,6 @@ func _check_fusion_palette_handover(view) -> void:
 		"the persistent merged body's color agrees with the active completion hint after handover")
 	view.cancel_input()
 	words = original_words
-	_reset(view)
-	var fixture: Dictionary = _legacy_invalid_merge(view)
-	var prefixes: Array[int] = []
-	for column in range(2):
-		var prefix: Dictionary = view.game._new_tile("ca", 1, 0)
-		prefix.column = column
-		prefix.row = Model.ROWS - 1
-		prefixes.append(int(prefix.id))
-		view.game.cells.append(prefix)
-	view._sync_tiles()
-	view._activate(fixture.id)
-	var split: Dictionary = view.game.fusions[0]
-	visual = view._fusion_visuals[str(split.attempt_id)]
-	var parent_hue: float = float(visual.merged._gel.get_shader_parameter("palette_hue"))
-	for parameter: String in ["palette_hue_a", "palette_hue_b"]:
-		check(_hue_distance(float(visual.art._gel.get_shader_parameter(parameter)), parent_hue) < 0.00001,
-			"both separating lobes start with the actual unsplit parent's color")
-	var suffix_index: int = 0 if str(split.results[0].text) == "t" else 1
-	var suffix = visual.parts[suffix_index]
-	alternate = prefixes[1] if view._tiles[prefixes[1]].palette_index != suffix.palette_index else prefixes[0]
-	check(view._press(-1, _center(view, alternate)), "a live matching prefix can be selected during a split")
-	_advance(view, Model.SPLIT_SECONDS * 0.5)
-	check(suffix.palette_index == view._tiles[alternate].palette_index,
-		"a split child refreshes its material when a live prefix changes its completion hint")
-	var target_hue: float = float(suffix._gel.get_shader_parameter("palette_hue"))
-	var parameter: String = "palette_hue_a" if suffix_index == 0 else "palette_hue_b"
-	var midway: float = float(visual.art._gel.get_shader_parameter(parameter))
-	check(_hue_distance(midway, parent_hue) > 0.00001 and _hue_distance(midway, target_hue) > 0.00001,
-		"the split color transitions visibly between parent paint and the child's current hint")
-	_advance(view, Model.SPLIT_SECONDS * 0.40)
-	check(_hue_distance(float(visual.art._gel.get_shader_parameter(parameter)), target_hue) < 0.00001,
-		"the separated liquid lobe reaches its child skin's hue before handover")
-	_advance(view, Model.SPLIT_SECONDS * 0.11 + Model.SETTLE_SECONDS)
-	check(view._tiles[int(split.results[suffix_index].id)].palette_index == view._tiles[alternate].palette_index,
-		"the restored child keeps the active completion color when its temporary split skin disappears")
-	view.cancel_input()
 
 
 func _check_crowded_palette_separation(view) -> void:
@@ -2303,115 +2253,6 @@ func _check_merge_handover_stability(view) -> void:
 			"merging leaves unrelated settled jelly positions unchanged")
 
 
-func _install_legacy_parent(view, children: Array[Dictionary]) -> Dictionary:
-	var text := ""
-	var mass := 0
-	var fragments := 0
-	var ids: Array[int] = []
-	for child: Dictionary in children:
-		text += str(child.text)
-		mass += int(child.mass)
-		fragments += int(child.fragments)
-		ids.append(int(child.id))
-	var parent: Dictionary = view.game._new_tile(text, mass, fragments)
-	parent.skin = int(children[1].get("skin", children[1].id))
-	parent.column = mini(int(children[1].column), Model.COLUMNS - int(parent.width))
-	parent.row = Model.ROWS - int(parent.height)
-	for index in range(view.game.cells.size() - 1, -1, -1):
-		if int(view.game.cells[index].id) in ids:
-			view.game.cells.remove_at(index)
-	# Imported legacy boards may contain invalid parents; new input cannot create one.
-	view.game._merge_history[int(parent.id)] = children.duplicate(true)
-	view.game.cells.append(parent)
-	view._sync_tiles()
-	view._layout()
-	return parent
-
-
-func _legacy_invalid_merge(view) -> Dictionary:
-	var ids: Array[int] = _install(view, ["t", "ca"], [1, 2])
-	var inputs: Array[Dictionary] = [view.game.cell(ids[0]).duplicate(true), view.game.cell(ids[1]).duplicate(true)]
-	var parent: Dictionary = _install_legacy_parent(view, inputs)
-	check(parent.text == "tca" and not view.game.is_valid_word(parent) and view.game.can_split(parent),
-		"the explicit legacy fixture preserves an invalid parent's two chest-bearing children")
-	return {"id": int(parent.id), "ids": ids, "inputs": inputs}
-
-func _check_split_pointer_recovery(view) -> void:
-	for reduced: bool in [false, true]:
-		for pointer: int in [-1, 7]:
-			_reset(view, reduced)
-			var fixture: Dictionary = _legacy_invalid_merge(view)
-			var center: Vector2 = _center(view, fixture.id)
-			check(view.game.can_split(view.game.cell(fixture.id)), "an invalid merged word can return to its last two inputs")
-			check(view._press(pointer, center), "mouse and touch can press an invalid merged jelly")
-			view._release(center)
-			check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split",
-				"tapping an invalid merged jelly starts one distinct split operation")
-			var split: Dictionary = view.game.fusions[0]
-			check(int(split.a_id) == fixture.id and int(split.b_id) == fixture.id and split.results.size() == 2,
-				"the splitting parent reserves both child destinations")
-			check(not view._press(pointer, center), "a repeated tap cannot pick up the splitting parent")
-			view._release(center)
-			view._activate(fixture.id)
-			check(view.game.fusions.size() == 1 and view.game.fusions[0].attempt_id == split.attempt_id,
-				"repeated pointer and keyboard input cannot duplicate a split")
-			_advance(view, Model.SPLIT_SECONDS * 0.5)
-			check(view.game.cells.size() == 1 and view.game.cell(fixture.ids[0]).is_empty()
-				and view.game.cell(fixture.ids[1]).is_empty(), "children remain reserved until the split animation completes")
-			var visual: Dictionary = view._fusion_visuals[str(split.attempt_id)]
-			check(visual.parts.size() == 2, "the split has two separate child skins")
-			for index in range(2):
-				var part = visual.parts[index]
-				check(part.is_visible_in_tree(), "both restored child skins are visible during separation")
-				if reduced:
-					check(part.get_rect().is_equal_approx(view._tile_rect(split.results[index])) and part.scale == Vector2.ONE,
-						"reduced motion crossfades children at steady final positions and scale")
-				else:
-					check(not part.get_rect().is_equal_approx(view._tile_rect(split.results[index])),
-						"normal motion visibly separates each child before it reaches the reserved destination")
-			check(not visual.art.visible if reduced else visual.art.visible and visual.art.stage == "split",
-				"the liquid separation artwork follows the selected motion preference")
-			check(heard.is_empty() and payouts.is_empty() and attempts.is_empty() and cues.count("pop") == 0,
-				"splitting never speaks a word, records an answer, or plays the collection disappearance")
-			check(not view.snapshot().word_reveal.visible, "splitting an invalid word never opens the collected-word reveal")
-			_advance(view, Model.SPLIT_SECONDS * 0.5 - 0.001)
-			var final_rects: Dictionary = {}
-			for index in range(2):
-				var final_rect: Rect2 = visual.parts[index].get_rect()
-				final_rects[int(split.results[index].id)] = final_rect
-				check(final_rect.is_equal_approx(view._tile_rect(split.results[index])), "each split skin reaches its exact reserved rectangle before handover")
-			_advance(view, 0.002 + Model.SETTLE_SECONDS)
-			check(view.game.cells.size() == 2 and view.game.cell(fixture.id).is_empty(), "one invalid parent returns to exactly two children")
-			for original: Dictionary in fixture.inputs:
-				var restored: Dictionary = view.game.cell(int(original.id))
-				check(not restored.is_empty() and restored.text == original.text and restored.mass == original.mass
-					and restored.fragments == original.fragments and int(restored.get("skin", restored.id)) == int(original.get("skin", original.id)),
-					"each child retains its original identity, text, mass, skin, and individual fragment count")
-				check(view._tiles[int(original.id)].visible_fragment_badges() == int(original.fragments)
-					and view._board.encloses(view._tiles[int(original.id)].get_rect()), "restored child artwork and all chest markers fit the board")
-				check(view._tiles[int(original.id)].get_rect().is_equal_approx(final_rects[int(original.id)]),
-					"the persistent child retains its split animation's final position and size")
-				check(_has_support(view.game.cells, restored), "a split child lands on the floor or another body without floating over an empty row")
-				check(not view.game.can_split(restored), "a restored single root cannot split further")
-			check(view._fusion_visuals.is_empty(), "split completion clears transient child artwork")
-			check(not view._tiles[fixture.ids[0]].get_rect().intersects(view._tiles[fixture.ids[1]].get_rect()),
-				"restored child hit targets do not overlap")
-			check(view.game.collected_coins == 0 and view.game.fragment_count == 0 and view.game.cleared_pairs == 0,
-				"split conserves rewards without collecting the carried fragments")
-			_drag(view, fixture.ids[1], fixture.ids[0])
-			var corrected: int = _merged_id(view)
-			_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-			check(view.game.cell(corrected).text == "cat" and not view.game.can_split(view.game.cell(corrected)),
-				"the restored inputs can be corrected into a valid collectible word")
-			center = _center(view, corrected)
-			view._press(pointer, center)
-			view._release(center)
-			check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "collect", "valid-word taps still collect instead of splitting")
-			_advance(view, Model.COLLECT_SECONDS)
-			check(payouts.size() == 1 and payouts[0].amount == 50 and payouts[0].fragments == 3
-				and heard.size() == 1 and attempts.size() == 1, "correcting and collecting records its rare bonus and learning answer exactly once")
-
-
 func _has_support(cells: Array, child: Dictionary) -> bool:
 	var bottom: int = int(child.row) + int(child.height)
 	if bottom == Model.ROWS:
@@ -2423,122 +2264,6 @@ func _has_support(cells: Array, child: Dictionary) -> bool:
 			return true
 	return false
 
-
-func _check_split_cancel_and_pause(view) -> void:
-	_reset(view)
-	var fixture: Dictionary = _legacy_invalid_merge(view)
-	var center: Vector2 = _center(view, fixture.id)
-	view._press(-1, center)
-	view.cancel_input()
-	view._release(center)
-	check(view.game.fusions.is_empty() and not view.game.cell(fixture.id).is_empty(), "canceling a press cannot split its invalid word")
-	view._press(-1, center)
-	view.pause(true)
-	view._release(center)
-	check(view.game.fusions.is_empty(), "pausing between press and release cancels a possible split")
-	view.pause(false)
-	view._press(-1, center)
-	var empty_point: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 2.5, view._pitch * 0.5))
-	view._move(empty_point)
-	view._release(empty_point)
-	check(view.game.fusions.is_empty() and not view.game.cell(fixture.id).is_empty(), "dragging an invalid word into empty space never acts as a split tap")
-	_advance(view, Model.SETTLE_SECONDS + 0.01)
-	center = _center(view, fixture.id)
-	view._press(7, center)
-	view._release(center)
-	_advance(view, Model.SPLIT_SECONDS * 0.4)
-	var split: Dictionary = view.game.fusions[0]
-	var elapsed: float = float(split.elapsed)
-	var parts: Array = view._fusion_visuals[str(split.attempt_id)].parts
-	var before: Array[Rect2] = [parts[0].get_rect(), parts[1].get_rect()]
-	view.pause(true)
-	_advance(view, 1.0)
-	check(view.game.fusions.size() == 1 and is_equal_approx(float(view.game.fusions[0].elapsed), elapsed), "pause freezes a split before either child is restored")
-	check(parts[0].get_rect().is_equal_approx(before[0]) and parts[1].get_rect().is_equal_approx(before[1]), "pause also freezes both visible separation poses")
-	var previous_texture: Texture2D = view._chest_texture
-	view.apply_theme(Data.theme("winter"), data.chests)
-	check(view._chest_texture != previous_texture and is_equal_approx(float(view.game.fusions[0].elapsed), elapsed),
-		"changing theme during a paused split updates its artwork without advancing the split")
-	var visual: Dictionary = view._fusion_visuals[str(split.attempt_id)]
-	for body in [visual.merged, parts[0], parts[1]]:
-		check(body._fragment_texture == view._chest_texture and body._fragment_badges[0].texture == view._chest_texture,
-			"the paused split parent and both child fragment markers use the new theme")
-	var cached_texture: Texture2D = view._chest_for_theme("ocean")
-	view._apply_chest_texture(cached_texture)
-	for body in [visual.merged, parts[0], parts[1]]:
-		check(body._fragment_badges[0].texture == cached_texture, "a refreshed cached chest texture reaches every split ghost")
-	check(not view._press(-1, center), "paused splitting rejects new pointer input")
-	view.pause(false)
-	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
-	check(view.game.fusions.is_empty() and view.game.cells.size() == 2 and heard.is_empty() and payouts.is_empty(), "resuming a paused split restores its children without rewarding or speaking")
-
-
-func _check_split_keyboard_and_nested_merge(view) -> void:
-	_reset(view)
-	var fixture: Dictionary = _legacy_invalid_merge(view)
-	var extra: Dictionary = view.game._new_tile("x", 1, 1)
-	extra.column = 0
-	extra.row = Model.ROWS - 1
-	view.game.cells.append(extra)
-	view._sync_tiles()
-	view._activate(int(extra.id))
-	view._activate(fixture.id)
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and view.game.can_split(view.game.cell(fixture.id)),
-		"an existing keyboard source rejects an invalid combination without splitting or consuming its legacy target")
-	_advance(view, 0.4)
-	var nested: Dictionary = _install_legacy_parent(view, [extra.duplicate(true), view.game.cell(fixture.id).duplicate(true)] as Array[Dictionary])
-	view._activate(int(nested.id))
-	check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split",
-		"keyboard activation without a held source splits an explicitly restored nested legacy word")
-	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
-	check(view.game.cells.size() == 2 and view.game.can_split(view.game.cell(fixture.id)),
-		"one legacy split restores its invalid merged child with nested ancestry intact")
-	_drag(view, fixture.id, int(extra.id))
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 2 and view.game.can_split(view.game.cell(fixture.id)),
-		"a restored legacy child cannot create a new invalid parent and retains its own undo history")
-	_advance(view, 0.4)
-	view._activate(fixture.id)
-	_advance(view, Model.SPLIT_SECONDS + Model.SETTLE_SECONDS)
-	var actual_ids: Array[int] = []
-	var mass: int = 0
-	var fragments: int = 0
-	for tile: Dictionary in view.game.cells:
-		actual_ids.append(int(tile.id))
-		mass += int(tile.mass)
-		fragments += int(tile.fragments)
-	var expected_ids: Array[int] = [fixture.ids[0], fixture.ids[1], int(extra.id)]
-	actual_ids.sort()
-	expected_ids.sort()
-	check(actual_ids == expected_ids and mass == 3 and fragments == 4,
-		"nested legacy recovery restores each original root once and conserves all mass and fragments")
-	check(view.game.collected_coins == 0 and view.game.fragment_count == 0 and heard.is_empty()
-		and payouts.is_empty() and attempts.is_empty(), "nested recovery and rejection never grant coins, chest progress, or learning credit")
-
-func _check_split_keyboard_source_shortcut(view) -> void:
-	for keycode: Key in [KEY_ENTER, KEY_SPACE]:
-		_reset(view)
-		var fixture: Dictionary = _legacy_invalid_merge(view)
-		var extra: Dictionary = view.game._new_tile("x", 1, 0)
-		extra.column = 0
-		extra.row = Model.ROWS - 1
-		view.game.cells.append(extra)
-		view._sync_tiles()
-		view._tiles[fixture.id].grab_focus()
-		var event := InputEventKey.new()
-		event.keycode = keycode
-		event.pressed = true
-		event.shift_pressed = true
-		view._input(event)
-		check(view._keyboard_source == fixture.id and view.game.fusions.is_empty(),
-			"Shift+Enter and Shift+Space select a legacy merged jelly as a source without splitting")
-		view._activate(int(extra.id))
-		check(view.game.fusions.is_empty() and cues.count("wrong") == 1 and view._keyboard_source == -1
-			and view.game.can_split(view.game.cell(fixture.id)) and not view.game.cell(int(extra.id)).is_empty(),
-			"the next keyboard activation rejects an invalid source-target word and preserves both bodies")
-		_advance(view, 0.4)
-		view._activate(fixture.id)
-		check(view.game.fusions.size() == 1 and view.game.fusions[0].operation == "split",
-			"plain activation still splits the original legacy parent after rejection consumes source selection")
 
 func _check_repeat_merge_and_wrap(view) -> void:
 	_reset(view)

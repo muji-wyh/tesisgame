@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -28,24 +30,27 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	check(app.MODES.keys() == ["match", "memory", "pop", "phrase", "jelly", "word_jelly"],
-		"The game offers Match, Memory, Voice Pop, Phrase Builder, and Jelly Match in that order")
-	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
-		"Entering the game opens the Match board")
+		"The game retains all six supported mode identifiers")
+	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_word_jelly", "Mode_match", "Mode_memory", "Mode_pop", "Mode_phrase", "Mode_jelly"],
+		"Home presents all six games with Jelly Words first")
+	PlayerFlow.enter_mode(app, "match")
+	await settle()
+	check(app._mode_id == "match" and not app._mode_menu_open()
+		and app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
+		"Choosing Match from Home opens its playable board")
 	check(app.find_child("Mode_match", true, false).button_pressed and app.find_child("Mode_learn", true, false) == null
 		and app.cards.size() == 10 and app.model.hints_remaining == 3 and not app._voice_mode,
 		"Match starts selected with a ready board, three hints, and no microphone")
-	check(app._mode_buttons.map(func(button: Button) -> String: return str(button.name)) == ["Mode_match", "Mode_memory", "Mode_pop", "Mode_phrase", "Mode_jelly"],
-		"The actual mode choices preserve their requested order inside the popover")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+	PlayerFlow.earn_pair_chest(app)
 	app.model.phase = "won"
-	app.model.chest_state = "opened"
+	check(app._settle_pair_reward(), "The result fixture has a durably settled chest before checking its actions")
 	app._refresh()
 	for dimensions in [Vector2i(320, 568), Vector2i(768, 1024), Vector2i(1366, 768)]:
 		root.size = dimensions
@@ -83,7 +88,7 @@ func _run() -> void:
 			check(surface.bg_color.a > 0.9 and surface.border_width_top > 0,
 				"The active result action has a real button surface rather than floating text")
 	app._save_error = false
-	app._pending_fragment = {"medal_id": "spring-1", "after": 1}
+	app._pending_fragment = {"medal_id": "spring-1", "after": app.medal_progress.count_for("spring-1") + 1}
 	app._refresh()
 	check(not app._new_adventure_button.visible and not app._result_retry_button.visible
 		and app._valid_focus(app._default_focus()), "Pending reward persistence keeps New adventure hidden with a valid fallback focus")

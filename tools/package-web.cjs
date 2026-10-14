@@ -8,7 +8,6 @@ const { readChestReferenceAudio } = require('./chest-reference-audio.cjs');
 const { readChestKenneyAudio } = require('./chest-kenney-audio.cjs');
 
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-const CHEST_CUES = ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle'];
 const POP_REFERENCE_IDS = ['quick', 'juicy', 'crisp'];
 
 function compressWebAsset(bytes, candidates = []) {
@@ -162,8 +161,7 @@ function collectRequiredAudio(root) {
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
-    ...phrasePaths,
-    ...THEMES.flatMap(theme => CHEST_CUES.map(cue => `assets/audio/chests/${theme}-${cue}.wav`)).sort()
+    ...phrasePaths
   ];
   const uiClick = readUiClickAudio(root);
   return [...sources.map(source => importedAudio(root, source)), importedAudio(root, uiClick.asset.destination),

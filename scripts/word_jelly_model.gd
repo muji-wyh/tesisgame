@@ -31,7 +31,6 @@ const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
 const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
 const FUSION_SECONDS: float = 0.76
-const SPLIT_SECONDS: float = 0.45
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.10
@@ -86,7 +85,6 @@ var _next_tile_id: int = 1
 var _next_event_id: int = 1
 var _collection_event_ids: Dictionary = {}
 var _collection_coin_rewards: Dictionary = {}
-var _merge_history: Dictionary = {}
 var _generation: int = 0
 var _growth_pending: bool = false
 var _gravity_pending: bool = false
@@ -133,7 +131,6 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_completed_words.clear()
 	_collection_event_ids.clear()
 	_collection_coin_rewards.clear()
-	_merge_history.clear()
 	_result.clear()
 	phase = "finished"
 	paused = false
@@ -509,15 +506,6 @@ func _complete_powerup() -> void:
 func _grant_powerup_fragment(tile: Dictionary) -> void:
 	tile.fragments = int(tile.fragments) + 1
 	tile.chest = true
-	# A historical merged body may later split repeatedly. Store each new
-	# marker in one descendant at every level so no split loses or copies it.
-	var descendants: Array = _merge_history.get(int(tile.id), [])
-	if not descendants.is_empty():
-		var selected: Dictionary = descendants[0]
-		for child: Dictionary in descendants:
-			if int(child.fragments) < int(selected.fragments):
-				selected = child
-		_grant_powerup_fragment(selected)
 
 
 func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
@@ -563,37 +551,6 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 		if _can_continue(generation):
 			changed.emit()
 	return "merged"
-
-
-func can_split(tile: Dictionary) -> bool:
-	return int(tile.get("mass", 0)) > 1 and not is_valid_word(tile) \
-		and _merge_history.has(int(tile.get("id", -1)))
-
-
-func split(tile_id: int) -> bool:
-	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
-		return false
-	var parent: Dictionary = cell(tile_id)
-	if not is_settled(parent) or not can_split(parent) or is_lifted(tile_id):
-		return false
-	var results: Array[Dictionary] = _split_placements(parent)
-	if results.size() != 2:
-		return false
-	var active: Dictionary = {
-		"operation": "split", "a_id": tile_id, "b_id": tile_id,
-		"a": parent.duplicate(true), "b": parent.duplicate(true), "result": {},
-		"results": results, "word": {}, "attempt_id": _event_id("split"),
-		"elapsed": 0.0, "duration": SPLIT_SECONDS, "pop_at": SPLIT_SECONDS,
-		"popped": false
-	}
-	fusions.append(active)
-	var generation: int = _generation
-	fusion_started.emit(active.duplicate(true))
-	if _can_continue(generation) and _fusion_index(str(active.attempt_id)) >= 0:
-		cue_requested.emit("release")
-		if _can_continue(generation):
-			changed.emit()
-	return true
 
 
 func collect(tile_id: int) -> bool:
@@ -952,7 +909,7 @@ func _restore_dragged_tile() -> void:
 	var position: Vector2i = _drag_return_position(occupied, extent.x, extent.y, tile)
 	if position.x < 0:
 		# Retain as much of the original body as possible if falling stacks have
-		# fragmented its old space. Mass, word data and ancestry remain intact.
+		# fragmented its old space. Mass, word data and fragments remain intact.
 		var best_area: int = 0
 		for height in range(1, original_extent.y + 1):
 			for width in range(1, original_extent.x + 1):
@@ -1353,9 +1310,6 @@ func _complete_operation(event_id: String) -> void:
 	if str(completed.operation) == "merge":
 		fusions.remove_at(operation_index)
 		_complete_merge(completed)
-	elif str(completed.operation) == "split":
-		fusions.remove_at(operation_index)
-		_complete_split(completed)
 	elif str(completed.operation) == "collect":
 		var generation: int = _generation
 		if int(completed.coins) > 0 and not bool(completed.get("credited", false)) and credit_collection.is_valid():
@@ -1397,9 +1351,10 @@ func _complete_merge(completed: Dictionary) -> void:
 	cells.append(result)
 	if _held_tile_id in [int(a.id), int(b.id)]:
 		_held_tile_id = -1
-	# Keep ancestry outside public tile snapshots, so repeated merges do not
-	# recursively duplicate the entire tree on every frame or animation event.
-	_merge_history[int(result.id)] = [completed.a.duplicate(true), completed.b.duplicate(true)]
+	# Consumed words cannot return after a valid merge. Release any failed
+	# collection rolls only when their replacement has committed.
+	_discard_collection_reward(int(a.id))
+	_discard_collection_reward(int(b.id))
 	_restore_growth(int(result.id))
 	_gravity_pending = true
 	merged_count += 1
@@ -1422,51 +1377,9 @@ func _complete_merge(completed: Dictionary) -> void:
 		changed.emit()
 
 
-func _complete_split(completed: Dictionary) -> void:
-	var parent_id: int = int(completed.a_id)
-	var index: int = _index_for_id(parent_id)
-	if index < 0:
-		return
-	cells.remove_at(index)
-	# Commit both destinations before callbacks can spawn or merge another body.
-	# Their own histories and failed wallet receipts remain available for undo.
-	for child: Dictionary in completed.results:
-		var restored: Dictionary = child.duplicate(true)
-		restored.age = 0.0
-		restored.settling = true
-		restored.arrival = false
-		restored.falling = false
-		restored.falling_rows = 0
-		restored.lifted = false
-		restored.placement_locked = false
-		cells.append(restored)
-	if _held_tile_id == parent_id:
-		_held_tile_id = -1
-	_merge_history.erase(parent_id)
-	_collection_coin_rewards.erase(_collection_event_ids.get(parent_id, ""))
-	_collection_event_ids.erase(parent_id)
-	# Wrapped parents may release padding cells. Reconsider compressed neighbors
-	# only after both frozen split destinations have finished settling.
-	_growth_pending = true
-	_gravity_pending = true
-	# A split does not restart an existing full-board deadline.
-	if _has_free_cell():
-		full_elapsed = -1.0
-	var generation: int = _generation
-	fusion_completed.emit(completed, 0)
-	if _can_continue(generation):
-		changed.emit()
-
-
-func _discard_history(tile_id: int) -> void:
-	var pending: Array[int] = [tile_id]
-	while not pending.is_empty():
-		var current_id: int = pending.pop_back()
-		for child: Dictionary in _merge_history.get(current_id, []):
-			pending.append(int(child.id))
-		_merge_history.erase(current_id)
-		_collection_coin_rewards.erase(_collection_event_ids.get(current_id, ""))
-		_collection_event_ids.erase(current_id)
+func _discard_collection_reward(tile_id: int) -> void:
+	_collection_coin_rewards.erase(_collection_event_ids.get(tile_id, ""))
+	_collection_event_ids.erase(tile_id)
 
 
 func _complete_collection(completed: Dictionary) -> void:
@@ -1476,7 +1389,7 @@ func _complete_collection(completed: Dictionary) -> void:
 	cells.remove_at(index)
 	if _held_tile_id == int(completed.a_id):
 		_held_tile_id = -1
-	_discard_history(int(completed.a_id))
+	_discard_collection_reward(int(completed.a_id))
 	_restore_growth()
 	# Wait until all operations at this timestamp finish before moving the stack.
 	# Failed payments leave their body in place and never initiate gravity.
@@ -1607,9 +1520,6 @@ func _occupied(excluded_ids: Array[int] = [], reserve_drag_return: bool = true) 
 		if str(active.operation) == "merge":
 			var result: Dictionary = active.result
 			_occupy(occupied, int(result.column), int(result.row), int(result.width), int(result.height))
-		elif str(active.operation) == "split":
-			for child: Dictionary in active.results:
-				_occupy(occupied, int(child.column), int(child.row), int(child.width), int(child.height))
 	if reserve_drag_return and _dragged_tile_id >= 0 and not _dragged_tile_id in excluded_ids:
 		# A moving spare cell protects cancellation from new arrivals and growth.
 		# Gravity never sees this reservation, so it cannot act as hidden support.
@@ -1619,104 +1529,6 @@ func _occupied(excluded_ids: Array[int] = [], reserve_drag_return: bool = true) 
 			if position.x >= 0:
 				_occupy(occupied, position.x, position.y, 1, 1)
 	return occupied
-
-
-func _split_sizes(child: Dictionary) -> Array[Vector2i]:
-	var sizes: Array[Vector2i] = [_preferred_size(int(child.mass))]
-	for size: Vector2i in [Vector2i(int(child.width), int(child.height)), Vector2i.ONE]:
-		if not size in sizes:
-			sizes.append(size)
-	return sizes
-
-
-func _split_placements(parent: Dictionary) -> Array[Dictionary]:
-	var children: Array = _merge_history[int(parent.id)]
-	var sizes_a: Array[Vector2i] = _split_sizes(children[0])
-	var sizes_b: Array[Vector2i] = _split_sizes(children[1])
-	var options: Array[Dictionary] = []
-	for a_size: Vector2i in sizes_a:
-		for b_size: Vector2i in sizes_b:
-			options.append({"a": a_size, "b": b_size,
-				"area": a_size.x * a_size.y + b_size.x * b_size.y, "order": options.size()})
-	options.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return int(a.area) > int(b.area) if a.area != b.area else int(a.order) < int(b.order))
-	var occupied: Dictionary = _occupied([int(parent.id)])
-	var outgoing_ids: Array[int] = [int(parent.id)]
-	for active: Dictionary in fusions:
-		outgoing_ids.append(int(active.a_id))
-		outgoing_ids.append(int(active.b_id))
-	# Outgoing bodies still block placement, but only their reserved results
-	# can support a child after concurrent animations have completed.
-	var support_occupied: Dictionary = _occupied(outgoing_ids, false)
-	var center := Vector2(float(parent.column) + float(parent.width) * 0.5,
-		float(parent.row) + float(parent.height) * 0.5)
-	for option: Dictionary in options:
-		var positions: Array[Vector2i] = _split_pair(occupied, support_occupied, option.a, option.b, center)
-		if positions.size() != 2:
-			continue
-		var results: Array[Dictionary] = []
-		for index in range(2):
-			var child: Dictionary = children[index].duplicate(true)
-			var size: Vector2i = option.a if index == 0 else option.b
-			child.column = positions[index].x
-			child.row = positions[index].y
-			child.width = size.x
-			child.height = size.y
-			child.age = 0.0
-			child.settling = true
-			child.arrival = false
-			child.falling = false
-			child.falling_rows = 0
-			child.placement_locked = false
-			results.append(child)
-		return results
-	return []
-
-
-func _split_pair(occupied: Dictionary, support_occupied: Dictionary, size_a: Vector2i, size_b: Vector2i, center: Vector2) -> Array[Vector2i]:
-	var candidates_a: Array[Rect2i] = _split_candidates(occupied, size_a)
-	var candidates_b: Array[Rect2i] = _split_candidates(occupied, size_b)
-	var target_a: Vector2 = center - Vector2(float(size_b.x) * 0.5, 0.0)
-	var target_b: Vector2 = center + Vector2(float(size_a.x) * 0.5, 0.0)
-	var nearest: Array[Vector2i] = []
-	var distance: float = INF
-	var horizontal_distance: float = INF
-	# Search pairs together: a small child must not consume the only corridor
-	# that can fit its larger sibling. Every board row is available for undo.
-	for a: Rect2i in candidates_a:
-		var a_offset: Vector2 = Vector2(a.position) + Vector2(a.size) * 0.5 - target_a
-		for b: Rect2i in candidates_b:
-			if a.intersects(b):
-				continue
-			if not _split_has_support(a, b, support_occupied) or not _split_has_support(b, a, support_occupied):
-				continue
-			var b_offset: Vector2 = Vector2(b.position) + Vector2(b.size) * 0.5 - target_b
-			var candidate_distance: float = a_offset.length_squared() + b_offset.length_squared()
-			var candidate_horizontal: float = a_offset.x * a_offset.x + b_offset.x * b_offset.x
-			# On equal travel, drop into a gap instead of hopping sideways.
-			if candidate_distance < distance or (is_equal_approx(candidate_distance, distance) and candidate_horizontal < horizontal_distance):
-				nearest.assign([a.position, b.position])
-				distance = candidate_distance
-				horizontal_distance = candidate_horizontal
-	return nearest
-
-
-func _split_has_support(body: Rect2i, sibling: Rect2i, occupied: Dictionary) -> bool:
-	if body.end.y == ROWS:
-		return true
-	for column in range(body.position.x, body.end.x):
-		if occupied.has(body.end.y * COLUMNS + column) or sibling.has_point(Vector2i(column, body.end.y)):
-			return true
-	return false
-
-
-func _split_candidates(occupied: Dictionary, size: Vector2i) -> Array[Rect2i]:
-	var candidates: Array[Rect2i] = []
-	for row in range(ROWS - size.y + 1):
-		for column in range(COLUMNS - size.x + 1):
-			if _fits(occupied, column, row, size.x, size.y):
-				candidates.append(Rect2i(Vector2i(column, row), size))
-	return candidates
 
 
 func _position_near(occupied: Dictionary, width: int, height: int, anchor: Dictionary) -> Vector2i:

@@ -847,13 +847,19 @@ func _run() -> void:
 				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await settle()
 			var current_positions: Array[Vector2] = []
-			current_positions.append(app._header.global_position)
+			var game_area: Rect2 = app._content_margins.get_global_rect()
+			current_positions.append(app._header.global_position - game_area.position)
+			check(app.get_global_rect().grow(1.0).encloses(game_area)
+				and game_area.grow(1.0).encloses(app._header.get_global_rect())
+				and game_area.get_center().distance_to(app.get_global_rect().get_center()) <= 1.0,
+				"The compact Pip header stays inside its centered game area at %s in %s" % [dimensions, mode])
 			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 				"Mode choices stay hidden until Home is opened at %s in %s" % [dimensions, mode])
 			if original_positions.is_empty():
 				original_positions = current_positions
 			else:
-				check(current_positions == original_positions, "The compact Pip header stays in the same position at %s in %s" % [dimensions, mode])
+				check(current_positions == original_positions,
+					"The compact Pip header keeps the same game-area inset at %s in %s" % [dimensions, mode])
 		var view = app._pop
 		view.set_process(false)
 		check(view.find_child("ChoosePopMode", true, false) == null and view.find_child("MultiplayerStatus", true, false) == null,

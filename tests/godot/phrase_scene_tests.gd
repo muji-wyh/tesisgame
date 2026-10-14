@@ -877,8 +877,8 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 		"Public New adventure starts another fresh three-question Phrase Builder round")
 	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) == app.growth.learning_age()),
 		"The next Phrase Builder round uses exactly the current learning age after browsing a future age")
-	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().surprise.active,
-		"A new phrase round keeps saved progress and clears the previous displayed gift")
+	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().opened_effect.active,
+		"A new phrase round keeps saved progress and clears the previous opening flourish")
 
 
 func _check_first_candidate_row(view) -> void:

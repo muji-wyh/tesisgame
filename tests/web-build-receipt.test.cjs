@@ -134,6 +134,18 @@ test('changing the vocabulary motion manifest, source map or validator invalidat
   }
 });
 
+test('changes to the chest milestone artwork validator reject an older export', t => {
+  const { root, write, record } = fixture(t);
+  const source = 'tools/prepare-chest-milestone-art.cjs';
+  write(source, 'original milestone artwork validation');
+  record();
+  write(source, 'revised milestone artwork validation');
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*prepare-chest-milestone-art\.cjs/);
+  record();
+  fs.unlinkSync(path.join(root, source));
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*prepare-chest-milestone-art\.cjs/);
+});
+
 test('editing or deleting the phrase catalog rejects an older export', t => {
   const { root, write, record } = fixture(t);
   write('phrases.json', '[{"id":"red-apple","text":"red apple"}]');

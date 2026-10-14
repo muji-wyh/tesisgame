@@ -1,8 +1,10 @@
 # Jelly Words
 
 Jelly Words reuses the acquired production assets from [Jelly Match](jelly-match.md),
-the [Kenney layered garden](jelly-garden.md), and the
-[chest-fragment presentation](jelly-fragments.md). No new artwork was downloaded.
+the [Kenney daylight panorama](jelly-sky.md), the
+[Kenney garden edges](jelly-garden.md), and the
+[chest-fragment presentation](jelly-fragments.md). Their source, acquisition,
+and license records remain in the linked asset documents.
 
 | Material | Source, creator, license | Integration and animation |
 | --- | --- | --- |
@@ -49,10 +51,10 @@ the completed words on the board for ordinary collection. Treasure costs 200,
 board, preferring bodies without fragments. Payment is persisted before either
 ability starts. The two prices advance independently after successful payment;
 failed or duplicate payments do not advance them. Supply and danger clocks wait while the ability runs; Home and
-Finish confirmation pause it. Neither ability collects words, grants coins, or
+the Finish pull gesture pause it. Neither ability collects words, grants coins, or
 credits learning progress by itself.
 
-Automatic merges, splits, and restored growth check for support after the
+Automatic merges and restored growth check for support after the
 fusion handover and settle vertically onto the nearest body or the floor.
 Dragging into empty space snaps the entire jelly footprint to the nearest
 grid position, preserving the original finger offset. A translucent
@@ -64,7 +66,7 @@ from the final pointer position onto the nearest supporting body or the floor.
 The full footprint determines support, and the fall keeps the chosen column
 and body size. Removing its support starts another fall; bodies above its
 former position also settle. Moving preserves its word,
-picture, mass, merge history, fragments, and reward receipt without paying coins.
+picture, mass, fragments, and reward receipt without paying coins.
 Reduced motion keeps the same placement rules and static preview, placing
 the body directly at its supported destination.
 
@@ -108,7 +110,7 @@ wrong-answer sound starts once at that release; hovering or canceling does not
 play it. Reduced motion uses the same outcome with a steady brief accent.
 The next pickup, pause, round finish or navigation stops the previous sound tail.
 Rejection preserves both bodies, carried fragments and rewards without recording
-a learning attempt. Historical incomplete merged bodies can still be split.
+a learning attempt.
 
 Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
@@ -116,7 +118,7 @@ after landing. Shared entry lanes retain extra clearance so a later root cannot
 overtake an earlier one. Each preview slot refills after its own departing body
 has cleared it. Reduced motion keeps the same readiness clocks while placing
 bodies directly at their reserved destinations. The six-column board, initial
-three rows, 20-to-16-second supply cadence, merge, split, and collection rules
+three rows, 20-to-16-second supply cadence, merge, and collection rules
 remain unchanged. This polish reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
 
@@ -126,7 +128,7 @@ rows, with one pickup every 100 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
-fragment transaction. Historical incomplete combinations remain available for splitting.
+fragment transaction. Unmatched roots remain on the board.
 Existing movement settles before the first pickup; queued words then keep their
 places so gravity and deferred growth cannot delay the following beats.
 The current batch finishes before another can begin; pause freezes its clock,

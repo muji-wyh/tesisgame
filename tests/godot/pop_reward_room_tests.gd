@@ -843,7 +843,7 @@ func _room_checks() -> void:
 		"A completed chest visibly reports its opened state without inviting another hold")
 	check(room.get_meta("coin_wallet").balance == 50 and room.get_meta("coin_releases").size() == 1
 		and room.get_meta("coin_releases")[0].reward.amount == 50 and room.get_meta("coin_releases")[0].animate
-		and not room._cards[0].art.hold_effect_snapshot().surprise.active,
+		and room._cards[0].art.mode == "opened",
 		"The room emits one 50-coin flight from its completed chest after durable credit")
 	check(room.configure("room-one", 3, "space", _manifest, false) and room.snapshot().opened_count == 1,
 		"Reentering the same round preserves opened chests")
@@ -879,8 +879,8 @@ func _room_checks() -> void:
 	check(restored.get_meta("coin_wallet").balance == 150 and restored.get_meta("coin_releases").is_empty()
 		and storage.coin_writes == 3, "Restoring an opened room preserves coins without crediting or presenting them again")
 	for card in restored._cards:
-		check(card.art.mode == "opened" and card.art.hold_effect_snapshot().surprise.play_count == 0,
-			"Restoring durable state never replays the chest animation or surprise")
+		check(card.art.mode == "opened" and not card.art.hold_effect_snapshot().opened_effect.active,
+			"Restoring durable state never replays the chest animation or opening flourish")
 	restored.queue_free()
 	await process_frame
 
@@ -965,15 +965,15 @@ func _retained_rewards_checks() -> void:
 		art._advance_animation(600.0)
 		room._announce(index)
 		room._finished(index)
-		check(not art.hold_effect_snapshot().surprise.active and room.get_meta("coin_releases").size() == 3
+		check(not art.hold_effect_snapshot().opened_effect.active and room.get_meta("coin_releases").size() == 3
 			and room.get_meta("coin_wallet").balance == 150,
 			"Later openings, long idle time and stale completion callbacks cannot replay earlier coin rewards")
 	check(storage.writes == 4 and storage.coin_writes == 3 and reward_audio.size() == 3,
 		"Repeated presentation cannot replay reward audio or save extra opening or coin receipts")
 	room.hide()
 	for card in room._cards:
-		check(not card.art.hold_effect_snapshot().surprise.active,
-			"Coin-only rewards leave no decorative gift on a hidden chest stage")
+		check(not card.art.hold_effect_snapshot().opened_effect.active,
+			"Hiding the chest stage clears its opening flourish")
 	room.show()
 	room.resume()
 	for index in range(3):

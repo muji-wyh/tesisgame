@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
 
 class BrowserStorage:
@@ -35,12 +37,13 @@ func check(value: bool, message: String) -> void:
 func _app(storage: BrowserStorage):
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg", storage)
-	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	_enter_mode(app, "match")
 	return app
 
 func _visible_retry(app) -> Button:
@@ -67,7 +70,7 @@ func _tap_control(control: Control) -> void:
 
 func _win(app) -> void:
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
+	PlayerFlow.reserve_pair_chest(app)
 	if app._mode_id == "memory":
 		for word in app.model.lesson_words:
 			for index in range(app._memory.memory.cards.size()):
@@ -81,7 +84,7 @@ func _win(app) -> void:
 				app.cards[card.word.id + ":image"].pressed.emit()
 				app._continue_match()
 	check(app.model.phase == "won" and app.model.chest_state == "closed", "A completed %s round has an unopened reward" % app._mode_id)
-	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+	PlayerFlow.finish_celebration(app)
 
 
 func _total(app) -> int:
@@ -97,7 +100,7 @@ func _check_audio_recovery(app) -> void:
 		if location == "home":
 			app._show_collection()
 		else:
-			app.choose_mode(location)
+			_enter_mode(app, location)
 		app.audio.interact(app.model.theme_id)
 		app.audio.cue("select")
 		app.audio.say("res://" + app.data.words[0].audio)
@@ -120,7 +123,7 @@ func _check_audio_recovery(app) -> void:
 			location + " ignores duplicate foreground notifications without restarting the music")
 		if location == "home":
 			app._hide_collection()
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	app.audio.halt()
 	app.on_page_hidden()
 	app.on_page_visible()
@@ -210,6 +213,12 @@ func _check_background_collection_close(app) -> void:
 	app.new_round(43, true, "", "match")
 
 
+func _enter_mode(app, id: String) -> void:
+	PlayerFlow.enter_mode(app, id)
+	check(app._mode_id == id and not app._mode_menu_open(),
+		"The Home route enters " + id + " before exercising its gameplay controls")
+
+
 func _run() -> void:
 	directory = "user://ui-recovery-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -251,10 +260,10 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	await _tap_control(match_mode)
-	check(app._mode_id == "match" and not app.cards.is_empty(), "The Match popover choice remains usable after initial storage failure")
+	check(app._mode_id == "match" and not app.cards.is_empty(), "The Match Home choice remains usable after initial storage failure")
 	app.choose_theme("ocean")
 	check(app.model.theme_id == "ocean", "A progress read failure does not block choosing a practice theme")
-	app.choose_mode("memory")
+	_enter_mode(app, "memory")
 	await process_frame
 	await process_frame
 	check(app._mode_id == "memory", "Other practice modes remain available before progress recovers")
@@ -277,7 +286,7 @@ func _run() -> void:
 	_check_audio_recovery(app)
 	await _check_background_collection_close(app)
 	for mode in ["match", "memory"]:
-		app.choose_mode(mode)
+		_enter_mode(app, mode)
 		_win(app)
 		var before := _total(app)
 		var completed_lesson: Array = app.model.lesson_words.duplicate(true)
@@ -289,16 +298,16 @@ func _run() -> void:
 		check(app._new_adventure_button.visible, "Saving the opened %s chest exposes New adventure" % mode)
 		app._new_adventure_button.pressed.emit()
 		check(_total(app) == before + 1, "New adventure after %s preserves the opened chest's saved piece" % mode)
-		check(app.model.phase == "waiting" and app._mode_id == "match" and app.model.lesson_words.size() == 5
+		check(app.model.phase == "waiting" and app._mode_id == mode and app.model.lesson_words.size() == 5
 			and app.model.lesson_words != completed_lesson and app.model.hints_remaining == 3,
-			"Successful reward preservation starts a fresh five-word Match round with three hints")
+			"Successful reward preservation starts a fresh five-word %s round with three hints" % mode)
 		var fresh_lesson: Array = app.model.lesson_words.duplicate(true)
 		app._new_adventure_button.pressed.emit()
 		check(app.model.lesson_words == fresh_lesson and _total(app) == before + 1,
 			"A repeated hidden result click neither replaces the fresh lesson nor duplicates its saved piece")
 		var persisted = load("res://scripts/medal_progress.gd").new(directory + "/reload.cfg", directory + "/legacy.cfg", storage)
 		check(persisted.load_progress() and persisted.counts == app.medal_progress.counts, "The preserved victory survives reloading progress")
-	app.choose_mode("memory")
+	_enter_mode(app, "memory")
 	_win(app)
 	var before := _total(app)
 	var lesson: Array = app.model.lesson_words.duplicate(true)
@@ -315,6 +324,8 @@ func _run() -> void:
 	check(str(app._result_retry_button.get("accessibility_description")) == app.medal_progress.error
 		and app._result_retry_button.tooltip_text.is_empty(), "Retry saving keeps the storage error accessible without a hover popup")
 	app._result_retry_button.pressed.emit()
+	app._show_mode_menu()
+	check(not app._mode_menu_open(), "An unsaved completed round blocks returning Home before a mode switch")
 	app.choose_mode("match")
 	app.new_round()
 	check(app.model.phase == "won" and app._mode_id == "memory" and app.model.lesson_words == lesson and _total(app) == before,
@@ -332,8 +343,9 @@ func _run() -> void:
 		and app._default_focus() == app._new_adventure_button,
 		"Successful saving restores New adventure as the normal result action")
 	app._new_adventure_button.pressed.emit()
-	check(app.model.phase == "waiting" and app._mode_id == "match" and app.model.lesson_words != lesson
-		and _total(app) == before + 1, "Only New adventure starts a fresh Match after saving, without another piece")
+	check(app.model.phase == "waiting" and app._mode_id == "memory" and app._memory.is_visible_in_tree()
+		and app.model.lesson_words != lesson and _total(app) == before + 1,
+		"Only New adventure starts a fresh Memory round after saving, without another piece")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

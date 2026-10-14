@@ -383,11 +383,17 @@ func resume_previews() -> void:
 		tile.preview.resume_demo()
 
 
-func ensure_mode_visible(id: String) -> void:
+func button_for_mode(id: String) -> Button:
 	for tile: Dictionary in _tiles:
 		if tile.entry.id == id:
-			scroll.ensure_control_visible(tile.button)
-			return
+			return tile.button
+	return null
+
+
+func ensure_mode_visible(id: String) -> void:
+	var button: Button = button_for_mode(id)
+	if button != null:
+		scroll.ensure_control_visible(button)
 
 
 func _sync_pip_visibility() -> void:

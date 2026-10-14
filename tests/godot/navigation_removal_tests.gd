@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -28,22 +30,23 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._presentation.path = directory + "/presentation.cfg"
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	app.choose_mode("match")
+	PlayerFlow.enter_mode(app, "match")
 	await settle()
-	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app._mode_buttons[0].button_pressed,
-		"Match is selected and playable on entry")
+	check(app._mode_id == "match" and not app._mode_menu_open() and app.grid.is_visible_in_tree()
+		and app.find_child("Mode_match", true, false).button_pressed,
+		"Match is selected by identity and playable after entering it from Home")
 	check(not app.has_method("_replay")
 		and not app.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "replay_button"),
 		"The Repeat lesson handler and control are removed")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+	PlayerFlow.earn_pair_chest(app)
 	app.model.phase = "won"
-	app.model.chest_state = "opened"
+	check(app._settle_pair_reward(), "The result fixture settles its earned chest before checking navigation")
 	app._refresh()
 	await settle()
 	var actions: Array = app._outcome.find_children("*", "Button", true, false).filter(

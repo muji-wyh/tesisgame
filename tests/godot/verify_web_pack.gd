@@ -120,11 +120,6 @@ func _verify() -> void:
 			or absf(cue_stream.get_length() - cue_seconds) > 1.0 / 44100.0:
 			printerr("A retained supplied feedback recording is missing or invalid in the startup pack: " + cue_path)
 			failures += 1
-		for theme: String in themes:
-			var retired_path: String = "res://assets/audio/chests/%s-%s.wav" % [theme, cue]
-			if ResourceLoader.exists(retired_path) or FileAccess.file_exists(retired_path):
-				printerr("A replaced chest sound is still bundled: " + retired_path)
-				failures += 1
 	var effects := ["select", "correct"]
 	for theme in themes:
 		effects.append(theme + "-arrive")
@@ -446,6 +441,15 @@ func _verify_excluded_content_absent() -> int:
 		"res://assets/images/mascots/outfits/wardrobe.svg", "res://assets/coins/prepare.py",
 		"res://assets/coins/manifest.json", "res://assets/coins/review-contact.png"]
 	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-", "review-contact.png-"]
+	var archived_chest_imports: Dictionary = {}
+	var chest_bank = load("res://scripts/chest_sound_bank.gd")
+	for theme: String in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
+		for cue: String in chest_bank.CUES:
+			var source_path: String = "res://assets/audio/chests/%s-%s.wav" % [theme, cue]
+			archived_chest_imports["res://.godot/imported/%s-%s.sample" % [source_path.get_file(), source_path.md5_text()]] = true
+	for name: String in ["star", "ball", "rocket", "kite", "robot", "doll"]:
+		var source_path: String = "res://assets/chests/surprises/%s.svg" % name
+		archived_chest_imports["res://.godot/imported/%s-%s.ctex" % [source_path.get_file(), source_path.md5_text()]] = true
 	var historical_word_imports: Dictionary = {}
 	var original_words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if original_words is Array:
@@ -485,6 +489,10 @@ func _verify_excluded_content_absent() -> int:
 				failures += 1
 			if path.contains("talk_quest") or path.contains("assets/audio/quest/"):
 				printerr("Retired Talk Quest content is still bundled: " + path)
+				failures += 1
+			if path.begins_with("res://assets/audio/chests/") or path.begins_with("res://assets/chests/surprises/") \
+				or archived_chest_imports.has(path):
+				printerr("Archived chest audio or surprise artwork is still bundled: " + path)
 				failures += 1
 			var build_only: bool = build_only_sources.has(path.trim_suffix(".import")) or path.begins_with("res://assets/images/words/")
 			if directory == "res://.godot/imported":

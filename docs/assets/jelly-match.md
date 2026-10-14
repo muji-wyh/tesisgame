@@ -5,14 +5,14 @@ pictures and labels. A shared silhouette, consistent upper-left highlights and
 muted color variants give the board a soft material without competing with the
 learning content. The appearance comes from a production illustration; animation
 deforms that illustration rather than replacing it with flat geometry.
-The playfield sits in the sourced [Kenney layered garden](jelly-garden.md), with
-quiet distant hills, clouds and perimeter foliage shared by both jelly modes.
+Both jelly modes share the sourced [Kenney daylight panorama](jelly-sky.md),
+with quiet [garden foliage](jelly-garden.md) along the perimeter.
 
 Jelly Words reuses the acquired coral skin and its signed-distance material.
 A per-instance shader hue preserves the original highlights, shaded contours
 and alpha while identifying exact-word partners. Idle pairs have distinct hues;
 selecting a chunk recolors its ordered word completions to the same hue. Both
-fusion lobes, split children and the upcoming preview use the same palette.
+fusion lobes and the upcoming preview use the same palette.
 The default shader hue is disabled in Jelly Match, preserving its four skins.
 This is a runtime color adaptation of the integrated CC0 artwork below, with
 no new asset acquisition or baked animation.
@@ -464,6 +464,12 @@ The original sources, acquisition records and texture hashes are preserved in
 `assets/chests/SOURCE.txt` and [Jelly fragments](jelly-fragments.md). These are
 static production textures animated by the reveal; no new assets are acquired.
 
-The reveal peaks at the existing 180 ms collection-pop boundary. The recorded
-word and unchanged `clear.wav` cue retain their normal playback, speech ducking,
-mute and interruption rules; no second pronunciation or chest reward cue is added.
+Each collection creates an independent content-sized burst in the upper
+playfield, with varied placement and scale and an elastic entrance. Direct taps
+retain the 1.95-second reading beat and selected-word pronunciation. Collect
+batches launch a new burst every 100 ms, retaining older bursts for 480-860 ms
+according to screen space; batch pickups never pronounce words. The unchanged
+`clear.wav` cue fires at the 180 ms manual-pop boundary or the 60 ms batch-pop
+boundary. Speech ducking, mute and interruption rules remain shared with
+ordinary gameplay. See [Jelly Words](jelly-words.md) for the active reveal and
+collection behavior.

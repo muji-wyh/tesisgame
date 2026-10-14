@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -24,13 +25,15 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
 	root.size = Vector2i(480, 900)
 	root.add_child(app)
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(false)
 	app.audio.set_muted(false)
+	PlayerFixture.enter_mode(app, "match")
 	app._pop.missed.connect(func(count: int) -> void: missed_batches.append(count))
 	_check_match(app)
 	_check_match_voice_answers(app)
@@ -261,7 +264,9 @@ func _check_lifecycle(app) -> void:
 			"home": app._show_collection()
 			"hidden": app.on_page_hidden()
 			"new_round": app.new_round(85, true)
-			"mode_exit": app.choose_mode("memory")
+			"mode_exit":
+				preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "memory")
+				check(app._mode_id == "memory" and not app._mode_menu_open(), "Mode exit reaches Memory through Home")
 		check(not _pip_audio_loaded(app) and app.duck._gameplay_reaction.is_empty()
 			and app.audio._pop_players.all(func(player: AudioStreamPlayer) -> bool: return not player.playing),
 			transition + " clears the slice effect and emotion while Pip remains silent")
@@ -330,8 +335,14 @@ func _check_match_audio_tail(app) -> void:
 					break
 			app.cards[next].pressed.emit()
 		else:
-			check(app.coin_wallet.credit("fixture:hint-audio-tail", 4).ok, "Fund the paid hint that replaces the previous answer sound")
+			var price: int = app._match_hint_price()
+			check(app.coin_wallet.credit("fixture:hint-audio-tail", price).ok, "Fund the sound-tail hint at its current quoted price")
+			var balance: int = app.coin_wallet.balance
 			app._request_hint()
+			check(app.model.hint_ids.size() == 2 and app.model.hints_remaining == 2
+				and app.coin_wallet.balance == balance - price
+				and app.coin_wallet._receipts.get(app._round_id + ":match-hint:1", 0) == -price,
+				"The sound-tail fixture accepts one hint and saves exactly its quoted debit")
 		check(not app.audio.pair_feedback.playing if correct else app.audio.pair_feedback.playing
 			and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true])
 			and app.model.hints_remaining == 2,

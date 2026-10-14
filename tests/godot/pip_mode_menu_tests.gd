@@ -90,12 +90,12 @@ func _enter(app, id: String) -> void:
 	check(app._mode_id == id and not app._mode_menu_open(), "The Home card enters " + id)
 
 func _return_home(app) -> void:
-	var home: Button = app.find_child("Home", true, false) as Button
+	var home: Button = app._jelly_rewards._home if app._jelly_game_over_open() else app.find_child("Home", true, false) as Button
 	check(home != null and home.is_visible_in_tree() and not home.disabled,
 		"Every gameplay screen exposes an available Home button")
 	if home != null and home.is_visible_in_tree() and not home.disabled:
 		await _tap(home.get_global_rect().get_center())
-	check(app._mode_menu_open(), "The Home button returns to the dedicated homepage")
+	check(app._mode_menu_open(), "The active Home button returns to the dedicated homepage: " + app._mode_id)
 
 func _round_snapshot(app) -> Array:
 	return [app._round_id, app._mode_id, app.model.cards.duplicate(true), app.model.lesson_words.duplicate(true),
@@ -176,6 +176,10 @@ func _check_startup(app) -> void:
 		"The initial homepage does not claim a default game is already playing")
 	check(app._mode_buttons.size() == 6 and not app._mode_buttons.any(func(button: Button) -> bool: return button.button_pressed),
 		"All six games are offered without a preselected game")
+	app._refresh()
+	check(not app._mode_buttons.any(func(button: Button) -> bool: return button.button_pressed)
+		and app._default_focus() == _choice(app, "word_jelly"),
+		"Refreshing initial Home keeps every game unselected and starts keyboard focus on the first visible game")
 	check(app.find_child("LibraryClose", true, false) == null, "Home has no transient-menu close action")
 	var before := _round_snapshot(app)
 	await _escape()
@@ -240,7 +244,10 @@ func _check_home_touch_gestures(app) -> void:
 		root.gui_release_focus()
 		scroll.scroll_vertical = 0
 		await settle()
+		app._mode_panel.ensure_mode_visible("memory")
+		await settle()
 		var point: Vector2 = _choice(app, "memory").get_global_rect().get_center()
+		check(scroll.get_global_rect().has_point(point), "The interrupted Home tap starts inside a visible Memory card")
 		await _home_pointer(point, true, true)
 		await _home_pointer(point, true, false)
 		match interruption:
@@ -258,7 +265,10 @@ func _check_home_touch_gestures(app) -> void:
 	root.gui_release_focus()
 	scroll.scroll_vertical = 0
 	await settle()
+	app._mode_panel.ensure_mode_visible("memory")
+	await settle()
 	var point: Vector2 = _choice(app, "memory").get_global_rect().get_center()
+	check(scroll.get_global_rect().has_point(point), "The fresh Home tap targets the visible Memory card after canceled gestures")
 	await _home_pointer(point, true, true)
 	await _home_pointer(point, true, false)
 	await _home_pointer(point, false, true)
@@ -277,6 +287,12 @@ func _check_modes_and_pause(app) -> void:
 		await _return_home(app)
 		check(app._mode_panel.snapshot().current == id and _choice(app, id).button_pressed,
 			"Home marks the resumable current game: " + id)
+		app._refresh()
+		check(app._default_focus() == _choice(app, id),
+			"Home keyboard and controller focus follows the current game by identity: " + id)
+		for button: Button in app._mode_buttons:
+			check(button.button_pressed == (button == _choice(app, id)),
+				"An ordinary refresh preserves only the current game's selected card: " + id + " / " + str(button.name))
 		check(app.feedback_timer.paused and app._memory._paused and app._phrase._paused,
 			"Home pauses feedback and teaching flows: " + id)
 		var frozen := _game_snapshot(app)
@@ -412,6 +428,11 @@ func _check_results_and_replay(app) -> void:
 		app._active_jelly().game.finish_round()
 		await settle()
 		check(app._active_jelly().game.phase == "finished", "The result fixture completes " + id)
+		var ended_round: String = app._round_id
+		var covered_home: Button = app.find_child("Home", true, false) as Button
+		await _tap(covered_home.get_global_rect().get_center())
+		check(app._jelly_game_over_open() and not app._mode_menu_open() and app._round_id == ended_round,
+			"The covered header Home cannot dismiss the settlement dialog: " + id)
 		await _return_home(app)
 		check(app._mode_id == id, "A result screen returns Home without switching modes: " + id)
 

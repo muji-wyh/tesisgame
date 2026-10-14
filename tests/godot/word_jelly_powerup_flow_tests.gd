@@ -81,7 +81,6 @@ func _check_insufficient(app) -> void:
 	await _prepare(app)
 	var view = app._word_jelly
 	var game = view.game
-	var history: Dictionary = game._merge_history.duplicate(true)
 	var saved: Variant = app.coin_wallet._saved_text
 	for kind: String in ["auto_merge", "fragments"]:
 		var board: Array = game.cells.duplicate(true)
@@ -89,7 +88,7 @@ func _check_insufficient(app) -> void:
 		var price: int = game.powerup_price(kind)
 		check(button.is_visible_in_tree() and not button.disabled, "An unaffordable " + kind + " remains available for meaningful feedback")
 		button.pressed.emit()
-		check(game.cells == board and game._merge_history == history and game.fusions.is_empty()
+		check(game.cells == board and game.fusions.is_empty()
 			and not game.powerup_active() and game.collected_coins == 0 and game.fragment_count == 0,
 			"An unfunded " + kind + " changes no jelly, reward, or fragment state")
 		check(app.coin_wallet.balance == 0 and app.coin_wallet._saved_text == saved

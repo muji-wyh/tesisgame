@@ -15,7 +15,7 @@ const INPUTS = [
   'docs/assets/word-library.json', 'tools/word-library-art.cjs',
   'docs/assets/word-library-motion.json', 'tools/word-library-motion.cjs', 'tools/vocabulary-art/library-motion-map.json',
   'tests/godot/verify_web_pack.gd', 'tools/pack-vocabulary.gd',
-  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'chest-kenney-audio', 'prepare-jelly-reward-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
+  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'chest-kenney-audio', 'prepare-jelly-reward-art', 'prepare-chest-milestone-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');

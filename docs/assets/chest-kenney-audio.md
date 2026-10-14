@@ -32,8 +32,9 @@ source OGG decodes exceed full scale. The delivered files are 44,100 Hz mono
 PCM16, with no compression or import normalization. Recorded peaks are limited
 to 0.36–0.72 except the quieter pressure/anticipation layers. No generated tones
 or noise are added. All themes share the same 365 KB bank and cache resources.
-The old reference clips remain unchanged for other game modes; the prior themed
-support assets remain archived in the repository/package for compatibility.
+The old reference clips remain unchanged for other game modes. The prior themed
+support assets remain archived in the repository and are excluded from the
+runtime export because the shared Kenney bank replaces their live playback.
 
 Rebuild from the acquired local collection:
 

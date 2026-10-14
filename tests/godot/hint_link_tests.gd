@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 var coverage := {2: {"aligned": false, "offset": false}, 5: {"aligned": false, "offset": false}}
@@ -107,11 +109,15 @@ func hue_distance(first: Color, second: Color) -> float:
 func check_theme_switches(app) -> void:
 	app.new_round(21, false, "", "match")
 	await settle()
-	check(app.coin_wallet.credit("fixture:hint-link", 4).ok, "Fund the electric-link presentation's paid hint")
+	var price: int = app._match_hint_price()
+	check(app.coin_wallet.credit("fixture:hint-link", price).ok, "Fund the electric-link presentation at the quoted hint price")
+	var balance: int = app.coin_wallet.balance
 	app._request_hint()
 	await settle()
 	var hinted: Array = app.model.hint_ids.duplicate()
-	check(hinted.size() == 2 and app.model.hints_remaining == 2, "Theme switching starts with one real, paid hint")
+	check(hinted.size() == 2 and app.model.hints_remaining == 2 and app.coin_wallet.balance == balance - price
+		and app.coin_wallet._receipts.get(app._round_id + ":match-hint:1", 0) == -price,
+		"Theme switching starts with one real hint and its quoted, durably saved debit")
 	if hinted.size() != 2:
 		return
 	var link = app._hint_link
@@ -178,10 +184,13 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	PlayerFixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	PlayerFixture.enter_mode(app, "match")
 	for seed_value in range(8):
 		app.new_round(seed_value, false, "", "match")
 		await settle()

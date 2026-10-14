@@ -79,11 +79,11 @@ func _run() -> void:
 	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
 	root.size = Vector2i(768, 1024)
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y - app._content_margins.global_position.y <= 132,
+	check(not app._mode_panel.grid.is_visible_in_tree() and app._match_playfield.global_position.y - app._content_margins.global_position.y <= 132,
 		"A wide viewport uses one compact header row")
 	root.size = Vector2i(390, 844)
 	await settle()
-	check(not app._mode_row.is_visible_in_tree() and app._match_playfield.global_position.y <= 164
+	check(not app._mode_panel.grid.is_visible_in_tree() and app._match_playfield.global_position.y <= 164
 		and app._mode_heading_button.is_visible_in_tree(),
 		"Narrow phones separate companion status and game actions while preserving the mode entry")
 	app.queue_free()

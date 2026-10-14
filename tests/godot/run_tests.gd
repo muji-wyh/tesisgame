@@ -1,5 +1,8 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+
 var failures: int = 0
 var checks: int = 0
 
@@ -68,12 +71,12 @@ func wrong_pair_for(model) -> Array:
 
 func win_round(app) -> void:
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
+	PlayerFlow.reserve_pair_chest(app)
 	for pair in pairs_for(app.model):
 		app.cards[pair[0]].pressed.emit()
 		app.cards[pair[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
-	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+	PlayerFlow.finish_celebration(app)
 
 
 func set_completed_rewards(app, rewards: Dictionary) -> void:
@@ -807,8 +810,11 @@ func _test_play_improvements(app) -> void:
 		app.choose_theme(season)
 		win_round(app)
 		app._open_chest()
-		check(not data_script.reward(app.model.reward_id).is_empty() and app.model.reward_theme == season,
-			"Completing a seasonal collection does not prevent future chest opening")
+		var seasonal_reward: Dictionary = data_script.reward(app.model.reward_id)
+		check(not seasonal_reward.is_empty() and seasonal_reward.theme == season
+			and app.model.reward_theme == RewardProgress.theme_for_tier(1)
+			and app.model.chest_state in ["opening", "opened"],
+			"A completed seasonal collection still opens its tier-one chest with the earned season's reward")
 	app.new_round(6)
 	set_completed_rewards(app, saved_rewards)
 
@@ -854,7 +860,7 @@ func _test_scene() -> void:
 	var progress_script = load("res://scripts/medal_progress.gd")
 	var app = packed.instantiate()
 	app.medal_progress = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
@@ -865,6 +871,7 @@ func _test_scene() -> void:
 		await process_frame
 		return
 	app.audio.set_muted(true)
+	PlayerFlow.enter_mode(app, "match")
 	await _test_play_improvements(app)
 	_test_season_progress(app)
 	check(app.find_child("Practice", true, false) == null,
@@ -891,14 +898,14 @@ func _test_scene() -> void:
 	check(app.theme_buttons[0].get_theme_stylebox("normal").get_instance_id() == theme_style_id
 		and app._mode_buttons[0].get_theme_stylebox("normal").get_instance_id() == mode_style_id,
 		"Ordinary gameplay refreshes reuse unchanged theme styles")
-	app.choose_mode("pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.enter_mode(app, "pop")
+	PlayerFlow.choose_pop_player(app)
 	check(app._pop.is_visible_in_tree(), "Voice Pop shows its speaking game")
-	app.choose_mode("memory")
+	PlayerFlow.enter_mode(app, "memory")
 	check(app._memory.is_visible_in_tree() and app._memory.memory.cards.size() == 10
 		and app.find_child("MemoryProgress", true, false) == null and app.find_child("MemoryMistakes", true, false) == null,
 		"Memory retains its five-pair board without creating progress or mistake counters")
-	app.choose_mode("match")
+	PlayerFlow.enter_mode(app, "match")
 	check(app.grid.is_visible_in_tree(), "Returning to Match restores its board")
 	check(has_property(app, "collection_button") and app.collection_button != null,
 		"The rewards collection is directly available")
@@ -1052,7 +1059,7 @@ func _test_scene() -> void:
 	check(not app.collection_page.visible and app.model.cards == cards_before_controller,
 		"Controller B closes My Rewards and preserves the active round")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
+	PlayerFlow.reserve_pair_chest(app)
 	app.choose_theme("spring")
 	var first_pair: Array = pairs_for(app.model)[0]
 	app.cards[first_pair[1]].grab_focus()
@@ -1077,15 +1084,17 @@ func _test_scene() -> void:
 			and not app._message.is_visible_in_tree(), "Match feedback stays on the board until its automatic transition")
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "won", "The native button/timer wiring can win a round")
-	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+	PlayerFlow.finish_celebration(app)
 	await process_frame
 	await process_frame
 	check(app.chest_button.has_focus(), "Controller focus moves to the chest after winning")
+	var earned_chest_theme: String = RewardProgress.theme_for_tier(1)
 	for season in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
 		app.choose_theme(season)
 		await process_frame
-		check(app.chest.theme_id == "spring", "The earned closed chest retains Spring when selecting " + season)
-		var chest_style: String = app.data.theme("spring").chest
+		check(app.chest.theme_id == earned_chest_theme and app.model.reward_theme == earned_chest_theme,
+			"The earned tier-one chest retains its appearance when selecting " + season)
+		var chest_style: String = app.data.theme(earned_chest_theme).chest
 		var expected_pieces: int = 9 if chest_style == "crystal" else 5 if chest_style in ["royal", "energy"] else 1
 		var live: Dictionary = app.chest.hold_effect_snapshot().get("live_model", {})
 		check(app.chest.piece_count() == expected_pieces
@@ -1138,7 +1147,8 @@ func _test_scene() -> void:
 	check_no_collectible_presentation(app, "Reduced motion does not reveal collectible artwork or a flight")
 	check(app.collection_button.scale == Vector2.ONE, "Reduced motion does not bounce the rewards button")
 	app.choose_theme("winter")
-	check(app.model.reward_theme == "spring" and app.chest.theme_id == "spring", "Earned chest remains spring")
+	check(app.model.reward_theme == earned_chest_theme and app.chest.theme_id == earned_chest_theme,
+		"The opened tier-one chest retains its earned appearance")
 	check(app.chest.visible and app.chest.mode == "opened", "Opening keeps the earned chest visible")
 	app.new_round(81)
 	check(app.audio.muted, "An internal fixture reset preserves mute")
@@ -1325,11 +1335,15 @@ func _test_scene() -> void:
 	joy_button(JOY_BUTTON_A, true)
 	var held_app = packed.instantiate()
 	held_app.medal_progress = progress_script.new(directory + "/held.cfg", directory + "/legacy.cfg")
+	PlayerFlow.install(held_app, directory, "held-growth.cfg")
 	held_app._mode_id = "match"
 	root.add_child(held_app)
 	await process_frame
 	await process_frame
 	held_app.audio.set_muted(true)
+	PlayerFlow.enter_mode(held_app, "match")
+	check(held_app._mode_id == "match" and not held_app._mode_menu_open()
+		and held_app.grid.is_visible_in_tree(), "The startup hold fixture enters Match through Home")
 	var held_first: String = held_app.model.cards[0].id
 	held_app.cards[held_first].grab_focus()
 	await process_frame

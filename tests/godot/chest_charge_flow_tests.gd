@@ -224,7 +224,7 @@ func _run() -> void:
 	app.chest_button.button_up.emit()
 	check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().flights == 1
 		and app._coin_flight._seen.size() == coin_receipts + 1 and app.coin_wallet.balance == 50
-		and app._coin_counter.target == 0 and not app.chest.hold_effect_snapshot().surprise.active,
+		and app._coin_counter.target == 0 and not app.chest.hold_effect_snapshot().opened_effect.active,
 		"The completed opening saves 50 coins and launches one flight before the counter increases")
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")

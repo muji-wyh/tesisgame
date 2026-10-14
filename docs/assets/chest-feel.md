@@ -139,23 +139,19 @@ flight to the toolbar. The view owns the release flash and twelve radial light
 streaks alongside its existing theme decorations. There is no separate global
 release burst or larger post-opening medal celebration.
 
-## Cosmetic gift surprise
+## Retired cosmetic gift artwork
 
-After the full opening completes, one random cosmetic gift appears above the
-chest: a star, ball, rocket, kite, robot or doll. It follows an upward arc with
-rotation and sparkles, then settles above the chest and remains visible until
-the reward view is left or reset. Only the sparkles fade within 2.4 seconds.
-Reduced motion shows the same lasting gift in its settled position immediately.
-Pausing and resuming preserves the gift without replaying its reveal.
+The cosmetic toy reveal was replaced by saved coin rewards in commit
+`1a1558fa`. Its unused runtime child, animation clock and standalone tests have
+been removed. Current openings use the finite sparkle flourish documented above
+and the separate coin flight; restoration and background settlement remain quiet.
 
-`assets/chests/surprises/` contains the six small transparent SVGs, derived from
-the existing hand-drawn word icons. They retain their outlines, colors and
-details; only the pale circular backplate and floor shadow are removed.
-
-This surprise is a cosmetic display for the current reward view. It has no
-collectible album, progress counter or saved storage, and does not change rewards
-or ownership.
-Existing reward records remain independent from word mastery and Pip levels.
+`assets/chests/surprises/` retains the six historical transparent SVGs: star,
+ball, rocket, kite, robot and doll. They were derived from the existing hand-drawn
+word icons, retaining their outlines, colors and details while removing only the
+pale circular backplate and floor shadow. These files are retained source
+artwork, not active chest rewards. The old reveal never had saved collectible
+state, so removing it does not require a reward migration.
 
 ## Sound bank
 

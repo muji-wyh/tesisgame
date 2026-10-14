@@ -115,12 +115,13 @@ func _result_lifecycle() -> void:
 		var review: Dictionary = view.game.summary().missed_words[0]
 		app._pop_hear(review)
 		check(app.audio.voice.playing, destination + " transition starts with an active result pronunciation")
-		app.choose_mode(destination)
-		check(app._mode_id == destination and not app.audio.voice.playing,
+		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, destination)
+		check(app._mode_id == destination and not app._mode_menu_open() and not app.audio.voice.playing,
 			"Leaving the result for " + destination + " stops the previous word without stale report callbacks")
 		app._pop_hear(review)
 		check(not app.audio.voice.playing, "A late Voice Pop word callback is ignored in " + destination)
-		app.choose_mode("pop")
+		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "pop")
+		check(app._mode_id == "pop" and not app._mode_menu_open(), "Returning from " + destination + " reaches Voice Pop through Home")
 		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		view.set_process(false)
 		app._on_voice_state([true, true, "Listening."])

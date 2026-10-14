@@ -16,7 +16,6 @@ const RAINBOW_LIGHT = preload("res://scripts/chest_rainbow_light.gdshader")
 const OpeningEffect = preload("res://scripts/chest_opening_effect.gd")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
-const Surprise = preload("res://scripts/chest_surprise.gd")
 const ModelView = preload("res://scripts/chest_model_view.gd")
 
 var theme_id: String = ""
@@ -83,8 +82,6 @@ var _seam_light := Node2D.new()
 var _release_color := Color.WHITE
 var _lid_edges: Array[Dictionary] = []
 var _surface_light_active: bool = false
-var _surprise := Surprise.new()
-var _surprise_shown: bool = false
 var _model_view: ModelView
 var _model_time: float = 0.0
 var _cancel_model_drive := Vector2.ZERO
@@ -126,8 +123,6 @@ func _ready() -> void:
 	add_child(_seam_light)
 	_seam_light.z_index = 3
 	_seam_light.draw.connect(_draw_seam)
-	add_child(_surprise)
-	_surprise.z_index = 11
 	add_child(_opened_effect)
 	_opened_effect.z_index = 8
 	resized.connect(_fit)
@@ -138,7 +133,6 @@ func _ready() -> void:
 func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	if theme_id == palette.id:
 		return
-	_surprise.clear()
 	_finish_flourish = false
 	stop_reaction()
 	theme_id = palette.id
@@ -152,7 +146,6 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
 	_release_color = Feel.FLASH_COLORS.get(theme_id, palette.light)
 	mode = "closed"
-	_surprise_shown = false
 	_elapsed = 0.0
 	_idle_time = 0.0
 	_model_time = 0.0
@@ -403,7 +396,6 @@ func _fit() -> void:
 	_glint.visible = not reduced_motion and (hold_progress > 0.0
 		or (mode == "opening" and _elapsed < Feel.RELEASE_TIME))
 	_glint.queue_redraw()
-	_surprise.fit(size, _cavity_origin(), _charge_scale)
 	_opened_effect.sample(_finish_flourish and mode == "opened" and is_visible_in_tree()
 		and not _idle_paused and not reduced_motion, _idle_time, _release_bounds(),
 		_cavity_origin(), 1.0 / _charge_scale, _release_color)
@@ -780,7 +772,6 @@ func hold_effect_snapshot() -> Dictionary:
 			surface_light = float(piece.node.material.get_shader_parameter("light_strength"))
 			break
 	return {"active": active, "phase": performance_phase(),
-		"surprise": _surprise.snapshot(),
 		"opened_effect": _opened_effect.snapshot(),
 		"progress": performance_progress(), "performance_progress": performance_progress(), "hold_progress": hold_progress,
 		"visual_progress": _visual_performance_progress(),
@@ -1577,7 +1568,6 @@ func start_open(reduce: bool) -> void:
 	if not _hold_active:
 		_model_rest_time = _model_time
 	reduced_motion = reduce
-	_surprise_shown = false
 	var confirmed_steps: int = _charge_step
 	stop_reaction()
 	hold_progress = 0.0
@@ -1614,20 +1604,10 @@ func finish_immediately(celebrate: bool = false) -> void:
 	opened.emit()
 
 
-func show_surprise() -> void:
-	if mode != "opened" or _surprise_shown or _idle_paused or not is_visible_in_tree():
-		return
-	_surprise_shown = true
-	_surprise.fit(size, _cavity_origin(), _charge_scale)
-	_surprise.play(_release_color, reduced_motion)
-
-
 func clear() -> void:
-	_surprise.clear()
 	_finish_flourish = false
 	_opened_effect.clear()
 	stop_reaction()
-	_surprise_shown = false
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
@@ -1694,7 +1674,6 @@ func piece_count() -> int:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
-		_surprise.clear()
 		_finish_flourish = false
 		_opened_effect.clear()
 		stop_reaction()
@@ -1728,9 +1707,7 @@ func _advance_animation(delta: float) -> void:
 	if delta <= 0.0 or not is_finite(delta) or not is_visible_in_tree() or _idle_paused:
 		return
 	if reduced_motion:
-		_surprise.reduce_motion()
 		_finish_flourish = false
-	_surprise.advance(delta)
 	if mode == "opened" and not reduced_motion:
 		_idle_time += delta
 	if is_instance_valid(_model_view) and not reduced_motion:

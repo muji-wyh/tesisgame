@@ -56,7 +56,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   }
   for (const source of [
     'assets/audio/bgm/spring.wav',
-    'assets/audio/chests/spring-settle.wav', 'assets/audio/voice/spring-theme.wav',
+    'assets/audio/voice/spring-theme.wav',
     ...['step', 'step-detail', 'step-roll', 'release', 'reward'].map(cue => `assets/imported-audio/chest-reference/${cue}.wav`),
     ...require('../tools/chest-kenney-audio.cjs').CHEST_KENNEY_CUES.map(cue => `assets/audio/chest-kenney/${cue}.wav`),
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
@@ -71,6 +71,13 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   }
   for (const source of ['assets/audio/voice/ocean-arrive.wav', 'assets/audio/voice/ocean-open.wav']) {
     assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Retired audio stays excluded: ${source}`);
+  }
+  for (const directory of ['assets/audio/chests', 'assets/chests/surprises']) {
+    for (const filename of fs.readdirSync(path.join(root, directory))) {
+      const source = `${directory}/${filename}`;
+      assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)),
+        `Archived chest sources and imports stay out of the game pack: ${source}`);
+    }
   }
   for (const name of ['ready.wav', 'high-five.wav', 'round-20.wav']) {
     const source = `assets/audio/pop/${name}`;
@@ -142,13 +149,26 @@ test('the Godot command runner waits for the engine and propagates its real fail
   );
 });
 
-test('accessible help describes the current controls rather than the removed motion menu', () => {
+test('accessible help describes current paid items, Home navigation and Jelly settlement', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
   assert.ok(help, 'The canvas needs accessible gameplay instructions.');
-  assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button|sound and motion on Home|until you choose a preference/i);
+  assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button|sound and motion on Home|until you choose a preference|without a penalty|Y or Menu for More|fresh Match round after the card games/i);
   assert.match(help, /device.*reduced-motion/i);
   assert.match(help, /Keep trying until every pair is matched/);
+  assert.match(help, /Match hints cost 100, 150, then 200 coins per round/);
+  assert.match(help, /first Memory peek in each round is free[\s\S]*second costs 100 coins, the third 200, and every later peek 300/);
+  assert.match(help, /Games and themes can only be changed from Home/);
+  assert.match(help, /On Home, LB and RB change the theme/);
+  assert.match(help, /fresh round in the same game: Match, Memory, or Phrase Builder/);
+  assert.match(help, /Keyboard or controller activation opens a Keep playing \/ Finish confirmation/);
+  assert.match(help, /settlement dialog over the frozen board, even when no chest was earned/);
+  assert.match(help, /ca onto t makes cat, but t onto ca cannot merge/);
+  assert.match(help, /merge is allowed only when the combined spelling is a complete word/);
+  assert.match(help, /Collect gathers all ready words one at a time at 100 ms intervals, without word pronunciation/);
+  assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
+  assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
+  assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);
   assert.doesNotMatch(shell, /speech-successes|speech-mistakes|speech-score|roundProgress|Three mistakes/);
 });
 
@@ -232,12 +252,13 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   const kenney = require('./helpers/chest-kenney-assets.cjs').chestKenneyFixture(fixture.directory, fixture.writeImport);
   for (const theme of ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']) {
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
-    for (const cue of ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle']) {
-      fixture.writeImport(`assets/audio/chests/${theme}-${cue}.wav`);
-    }
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 418);
+  assert.equal(required.length, 370);
+  assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
+    'Packaging succeeds without the archived theme recordings');
+  assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
+    'The reviewed shared bank replaces every former theme-specific chest cue');
   assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.slice(-4), reference);

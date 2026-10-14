@@ -117,39 +117,52 @@ bound to a live target resets that word. Silence, expiry, unbound speech and
 recognition errors do not reset mastery. Speech input stops before celebration
 audio starts. See [speech matching](voice-matching.md) for targeting details.
 
-Voice Pop saves its chest batch at the round end. A batch of one, two or three
-chests receives the shared celebration before the complete results appear.
-A zero-chest round goes directly to results. Chest thresholds and durable claims
-are described in [Voice Pop treasure](voice-pop-treasure.md).
+Voice Pop gives each target a 35% chance of a chest marker. A marked hit earns
+one fragment; four unlock a chest and each additional five upgrade it. The
+round saves its final chest tier and celebrates before showing the results.
+A zero-chest round goes directly to results. Earlier saved multi-chest batches
+remain claimable. Progression and durable claims are described in
+[Voice Pop treasure](voice-pop-treasure.md).
+
+## Shared Jelly controls and settlement
+
+Both Jelly modes begin with three rows. Their board stays within a bounded game
+area; the chest sits in the header and the controls adapt to leave room for play.
+The preview releases the next batch on demand without a cooldown. The sourced
+panoramic sky has slow drift and daylight changes; Home, the notebook, page
+hiding and Finish confirmation pause play and scenery. Reduced motion keeps the
+sky still. See [Jelly sky](assets/jelly-sky.md) for the artwork and rendering.
+
+Pull Finish downward until it glows and sounds, then release to finish. An early
+release springs back without ending play; tapping demonstrates the pull. Keyboard
+and controller activation use a Keep playing / Finish confirmation instead.
+Finishing or letting the full-board danger countdown expire opens settlement in
+a modal over the frozen board. The modal shows the score, completed words and
+earned chest, including an empty result. There is no standalone Jelly result
+page. Play again collects pending treasure and starts a new round; Home retains
+unopened treasure. Failed saves remain available for retry.
 
 ## Jelly Words
 
 Join letter chunks on a six-column board. Dragging `ca` onto `t` makes `cat`:
-the dragged chunk comes first. Both bodies flow into one larger jelly, which
-stays near the drop target and can join another piece. Collecting a supporting
-word makes the unsupported stack fall vertically into the gap, with a brief
-soft landing. Held bodies and active merges or splits finish before their
-deferred fall. Larger bodies and long text wrap across rows when needed;
-ordinary merges keep their target height.
+the dragged chunk comes first, and the joined spelling must be an exact word
+in the current learning-age vocabulary. Both bodies flow into one larger jelly
+near the drop target. A completed word can join another piece only when their
+combination is also a valid word. Invalid combinations separate with elastic
+feedback and a negative sound, without creating a merged body.
 
-The preview, well and Finish control form one group anchored to the bottom of
-the available play area, with a 12-pixel inner bottom margin in addition to the
-page padding. Resizing keeps the supply above the well and the footer in reach.
+Jellies can move to another position where they fit. Unsupported bodies fall
+vertically onto the next support or floor, including after a supporting word is
+collected or dragged away. Held bodies and active merges finish before their
+deferred fall. Larger bodies and long text wrap across rows when needed.
 
 At rest, exact-word partners share a painted color, including partners in the
 upcoming preview. Other pairs use different hues. Picking up a chunk updates
-the color hints: every target that completes a current-age word in the dragged
-order shares its color. This also handles chunks with several correct partners,
-such as `ca` with either `t` or `n`. Partial three-part builds get a matching
-color when one further jelly can finish the word. Color does not restrict merges.
-
-Tap a merged jelly that is not a current vocabulary word to undo its last merge.
-Its two previous bodies separate nearby onto supporting jellies or the floor,
-with their original chunks, pictures and chest fragments, and refreshed pairing
-colors. An invalid
-merged part can be split again. Splitting earns no coins or learning credit.
-If the well cannot fit two bodies, the jelly gives a brief elastic response and
-stays intact until there is room.
+the hints: targets that complete a word in the dragged order share its color,
+glow and gently pulse. This handles chunks with several correct partners, such
+as `ca` with either `t` or `n`. Reverse-only partners keep their resting paint
+and receive no highlight: dragging `t` does not cue `ca`, because `tca` is not
+a word. All jellies still react to physical contact, including invalid pairs.
 
 Automatic batches start 20 seconds apart. Each collected word shortens the
 interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can
@@ -173,16 +186,19 @@ repeated input cannot reroll or award the same collection twice.
 Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
-Auto merge still leaves completed words for manual collection. Failed payments
+Auto merge launches a random compatible jelly every 200 ms, dragging it to its
+target over 300 ms, and leaves completed words for manual collection. Failed payments
 do not advance a price. A fresh round resets prices. See the
 [coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
-An accepted word tap also presents its picture and spelling in a brief upper
-overlay. The picture rises with a soft glow and painted glints, peaking with
-the existing collection pop at 180 ms, while the word's recorded pronunciation
-plays once. The overlay never blocks the board. Rapid collections replace it
-with the newest word; it fades after a reading hold and clears on pause, exit
-or round completion. Reduced motion keeps the picture and spelling steady.
+A completed merge queues the word's recorded pronunciation once. An accepted
+word tap also presents its picture and spelling above the board and pronounces
+it once. Collect gathers ready words at 100 ms intervals without pronunciation.
+Each reveal has its own randomly varied position and size, fits its picture and
+spelling, and enters with elastic squash and stretch. Successive reveals coexist
+and fade independently instead of replacing one another. They do not intercept
+board input and clear on pause, exit or round completion. Reduced motion keeps
+the picture and spelling steady.
 
 Chest fragments remain attached when either jelly is merged. Two marked pieces
 produce two visible markers, and collecting the complete word banks all of its
@@ -214,8 +230,9 @@ invitation does not repeat the full performance.
 ## Controls, accessibility and saves
 
 Touch and mouse input share the same controls. Arrow keys and controller
-D-pad/left stick move focus; Enter, Space or controller A activate it. Pip or
-the mode heading opens the game library. Escape/controller Back closes an
+D-pad/left stick move focus; Enter, Space or controller A activate it. Home
+opens the game library; tapping Pip plays an age-appropriate motion.
+Escape/controller Back closes an
 overlay and returns to the current round. Menu access and exit remain available
 during celebrations, but underlying answer, result and chest actions are gated.
 

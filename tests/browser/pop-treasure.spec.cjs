@@ -4,6 +4,7 @@ const { roomState, scrollChestIntoView } = require('./pop-treasure-ui.cjs');
 
 const STORAGE_KEY = 'wordBuddies.popRewards';
 const PIXEL_TOLERANCE = 0.1;
+const HOLD_SECONDS = 0.65; // scripts/chest_feel.gd
 
 async function installRecognition(page) {
   await page.addInitScript(() => {
@@ -243,33 +244,114 @@ async function expectChestRoom(page, opened, expectedTypes, count = 1, tier = 2)
   return current;
 }
 
-async function pressChest(page, index) {
+async function prepareChestGesture(page, index, hideOnPress = false) {
   const current = await scrollChestIntoView(page, index), chest = current.chests[index];
   expect(current.visible).toBe(true);
   expect(chest.opened).toBe(false);
   expect(chest.disabled).toBe(false);
   const bounds = await metrics(page), rect = chest.rect;
-  await page.mouse.move(bounds.x + (rect.x + rect.width / 2) * bounds.scale,
-    bounds.y + (rect.y + rect.height / 2) * bounds.scale);
-  const pressedAt = Date.now();
-  await page.mouse.down();
-  await expect.poll(async () => {
-    const value = await roomState(page);
-    return { active: value.active, holding: value.holding };
-  }, { intervals: [20, 50, 100] }).toEqual({ active: index, holding: true });
-  expect((await roomState(page)).chests[index].caption).toBe('Keep holding...');
-  return pressedAt;
+  const point = { x: bounds.x + (rect.x + rect.width / 2) * bounds.scale,
+    y: bounds.y + (rect.y + rect.height / 2) * bounds.scale };
+  await page.mouse.move(point.x, point.y);
+  await page.evaluate(({ index, hideOnPress }) => {
+    window.__popChestGestureCleanup?.();
+    const observation = { presses: [], releases: [], cues: [], states: [] };
+    const status = document.getElementById('pop-reward-status');
+    const record = (snapshot = status.dataset.snapshot || '{}') => {
+      const state = JSON.parse(snapshot), chest = state.chests?.[index];
+      observation.states.push({ at: performance.now(), active: state.active, holding: state.holding,
+        opened: chest?.opened, committed: chest?.committed, caption: chest?.caption });
+    };
+    const pressed = () => observation.presses.push(performance.now());
+    const released = () => observation.releases.push(performance.now());
+    const cue = event => {
+      observation.cues.push(event.detail);
+      if (hideOnPress && event.detail.cue === 'press') {
+        hideOnPress = false;
+        // Dispatch the real lifecycle event immediately after Godot accepts
+        // the press, before trace or polling work can prolong this hold.
+        queueMicrotask(() => {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+      }
+    };
+    const observer = new MutationObserver(changes => {
+      // A short press and cancel can publish within one engine frame. Preserve
+      // those actual intermediate snapshots instead of reading only the last.
+      for (const change of changes) if (change.oldValue) record(change.oldValue);
+      record();
+    });
+    observer.observe(status, { attributes: true, attributeFilter: ['data-snapshot'], attributeOldValue: true });
+    window.addEventListener('pointerdown', pressed, true);
+    window.addEventListener('pointerup', released, true);
+    window.addEventListener('wordbuddies:chest-cue', cue);
+    window.__popChestGesture = observation;
+    window.__popChestGestureCleanup = () => {
+      observer.disconnect();
+      window.removeEventListener('pointerdown', pressed, true);
+      window.removeEventListener('pointerup', released, true);
+      window.removeEventListener('wordbuddies:chest-cue', cue);
+    };
+    record();
+  }, { index, hideOnPress });
+  return point;
+}
+
+async function chestGesture(page) {
+  return page.evaluate(() => {
+    window.__popChestGestureCleanup();
+    return window.__popChestGesture;
+  });
+}
+
+function expectAcceptedHold(observation, index) {
+  expect(observation.cues.some(event => event.cue === 'press'), 'The real pointer press reaches the chest').toBe(true);
+  expect(observation.states.some(state => state.active === index && state.holding &&
+    state.caption === 'Keep holding...' && !state.committed && !state.opened),
+  'The accepted gesture presents its cancelable hold before release').toBe(true);
+}
+
+function expectUncommittedHold(observation) {
+  expect(observation.cues.some(event => event.cue === 'opening' || event.cue === 'release'),
+    'A canceled short hold never reaches opening or mechanical release').toBe(false);
+  expect(observation.states.every(state => !state.committed && !state.opened),
+    'No observed frame commits or awards the canceled chest').toBe(true);
+}
+
+async function cancelShortChestHold(page, index) {
+  const point = await prepareChestGesture(page, index);
+  // One input command keeps the real down/150 ms/up sequence free of snapshot
+  // polls and trace work between separate Playwright actions.
+  await page.mouse.click(point.x, point.y, { delay: 150 });
+  await expect.poll(async () => (await roomState(page)).active).toBe(-1);
+  const observation = await chestGesture(page);
+  expectAcceptedHold(observation, index);
+  expect(observation.presses).toHaveLength(1);
+  expect(observation.releases).toHaveLength(1);
+  expect(observation.releases[0] - observation.presses[0],
+    'The cancellation gesture releases before the intentional hold threshold').toBeLessThan(HOLD_SECONDS * 1000);
+  expectUncommittedHold(observation);
 }
 
 async function openChest(page, index, expectedOpened) {
-  const started = await pressChest(page, index);
+  await prepareChestGesture(page, index);
+  await page.mouse.down();
   try {
     await expect.poll(async () => (await roomState(page)).chests[index].opened,
       { timeout: 12000, intervals: [50, 100, 200], message: 'The held chest reaches its real release and saves once' }).toBe(true);
   } finally {
     await page.mouse.up();
   }
-  expect(Date.now() - started, 'Even reduced motion requires an intentional hold').toBeGreaterThanOrEqual(1000);
+  const observation = await chestGesture(page);
+  expectAcceptedHold(observation, index);
+  const press = observation.cues.find(event => event.cue === 'press');
+  const opening = observation.cues.find(event => event.cue === 'opening');
+  expect(opening, 'A full hold enters opening before the chest is awarded').toBeTruthy();
+  // Observe engine cues in the page, not runner polling time; allow one small
+  // frame/bridge delay while requiring the current 0.65-second confirmation.
+  expect(opening.at - press.at, 'Even reduced motion requires the complete intentional hold')
+    .toBeGreaterThanOrEqual(HOLD_SECONDS * 1000 - 100);
   await expect.poll(async () => {
     const current = await roomState(page);
     return { active: current.active, opening: current.opening, count: current.opened_count };
@@ -325,18 +407,19 @@ test('Voice Pop fragments upgrade one chest that survives cancellation and reloa
   expect(unopened).toBeTruthy();
   await page.screenshot({ path: info.outputPath('treasure-room.png') });
 
-  await pressChest(page, 0);
-  await page.waitForTimeout(150);
-  await page.mouse.up();
-  await expect.poll(async () => (await roomState(page)).active).toBe(-1);
+  await cancelShortChestHold(page, 0);
   await expectChestRoom(page, 0, types);
   expect(await storedRewards(page), 'A short hold leaves the durable reward batch unchanged').toBe(unopened);
 
-  await pressChest(page, 0);
+  await prepareChestGesture(page, 0, true);
+  await page.mouse.down();
   try {
-    await setHidden(page, true);
-    await expect.poll(async () => (await roomState(page)).paused).toBe(true);
+    await page.waitForFunction(() => document.hidden);
     await page.mouse.up();
+    await expect.poll(async () => (await roomState(page)).paused).toBe(true);
+    const observation = await chestGesture(page);
+    expectAcceptedHold(observation, 0);
+    expectUncommittedHold(observation);
   } finally {
     await page.mouse.up();
     await setHidden(page, false);
@@ -354,6 +437,26 @@ test('Voice Pop fragments upgrade one chest that survives cancellation and reloa
   expect(room.round_id).toBe(round);
   expect(room.chests.map(chest => chest.opened)).toEqual([false]);
   expect(await storedRewards(page), 'Returning to the same room never rerolls or upgrades treasure').toBe(unopened);
+
+  await page.locator('#canvas').press('Escape');
+  await visibleResultState(page);
+  await tapPopAction(page, 'Replay');
+  await expect.poll(async () => ({ phase: (await popState(page)).phase,
+    treasureVisible: (await roomState(page)).visible }),
+  { message: 'Play again starts a live round while keeping the saved chest for later' })
+    .toEqual({ phase: 'running', treasureVisible: false });
+  expect(await popState(page)).toMatchObject({ chestCount: 0, chestTier: 0, fragments: 0 });
+  expect(await storedRewards(page), 'Replay neither opens nor replaces the previous final chest').toBe(unopened);
+
+  await chooseMode(page, 'match');
+  const startsBeforeReturn = await page.evaluate(() => window.__popTreasureSpeech.starts);
+  await chooseMode(page, 'pop');
+  room = await expectChestRoom(page, 0, types);
+  expect(room.round_id, 'Home navigation restores the original pending reward batch').toBe(round);
+  expect(await storedRewards(page), 'Returning through Home preserves unopened reward IDs and tier').toBe(unopened);
+  expect(await page.evaluate(() => ({ starts: window.__popTreasureSpeech.starts,
+    listening: window.__popTreasureSpeech.instances.some(instance => instance.running) })))
+    .toEqual({ starts: startsBeforeReturn, listening: false });
 
   await page.reload();
   await enterGame(page);

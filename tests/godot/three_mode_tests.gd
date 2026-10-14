@@ -110,11 +110,13 @@ func _run() -> void:
 		app._memory.end_peek()
 		check(not app._memory.memory.studying and range(10).all(func(index: int) -> bool:
 			return not app._memory.memory.is_revealed(index)), "Releasing the eye turns every face back")
-		check(app.coin_wallet.credit("fixture:second-memory-peek", 2).ok and app.coin_wallet.balance == 100,
-			"Fund only the second Memory hold's 100-coin price in the isolated wallet")
+		var previous_coins: int = app.coin_wallet.balance
+		var credit: Dictionary = app.coin_wallet.credit("fixture:second-memory-peek", 2)
+		check(credit.ok and credit.amount == 100 and app.coin_wallet.balance == previous_coins + 100,
+			"Fund the second Memory hold's 100-coin price while preserving any settled Match reward")
 		app._coin_flight.sync(app.coin_wallet.balance)
 		app._memory.begin_peek()
-		check(app._memory.memory.studying and app._memory.memory.peeks == 2 and app.coin_wallet.balance == 0,
+		check(app._memory.memory.studying and app._memory.memory.peeks == 2 and app.coin_wallet.balance == previous_coins,
 			"The second paid hold is actively revealing before page cancellation is tested")
 		app.on_page_hidden()
 		check(not app._memory.memory.studying, "Hiding the page releases a held eye")

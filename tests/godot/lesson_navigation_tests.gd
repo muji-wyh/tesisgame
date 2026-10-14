@@ -58,7 +58,9 @@ func _run() -> void:
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
 	app.model.phase = "won"
-	app.model.chest_state = "opened"
+	check(app._settle_pair_reward(), "The completed fixture chest is settled before starting another lesson")
+	var earned_medals: Dictionary = app.medal_progress.counts.duplicate(true)
+	var earned_coins: int = app.coin_wallet.balance
 	app._refresh()
 	app._new_adventure_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app.collection_page.visible,
@@ -67,8 +69,9 @@ func _run() -> void:
 	lesson = app.model.lesson_words.duplicate(true)
 	app._new_adventure_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "A repeated result click cannot start another lesson")
-	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3 and app.medal_progress.counts.is_empty(),
-		"Starting a lesson grants no rewards and initializes a normal attempt")
+	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3
+		and app.medal_progress.counts == earned_medals and app.coin_wallet.balance == earned_coins,
+		"Starting a lesson preserves earned rewards, grants no extra rewards, and initializes a normal attempt")
 	var storage := BrowserStorage.new()
 	var state = load("res://scripts/growth_state.gd").new(directory + "/mock.cfg", storage)
 	check(state.configure(app.data.words) and state.load_state(), "The isolated growth fixture loads")

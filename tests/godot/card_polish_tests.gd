@@ -54,6 +54,10 @@ func _run() -> void:
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(false)
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "match")
+	await settle()
+	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._mode_menu_open(),
+		"Card press checks start on the Match board after choosing it from Home")
 	check(root.title == "Grow with Pip", "The native window displays the new name")
 	check(ProjectSettings.get_setting("application/config/name") == "Word Buddies",
 		"The internal project identity remains stable for existing native and Web save paths")
@@ -82,8 +86,10 @@ func _run() -> void:
 		check(noun_card.get_global_rect() == noun_rect and noun_card._press_motion._tween == null
 			and noun_card._face.scale == Vector2.ONE, "Opening More settles Match motion without moving its target")
 		app._hide_collection()
-	app.choose_mode("memory")
+	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "memory")
 	await settle()
+	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app._mode_menu_open(),
+		"Memory press checks start after choosing Memory from Home")
 	var memory_card = app._memory.card_buttons[0]
 	var memory_rect: Rect2 = memory_card.get_global_rect()
 	memory_card.pressed.emit()

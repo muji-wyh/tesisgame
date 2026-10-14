@@ -184,9 +184,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
-    ...phrases.map(phrase => phrase.audio),
-    ...themes.flatMap(id => ['press', 'charge', 'cancel', 'opening', 'unlock', 'settle']
-      .map(cue => `assets/audio/chests/${id}-${cue}.wav`)).sort()
+    ...phrases.map(phrase => phrase.audio)
   ];
   fs.mkdirSync(path.join(directory, '.godot/imported'), { recursive: true });
   for (const [index, source] of expected.entries()) {
@@ -222,7 +220,8 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.deepEqual(audio.map(file => file.source), expected.map(source => `res://${source}`));
   assert.ok(audio.every(file => !file.source.includes('/audio/pop/') && !file.source.includes('/audio/quest/')));
   assert.equal(new Set(audio.map(file => file.source)).size, expected.length);
-  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 48);
+  assert.equal(audio.filter(file => file.source.includes('/chests/')).length, 0,
+    'Archived theme chest cues are not required to package the live shared bank');
   assert.equal(audio.filter(file => file.source.includes('/chest-reference/')).length, 5);
   assert.equal(audio.filter(file => file.source.includes('/chest-kenney/')).length, 11);
   assert.equal(audio.filter(file => file.source.includes('/voice/phrase-')).length, 330);
@@ -230,8 +229,6 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
   assert.equal(audio.filter(file => file.source.includes('/audio/coins/')).length, 2,
     'Coin release and wallet arrival both ship in the startup bundle');
-  assert.ok(audio.every(file => !/\/chests\/[^/]+-(?:step(?:-detail|-roll)?|release|reward)\.wav$/.test(file.source)),
-    'Replaced theme copies never re-enter the required inventory');
   const phraseCatalog = path.join(directory, 'phrases.json');
   for (const invalid of [[], {}, null]) {
     fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));
@@ -287,7 +284,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     assert.ok(sources.includes(`res://assets/audio/bgm/${id}.wav`));
     assert.ok(sources.includes(`res://assets/audio/voice/${id}-theme.wav`));
   }
-  const source = 'assets/audio/chests/winter-unlock.wav';
+  const source = 'assets/audio/chest-kenney/unlock.wav';
   const lastImport = path.join(directory, `${source}.import`);
   const original = fs.readFileSync(lastImport);
   fs.writeFileSync(lastImport, 'path="res://missing-resource"\n');
@@ -298,7 +295,7 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.throws(() => collectRequiredAudio(directory), /Expected an imported Godot audio resource/);
   fs.writeFileSync(lastResource, 'RSRC restored fixture');
   fs.unlinkSync(lastImport);
-  assert.throws(() => collectRequiredAudio(directory), /winter-unlock\.wav\.import/,
+  assert.throws(() => collectRequiredAudio(directory), /chest-kenney.*unlock\.wav\.import/,
     'A missing chest cue cannot silently disappear from the required bundle');
   fs.writeFileSync(lastImport, original);
   fs.unlinkSync(path.join(directory, 'assets/audio/bgm/candy.wav.import'));

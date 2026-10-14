@@ -1,5 +1,8 @@
 extends SceneTree
 
+const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+const Growth = preload("res://scripts/growth_state.gd")
+
 var checks := 0
 var failures := 0
 
@@ -18,6 +21,47 @@ func check(value: bool, message: String) -> void:
 func settle() -> void:
 	for frame in range(6):
 		await process_frame
+
+
+func _prepare_learner(app, directory: String) -> bool:
+	var words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return word.id == "microphone")
+	check(words.size() == 1, "The long-word fixture resolves one curriculum word")
+	if words.size() != 1:
+		return false
+	var age: int = int(words[0].min_age)
+	var path: String = directory + "/growth-age-%d.cfg" % age
+	var saved := ConfigFile.new()
+	saved.set_value("growth", "version", 1)
+	saved.set_value("growth", "level", age)
+	saved.set_value("growth", "streaks", {})
+	saved.set_value("growth", "receipts", [])
+	var written: bool = saved.save(path) == OK
+	check(written, "The long-word fixture saves its isolated learner")
+	if not written:
+		return false
+	var growth := Growth.new(path)
+	var ready: bool = growth.configure(app.data.words) and growth.load_state() and growth.learning_age() == age
+	check(ready, "The isolated learner is eligible for the long word's age cohort")
+	if not ready:
+		return false
+	app.growth = growth
+	app.vocabulary_loader.request_age(age)
+	app._refresh_growth()
+	PlayerFixture.enter_mode(app, "match")
+	var entered: bool = app._mode_id == "match" and not app._mode_menu_open()
+	check(entered, "The grouping fixture enters Match through Home")
+	return entered
+
+
+func _finish(app, directory: String) -> void:
+	app.audio.halt()
+	app.queue_free()
+	await settle()
+	for filename in DirAccess.get_files_at(directory):
+		DirAccess.remove_absolute(directory + "/" + filename)
+	DirAccess.remove_absolute(directory)
+	print("Match groups: %d checks, %d failures" % [checks, failures])
+	quit(1 if failures else 0)
 
 
 func state(app) -> Array:
@@ -60,18 +104,46 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	if not _prepare_learner(app, directory):
+		await _finish(app, directory)
+		return
 	for seed_value in range(8):
-		check(app.new_round(seed_value, false, "music-makers", "match", "microphone"),
-			"A long-word Match lesson starts normally")
+		var started: bool = app.new_round(seed_value, false, "", "match", "microphone")
 		await settle()
-		check(app._default_focus().card_data.kind == "image", "Board focus starts with a picture")
-		check(app.coin_wallet.credit("fixture:group-hint:%d" % seed_value, 4).ok, "Fund this board's paid grouping hint")
+		var playable: bool = started and app._mode_id == "match" and not app._mode_menu_open() \
+			and app.cards.has("microphone:image") and app.cards.has("microphone:word") and app.cards.size() == 10
+		check(playable, "A long-word Match lesson starts from the full current-age pool")
+		if not playable:
+			await _finish(app, directory)
+			return
+		var age: int = app.growth.learning_age()
+		check(app.model.lesson_words.all(func(word: Dictionary) -> bool: return int(word.min_age) == age),
+			"Every grouped lesson word belongs to the isolated learner's age")
+		var default_focus = app._default_focus()
+		check(default_focus != null and default_focus.get("card_data") is Dictionary
+			and default_focus.card_data.kind == "image", "Board focus starts with a picture")
+		var price: int = app._match_hint_price()
+		var funded: Dictionary = app.coin_wallet.credit("fixture:group-hint:%d" % seed_value,
+			int(price / app.Economy.COINS_PER_TIER))
+		check(funded.ok and int(funded.amount) == price, "Fund this board's actual paid grouping hint price")
+		if not funded.ok:
+			await _finish(app, directory)
+			return
+		var before_hint: int = app.coin_wallet.balance
 		app._request_hint()
+		var hinted: bool = app.model.hint_ids.size() == 2 \
+			and app.model.hint_ids.all(func(id: String) -> bool: return app.cards.has(id))
+		check(hinted and app.coin_wallet.balance == before_hint - price,
+			"The paid grouping hint identifies two live cards and deducts its current price")
+		if not hinted:
+			await _finish(app, directory)
+			return
 		var first: String = app.model.hint_ids[0]
 		var partner: String = app.model.hint_ids[1]
 		app.cards[first].pressed.emit()
@@ -106,27 +178,24 @@ func _run() -> void:
 		check(app.model.mistakes == 1 and (app.model.matched_ids.size() / 2) == 1, "Wrong cross-group pairs retain normal feedback and scoring")
 		app._resolve_feedback()
 	var lesson: Array = app.model.lesson_words.duplicate(true)
-	app.choose_mode("memory")
+	PlayerFixture.enter_mode(app, "memory")
 	await settle()
+	check(app._mode_id == "memory" and not app._mode_menu_open(), "Memory is selected through Home")
 	var memory_cards: Array = app._memory.memory.cards.duplicate(true)
 	root.size = Vector2i(1366, 768)
 	await settle()
 	check(app.model.lesson_words == lesson and app._memory.memory.cards == memory_cards and app._memory.card_buttons.size() == 10
 		and not app.grid.is_visible_in_tree(), "Memory keeps its own ten-card board and order")
-	app.choose_mode("pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFixture.enter_mode(app, "pop")
+	PlayerFixture.choose_pop_player(app)
 	await settle()
+	check(app._mode_id == "pop" and not app._mode_menu_open(), "Voice Pop is selected through Home")
 	check(app.model.lesson_words == lesson and app._pop.is_visible_in_tree()
 		and not app.grid.is_visible_in_tree() and not app._memory.is_visible_in_tree(),
 		"Voice Pop replaces the board without losing the shared five-word adventure")
-	app.choose_mode("match")
+	PlayerFixture.enter_mode(app, "match")
 	await settle()
+	check(app._mode_id == "match" and not app._mode_menu_open(), "Match is selected through Home")
 	check(app.model.lesson_words == lesson, "Returning to Match retains the shared adventure words")
 	check_groups(app)
-	app.queue_free()
-	await process_frame
-	for filename in DirAccess.get_files_at(directory):
-		DirAccess.remove_absolute(directory + "/" + filename)
-	DirAccess.remove_absolute(directory)
-	print("Match groups: %d checks, %d failures" % [checks, failures])
-	quit(1 if failures else 0)
+	await _finish(app, directory)

@@ -19,6 +19,20 @@ class Storage extends RefCounted:
 		writes += 1
 		return true
 
+class VocabularyDownload extends RefCounted:
+	var requests: Array[int] = []
+	var callbacks: Dictionary = {}
+
+	func requestVocabulary(age: int, callback: Callable) -> void:
+		requests.append(age)
+		callbacks[age] = callback
+
+	func reply(age: int, state: String) -> void:
+		callbacks[age].call([JSON.stringify({"age": age, "state": state,
+			"progress": 1.0 if state == "ready" else 0.0,
+			"path": "/vocabulary-%d-0123456789abcdef.pck" % age,
+			"error": "The connection was interrupted." if state == "failed" else ""})])
+
 var checks: int = 0
 var failures: int = 0
 
@@ -47,6 +61,7 @@ func _run() -> void:
 		await _fragment_flow_checks(fragments)
 	await _early_exit_checks()
 	await _save_failure_checks()
+	await _delayed_replay_checks()
 	await _pending_treasure_reload_checks()
 	print("Pop reward flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -58,6 +73,7 @@ func _create_app():
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	Fixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	app.audio.muted = true
 	await process_frame
@@ -140,9 +156,13 @@ func _fragment_flow_checks(fragments: int) -> void:
 	if fragments == 9:
 		var first_id: String = app._pop.game.round_id
 		app._pop.replay_button.pressed.emit()
-		check(app._pop.game.phase == "ready" and app._pop.game.round_id != first_id
-			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries,
+		var replayed: bool = app._pop.game.phase == "ready" and app._pop.game.round_id != first_id \
+			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries
+		check(replayed,
 			"Play again starts a fresh round while preserving the previous unopened final chest")
+		if not replayed:
+			await _dispose(app)
+			return
 		app._pop.set_listening(true, true, "Listening.")
 		app._pop_speech_active = true
 		app._pop.set_process(false)
@@ -166,6 +186,10 @@ func _fragment_flow_checks(fragments: int) -> void:
 	check(app._pop_rewards_shown and room.visible and not app._pop.visible, "The result opens the dedicated treasure page")
 	check(room.snapshot().chest_count == (2 if fragments == 9 else 1),
 		"The opening page includes only final round rewards and any previously saved treasure")
+	if room._cards.size() != (2 if fragments == 9 else 1):
+		check(false, "The earned treasure room provides every expected chest control")
+		await _dispose(app)
+		return
 	var first: Button = room._cards[0].button
 	first.grab_focus()
 	_controller(app, true)
@@ -258,6 +282,51 @@ func _save_failure_checks() -> void:
 	await _dispose(app)
 
 
+func _delayed_replay_checks() -> void:
+	var app = await _create_app()
+	await _earn_fragments(app, 4)
+	await _finish_pop(app)
+	Fixture.finish_celebration(app)
+	var saved_entries: Array = app._pop_rewards.rewards.entries.duplicate(true)
+	var saved_text: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
+	var previous_round: String = app._pop.game.round_id
+	var age: int = app.growth.learning_age()
+	var download := VocabularyDownload.new()
+	app.vocabulary_loader.configure(download, func(_path: String, replace: bool) -> bool: return not replace)
+	app._pop.replay_button.pressed.emit()
+	var waiting: bool = download.requests == [age] and app._vocabulary_prompt.visible \
+		and app._pop.game.round_id == previous_round and app._pop_rewards.rewards.entries == saved_entries
+	check(waiting, "Replay waits for required vocabulary without consuming or replacing unopened treasure")
+	if not waiting:
+		app._cancel_vocabulary_round()
+		await _dispose(app)
+		return
+	download.reply(age, "failed")
+	check(app._vocabulary_retry.visible and app._pop.game.round_id == previous_round,
+		"A failed replay download retains the finished round and exposes Retry")
+	app._vocabulary_retry.pressed.emit()
+	check(download.requests == [age, age], "Replay retries only its required vocabulary age")
+	download.reply(age, "ready")
+	for frame in range(6):
+		await process_frame
+	check(app._pop.game.phase == "ready" and app._pop.game.round_id != previous_round
+		and app._pop.is_visible_in_tree() and not app._pop_rewards_shown and not app._vocabulary_prompt.visible
+		and app._pending_vocabulary_round.is_empty(),
+		"A retried download resumes the requested fresh Pop replay without opening the treasure room")
+	check(not app._pop_speech_active and not app._pop._listening,
+		"Completing a replay download does not start a microphone session without a new gesture")
+	check(app._pop_rewards.rewards.entries == saved_entries
+		and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
+		"Delayed replay preserves the exact unopened reward IDs, levels and durable save")
+	Fixture.enter_mode(app, "match")
+	Fixture.enter_mode(app, "pop")
+	check(app._pop_rewards_shown and app._pop_rewards.is_visible_in_tree()
+		and not app._pop.is_visible_in_tree() and app._pop_rewards.rewards.entries == saved_entries
+		and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
+		"Returning through Home still restores the same unopened treasure after a delayed replay")
+	await _dispose(app)
+
+
 func _pending_treasure_reload_checks() -> void:
 	var directory: String = "user://pop-pending-reload-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -267,6 +336,7 @@ func _pending_treasure_reload_checks() -> void:
 		var app = load("res://scenes/main.tscn").instantiate()
 		app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 		Fixture.install(app, directory)
+		app._presentation.path = directory + "/presentation.cfg"
 		root.add_child(app)
 		app.audio.muted = true
 		await process_frame

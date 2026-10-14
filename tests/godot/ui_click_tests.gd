@@ -83,13 +83,16 @@ func _check_library(app) -> void:
 	app._show_mode_menu()
 	check(app.audio.click_count == count, "Programmatic Home changes do not add UI sounds")
 	_check_backdrop(app)
-	UiClick.bind_button(app._mode_buttons[1])
-	UiClick.bind_button(app._mode_buttons[1])
+	var memory_button := app._mode_panel.grid.get_node("Mode_memory") as Button
+	check(app._mode_menu_open() and memory_button.is_visible_in_tree() and not memory_button.disabled,
+		"The Memory card is available on Home before its click lifecycle check")
+	UiClick.bind_button(memory_button)
+	UiClick.bind_button(memory_button)
 	await create_timer(0.12).timeout
 	var request: int = app.audio._playback_requests.get(app.audio.ui_click, 0)
 	var completions: Array[bool] = []
 	app.audio.ui_click.finished.connect(func() -> void: completions.append(true), CONNECT_ONE_SHOT)
-	_click(app, app._mode_buttons[1], "A Memory mode choice, even when bound repeatedly")
+	_click(app, memory_button, "A Memory mode choice, even when bound repeatedly")
 	check(app._mode_id == "memory" and app.audio._playback_requests.get(app.audio.ui_click, 0) == request + 1,
 		"A mode change does not cancel its click request during gameplay shutdown")
 	await create_timer(0.2).timeout

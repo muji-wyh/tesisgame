@@ -343,15 +343,30 @@ test('mastering the complete age 3 cohort grows Pip while independent Lv progres
   const errors = await openGame(page);
   const before = await expectHeaderBadge(page);
   expect(before.state.mastered).toBe(cohort.length - 1);
+  expect(before.state.lifetime_mastered).toBe(79);
   expect(before.state.level).toBe(19);
   expect(before.state.age).toBe(0);
   expect(Math.abs(before.bar.value / before.bar.max_value - 1 / 7)).toBeLessThanOrEqual(GROWTH_BAR_RATIO_TOLERANCE);
   expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=3/);
   const cards = await discoverMatchCards(page);
-  expect(cards.filter(card => card.word === 'apple')).toHaveLength(2);
-  for (const card of cards.filter(card => card.word === 'apple')) await matchTap(page, card);
+  const target = cards[0].word;
+  const pair = cards.filter(card => card.word === target);
+  expect(pair).toHaveLength(2);
+  // An unmastered word is more likely, not guaranteed, to be dealt. Once the
+  // actual board is known, prime an ordinary shared save with its target as the
+  // last unfinished word. The real answer rebases on that save, as in another tab.
+  const sharedStreaks = Object.fromEntries(cohort.map(word => [word.id,
+    word.id === target ? MASTERY_STREAK - 1 : MASTERY_STREAK]));
+  const masteredWords = cohort.filter(word => word.id !== target).map(word => word.id);
+  expect(masteredWords).toHaveLength(79);
+  const sharedSave = `[growth]\nversion=3\nlevel=19\nage=0\nstreaks=${JSON.stringify(sharedStreaks)}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=[]\n`;
+  await page.evaluate(({ key, record }) => localStorage.setItem(key, record), { key: KEY, record: sharedSave });
+  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toBe(sharedSave);
+  for (const card of pair) await matchTap(page, card);
   await expect.poll(async () => (await growth(page)).age).toBe(3);
-  expect((await growth(page)).streaks.apple).toBe(MASTERY_STREAK);
+  const completed = await growth(page);
+  expect(completed.streaks[target]).toBe(MASTERY_STREAK);
+  expect(cohort.every(word => completed.streaks[word.id] === MASTERY_STREAK)).toBe(true);
   const promoted = await expectHeaderBadge(page);
   expect(promoted.layout.pip.age).toBe(3);
   expect(promoted.state.level).toBe(19);

@@ -51,7 +51,7 @@ const groups = {
   'pip-audio': { godot: ['pip_audio_tests'] },
   'pip-feedback': { godot: ['reward_confetti_tests', 'pip_gameplay_motion_tests', 'pip_gameplay_feedback_tests', 'pip_expression_tests',
     'round_celebration_tests', 'round_celebration_audio_tests', 'round_celebration_flow_tests'] },
-  'chest-charge': { godot: ['chest_models_tests', 'chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'coin_audio_tests', 'chest_charge_flow_tests', 'chest_surprise_tests'] }
+  'chest-charge': { godot: ['chest_models_tests', 'chest_reveal_tests', 'chest_feel_tests', 'chest_audio_tests', 'coin_audio_tests', 'chest_charge_flow_tests'] }
 };
 
 const allGroups = Object.keys(groups);

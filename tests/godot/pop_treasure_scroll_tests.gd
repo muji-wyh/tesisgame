@@ -273,6 +273,9 @@ func _check_focus_and_snapshot(room) -> void:
 
 func _check_retained_reward(room, storage: Storage) -> void:
 	await _reset(room)
+	var released_ids: Array[String] = []
+	room.coins_released.connect(func(id: String, _reward: Dictionary, _origin: Vector2, _animate: bool) -> void:
+		released_ids.append(id))
 	var point := _visible_point(room, 0)
 	await pointer(point, true, "mouse")
 	room.advance_hold(Feel.HOLD_SECONDS)
@@ -280,17 +283,19 @@ func _check_retained_reward(room, storage: Storage) -> void:
 	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
 	await pointer(point, false, "mouse")
 	room._cards[0].art._advance_animation(60.0)
-	var gift: Dictionary = room._cards[0].art.hold_effect_snapshot().surprise
-	check(room.snapshot().opened_count == 1 and storage.writes == 2 and gift.active,
-		"A stationary full hold still opens and saves one chest with its persistent gift")
+	var reward_id: String = room._cards[0].reward_id
+	check(room.snapshot().opened_count == 1 and storage.writes == 2 and released_ids == [reward_id]
+		and room._cards[0].art.mode == "opened" and not room._cards[0].art.hold_effect_snapshot().opened_effect.active,
+		"A stationary full hold opens and saves one chest, presents its reward once and lets the flourish settle")
 	room._scroll.scroll_vertical = roundi(room.snapshot().scroll_max)
 	await settle()
 	room._scroll.scroll_vertical = 0
 	await settle()
-	var retained: Dictionary = room._cards[0].art.hold_effect_snapshot().surprise
-	check(retained.active and retained.kind == gift.kind and retained.play_count == gift.play_count
-		and storage.writes == 2,
-		"Scrolling an opened chest out of view and back preserves its gift without replay or duplicate save")
+	room._finished(0)
+	room._announce(0)
+	check(room._cards[0].art.mode == "opened" and not room._cards[0].art.hold_effect_snapshot().opened_effect.active
+		and released_ids == [reward_id] and storage.writes == 2,
+		"Scrolling an opened chest out of view and back preserves its result without another reward, flourish or save")
 
 
 func _check_scaled_restored_geometry(manifest: Dictionary) -> void:

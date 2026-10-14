@@ -176,8 +176,8 @@ func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 	view.action_button.pressed.emit()
 	check(_opened == ["manual"] and view.controls().is_empty(), "The explicit invitation can be accepted only once")
 	check(view.chest.mode == "closed" and not view.chest.opening_committed()
-		and not view.chest.hold_effect_snapshot().surprise.active,
-		"Celebration and acceptance never open the preview or manufacture a gift")
+		and not view.chest.hold_effect_snapshot().opened_effect.active,
+		"Celebration and acceptance keep the preview closed without triggering opening effects")
 	view.stop()
 
 

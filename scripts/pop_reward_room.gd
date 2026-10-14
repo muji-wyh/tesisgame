@@ -433,7 +433,7 @@ func _build_cards() -> void:
 		art.opened.connect(_finished.bind(index))
 		art.cue_requested.connect(_cue.bind(index))
 		if bool(entry.opened):
-			# Restoring a completed chest must not replay its release or surprise.
+			# Restoring a completed chest must not replay its release or opening flourish.
 			art.mode = "opening"
 			art.finish_immediately()
 	_refresh()

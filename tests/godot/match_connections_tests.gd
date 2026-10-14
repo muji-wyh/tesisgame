@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PlayerFixture = preload("res://tests/godot/player_flow_fixture.gd")
+const Growth = preload("res://scripts/growth_state.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -42,14 +43,53 @@ func _tap(control: Control) -> void:
 	await settle()
 
 
-func _start(app, seed_value: int = 21) -> void:
-	check(app.new_round(seed_value, false, "music-makers", "match", "microphone"),
-		"The isolated fixture starts a real five-pair Match round")
+func _prepare_learner(app) -> bool:
+	var words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return word.id == "microphone")
+	check(words.size() == 1, "The long-word fixture resolves one curriculum word")
+	if words.size() != 1:
+		return false
+	var age: int = int(words[0].min_age)
+	var path: String = directory + "/growth-age-%d.cfg" % age
+	var saved := ConfigFile.new()
+	saved.set_value("growth", "version", 1)
+	saved.set_value("growth", "level", age)
+	saved.set_value("growth", "streaks", {})
+	saved.set_value("growth", "receipts", [])
+	var written: bool = saved.save(path) == OK
+	check(written, "The long-word fixture saves its isolated learner")
+	if not written:
+		return false
+	var growth := Growth.new(path)
+	var ready: bool = growth.configure(app.data.words) and growth.load_state() and growth.learning_age() == age
+	check(ready, "The isolated learner is eligible for the long word's age cohort")
+	if not ready:
+		return false
+	app.growth = growth
+	app.vocabulary_loader.request_age(age)
+	app._refresh_growth()
+	PlayerFixture.enter_mode(app, "match")
+	var entered: bool = app._mode_id == "match" and not app._mode_menu_open()
+	check(entered, "The connection fixture enters Match through Home")
+	return entered
+
+
+func _start(app, seed_value: int = 21) -> bool:
+	var started: bool = app.new_round(seed_value, false, "", "match", "microphone")
 	app.feedback_timer.paused = true
 	await settle()
+	var playable: bool = started and app._mode_id == "match" and not app._mode_menu_open() \
+		and app.cards.has("microphone:image") and app.cards.has("microphone:word") \
+		and app.cards.size() == 10 and _words(app).size() == 5
+	check(playable, "The isolated fixture starts a real five-pair Match round from the full current-age pool")
+	if not playable:
+		return false
+	var age: int = app.growth.learning_age()
+	check(app.model.lesson_words.all(func(word: Dictionary) -> bool: return int(word.min_age) == age),
+		"Every connection fixture word belongs to the isolated learner's age")
 	check(app._match_connections.connections.is_empty(), "A new round has no completed connections")
 	check(app._match_connections.focused_id.is_empty() and app._match_connections.visible_connections().is_empty(),
 		"A new round has neither a focused pair nor a visible connector")
+	return true
 
 
 func _words(app) -> Array[String]:
@@ -172,8 +212,9 @@ func _check_geometry(app, expected_count: int, stage: String) -> void:
 			stage + ": the reserved gutter keeps each card fully visible and tappable")
 
 
-func _test_pointer_matches(app) -> void:
-	await _start(app)
+func _test_pointer_matches(app) -> bool:
+	if not (await _start(app)):
+		return false
 	var words: Array[String] = _words(app)
 	await _tap(app.cards[words[0] + ":image"])
 	check(app.model.selected_id == words[0] + ":image" and app._match_connections.connections.is_empty(),
@@ -240,9 +281,10 @@ func _test_pointer_matches(app) -> void:
 	check(not app._match_connections.focus_pair("missing-word")
 		and app._match_connections.focused_id == focus_before and _connection_snapshot(app) == accumulated,
 		"An unknown pair cannot replace the current focus or damage completed connections")
+	return true
 
 
-func _test_responsive_and_lifecycle(app) -> void:
+func _test_responsive_and_lifecycle(app) -> bool:
 	var before: Dictionary = _connection_snapshot(app)
 	var matched: Array = app.model.matched_ids.duplicate()
 	var focused: String = app._match_connections.focused_id
@@ -310,13 +352,23 @@ func _test_responsive_and_lifecycle(app) -> void:
 		check(app._match_connections.focused_id == remaining, "The final success becomes the focused pair")
 		_check_geometry(app, 5, "Final pair feedback")
 		app._resolve_feedback()
+		if app._pair_reward_revealing():
+			check(app._match_connections.is_visible_in_tree() and app.grid.is_visible_in_tree(),
+				"Completed connections remain on the board while its earned chest finishes flying")
+		# This suite disables GameUI processing; advance the earlier pair reward
+		# before expecting the round celebration to replace the completed board.
+		app._pair_reward.advance(app._pair_reward.REWARD_SECONDS)
+		app._refresh()
 		await settle()
+		check(not app._pair_reward_revealing() and app._round_celebration.is_active(),
+			"The round celebration starts after the earned-pair presentation finishes")
 		check(app.model.phase == "won" and not app._match_connections.is_visible_in_tree(),
 			"Completed lines and pair badges leave with the board when the chest result takes over")
 	var old_cards: Array[WeakRef] = []
 	for card in app.cards.values():
 		old_cards.append(weakref(card))
-	await _start(app, 37)
+	if not (await _start(app, 37)):
+		return false
 	check(old_cards.all(func(reference: WeakRef) -> bool: return reference.get_ref() == null),
 		"Restart releases all old card instances instead of retaining connector references")
 	var word: String = _words(app)[0]
@@ -325,19 +377,23 @@ func _test_responsive_and_lifecycle(app) -> void:
 	app._resolve_feedback()
 	await settle()
 	_check_geometry(app, 1, "Fresh round after reset")
-	app.choose_mode("memory")
+	PlayerFixture.enter_mode(app, "memory")
 	await settle()
-	check(not app._match_connections.is_visible_in_tree(), "Match connections cannot leak into another game mode")
-	app.choose_mode("match")
+	check(app._mode_id == "memory" and not app._mode_menu_open() and not app._match_connections.is_visible_in_tree(),
+		"Choosing Memory through Home hides the Match connections")
+	PlayerFixture.enter_mode(app, "match")
 	app.feedback_timer.paused = true
 	await settle()
-	check(app._match_connections.connections.is_empty() and app._match_connections.focused_id.is_empty()
+	check(app._mode_id == "match" and not app._mode_menu_open()
+		and app._match_connections.connections.is_empty() and app._match_connections.focused_id.is_empty()
 		and app._match_connections.visible_connections().is_empty(),
 		"Returning to Match starts with a clean connection layer and no stale focus")
+	return true
 
 
-func _test_voice_retention(app) -> void:
-	await _start(app)
+func _test_voice_retention(app) -> bool:
+	if not (await _start(app)):
+		return false
 	var words: Array[String] = _words(app)
 	var prior_id: String = words[0]
 	app._select_card(prior_id + ":image")
@@ -367,6 +423,7 @@ func _test_voice_retention(app) -> void:
 	app._stop_voice()
 	await settle()
 	_check_geometry(app, 2, "Voice stopped after success")
+	return true
 
 
 func _test_default_card_badge(app) -> void:
@@ -388,6 +445,17 @@ func _test_default_card_badge(app) -> void:
 	await process_frame
 
 
+func _finish(app) -> void:
+	app.audio.halt()
+	app.queue_free()
+	await settle()
+	for filename in DirAccess.get_files_at(directory):
+		DirAccess.remove_absolute(directory + "/" + filename)
+	DirAccess.remove_absolute(directory)
+	print("Match connections: %d checks, %d failures" % [checks, failures])
+	quit(1 if failures else 0)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(390, 844)
@@ -396,19 +464,23 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	PlayerFixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
 	app.set_process(false)
-	await _test_pointer_matches(app)
-	await _test_responsive_and_lifecycle(app)
-	await _test_voice_retention(app)
+	if not _prepare_learner(app):
+		await _finish(app)
+		return
+	if not (await _test_pointer_matches(app)):
+		await _finish(app)
+		return
+	if not (await _test_responsive_and_lifecycle(app)):
+		await _finish(app)
+		return
+	if not (await _test_voice_retention(app)):
+		await _finish(app)
+		return
 	await _test_default_card_badge(app)
-	app.queue_free()
-	await process_frame
-	for filename in DirAccess.get_files_at(directory):
-		DirAccess.remove_absolute(directory + "/" + filename)
-	DirAccess.remove_absolute(directory)
-	print("Match connections: %d checks, %d failures" % [checks, failures])
-	quit(1 if failures else 0)
+	await _finish(app)

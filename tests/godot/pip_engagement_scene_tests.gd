@@ -223,11 +223,22 @@ func _test_consumed_touches(app) -> void:
 	app.set_reduced_motion(false)
 	await settle()
 	for cancel_first in [false, true]:
+		var price: int = app._memory.memory.peek_price()
+		var ordinal: int = app._memory.memory.peeks + 1
+		if price > 0:
+			check(app.coin_wallet.credit("fixture:consumed-peek:" + str(ordinal), price).ok,
+				"Fund the multi-touch Peek fixture at its current quoted price")
+		var balance: int = app.coin_wallet.balance
+		var receipt_count: int = app.coin_wallet._receipts.size()
 		var card_point: Vector2 = app._memory.card_buttons[0].get_global_rect().get_center()
 		var eye_point: Vector2 = app._memory.study_button.get_global_rect().get_center()
 		viewport_touch(0, card_point, true)
 		viewport_touch(1, eye_point, true)
 		check(app._memory.memory.studying, "The real second touch holds Memory Peek")
+		check(app._memory.memory.peeks == ordinal and app.coin_wallet.balance == balance - price
+			and (app.coin_wallet._receipts.get(app._round_id + ":memory-peek:" + str(ordinal), 0) == -price
+				if price > 0 else app.coin_wallet._receipts.size() == receipt_count),
+			"The held Peek consumes one use and saves only its quoted debit, keeping the first use free")
 		viewport_touch(0, card_point, false, cancel_first)
 		check(not observe_idle(app, 18), "A remaining Peek touch keeps Pip quiet")
 		check(app.duck._attention == "thinking", "Pip studies with the held Memory Peek")

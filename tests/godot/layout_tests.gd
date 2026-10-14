@@ -180,7 +180,7 @@ func _run() -> void:
 	app.model.chest_state = "opened"
 	app._refresh()
 	await settle()
-	check(not app._mode_row.is_visible_in_tree(), "Results do not repeat gameplay navigation")
+	check(not app._mode_panel.grid.is_visible_in_tree(), "Results do not repeat gameplay navigation")
 	check(app._outcome.get_global_rect().position.y - app._content_margins.global_position.y <= 100,
 		"The result gets the space below one simple header inside the game area")
 	var old_lesson: Array = app.model.lesson_words.duplicate(true)

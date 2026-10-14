@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 var checks := 0
 var failures := 0
 
@@ -12,6 +14,12 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		printerr("FAIL: " + message)
 
+func _enter_mode(app, id: String) -> void:
+	PlayerFlow.enter_mode(app, id)
+	check(app._mode_id == id and not app._mode_menu_open(),
+		"The Home route enters " + id + " before exercising its gameplay controls")
+
+
 func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	if not app.has_method("choose_mode"):
@@ -22,19 +30,20 @@ func _run() -> void:
 	var directory := "user://expansion-%d" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	app._mode_id = "match"
 	root.add_child(app)
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	_enter_mode(app, "match")
 	app._voice_button.disabled = false
 	app._voice_button.focus_mode = Control.FOCUS_ALL
 	app._voice_mode = true
 	app._toggle_voice()
 	check(root.gui_get_focus_owner() == app._voice_button, "Toggling Voice retains keyboard focus after layout changes")
-	app.choose_mode("memory")
+	_enter_mode(app, "memory")
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app.grid.visible, "Memory replaces the matching board")
 	check(not app.hint_button.visible and not app._voice_button.visible, "Memory hides Match-only controls")
 	var word_index := 0
@@ -54,9 +63,9 @@ func _run() -> void:
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
 	app._hide_collection()
 	app._controller_mode = true
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
+	PlayerFlow.reserve_pair_chest(app)
 	var pairs: Array[String] = []
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
@@ -78,7 +87,7 @@ func _run() -> void:
 		app.cards[word_id + ":image"].pressed.emit()
 		app._continue_match()
 	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5, "Five Match pairs enter the shared win screen")
-	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+	PlayerFlow.finish_celebration(app)
 	check(app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "Completing the lesson presents only the unopened chest")
 	app._open_chest()
 	app.chest.finish_immediately()
@@ -93,7 +102,7 @@ func _run() -> void:
 	check(app.model.theme_id == "ocean"
 		and app.medal_progress.count_for("ocean-1") == 1,
 		"A fresh adventure preserves the selected world and earned piece")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	app.audio.set_muted(false)
 	var wrong: Array = []
 	for card in app.model.cards:
@@ -106,7 +115,7 @@ func _run() -> void:
 		app.cards[wrong[1].id].pressed.emit()
 		app._continue_match()
 	check(app.model.phase == "waiting" and app.model.mistakes == 5 and app.grid.visible, "Five incorrect pairs keep the original board playable")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	check(app.grid.visible and app.model.cards.size() == 10 and not app._pop.visible and not app._memory.visible,
 		"Selecting the active Match mode retains the ten-card game")
 	for dimensions in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390)]:
@@ -114,9 +123,9 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		for mode in ["match", "memory", "pop"]:
-			app.choose_mode(mode)
+			_enter_mode(app, mode)
 			if mode == "pop":
-				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+				PlayerFlow.choose_pop_player(app)
 			await process_frame
 			await process_frame
 			check(app._mode_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),

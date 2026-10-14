@@ -170,6 +170,9 @@ func _run() -> void:
 		await create_timer(0.8).timeout
 		check(app.model.phase == "won" and app.model.selected_id.is_empty(),
 			"The fifth pair automatically completes the game without another answer")
+		# The finale waits for the earlier earned-pair chest flight to settle.
+		app._pair_reward.advance(app._pair_reward.REWARD_SECONDS)
+		app._refresh()
 		check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(),
 			"The winning Match round celebrates before accepting its chest invitation")
 		preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
@@ -226,7 +229,8 @@ func _run() -> void:
 		app._controller_back()
 	for mode in ["pop", "memory", "match"]:
 		root.size = Vector2i(480, 900)
-		app.choose_mode(mode)
+		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, mode)
+		check(app._mode_id == mode and not app._mode_menu_open(), mode + " is selected through Home before its resize check")
 		if mode == "pop":
 			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 		await settle()

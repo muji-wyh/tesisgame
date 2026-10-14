@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -31,17 +32,18 @@ func _check_click_routes() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	app._mode_id = "match"
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await _settle()
 	app.set_reduced_motion(true)
+	PlayerFlow.enter_mode(app, "match")
 	app.audio.halt()
 	app.medal_progress.counts["spring-1"] = 1
 	app._refresh_collection()
 	# Prepare the result states before measuring whether companion input writes.
 	for mode in ["match", "memory"]:
 		app._mode_id = mode
-		preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+		PlayerFlow.earn_pair_chest(app)
 		check(app.medal_progress.finish_pair_round(mode, app._round_id), "Prepare a completed companion fixture")
 	app._mode_id = "match"
 	# Refreshing reduced motion schedules container layout before Pip can be hit.
@@ -50,14 +52,27 @@ func _check_click_routes() -> void:
 	var progress: Array = _progress(app)
 	var players: Array[Node] = app.audio.get_children()
 	app._update_duck()
-	check(not app.collection_page.visible and app.duck.is_visible_in_tree(),
-		"The isolated learning fixture exposes the gameplay header")
+	check(app._mode_id == "match" and not app._mode_menu_open()
+		and not app.collection_page.visible and app.duck.is_visible_in_tree(),
+		"The isolated learning fixture exposes the gameplay header after choosing Match from Home")
 	var trick_index: int = app._duck_trick_index
+	var header_voice_requests: int = _voice_requests(app)
 	await _tap(app.duck.get_global_rect().get_center())
-	# Opening the menu cancels pronunciation without starting a companion action.
+	check(not app._mode_menu_open() and app._duck_trick_index == trick_index + 1
+		and not app.audio.voice.playing and not PipAudio.has_pip_resources(app.audio)
+		and _voice_requests(app) == header_voice_requests,
+		"A real Pip mouse click performs its silent age action while gameplay stays open")
+	app.duck.settle()
+	trick_index = app._duck_trick_index
+	check(app._mode_heading_button.is_visible_in_tree() and not app._mode_heading_button.disabled,
+		"The gameplay header exposes a separate usable Home button")
+	var header_voice_stream: AudioStream = app.audio.voice.stream
+	await _tap(app._mode_heading_button.get_global_rect().get_center())
+	# Home cancels pending pronunciation, advancing the audio cancellation generation.
 	check(app._mode_menu_open() and not app.audio.voice.playing
-		and app._duck_trick_index == trick_index,
-		"A real header mouse click opens game modes without starting a duck greeting")
+		and app._duck_trick_index == trick_index and app.audio.voice.stream == header_voice_stream
+		and not PipAudio.has_pip_resources(app.audio),
+		"A real Home mouse click opens game modes without starting a duck greeting")
 	app._hide_mode_menu()
 	var before: int
 	var original_mode: String = app._mode_id
@@ -114,12 +129,12 @@ func _check_click_routes() -> void:
 
 func _show_result_companion(app) -> void:
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+	PlayerFlow.earn_pair_chest(app)
 	app.model.phase = "won"
 	if app._mode_id == "memory":
 		app._memory.memory.phase = "won"
 	app._refresh()
-	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
+	PlayerFlow.finish_celebration(app)
 	app._layout()
 	await _settle()
 	app.audio.halt()

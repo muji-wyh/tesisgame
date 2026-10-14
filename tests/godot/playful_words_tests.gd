@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const Growth = preload("res://scripts/growth_state.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 
 var checks := 0
@@ -23,35 +24,74 @@ func settle() -> void:
 		await process_frame
 
 
+func _start_word_round(app, directory: String, id: String) -> bool:
+	var words: Array = app.data.words.filter(func(word: Dictionary) -> bool: return word.id == id)
+	check(words.size() == 1, "The picture fixture resolves exactly one curriculum word: " + id)
+	if words.size() != 1:
+		return false
+	var age: int = int(words[0].min_age)
+	var path: String = directory + "/growth-age-%d.cfg" % age
+	if not FileAccess.file_exists(path):
+		# Each picture uses its own eligible learner; advanced ages no longer
+		# include lower-age words in their gameplay pool.
+		var saved := ConfigFile.new()
+		saved.set_value("growth", "version", 1)
+		saved.set_value("growth", "level", age)
+		saved.set_value("growth", "streaks", {})
+		saved.set_value("growth", "receipts", [])
+		var written: bool = saved.save(path) == OK
+		check(written, "The age-%d picture fixture saves its isolated learner" % age)
+		if not written:
+			return false
+	var growth := Growth.new(path)
+	var ready: bool = growth.configure(app.data.words) and growth.load_state() and growth.learning_age() == age
+	check(ready, "The isolated learner is ready for " + id + " in its own age cohort")
+	if not ready:
+		return false
+	app.growth = growth
+	app.vocabulary_loader.request_age(age)
+	app._refresh_growth()
+	Fixture.enter_mode(app, "match")
+	var started: bool = app.new_round(42, false, "", "match", id)
+	var playable: bool = started and app._mode_id == "match" and not app._mode_menu_open() \
+		and app.cards.has(id + ":image") and app.cards.has(id + ":word")
+	check(playable, "A real Match board includes the picture fixture word " + id)
+	if playable:
+		check(app.model.lesson_words.all(func(word: Dictionary) -> bool: return int(word.min_age) == age),
+			"The " + id + " animation fixture retains current-age-only gameplay")
+	return playable
+
+
+func _finish(app, directory: String) -> void:
+	app.audio.halt()
+	app.queue_free()
+	await settle()
+	for filename in DirAccess.get_files_at(directory):
+		DirAccess.remove_absolute(directory + "/" + filename)
+	DirAccess.remove_absolute(directory)
+	print("Playful words: %d checks, %d failures" % [checks, failures])
+	quit(1 if failures else 0)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(960, 720)
 	var directory := "user://playful-words-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
-	# Picture reactions span the curriculum. Migrate an isolated advanced save
-	# instead of granting future-age words to a new Baby player or using real saves.
-	var saved := ConfigFile.new()
-	saved.set_value("growth", "version", 1)
-	saved.set_value("growth", "level", 12)
-	saved.set_value("growth", "streaks", {})
-	saved.set_value("growth", "receipts", [])
-	check(saved.save(directory + "/growth.cfg") == OK, "The advanced picture fixture saves its isolated migration state")
 	var app = load("res://scenes/main.tscn").instantiate()
 	Fixture.install(app, directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	app._presentation.path = directory + "/presentation.cfg"
 	root.add_child(app)
 	await settle()
-	check(app.growth.ready and app.growth.age == 11 and app.growth.learning_age() == 12,
-		"The migrated picture fixture can access all curriculum words without altering player progress")
+	Fixture.enter_mode(app, "match")
+	check(app._mode_id == "match" and not app._mode_menu_open() and app.grid.is_visible_in_tree(),
+		"Picture reactions start on the playable Match board after choosing it from Home")
 	app.set_reduced_motion(false)
 	app.audio.set_muted(true)
 	var poses: Array = []
-	for entry in [["ball", "play-time"], ["bell", "music-makers"], ["rocket", "space-trip"],
-		["fish", "animal-friends"], ["boat", "on-the-move"], ["flower", "great-outdoors"]]:
-		var id: String = entry[0]
-		var started: bool = app.new_round(42, false, entry[1], "match", id)
-		check(started, "A real Match board includes the animated noun " + id)
-		if not started:
+	for id: String in ["ball", "bell", "rocket", "fish", "boat", "flower"]:
+		if not _start_word_round(app, directory, id):
 			continue
 		await settle()
 		var card = app.cards[id + ":image"]
@@ -85,7 +125,9 @@ func _run() -> void:
 		app._hide_collection()
 	check(poses.size() == 6 and poses[0] != poses[1] and poses[2] != poses[3],
 		"Nouns use different trajectories rather than one universal bounce")
-	check(app.new_round(42, false, "play-time", "match", "book"), "A noun without an extra picture reaction also has a real Match pair")
+	if not _start_word_round(app, directory, "book"):
+		await _finish(app, directory)
+		return
 	await settle()
 	app.cards["book:word"].pressed.emit()
 	app.cards["book:image"].pressed.emit()
@@ -94,7 +136,9 @@ func _run() -> void:
 		and WordArt.source_path(app.cards["book:image"].picture.texture) == "res://assets/images/word-library/book.webp",
 		"Other nouns retain their authored word-art animation without an unrelated transform reaction")
 	app.set_reduced_motion(true)
-	app.new_round(42, false, "play-time", "match", "ball")
+	if not _start_word_round(app, directory, "ball"):
+		await _finish(app, directory)
+		return
 	app.audio.set_muted(false)
 	await settle()
 	var reduced_home: Transform2D = app.cards["ball:image"].picture.get_transform()
@@ -105,7 +149,9 @@ func _run() -> void:
 		and app.cards["ball:image"].picture.get_transform().is_equal_approx(reduced_home),
 		"Reduced motion keeps pronunciation and the original readable picture")
 	app.set_reduced_motion(false)
-	app.new_round(42, false, "play-time", "match", "ball")
+	if not _start_word_round(app, directory, "ball"):
+		await _finish(app, directory)
+		return
 	app.audio.set_muted(false)
 	app._select_card("ball:word")
 	app._select_card("ball:image")
@@ -131,11 +177,4 @@ func _run() -> void:
 		app._select_card("ball:word")
 		check(not app.audio.voice.playing and not app.audio.active, "Voice mode stays quiet during matched replay")
 		app._stop_voice()
-	app.audio.halt()
-	app.queue_free()
-	await settle()
-	for filename in DirAccess.get_files_at(directory):
-		DirAccess.remove_absolute(directory + "/" + filename)
-	DirAccess.remove_absolute(directory)
-	print("Playful words: %d checks, %d failures" % [checks, failures])
-	quit(1 if failures else 0)
+	await _finish(app, directory)

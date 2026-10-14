@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Audio = preload("res://scripts/game_audio.gd")
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -202,9 +203,12 @@ func _test_lifecycle_cancellation(app) -> void:
 			"voice_off": app._stop_voice()
 			"speech_disabled": app._on_voice_state([false, false, "Stopped"])
 			"new_round": app.new_round(37, true, "", "match")
-			"memory": app.choose_mode("memory")
+			"memory": PlayerFlow.enter_mode(app, "memory")
 			"background": app.on_page_hidden()
 			"menu": app._show_collection()
+		if action == "memory":
+			check(app._mode_id == "memory" and app._memory.is_visible_in_tree(),
+				"The Home route completes the mode change before testing discarded recognition")
 		_check_cleared(app, action)
 		check(app._speech_queue.is_empty(), action + ": leaving recognition discards queued pairs")
 		var successes: int = (app.model.matched_ids.size() / 2)
@@ -294,6 +298,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await _settle()
 	await _test_callback_and_ignored_results(app)

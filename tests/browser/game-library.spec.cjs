@@ -289,10 +289,16 @@ test('every game is selected from home and choosing the current game continues i
     if (mode === 'match') await page.screenshot({ path: testInfo.outputPath('match-gameplay-home-header.png'), scale: 'css' });
     await openModeMenu(page);
     expect((await metrics(page)).library.current, 'Returning home does not silently switch modes').toBe(mode);
+    await expect.poll(async () => (await metrics(page)).library.controls
+      .filter(item => item.name.startsWith('Mode_') && item.selected).map(item => item.name),
+    { message: 'The current game stays selected independently of the card display order' }).toEqual([`Mode_${mode}`]);
+    await expect.poll(async () => (await metrics(page)).library.controls.find(item => item.focused)?.name,
+      { message: 'Home returns keyboard focus to the current game by identity' }).toBe(`Mode_${mode}`);
     await page.keyboard.press('Escape');
     await rendered(page);
     expect((await metrics(page)).library.visible).toBe(true);
-    await chooseMode(page, mode);
+    await page.keyboard.press('Enter');
+    await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
     expect((await metrics(page)).library.current).toBe(mode);
   }
   await chooseMode(page, 'match');

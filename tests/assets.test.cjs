@@ -120,8 +120,28 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
+  const sceneryImages = ['jelly-garden', 'jelly-sky'].flatMap(name =>
+    JSON.parse(fs.readFileSync(path.join(root, `docs/assets/${name}.json`), 'utf8')).images);
+  assert.equal(sceneryImages.length, 9, 'Eight preserved garden layers and one daytime panorama are imported');
+  for (const image of sceneryImages) {
+    assert.equal(sha256(fs.readFileSync(path.join(root, image.path))), image.sha256,
+      `${image.path} matches its inspected source record`);
+  }
+  const addedArtwork = [
+    ...sceneryImages.map(image => image.path),
+    'assets/images/ui/home.webp',
+    'assets/images/ui/mastery-medal.webp',
+    'assets/images/ui/modes/apple.webp',
+    'assets/images/ui/modes/cat.webp',
+    'assets/images/ui/modes/microphone.webp',
+    'assets/images/ui/jelly-powerups/auto-merge-wand.svg'
+  ];
+  const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
+  assert.equal(addedImports.size, 15, 'Scenery, Home previews, mastery and powerup artwork have separate imports');
+  assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
+  for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
   // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
-  assert.equal(textureImports.length, 2862 + 1277 + 5 + 3);
+  assert.equal(textureImports.filter(filename => !addedImports.has(filename)).length, 2862 + 1277 + 5 + 3);
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);

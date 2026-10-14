@@ -183,8 +183,8 @@ func _run() -> void:
 	app.chest._advance_animation(60.0)
 	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
 		and app.coin_wallet.balance == coins_before_chest + 50 and earned_receipts.get(chest_receipt, 0) == 50
-		and not app.chest.hold_effect_snapshot().surprise.active,
-		"The opened Memory chest retains its earned piece and one saved coin receipt without an extra gift panel")
+		and not app.chest.hold_effect_snapshot().opened_effect.active,
+		"The opened Memory chest retains its earned piece and one saved coin receipt after its flourish settles")
 	app.on_page_hidden()
 	app.chest._advance_animation(60.0)
 	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
@@ -195,7 +195,7 @@ func _run() -> void:
 	app.chest._advance_animation(60.0)
 	check(app.model.chest_state == "opened" and app.chest.mode == "opened"
 		and app.medal_progress.count_for("ocean-1") == 1 and app.coin_wallet._receipts == earned_receipts
-		and app.coin_wallet.balance == coins_before_chest + 50 and not app.chest.hold_effect_snapshot().surprise.active,
+		and app.coin_wallet.balance == coins_before_chest + 50 and not app.chest.hold_effect_snapshot().opened_effect.active,
 		"Returning to Memory retains the same opened result without replaying or paying another reward")
 	view.continue_feedback()
 	view.round_finished.emit(true, lesson)
@@ -207,8 +207,8 @@ func _run() -> void:
 	var reloaded = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(reloaded.load_progress() and reloaded.count_for("ocean-1") == 1, "Memory rewards survive storage reload")
 	check(app.new_round(-1, true), "A same-lesson internal reset prepares another Memory fixture")
-	check(not app.chest.hold_effect_snapshot().surprise.active,
-		"A new Memory round cannot expose an extra gift from the previous result")
+	check(not app.chest.hold_effect_snapshot().opened_effect.active,
+		"A new Memory round clears the opening flourish from the previous result")
 	check(app._mode_id == "memory" and app.model.lesson_words == lesson and app.model.theme_id == "ocean",
 		"The internal Memory fixture reset preserves its mode, lesson, and world")
 	check(view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "The fixture reset clears the prior attempt")

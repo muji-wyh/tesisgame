@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 const WordArt = preload("res://scripts/word_art.gd")
 
 var checks := 0
@@ -14,6 +16,12 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		printerr("FAIL: " + message)
 
+func _enter_mode(app, id: String) -> void:
+	PlayerFlow.enter_mode(app, id)
+	check(app._mode_id == id and not app._mode_menu_open(),
+		"The Home route enters " + id + " before exercising its gameplay controls")
+
+
 func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	if not app.get("_mode_id") == "match":
@@ -24,21 +32,21 @@ func _run() -> void:
 	var directory := "user://lesson-scene-%d" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(directory)
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	app.choose_theme("spring")
 	check(app.grid.is_visible_in_tree() and app.model.lesson_words.size() == 5, "Match starts with five vocabulary associations")
 	var lesson: Array = app.model.lesson_words.duplicate(true)
 	var world: String = app.model.theme_id
 	for mode in ["memory", "pop", "match"]:
-		app.choose_mode(mode)
+		_enter_mode(app, mode)
 		if mode == "pop":
-			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+			PlayerFlow.choose_pop_player(app)
 		check(app.model.lesson_words == lesson and app.model.theme_id == world, "Mode " + mode + " retains the exact lesson and world")
 		check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0, "Mode change resets only the attempt")
 		if mode == "memory":
@@ -65,9 +73,11 @@ func _run() -> void:
 	check(app.model.phase == "matching" and app.model.selected_id == wrong[0].id,
 		"The next card resumes the same challenge without a separate Continue")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
-	preload("res://tests/godot/player_flow_fixture.gd").earn_pair_chest(app)
+	PlayerFlow.earn_pair_chest(app)
 	app.model.phase = "won"
-	app.model.chest_state = "opened"
+	check(app._settle_pair_reward(), "The completed fixture chest is settled before starting another lesson")
+	var earned_medals: Dictionary = app.medal_progress.counts.duplicate(true)
+	var earned_coins: int = app.coin_wallet.balance
 	app._refresh()
 	check(app.model.lesson_words == lesson, "The opened chest retains the current lesson until New adventure")
 	app._new_adventure_button.pressed.emit()
@@ -80,7 +90,8 @@ func _run() -> void:
 	var current_card: Button = app.cards[current.id + ":word"]
 	var picture_card: Button = app.cards[current.id + ":image"]
 	current_card.pressed.emit()
-	check((app.model.matched_ids.size() / 2) == 0 and app.medal_progress.counts.is_empty(), "Selecting one Match word never scores or awards pieces")
+	check((app.model.matched_ids.size() / 2) == 0 and app.medal_progress.counts == earned_medals
+		and app.coin_wallet.balance == earned_coins, "Selecting one Match word never scores or changes earned rewards")
 	check(not app.audio.voice.playing and current_card.word_label.visible and picture_card.picture.visible,
 		"Muted Match keeps the written word and matching picture readable")
 	app.audio.available = false
@@ -113,7 +124,8 @@ func _run() -> void:
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + current.audio),
 		"Retrying the visible bundled word restores its actual pronunciation")
 	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app.model.hints_remaining == 3
-		and app.medal_progress.counts.is_empty(), "Audio recovery neither scores nor spends or awards progress")
+		and app.medal_progress.counts == earned_medals and app.coin_wallet.balance == earned_coins,
+		"Audio recovery neither scores nor spends or awards progress")
 	var stopped_playbacks: Array[WeakRef] = []
 	for player in [app.audio.music, app.audio.voice]:
 		if player.has_stream_playback():

@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFlow = preload("res://tests/godot/player_flow_fixture.gd")
+
 const PipAudio = preload("res://tests/godot/pip_audio_fixture.gd")
 
 var checks := 0
@@ -14,20 +16,27 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		printerr("FAIL: " + message)
 
+func _enter_mode(app, id: String) -> void:
+	PlayerFlow.enter_mode(app, id)
+	check(app._mode_id == id and not app._mode_menu_open(),
+		"The Home route enters " + id + " before exercising its gameplay controls")
+
+
 func _run() -> void:
 	var directory := "user://ui-audio-flow-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.make_dir_recursive_absolute(directory)
 	var app = load("res://scenes/main.tscn").instantiate()
 	app.medal_progress = load("res://scripts/medal_progress.gd").new(directory + "/medals.cfg", directory + "/legacy.cfg")
-	preload("res://tests/godot/player_flow_fixture.gd").install(app, directory)
+	PlayerFlow.install(app, directory)
 	root.add_child(app)
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(true)
+	_enter_mode(app, "match")
 	_check_theme_audio(app)
 	_check_match_prompt_audio(app)
 	_check_memory_prompt_audio(app)
-	app.choose_mode("memory")
+	_enter_mode(app, "memory")
 	await process_frame
 	await process_frame
 	var memory_card: Button = app._memory.card_buttons[0]
@@ -44,7 +53,7 @@ func _run() -> void:
 	app._hide_collection()
 	check(root.gui_get_focus_owner() == memory_card and app._valid_focus(memory_card),
 		"Returning from More restores focus to the same playable Memory card")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	check(not app.audio.voice.playing, "Changing game mode stops the prior card's pronunciation")
 	var first: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:
 		return card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty())[0]
@@ -118,7 +127,7 @@ func _run() -> void:
 		app.cards[id].pressed.emit()
 	check(app.model.phase == "won" and not app.audio.voice.playing and _match_progress(app) == progress,
 		"Hidden matched cards cannot replay or score behind the result")
-	app.choose_mode("memory")
+	_enter_mode(app, "memory")
 	var memory = app._memory
 	var a: int = 0
 	var b: int = -1
@@ -151,8 +160,8 @@ func _run() -> void:
 		"Memory first-tap shortcut selects exactly the new card without another attempt")
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + memory.memory.cards[next_card].word.audio),
 		"Memory first-tap shortcut replaces old feedback speech with the tapped card's actual word")
-	app.choose_mode("match")
-	app.choose_mode("memory")
+	_enter_mode(app, "match")
+	_enter_mode(app, "memory")
 	memory = app._memory
 	a = 0
 	for index in range(1, memory.memory.cards.size()):
@@ -169,7 +178,7 @@ func _run() -> void:
 	memory.study_button.button_up.emit()
 	check(not memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing and memory.memory.attempts == 1,
 		"Releasing the eye stays silent and preserves progress")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	app.cards[app.model.cards[0].id].pressed.emit()
 	app._show_collection()
 	check(not app.audio.voice.playing, "Opening rewards stops speech about a now-covered picture")
@@ -179,7 +188,7 @@ func _run() -> void:
 		"A growth catalog word plays its own pronunciation")
 	app._hide_collection()
 	check(not app.audio.voice.playing, "Leaving the catalog stops the hidden word's pronunciation")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	for exit_path in ["stop", "speech_end", "rewards", "hidden"]:
 		app.new_round(21, true)
 		app._on_voice_state([true, true, "Listening"])
@@ -473,7 +482,7 @@ func _check_theme_audio(app) -> void:
 
 func _check_speech_debug(app) -> void:
 	app.new_round(97, true, "", "pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.choose_pop_player(app)
 	app._on_voice_state([true, true, "Listening."])
 	var ledger: Array = [app.growth.snapshot().streaks.duplicate(true),
 		app.growth.snapshot().level, app.medal_progress.counts.duplicate(true)]
@@ -524,7 +533,7 @@ func _check_speech_debug(app) -> void:
 		"Late diagnostic commands are harmless after an idempotent close")
 	check(ledger == [app.growth.snapshot().streaks, app.growth.snapshot().level, app.medal_progress.counts],
 		"Diagnostic entry, cues and exit never write growth progress or rewards")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	check(app._on_speech_debug(["open"]), "Match can enter the same diagnostic pause")
 	app._on_speech_debug(["mix", 0.35])
 	app._on_speech_debug(["cue", "miss"])
@@ -563,7 +572,7 @@ func _check_speech_debug(app) -> void:
 		"Diagnostics preserves an existing scene pause when it closes")
 	paused = false
 	app.new_round(119, true, "", "pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.choose_pop_player(app)
 	app._on_voice_state([true, true, "Listening."])
 	app._pop_speech_active = true
 	app._pop._listening_tick_usec = -1
@@ -581,7 +590,7 @@ func _check_speech_debug(app) -> void:
 
 func _check_pop_launch_audio(app) -> void:
 	app.new_round(84, true, "", "pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.choose_pop_player(app)
 	var view = app._pop
 	view.set_process(false)
 	var launches: Array[int] = []
@@ -623,7 +632,7 @@ func _check_pop_launch_audio(app) -> void:
 	check(launches == [1, 2] and not player.playing,
 		"Retrying a paused round never replays the cleared launch")
 	app.new_round(85, true, "", "pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.choose_pop_player(app)
 	view.set_process(false)
 	launches.clear()
 	app._on_voice_state([true, true, "Listening."])
@@ -635,14 +644,14 @@ func _check_pop_launch_audio(app) -> void:
 		"A long frame never catches up an older target's missed launch sound")
 	for transition in ["home", "hidden", "mode_exit", "mute", "finish"]:
 		app.new_round(86, true, "", "pop")
-		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+		PlayerFlow.choose_pop_player(app)
 		view.set_process(false)
 		app._on_voice_state([true, true, "Listening."])
 		check(player.playing, transition + " starts during an audible throw")
 		match transition:
 			"home": app._show_collection()
 			"hidden": app.on_page_hidden()
-			"mode_exit": app.choose_mode("match")
+			"mode_exit": _enter_mode(app, "match")
 			"mute": app.audio.set_muted(true)
 			"finish": view._advance_game(view.game.remaining)
 		check(not player.playing and player.stream == null,
@@ -652,12 +661,12 @@ func _check_pop_launch_audio(app) -> void:
 		elif transition == "mute": app.audio.set_muted(false)
 		check(not player.playing, transition + " cannot replay a previous throw on return")
 	view.launched.disconnect(record_launch)
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 
 
 func _check_pop_hit_audio(app) -> void:
 	check(app.new_round(184, false, "", "pop"), "The slice-audio fixture starts a deterministic real Pop round")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	PlayerFlow.choose_pop_player(app)
 	app.audio.set_muted(false)
 	await process_frame
 	app._on_voice_state([true, true, "Listening. Say an English word."])
@@ -695,10 +704,10 @@ func _check_pop_hit_audio(app) -> void:
 		and expected_paths.has(_last_slice_path(app.audio))
 		and (expected_paths.size() < 2 or _last_slice_path(app.audio) != last_path),
 		"The next unmuted spoken hit resumes the pool without repeating the last audible slice")
-	app.choose_mode("match")
+	_enter_mode(app, "match")
 	check(_pop_playing(app.audio) == 0, "Leaving Voice Pop stops all active hit sounds")
-	app.choose_mode("pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	_enter_mode(app, "pop")
+	PlayerFlow.choose_pop_player(app)
 	await process_frame
 	app._on_voice_state([true, true, "Listening. Say an English word."])
 	check(_pop_hit_visible_word(app, 3.0) and _pop_playing(app.audio) == 1, "A new Pop round can start a fresh hit sound")
@@ -716,8 +725,8 @@ func _check_pop_hit_audio(app) -> void:
 func _check_pop_exit_audio(app) -> void:
 	for destination in ["match", "memory"]:
 		for state in ["pending", "listening", "denied", "report", "muted"]:
-			app.choose_mode("pop")
-			preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+			_enter_mode(app, "pop")
+			PlayerFlow.choose_pop_player(app)
 			app._pop.set_process(false)
 			if state in ["listening", "report", "muted"]:
 				app._on_voice_state([true, true, "Listening."])
@@ -727,7 +736,7 @@ func _check_pop_exit_audio(app) -> void:
 				app._pop._advance_game(app._pop.game.remaining)
 			if state == "muted":
 				app.audio.set_muted(true)
-			app.choose_mode(destination)
+			_enter_mode(app, destination)
 			var label: String = "Leaving %s Voice Pop for %s" % [state, destination]
 			check(app._mode_id == destination and not app._voice_mode and not app._pop_speech_active,
 				label + " clears microphone input and quiet-mode guards")
@@ -751,12 +760,12 @@ func _check_pop_exit_audio(app) -> void:
 					label + " pronounces the destination card's exact word")
 			app.audio.set_muted(false)
 			app._pop.set_process(true)
-	app.choose_mode("pop")
-	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
+	_enter_mode(app, "pop")
+	PlayerFlow.choose_pop_player(app)
 	app.on_page_hidden()
 	app.choose_mode("match")
-	check(not app.audio.active and not app.audio.music.playing,
-		"A mode change delivered to a hidden page cannot restore background audio")
+	check(app._mode_id == "pop" and not app.audio.active and not app.audio.music.playing,
+		"A mode change delivered to a hidden page cannot switch games or restore background audio")
 	app.on_page_visible()
 	await process_frame
 
