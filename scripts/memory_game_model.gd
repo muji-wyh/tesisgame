@@ -3,6 +3,8 @@ extends RefCounted
 const Data = preload("res://scripts/game_data.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
+const FIRST_PEEK_SECONDS: float = 10.0
+const REPEAT_PEEK_SECONDS: float = 5.0
 
 var cards: Array[Dictionary] = []
 var selected_indices: Array[int] = []
@@ -14,6 +16,8 @@ var peeks: int = 0
 var last_correct: bool = false
 var phase: String = "waiting"
 var studying: bool = false
+var peek_remaining: float = 0.0
+var peek_duration: float = 0.0
 var error: String = ""
 
 
@@ -59,6 +63,8 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	peeks = 0
 	last_correct = false
 	studying = false
+	peek_remaining = 0.0
+	peek_duration = 0.0
 	phase = "waiting"
 	return true
 
@@ -104,14 +110,34 @@ func continue_feedback() -> String:
 
 
 func set_study(value: bool) -> bool:
-	if not phase in ["waiting", "matching"] or cards.is_empty() or studying == value:
+	if not value:
+		peek_remaining = 0.0
+		peek_duration = 0.0
+		if not studying:
+			return false
+		studying = false
+		selected_indices.clear()
+		if phase in ["waiting", "matching"]:
+			phase = "waiting"
+		return true
+	if not phase in ["waiting", "matching"] or cards.is_empty() or studying:
 		return false
-	studying = value
-	if value:
-		peeks += 1
+	peek_duration = FIRST_PEEK_SECONDS if peeks == 0 else REPEAT_PEEK_SECONDS
+	peek_remaining = peek_duration
+	studying = true
+	peeks += 1
 	selected_indices.clear()
 	phase = "waiting"
 	return true
+
+
+func advance_peek(delta: float) -> bool:
+	if not studying or not is_finite(delta) or delta <= 0.0:
+		return false
+	peek_remaining = maxf(0.0, peek_remaining - delta)
+	if peek_remaining > 0.0:
+		return false
+	return set_study(false)
 
 
 func peek_price() -> int:
@@ -127,5 +153,7 @@ func is_revealed(index: int) -> bool:
 func stop() -> void:
 	phase = "stopped"
 	studying = false
+	peek_remaining = 0.0
+	peek_duration = 0.0
 	selected_indices.clear()
 	feedback_words.clear()

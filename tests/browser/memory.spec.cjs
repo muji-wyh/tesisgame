@@ -9,7 +9,7 @@ const MEDAL_KEY = 'wordBuddies.medalProgress';
 const WALLET_KEY = 'growWithPip.coinWallet.v1';
 const REVEAL = /^Memory card (\d+)\. (Word|Picture): ([a-z]+)\.$/;
 const READY = 'Find a pair.';
-const PEEK = 'Release to hide.';
+const PEEK = /Cards hide in \d+ seconds\./;
 const progress = (page, pairs, attempts) => expect(page.locator('#game-status'))
   .toContainText(`Memory. ${pairs} of 5 pairs grown. ${attempts} attempts.`);
 
@@ -180,7 +180,7 @@ async function dispatchMemoryTouches(page, type, active, changed) {
   }, { type, active, changed });
 }
 
-test('Memory eye charges 0, 100, 200, 300, 300 once per hold and resets only for a fresh round', async ({ page }, testInfo) => {
+test('Memory eye charges 0, 100, 200, 300, 300 once per timed reveal and resets only for a fresh round', async ({ page }, testInfo) => {
   test.setTimeout(180000);
   const { errors } = await beginMemory(page, { coinBalance: 900, reducedMotion: 'reduce' });
   await expect.poll(async () => Boolean((await metrics(page)).growth.memory?.peek)).toBe(true);
@@ -195,34 +195,33 @@ test('Memory eye charges 0, 100, 200, 300, 300 once per hold and resets only for
     expectPeekPriceLayout(bounds, price);
     const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
     const before = await memoryWallet(page);
-    await page.mouse.move(point.x, point.y);
-    await page.mouse.down();
-    try {
-      await expect(page.locator('#game-status')).toContainText(PEEK);
-      await expect.poll(async () => (await memoryPeek(page)).count).toBe(index + 1);
-      balance -= price;
-      await expect.poll(async () => (await memoryWallet(page)).balance).toBe(balance);
-      await expect.poll(async () => (await displayedCoins(page)).balance).toBe(balance);
-      const paid = await memoryWallet(page), state = await memoryPeek(page);
-      const receipts = Object.entries(paid.receipts).filter(([id]) => !Object.hasOwn(before.receipts, id));
-      expect(receipts.map(([, amount]) => amount), 'Each successful paid hold saves exactly its advertised debit')
-        .toEqual(price ? [-price] : []);
-      expect(Object.entries(before.receipts).every(([id, amount]) => paid.receipts[id] === amount),
-        'Peeking preserves every earlier wallet receipt').toBe(true);
-      expect(state).toMatchObject({ count: index + 1, next_price: Math.min((index + 1) * 100, 300),
-        studying: true, round_id: opening.round_id });
-      await page.mouse.down();
-      await page.mouse.down();
-      await page.mouse.move(point.x + 1, point.y + 1);
-      await rendered(page);
-      expect(await memoryWallet(page), 'Repeated mouse-down delivery during one hold cannot charge twice').toEqual(paid);
-      expect(await memoryPeek(page), 'Repeated hold callbacks cannot increase the counter or change the price').toMatchObject(state);
-      await progress(page, 0, 0);
-      if (index === 3) await screenshot(page, testInfo, 'memory-priced-eye-300-held', { held: true, verifyRendering: true });
-      ledger.push({ ordinal: index + 1, price, balance, peek: state, receipts });
-    } finally {
-      await page.mouse.up();
-    }
+    await page.mouse.click(point.x, point.y);
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    await expect.poll(async () => (await memoryPeek(page)).count).toBe(index + 1);
+    balance -= price;
+    await expect.poll(async () => (await memoryWallet(page)).balance).toBe(balance);
+    await expect.poll(async () => (await displayedCoins(page)).balance).toBe(balance);
+    const paid = await memoryWallet(page), state = await memoryPeek(page);
+    const receipts = Object.entries(paid.receipts).filter(([id]) => !Object.hasOwn(before.receipts, id));
+    expect(receipts.map(([, amount]) => amount), 'Each successful paid reveal saves exactly its advertised debit')
+      .toEqual(price ? [-price] : []);
+    expect(Object.entries(before.receipts).every(([id, amount]) => paid.receipts[id] === amount),
+      'Peeking preserves every earlier wallet receipt').toBe(true);
+    expect(state).toMatchObject({ count: index + 1, next_price: Math.min((index + 1) * 100, 300),
+      studying: true, round_id: opening.round_id, duration: index === 0 ? 10 : 5 });
+    await page.mouse.click(point.x, point.y);
+    await page.mouse.click(point.x, point.y);
+    await page.mouse.move(point.x + 1, point.y + 1);
+    await rendered(page);
+    expect(await memoryWallet(page), 'Repeated clicks during one countdown cannot charge twice').toEqual(paid);
+    const repeated = await memoryPeek(page);
+    expect(repeated, 'Repeated clicks cannot increase the counter or change the price')
+      .toMatchObject({ count: state.count, next_price: state.next_price, duration: state.duration });
+    expect(repeated.remaining, 'Repeated clicks cannot extend the reveal').toBeLessThanOrEqual(state.remaining);
+    await progress(page, 0, 0);
+    if (index === 3) await screenshot(page, testInfo, 'memory-priced-eye-300-countdown', { verifyRendering: true });
+    ledger.push({ ordinal: index + 1, price, balance, peek: state, receipts });
+    await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(READY);
     await expect.poll(async () => (await memoryPeek(page)).studying).toBe(false);
   }
@@ -235,22 +234,19 @@ test('Memory eye charges 0, 100, 200, 300, 300 once per hold and resets only for
   await page.mouse.move(bounds.x + eye.x * bounds.scale, bounds.y + eye.y * bounds.scale);
   const beforeDenied = await screenshot(page, testInfo, 'memory-before-unaffordable-eye', { held: true });
   const beforePeek = await memoryPeek(page);
-  await page.mouse.down();
-  try {
-    await page.mouse.down();
-    await rendered(page);
-    await expect(page.locator('#selection-status'), 'A declined reveal preserves the already selected card').toHaveText(selection);
-    expect(await memoryPeek(page)).toMatchObject({ count: beforePeek.count, next_price: 300,
-      studying: false, round_id: opening.round_id });
-    expect(await memoryWallet(page), 'Insufficient coins cannot alter balance or receipts').toEqual(emptyWallet);
-    expect((await displayedCoins(page)).balance, 'The visible coin counter also stays at zero').toBe(0);
-    await expect(page.locator('#game-status')).toContainText('Not enough coins. This reveal costs 300 coins.');
-    const refused = await screenshot(page, testInfo, 'memory-unaffordable-eye-keeps-cards', { held: true, verifyRendering: true });
-    expect((await cardChanges(page, bounds, beforeDenied, refused)).every(value => value < 0.005),
-      'The declined hold never reveals another card face').toBe(true);
-  } finally {
-    await page.mouse.up();
-  }
+  const eyePosition = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
+  await page.mouse.click(eyePosition.x, eyePosition.y);
+  await page.mouse.click(eyePosition.x, eyePosition.y);
+  await rendered(page);
+  await expect(page.locator('#selection-status'), 'A declined reveal preserves the already selected card').toHaveText(selection);
+  expect(await memoryPeek(page)).toMatchObject({ count: beforePeek.count, next_price: 300,
+    studying: false, round_id: opening.round_id });
+  expect(await memoryWallet(page), 'Insufficient coins cannot alter balance or receipts').toEqual(emptyWallet);
+  expect((await displayedCoins(page)).balance, 'The visible coin counter also stays at zero').toBe(0);
+  await expect(page.locator('#game-status')).toContainText('Not enough coins. This reveal costs 300 coins.');
+  const refused = await screenshot(page, testInfo, 'memory-unaffordable-eye-keeps-cards', { held: true, verifyRendering: true });
+  expect((await cardChanges(page, bounds, beforeDenied, refused)).every(value => value < 0.005),
+    'The declined reveal never exposes another card face').toBe(true);
   await expect(page.locator('#selection-status')).toHaveText(selection);
   await cancelCard(page, 0);
   await progress(page, 0, 0);
@@ -272,7 +268,97 @@ test('Memory eye charges 0, 100, 200, 300, 300 once per hold and resets only for
   expect(errors).toEqual([]);
 });
 
-test('Memory discoveries survive automatic mistakes, held peek, worlds and More', async ({ page }, testInfo) => {
+for (const reducedMotion of ['no-preference', 'reduce']) {
+test(`Memory timed eye counts down 10s then 5s with animated text and progress (${reducedMotion})`, async ({ page }, testInfo) => {
+  test.setTimeout(120000);
+  const { errors, bounds } = await beginMemory(page, { reducedMotion, coinBalance: 100 });
+  const saved = await medalRecord(page), backs = await screenshot(page, testInfo, 'memory-countdown-before');
+  const eye = peekPoint(bounds);
+  const activate = async () => page.touchscreen.tap(bounds.x + eye.x * bounds.scale, bounds.y + eye.y * bounds.scale);
+  const captured = [];
+  const captureStage = async name => {
+    const state = await memoryPeek(page);
+    expect(state.studying, `${name} is captured before real timer expiry`).toBe(true);
+    // Keep the live countdown path light on phones. Canvas readback, image
+    // decoding and pixel comparisons happen only after both timers expire.
+    const png = await page.screenshot({ path: testInfo.outputPath(`memory-countdown-${name}.png`), scale: 'css' });
+    captured.push({ name, state, png });
+    return png;
+  };
+  await activate();
+  await expect(page.locator('#game-status')).toContainText(PEEK);
+  const first = await memoryPeek(page);
+  expect(first).toMatchObject({ count: 1, duration: 10, next_price: 100, studying: true });
+  expect(first.remaining).toBeGreaterThan(8);
+  const firstWallet = await memoryWallet(page);
+  expect(firstWallet.balance).toBe(100);
+  await page.waitForTimeout(300);
+  const fronts = await captureStage('first-start');
+  await activate();
+  await activate();
+  await page.keyboard.press('Tab');
+  await page.mouse.move(0, 0);
+  const repeated = await memoryPeek(page);
+  expect(repeated).toMatchObject({ count: 1, duration: 10, next_price: 100, studying: true });
+  expect(repeated.remaining, 'Repeated taps and focus changes never restart the timer').toBeLessThan(first.remaining);
+  expect(await memoryWallet(page), 'The active countdown cannot buy another reveal').toEqual(firstWallet);
+  await expect.poll(async () => (await memoryPeek(page)).remaining, { intervals: [100], timeout: 8000 }).toBeLessThanOrEqual(5.5);
+  await captureStage('first-middle');
+  await expect.poll(async () => (await memoryPeek(page)).remaining, { intervals: [100], timeout: 6000 }).toBeLessThanOrEqual(2.7);
+  await captureStage('first-final-seconds');
+  await expect.poll(async () => (await memoryPeek(page)).studying, { intervals: [100], timeout: 5000 }).toBe(false);
+  await expect(page.locator('#game-status')).toContainText(READY);
+  expect(await memoryPeek(page)).toMatchObject({ remaining: 0, progress: 0, seconds: 0, countdown: { visible: false } });
+  await page.waitForTimeout(300);
+  const hidden = await screenshot(page, testInfo, 'memory-countdown-first-expired', { verifyRendering: true });
+  await activate();
+  await expect(page.locator('#game-status')).toContainText(PEEK);
+  const second = await memoryPeek(page);
+  expect(second).toMatchObject({ count: 2, duration: 5, next_price: 200, studying: true });
+  expect(second.remaining).toBeGreaterThan(3.5);
+  const paid = await memoryWallet(page);
+  expect(paid.balance).toBe(0);
+  expect(Object.entries(paid.receipts).filter(([id]) => !Object.hasOwn(firstWallet.receipts, id)).map(([, amount]) => amount)).toEqual([-100]);
+  await captureStage('second-start');
+  await activate();
+  expect(await memoryWallet(page)).toEqual(paid);
+  expect((await memoryPeek(page)).remaining).toBeLessThan(second.remaining);
+  await expect.poll(async () => (await memoryPeek(page)).remaining, { intervals: [100], timeout: 5000 }).toBeLessThanOrEqual(2.7);
+  await captureStage('second-final-seconds');
+  await expect.poll(async () => (await memoryPeek(page)).studying, { intervals: [100], timeout: 5000 }).toBe(false);
+  await expect(page.locator('#game-status')).toContainText(READY);
+  expect((await memoryPeek(page)).count).toBe(2);
+  expect(await memoryWallet(page)).toEqual(paid);
+  expect(await medalRecord(page), 'Timed peeking does not award mastery or rewards').toBe(saved);
+  await progress(page, 0, 0);
+  expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005),
+    'A completed touch tap leaves all ten cards revealed').toBe(true);
+  expect((await cardChanges(page, bounds, backs, hidden)).every(value => value < 0.005),
+    'The timer hides every unmatched card without another input').toBe(true);
+  for (const { name, state, png } of captured) {
+    expect(state.countdown.visible, `${name}: the timed reveal displays its own countdown`).toBe(true);
+    expect(state.seconds).toBe(Math.ceil(state.remaining));
+    expect(state.progress).toBeCloseTo(state.remaining / state.duration, 3);
+    expect(state.countdown.seconds).toBe(state.seconds);
+    expect(state.countdown.progress).toBeCloseTo(state.progress, 3);
+    const [x, y, width, height] = state.countdown.rect;
+    expect([x, y, width, height].every(Number.isFinite)).toBe(true);
+    expect(width * bounds.scale, `${name}: the bar remains legible on phones`).toBeGreaterThan(45);
+    expect(height * bounds.scale, `${name}: the timer and effects have actual drawing space`).toBeGreaterThan(16);
+    expect(x).toBeGreaterThanOrEqual(0);
+    expect(y).toBeGreaterThanOrEqual(0);
+    expect(x + width).toBeLessThanOrEqual(bounds.width + 1);
+    expect(y + height).toBeLessThanOrEqual(bounds.height + 1);
+    expect(await visibleColorCount(page, png), `${name}: the captured page shows the rendered game`).toBeGreaterThan(20);
+  }
+  await testInfo.attach('memory-countdown-stages.json', {
+    body: JSON.stringify(captured.map(({ name, state }) => ({ name, state })), null, 2), contentType: 'application/json'
+  });
+  expect(errors).toEqual([]);
+});
+}
+
+test('Memory discoveries survive automatic mistakes, timed peek, worlds and More', async ({ page }, testInfo) => {
   const { errors } = await beginMemory(page);
   const saved = await medalRecord(page), board = await discoverBoard(page);
   const word = board.findIndex(card => card.kind === 'Word');
@@ -287,10 +373,10 @@ test('Memory discoveries survive automatic mistakes, held peek, worlds and More'
   await withMemoryPeek(page, async () => {
     await expect(page.locator('#selection-status')).toBeEmpty();
     await progress(page, 0, 4);
-    await screenshot(page, testInfo, 'memory-held-eye', { held: true });
+    await screenshot(page, testInfo, 'memory-timed-eye', { held: true });
   });
   await expect(page.locator('#game-status')).toContainText(READY);
-  expect(await discoverBoard(page), 'Holding the eye and four mistakes preserve every card identity and position.').toEqual(board);
+  expect(await discoverBoard(page), 'Opening the eye and four mistakes preserve every card identity and position.').toEqual(board);
   await reveal(page, wrong);
   const selected = await page.locator('#selection-status').textContent();
   await chooseTheme(page, 4);
@@ -324,7 +410,7 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
     await progress(page, 2, 2);
     await expect(page.locator('#selection-status')).toBeEmpty();
     await page.waitForTimeout(300);
-    const fronts = await screenshot(page, testInfo, 'memory-all-ten-held', { held: true });
+    const fronts = await screenshot(page, testInfo, 'memory-all-ten-revealed', { held: true });
     const changes = await cardChanges(page, bounds, matchedFaces, fronts);
     for (let index = 0; index < 10; index++) {
       if (matched.includes(index)) {
@@ -337,8 +423,8 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
   await expect(page.locator('#game-status')).toContainText(READY);
   await progress(page, 2, 2);
   await page.waitForTimeout(300);
-  const released = await screenshot(page, testInfo, 'memory-matched-faces-after-release');
-  expect(await cardChanges(page, bounds, matchedFaces, released), 'Releasing Peek hides only unmatched faces.').toEqual(Array(10).fill(0));
+  const released = await screenshot(page, testInfo, 'memory-matched-faces-after-peek');
+  expect(await cardChanges(page, bounds, matchedFaces, released), 'Ending Peek hides only unmatched faces.').toEqual(Array(10).fill(0));
   for (const index of matched) {
     await cardTap(page, index);
     await expect(page.locator('#selection-status')).toBeEmpty();
@@ -362,7 +448,7 @@ test(`Memory matched faces stay visible after feedback, Peek and More (${reduced
 });
 }
 
-test('Memory accepts the next card and held eye directly from automatic feedback', async ({ page }, testInfo) => {
+test('Memory accepts the next card and timed eye directly from automatic feedback', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page);
   const saved = await medalRecord(page), board = await discoverBoard(page);
   const pairs = board.filter(card => card.kind === 'Word').map(card => pairFor(board, card.word));
@@ -442,7 +528,7 @@ test('five Memory pairs earn one saved piece and Play again refreshes Memory', a
   expect(errors).toEqual([]);
 });
 
-test('Memory eye uses keyboard and Xbox down/up and cancels on B, disconnect and resize', async ({ page }, testInfo) => {
+test('Memory timed eye survives keyboard and Xbox release but cancels on B, disconnect and resize', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await installGamepad(page);
   const { errors } = await beginMemory(page, { coinBalance: 5000 });
@@ -450,41 +536,41 @@ test('Memory eye uses keyboard and Xbox down/up and cancels on B, disconnect and
   const focusEye = async () => {
     const eye = peekPoint(await memoryMetrics(page));
     await tap(page, eye.x, eye.y);
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(READY);
   };
   for (const key of ['Space', 'Enter']) {
     await focusEye();
+    const beforeKey = await memoryPeek(page), beforeWallet = await memoryWallet(page);
     await page.keyboard.down(key);
-    try {
-      await expect(page.locator('#game-status')).toContainText(PEEK);
-      await expect(page.locator('#selection-status')).toBeEmpty();
-    } finally { await page.keyboard.up(key); }
+    await rendered(page);
+    expect(await memoryPeek(page), 'A key press starts no countdown before its release')
+      .toMatchObject({ studying: false, count: beforeKey.count });
+    expect(await memoryWallet(page), 'Key-down alone does not charge').toEqual(beforeWallet);
+    await page.keyboard.up(key);
+    await expect(page.locator('#game-status'), 'A completed key activation opens the paid reveal').toContainText(PEEK);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#game-status'), 'Moving keyboard focus preserves the countdown').toContainText(PEEK);
+    await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(READY);
   }
   await page.evaluate(() => window.gamepadFixture.connect());
   await focusEye();
-  await page.evaluate(() => window.gamepadFixture.button(0, true));
-  await expect(page.locator('#game-status')).toContainText(PEEK);
-  await page.evaluate(() => window.gamepadFixture.button(0, false));
-  await expect(page.locator('#game-status')).toContainText(READY);
-  await page.evaluate(() => window.gamepadFixture.button(0, true));
-  await expect(page.locator('#game-status')).toContainText(PEEK);
+  await pressGamepad(page, 0);
+  await expect(page.locator('#game-status'), 'Xbox A release preserves the reveal').toContainText(PEEK);
   await pressGamepad(page, 1);
   await expect(page.locator('#game-status')).toContainText(READY);
-  await page.evaluate(async () => {
-    window.gamepadFixture.button(0, false);
-    await new Promise(resolve => setTimeout(resolve, 120));
-  });
-  await page.evaluate(() => window.gamepadFixture.button(0, true));
+  await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toContainText(PEEK);
   await page.evaluate(() => window.gamepadFixture.disconnect());
   await expect(page.locator('#game-status')).toContainText(READY);
   await focusEye();
-  await page.keyboard.down('Space');
+  await page.keyboard.press('Space');
   await expect(page.locator('#game-status')).toContainText(PEEK);
   await page.setViewportSize({ width: 640, height: 320 });
   await rendered(page);
-  await page.keyboard.up('Space');
   await expect(page.locator('#game-status')).toContainText(READY);
   expect(await reveal(page, 0)).toEqual(board[0]);
   await cancelCard(page, 0);
@@ -495,7 +581,7 @@ test('Memory eye uses keyboard and Xbox down/up and cancels on B, disconnect and
   expect(errors).toEqual([]);
 });
 
-test('Memory held peek is cancelled by More and page lifecycle without changing the board', async ({ page }, testInfo) => {
+test('Memory timed peek is cancelled by More and page lifecycle without changing the board', async ({ page }, testInfo) => {
   await installGamepad(page, { connected: true });
   const { errors, bounds } = await beginMemory(page, { coinBalance: 5000 });
   const saved = await medalRecord(page), backs = await screenshot(page, testInfo, 'memory-before-peek-cancel');
@@ -508,7 +594,6 @@ test('Memory held peek is cancelled by More and page lifecycle without changing 
   for (const event of ['visibilitychange', 'pagehide']) {
     const eye = peekPoint(await memoryMetrics(page));
     await tap(page, eye.x, eye.y);
-    await page.keyboard.down('Space');
     await expect(page.locator('#game-status')).toContainText(PEEK);
     await page.evaluate(event => {
       if (event === 'visibilitychange') {
@@ -516,7 +601,6 @@ test('Memory held peek is cancelled by More and page lifecycle without changing 
         document.dispatchEvent(new Event(event));
       } else window.dispatchEvent(new Event(event));
     }, event);
-    await page.keyboard.up('Space');
     await page.evaluate(event => {
       if (event === 'visibilitychange') {
         delete document.hidden;
@@ -531,58 +615,72 @@ test('Memory held peek is cancelled by More and page lifecycle without changing 
   expect(errors).toEqual([]);
 });
 
-test('Memory mouse release closes the eye while the pointer stays over it', async ({ page }, testInfo) => {
+test('Memory mouse release keeps the timed eye open until automatic expiry', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page, { coinBalance: 100 });
   const eye = peekPoint(bounds);
   const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
   await page.mouse.move(point.x, point.y);
   for (let index = 0; index < 2; index++) {
+    const before = await memoryWallet(page);
     await page.mouse.down();
-    await expect(page.locator('#game-status')).toContainText(PEEK);
-    if (index === 1) await page.evaluate(() => document.getElementById('canvas').addEventListener('mouseup',
-      event => event.stopImmediatePropagation(), { capture: true, once: true }));
+    await rendered(page);
+    expect(await memoryPeek(page), 'Mouse-down alone does not begin a reveal')
+      .toMatchObject({ count: index, studying: false });
+    expect(await memoryWallet(page), 'A pending click does not charge').toEqual(before);
     await page.mouse.up();
-    await expect(page.locator('#game-status'), 'Mouse-up closes the eye without moving the pointer or blurring it.').toContainText(READY);
+    await expect(page.locator('#game-status'), 'Completing the click starts the countdown').toContainText(PEEK);
+    await page.mouse.move(0, 0);
+    await expect(page.locator('#game-status'), 'Leaving the eye cannot consume the remaining reveal time').toContainText(PEEK);
+    await expect.poll(async () => (await memoryPeek(page)).studying, { timeout: 12000, intervals: [100] }).toBe(false);
+    await expect(page.locator('#game-status')).toContainText(READY);
+    await page.mouse.move(point.x, point.y);
   }
-  await screenshot(page, testInfo, 'memory-eye-mouse-released', { held: true });
+  await screenshot(page, testInfo, 'memory-eye-mouse-expired');
   expect(errors).toEqual([]);
 });
 
-test('Memory eye touch taps never leave the cards revealed', async ({ page }, testInfo) => {
+test('Memory eye touch taps preserve one countdown without extra charges', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page, { reducedMotion: 'no-preference', coinBalance: 300 });
-  const eye = peekPoint(bounds);
+  const eye = peekPoint(bounds), initialWallet = await memoryWallet(page);
   for (let index = 0; index < 3; index++) {
     await page.touchscreen.tap(bounds.x + eye.x * bounds.scale, bounds.y + eye.y * bounds.scale);
-    await expect(page.locator('#game-status')).toContainText(READY);
+    await expect(page.locator('#game-status')).toContainText(PEEK);
+    expect(await memoryPeek(page)).toMatchObject({ count: 1, duration: 10, next_price: 100 });
+    expect(await memoryWallet(page)).toEqual(initialWallet);
   }
-  await screenshot(page, testInfo, 'memory-eye-touch-released', { held: true });
+  await screenshot(page, testInfo, 'memory-eye-repeated-touch-countdown');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText(READY);
   expect(errors).toEqual([]);
 });
 
-test('Memory eye releases opaque signed and high-bit touch identifiers without another input', async ({ page }, testInfo) => {
+test('Memory eye preserves timed reveals after opaque signed and high-bit touch releases', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page, { coinBalance: 5000 });
   const saved = await medalRecord(page), eye = peekPoint(bounds);
   const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
   const backs = await screenshot(page, testInfo, 'memory-before-opaque-touch', { held: true });
   // These synthetic events cover each browser's Touch conversion and the real engine handler.
-  // Trusted browser release fallback is covered separately by the CDP hold test below.
+  // Trusted browser release delivery is covered separately by the CDP timer test below.
   let capturedFronts = false;
   for (const id of [-1, -2, -2147483648, 0x80000001, 0xffffffff, 0]) {
     const contact = { id, ...point };
     for (let repeat = 0; repeat < 2; repeat++) {
       const identifiers = await dispatchMemoryTouches(page, 'touchstart', [contact], [contact]);
       expect(identifiers.map(value => value | 0), 'The browser preserves the requested signed 32-bit touch identity.').toEqual([id | 0]);
-      await expect(page.locator('#game-status'), `Identifier ${id}, hold ${repeat + 1} opens the eye.`).toContainText(PEEK);
+      await rendered(page);
+      expect((await memoryPeek(page)).studying, `Identifier ${id} waits for a completed tap.`).toBe(false);
+      await dispatchMemoryTouches(page, 'touchend', [], [contact]);
+      await expect(page.locator('#game-status'), `Identifier ${id}, completed tap ${repeat + 1} opens the eye.`).toContainText(PEEK);
       if (!capturedFronts) {
-        const fronts = await screenshot(page, testInfo, 'memory-opaque-touch-held', { held: true });
+        const fronts = await screenshot(page, testInfo, 'memory-opaque-touch-revealed', { held: true });
         expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005)).toBe(true);
         capturedFronts = true;
       }
-      await dispatchMemoryTouches(page, 'touchend', [], [contact]);
-      await expect(page.locator('#game-status'), `Identifier ${id} closes at the same position without a tap, mouse move or blur.`)
-        .toContainText(READY);
+      await expect(page.locator('#game-status'), `Identifier ${id} keeps its timed reveal after release.`).toContainText(PEEK);
       await page.waitForTimeout(160);
-      await expect(page.locator('#game-status'), 'The released eye stays closed while no input is sent.').toContainText(READY);
+      await expect(page.locator('#game-status'), 'The released eye remains open without any held input.').toContainText(PEEK);
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#game-status')).toContainText(READY);
     }
   }
   const released = await screenshot(page, testInfo, 'memory-opaque-touch-released', { held: true });
@@ -592,66 +690,100 @@ test('Memory eye releases opaque signed and high-bit touch identifiers without a
   expect(errors).toEqual([]);
 });
 
-test('Memory signed touch ownership survives another finger and ends on cancel or leaving the eye', async ({ page }, testInfo) => {
+test('Memory timed eye survives additional touches and leaving the eye but cancels on interruption', async ({ page }, testInfo) => {
   const { errors, bounds } = await beginMemory(page, { coinBalance: 300 });
   const eye = peekPoint(bounds), card = memoryPoint(bounds, 0);
   const owner = { id: -1, x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
   const second = { ...owner, id: -2 };
   const outside = { ...owner, x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale };
   await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
+  await dispatchMemoryTouches(page, 'touchend', [], [owner]);
   await expect(page.locator('#game-status')).toContainText(PEEK);
+  const activeWallet = await memoryWallet(page);
+  await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
   await dispatchMemoryTouches(page, 'touchstart', [owner, second], [second]);
   await dispatchMemoryTouches(page, 'touchend', [owner], [second]);
-  await expect(page.locator('#game-status'), 'Lifting another signed touch cannot release the owning finger.').toContainText(PEEK);
+  await expect(page.locator('#game-status'), 'Lifting another signed touch cannot cancel the countdown.').toContainText(PEEK);
   await dispatchMemoryTouches(page, 'touchend', [], [owner]);
-  await expect(page.locator('#game-status'), 'The original signed owner still closes on release.').toContainText(READY);
+  await expect(page.locator('#game-status'), 'The original touch release preserves the reveal.').toContainText(PEEK);
+  expect((await memoryPeek(page)).count).toBe(1);
+  expect(await memoryWallet(page), 'Additional touches cannot buy a second active reveal').toEqual(activeWallet);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText(READY);
   for (const type of ['touchcancel', 'touchmove']) {
     await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
+    await dispatchMemoryTouches(page, 'touchend', [], [owner]);
     await expect(page.locator('#game-status')).toContainText(PEEK);
+    await dispatchMemoryTouches(page, 'touchstart', [owner], [owner]);
     await dispatchMemoryTouches(page, type, type === 'touchmove' ? [outside] : [], [type === 'touchmove' ? outside : owner]);
-    await expect(page.locator('#game-status'), `${type} closes the signed owning finger's eye.`).toContainText(READY);
+    if (type === 'touchmove') {
+      await expect(page.locator('#game-status'), 'Moving away from the eye preserves its timer.').toContainText(PEEK);
+      await dispatchMemoryTouches(page, 'touchend', [], [outside]);
+      await expect(page.locator('#game-status')).toContainText(PEEK);
+      await page.keyboard.press('Escape');
+    }
+    await expect(page.locator('#game-status'), 'Explicit cancellation restores ordinary play.').toContainText(READY);
     await page.waitForTimeout(160);
     await expect(page.locator('#game-status')).toContainText(READY);
-    if (type === 'touchmove') await dispatchMemoryTouches(page, 'touchend', [], [outside]);
   }
   await screenshot(page, testInfo, 'memory-signed-touch-cancelled', { held: true });
   await expect(page.locator('#selection-status')).toBeEmpty();
   expect(errors).toEqual([]);
 });
 
-test('Memory trusted touch holds the eye and release or cancellation restores all backs', async ({ page, browserName }, testInfo) => {
+test('Memory trusted touch release starts the timer and explicit cancellation restores all backs', async ({ page, browserName }, testInfo) => {
   test.setTimeout(180000);
-  test.skip(browserName !== 'chromium', 'Trusted touch hold/cancel uses Chromium CDP.');
+  test.skip(browserName !== 'chromium', 'Trusted touch activation/cancel uses Chromium CDP.');
   const { errors, bounds } = await beginMemory(page, { coinBalance: 300 });
   const saved = await medalRecord(page), eye = peekPoint(bounds);
   const point = { x: bounds.x + eye.x * bounds.scale, y: bounds.y + eye.y * bounds.scale };
   const backs = await screenshot(page, testInfo, 'memory-before-trusted-eye');
   const client = await page.context().newCDPSession(page);
   let held = false;
-  try {
+  const touchStart = async () => {
     await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
     held = true;
-    await expect(page.locator('#game-status')).toContainText(PEEK);
-    const fronts = await screenshot(page, testInfo, 'memory-trusted-eye-held', { held: true });
-    expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005)).toBe(true);
+  };
+  const touchEnd = async () => {
     await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     held = false;
-    await expect(page.locator('#game-status'), 'Lifting the owning finger closes the eye without another screen interaction.').toContainText(READY);
+  };
+  try {
+    const openingWallet = await memoryWallet(page);
+    await touchStart();
     await rendered(page);
-    const released = await screenshot(page, testInfo, 'memory-trusted-eye-released', { held: true });
+    expect(await memoryPeek(page), 'Touch-down alone does not begin a reveal').toMatchObject({ count: 0, studying: false });
+    expect(await memoryWallet(page)).toEqual(openingWallet);
+    await touchEnd();
+    await expect(page.locator('#game-status'), 'A completed trusted tap starts the countdown').toContainText(PEEK);
+    const fronts = await screenshot(page, testInfo, 'memory-trusted-eye-revealed');
+    expect((await cardChanges(page, bounds, backs, fronts)).every(value => value > 0.005)).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#game-status')).toContainText(READY);
+    await rendered(page);
+    const released = await screenshot(page, testInfo, 'memory-trusted-eye-escape');
     // Fractional mobile display scales can rerasterize a few text-edge pixels.
     expect((await cardChanges(page, bounds, backs, released)).every(value => value < 0.005)).toBe(true);
-    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
-    held = true;
-    await expect(page.locator('#game-status')).toContainText(PEEK);
+
+    const beforeLostRelease = await memoryWallet(page);
+    await touchStart();
     await page.evaluate(() => document.getElementById('canvas').addEventListener('touchend',
       event => event.stopImmediatePropagation(), { capture: true, once: true }));
-    await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    held = false;
-    await expect(page.locator('#game-status'), 'The page-level release still closes the eye when canvas delivery is interrupted.').toContainText(READY);
-    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
-    held = true;
+    await touchEnd();
+    await rendered(page);
+    expect(await memoryPeek(page), 'A tap whose release never reaches the canvas does not activate')
+      .toMatchObject({ count: 1, studying: false });
+    expect(await memoryWallet(page), 'An incomplete paid tap leaves the wallet unchanged').toEqual(beforeLostRelease);
+    // Explicitly cancel the pending finger before a new, complete tap.
+    await page.locator('#canvas').dispatchEvent('pointercancel');
+    await touchStart();
+    await touchEnd();
     await expect(page.locator('#game-status')).toContainText(PEEK);
+    expect(await memoryPeek(page)).toMatchObject({ count: 2, duration: 5 });
+    const activeWallet = await memoryWallet(page);
+    expect(activeWallet.balance).toBe(200);
+
+    await touchStart();
     const card = memoryPoint(bounds, 0);
     await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point },
       { id: 2, x: bounds.x + card.x * bounds.scale, y: bounds.y + card.y * bounds.scale }] });
@@ -660,7 +792,9 @@ test('Memory trusted touch holds the eye and release or cancellation restores al
     await expect(page.locator('#selection-status')).toBeEmpty();
     // CDP touchEnd lifts every point; update the active set to lift only finger 2.
     await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, ...point }] });
-    await expect(page.locator('#game-status'), 'Lifting the second finger cannot release the first finger\'s eye.').toContainText(PEEK);
+    await expect(page.locator('#game-status'), 'Lifting the second finger cannot cancel the countdown').toContainText(PEEK);
+    expect(await memoryWallet(page), 'Additional touches cannot charge an active countdown').toEqual(activeWallet);
+    expect((await memoryPeek(page)).count).toBe(2);
     await client.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
     held = false;
     await expect(page.locator('#game-status')).toContainText(READY);
@@ -711,7 +845,7 @@ test('Memory flips face content while its card hitboxes stay fixed', async ({ pa
     const result = window.memoryFlipFrames = { before: visibleWidth().width, widths: [], done: false };
     const until = performance.now() + 900;
     const sample = now => {
-      if (document.getElementById('game-status').textContent.includes('Release to hide.')) {
+      if (document.getElementById('game-status').textContent.match(/Cards hide in \d+ seconds\./)) {
         context.drawImage(source, (crop.x - sourceRect.x) * source.width / sourceRect.width,
           (crop.y - sourceRect.y) * source.height / sourceRect.height,
           crop.width * source.width / sourceRect.width, crop.height * source.height / sourceRect.height,
@@ -734,7 +868,7 @@ test('Memory flips face content while its card hitboxes stay fixed', async ({ pa
     expect(narrowest, 'The colored back visibly compresses before changing faces.').toBeLessThan(before * 0.8);
     expect(widths.at(-1), 'The revealed artwork expands again after the narrowest frame.').toBeGreaterThan(narrowest);
     expect((await page.screenshot({ clip: edge, scale: 'css' })).equals(fixedEdge), 'Only CardFace transforms; the button edge does not move.').toBe(true);
-    await screenshot(page, testInfo, 'memory-flipped-faces-held', { held: true, verifyRendering: true });
+    await screenshot(page, testInfo, 'memory-flipped-faces-revealed', { held: true, verifyRendering: true });
   });
   await expect(page.locator('#game-status')).toContainText(READY);
   await page.waitForTimeout(65);

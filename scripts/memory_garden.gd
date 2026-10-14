@@ -6,6 +6,7 @@ signal progress_changed(successes: int, attempts: int)
 signal round_finished(won: bool, found_words: Array)
 signal prompt_ready
 signal peek_feedback(success: bool, price: int)
+signal peek_clock_changed(remaining: float, duration: float)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Memory = preload("res://scripts/memory_game_model.gd")
@@ -148,15 +149,38 @@ var _board: Control
 var _feedback_timer: Timer
 var _peek_touch: int = -1
 var _peek_touch_active: bool = false
-var _mouse_peek: bool = false
-var _peek_attempted: bool = false
 var _peek_purchasing: bool = false
 var _peek_generation: int = 0
-var _peek_hold_serial: int = 0
+var _peek_origin_frame: int = -1
 
 
 func _ready() -> void:
 	_build()
+
+
+func _process(delta: float) -> void:
+	# Input can start a reveal earlier in this frame. Its delta includes time
+	# before the click, so the countdown starts with the following frame.
+	if Engine.get_process_frames() == _peek_origin_frame:
+		return
+	_advance_peek(delta)
+
+
+func _advance_peek(delta: float) -> void:
+	if not memory.studying:
+		return
+	if _paused or not is_visible_in_tree() or not is_instance_valid(study_button):
+		end_peek()
+		return
+	var previous_second: int = ceili(memory.peek_remaining)
+	if memory.advance_peek(delta):
+		_refresh()
+		prompt_ready.emit()
+	else:
+		peek_clock_changed.emit(memory.peek_remaining, memory.peek_duration)
+		if ceili(memory.peek_remaining) != previous_second:
+			_update_peek_status()
+			prompt_ready.emit()
 
 
 func _build() -> void:
@@ -175,12 +199,9 @@ func _build() -> void:
 	study_button = PeekButton.new()
 	study_button.name = "StudyGarden"
 	study_button.symbol = IconButton.Symbol.EYE
-	_name_control(study_button, "Hold to reveal all cards. Release to hide unmatched cards.")
-	study_button.button_down.connect(begin_peek)
-	study_button.button_up.connect(end_peek)
-	study_button.gui_input.connect(_study_input)
-	study_button.focus_exited.connect(end_peek)
-	study_button.mouse_exited.connect(_study_mouse_exited)
+	_name_control(study_button, "Reveal all cards for 10 seconds the first time, then 5 seconds each time.")
+	study_button.pressed.connect(begin_peek)
+	study_button.focus_exited.connect(_clear_peek_input)
 	study_button.tree_entered.connect(_layout)
 	add_child(study_button)
 	_feedback_timer = Timer.new()
@@ -198,14 +219,11 @@ func _build() -> void:
 func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> void:
 	_build()
 	_peek_generation += 1
-	_peek_hold_serial += 1
-	_peek_attempted = false
+	_peek_origin_frame = -1
+	_clear_peek_input()
 	study_button.reset_feedback()
 	memory.stop()
 	_feedback_timer.stop()
-	_peek_touch = -1
-	_peek_touch_active = false
-	_mouse_peek = false
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
 		button.pressed.disconnect(_choose.bind(index))
@@ -251,16 +269,13 @@ func pause(value: bool) -> void:
 
 func stop() -> void:
 	_peek_generation += 1
-	_peek_hold_serial += 1
-	_peek_attempted = false
+	_peek_origin_frame = -1
+	_clear_peek_input()
 	if is_instance_valid(study_button):
 		study_button.reset_feedback()
 	memory.stop()
 	if _feedback_timer != null:
 		_feedback_timer.stop()
-	_peek_touch = -1
-	_peek_touch_active = false
-	_mouse_peek = false
 	_paused = false
 	for button in card_buttons:
 		button.clear_feedback()
@@ -345,13 +360,9 @@ func _choose(index: int) -> void:
 
 
 func begin_peek() -> void:
-	if _peek_attempted or _peek_purchasing or memory.studying or not _can_begin_peek():
+	if _peek_purchasing or memory.studying or not _can_begin_peek():
 		return
-	# The latch belongs to the physical hold, including a declined purchase.
-	# Native button-down, touch and controller callbacks may share that hold.
-	_peek_attempted = true
 	var generation: int = _peek_generation
-	var hold_serial: int = _peek_hold_serial
 	var round_model = memory
 	var price: int = memory.peek_price()
 	var accepted: bool = price == 0
@@ -359,10 +370,10 @@ func begin_peek() -> void:
 		_peek_purchasing = true
 		var response: Variant = purchase_peek.call(memory.peeks + 1, price)
 		_peek_purchasing = false
-		if not _same_peek_hold(generation, hold_serial, round_model):
+		if not _same_peek_request(generation, round_model):
 			return
 		accepted = response is Dictionary and bool(response.get("ok", false))
-	if not _same_peek_hold(generation, hold_serial, round_model):
+	if not _same_peek_request(generation, round_model):
 		return
 	if not accepted:
 		_refresh()
@@ -376,13 +387,16 @@ func begin_peek() -> void:
 		memory.continue_feedback()
 	if not memory.set_study(true):
 		return
+	_peek_origin_frame = Engine.get_process_frames()
 	study_button.grab_focus()
-	if not _same_peek_hold(generation, hold_serial, round_model):
+	if not _same_peek_request(generation, round_model):
 		return
 	_refresh()
+	if not _same_peek_request(generation, round_model):
+		return
 	study_button.feedback(true)
 	peek_feedback.emit(true, price)
-	if _same_peek_hold(generation, hold_serial, round_model):
+	if _same_peek_request(generation, round_model):
 		prompt_ready.emit()
 
 
@@ -393,63 +407,28 @@ func _can_begin_peek() -> bool:
 			or (memory.phase == "feedback" and memory.matched_word_ids.size() < 5))
 
 
-func _same_peek_hold(generation: int, hold_serial: int, round_model) -> bool:
-	return generation == _peek_generation and hold_serial == _peek_hold_serial \
-		and round_model == memory and _peek_attempted and _can_begin_peek()
+func _same_peek_request(generation: int, round_model) -> bool:
+	return generation == _peek_generation and round_model == memory and _can_begin_peek()
 
 
 func end_peek() -> void:
-	_peek_hold_serial += 1
-	_peek_attempted = false
-	_peek_touch = -1
-	_peek_touch_active = false
-	_mouse_peek = false
+	_peek_generation += 1
+	_peek_origin_frame = -1
+	_clear_peek_input()
 	if memory.set_study(false):
-		if is_instance_valid(study_button):
-			study_button.set_pressed_no_signal(false)
 		_refresh()
 		prompt_ready.emit()
 
 
-func release_peek_pointer(touch_index: int, is_touch: bool = true) -> void:
-	# The browser also observes releases before canvas handlers can consume them.
-	# Touch identifiers are opaque signed integers, including -1; source and
-	# ownership must stay separate from their numeric value.
-	if (is_touch and _peek_touch_active and touch_index == _peek_touch) or (not is_touch and _mouse_peek):
-		end_peek()
-		if is_instance_valid(study_button) and study_button.button_pressed and study_button.has_focus():
-			# Focus exit also clears BaseButton's native press and captured touch.
-			study_button.release_focus()
-			study_button.grab_focus()
+func _clear_peek_input() -> void:
+	_peek_touch = -1
+	_peek_touch_active = false
+	if is_instance_valid(study_button):
+		study_button.set_pressed_no_signal(false)
 
 
 func _can_play() -> bool:
 	return not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
-
-
-func _study_input(event: InputEvent) -> void:
-	if not is_instance_valid(study_button):
-		return
-	if event is InputEventKey and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
-		study_button.accept_event()
-		if not event.pressed:
-			end_peek()
-		elif not event.echo:
-			begin_peek()
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_mouse_peek = event.pressed and not event.canceled
-	elif event is InputEventScreenTouch:
-		# Keep ownership when the native button receives the press through GUI input.
-		if event.pressed and not event.canceled and not _peek_touch_active:
-			_peek_touch = event.index
-			_peek_touch_active = true
-		elif not event.pressed or event.canceled:
-			release_peek_pointer(event.index)
-
-
-func _study_mouse_exited() -> void:
-	if _mouse_peek:
-		end_peek()
 
 
 func _input(event: InputEvent) -> void:
@@ -458,30 +437,38 @@ func _input(event: InputEvent) -> void:
 	if not is_instance_valid(study_button):
 		end_peek()
 		return
-	if event is InputEventKey and not event.pressed and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER] and (memory.studying or _peek_attempted):
-		end_peek()
-		get_viewport().set_input_as_handled()
-		return
 	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		# A completed tap starts the clock. Touch ownership never owns its lifetime.
+		# Identifiers may be negative, so the active flag stays separate from the ID.
 		var inside: bool = study_button.get_global_rect().has_point(event.position)
 		if _peek_touch_active:
 			get_viewport().set_input_as_handled()
 			if event.index == _peek_touch and (not inside or (event is InputEventScreenTouch and (event.canceled or not event.pressed))):
-				end_peek()
+				var activate: bool = inside and event is InputEventScreenTouch and not event.pressed and not event.canceled
+				_clear_peek_input()
+				if activate:
+					begin_peek()
 		elif inside and not study_button.disabled and event is InputEventScreenTouch and event.pressed and not event.canceled:
 			get_viewport().set_input_as_handled()
 			_peek_touch = event.index
 			_peek_touch_active = true
-			begin_peek()
+			study_button.grab_focus()
+			study_button.set_pressed_no_signal(true)
 		return
 	if event is InputEventMouseButton or event is InputEventMouseMotion:
 		if event.device == InputEvent.DEVICE_ID_EMULATION and (_peek_touch_active or study_button.get_global_rect().has_point(event.position)):
 			get_viewport().set_input_as_handled()
 			return
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and (not event.pressed or event.canceled) and _mouse_peek:
-			end_peek()
-		elif event is InputEventMouseMotion and _mouse_peek and (not study_button.get_global_rect().has_point(event.position) or (event.button_mask & MOUSE_BUTTON_MASK_LEFT) == 0):
-			end_peek()
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
+			and not event.pressed and study_button.button_pressed and not _peek_touch_active \
+			and (event.canceled or not study_button.get_global_rect().has_point(event.position)):
+			# A canceled release can reach the GUI without a preceding mouse-exit.
+			# Clear BaseButton's captured press without touching an active clock.
+			study_button.set_pressed_no_signal(false)
+			if study_button.has_focus():
+				study_button.release_focus()
+				study_button.grab_focus()
+			get_viewport().set_input_as_handled()
 
 
 func _notification(what: int) -> void:
@@ -522,7 +509,7 @@ func _refresh() -> void:
 	elif memory.phase == "won":
 		status_label.text = "Garden complete!"
 	elif memory.studying:
-		status_label.text = "Release to hide."
+		_update_peek_status()
 	elif not memory.selected_indices.is_empty():
 		var first: Dictionary = memory.cards[memory.selected_indices[0]]
 		status_label.text = ("Word: " if first.kind == "word" else "Picture: ") + first.word.text
@@ -550,6 +537,14 @@ func _refresh() -> void:
 			label += ". Planted."
 		_name_control(button, label)
 	_layout()
+	peek_clock_changed.emit(memory.peek_remaining, memory.peek_duration)
+
+
+func _update_peek_status() -> void:
+	status_label.text = "Cards hide in %d seconds." % ceili(memory.peek_remaining)
+	_name_control(status_label, status_label.text)
+	if is_instance_valid(study_button):
+		_name_control(study_button, "Reveal active. " + status_label.text)
 
 
 func _layout() -> void:

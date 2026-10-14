@@ -362,11 +362,11 @@ func _check_memory_and_collection(app) -> void:
 	await _enter(app, "memory")
 	check(app._memory.memory.selected_indices == selected, "Reentering Memory restores its selected card")
 	app._memory.begin_peek()
-	check(app._memory.memory.studying, "The Memory peek fixture is visibly held")
+	check(app._memory.memory.studying, "The Memory peek fixture is visibly active")
 	var attempts: int = app._memory.memory.attempts
 	await _return_home(app)
 	check(not app._memory.memory.studying and app._memory.memory.selected_indices.is_empty()
-		and app._memory.memory.attempts == attempts, "Returning Home releases a held peek without scoring")
+		and app._memory.memory.attempts == attempts, "Returning Home cancels a timed peek without scoring")
 	var frozen := _game_snapshot(app)
 	app._mode_panel.collection_requested.emit()
 	await settle()

@@ -29,6 +29,7 @@ func _run() -> void:
 	_test_matched_visibility(model)
 	_test_study_and_stop(model)
 	_test_peek_prices(model)
+	_test_peek_countdown(model)
 	_test_rejected_resets(model)
 	_test_runtime_library(model)
 	print("Memory model: %d assertions, %d failures" % [checks, failures])
@@ -55,7 +56,8 @@ func _snapshot(model) -> Dictionary:
 	return {"cards": model.cards.duplicate(true), "selected": model.selected_indices.duplicate(),
 		"matched": model.matched_word_ids.duplicate(), "feedback": model.feedback_words.duplicate(true),
 		"attempts": model.attempts, "mistakes": model.mistakes, "last_correct": model.last_correct,
-		"phase": model.phase, "studying": model.studying, "peeks": model.peeks}
+		"phase": model.phase, "studying": model.studying, "peeks": model.peeks,
+		"peek_remaining": model.peek_remaining, "peek_duration": model.peek_duration}
 
 
 func _pair(model, id: String) -> void:
@@ -189,20 +191,20 @@ func _test_study_and_stop(model) -> void:
 	check(model.set_study(true) and model.studying and model.phase == "waiting"
 		and model.selected_indices.is_empty(), "Beginning a peek cancels an unfinished first selection")
 	for index in range(10):
-		check(model.is_revealed(index), "Holding a peek exposes every front, including planted pairs")
+		check(model.is_revealed(index), "An active peek exposes every front, including planted pairs")
 	var studying: Dictionary = _snapshot(model)
 	check(not model.set_study(true) and model.select(0) == "ignored"
 		and model.continue_feedback() == "ignored" and _snapshot(model) == studying,
-		"Holding a peek rejects scoring input and repeated activation")
+		"An active peek rejects scoring input and repeated activation")
 	check(model.set_study(false) and not model.studying and model.attempts == 1
 		and model.mistakes == 0 and model.matched_word_ids == ["cat"] and model.cards == board,
-		"Releasing a peek retains progress and positions without scoring")
+		"Ending a peek retains progress and positions without scoring")
 	for index in range(10):
 		check(model.is_revealed(index) == (model.cards[index].word.id == "cat"),
-			"Releasing a peek keeps planted faces visible and hides every unmatched card")
-	check(not model.set_study(false), "Repeated peek release is a no-op")
+			"Ending a peek keeps planted faces visible and hides every unmatched card")
+	check(not model.set_study(false), "Repeated peek cancellation is a no-op")
 	check(model.matched_word_ids == ["cat"] and model.attempts == 1,
-		"Repeated releases preserve the matched pair and attempt count")
+		"Repeated cancellations preserve the matched pair and attempt count")
 	_pair(model, "dog")
 	model.stop()
 	check(model.phase == "stopped" and not model.studying and model.selected_indices.is_empty()
@@ -228,9 +230,9 @@ func _test_peek_prices(model) -> void:
 		check(model.set_study(true) and model.peeks == before + 1,
 			"Only a newly accepted reveal increments the per-round peek count")
 		check(not model.set_study(true) and model.peeks == before + 1,
-			"Repeated hold activation cannot advance the next reveal price")
+			"Repeated countdown activation cannot advance the next reveal price")
 		check(model.set_study(false) and not model.set_study(false) and model.peeks == before + 1,
-			"Releasing or cancelling a held peek retains the price of the next use")
+			"Expiry or cancellation of a timed peek retains the price of the next use")
 	var used: int = model.peeks
 	_pair(model, "cat")
 	check(not model.set_study(true) and model.peeks == used and model.peek_price() == 300,
@@ -239,6 +241,53 @@ func _test_peek_prices(model) -> void:
 	check(not model.set_study(true) and model.peeks == used, "Stopped rounds cannot consume paid reveal uses")
 	check(model.reset(_words(), 84) and model.peeks == 0 and model.peek_price() == 0,
 		"Starting a new game resets the reveal price to free")
+
+
+func _test_peek_countdown(model) -> void:
+	model.reset(_words(), 94)
+	check(not model.advance_peek(20.0) and model.peek_remaining == 0.0 and model.peek_duration == 0.0,
+		"An idle countdown cannot reveal cards or consume a use")
+	_pair(model, "cat")
+	model.continue_feedback()
+	var progress: Array = [model.cards.duplicate(true), model.matched_word_ids.duplicate(), model.attempts, model.mistakes]
+	check(model.set_study(true) and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
+		"The first accepted reveal starts a full ten-second countdown")
+	check(not model.advance_peek(3.0) and model.peek_remaining == 7.0 and model.studying,
+		"Elapsed time reduces the active countdown while cards remain revealed")
+	check(not model.set_study(true) and model.peek_remaining == 7.0 and model.peeks == 1,
+		"Clicking an active reveal never refreshes its clock or consumes another use")
+	for invalid_delta: float in [0.0, -1.0, NAN, INF]:
+		check(not model.advance_peek(invalid_delta) and model.peek_remaining == 7.0 and model.studying,
+			"Invalid elapsed time cannot extend, poison, or expire the reveal")
+	check(not model.advance_peek(6.99) and model.studying and model.peek_remaining > 0.0,
+		"The first reveal remains available until its actual deadline")
+	check(model.advance_peek(0.02) and not model.studying and model.peek_remaining == 0.0,
+		"Crossing the deadline automatically conceals unmatched cards")
+	check(not model.advance_peek(1.0) and model.peeks == 1,
+		"Expiry reports once and further elapsed time cannot consume another use")
+	for index in range(model.cards.size()):
+		check(model.is_revealed(index) == (model.cards[index].word.id == "cat"),
+			"Expiry preserves earned pair faces and hides only unmatched answers")
+	check([model.cards, model.matched_word_ids, model.attempts, model.mistakes] == progress,
+		"A timed reveal never changes board positions or earned progress")
+	for attempt in range(3):
+		check(model.set_study(true) and model.peek_duration == 5.0 and model.peek_remaining == 5.0,
+			"Every later accepted reveal starts five seconds, including uses after expiry")
+		check(model.advance_peek(5.0) and not model.studying and model.peek_remaining == 0.0,
+			"Exactly five elapsed seconds closes a later reveal")
+	model.set_study(true)
+	model.advance_peek(1.0)
+	check(model.set_study(false) and model.peek_remaining == 0.0 and model.peek_duration == 0.0,
+		"Explicit cancellation clears the active timer immediately")
+	model.set_study(true)
+	model.stop()
+	check(model.peek_remaining == 0.0 and model.peek_duration == 0.0 and not model.advance_peek(60.0),
+		"Stopping discards the old countdown and rejects delayed expiry")
+	model.reset(_words(), 95)
+	check(model.peeks == 0 and model.peek_remaining == 0.0 and model.set_study(true)
+		and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
+		"A new round restores the first free ten-second reveal")
+	model.set_study(false)
 
 
 func _test_rejected_resets(model) -> void:

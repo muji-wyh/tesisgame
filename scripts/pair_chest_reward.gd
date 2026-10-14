@@ -49,6 +49,7 @@ var _overlay := CanvasLayer.new()
 var _glow := Node2D.new()
 var _pose: Dictionary = {}
 var _art_rect := Rect2()
+var _status_suppressed: bool = false
 
 
 func _init() -> void:
@@ -154,6 +155,14 @@ func set_paused(value: bool) -> void:
 	_sample()
 	if resuming:
 		_warm_chest()
+
+
+func set_status_suppressed(value: bool) -> void:
+	# A timed Memory reveal shares this row, while the earned chest keeps its
+	# original resting position and uninterrupted showcase flight.
+	_status_suppressed = value
+	_title.visible = not value
+	_surface_layer.visible = not value
 
 
 func set_reduced_motion(value: bool) -> void:

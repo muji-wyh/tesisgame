@@ -33,7 +33,7 @@ func _run() -> void:
 		return
 	var view = script.new()
 	view.purchase_peek = func(_ordinal: int, _price: int) -> Dictionary: return {"ok": true, "duplicate": false}
-	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Memory exposes held reveal and release, not a Study toggle")
+	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Memory exposes timed reveal and explicit cancellation")
 	check(not view.get_property_list().any(func(property: Dictionary) -> bool: return property.name == "feedback_view"),
 		"Memory no longer owns a lesson feedback footer")
 	if not view.has_method("begin_peek") or not view.has_method("end_peek"):
@@ -62,9 +62,10 @@ func _run() -> void:
 	check(view.study_button.text.is_empty() and view.study_button.symbol == view.study_button.Symbol.EYE,
 		"The sole reveal control is a drawn eye without toggle text")
 	check(view.study_button.tooltip_text.is_empty()
-		and view.study_button.accessibility_name.contains("Hold to reveal all cards")
-		and view.study_button.accessibility_name.contains("Release to hide unmatched cards"),
-		"The eye retains accessible hold instructions without a hover popup")
+		and view.study_button.accessibility_name.to_lower().contains("reveal")
+		and view.study_button.accessibility_name.contains("10")
+		and not view.study_button.accessibility_name.contains("Hold"),
+		"The eye explains its timed reveal accessibly without a hover popup")
 	check(view.find_child("MemoryFeedback", true, false) == null and view.find_child("MemoryReviewHint", true, false) == null,
 		"No correction footer or reserved hint area exists")
 	check(view.find_child("FlowerProgress", true, false) == null and view.find_child("FlowerCount", true, false) == null,
@@ -90,25 +91,25 @@ func _run() -> void:
 	check(view.memory.selected_indices.is_empty() and view.memory.attempts == 0 and revealed.size() == 2,
 		"Repeated selection cancels without scoring or a false reveal")
 	view.card_buttons[first].pressed.emit()
-	view.study_button.button_down.emit()
-	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Holding the eye clears an unfinished selection")
-	check(view.study_button.engaged and view.controls() == [view.study_button], "The held eye is open and remains the only playable control")
-	check(not view.status_label.visible and view.status_label.text == "Release to hide.", "Held status remains available but never adds visible instructions")
+	view.study_button.pressed.emit()
+	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Clicking the eye clears an unfinished selection")
+	check(view.study_button.engaged and view.controls() == [view.study_button], "The active eye is open and remains the only playable control")
+	check(not view.status_label.visible and view.status_label.text.contains("10"), "Countdown status stays available to the host without a redundant board instruction")
 	for index in range(10):
 		check(view.memory.is_revealed(index) and (view.card_buttons[index].picture.visible or view.card_buttons[index].word_label.visible),
-			"Every held card exposes its original front")
+			"Every revealed card exposes its original front")
 		view.card_buttons[index].pressed.emit()
-	check(view.memory.attempts == 0 and answers.is_empty(), "Held card presses cannot submit an answer")
+	check(view.memory.attempts == 0 and answers.is_empty(), "Card presses during the countdown cannot submit an answer")
 	view.set_palette(Data.theme("ocean"))
 	view.pause(true)
 	check(not view.memory.studying and not view.study_button.engaged and view.controls().is_empty(), "Pausing releases the eye and blocks all controls")
-	view.study_button.button_down.emit()
-	check(not view.memory.studying, "A paused hold is ignored")
+	view.study_button.pressed.emit()
+	check(not view.memory.studying, "A paused reveal is ignored")
 	view.pause(false)
 	view.study_button.button_up.emit()
 	check(not view.memory.studying and view.memory.selected_indices.is_empty(), "A stale release after resuming is harmless")
 	check(_positions(view) == positions and view.card_buttons == nodes and view.memory.cards == order,
-		"Selection, hold, pause and palette changes preserve every card target and identity")
+		"Selection, timed reveal, pause and palette changes preserve every card target and identity")
 	_check_resting_faces(view)
 	view.card_buttons[first].pressed.emit()
 	view.card_buttons[wrong].pressed.emit()
@@ -172,10 +173,10 @@ func _run() -> void:
 		card.pressed.emit()
 	check(view.memory.attempts == 5 and view.controls().size() == 9, "Planted cards cannot score again")
 	view.begin_peek()
-	check(view.memory.is_revealed(first) and view.memory.is_revealed(partner), "A new hold also reveals planted fronts")
+	check(view.memory.is_revealed(first) and view.memory.is_revealed(partner), "A new reveal also reveals planted fronts")
 	view.end_peek()
 	check(view.memory.is_revealed(first) and view.memory.is_revealed(partner) and view.memory.matched_word_ids == [words[0].id],
-		"Releasing a peek keeps both planted faces visible with their progress")
+		"Ending a peek keeps both planted faces visible with their progress")
 	_check_resting_faces(view)
 	for dimensions in [Vector2(456, 200), Vector2(456, 600), Vector2(288, 600), Vector2(960, 320), Vector2(456, 456), Vector2(400, 400)]:
 		view.size = dimensions
@@ -196,12 +197,12 @@ func _run() -> void:
 	view._choose(-1)
 	for card in view.card_buttons:
 		card.pressed.emit()
-	check(not view.memory.studying and view.memory.attempts == 9 and progress.back() == [5, 9], "Final hold and card shortcuts cannot alter score or delay completion")
+	check(not view.memory.studying and view.memory.attempts == 9 and progress.back() == [5, 9], "Final eye and card shortcuts cannot alter score or delay completion")
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "won" and endings.size() == 1 and endings[0][0] and endings[0][1].size() == 5,
 		"The fifth pair automatically wins exactly once with all five words")
 	view.continue_feedback()
-	view.study_button.button_down.emit()
+	view.study_button.pressed.emit()
 	view.study_button.button_up.emit()
 	check(endings.size() == 1 and view.controls().is_empty(), "Delayed input cannot win twice")
 	_check_resting_faces(view)
@@ -282,12 +283,13 @@ func _check_feedback_shortcuts(view, words: Array) -> void:
 			else: view.show()
 		if action.ends_with("peek"):
 			await _mouse(view.study_button, true)
-			check(view.memory.studying and view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(), action + ": the first press immediately begins a peek")
-			check(root.gui_get_focus_owner() == view.study_button and view.controls() == [view.study_button], action + ": held focus stays on the eye")
+			await _mouse(view.study_button, false)
+			check(view.memory.studying and view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(), action + ": the completed click begins a timed peek")
+			check(root.gui_get_focus_owner() == view.study_button and view.controls() == [view.study_button], action + ": revealing focus stays on the eye")
 			view.card_buttons[target].pressed.emit()
 			check(revealed.size() == reveal_count, action + ": a peek never falsely pronounces a selected card")
-			await _mouse(view.study_button, false)
-			check(not view.memory.studying and view.memory.phase == "waiting", action + ": releasing returns directly to play")
+			view._advance_peek(view.memory.peek_remaining)
+			check(not view.memory.studying and view.memory.phase == "waiting", action + ": countdown expiry returns directly to play")
 		else:
 			await _mouse(view.card_buttons[target], true)
 			await _mouse(view.card_buttons[target], false)
@@ -339,7 +341,7 @@ func _check_matched_fronts(view, words: Array) -> void:
 	_check_resting_faces(view)
 	check(view.memory.phase == "waiting" and view.memory.matched_word_ids == [words[0].id]
 		and view.memory.attempts == 2 and view.memory.mistakes == 1 and view.memory.selected_indices.is_empty(),
-		"Peek release and pause recovery preserve only the earned pair and its score")
+		"Peek cancellation and pause recovery preserve only the earned pair and its score")
 	check(view.memory.cards == order and _positions(view) == positions, "Persistent matched fronts preserve every remembered position")
 	view.set_reduced_motion(true)
 

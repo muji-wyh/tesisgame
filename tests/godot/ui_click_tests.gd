@@ -191,8 +191,8 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	check(app.model.hints_used == 1 and app.audio.click_count == count, "Match cards, deselection and paid hints keep their gameplay sounds only")
 	PlayerFixture.enter_mode(app, "memory")
 	app._memory.card_buttons[0].pressed.emit()
-	app._memory.study_button.button_down.emit()
-	app._memory.study_button.button_up.emit()
+	app._memory.study_button.pressed.emit()
+	app._memory.end_peek()
 	check(app.audio.click_count == count, "Memory cards and peeking have no menu click")
 	app.new_round(42, true, "", "match")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.

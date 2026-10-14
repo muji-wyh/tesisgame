@@ -49,7 +49,7 @@ The six default scenarios receive equal weight:
 | Scenario | Presentation and scheduled input |
 | --- | --- |
 | Match (`match`) | Ten cards from the seeded Lv3 curriculum, Spring theme; two successful word-picture pairs at 8% and 50% of the measured interval. |
-| Memory (`memory`) | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief held study peek. |
+| Memory (`memory`) | Ten cards from the same seeded lesson; two successful pairs with a 15-frame gap between reveals; a brief timed study peek canceled by the harness. |
 | Voice Pop (`voice-pop`) | Actual listening/running state, wall-clock target movement, transcript feedback, and three scheduled hits on the first live target. |
 | Growth notebook (`growth`) | The 80-word Lv3 cohort; browse age 4, return to age 3, then hear its first card. Browsing and listening must leave learning progress unchanged. |
 | Age catalogue (`catalog`) | The 284-word age-7 preview cohort in one continuous scroll; focus and pronounce the first, middle, and last card. All card identities persist while only visible and nearby pictures retain image textures. |

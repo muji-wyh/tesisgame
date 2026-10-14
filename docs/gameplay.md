@@ -81,11 +81,16 @@ Turn over two cards to find a word-picture pair. Correct pairs remain revealed;
 unmatched cards turn back after feedback. A correct pair credits its word once.
 A mismatch resets both involved words. There is no visible correct/error count.
 
-Hold the eye button to peek. Releasing the pointer, touch, key or controller
-button closes the eye immediately. Cancellation, interruption and page hiding
-also end the peek. Looking at cards does not change mastery.
+Click or tap the eye button to reveal every card. The first successful reveal in
+a round lasts 10 seconds; later reveals last 5 seconds. A countdown and glowing
+progress bar show the remaining time, then unmatched cards hide automatically.
+Releasing the pointer, touch, key or controller button, moving away, and changing
+focus do not shorten the reveal. Repeated activation during the countdown neither
+extends it nor charges again. Escape, Xbox B, Home, opening a collection, or a
+page/input interruption cancels the reveal. Looking at cards does not change mastery.
 The first reveal in a round is free; later reveals cost 100, 200, then 300
 coins, with further reveals staying at 300. The button shows the next price.
+A declined payment starts no countdown and does not advance the price or use count.
 
 ## Phrase Builder
 

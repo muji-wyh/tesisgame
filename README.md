@@ -9,7 +9,7 @@ handles loading, accessibility, audio recovery, and speech recognition.
 ## Current game
 
 - **Match:** five word-picture pairs, hint purchases at 100, 150, then 200 coins with no per-round use limit, optional spoken answers and unlimited retries.
-- **Memory:** five hidden pairs, with a hold-to-peek control and no countdown.
+- **Memory:** five hidden pairs, with a click-to-peek eye that reveals cards for 10 seconds on the first use in each round and 5 seconds on later uses.
 - **Phrase Builder:** listen, drag pictured or contextual word tiles into order, and complete three phrases from the current learning age to earn a chest. The catalog contains 330 recorded phrases with unlimited retries. Earlier words appear only as prerequisites for those phrases.
 - **Voice Pop:** speak visible words during a 50-second round. Marked targets supply fragments that unlock and upgrade one chest. Results retain scores, chest progress and word review.
 - **Jelly Match:** drag falling pictures onto their words in a four-column well. Matching jellies merge, bounce away, and credit one learning success. Make room before the eight-second full-board countdown ends; marked pairs earn chests. The pace increases as pairs are cleared. Earned treasure is saved when the round ends or you change modes.

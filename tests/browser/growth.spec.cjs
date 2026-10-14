@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const { openGame, enterGame, metrics, tap, rendered, chooseMode, discoverMatchCards,
-  boardPoint, memoryPoint, peekPoint, pipHeaderRect } = require('./game-ui.cjs');
+  boardPoint, memoryPoint, withMemoryPeek, pipHeaderRect } = require('./game-ui.cjs');
 
 const KEY = 'growWithPip.growth.v1';
 const MASTERY_STREAK = 3;
@@ -226,11 +226,9 @@ test('real Match and Memory answers persist shared streaks while peek is neutral
   await expect.poll(async () => (await growth(page)).streaks[picture.word]).toBe(1);
   await chooseMode(page, 'memory');
   const before = (await growth(page)).streaks;
-  const peek = peekPoint(await metrics(page)), bounds = await metrics(page);
-  await page.mouse.move(bounds.x + peek.x * bounds.scale, bounds.y + peek.y * bounds.scale);
-  await page.mouse.down();
-  await expect(page.locator('#game-status')).toContainText('Release to hide.');
-  await page.mouse.up();
+  await withMemoryPeek(page, async () => {
+    expect((await growth(page)).streaks).toEqual(before);
+  });
   await expect(page.locator('#game-status')).toContainText('Find a pair.');
   expect((await growth(page)).streaks).toEqual(before);
   const memory = [];

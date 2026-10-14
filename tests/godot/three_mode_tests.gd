@@ -101,15 +101,15 @@ func _run() -> void:
 		check(app._mode_id == "memory" and app.model.lesson_words == memory_words
 			and app._memory.memory.cards == memory_cards and app._memory.card_buttons[0].get_instance_id() == memory_button_id,
 			"A stale " + removed_mode + " mode request leaves the current Memory round and controls unchanged")
-	check(app._memory.has_method("begin_peek") and app._memory.has_method("end_peek"), "Memory exposes hold-to-peek input")
+	check(app._memory.has_method("begin_peek") and app._memory.has_method("end_peek"), "Memory exposes timed reveal input")
 	check(app._memory.find_child("MemoryFeedback", true, false) == null
 		and app._memory.find_child("MemoryReviewHint", true, false) == null, "Memory has no bottom panel")
 	if app._memory.has_method("begin_peek") and app._memory.has_method("end_peek"):
 		app._memory.begin_peek()
-		check(app._memory.memory.studying, "Holding the eye reveals the board")
+		check(app._memory.memory.studying, "Activating the eye reveals the board")
 		app._memory.end_peek()
 		check(not app._memory.memory.studying and range(10).all(func(index: int) -> bool:
-			return not app._memory.memory.is_revealed(index)), "Releasing the eye turns every face back")
+			return not app._memory.memory.is_revealed(index)), "Ending the reveal turns every unmatched face back")
 		var previous_coins: int = app.coin_wallet.balance
 		var credit: Dictionary = app.coin_wallet.credit("fixture:second-memory-peek", 2)
 		check(credit.ok and credit.amount == 100 and app.coin_wallet.balance == previous_coins + 100,
@@ -117,9 +117,9 @@ func _run() -> void:
 		app._coin_flight.sync(app.coin_wallet.balance)
 		app._memory.begin_peek()
 		check(app._memory.memory.studying and app._memory.memory.peeks == 2 and app.coin_wallet.balance == previous_coins,
-			"The second paid hold is actively revealing before page cancellation is tested")
+			"The second paid countdown is actively revealing before page cancellation is tested")
 		app.on_page_hidden()
-		check(not app._memory.memory.studying, "Hiding the page releases a held eye")
+		check(not app._memory.memory.studying, "Hiding the page cancels an active countdown")
 		app.on_page_visible()
 	for removed_mode in ["learn", "quest"]:
 		check(app.new_round(23, false, "", removed_mode) and app._mode_id == "match"

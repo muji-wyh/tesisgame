@@ -171,13 +171,15 @@ func _run() -> void:
 	memory.card_buttons[a].pressed.emit()
 	memory.card_buttons[b].pressed.emit()
 	check(app.audio.voice.playing, "The revealed Memory card's speech is active before a peek")
-	memory.study_button.button_down.emit()
+	memory.study_button.pressed.emit()
 	check(memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing
 		and memory.memory.attempts == 1,
-		"Holding the eye stops feedback speech and preserves the existing attempt")
+		"Clicking the eye stops feedback speech and preserves the existing attempt")
 	memory.study_button.button_up.emit()
+	check(memory.memory.studying and not app.audio.voice.playing, "Button release leaves the active countdown silent")
+	memory._advance_peek(memory.memory.peek_remaining)
 	check(not memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing and memory.memory.attempts == 1,
-		"Releasing the eye stays silent and preserves progress")
+		"Countdown expiry stays silent and preserves progress")
 	_enter_mode(app, "match")
 	app.cards[app.model.cards[0].id].pressed.emit()
 	app._show_collection()

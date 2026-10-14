@@ -31,7 +31,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	check(app.coin_wallet.credit("fixture:memory-peek-funding", 1000).ok,
-		"Fund repeated Memory holds through the isolated wallet's real credit API")
+		"Fund repeated Memory reveals through the isolated wallet's real credit API")
 	app._coin_flight.sync(app.coin_wallet.balance)
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
@@ -90,24 +90,31 @@ func _run() -> void:
 	view.card_buttons[0].grab_focus()
 	app._show_collection()
 	view.card_buttons[1].pressed.emit()
-	view.study_button.button_down.emit()
+	view.study_button.pressed.emit()
 	app.choose_mode("match")
 	check(view.memory.selected_indices == [0] and not view.memory.studying and app._mode_id == "memory", "Covered controls cannot mutate the attempt")
 	app._hide_collection()
 	check(root.gui_get_focus_owner() == view.card_buttons[0], "Closing rewards restores the selected card's keyboard focus")
-	view.study_button.button_down.emit()
-	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Holding the eye clears unfinished selections")
-	check(app._default_focus() == view.study_button, "The held eye remains the default Memory control")
+	view.study_button.pressed.emit()
+	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Clicking the eye clears unfinished selections")
+	check(app._default_focus() == view.study_button, "The active eye remains the default Memory control")
 	app._controller_back()
 	check(not view.memory.studying, "Xbox B or Escape releases the eye without resetting the board")
 	view.study_button.grab_focus()
+	var peeks_before: int = view.memory.peeks
 	await _joy_accept(true)
-	check(view.memory.studying, "Native Xbox A down begins a held reveal")
+	check(view.memory.studying and view.memory.peek_duration == 5.0 and view.memory.peeks == peeks_before + 1,
+		"Native Xbox A activates one five-second reveal")
 	await _joy_accept(false)
-	check(not view.memory.studying and _all_hidden(view), "Native Xbox A up conceals all ten fronts")
+	check(view.memory.studying and view.memory.peeks == peeks_before + 1,
+		"Native Xbox A release leaves the countdown running")
+	var remaining: float = view.memory.peek_remaining
 	await _joy_accept(true)
+	await _joy_accept(false)
+	check(view.memory.studying and view.memory.peek_remaining <= remaining and view.memory.peeks == peeks_before + 1,
+		"Repeated Xbox clicks neither close nor restart the countdown")
 	app._on_joy_connection_changed(0, false)
-	check(not view.memory.studying, "Controller disconnect cancels a held reveal")
+	check(not view.memory.studying and view.memory.peek_remaining == 0.0, "Controller disconnect cancels the active countdown")
 	await _joy_accept(false)
 	view.begin_peek()
 	app.on_page_hidden()
@@ -154,7 +161,7 @@ func _run() -> void:
 			for button in view.card_buttons:
 				button.pressed.emit()
 			check(view.memory.phase == "feedback" and view.study_button.disabled and not view.memory.studying and app.model.phase != "won",
-				"The fifth pair finishes its feedback automatically, without a held-eye delay")
+				"The fifth pair finishes its feedback automatically, without a peek delay")
 			check(view.memory.attempts == 9 and view.memory.matched_word_ids.size() == 5 and app.medal_progress.counts.is_empty(), "Final blocked shortcuts cannot change score or claim rewards")
 			var final_focus: Control = root.gui_get_focus_owner()
 			check(app._valid_focus(final_focus) and view.controls().is_empty(), "Final feedback leaves focus on a valid host control, not a removed footer")
@@ -169,7 +176,7 @@ func _run() -> void:
 			view.continue_feedback()
 	check(app.model.phase == "won" and view.memory.matched_word_ids.size() == 5, "Five completed pairs enter the ordinary victory screen")
 	check(not app.chest_button.is_visible_in_tree(), "Final pair feedback cannot expose early chest controls")
-	app._advance_ui(2.0)
+	app._advance_ui(app._pair_reward.REWARD_SECONDS + 0.01)
 	check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(),
 		"The completed Memory round presents the shared celebration before its unopened chest")
 	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
@@ -224,6 +231,7 @@ func _run() -> void:
 		check(app._mode_id == mode and app.model.lesson_words == lesson, "The " + mode + " mode remains reachable with the same shared lesson")
 	await _check_feedback_shortcut_focus(app)
 	await _check_host_layout(app)
+	await _check_countdown_presentation(app)
 	if "--screenshots" in OS.get_cmdline_user_args():
 		await _capture_scenes(app)
 	await _finish(app, directory)
@@ -268,17 +276,19 @@ func _check_feedback_shortcut_focus(app) -> void:
 			check(view.controls().has(root.gui_get_focus_owner()) and view.controls().has(app._default_focus()), "Wrong and correct feedback keep focus on the board")
 			var control: Button = view.study_button if action == "study" else view.card_buttons[target]
 			await _mouse_control(control, true)
-			if action == "card":
-				await _mouse_control(control, false)
+			await _mouse_control(control, false)
 			check(root.gui_get_focus_owner() == control, "The first " + action + " input moves actual host focus to its target")
 			check(view.memory.phase != "feedback", "The first " + action + " input resolves nonfinal feedback")
 			if action == "card":
 				check(view.memory.phase == "matching" and view.memory.selected_indices == [target], "The host keeps only the first tapped new card selected")
 			else:
-				check(view.memory.studying and view.memory.selected_indices.is_empty() and app._default_focus() == view.study_button, "The host begins a peek on eye down")
-				await _mouse_control(view.study_button, false)
-				check(not view.memory.studying and view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button,
-					"Eye up restores concealed play and retains eye focus")
+				check(view.memory.studying and view.memory.selected_indices.is_empty() and app._default_focus() == view.study_button,
+					"The host begins a timed peek after a completed eye click")
+				check(view.memory.phase == "waiting" and root.gui_get_focus_owner() == view.study_button,
+					"Eye click retains focus while the countdown reveals the board")
+				view._advance_peek(view.memory.peek_remaining)
+				check(not view.memory.studying and root.gui_get_focus_owner() == view.study_button,
+					"Expiry restores concealed play while preserving eye focus")
 			check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, view.memory.matched_word_ids.size(), app.medal_progress.counts] == score, "First-tap feedback shortcuts preserve host score and rewards")
 			check(view.memory.cards == board and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == positions, "First-tap feedback shortcuts keep the host board stationary")
 
@@ -334,6 +344,71 @@ func _check_host_layout(app) -> void:
 			check(bounds.encloses(card.get_global_rect()), "Every Memory target fits the real host after resizing")
 			check(card.position.is_equal_approx(Vector2((index % columns) * (cell.x + gap), (index / columns) * (cell.y + gap)))
 				and card.size.is_equal_approx(cell), "Every real-scene row is complete and uniformly sized")
+
+
+func _check_countdown_presentation(app) -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	for dimensions in [Vector2i(320, 568), Vector2i(393, 852), Vector2i(1280, 800)]:
+		root.size = dimensions
+		check(app.new_round(409, false, "", "memory"), "A fresh round prepares the responsive countdown fixture")
+		app.set_reduced_motion(true)
+		for frame in range(4):
+			await process_frame
+		var view = app._memory
+		var countdown = app._memory_peek_countdown
+		var board_bounds: Rect2 = view.get_global_rect()
+		var card_bounds: Array = view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
+		check(not countdown.is_visible_in_tree(), "The countdown takes no visible attention before opening the eye")
+		view.study_button.pressed.emit()
+		var display: Dictionary = countdown.snapshot()
+		check(display.visible and display.seconds == 10 and is_equal_approx(float(display.progress), 1.0),
+			"The first reveal displays ten seconds and a full progress bar at " + str(dimensions))
+		var area: Rect2 = countdown.get_global_rect()
+		var bar: Rect2 = countdown.bar_rect()
+		bar.position += countdown.global_position
+		var number: Rect2 = countdown.text_rect()
+		number.position += countdown.global_position
+		check(root.get_visible_rect().grow(0.5).encloses(area) and area.encloses(bar) and area.encloses(number)
+			and bar.has_area() and not bar.intersects(number) and not area.intersects(board_bounds),
+			"Countdown text and progress fit on screen without overlapping each other or the board")
+		check(countdown.mouse_filter == Control.MOUSE_FILTER_IGNORE and countdown.focus_mode == Control.FOCUS_NONE,
+			"The decorative countdown cannot intercept gameplay input or keyboard navigation")
+		view._advance_peek(6.25)
+		display = countdown.snapshot()
+		check(display.seconds == 4 and is_equal_approx(float(display.progress), 0.375)
+			and str(countdown.get("accessibility_name")).contains("4"),
+			"Visible seconds, accessible text and fractional progress agree with elapsed time")
+		check(view.get_global_rect() == board_bounds and view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect()) == card_bounds,
+			"Opening and updating the countdown never shrinks or moves any Memory target")
+		view._advance_peek(view.memory.peek_remaining)
+		check(not countdown.is_visible_in_tree() and not view.memory.studying,
+			"Automatic expiry removes the countdown and conceals the unmatched cards")
+		PlayerFixture.reserve_pair_chest(app)
+		var first_word: String = str(view.memory.cards[0].word.id)
+		for card in view.card_buttons:
+			if card.card_data.word.id == first_word:
+				card.pressed.emit()
+		view.continue_feedback()
+		app._pair_reward.advance(app._pair_reward.REWARD_SECONDS + 0.01)
+		app._refresh()
+		check(app.model.chest_earned and app._pair_reward.chest.is_visible_in_tree(),
+			"A real successful pair supplies the earned-chest coexistence fixture")
+		var chest_bounds: Rect2 = app._pair_reward.chest.get_global_rect()
+		board_bounds = view.get_global_rect()
+		check(app.coin_wallet.credit("fixture:timed-peek:" + str(dimensions), 2).ok, "Fund the later five-second presentation")
+		view.study_button.pressed.emit()
+		check(countdown.is_visible_in_tree() and countdown.seconds == 5 and countdown.progress() == 1.0
+			and app._pair_reward.chest.is_visible_in_tree() and not app._pair_reward._title.visible
+			and not app._pair_reward._surface_layer.visible,
+			"The five-second timer shares the row with the earned chest while suppressing the old message")
+		check(app._pair_reward.chest.get_global_rect() == chest_bounds and view.get_global_rect() == board_bounds,
+			"A later countdown preserves the earned chest and playfield positions")
+		check(countdown.reduced_motion and not countdown.is_processing(),
+			"Reduced motion keeps the functional clock while disabling decorative motion")
+		view._advance_peek(5.0)
+		check(not countdown.is_visible_in_tree() and app._pair_reward._title.visible
+			and app._pair_reward._surface_layer.visible and app._pair_reward.chest.is_visible_in_tree(),
+			"Expiry restores the existing reward presentation without removing the earned chest")
 
 
 func _capture_scenes(app) -> void:

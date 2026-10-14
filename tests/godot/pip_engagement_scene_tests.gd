@@ -101,7 +101,7 @@ func _run() -> void:
 	app._memory.memory.phase = "waiting"
 	app._mode_id = "match"
 	app._memory.memory.studying = true
-	check(not observe_idle(app, 20), "A held Memory Peek suppresses invitations")
+	check(not observe_idle(app, 20), "An active Memory countdown suppresses invitations")
 	app._memory.memory.studying = false
 	app._voice_mode = true
 	check(not observe_idle(app, 20) and app.duck.is_visible_in_tree()
@@ -234,22 +234,26 @@ func _test_consumed_touches(app) -> void:
 		var eye_point: Vector2 = app._memory.study_button.get_global_rect().get_center()
 		viewport_touch(0, card_point, true)
 		viewport_touch(1, eye_point, true)
-		check(app._memory.memory.studying, "The real second touch holds Memory Peek")
+		check(not app._memory.memory.studying, "The eye waits for a complete tap while another finger is held")
+		viewport_touch(0, card_point, false, cancel_first)
+		check(not observe_idle(app, 18), "The pending eye touch keeps Pip quiet")
+		viewport_touch(1, eye_point, false)
+		check(app._memory.memory.studying, "The completed second touch starts Memory's countdown")
 		check(app._memory.memory.peeks == ordinal and app.coin_wallet.balance == balance - price
 			and (app.coin_wallet._receipts.get(app._round_id + ":memory-peek:" + str(ordinal), 0) == -price
 				if price > 0 else app.coin_wallet._receipts.size() == receipt_count),
-			"The held Peek consumes one use and saves only its quoted debit, keeping the first use free")
-		viewport_touch(0, card_point, false, cancel_first)
-		check(not observe_idle(app, 18), "A remaining Peek touch keeps Pip quiet")
-		check(app.duck._attention == "thinking", "Pip studies with the held Memory Peek")
-		viewport_touch(1, eye_point, false)
+			"The complete tap consumes one use and saves only its quoted debit, keeping the first use free")
+		check(not observe_idle(app, 18), "A timed reveal keeps Pip quiet after all fingers lift")
+		check(app.duck._attention == "thinking", "Pip studies while the countdown is active")
 		await settle()
-		check(not app._memory.memory.studying and app._proactive_touches.is_empty()
+		check(app._memory.memory.studying and app._proactive_touches.is_empty()
 			and not app._pointer_focus_active,
 			"Consumed touch releases/cancels clear every tracked pointer through real viewport dispatch")
-		check(app.duck._attention.is_empty(), "Releasing Peek clears Pip's studying expression")
+		app._memory._advance_peek(app._memory.memory.peek_remaining)
+		await settle()
+		check(not app._memory.memory.studying and app.duck._attention.is_empty(), "Countdown expiry clears Pip's studying expression")
 		check(not observe_idle(app, 5.5) and observe_idle(app, 4),
-			"Pip resumes only after a fresh quiet interval once both fingers lift")
+			"Pip resumes only after a fresh quiet interval once the timed reveal ends")
 
 
 func _test_contextual_attention(app) -> void:

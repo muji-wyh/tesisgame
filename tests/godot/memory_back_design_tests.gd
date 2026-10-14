@@ -126,10 +126,10 @@ func _run() -> void:
 	await settle()
 	view.begin_peek()
 	check(view.memory.studying and view.card_buttons.all(func(card: Button) -> bool:
-		return not card.find_child("CardBack", true, false).is_visible_in_tree()), "Held Peek still reveals the true fronts")
+		return not card.find_child("CardBack", true, false).is_visible_in_tree()), "Timed Peek still reveals the true fronts")
 	view.end_peek()
 	check(not view.memory.studying and view.card_buttons.all(func(card: Button) -> bool:
-		return card.find_child("CardBack", true, false).is_visible_in_tree()), "Releasing Peek restores the themed backs")
+		return card.find_child("CardBack", true, false).is_visible_in_tree()), "Ending Peek restores the themed backs")
 	var first: Dictionary = view.memory.cards[0]
 	var partner := -1
 	for index in range(1, 10):

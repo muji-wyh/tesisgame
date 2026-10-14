@@ -422,8 +422,8 @@
         Complete three phrases to open the settlement dialog over your finished answer. Hold the chest directly after the celebration to collect your gift. Play again starts another three phrases. Phrase difficulty follows your current learning age.
         Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: pair each word with its picture to grow five flowers.
-        Hold the eye icon to flip every card face up; release to flip faces back without clearing completed pairs.
-        Hold Space, Enter, or Xbox A on the eye for the same peek. Memory has no countdown or limit on attempts.
+        Click the eye icon to flip every card face up. The first reveal in each round lasts 10 seconds; later reveals last 5 seconds. A countdown and glowing progress bar show the time left before unmatched cards hide.
+        Press Space, Enter, or Xbox A on the eye for the same timed peek. Releasing or moving away does not close it. Repeated activation while the countdown is running does not extend it or charge again. Escape or Xbox B cancels the reveal. Memory has no round time limit or limit on attempts.
         The first Memory peek in each round is free. The second costs 100 coins, the third 200, and every later peek 300. The eye button shows the next price. A failed payment does not reveal cards or advance the price.
         Voice Pop is a single-player game using your browser's system speech recognition. Tap to start and request microphone access. Say the words you see to pop them. Each round starts with 50 seconds.
         The timer starts when the microphone is listening. The colored screen edges glow while listening.
@@ -3322,7 +3322,7 @@
           window.addEventListener('resize', cancelResizedInput);
           if (window.visualViewport) window.visualViewport.addEventListener('resize', cancelResizedInput);
           new ResizeObserver(cancelResizedInput).observe(canvas);
-          // A held Memory eye must close even if its canvas loses the release.
+          // Complete active drag and hold gestures even if the canvas loses a release.
           // Capture at the window before canvas handlers; preserve finger identity.
           window.addEventListener('touchend', event => {
             // Godot stores browser touch IDs as signed i32 values. A negative

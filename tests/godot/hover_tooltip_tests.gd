@@ -102,7 +102,7 @@ func _match(app) -> void:
 func _memory_and_phrase(app) -> void:
 	Fixture.enter_mode(app, "memory")
 	await settle()
-	named([app._memory.study_button], "Memory hold-to-peek")
+	named([app._memory.study_button], "Memory timed reveal")
 	scan(app, "Face-down Memory board")
 	app._memory.begin_peek()
 	scan(app, "Revealed Memory board")

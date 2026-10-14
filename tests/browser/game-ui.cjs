@@ -504,16 +504,19 @@ function peekPoint(bounds) {
   return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }
 
-async function withMemoryPeek(page, held) {
+async function withMemoryPeek(page, revealed) {
   const bounds = await memoryMetrics(page), point = peekPoint(bounds);
-  await page.mouse.move(bounds.x + point.x * bounds.scale, bounds.y + point.y * bounds.scale);
-  await page.mouse.down();
+  await tap(page, point.x, point.y);
+  await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
   try {
-    await rendered(page);
-    await expect(page.locator('#game-status')).toContainText('Release to hide.');
-    await held(bounds);
+    await revealed(bounds);
   } finally {
-    await page.mouse.up();
+    // Keep shared visual/gameplay fixtures short; timer expiry is exercised by
+    // the dedicated countdown tests. Do not dismiss a modal opened by the callback.
+    if ((await metrics(page)).growth?.memory?.peek?.studying) {
+      await page.keyboard.press('Escape');
+      await expect.poll(async () => (await metrics(page)).growth.memory.peek.studying).toBe(false);
+    }
   }
   await rendered(page);
 }

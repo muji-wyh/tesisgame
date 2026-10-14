@@ -23,6 +23,7 @@ const Icons = preload("res://scripts/icon_button.gd")
 const PricedIcons = preload("res://scripts/priced_icon_button.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
+const MemoryPeekCountdown = preload("res://scripts/memory_peek_countdown.gd")
 const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
@@ -117,6 +118,7 @@ var _pending_coin_reward: Dictionary = {}
 var _coin_published: String = ""
 var _pair_reward: PairChestReward
 var _pair_reward_row: Control
+var _memory_peek_countdown: MemoryPeekCountdown
 var _reward_confetti: RewardConfetti
 var _confetti_reward_keys: Dictionary = {}
 var _pair_words: Array[String] = []
@@ -260,7 +262,6 @@ var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
 var _controller_repeat_elapsed: float = 0.0
 var _controller_holding_chest: bool = false
-var _controller_peeking: bool = false
 var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
 var _preferred_theme: String = ""
@@ -625,6 +626,9 @@ func _build_controls() -> void:
 	column.add_child(_pair_reward_row)
 	_pair_reward_row.add_child(_pair_reward)
 	_pair_reward.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_memory_peek_countdown = MemoryPeekCountdown.new()
+	_memory_peek_countdown.name = "MemoryPeekCountdown"
+	_pair_reward_row.add_child(_memory_peek_countdown)
 	_pair_reward_row.resized.connect(_layout_pair_reward)
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
@@ -674,6 +678,7 @@ func _build_controls() -> void:
 	_memory.prompt_ready.connect(_memory_prompt)
 	_memory.purchase_peek = _purchase_memory_peek
 	_memory.peek_feedback.connect(_memory_peek_feedback)
+	_memory.peek_clock_changed.connect(_memory_peek_clock_changed)
 	_memory.hide()
 	column.add_child(_memory)
 	_memory.study_button.reparent(_toolbar)
@@ -2315,6 +2320,18 @@ func _memory_peek_feedback(success: bool, price: int) -> void:
 	_publish_growth_view()
 
 
+func _memory_peek_clock_changed(remaining: float, duration: float) -> void:
+	if not is_instance_valid(_memory_peek_countdown):
+		return
+	var active_changed: bool = (_memory_peek_countdown.remaining > 0.0) != (remaining > 0.0)
+	_memory_peek_countdown.configure(remaining, duration, _active_palette, reduced_motion)
+	# Memory emits its initial clock while the remaining host controls are building.
+	if not is_instance_valid(collection_page) or not active_changed:
+		return
+	_sync_pair_presentation()
+	_layout_pair_reward()
+
+
 func _sync_memory_selection() -> void:
 	if _host == null:
 		return
@@ -3539,10 +3556,6 @@ func _input(event: InputEvent) -> void:
 				_controller_accept_needs_release = false
 				_controller_holding_jelly_chest = false
 				_jelly_rewards.end_hold()
-			elif _controller_peeking:
-				_controller_accept_needs_release = false
-				_controller_peeking = false
-				_memory.end_peek()
 			else:
 				_controller_accept_needs_release = false
 			get_viewport().set_input_as_handled()
@@ -3607,8 +3620,7 @@ func _stop_controller_actions() -> void:
 	if _controller_holding_jelly_chest:
 		_controller_holding_jelly_chest = false
 		_jelly_rewards.cancel_input()
-	if _controller_peeking:
-		_controller_peeking = false
+	if is_instance_valid(_memory) and _memory.memory.studying:
 		_memory.end_peek()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 
@@ -3642,8 +3654,8 @@ func _controller_accept() -> void:
 		_pop_rewards.begin_hold(focused)
 		return
 	if _mode_id == "memory" and focused == _memory.study_button and _valid_focus(focused):
-		# A declined purchase still owns the hold until controller release.
-		_controller_peeking = true
+		# One controller press starts a timed reveal; releasing A leaves it running.
+		_controller_accept_needs_release = true
 		_memory.begin_peek()
 		return
 	if focused == chest_button and model.phase == "won" and model.chest_state == "closed":
@@ -3699,7 +3711,6 @@ func _controller_back() -> void:
 		_continue_match()
 	elif _mode_id == "memory":
 		if _memory.memory.studying:
-			_controller_peeking = false
 			_memory.end_peek()
 		elif _memory.memory.phase == "matching" and not _memory.memory.selected_indices.is_empty():
 			_memory.card_buttons[_memory.memory.selected_indices[0]].pressed.emit()
@@ -3943,7 +3954,6 @@ func _connect_browser() -> void:
 		set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		_memory.release_peek_pointer(int(arguments[0]), bool(arguments[1]))
 		_phrase.release_pointer(int(arguments[0]))
 		_jelly.release_pointer(int(arguments[0]))
 		_word_jelly.release_pointer(int(arguments[0])))
@@ -4784,6 +4794,10 @@ func _sync_pair_presentation() -> void:
 		audio.stop_pair_chest_discovery()
 	_pair_reward.set_paused(not allowed)
 	_pair_reward.visible = allowed
+	var timed_peek: bool = allowed and _mode_id == "memory" and is_instance_valid(_memory) and _memory.memory.studying
+	_pair_reward.set_status_suppressed(timed_peek)
+	if is_instance_valid(_memory_peek_countdown):
+		_memory_peek_countdown.visible = timed_peek
 	# Opening the header menu must not move the board behind its overlay.
 	_pair_reward_row.visible = on_board
 
@@ -4791,6 +4805,14 @@ func _sync_pair_presentation() -> void:
 func _layout_pair_reward() -> void:
 	if is_instance_valid(_pair_reward):
 		_pair_reward.set_toast_bounds(Rect2(Vector2.ZERO, _pair_reward.size))
+	if is_instance_valid(_memory_peek_countdown) and is_instance_valid(_pair_reward_row):
+		var unit: float = 1.0 / Style.ui_scale(self)
+		var row: Vector2 = _pair_reward_row.size
+		var has_chest: bool = model.chest_earned and _mode_id == "memory"
+		var group_width: float = minf(324.0 * unit, row.x)
+		var inset: float = minf(64.0 * unit, row.x * 0.2) if has_chest else 0.0
+		_memory_peek_countdown.position = Vector2((row.x - group_width) * 0.5 + inset, 0.0)
+		_memory_peek_countdown.size = Vector2(maxf(0.0, group_width - inset), row.y)
 
 
 func _pair_reward_cue(round_id: String, cue: String) -> void:
@@ -4896,6 +4918,9 @@ func _publish_growth_view() -> void:
 		state["memory"] = {"peek": {"count": _memory.memory.peeks,
 			"next_price": _memory.memory.peek_price(), "price_text": str(_memory.study_button.cost),
 			"price_rect": [price_area.position.x, price_area.position.y, price_area.size.x, price_area.size.y],
+			"remaining": _memory.memory.peek_remaining, "duration": _memory.memory.peek_duration,
+			"seconds": ceili(_memory.memory.peek_remaining), "progress": _memory_peek_countdown.progress(),
+			"countdown": _memory_peek_countdown.snapshot(),
 			"studying": _memory.memory.studying, "round_id": _round_id}}
 	elif _mode_id == "match":
 		var price_area: Rect2 = hint_button.price_rect()

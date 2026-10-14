@@ -173,8 +173,10 @@ test('Pip offers six direct reactions on results without changing saved progress
   expect(errors).toEqual([]);
 });
 
-test('Pip resumes after multi-touch Peek ends or is canceled', async ({ page, browserName }, testInfo) => {
+test('Pip resumes after a timed multi-touch Peek is canceled', async ({ page, browserName }, testInfo) => {
   test.skip(browserName !== 'chromium', 'Trusted multi-touch uses Chromium CDP.');
+  await page.addInitScript(() => localStorage.setItem('growWithPip.coinWallet.v1',
+    '[wallet]\nversion=2\nbalance=100\nreceipts={"memory-idle-opening-coins":100}\n'));
   const errors = await openGame(page, { mode: 'memory', reducedMotion: 'no-preference' });
   const bounds = await metrics(page), card = memoryPoint(bounds, 0), eye = peekPoint(bounds);
   const point = (id, value) => ({ id, x: bounds.x + value.x * bounds.scale, y: bounds.y + value.y * bounds.scale });
@@ -184,12 +186,21 @@ test('Pip resumes after multi-touch Peek ends or is canceled', async ({ page, br
   let touching = false;
   try {
     for (const ending of ['touchEnd', 'touchCancel']) {
+      await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [second] });
+      touching = true;
+      await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      touching = false;
+      await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
       await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [first] });
       touching = true;
       await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [first, second] });
-      await expect(page.locator('#game-status')).toContainText('Release to hide.');
+      await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
       await client.send('Input.dispatchTouchEvent', { type: ending, touchPoints: [] });
       touching = false;
+      if (ending === 'touchEnd') {
+        await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
+        await page.keyboard.press('Escape');
+      }
       await expect(page.locator('#game-status')).toContainText('Find a pair.');
       await rendered(page);
       const area = await clips(page), resting = await capture(page, area.body);

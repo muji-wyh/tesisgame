@@ -42,7 +42,7 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Ordinary / tier-one chest | 50 | 50, unchanged |
 | Levelled chest | 50 x level | 50 x level, unchanged |
 | Match Hint | 200 each | 100, 150, then 200; no per-round use limit |
-| Memory peek | 0, 100, 200, 300, then 300 | Unchanged |
+| Memory peek | 0, 100, 200, 300, then 300 | Prices unchanged. First reveal lasts 10 seconds; later reveals last 5 seconds. Repeated clicks during the countdown do not charge or extend it. |
 | Auto Merge | 2000 each | 600, 900, 1200, then 1200 |
 | Treasure | 500 each | 200, 300, 400, then 400 |
 | Treasure fragments | Random 2-8 | Random 2-8, unchanged |

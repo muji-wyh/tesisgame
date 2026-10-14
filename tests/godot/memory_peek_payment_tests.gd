@@ -66,7 +66,8 @@ func _state(view) -> Dictionary:
 	return {"cards": view.memory.cards.duplicate(true), "selected": view.memory.selected_indices.duplicate(),
 		"matched": view.memory.matched_word_ids.duplicate(), "feedback": view.memory.feedback_words.duplicate(true),
 		"attempts": view.memory.attempts, "mistakes": view.memory.mistakes, "phase": view.memory.phase,
-		"studying": view.memory.studying, "peeks": view.memory.peeks, "price": view.memory.peek_price()}
+		"studying": view.memory.studying, "peeks": view.memory.peeks, "price": view.memory.peek_price(),
+		"peek_remaining": view.memory.peek_remaining, "peek_duration": view.memory.peek_duration}
 
 
 func _check_free_and_insufficient(app, storage: BrowserStorage) -> void:
@@ -75,10 +76,10 @@ func _check_free_and_insufficient(app, storage: BrowserStorage) -> void:
 	var writes: int = storage.writes
 	view.begin_peek()
 	view.begin_peek()
-	view.study_button.button_down.emit()
+	view.study_button.pressed.emit()
 	check(view.memory.studying and view.memory.peeks == 1 and view.memory.peek_price() == 100
 		and purchases.is_empty() and storage.writes == writes and app.coin_wallet.balance == 0,
-		"The first hold reveals for free once without a zero-cost wallet transaction")
+		"The first click reveals for free once without a zero-cost wallet transaction")
 	view.end_peek()
 	view.card_buttons[0].pressed.emit()
 	var before: Dictionary = _state(view)
@@ -90,12 +91,11 @@ func _check_free_and_insufficient(app, storage: BrowserStorage) -> void:
 		and not bool(purchases[0].revealed_before_payment), "Payment is requested with the next ordinal before exposing any hidden cards")
 	check(not feedback.is_empty() and feedback.back() == {"success": false, "price": 100}
 		and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
-		"An unfunded hold produces the negative response and the existing negative sound")
+		"An unfunded click produces the negative response and the existing negative sound")
 	var feedback_count: int = feedback.size()
-	view.begin_peek()
-	view.study_button.button_down.emit()
-	check(purchases.size() == 1 and feedback.size() == feedback_count and _state(view) == before,
-		"Duplicate native callbacks during one denied hold do not retry payment or spam feedback")
+	view.study_button.pressed.emit()
+	check(purchases.size() == 2 and feedback.size() == feedback_count + 1 and _state(view) == before,
+		"A fresh denied click retries payment without changing the board, timer, price or wallet")
 	view.end_peek()
 	check(app.coin_wallet.ready and app.coin_wallet.error.is_empty() and app._coin_counter.available,
 		"Ordinary insufficient funds never disable otherwise healthy coin storage")
@@ -126,16 +126,23 @@ func _check_price_sequence(app, storage: BrowserStorage) -> void:
 			check(feedback.size() == before_feedback + 1 and feedback.back() == {"success": true, "price": price}
 				and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true]),
 				"A saved paid reveal starts one positive response and its sound")
+		check(view.memory.peek_duration == (10.0 if ordinal == 1 else 5.0)
+			and view.memory.peek_remaining == view.memory.peek_duration,
+			"Only a successful reveal starts the full first or later countdown")
+		view._advance_peek(1.0)
+		var remaining: float = view.memory.peek_remaining
 		var accepted_calls: int = purchases.size()
 		var accepted_feedback: int = feedback.size()
 		view.begin_peek()
-		view.study_button.button_down.emit()
+		view.study_button.pressed.emit()
 		check(purchases.size() == accepted_calls and feedback.size() == accepted_feedback
-			and app.coin_wallet.balance == initial_balance - expected_spend and view.memory.peeks == ordinal,
-			"Repeated callbacks while the eye is held neither spend nor count twice")
-		view.end_peek()
-		view.end_peek()
-		check(not view.memory.studying and view.memory.peeks == ordinal, "Repeated release only conceals the paid reveal")
+			and app.coin_wallet.balance == initial_balance - expected_spend and view.memory.peeks == ordinal
+			and view.memory.peek_remaining == remaining,
+			"Repeated callbacks during the countdown neither spend nor count twice")
+		view._advance_peek(remaining)
+		view._advance_peek(1.0)
+		check(not view.memory.studying and view.memory.peeks == ordinal and view.memory.peek_remaining == 0.0,
+			"Automatic expiry conceals the paid reveal once without a refund or an extra debit")
 	check(storage.writes == initial_writes + 5 and view.memory.peek_price() == 300,
 		"Six reveals persist five payments and retain the 300-coin cap")
 	var saved_balance: int = app.coin_wallet.balance
@@ -182,14 +189,15 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 			"Storage failure is surfaced without pretending a reveal was bought")
 		var calls: int = storage.calls
 		view.begin_peek()
-		check(storage.calls == calls and purchases.size() == 1, "A denied held press cannot retry a failing durable write")
+		check(storage.calls == calls + 1 and purchases.size() == 2 and _state(view) == before,
+			"A fresh click may retry a failed write without consuming a use or starting its timer")
 		view.end_peek()
 		storage.fail_write = false
 		view.begin_peek()
 		check(view.memory.studying and view.memory.phase == "waiting" and view.memory.peeks == 2
 			and view.memory.attempts == before.attempts and view.memory.mistakes == before.mistakes
 			and view.memory.matched_word_ids == before.matched and view._feedback_timer.is_stopped(),
-			"A fresh successfully paid hold resolves feedback once without replaying the answer")
+			"A fresh successfully paid click resolves feedback once without replaying the answer")
 		check(app.coin_wallet.balance == balance - 100 and app._coin_counter.available
 			and app.coin_wallet._receipts.get(app._round_id + ":memory-peek:2", 0) == -100,
 			"Recovery saves one 100-coin receipt for the same previously denied reveal")
@@ -211,7 +219,7 @@ func _check_missing_callback_and_reentry(app) -> void:
 	view.purchase_peek = func(ordinal: int, price: int) -> Dictionary:
 		reentrant_calls.append(ordinal)
 		view.begin_peek()
-		view.study_button.button_down.emit()
+		view.study_button.pressed.emit()
 		return app._purchase_memory_peek(ordinal, price)
 	view.begin_peek()
 	check(view.memory.studying and view.memory.peeks == 2 and reentrant_calls == [2] and app.coin_wallet.balance == balance - 100,
@@ -240,7 +248,7 @@ func _check_paid_interruption(app) -> void:
 	view.begin_peek()
 	check(view.memory.studying and view.memory.peeks == 2 and app.coin_wallet.balance == balance - 100
 		and app.coin_wallet._receipts.size() == receipts + 1,
-		"A fresh hold consumes its already-paid ordinal without creating a second debit")
+		"A fresh click consumes its already-paid ordinal without creating a second debit")
 	view.end_peek()
 
 
@@ -259,8 +267,9 @@ func _check_lifecycle_and_reset(app) -> void:
 			"page": app.on_page_hidden()
 			"home": app._show_mode_menu()
 			"focus": view.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
-		check(not view.memory.studying and view.memory.peeks == peeks + 1 and app.coin_wallet.balance == balance - price,
-			"Cancelling an accepted " + cancellation + " hold hides cards without refunding or buying another use")
+		check(not view.memory.studying and view.memory.peeks == peeks + 1 and app.coin_wallet.balance == balance - price
+			and view.memory.peek_remaining == 0.0 and view.memory.peek_duration == 0.0,
+			"Cancelling an accepted " + cancellation + " reveal hides cards without refunding or buying another use")
 		match cancellation:
 			"pause": view.pause(false)
 			"page": app.on_page_visible()
@@ -274,6 +283,8 @@ func _check_lifecycle_and_reset(app) -> void:
 	check(app._round_id != old_round and view.memory.peeks == 0 and view.memory.peek_price() == 0,
 		"A new game starts at free with a distinct receipt namespace")
 	view.begin_peek()
+	check(view.memory.peek_duration == 10.0 and view.memory.peek_remaining == 10.0,
+		"A new round restores ten seconds even after the previous round reached paid reveals")
 	view.end_peek()
 	check(app.coin_wallet.balance == balance and purchases.is_empty() and view.memory.peeks == 1,
 		"The new round's first reveal is free even after the previous round reached the cap")

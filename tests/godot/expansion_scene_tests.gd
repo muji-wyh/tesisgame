@@ -58,7 +58,7 @@ func _run() -> void:
 	var selection: Array = app._memory.memory.selected_indices.duplicate()
 	app._show_collection()
 	app._memory.card_buttons[(word_index + 1) % app._memory.card_buttons.size()].pressed.emit()
-	app._memory.study_button.button_down.emit()
+	app._memory.study_button.pressed.emit()
 	check((app.model.matched_ids.size() / 2) == 0 and app.model.mistakes == 0 and app._memory.memory.selected_indices == selection
 		and not app._memory.memory.studying, "Covered Memory controls cannot change the attempt under More")
 	app._hide_collection()

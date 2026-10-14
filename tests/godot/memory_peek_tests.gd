@@ -29,7 +29,7 @@ func _run() -> void:
 	await _test_face_tween()
 	var view = load("res://scripts/memory_garden.gd").new()
 	_fund_peeks(view)
-	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Native Memory has explicit hold/release entry points")
+	check(view.has_method("begin_peek") and view.has_method("end_peek"), "Native Memory has explicit start and cancellation entry points")
 	if view.has_method("begin_peek") and view.has_method("end_peek"):
 		view.pause(true)
 		view.end_peek()
@@ -38,8 +38,8 @@ func _run() -> void:
 			"Lifecycle cancellation is safe before the view enters the scene tree")
 		root.add_child(view)
 		view.size = Vector2(456, 400)
-		await _test_hold_inputs(view)
-		await _test_denied_hold_inputs(view)
+		await _test_timed_inputs(view)
+		await _test_denied_clicks(view)
 		await _test_cancel_and_reverse(view)
 		await _test_scaled_layout(view)
 		view.queue_free()
@@ -130,7 +130,7 @@ func _test_face_tween() -> void:
 	await process_frame
 
 
-func _test_hold_inputs(view) -> void:
+func _test_timed_inputs(view) -> void:
 	view.set_reduced_motion(true)
 	view.start_round(words, Data.theme("spring"), 71)
 	await process_frame
@@ -138,67 +138,70 @@ func _test_hold_inputs(view) -> void:
 	var board: Array = view.memory.cards.duplicate(true)
 	var initial_purchases: int = purchases.size()
 	view.study_button.button_down.emit()
-	view.begin_peek()
-	check(view.memory.studying and view.study_button.engaged and view.memory.attempts == 0, "Repeated button-down/hold activation is idempotent")
-	check(view.memory.peeks == 1 and purchases.size() == initial_purchases,
-		"Repeated activation of the first free reveal never calls the purchase callback")
-	view.study_button.pressed.emit()
-	check(view.memory.studying, "Pressed does not toggle a held eye")
+	check(_all_hidden(view), "Pressing down alone does not purchase or reveal")
 	view.study_button.button_up.emit()
-	view.end_peek()
-	check(_all_hidden(view) and not view.study_button.engaged, "Button-up and repeated release hide every front")
+	check(_all_hidden(view), "Release without a complete native click cannot reveal cards")
 	view.study_button.pressed.emit()
-	check(not view.memory.studying, "A pressed-only event cannot latch the eye")
+	check(view.memory.studying and view.study_button.engaged and view.memory.peek_remaining == 10.0,
+		"A completed first click opens the eye for ten seconds")
+	view._process(2.0)
+	check(view.memory.peek_remaining == 10.0, "The activation frame cannot charge time elapsed before the click")
+	view._advance_peek(2.0)
+	var remaining: float = view.memory.peek_remaining
+	view.study_button.pressed.emit()
+	view.begin_peek()
+	view.study_button.button_up.emit()
+	view.study_button.grab_focus()
+	view.study_button.release_focus()
+	check(view.memory.studying and view.memory.peek_remaining == remaining
+		and view.memory.peeks == 1 and purchases.size() == initial_purchases,
+		"Active clicks, key release and focus movement neither close, restart nor charge the countdown")
+	view._advance_peek(remaining)
+	check(_all_hidden(view) and not view.study_button.engaged and view.memory.peek_remaining == 0.0,
+		"The view conceals every unmatched card when the countdown expires")
 	for key in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
 		var paid_before: int = purchases.size()
 		view.study_button.grab_focus()
 		await _key(key, true)
-		check(view.memory.studying and view.study_button.engaged, "Native key-down begins a hold: " + str(key))
 		await _key(key, true, true)
-		check(view.memory.studying, "Key repeat cannot toggle a held eye")
-		check(purchases.size() == paid_before + 1,
-			"Native button and keyboard-repeat callbacks charge only once for the paid hold")
+		check(_all_hidden(view) and purchases.size() == paid_before,
+			"Key-down and keyboard repeat do not buy before a completed click: " + str(key))
 		await _key(key, false)
-		check(_all_hidden(view) and not view.study_button.engaged, "Native key-up releases the eye: " + str(key))
-	await _mouse(view.study_button.get_global_rect().get_center(), true)
-	check(view.memory.studying, "Native mouse-down reveals before release")
-	await _mouse(view.study_button.get_global_rect().get_center(), false)
-	check(_all_hidden(view), "Native mouse-up reveals nothing persistently")
-	await _mouse(view.study_button.get_global_rect().get_center(), true)
-	var outside: Vector2 = view.get_global_rect().end + Vector2(30, 30)
-	await _motion(outside, MOUSE_BUTTON_MASK_LEFT)
-	check(not view.memory.studying, "Dragging a held mouse outside the eye cancels the peek")
-	await _mouse(outside, false)
-	await _mouse(view.study_button.get_global_rect().get_center(), true)
-	await _mouse(outside, false, true)
-	check(_all_hidden(view), "A cancelled mouse release outside the button cannot latch it")
+		check(view.memory.studying and view.study_button.engaged and purchases.size() == paid_before + 1
+			and view.memory.peek_duration == 5.0,
+			"Keyboard activation opens a paid five-second reveal on release: " + str(key))
+		remaining = view.memory.peek_remaining
+		await _key(key, true)
+		await _key(key, false)
+		check(view.memory.studying and view.memory.peek_remaining <= remaining and purchases.size() == paid_before + 1,
+			"A second completed key click cannot restart or charge the active countdown")
+		view._advance_peek(5.0)
+		check(_all_hidden(view), "The keyboard reveal closes at expiry without requiring another event")
 	var center: Vector2 = view.study_button.get_global_rect().get_center()
-	await _touch(4, center, true)
-	check(view.memory.studying, "A native touch holds the eye")
-	await _touch(5, center, true)
-	await _touch(5, center, false)
-	check(view.memory.studying, "Another finger cannot release the active held touch")
-	await _touch(4, outside, false, true)
-	check(_all_hidden(view), "Cancelling the owning touch hides every face")
-	await _touch(6, center, true)
-	var drag := InputEventScreenDrag.new()
-	drag.index = 6
-	drag.position = outside
-	root.push_input(drag, true)
-	await process_frame
-	check(_all_hidden(view), "Dragging the owning touch out cancels its peek")
-	await _touch(6, outside, false)
-	await _test_touch_release(view)
-	await _test_signed_touch_identifiers(view)
-	await _test_release_fallback(view)
-	view.begin_peek()
+	var outside: Vector2 = view.get_global_rect().end + Vector2(30, 30)
+	var before: int = purchases.size()
+	await _mouse(center, true)
+	check(_all_hidden(view) and purchases.size() == before, "Mouse-down waits for the click to complete")
+	await _mouse(center, false)
+	check(view.memory.studying and purchases.size() == before + 1, "A mouse click opens a reveal that stays open after release")
+	await _motion(outside, 0)
 	view.study_button.release_focus()
-	check(_all_hidden(view), "Losing eye focus releases a held reveal")
+	check(view.memory.studying, "Leaving the eye or moving focus does not cancel its countdown")
+	view.end_peek()
+	before = purchases.size()
+	await _mouse(center, true)
+	await _motion(outside, MOUSE_BUTTON_MASK_LEFT)
+	await _mouse(outside, false)
+	check(_all_hidden(view) and purchases.size() == before, "Dragging away before mouse release does not buy a reveal")
+	await _mouse(center, true)
+	await _mouse(outside, false, true)
+	check(_all_hidden(view) and purchases.size() == before, "A cancelled mouse press cannot purchase a reveal")
+	await _test_touch_clicks(view)
 	check(view.memory.cards == board and _rects(view) == positions and view.memory.attempts == 0 and view.memory.selected_indices.is_empty(),
-		"All physical hold/cancel paths preserve identity, score and input geometry")
+		"All complete and cancelled input paths preserve identity, score and target geometry")
 
 
-func _test_denied_hold_inputs(view) -> void:
+func _test_denied_clicks(view) -> void:
 	view.start_round(words, Data.theme("spring"), 83)
 	view.begin_peek()
 	view.end_peek()
@@ -207,192 +210,94 @@ func _test_denied_hold_inputs(view) -> void:
 		denied.append([ordinal, price])
 		return {"ok": false, "reason": "insufficient"}
 	view.study_button.grab_focus()
-	for repeat_hold in range(2):
+	for attempt in range(2):
 		var before: int = denied.size()
 		await _key(KEY_SPACE, true)
 		await _key(KEY_SPACE, true, true)
-		view.begin_peek()
-		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1,
-			"A denied keyboard hold and its repeat attempt one payment without advancing the price")
+		check(denied.size() == before, "Keyboard down and repeat cannot attempt a paid click early")
 		await _key(KEY_SPACE, false)
+		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1
+			and view.memory.peek_remaining == 0.0,
+			"Each complete denied keyboard click makes one attempt without starting a timer")
 	var center: Vector2 = view.study_button.get_global_rect().get_center()
-	for touch_first: bool in [true, false]:
+	for attempt in range(2):
 		var before: int = denied.size()
-		for touch: bool in [touch_first, not touch_first]:
-			if touch:
-				await _touch(40, center, true)
-			else:
-				await _mouse(center, true, false, InputEvent.DEVICE_ID_EMULATION)
+		await _touch(40, center, true)
 		await _touch(41, center, true)
 		await _touch(41, center, false)
-		view.begin_peek()
-		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1,
-			"A denied touch, its mouse emulation, and another finger produce one purchase attempt")
-		view.release_peek_pointer(40, true)
+		check(denied.size() == before, "An unrelated finger cannot complete the eye's pending paid click")
 		await _touch(40, center, false)
-		await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
-		await _touch(42, center, true)
-		check(denied.size() == before + 2,
-			"An owning fallback release clears a denied hold so a fresh touch can retry")
-		await _touch(42, center, false)
-	for repeat_hold in range(2):
+		check(denied.size() == before + 1 and _all_hidden(view) and view.memory.peeks == 1,
+			"A complete denied touch attempts one payment and a later touch can retry")
+	for attempt in range(2):
 		var before: int = denied.size()
 		await _mouse(center, true)
-		view.begin_peek()
-		check(denied.size() == before + 1 and _all_hidden(view), "A denied mouse hold remains latched until its owning release")
 		await _mouse(center, false)
+		check(denied.size() == before + 1 and _all_hidden(view), "Every separate denied mouse click can retry payment")
 	check(view.memory.peek_price() == 100 and denied.all(func(entry: Array) -> bool: return entry == [2, 100]),
-		"Every denied physical retry retains the same unpaid ordinal and 100-coin price")
+		"Failed clicks retain the same unpaid ordinal and 100-coin price")
 	_fund_peeks(view)
 
 
-func _test_touch_release(view) -> void:
+func _test_touch_clicks(view) -> void:
 	var center: Vector2 = view.study_button.get_global_rect().get_center()
-	await _touch(20, center, true)
-	check(view.memory.studying and view.study_button.engaged,
-		"A stationary finger opens the eye before any release")
-	await _touch(20, center, false)
-	check(_all_hidden(view) and not view.study_button.engaged and view._peek_touch == -1,
-		"Lifting the stationary owning finger closes the eye without another pointer event")
+	var outside: Vector2 = view.get_global_rect().end + Vector2(30, 30)
+	for identifier in [20, -1, -2, -2147483648, 2147483647]:
+		var before_peeks: int = view.memory.peeks
+		var before_purchases: int = purchases.size()
+		await _touch(identifier, center, true)
+		check(_all_hidden(view) and view.memory.peeks == before_peeks,
+			"Touch-down waits for a complete tap, including opaque signed identifiers")
+		await _touch(-1234, center, true)
+		await _touch(-1234, center, false)
+		check(_all_hidden(view), "A second finger cannot complete another finger's pending tap")
+		await _touch(identifier, center, false)
+		check(view.memory.studying and view.study_button.engaged and view.memory.peeks == before_peeks + 1
+			and purchases.size() == before_purchases + 1,
+			"The matching touch-up opens exactly one five-second reveal")
+		var remaining: float = view.memory.peek_remaining
+		await _touch(identifier, center, true)
+		await _touch(identifier, center, false)
+		check(view.memory.studying and view.memory.peek_remaining <= remaining and view.memory.peeks == before_peeks + 1
+			and purchases.size() == before_purchases + 1, "Repeated taps cannot restart or buy an active reveal")
+		view._advance_peek(5.0)
+		check(_all_hidden(view) and not view.study_button.engaged, "A released touch reveal expires without further input")
+	var before: int = purchases.size()
+	await _touch(-2, center, true)
+	await _touch(-2, center, false, true)
+	check(_all_hidden(view) and purchases.size() == before, "Cancelling a pending touch never buys a reveal")
+	await _touch(-1, center, true)
+	var drag := InputEventScreenDrag.new()
+	drag.index = -1
+	drag.position = outside
+	root.push_input(drag, true)
 	await process_frame
-	check(_all_hidden(view), "An ordinary touch release stays closed on the next idle frame")
+	await _touch(-1, outside, false)
+	check(_all_hidden(view) and purchases.size() == before, "Dragging a touch away before release never buys a reveal")
 	for touch_first: bool in [true, false]:
 		for release_touch_first: bool in [true, false]:
-			var before_peeks: int = view.memory.peeks
-			var paid_before: int = purchases.size()
-			var label := "touch-first=%s release-touch-first=%s" % [touch_first, release_touch_first]
+			var peeks: int = view.memory.peeks
+			before = purchases.size()
 			for touch: bool in [touch_first, not touch_first]:
 				if touch:
 					await _touch(21, center, true)
 				else:
 					await _mouse(center, true, false, InputEvent.DEVICE_ID_EMULATION)
-			check(view.memory.studying and view._peek_touch == 21 and view.memory.peeks == before_peeks + 1,
-				"Paired touch and mouse emulation open one owned peek: " + label)
-			check(purchases.size() == paid_before + 1,
-				"Paired touch and emulated mouse purchase only one reveal: " + label)
 			for touch: bool in [release_touch_first, not release_touch_first]:
 				if touch:
 					await _touch(21, center, false)
-					check(_all_hidden(view) and not view.study_button.engaged,
-						"The actual touch release closes before any following emulated event: " + label)
 				else:
 					await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
-					if not release_touch_first:
-						check(view.memory.studying and view._peek_touch == 21,
-							"An early emulated mouse release preserves the owning finger: " + label)
-			check(_all_hidden(view) and not view.study_button.engaged and view.memory.peeks == before_peeks + 1,
-				"A completed paired release cannot reopen or count another peek: " + label)
-	await _touch(22, center, true)
-	await _touch(23, center, true)
-	await _touch(23, center, false)
-	check(view.memory.studying and view._peek_touch == 22,
-		"Lifting a second finger keeps the original finger's eye open")
-	await _touch(22, center, false)
-	check(_all_hidden(view) and not view.study_button.engaged,
-		"Lifting the original finger closes the eye after a second finger has left")
-	var rapid_peeks: int = view.memory.peeks
+			check(view.memory.studying and view.memory.peeks == peeks + 1 and purchases.size() == before + 1,
+				"Touch with emulated mouse events purchases once regardless of event ordering")
+			view._advance_peek(5.0)
+	var peeks: int = view.memory.peeks
 	for tap in range(3):
 		root.push_input(_touch_event(24, center, true), true)
-		check(view.memory.studying, "A rapid tap opens immediately on press: %d" % tap)
 		root.push_input(_touch_event(24, center, false), true)
-		check(_all_hidden(view) and not view.study_button.engaged,
-			"A rapid tap closes immediately before the next frame: %d" % tap)
-	await process_frame
-	check(_all_hidden(view) and view.memory.peeks == rapid_peeks + 3,
-		"Three rapid touch taps settle closed and count only their three holds")
-
-
-func _test_signed_touch_identifiers(view) -> void:
-	var center: Vector2 = view.study_button.get_global_rect().get_center()
-	for identifier in [-1, -2, -2147483648, 2147483647]:
-		var before_peeks: int = view.memory.peeks
-		await _touch(identifier, center, true)
-		check(view.memory.studying and view.study_button.engaged and view._peek_touch_active,
-			"An opaque signed touch identifier opens the eye: %d" % identifier)
-		await _touch(-1234, center, true)
-		await _touch(-1234, center, false)
-		view.release_peek_pointer(-1234, true)
-		view.release_peek_pointer(-1, false)
-		await _mouse(center, false, false, InputEvent.DEVICE_ID_EMULATION)
-		check(view.memory.studying and view._peek_touch == identifier,
-			"Another finger or mouse cannot release a signed touch owner: %d" % identifier)
-		await _touch(identifier, center, false)
-		check(_all_hidden(view) and not view.study_button.engaged and not view._peek_touch_active,
-			"The same signed touch identifier closes on release without another input: %d" % identifier)
-		await _touch(identifier, center, true)
-		view.release_peek_pointer(identifier, true)
-		check(_all_hidden(view) and not view._peek_touch_active,
-			"The browser fallback closes a signed touch owner before the native release: %d" % identifier)
-		await _touch(identifier, center, false)
-		check(_all_hidden(view) and view.memory.peeks == before_peeks + 2,
-			"A late native release stays closed and does not add another peek: %d" % identifier)
-	await _touch(-2, center, true)
-	await _touch(-2, center, false, true)
-	check(_all_hidden(view) and not view._peek_touch_active, "Cancelling a negative touch owner closes the eye")
-	await _touch(-1, center, true)
-	var drag := InputEventScreenDrag.new()
-	drag.index = -1
-	drag.position = view.get_global_rect().end + Vector2(30, 30)
-	root.push_input(drag, true)
-	await process_frame
-	check(_all_hidden(view) and not view._peek_touch_active, "Dragging a negative touch owner off the eye closes it")
-	await _touch(-1, drag.position, false)
-
-
-func _test_release_fallback(view) -> void:
-	var center: Vector2 = view.study_button.get_global_rect().get_center()
-	await _touch(30, center, true)
-	await _touch(31, center, true)
-	view.release_peek_pointer(31)
-	view.release_peek_pointer(-1, false)
-	check(view.memory.studying and view._peek_touch == 30,
-		"Browser releases from another finger or mouse cannot close the owning touch")
-	await _touch(31, center, false)
-	view.release_peek_pointer(30)
-	check(_all_hidden(view) and not view.study_button.engaged,
-		"The browser owning-finger release closes before its canvas event arrives")
-	await _touch(30, center, false)
-	check(_all_hidden(view), "A late canvas touch release keeps the fallback-closed eye shut")
-	await _mouse(center, true)
-	check(view.memory.studying and view._mouse_peek and view.study_button.button_pressed,
-		"A real mouse hold records pointer ownership and the native pressed state")
-	view.release_peek_pointer(30)
-	check(view.memory.studying, "A browser touch release cannot cancel a mouse-owned peek")
-	view.release_peek_pointer(-1, false)
-	check(_all_hidden(view) and not view.study_button.engaged and not view.study_button.button_pressed
-		and view.study_button.has_focus(),
-		"The browser mouse release clears both the reveal and native press while preserving eye focus")
-	await _mouse(center, false)
-	view.study_button.grab_focus()
-	await _key(KEY_SPACE, true)
-	view.release_peek_pointer(30)
-	view.release_peek_pointer(-1, false)
-	check(view.memory.studying, "Browser pointer releases leave a keyboard-owned hold open")
-	await _key(KEY_SPACE, false)
-	view.begin_peek()
-	view.release_peek_pointer(30)
-	view.release_peek_pointer(-1, false)
-	check(view.memory.studying and view._peek_touch == -1 and not view._mouse_peek,
-		"Browser pointer releases leave the controller's explicit begin_peek hold open")
-	view.end_peek()
-	# Bypass the view's global input handler to exercise the native Button GUI path.
-	view.set_process_input(false)
-	await _touch(32, center, true)
-	check(view.memory.studying and view._peek_touch == 32 and view.study_button.button_pressed,
-		"Native GUI touch input records the same finger ownership before button-down reveals cards")
-	view.release_peek_pointer(33)
-	check(view.memory.studying, "An unrelated browser release cannot finish a native GUI touch")
-	view.release_peek_pointer(32)
-	check(_all_hidden(view) and not view.study_button.button_pressed and view.study_button.has_focus(),
-		"A fallback release clears native GUI touch state and preserves eye focus")
-	await _touch(32, center, false)
-	await _touch(33, center, true)
-	check(view.memory.studying and view._peek_touch == 33,
-		"A new native GUI finger can hold the eye after fallback released its predecessor")
-	await _touch(33, center, false)
-	check(_all_hidden(view) and not view.study_button.button_pressed,
-		"Native GUI touch release closes the eye without waiting for another screen interaction")
-	view.set_process_input(true)
+	check(view.memory.studying and view.memory.peeks == peeks + 1,
+		"Three rapid complete taps open one countdown instead of buying three reveals")
+	view._advance_peek(5.0)
 
 
 func _test_cancel_and_reverse(view) -> void:
@@ -406,7 +311,7 @@ func _test_cancel_and_reverse(view) -> void:
 		card._flip.pause()
 		card._flip.custom_step(0.04)
 	check(view.card_buttons.all(func(card: Button) -> bool: return card.word_label.get_parent().scale.x < 1.0),
-		"All ten actual face containers animate together on hold")
+		"All ten actual face containers animate together when a reveal begins")
 	check(_rects(view) == positions and view.card_buttons.all(func(card: Button) -> bool: return card.scale == Vector2.ONE),
 		"All ten Button targets stay fixed during simultaneous flips")
 	for card in view.card_buttons:
@@ -415,7 +320,7 @@ func _test_cancel_and_reverse(view) -> void:
 	view.begin_peek()
 	view.end_peek()
 	await create_timer(0.3).timeout
-	check(_all_hidden(view) and _all_settled(view), "Rapid hold/release/rehold settles all latest backs")
+	check(_all_hidden(view) and _all_settled(view), "Rapid reveal/cancel/reveal settles all latest backs")
 	for cancellation in ["pause", "hide", "focus", "stop", "restart"]:
 		view.start_round(words, Data.theme("spring"), 91)
 		view.begin_peek()
@@ -426,7 +331,7 @@ func _test_cancel_and_reverse(view) -> void:
 			"focus": view.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
 			"stop": view.stop()
 			"restart": view.start_round(words, Data.theme("spring"), 92)
-		check(not view.memory.studying and _all_settled(view), cancellation + " immediately cancels held animations")
+		check(not view.memory.studying and _all_settled(view), cancellation + " immediately cancels reveal animations")
 		await create_timer(0.3).timeout
 		view.pause(false)
 		view.show()
@@ -436,10 +341,10 @@ func _test_cancel_and_reverse(view) -> void:
 	view.begin_peek()
 	view.size = Vector2(600, 360)
 	await process_frame
-	check(view.memory.studying and _all_settled(view), "Resizing a held board settles all requested fronts")
+	check(view.memory.studying and _all_settled(view), "Resizing an active countdown settles all requested fronts")
 	view.end_peek()
 	view.set_reduced_motion(true)
-	check(_all_hidden(view) and _all_settled(view), "Reduced motion during release settles every back immediately")
+	check(_all_hidden(view) and _all_settled(view), "Reduced motion during cancellation settles every back immediately")
 
 
 func _test_scaled_layout(view) -> void:
@@ -502,20 +407,21 @@ func _test_external_toolbar() -> void:
 		await process_frame
 		_check_external_grid(view)
 	view.size = Vector2(456, 500)
-	await _test_hold_inputs(view)
+	await _test_timed_inputs(view)
 	var center: Vector2 = eye.get_global_rect().get_center()
 	await _touch(8, center, true)
 	view.set_palette(Data.theme("space"))
 	view.size = Vector2(600, 420)
-	check(view.memory.studying and view._peek_touch == 8 and eye.get_rect() == eye_bounds,
+	check(not view.memory.studying and view._peek_touch == 8 and eye.get_rect() == eye_bounds,
 		"External touch capture survives board resize and palette refresh")
 	await _touch(8, center, false)
-	check(_all_hidden(view), "The original outside-view touch release still conceals all ten fronts")
+	check(view.memory.studying, "The external eye opens on release and retains its countdown")
+	view.end_peek()
 	view.begin_peek()
 	view.hide()
 	check(not eye.visible and not view.memory.studying, "Hiding Memory also hides and releases its externally parented eye")
 	view.show()
-	check(eye.visible and not eye.disabled and _all_hidden(view), "Showing Memory restores only an unheld external eye")
+	check(eye.visible and not eye.disabled and _all_hidden(view), "Showing Memory restores a closed external eye")
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	root.content_scale_size = Vector2i(480, 720)
 	root.size = Vector2i(320, 480)
@@ -530,7 +436,7 @@ func _test_external_toolbar() -> void:
 	_check_external_grid(view)
 	center = eye.get_global_rect().get_center()
 	await _touch(9, center, true)
-	check(view.memory.studying and view._peek_touch == 9, "Parent-first teardown begins with a real captured external touch")
+	check(not view.memory.studying and view._peek_touch == 9, "Parent-first teardown begins with a real pending external touch")
 	toolbar.queue_free()
 	await process_frame
 	await process_frame
@@ -559,9 +465,8 @@ func _test_external_toolbar() -> void:
 	remaining_eye.reparent(other_toolbar)
 	other.queue_free()
 	await process_frame
-	remaining_eye.button_down.emit()
-	remaining_eye.button_up.emit()
-	check(remaining_eye.get_signal_connection_list("button_down").is_empty(),
+	remaining_eye.pressed.emit()
+	check(remaining_eye.get_signal_connection_list("pressed").is_empty(),
 		"Memory-first teardown disconnects its externally owned native handlers")
 	other_toolbar.queue_free()
 	await process_frame
