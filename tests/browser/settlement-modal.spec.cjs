@@ -147,77 +147,99 @@ async function checkModal(page, info, label) {
 }
 
 for (const mode of ['match', 'memory', 'phrase']) {
-  test(`${mode} settles over its completed game and preserves its chest through Home and Play again`, async ({ page }, info) => {
-    // Complete a real round, open its chest, and revisit the modal before replay.
-    // Software WebGL rendering needs room for the full flow; action waits stay bounded.
-    test.setTimeout(180000);
-    const errors = await openGame(page, { mode });
-    await observeSettlement(page);
-    const beforePieces = await pieceCount(page), beforeCoins = (await wallet(page)).balance;
-    const complete = { match: completeMatch, memory: completeMemory, phrase: completePhrase }[mode];
-    await complete(page);
-    await expect.poll(async () => (await celebrationState(page)).ready, { timeout: 15000 }).toBe(true);
-    await checkModal(page, info, `${mode}-celebration-dialog`);
-    await acceptCelebration(page);
-    let state = await checkModal(page, info, `${mode}-closed-chest-dialog`);
-    expect(state.result.visible).toBe(true);
-    expect(state.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(true);
-    expect(await pieceCount(page), 'Completing the game never claims the chest early.').toBe(beforePieces);
-    expect((await wallet(page)).balance).toBe(beforeCoins);
+  for (const geometry of [
+    { name: 'desktop', width: 1366, height: 768 },
+    { name: 'phone', width: 393, height: 852 }
+  ]) {
+    test(`${mode} opens its chest directly in settlement on ${geometry.name} and preserves Home and Play again`, async ({ page }, info) => {
+      // Complete a real round, open its chest, and revisit the modal before replay.
+      // Software WebGL rendering needs room for the full flow; action waits stay bounded.
+      test.setTimeout(180000);
+      await page.setViewportSize({ width: geometry.width, height: geometry.height });
+      const errors = await openGame(page, { mode });
+      await observeSettlement(page);
+      const beforePieces = await pieceCount(page), beforeCoins = (await wallet(page)).balance;
+      const complete = { match: completeMatch, memory: completeMemory, phrase: completePhrase }[mode];
+      await complete(page);
+      await acceptCelebration(page);
+      let state = await checkModal(page, info, `${mode}-closed-chest-dialog`);
+      expect(state.result.visible).toBe(true);
+      expect((await celebrationState(page)).active, 'The performance hands off directly to the real chest.').toBe(false);
+      expect((await celebrationState(page)).action.visible, 'No intermediary Open chest button is shown.').toBe(false);
+      expect(state.result.controls.filter(control => control.visible && control.text === 'Open chest')).toEqual([]);
+      expect(state.result.controls.find(control => control.name === 'OpenSettlementChest'))
+        .toMatchObject({ visible: true, disabled: false });
+      expect(state.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(true);
+      expect(await pieceCount(page), 'Completing the game never claims the chest early.').toBe(beforePieces);
+      expect((await wallet(page)).balance).toBe(beforeCoins);
 
-    const bounds = await metrics(page), coveredHome = headerPoint(bounds, 'mode');
-    await tap(page, 4 / bounds.scale, bounds.height / 2);
-    await tap(page, coveredHome.x, coveredHome.y);
-    await page.keyboard.press('Escape');
-    state = (await metrics(page)).growth;
-    expect(state.settlement.visible, 'Shade, covered header and Escape cannot leave the settlement.').toBe(true);
-    expect((await metrics(page)).library.visible).toBe(false);
-    expect(state.visible, 'The underlying word catalog remains closed.').toBe(false);
-    for (let step = 0; step < 5; step++) {
-      await page.keyboard.press('Tab');
-      await expect.poll(async () => (await metrics(page)).growth.result.controls.some(control =>
-        control.focused && control.visible && !control.disabled), { message: 'Tab focus stays inside settlement.' }).toBe(true);
-    }
-    const disabledReplay = resultPoint(await metrics(page), 'newAdventure');
-    await tap(page, disabledReplay.x, disabledReplay.y);
-    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+      const bounds = await metrics(page), coveredHome = headerPoint(bounds, 'mode');
+      await tap(page, 4 / bounds.scale, bounds.height / 2);
+      await tap(page, coveredHome.x, coveredHome.y);
+      await page.keyboard.press('Escape');
+      state = (await metrics(page)).growth;
+      expect(state.settlement.visible, 'Shade, covered header and Escape cannot leave the settlement.').toBe(true);
+      expect((await metrics(page)).library.visible).toBe(false);
+      expect(state.visible, 'The underlying word catalog remains closed.').toBe(false);
+      for (let step = 0; step < 5; step++) {
+        await page.keyboard.press('Tab');
+        await expect.poll(async () => (await metrics(page)).growth.result.controls.some(control =>
+          control.focused && control.visible && !control.disabled), { message: 'Tab focus stays inside settlement.' }).toBe(true);
+      }
+      const disabledReplay = resultPoint(await metrics(page), 'newAdventure');
+      await tap(page, disabledReplay.x, disabledReplay.y);
+      await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
 
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await rendered(page);
-    const chestBounds = await metrics(page), chest = resultPoint(chestBounds, 'chest');
-    await page.mouse.move(chestBounds.x + chest.x * chestBounds.scale, chestBounds.y + chest.y * chestBounds.scale);
-    await page.mouse.down();
-    try {
-      await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
-    } finally { await page.mouse.up(); }
-    await expect.poll(async () => pieceCount(page)).toBe(beforePieces + 1);
-    await expect.poll(async () => (await wallet(page)).balance).toBeGreaterThan(beforeCoins);
-    const earnedCoins = (await wallet(page)).balance;
-    state = await checkModal(page, info, `${mode}-opened-chest-dialog`);
-    expect(state.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(false);
-    await page.emulateMedia({ reducedMotion: 'reduce' });
+      // The chest itself is the interaction target. An incomplete hold must
+      // return to rest without claiming either the treasure or its coins.
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      await rendered(page);
+      const initialBounds = await metrics(page), initialChest = resultPoint(initialBounds, 'chest');
+      await page.mouse.click(initialBounds.x + initialChest.x * initialBounds.scale,
+        initialBounds.y + initialChest.y * initialBounds.scale, { delay: 140 });
+      await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+      expect(await pieceCount(page), 'Releasing a short hold leaves the chest unclaimed.').toBe(beforePieces);
+      expect((await wallet(page)).balance).toBe(beforeCoins);
+      await openModeMenu(page);
+      await chooseMode(page, mode);
+      await acceptCelebration(page);
+      expect(await pieceCount(page), 'Home preserves the unopened chest without claiming it.').toBe(beforePieces);
+      expect((await wallet(page)).balance).toBe(beforeCoins);
+      const chestBounds = await metrics(page), chest = resultPoint(chestBounds, 'chest');
+      await page.mouse.move(chestBounds.x + chest.x * chestBounds.scale, chestBounds.y + chest.y * chestBounds.scale);
+      await page.mouse.down();
+      try {
+        await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
+      } finally { await page.mouse.up(); }
+      await expect.poll(async () => pieceCount(page)).toBe(beforePieces + 1);
+      await expect.poll(async () => (await wallet(page)).balance).toBeGreaterThan(beforeCoins);
+      const earnedCoins = (await wallet(page)).balance;
+      state = await checkModal(page, info, `${mode}-opened-chest-dialog`);
+      expect(state.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(false);
+      await page.emulateMedia({ reducedMotion: 'reduce' });
 
-    await openModeMenu(page);
-    expect((await metrics(page)).growth.settlement.visible).toBe(false);
-    await chooseMode(page, mode);
-    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
-    expect(await pieceCount(page)).toBe(beforePieces + 1);
-    expect((await wallet(page)).balance).toBe(earnedCoins);
-    const replay = resultPoint(await metrics(page), 'newAdventure');
-    await tap(page, replay.x, replay.y);
-    await expect.poll(async () => (await metrics(page)).growth.settlement.visible).toBe(false);
-    expect((await metrics(page)).library.current).toBe(mode);
-    expect((await metrics(page)).growth.background_game.visible).toBe(true);
-    if (mode === 'phrase') await expect.poll(async () => (await phraseState(page)).completed).toBe(0);
-    else await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Find a pair.');
-    expect(await pieceCount(page), 'Play again cannot claim the previous chest twice.').toBe(beforePieces + 1);
-    expect((await wallet(page)).balance).toBe(earnedCoins);
+      await openModeMenu(page);
+      expect((await metrics(page)).growth.settlement.visible).toBe(false);
+      await chooseMode(page, mode);
+      await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
+      expect(await pieceCount(page)).toBe(beforePieces + 1);
+      expect((await wallet(page)).balance).toBe(earnedCoins);
+      const replay = resultPoint(await metrics(page), 'newAdventure');
+      await tap(page, replay.x, replay.y);
+      await expect.poll(async () => (await metrics(page)).growth.settlement.visible).toBe(false);
+      expect((await metrics(page)).library.current).toBe(mode);
+      expect((await metrics(page)).growth.background_game.visible).toBe(true);
+      if (mode === 'phrase') await expect.poll(async () => (await phraseState(page)).completed).toBe(0);
+      else await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Find a pair.');
+      expect(await pieceCount(page), 'Play again cannot claim the previous chest twice.').toBe(beforePieces + 1);
+      expect((await wallet(page)).balance).toBe(earnedCoins);
 
-    const frames = await page.evaluate(() => window.settlementFrames);
-    expect(frames.some(frame => frame.result), 'The real settlement path was observed.').toBe(true);
-    expect(frames.filter(frame => frame.result && (!frame.dialog || !frame.background)),
-      'No standalone results page or missing-game transition is rendered.').toEqual([]);
-    await info.attach(`${mode}-settlement-transitions`, { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
-    expect(errors).toEqual([]);
-  });
+      const frames = await page.evaluate(() => window.settlementFrames);
+      expect(frames.some(frame => frame.result), 'The real settlement path was observed.').toBe(true);
+      expect(frames.filter(frame => frame.result && (!frame.dialog || !frame.background)),
+        'No standalone results page or missing-game transition is rendered.').toEqual([]);
+      await info.attach(`${mode}-settlement-transitions`, { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+      expect(errors).toEqual([]);
+    });
+  }
 }

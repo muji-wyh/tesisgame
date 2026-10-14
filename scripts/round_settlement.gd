@@ -8,8 +8,12 @@ signal home_requested
 
 const ChestView = preload("res://scripts/chest_view.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const Mascot = preload("res://scripts/duck_mascot.gd")
+const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
+const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 
+var pip: Mascot
 var chest: ChestView
 var chest_button: Button
 var retry_button: Button
@@ -25,6 +29,7 @@ var _save_failed: bool = false
 var _opened: bool = false
 var _compact: bool = false
 var _appearance: Array = []
+var _chest_light := TextureRect.new()
 
 
 func _init() -> void:
@@ -42,6 +47,17 @@ func _init() -> void:
 	caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	caption.max_lines_visible = 3
 	add_child(caption)
+	pip = Mascot.new()
+	pip.name = "SettlementPip"
+	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pip.focus_mode = Control.FOCUS_NONE
+	pip.set_proactive_allowed(false)
+	add_child(pip)
+	_chest_light.texture = TREASURE_LIGHT
+	_chest_light.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_chest_light.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_chest_light.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_chest_light)
 	chest = ChestView.new()
 	chest.name = "SettlementChest"
 	chest.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -52,9 +68,13 @@ func _init() -> void:
 	chest_button.focus_mode = Control.FOCUS_ALL
 	chest_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	chest_button.set("accessibility_name", "Hold to open the treasure chest")
-	for state in ["normal", "hover", "pressed", "disabled"]:
+	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		chest_button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	add_child(chest_button)
+	chest_button.focus_entered.connect(_refresh_chest_focus)
+	chest_button.focus_exited.connect(_refresh_chest_focus)
+	chest_button.mouse_entered.connect(_refresh_chest_focus)
+	chest_button.mouse_exited.connect(_refresh_chest_focus)
 	retry_button = _make_button("RetrySettlementSave", "Retry save")
 	retry_button.pressed.connect(func() -> void:
 		if _can_activate(retry_button):
@@ -68,6 +88,7 @@ func _init() -> void:
 		if _can_activate(replay_button):
 			replay_requested.emit())
 	resized.connect(_layout)
+	visibility_changed.connect(_sync_companion)
 	configure({}, false, false, false, false)
 
 
@@ -120,7 +141,26 @@ func configure(palette: Dictionary, has_chest: bool, saving: bool, save_failed: 
 	retry_button.set("accessibility_description", message if save_failed else "")
 	home_button.disabled = saving or save_failed
 	replay_button.disabled = saving or save_failed
+	_sync_companion()
 	_layout()
+
+
+func _refresh_chest_focus() -> void:
+	var focused: bool = chest_button.has_focus() and not chest_button.disabled
+	var hovered: bool = chest_button.is_hovered() and not chest_button.disabled
+	_chest_light.visible = _has_chest
+	_chest_light.modulate = Color("#ebcd85", 0.52 if focused else 0.38 if hovered else 0.22)
+	caption.add_theme_color_override("font_color", Style.WRONG if _save_failed else
+		Style.GOOD if focused or hovered or _opened else Style.MUTED)
+
+
+func _sync_companion() -> void:
+	if not is_instance_valid(pip):
+		return
+	pip.set_outfit_theme(chest.theme_id)
+	pip.set_reduced_motion(chest.reduced_motion)
+	pip.set_celebration_progress(1.0)
+	pip.set_idle_paused(not is_visible_in_tree())
 
 
 func _layout() -> void:
@@ -132,71 +172,25 @@ func _layout() -> void:
 		Style.action_button(home_button, accent)
 		Style.action_button(replay_button, accent, true)
 		Style.action_button(retry_button, accent)
-		chest_button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT,
-			accent, ceili(20 / s), maxi(2, roundi(2 / s))))
 		_appearance = [s, accent]
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
-	var margin: float = 4.0 / s
-	var gap: float = 8.0 / s
-	var action_h: float = 48.0 / s
-	var inner_w: float = maxf(1.0, size.x - margin * 2.0)
-	var action_y: float = size.y - margin - action_h
-	var wide_actions: bool = size.x * s >= 420.0
-	var action_count: int = 3 if _save_failed and wide_actions else 2
-	var action_w: float = (inner_w - gap * (action_count - 1)) / action_count
-	home_button.position = Vector2(margin, action_y)
-	home_button.size = Vector2(action_w, action_h)
-	replay_button.position = Vector2(size.x - margin - action_w, action_y)
-	replay_button.size = Vector2(action_w, action_h)
-	var stage_bottom: float = action_y - gap
-	if _save_failed:
-		if wide_actions:
-			retry_button.position = Vector2(margin + action_w + gap, action_y)
-			retry_button.size = Vector2(action_w, action_h)
-		else:
-			stage_bottom -= action_h
-			retry_button.position = Vector2(margin, stage_bottom)
-			retry_button.size = Vector2(inner_w, action_h)
-			stage_bottom -= gap
-	var stage_h: float = maxf(0.0, stage_bottom - margin)
-	_compact = _has_chest and inner_w * s >= 380.0 and stage_h * s < 320.0
-	var tight: bool = stage_h * s < 180.0
-	var heading_h: float = (28.0 if tight else 36.0) / s
-	var caption_h: float = (50.0 if _save_failed else 38.0) / s
-	heading.add_theme_font_size_override("font_size", ceili((20.0 if tight else 24.0) / s))
-	caption.add_theme_font_size_override("font_size", ceili((12.0 if tight else 14.0) / s))
-	if _compact:
-		var info_w: float = inner_w * 0.43
-		var info_h: float = heading_h + gap + caption_h
-		var info_top: float = margin + maxf(0.0, (stage_h - info_h) * 0.5)
-		heading.position = Vector2(margin, info_top)
-		heading.size = Vector2(info_w, heading_h)
-		caption.position = Vector2(margin, info_top + heading_h + gap)
-		caption.size = Vector2(info_w, caption_h)
-		chest.position = Vector2(margin + info_w + gap, margin)
-		chest.size = Vector2(maxf(0.0, inner_w - info_w - gap), stage_h)
-	elif _has_chest:
-		heading.position = Vector2(margin, margin)
-		heading.size = Vector2(inner_w, heading_h)
-		caption.position = Vector2(margin, stage_bottom - caption_h)
-		caption.size = Vector2(inner_w, caption_h)
-		var chest_top: float = margin + heading_h + gap
-		var chest_h: float = maxf(0.0, caption.position.y - gap - chest_top)
-		var chest_w: float = minf(inner_w, 410.0 / s)
-		chest.position = Vector2((size.x - chest_w) * 0.5, chest_top)
-		chest.size = Vector2(chest_w, chest_h)
-	else:
-		var info_h: float = heading_h + gap + caption_h
-		var info_top: float = margin + maxf(0.0, (stage_h - info_h) * 0.5)
-		heading.position = Vector2(margin, info_top)
-		heading.size = Vector2(inner_w, heading_h)
-		caption.position = Vector2(margin, info_top + heading_h + gap)
-		caption.size = Vector2(inner_w, caption_h)
-		chest.position = Vector2.ZERO
-		chest.size = Vector2.ZERO
+	var layout: Dictionary = RewardLayout.measure(size, s, _has_chest, _save_failed)
+	_compact = layout.compact
+	for item: Array in [[heading, "heading"], [caption, "caption"], [pip, "pip"], [chest, "chest"],
+		[home_button, "home"], [replay_button, "replay"], [retry_button, "retry"]]:
+		var control: Control = item[0]
+		var rect: Rect2 = layout[item[1]]
+		control.custom_minimum_size = Vector2.ZERO
+		control.position = rect.position
+		control.size = rect.size
+	heading.add_theme_font_size_override("font_size", layout.heading_size)
+	caption.add_theme_font_size_override("font_size", layout.caption_size)
 	chest_button.position = chest.position
 	chest_button.size = chest.size
+	_chest_light.size = Vector2.ONE * minf(chest.size.x, chest.size.y * 1.15)
+	_chest_light.position = chest.position + Vector2(chest.size.x * 0.5, chest.size.y * 0.60) - _chest_light.size * 0.5
+	_refresh_chest_focus()
 	_update_focus()
 
 
@@ -220,7 +214,7 @@ func _update_focus() -> void:
 func snapshot() -> Dictionary:
 	return {
 		"visible": is_visible_in_tree(), "rect": _rect(get_global_rect()),
-		"heading": heading.text, "caption": caption.text,
+		"heading": heading.text, "caption": caption.text, "pip_rect": _rect(pip.get_global_rect()),
 		"has_chest": _has_chest, "saving": _saving, "save_failed": _save_failed,
 		"opened": _opened, "compact": _compact,
 		"chest": {"visible": chest.is_visible_in_tree(), "rect": _rect(chest.get_global_rect())},

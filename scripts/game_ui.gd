@@ -2118,7 +2118,11 @@ func _on_round_celebration_finished(round_id: String) -> void:
 		return
 	audio.stop_round_celebration()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
-	_announce_status("You earned a treasure chest! Choose Open chest." if model.chest_earned else "Every word matched! Choose Play again.")
+	# Finish the entrance in place; the chest itself is the next interaction.
+	if int(_round_celebration.snapshot().chest_count) > 0:
+		_accept_round_chest(round_id)
+		return
+	_announce_status("Every word matched! Choose Play again.")
 	var target: Control = _default_focus()
 	if _valid_focus(target):
 		target.grab_focus()
@@ -2128,8 +2132,8 @@ func _on_round_celebration_finished(round_id: String) -> void:
 func _accept_round_chest(round_id: String) -> void:
 	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id in ["pop", "jelly", "word_jelly"]:
 		return
-	_play_ui_click()
 	if _mode_id in ["match", "memory"] and not model.chest_earned:
+		_play_ui_click()
 		if new_round():
 			_default_focus().grab_focus()
 		else:
@@ -2454,6 +2458,7 @@ func _refresh() -> void:
 		var reward_id: String = JellyRewardProgress.theme_for_tier(1) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		chest.reduced_motion = reduced_motion
 		chest.configure_skin(Data.theme(reward_id), data.chests)
+		_single_result._sync_companion()
 	_sync_settlement_dialog()
 	if _last_phase != model.phase:
 		_last_phase = model.phase
@@ -3469,7 +3474,8 @@ func _observe_activity(event: InputEvent) -> void:
 
 func _input(event: InputEvent) -> void:
 	if _settlement_dialog_open():
-		if event.is_action_pressed("ui_cancel"):
+		if event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.button_index == JOY_BUTTON_B and event.pressed):
+			_stop_controller_actions()
 			_on_input_canceled()
 			get_viewport().set_input_as_handled()
 			return
@@ -4842,7 +4848,7 @@ func _refresh_growth() -> void:
 		return
 	var state: Dictionary = growth.snapshot()
 	_mode_panel.configure_growth(state)
-	for mascot in [duck, _phrase.pip, _round_celebration.pip]:
+	for mascot in [duck, _phrase.pip, _round_celebration.pip, _single_result.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)

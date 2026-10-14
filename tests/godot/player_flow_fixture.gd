@@ -53,7 +53,8 @@ static func earn_pair_chest(app) -> void:
 static func finish_celebration(app) -> void:
 	# Chest/result-focused suites explicitly cross the shared presentation gate.
 	# Dedicated celebration suites exercise real timing, narration and cancellation.
-	app._pair_reward.advance(3.0)
+	app._pair_reward.advance(app._pair_reward.REWARD_SECONDS + 0.01)
+	app.audio.stop_pair_chest_discovery()
 	app._refresh()
 	if not app._round_celebration.is_active():
 		return
@@ -61,5 +62,5 @@ static func finish_celebration(app) -> void:
 	app._round_celebration.set_narration_playing(false)
 	app._round_celebration.advance(3.01)
 	if app._round_celebration.is_active():
-		assert(app._round_celebration.is_ready())
+		assert(app._round_celebration.is_ready() and not app.model.chest_earned)
 		app._round_celebration.action_button.pressed.emit()

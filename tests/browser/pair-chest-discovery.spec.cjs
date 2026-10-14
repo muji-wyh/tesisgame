@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, memoryPoint,
-  celebrationState
+  acceptCelebration
 } = require('./game-ui.cjs');
 const {
   watchAudioRequests, observeOutputAudio, expectOutputEnergy, recordingTiming
@@ -118,7 +118,7 @@ for (const mode of ['match', 'memory']) {
         await playPair(page, mode, pairs[index]);
         if (index < pairs.length - 1) await continuePairs(page, mode);
       }
-      await expect.poll(async () => (await celebrationState(page)).ready, { timeout: 15000 }).toBe(true);
+      await acceptCelebration(page);
       const cheers = await discoveryPlaybacks(page, from, timing);
       expect(cheers, 'Further successful pairs and round settlement never repeat the discovery cheer.').toHaveLength(1);
       expect(cheers[0].endedAt, 'The discovery recording completes naturally.').toBeGreaterThan(cheers[0].at);

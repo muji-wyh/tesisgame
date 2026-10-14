@@ -7,6 +7,7 @@ signal home_requested
 signal cue_requested(round_id: String, cue: String)
 signal confetti_requested(round_id: String)
 
+const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
@@ -80,8 +81,8 @@ func _init() -> void:
 	_count = _label("", "CelebrationChestCount")
 	_count.add_theme_font_override("font", Style.HEADING_FONT)
 	action_button = Button.new()
-	action_button.name = "OpenEarnedChest"
-	action_button.text = "Open chest"
+	action_button.name = "CelebrationReplay"
+	action_button.text = "Play again"
 	action_button.pressed.connect(_request_open)
 	add_child(action_button)
 	home_button = Button.new()
@@ -128,7 +129,7 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 	if _chest_tier > 0:
 		_caption.text = "Score: %d · %s" % [_score, JellyRewardProgress.title_for_tier(_chest_tier)]
 	_count.text = "" if _chest_count <= 1 else "x%d" % _chest_count
-	action_button.text = "Play again" if _chest_count == 0 else "Open chest" if _chest_count == 1 else "Open chests"
+	action_button.text = "Play again"
 	chest.visible = _chest_count > 0
 	_glow.visible = _chest_count > 0
 	pip.set_reduced_motion(reduce)
@@ -225,7 +226,7 @@ func current_round_id() -> String:
 
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
-	if _active and _ready_to_open and not _paused and not _automatic and not _open_emitted and is_visible_in_tree():
+	if _active and _ready_to_open and not _paused and not _automatic and _chest_count == 0 and not _open_emitted and is_visible_in_tree():
 		result.append(action_button)
 	return result
 
@@ -311,8 +312,8 @@ func _visibility_changed() -> void:
 
 
 func _refresh_action() -> void:
-	action_button.visible = _active and _ready_to_open and not _automatic
-	action_button.disabled = not _active or not _ready_to_open or _paused or _open_emitted
+	action_button.visible = _active and _ready_to_open and not _automatic and _chest_count == 0
+	action_button.disabled = not _active or not _ready_to_open or _paused or _open_emitted or _chest_count > 0
 	home_button.visible = action_button.visible
 	home_button.disabled = action_button.disabled
 
@@ -345,58 +346,28 @@ func _layout() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var scale_factor: float = maxf(0.25, Style.ui_scale(self))
-	var w: float = size.x * scale_factor
-	var h: float = size.y * scale_factor
-	var compact: bool = h < 350.0
-	var title_h: float = 40.0 if compact else 54.0
-	var caption_h: float = 25.0 if compact else 32.0
-	var action_h: float = 44.0 if compact else 50.0
-	var gap: float = 5.0 if compact else 12.0
-	var available: float = maxf(48.0, h - title_h - caption_h - action_h - gap * 3.0)
-	var hero_height: float = minf(280.0, minf(available, w * 0.70))
-	var hero_width: float = minf(w - 12.0, hero_height * 1.82)
-	var pip_side: float = minf(hero_height, hero_width * 0.59)
-	if _chest_count == 0:
-		pip_side = hero_height
-	var chest_side: float = minf(hero_height * 0.85, hero_width * 0.46)
-	var total: float = title_h + hero_height + caption_h + action_h + gap * 3.0
-	var top: float = maxf(0.0, (h - total) * 0.42)
-	var left: float = (w - hero_width) * 0.5
-	var hero_top: float = top + title_h + gap
-	_place(_heading, Rect2(4.0, top, w - 8.0, title_h), scale_factor)
-	_heading.add_theme_font_size_override("font_size", ceili((28.0 if compact else 38.0) / scale_factor))
-	_pip_rect = Rect2(Vector2(left, hero_top + hero_height - pip_side) / scale_factor, Vector2.ONE * pip_side / scale_factor)
-	if _chest_count == 0:
-		_pip_rect.position.x = (w - pip_side) * 0.5 / scale_factor
-	_chest_rect = Rect2(Vector2(left + hero_width - chest_side, hero_top + hero_height - chest_side * 0.91) / scale_factor, Vector2.ONE * chest_side / scale_factor)
-	pip.custom_minimum_size = Vector2.ZERO
-	pip.position = _pip_rect.position
-	pip.size = _pip_rect.size
-	chest.position = _chest_rect.position
-	chest.size = _chest_rect.size
+	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0)
+	for item: Array in [[_heading, "heading"], [_caption, "caption"], [pip, "pip"], [chest, "chest"],
+		[home_button, "home"], [action_button, "replay"]]:
+		var control: Control = item[0]
+		var rect: Rect2 = layout[item[1]]
+		control.custom_minimum_size = Vector2.ZERO
+		control.position = rect.position
+		control.size = rect.size
+	_pip_rect = layout.pip
+	_chest_rect = layout.chest
 	_glow_rect = Rect2(_chest_rect.get_center() - _chest_rect.size * 0.60, _chest_rect.size * 1.20)
 	_glow.position = _glow_rect.position
 	_glow.size = _glow_rect.size
-	var caption_y: float = hero_top + hero_height + gap
-	_place(_caption, Rect2(4, caption_y, w - 8, caption_h), scale_factor)
-	_caption.add_theme_font_size_override("font_size", ceili((14.0 if compact else 17.0) / scale_factor))
+	_heading.add_theme_font_size_override("font_size", layout.heading_size)
+	_caption.add_theme_font_size_override("font_size", layout.caption_size)
 	_caption.add_theme_color_override("font_color", _palette.get("accent", Style.GOOD))
-	_place(_count, Rect2((left + hero_width - chest_side * 0.40), hero_top + hero_height - 25.0, chest_side * 0.4, 26.0), scale_factor)
-	_count.add_theme_font_size_override("font_size", ceili((17.0 if compact else 22.0) / scale_factor))
-	_count.add_theme_color_override("font_color", Style.INK)
+	_count.position = _chest_rect.end - Vector2(54, 30) / scale_factor
+	_count.size = Vector2(50, 26) / scale_factor
+	_count.add_theme_font_size_override("font_size", ceili(22.0 / scale_factor))
 	Style.action_button(action_button, _palette.get("accent", Style.GOOD), true)
-	action_button.custom_minimum_size.y = action_h / scale_factor
-	var action_w: float = (w - 24.0) * 0.5
 	Style.action_button(home_button, _palette.get("accent", Style.GOOD))
-	home_button.custom_minimum_size.y = action_h / scale_factor
-	_place(home_button, Rect2(8, caption_y + caption_h + gap, action_w, action_h), scale_factor)
-	_place(action_button, Rect2(w - 8 - action_w, caption_y + caption_h + gap, action_w, action_h), scale_factor)
 	_sample()
-
-
-func _place(control: Control, rect: Rect2, scale_factor: float) -> void:
-	control.position = rect.position / scale_factor
-	control.size = rect.size / scale_factor
 
 
 func _rect(rect: Rect2) -> Array:

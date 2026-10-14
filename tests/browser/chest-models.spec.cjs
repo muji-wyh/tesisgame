@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const {
   THEME_IDS, enterGame, chooseMode, rendered, metrics, openGame, chooseTheme,
-  tap, boardPoint, discoverMatchCards, celebrationState, acceptCelebration,
+  tap, boardPoint, discoverMatchCards, acceptCelebration,
   resultPoint, visibleColorCount
 } = require('./game-ui.cjs');
 const { roomState, scrollChestIntoView, insideViewport } = require('./pop-treasure-ui.cjs');
@@ -198,10 +198,7 @@ async function winMatch(page) {
     await page.keyboard.press('Escape');
     await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word');
   }
-  await expect.poll(async () => {
-    const state = await celebrationState(page);
-    return state.active && state.ready;
-  }, { timeout: 15000 }).toBe(true);
+  await acceptCelebration(page);
 }
 
 async function captureThemedStage(page, info, theme, phase) {
@@ -211,35 +208,31 @@ async function captureThemedStage(page, info, theme, phase) {
   expect(await visibleColorCount(page, png), `${theme}/${phase} includes the actual rendered stage`).toBeGreaterThan(20);
 }
 
-test('all five replacement designs fit celebrations and closed stages, and a claimed chest survives theme changes', async ({ page }, info) => {
+test('all five replacement designs fit direct settlement, and a claimed chest survives theme changes', async ({ page }, info) => {
   test.setTimeout(480000);
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   await chooseTheme(page, THEME_IDS.indexOf(MODEL_THEMES[0]));
   await winMatch(page);
   const miniatures = [];
-  for (const theme of MODEL_THEMES) {
-    await chooseTheme(page, THEME_IDS.indexOf(theme));
-    const state = await celebrationState(page), bounds = await metrics(page);
-    expect({ active: state.active, ready: state.ready, theme: state.theme, mode: state.chest_mode })
-      .toEqual({ active: true, ready: true, theme, mode: 'closed' });
-    const [x, y, width, height] = state.chest_rect;
-    expect(width).toBeGreaterThan(30);
-    expect(height).toBeGreaterThan(30);
-    expect(insideViewport({ x, y, width, height }, { x: 0, y: 0, width: bounds.width, height: bounds.height }),
-      `${theme} miniature remains inside the game viewport`).toBe(true);
-    miniatures.push(state);
-    await captureThemedStage(page, info, theme, 'celebration');
-  }
-  await info.attach('themed-celebration-miniatures.json', { body: JSON.stringify(miniatures, null, 2), contentType: 'application/json' });
-  await acceptCelebration(page);
   const before = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   for (const theme of MODEL_THEMES) {
     await chooseTheme(page, THEME_IDS.indexOf(theme));
-    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+    await acceptCelebration(page);
+    const bounds = await metrics(page);
+    expect(bounds.library.theme_id).toBe(theme);
+    const control = bounds.growth.result.controls.find(item => item.name === 'OpenSettlementChest');
+    expect(control).toMatchObject({ visible: true, disabled: false });
+    const [x, y, width, height] = control.rect;
+    expect(width).toBeGreaterThan(30);
+    expect(height).toBeGreaterThan(30);
+    expect(insideViewport({ x, y, width, height }, { x: 0, y: 0, width: bounds.width, height: bounds.height }),
+      `${theme} chest remains inside the game viewport`).toBe(true);
+    miniatures.push({ theme, rect: control.rect });
     await captureThemedStage(page, info, theme, 'closed');
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
       'Previewing closed designs does not award a reward').toBe(before);
   }
+  await info.attach('themed-settlement-chests.json', { body: JSON.stringify(miniatures, null, 2), contentType: 'application/json' });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await rendered(page);
   const bounds = await metrics(page), point = resultPoint(bounds, 'chest');

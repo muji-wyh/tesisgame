@@ -270,7 +270,8 @@ async function observeRoundCelebration(page) {
       if (observation.started && observation.chestAt === null && status.textContent.includes('Hold the chest to open')) {
         observation.chestAt = performance.now();
       }
-      if (observation.started && state.celebration.ready) {
+      if (observation.started && !state.celebration.active && state.phase === 'finished' &&
+          status.textContent.includes('Hold the chest to open')) {
         observation.finished = state;
         observation.finishedAt = performance.now();
         observer.disconnect();
@@ -283,18 +284,19 @@ async function observeRoundCelebration(page) {
 
 async function expectRoundCelebration(page, info, name) {
   await expect.poll(() => page.evaluate(() => Boolean(window.phraseRoundCelebrationObservation?.finished)),
-    { message: 'The shared celebration enables Open chest after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
+    { message: 'The shared celebration makes the chest directly available after Pip and the final phrase finish', timeout: 15000 }).toBe(true);
   const observation = await page.evaluate(() => window.phraseRoundCelebrationObservation);
   const { started, finished, frame, startedAt, finishedAt, chestAt } = observation;
   expect(started.celebration).toMatchObject({ active: true, ready: false, chest_count: 1, mode: 'phrase' });
-  expect(finished).toMatchObject({ phase: 'correct', completed: 3, completion_pending: true,
-    celebration: { active: true, ready: true, action: { text: 'Open chest', visible: true, disabled: false } } });
+  expect(finished).toMatchObject({ phase: 'finished', completed: 3, completion_pending: false,
+    celebration: { active: false, action: { visible: false, disabled: true } } });
   expect(finishedAt - startedAt, 'The shared celebration has its own readable interval').toBeGreaterThanOrEqual(2850);
-  expect(chestAt, 'The chest cannot open before the learner accepts the invitation').toBeNull();
+  expect(chestAt, 'The real chest becomes available automatically when the performance finishes').toBeGreaterThanOrEqual(startedAt + 2850);
+  expect(chestAt).toBeLessThanOrEqual(finishedAt);
   expect(frame, 'The in-page observer captures the shared completion stage').toBeTruthy();
   expect(frame.state).toMatchObject({ phase: 'correct', completed: 3, completion_pending: true,
     celebration: { active: true, ready: false } });
-  expect(frame.state.celebration.action).toMatchObject({ text: 'Open chest', visible: false, disabled: true });
+  expect(frame.state.celebration.action).toMatchObject({ visible: false, disabled: true });
   expect(frame.state.board_frozen, 'The completed phrase remains behind the modal').toBe(true);
   for (const control of [...frame.state.options, ...frame.state.answers, frame.state.listen]) {
     expect(control.disabled, `Completion disables ${control.name}`).toBe(true);
@@ -615,7 +617,7 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect(await savedMedals(page), 'Completing all three phrases and celebrating leave the chest unclaimed').toBe(saved);
   if (audioAvailable) {
     const recording = await expectRecording(page, finalFrom, finalPhraseAudio);
-    expect(completion.finishedAt - recording.at, 'The final phrase finishes before enabling Open chest')
+    expect(completion.finishedAt - recording.at, 'The final phrase finishes before enabling the chest hold')
       .toBeGreaterThanOrEqual(recording.duration * 1000 - 100);
     if (recording.stopContextTime !== undefined) {
       expect(recording.stopContextTime - recording.scheduledAt, 'The final reading is not cut off by the transition')
@@ -623,13 +625,12 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
     }
   }
   expect(progress(await phraseState(page))).toEqual(progress(completion.finished));
-  await capture(page, info, 'phrase-earned-chest-invitation');
+  await capture(page, info, 'phrase-direct-chest-settlement');
   await openModeMenu(page);
   await chooseMode(page, 'phrase');
-  await expect.poll(async () => (await celebrationState(page)).ready).toBe(true);
-  expect((await celebrationState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
-  expect(progress(await phraseState(page)), 'Returning from home preserves the ready invitation').toEqual(progress(completion.finished));
   await acceptCelebration(page);
+  expect((await celebrationState(page)).action).toMatchObject({ visible: false, disabled: true });
+  expect(progress(await phraseState(page)), 'Returning from home preserves the directly available chest').toEqual(progress(completion.finished));
   await expect(page.locator('#game-status')).toContainText('Hold the chest to open');
   await expect.poll(async () => (await phraseState(page)).board_frozen).toBe(true);
   expect((await phraseState(page)).visible, 'The finished phrase remains visible beneath settlement').toBe(true);

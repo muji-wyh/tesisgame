@@ -24,8 +24,9 @@ and expose the existing Retry rewards action. Pair rewards never alter word
 mastery credit.
 
 The final pair finishes its small reward acknowledgement before the normal
-Pip completion sequence. That sequence retains Open chest but does not repeat
-the already-played chest cue or confetti. The reserved HUD row does not change
+Pip completion sequence. That sequence enables the real chest directly in the
+same modal, without an Open chest button, and does not repeat the already-played
+chest cue or confetti. The reserved HUD row does not change
 height when the acknowledgement appears or clears; short landscape uses 34 CSS
 pixels. At heights of 360 CSS pixels or less, Match and Memory use a 44-pixel
 header and tighter outer spacing to preserve 44-pixel card targets even with

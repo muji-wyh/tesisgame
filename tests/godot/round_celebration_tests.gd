@@ -168,16 +168,18 @@ func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 	check(_cues == ["manual:step", "manual:step-detail", "manual:reward"],
 		"The owner's clock emits each synchronized sound once")
 	view.set_narration_playing(false)
-	check(view.is_ready() and view.controls() == [view.action_button] and view.default_focus() == view.action_button
-		and _finished == ["manual"], "Finishing both gates exposes one focused invitation")
+	check(view.is_ready() and not view.action_button.visible and view.action_button.disabled
+		and not view.controls().has(view.action_button) and _finished == ["manual"],
+		"Finishing both gates signals the host without an earned-chest action")
 	_step(view, 10.0)
-	check(_opened.is_empty(), "A ready manual invitation never opens itself")
+	check(_opened.is_empty(), "Presentation readiness never opens or awards a chest by itself")
 	view.action_button.pressed.emit()
 	view.action_button.pressed.emit()
-	check(_opened == ["manual"] and view.controls().is_empty(), "The explicit invitation can be accepted only once")
+	check(_opened.is_empty() and not view.controls().has(view.action_button),
+		"Stale hidden action callbacks cannot insert an earned-chest invitation")
 	check(view.chest.mode == "closed" and not view.chest.opening_committed()
 		and not view.chest.hold_effect_snapshot().opened_effect.active,
-		"Celebration and acceptance keep the preview closed without triggering opening effects")
+		"The celebration preview stays closed without triggering opening effects")
 	view.stop()
 
 
@@ -286,9 +288,10 @@ func _check_no_chest(view, manifest: Dictionary) -> void:
 	check(view.is_ready() and not view.snapshot().chest_visible and not view._glow.visible,
 		"Reduced motion preserves zero-chest ownership and the completion action")
 	_begin(view, manifest, "after-no-chest")
-	check(view.chest.visible and view._glow.visible and view.action_button.text == "Open chest"
+	check(view.chest.visible and view._glow.visible and view.action_button.text == "Play again"
+		and not view.action_button.visible and view.action_button.disabled
 		and view.snapshot().caption == "You earned a treasure chest!",
-		"A later earned chest restores its authored preview, glow, and invitation")
+		"A later earned chest restores its authored preview without an Open chest action")
 	view.stop()
 
 
@@ -390,11 +393,17 @@ func _check_layouts(view, manifest: Dictionary) -> void:
 		_begin(view, manifest, "layout-%s" % str(dimensions), true)
 		_step(view, 3.01)
 		var frame := Rect2(Vector2.ZERO, dimensions)
-		check(frame.encloses(view.pip.get_rect()) and frame.encloses(view.action_button.get_rect())
+		check(frame.encloses(view.pip.get_rect()) and frame.encloses(view.chest.get_rect())
 			and frame.encloses(view._heading.get_rect()) and frame.encloses(view._caption.get_rect()),
-			"Pip, copy and the complete touch action fit " + str(dimensions))
-		check(view.action_button.size.y >= 44.0 and not view.pip.get_rect().intersects(view.action_button.get_rect()),
-			"Compact layouts preserve the touch target and separate it from the performance")
+			"The Pip/chest composition and complete copy fit " + str(dimensions))
+		check(not view.action_button.visible and view.action_button.disabled,
+			"Earned-chest layouts never expose an extra action at " + str(dimensions))
+		view.stop()
+		_begin(view, manifest, "no-chest-layout-%s" % str(dimensions), true, false, 0)
+		_step(view, 3.01)
+		check(frame.encloses(view.action_button.get_rect()) and view.action_button.size.y >= 44.0
+			and not view.pip.get_rect().intersects(view.action_button.get_rect()),
+			"Zero-chest layouts retain an unobstructed replay touch target at " + str(dimensions))
 		view.stop()
 	view.size = Vector2(912, 572)
 

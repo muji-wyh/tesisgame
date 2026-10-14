@@ -455,14 +455,15 @@ async function celebrationState(page) {
 }
 
 async function acceptCelebration(page) {
+  // Keep the established helper name while callers migrate: the completed
+  // performance now reveals the real chest without an intermediary click.
   await expect.poll(async () => {
-    const current = await celebrationState(page);
-    return Boolean(current.active && current.ready && current.action?.visible && !current.action.disabled);
-  }, { timeout: 15000, message: 'The shared celebration finishes before the explicit Open chest action' }).toBe(true);
-  const { action } = await celebrationState(page);
-  const [x, y, width, height] = action.rect;
-  await tap(page, x + width / 2, y + height / 2);
-  await expect.poll(async () => (await celebrationState(page)).active).toBe(false);
+    const current = await celebrationState(page), result = (await metrics(page)).growth?.result;
+    const chest = result?.controls?.find(control => control.name === 'OpenSettlementChest');
+    return Boolean(!current.active && result?.visible && chest?.visible && !chest.disabled);
+  }, { timeout: 15000, message: 'The celebration reveals the chest directly inside settlement' }).toBe(true);
+  expect((await celebrationState(page)).action?.visible,
+    'The completed performance has no separate Open chest action.').not.toBe(true);
   await expect(page.locator('#game-status')).toContainText('Hold the chest to open');
 }
 

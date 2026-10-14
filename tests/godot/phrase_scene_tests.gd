@@ -154,7 +154,7 @@ func _run() -> void:
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
 		and app.chest_button.is_visible_in_tree() and view.is_visible_in_tree() and app._single_result.replay_button.disabled
 		and app._settlement_dialog.is_visible_in_tree(),
-		"Choosing Open chest keeps the finished Phrase board behind its settlement dialog")
+		"Automatic completion keeps the finished Phrase board behind its directly openable chest dialog")
 	check(not app.audio.voice.playing, "The chest transition does not play spoken completion instructions")
 	view.finished.emit()
 	view.action_button.pressed.emit()
@@ -225,8 +225,9 @@ func _check_answer_confetti(app) -> void:
 			app.audio.stop_voice()
 			celebration.set_narration_playing(false)
 			celebration.advance(celebration.DURATION + 0.1)
-			check(celebration.is_ready() and not celebration.action_button.disabled,
-				"The Phrase invitation becomes ready without needing a confetti celebration")
+			check(not celebration.is_active() and app.chest_button.is_visible_in_tree()
+				and not app.chest_button.disabled and app.model.chest_state == "closed",
+				"The Phrase chest becomes directly openable without a confetti celebration")
 		for interruption in ["home", "catalog", "background"]:
 			if interruption == "home":
 				app._mode_heading_button.pressed.emit()
@@ -250,9 +251,9 @@ func _check_answer_confetti(app) -> void:
 			_check_no_finale_confetti(paper, "Returning to the " + stage + " Phrase invitation from " + interruption + " cannot restore old paper")
 	celebration.action_button.pressed.emit()
 	check(view.game.phase == "finished" and app.model.phase == "won" and not celebration.is_active(),
-		"The confetti-free Phrase invitation still opens the earned chest screen")
+		"The confetti-free Phrase result exposes its earned chest directly inside settlement")
 	paper.advance(0.25)
-	_check_no_finale_confetti(paper, "Opening the chest screen cannot resume the cleared answer confetti")
+	_check_no_finale_confetti(paper, "The direct chest handoff cannot resume the cleared answer confetti")
 	check(app.new_round(174, false, "", "phrase"), "The next Phrase round resets its local answer sequence")
 	await _settle()
 	check(paper.snapshot().keys.is_empty() and not paper.is_active(),
@@ -410,19 +411,22 @@ func _check_round_celebration(app) -> void:
 	celebration.advance(3.01)
 	check(not celebration.snapshot().ready and view.game.snapshot() == before and app.model.phase != "won",
 		"The final phrase recording can outlast the shared animation without being interrupted")
+	var preview_rect: Rect2 = celebration.chest.get_global_rect()
 	app.audio.stop_voice()
 	celebration.set_narration_playing(false)
-	check(celebration.snapshot().ready and not celebration.action_button.disabled
-		and view.game.phase == "correct" and completions.is_empty() and _pieces(app) == pieces_before,
-		"Completing animation and pronunciation enables the shared Open chest invitation")
+	check(not celebration.is_active() and not celebration.action_button.is_visible_in_tree()
+		and celebration.action_button.disabled and app.chest_button.is_visible_in_tree()
+		and not app.chest_button.disabled and view.game.phase == "finished" and app.model.phase == "won"
+		and completions == [true] and not view.completion_pending and _pieces(app) == pieces_before,
+		"Completing animation and pronunciation enables the real chest directly and finishes Phrase once")
+	check(app.chest.get_global_rect().is_equal_approx(preview_rect) and app.model.chest_state == "closed",
+		"The enabled chest retains its preview placement and remains unopened")
 	celebration.advance(4.0)
-	check(view.game.snapshot() == before and app.model.phase != "won" and completions.is_empty(),
-		"The ready invitation waits for an explicit click")
 	celebration.action_button.pressed.emit()
-	check(view.game.phase == "finished" and app.model.phase == "won" and completions == [true]
-		and not view.completion_pending and not celebration.snapshot().active and _pieces(app) == pieces_before,
-		"Accepting the shared invitation finishes Phrase and enters its unopened chest exactly once")
-	_check_frozen_phrase(view, final_words, str(before.text), "After accepting the chest invitation")
+	check(app.model.phase == "won" and app.model.chest_state == "closed" and completions == [true]
+		and not celebration.is_active() and _pieces(app) == pieces_before,
+		"The direct result waits for a real chest hold and rejects the removed action")
+	_check_frozen_phrase(view, final_words, str(before.text), "After the direct chest handoff")
 	check(view.game.current_question().is_empty() and view.game.options.is_empty() and view.game.answer.is_empty(),
 		"The frozen board uses presentation data without restoring a playable model question")
 	var finished_state: Dictionary = view.game.snapshot()
@@ -441,7 +445,7 @@ func _check_round_celebration(app) -> void:
 	view.pip.gameplay_reaction_finished.emit(true)
 	view.pip._process(4.0)
 	check(completions == [true] and _pieces(app) == pieces_before,
-		"Late local Pip events cannot repeat completion of the shared invitation")
+		"Late local Pip events cannot repeat completion of the direct chest handoff")
 	view.finished.disconnect(record)
 	app.set_process(true)
 

@@ -138,11 +138,13 @@ func check_pair_reveal(app, mode: String, already_checked: bool) -> bool:
 	return true
 
 
-func start_manual(app, mode: String, earned: bool = true) -> void:
+func start_manual(app, mode: String, earned: bool = true, theme_id: String = "") -> void:
 	if mode in ["match", "memory"]:
 		reset_pair_fixture(app)
 	var seed_value: int = reward_seed(app, earned) if mode in ["match", "memory"] else 713
 	check(app.new_round(seed_value, false, "", mode), "A fresh " + mode + " round starts")
+	if not theme_id.is_empty():
+		app.choose_theme(theme_id)
 	if mode in ["match", "memory"]:
 		check(not app.model.chest_earned and (app.model.chest_reward_pair > 0) == earned,
 			mode + " reserves its seeded chance without awarding a chest at round creation")
@@ -185,7 +187,7 @@ func start_manual(app, mode: String, earned: bool = true) -> void:
 		check(app.model.chest_earned == earned and pair_reveal_checked == earned,
 			mode + " completes all five real pairs with exactly its planned reward outcome")
 		# The final pair's inline effect completes before the separate round finale.
-		app._pair_reward.advance(3.0)
+		app._pair_reward.advance(app._pair_reward.REWARD_SECONDS + 0.01)
 		app._refresh()
 	app._round_celebration.set_process(false)
 	check(app._round_celebration.snapshot().active, mode + " reaches the shared performance through real game controls")
@@ -193,7 +195,13 @@ func start_manual(app, mode: String, earned: bool = true) -> void:
 
 func check_manual_mode(app, mode: String) -> void:
 	var before: int = pieces(app)
-	await start_manual(app, mode)
+	var original_theme: String = app.model.theme_id
+	var selected_theme: String = "ocean" if mode == "match" else "winter" if mode == "memory" else "summer"
+	await start_manual(app, mode, true, selected_theme)
+	check(app.model.theme_id == selected_theme, mode + " exercises direct settlement in a non-default world")
+	var original_size: Vector2i = root.size
+	root.size = Vector2i(393, 852) if mode == "match" else Vector2i(844, 390) if mode == "memory" else Vector2i(1366, 768)
+	await settle()
 	var coins_before: int = app.coin_wallet.balance
 	var view = app._round_celebration
 	var identity: String = view.snapshot().round_id
@@ -203,13 +211,13 @@ func check_manual_mode(app, mode: String) -> void:
 	app._refresh_controller_focus()
 	check(app._valid_focus(root.gui_get_focus_owner()) and root.gui_get_focus_owner() != app.chest_button,
 		mode + " controller refresh chooses a visible allowed control during the performance")
-	check(view.is_visible_in_tree() and view.snapshot().chest_count == 1 and not view.snapshot().automatic,
-		mode + " presents one earned chest through the shared manual invitation")
+	check(view.is_visible_in_tree() and view.snapshot().chest_count == 1,
+		mode + " presents its one earned chest inside the shared result modal")
 	if mode in ["match", "memory"]:
 		check(view.chest.theme_id == RewardProgress.theme_for_tier(1),
-			mode + " shared invitation retains the ordinary chest skin")
+			mode + " celebration retains the ordinary chest skin")
 	check(not app.chest_button.is_visible_in_tree() and not view.snapshot().ready,
-		mode + " keeps the unopened-chest page and invitation action unavailable during performance")
+		mode + " keeps direct chest input unavailable during the performance")
 	var initial_bursts: int = app._reward_confetti.snapshot().keys.size()
 	check(initial_bursts == (1 if mode in ["match", "memory"] else 0),
 		mode + " begins its finale with only paper already earned during play")
@@ -226,43 +234,76 @@ func check_manual_mode(app, mode: String) -> void:
 	if mode in ["match", "memory"]:
 		check(view.snapshot().get("chest_announced", false) and app._reward_confetti.snapshot().keys.size() == initial_bursts
 			and not view.snapshot().cue_log.has("reward"),
-			mode + " keeps the earned chest invitation without replaying its already seen reward burst or cue")
+			mode + " does not replay its already seen reward burst or discovery cue")
 	else:
 		check_fullscreen_confetti(app, mode)
-	check(pieces(app) == before and not view.snapshot().ready,
-		mode + " keeps the reward and invitation gates unchanged during the finale")
 	view.advance(maxf(0.0, 2.99 - float(view.snapshot().elapsed)))
 	check(not view.snapshot().ready and view.snapshot().active and pieces(app) == before,
 		mode + " preserves the full three-second performance gate")
+	var preview_rect: Rect2 = view.chest.get_global_rect()
+	var pip_rect: Rect2 = view.pip.get_global_rect()
+	var pip_theme: String = view.pip.theme_id
+	var pip_age: int = view.pip.growth_age
+	var pip_expression: String = view.pip.expression_name()
+	var pip_pose: int = view.pip.pose
+	var pip_art: Texture2D = view.pip._outfit_dance_sheet
+	var panel_rect: Rect2 = app._settlement_dialog.panel.get_global_rect()
 	view.advance(0.02)
-	check(view.snapshot().ready and not view.action_button.disabled and view.action_button.is_visible_in_tree()
-		and app._reward_confetti.is_active() == (mode != "phrase"),
-		mode + " exposes Open chest after the performance")
-	check_fullscreen_confetti(app, mode + " ready invitation tail")
+	check(not view.is_active() and not view.action_button.is_visible_in_tree() and view.action_button.disabled
+		and app._single_result.is_visible_in_tree() and app.chest_button.is_visible_in_tree() and not app.chest_button.disabled,
+		mode + " enables the real chest directly without an Open chest action")
+	check(app._settlement_dialog.panel.get_global_rect().is_equal_approx(panel_rect)
+		and app.chest.get_global_rect().is_equal_approx(preview_rect)
+		and app.chest_button.get_global_rect().is_equal_approx(preview_rect),
+		mode + " keeps the same modal and exact chest placement through the handoff")
+	var result_pip = app._single_result.pip
+	check(result_pip.get_global_rect().is_equal_approx(pip_rect) and result_pip.theme_id == pip_theme
+		and result_pip.growth_age == pip_age and result_pip.growth_age == app.growth.age
+		and result_pip.expression_name() == pip_expression and result_pip.pose == pip_pose
+		and result_pip._outfit_dance_sheet == pip_art,
+		mode + " preserves Pip position, theme, growth artwork and proud pose across the direct handoff")
+	check_fullscreen_confetti(app, mode + " direct chest tail")
 	root.gui_release_focus()
 	app._refresh_controller_focus()
-	check(root.gui_get_focus_owner() == view.action_button and app._valid_focus(view.action_button),
-		mode + " controller refresh targets the ready invitation instead of the hidden chest")
-	check(view.snapshot().round_id == identity and pieces(app) == before,
-		mode + " finishing the performance retains the same unclaimed round")
-	await cover(app, "menu", true)
-	await cover(app, "menu", false)
-	view.set_process(false)
-	check(view.snapshot().ready and view.snapshot().round_id == identity and app.model.chest_earned
-		and pieces(app) == before, mode + " keeps its earned reward through a menu visit without rerolling")
-	view.advance(5.0)
-	app._reward_confetti.advance(app._reward_confetti.DURATION)
-	check(view.snapshot().ready and not app.chest_button.is_visible_in_tree() and not app._reward_confetti.is_active(),
-		mode + " waits indefinitely for the learner's explicit invitation click")
-	view.action_button.pressed.emit()
-	check(not view.snapshot().active and app.model.phase == "won" and app.chest_button.is_visible_in_tree()
-		and app.model.chest_state == "closed" and pieces(app) == before,
-		mode + " accepts the invitation into the unopened chest without awarding it")
+	check(root.gui_get_focus_owner() == app.chest_button and app._valid_focus(app.chest_button),
+		mode + " controller focus moves straight onto the visible chest")
+	check(app._round_id == identity and pieces(app) == before and app.model.chest_state == "closed",
+		mode + " finishing the performance enables interaction without awarding or opening the chest")
 	if mode == "phrase":
 		check(app._phrase.game.phase == "finished" and not app._phrase.completion_pending,
-			"Phrase becomes finished only after the accepted shared invitation")
+			"Phrase completes at the automatic modal handoff without an extra confirmation")
+	await cover(app, "menu", true)
+	await cover(app, "menu", false)
+	check(not view.is_active() and app.chest_button.is_visible_in_tree() and app._round_id == identity
+		and app.model.chest_earned and pieces(app) == before,
+		mode + " restores the same directly openable reward after a Home visit")
+	view.advance(5.0)
+	app._reward_confetti.advance(app._reward_confetti.DURATION)
+	view.action_button.pressed.emit()
+	view.open_requested.emit(identity)
+	view.performance_finished.emit(identity)
+	check(not view.is_active() and app.model.chest_state == "closed" and pieces(app) == before
+		and not app._reward_confetti.is_active(),
+		mode + " waits for a real chest hold and rejects stale invitation callbacks")
+	app._controller_mode = false
+	app.chest_button.grab_focus()
+	_key(KEY_SPACE, true)
+	await process_frame
+	app.set_process(false)
+	check(app._holding_chest, mode + " the focused chest accepts a native keyboard hold")
+	app._advance_ui(0.15)
+	_key(KEY_SPACE, false)
+	await process_frame
+	check(not app._holding_chest and app.model.chest_state == "closed" and pieces(app) == before
+		and app.coin_wallet.balance == coins_before,
+		mode + " releasing an incomplete keyboard hold cancels without reward")
 	app.set_reduced_motion(true)
-	app.chest_button.button_down.emit()
+	app._controller_mode = true
+	app.chest_button.grab_focus()
+	app._controller_accept()
+	app.set_process(false)
+	check(app._holding_chest and app._controller_holding_chest,
+		mode + " controller accept holds the direct chest instead of an intermediary button")
 	app._advance_ui(Feel.HOLD_SECONDS)
 	check(app.model.chest_state == "opened" and pieces(app) == before + 1,
 		mode + " preserves the existing hold-to-open reward commitment")
@@ -274,8 +315,24 @@ func check_manual_mode(app, mode: String) -> void:
 	check(pieces(app) == before + 1 and app.model.chest_state == "opened"
 		and app.coin_wallet.balance == coins_before + 50 and app._coin_flight.snapshot().flights == 1,
 		mode + " ignores duplicate performance, invitation, and chest completion callbacks")
+	var saved = load("res://scripts/medal_progress.gd").new(app.medal_progress._save_path, "user://unused-direct-chest-legacy.cfg")
+	check(saved.load_progress() and saved.counts == app.medal_progress.counts,
+		mode + " saves exactly the opened treasure through the normal durable storage path")
+	app._stop_controller_actions()
 	app.set_reduced_motion(false)
 	app._controller_mode = prior_controller_mode
+	app.set_process(true)
+	app.choose_theme(original_theme)
+	root.size = original_size
+	await settle()
+
+
+func _key(code: Key, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.physical_keycode = code
+	event.pressed = pressed
+	root.push_input(event, true)
 
 
 func check_no_chest_mode(app, mode: String) -> void:
@@ -346,7 +403,9 @@ func check_voice_gate(app) -> void:
 	view.action_button.pressed.emit()
 	check(app._phrase.game.phase == "correct", "A long final phrase cannot be skipped by an early invitation callback")
 	view.set_narration_playing(false)
-	check(view.snapshot().ready, "The final phrase ending releases the completed performance gate")
+	check(not view.is_active() and app._phrase.game.phase == "finished" and app.model.phase == "won"
+		and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed",
+		"The final phrase ending enables the direct chest without another confirmation")
 	app.set_process(true)
 
 
@@ -394,17 +453,21 @@ func check_interruption_and_replacement(app) -> void:
 		check(app._reward_confetti.snapshot().keys == paper.keys,
 			kind + " cannot replay the same reward burst when the performance reaches its reveal again")
 		view.advance(1.2)
-		check(view.snapshot().ready, kind + " eventually returns to the explicit invitation")
+		check(not view.is_active() and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed",
+			kind + " eventually enables the direct chest inside the same modal")
 		await cover(app, kind, true)
 		view.action_button.pressed.emit()
 		await cover(app, kind, false)
 		view.set_process(false)
-		check(view.snapshot().ready and view.snapshot().round_id == identity and app._phrase.game.phase == "correct"
+		check(not view.is_active() and app._round_id == identity and app._phrase.game.phase == "finished"
+			and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed"
 			and app._reward_confetti.snapshot().keys == paper.keys,
-			kind + " restores a ready invitation without replaying or entering the chest")
-	var old_id: String = app._round_celebration.snapshot().round_id
+			kind + " restores the same direct chest without replaying or opening it")
+	var old_id: String = app._round_id
 	var before: int = pieces(app)
-	check(app.new_round(991, false, "", "phrase"), "A replacement game can leave an unaccepted Phrase invitation")
+	check(app.new_round(991, false, "", "phrase"), "A replacement game settles the earned Phrase chest")
+	check(pieces(app) == before + 1, "Navigation preserves the unopened earned chest through ordinary settlement")
+	before = pieces(app)
 	app._round_celebration.open_requested.emit(old_id)
 	app._round_celebration.performance_finished.emit(old_id)
 	app._round_celebration.cue_requested.emit(old_id, "reward")

@@ -16,7 +16,7 @@ body parts, ten expression heads and all eight wardrobes described in
 These are existing project artwork and locally authored derivatives; the
 repository does not identify a separate individual illustrator.
 
-The small closed chest reuses the current world's integrated chest art. The
+The closed chest reuses the current world's integrated chest art. The
 Royal, Energy and Crystal designs come from the user-provided Modern 2D Animated
 Chests Pack_FREE Demo 1.0.2. Its original source paths and file hashes are
 recorded in `assets/chests/SOURCE.txt` and `assets/chests/manifest.json`; those
@@ -43,10 +43,21 @@ happy pose with no moving halo or confetti.
 `GameUI` owns the round identity, interruptions and input gate. Every mode uses
 the shared settlement modal over its completed board; standalone result pages
 are removed. Match, Memory and Phrase Builder keep this performance inside the
-modal and wait for both the performance and final pronunciation before offering
-`Open chest`. Phrase accepts completion only at that action. Match and Memory
+modal and wait for both the performance and final pronunciation before enabling
+the real chest in place. There is no Open chest button or extra confirmation.
+`RoundRewardLayout` gives the preview and settlement the same Pip and chest
+rectangles, keeping both subjects still across the handoff. The existing hold
+gesture drives the rainbow, opening, cancellation, audio and durable reward save;
+finishing the celebration never opens or awards treasure automatically. Phrase
+accepts completion at this automatic handoff. Match and Memory
 also celebrate rounds without treasure, omitting the chest and confetti before
 offering Play again. Presentation never saves rewards or opens a chest.
+
+The direct chest target has no rectangular button or focus border. Keyboard focus
+and pointer hover brighten the same acquired Bobardo `portal_glow.png` texture
+used by Jelly and Pop settlement, with the existing source and license record in
+[Jelly Finish](jelly-finish.md). This integrated static texture receives only
+runtime placement and opacity changes; no new artwork or source animation is added.
 
 Voice Pop and both Jelly modes show results immediately without this completion
 performance. Voice Pop stops recognition and saves its final chest before opening
@@ -94,8 +105,9 @@ previous presentation. `stop_round_celebration()` invalidates the active ID,
 stops both players, releases their streams and restores the music mix. A resume
 of an unfinished presentation explicitly begins its audio again and restarts
 the complete three-second visual timeline, including its three synchronized
-beats. A completed invitation preserves its ready state and does not replay
-the performance or its sounds when an overlay or background pause ends.
+beats. An earned chest hands off once to the direct hold target. A completed
+no-chest invitation preserves its ready state. Neither completion replays the
+performance or its sounds when an overlay or background pause ends.
 
 Two dedicated players bound overlap. These players share the loaded audio
 resources with the chest bank but never call its opening or saved-reward APIs.
