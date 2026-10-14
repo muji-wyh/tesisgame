@@ -49,7 +49,7 @@ void fragment() {
 	gel.rgb = palette(gel.rgb);
 	// A soft sweep lights the acquired paint without moving the learning label.
 	float sweep = 1.0 - smoothstep(0.02, 0.18, abs(sample_uv.x * 0.7 + sample_uv.y * 0.3 - completion_glint));
-	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.89), completion_strength * (0.08 + sweep * 0.34));
+	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.89), completion_strength * (0.12 + sweep * 0.42));
 	float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
 	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);
 	if (rim_strength > 0.0) {

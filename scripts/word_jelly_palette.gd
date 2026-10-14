@@ -6,7 +6,6 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 static var _hues: Array[float] = HUES.duplicate()
 var colors: Dictionary = {}
 var _signature: String = ""
-var _reserved: Array[int] = []
 
 static func hue(index: int) -> float:
 	# A crowded board still needs distinct colors, rather than modulo-four skins.
@@ -29,7 +28,6 @@ static func completes(a: Dictionary, b: Dictionary, words: Dictionary) -> bool:
 func clear() -> void:
 	colors.clear()
 	_signature = ""
-	_reserved.clear()
 
 func update(items: Array[Dictionary], words: Dictionary, reserved: Array[int] = []) -> void:
 	var signature: String = ""
@@ -39,7 +37,6 @@ func update(items: Array[Dictionary], words: Dictionary, reserved: Array[int] = 
 	if signature == _signature:
 		return
 	_signature = signature
-	_reserved = reserved.duplicate()
 	var groups: Array[Array] = []
 	var paired: Dictionary = {}
 	# Keep existing valid pairs before matching new arrivals. Each body belongs
@@ -96,17 +93,12 @@ func selected(items: Array[Dictionary], words: Dictionary, source_id: int) -> Di
 	if source.is_empty() or not colors.has(source_id):
 		return result
 	var source_color: int = int(colors[source_id])
-	var spare: int = 0
-	while spare in colors.values() or spare in _reserved:
-		spare += 1
 	for item: Dictionary in items:
 		var id: int = int(item.id)
 		if id == source_id:
 			continue
 		if completes(source, item, words):
 			result[id] = source_color
-		elif int(result[id]) == source_color:
-			# The reverse direction may be a word, but the dragged part goes first.
-			result[id] = spare
-			spare += 1
+		# Incompatible targets retain their idle paint, even if the reverse word
+		# shares a resting pair color. Only a forward completion earns a cue.
 	return result

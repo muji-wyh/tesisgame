@@ -83,6 +83,7 @@ func _run() -> void:
 	_check_release_after_support_collection(view)
 	_check_coarse_frame_collection_landing(view)
 	_check_word_pair_colors(view)
+	_check_directional_palette_stability(view)
 	_check_completion_hints(view)
 	_check_ordered_completion_contact(view)
 	_check_neutral_contact_targets(view)
@@ -1551,8 +1552,8 @@ func _check_word_pair_colors(view) -> void:
 			view._activate(ids.t)
 		else:
 			view._press(-1, _center(view, ids.t))
-		check(_palette_item(view, ids.t).get("palette_index", -1) != _palette_item(view, ids.ca).get("palette_index", -1),
-			"a reversed-only word partner does not suggest an invalid source-then-target merge")
+		_assert_resting_palette(view, resting.tiles, "reverse-only pointer or keyboard source")
+		_assert_completion_hints(view, [], "reverse-only pointer or keyboard source")
 		view.cancel_input()
 	view.apply_theme(Data.theme("autumn"), data.chests)
 	for tile: Dictionary in resting.tiles:
@@ -1563,6 +1564,65 @@ func _check_word_pair_colors(view) -> void:
 		check(int(slot.get("palette_index", -1)) >= 0
 			and is_equal_approx(float(slot.get("palette_hue", -1.0)), float(view._preview_tiles[index]._gel.get_shader_parameter("palette_hue"))),
 			"upcoming parts publish the same hint hue that their actual gel renders")
+	words = original_words
+
+
+func _assert_resting_palette(view, resting: Array, context: String) -> void:
+	for original: Dictionary in resting:
+		var id: int = int(original.id)
+		var tile: Dictionary = _palette_item(view, id)
+		check(tile.get("palette_index", -1) == original.get("palette_index", -2)
+			and is_equal_approx(float(tile.get("palette_hue", -1.0)), float(original.get("palette_hue", -2.0))),
+			context + ": ineligible bodies retain their resting palette")
+		check(is_equal_approx(float(view._tiles[id]._gel.get_shader_parameter("palette_hue")),
+			float(original.get("palette_hue", -2.0))), context + ": rendered gel retains its resting hue")
+
+
+func _check_directional_palette_stability(view) -> void:
+	var original_words: Array = words.duplicate(true)
+	var can: Dictionary = original_words[0].duplicate(true)
+	can.id = "view-directional-can"
+	can.text = "can"
+	words.append(can)
+	for pointer: int in [-1, 7]:
+		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
+		for reduced: bool in [false, true]:
+			_reset(view, reduced)
+			var ids: Array[int] = _completion_board(view, ["ca", "t", "n", "c", "at", "x"])
+			var resting: Array = view.snapshot().tiles
+			var context: String = "ca/t with %s%s" % ["mouse" if pointer < 0 else "touch", " and reduced motion" if reduced else ""]
+			check(view._tiles[ids[0]].palette_index == view._tiles[ids[1]].palette_index,
+				context + ": the reverse-selection regression starts with the idle ca/t pair sharing a hue")
+			check(view._tiles[ids[0]].palette_index != view._tiles[ids[2]].palette_index,
+				context + ": the second forward completion starts with a different idle hue")
+			var suffix_center: Vector2 = _center(view, ids[1])
+			_pointer_event(view, pointer, "down", suffix_center)
+			_assert_resting_palette(view, resting, context + " held t")
+			_assert_completion_hints(view, [], context + " held t")
+			_pointer_event(view, pointer, "move", suffix_center + Vector2(0.0, -18.0))
+			_advance(view, 0.24)
+			check(view._dragging, context + ": t enters an actual drag")
+			_assert_resting_palette(view, resting, context + " dragging t")
+			_assert_completion_hints(view, [], context + " dragging t")
+			view.cancel_input()
+			_assert_resting_palette(view, resting, context + " canceled t")
+			_assert_completion_hints(view, [], context + " canceled t")
+			var prefix_center: Vector2 = _center(view, ids[0])
+			_pointer_event(view, pointer, "down", prefix_center)
+			_pointer_event(view, pointer, "move", prefix_center + Vector2(0.0, -18.0))
+			_advance(view, 0.24)
+			_assert_completion_hints(view, [ids[1], ids[2]], context + " dragging ca")
+			for id: int in [ids[1], ids[2]]:
+				check(view._tiles[id].palette_index == view._tiles[ids[0]].palette_index
+					and is_equal_approx(float(view._tiles[id]._gel.get_shader_parameter("palette_hue")),
+						float(view._tiles[ids[0]]._gel.get_shader_parameter("palette_hue"))),
+					context + ": both forward completions use the source hue in their rendered gel")
+			var unaffected: Array = resting.filter(func(tile: Dictionary) -> bool: return not int(tile.id) in [ids[1], ids[2]])
+			_assert_resting_palette(view, unaffected, context + " dragging ca")
+			view.cancel_input()
+			_assert_resting_palette(view, resting, context + " canceled ca")
+			_assert_completion_hints(view, [], context + " canceled ca")
+	view.size = Vector2(1000, 720)
 	words = original_words
 
 
@@ -1697,6 +1757,7 @@ func _check_ordered_completion_contact(view) -> void:
 				var originals: Array = view.game.cells.duplicate(true)
 				var source = view._tiles[source_id]
 				var target = view._tiles[target_id]
+				var resting_target: Dictionary = _palette_item(view, target_id)
 				var center: Vector2 = _center(view, source_id)
 				var destination: Vector2 = _center(view, target_id)
 				var expected: Array[int] = []
@@ -1709,8 +1770,11 @@ func _check_ordered_completion_contact(view) -> void:
 				_assert_completion_hints(view, expected, context + " press")
 				check(source.selected and not target.highlighted and view._contact_state().kind == "none",
 					context + ": pressing previews the ordered candidates without pretending they touch")
-				check((source.palette_index == target.palette_index) == bool(pairing.complete),
-					context + ": selected colors follow source-then-target order and current age")
+				if bool(pairing.complete):
+					check(source.palette_index == target.palette_index,
+						context + ": an exact forward completion adopts the selected source hue")
+				else:
+					_assert_resting_palette(view, [resting_target], context + " ineligible target")
 				_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
 				check(not view._dragging, context + ": a small pointer movement keeps the press below the drag threshold")
 				_assert_completion_hints(view, expected, context + " small movement")

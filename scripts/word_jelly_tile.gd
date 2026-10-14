@@ -53,21 +53,21 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 			_completion_glints.append(glint)
 	if _completion_glow != null:
 		_completion_glow.visible = completion_hint
-		var spread: float = 1.0 if reduced else 1.0 + breath * 0.035
+		var spread: float = 1.0 if reduced else 1.0 + breath * 0.06
 		var reach: float = minf(minf(size.x, size.y), 80.0 / Style.ui_scale(self))
-		_completion_glow.size = size + Vector2(0.50, 0.56) * reach * spread
+		_completion_glow.size = size + Vector2(0.86, 0.92) * reach * spread
 		_completion_glow.position = (size - _completion_glow.size) * 0.5 - Vector2(0.0, size.y * 0.035)
-		_completion_glow.modulate = Color(1.0, 0.83, 0.36, 0.68 if reduced else 0.38 + enter * (0.18 + breath * 0.16))
+		_completion_glow.modulate = Color(1.0, 0.78, 0.26, 0.86 if reduced else 0.58 + enter * (0.20 + breath * 0.14))
 	for index in range(_completion_glints.size()):
 		var glint: TextureRect = _completion_glints[index]
 		glint.visible = completion_hint
 		var twinkle: float = 0.75 if reduced else pow((1.0 + sin(elapsed * TAU / 1.6 - index * PI)) * 0.5, 2.0)
-		var edge: float = minf(minf(size.x, size.y) * (0.28 if index == 0 else 0.21), 20.0 / Style.ui_scale(self))
+		var edge: float = minf(minf(size.x, size.y) * (0.34 if index == 0 else 0.26), 26.0 / Style.ui_scale(self))
 		glint.size = Vector2.ONE * edge
 		glint.pivot_offset = glint.size * 0.5
 		glint.position = size * (Vector2(0.85, 0.20) if index == 0 else Vector2(0.10, 0.69)) - glint.size * 0.5
 		glint.scale = Vector2.ONE * (1.0 if reduced else 0.82 + twinkle * 0.3)
-		glint.modulate = Color(1.0, 0.86, 0.43, (1.0 if reduced else enter) * (0.52 + twinkle * 0.48))
+		glint.modulate = Color(1.0, 0.91, 0.58, (1.0 if reduced else enter) * (0.70 + twinkle * 0.30))
 	if completion_hint or was_active:
 		_refresh_feedback()
 
@@ -112,9 +112,9 @@ func set_chest_texture(texture: Texture2D) -> void:
 func _refresh_feedback(reset_motion: bool = false) -> void:
 	super._refresh_feedback(reset_motion)
 	if completion_hint and _mark < 2 and _contact_kind == "none":
-		_gel.set_shader_parameter("rim_color", Color("#ffe49a"))
+		_gel.set_shader_parameter("rim_color", Color("#ffe9a8"))
 		_gel.set_shader_parameter("rim_strength", 1.0)
-		_gel.set_shader_parameter("rim_width", 1.45)
+		_gel.set_shader_parameter("rim_width", 1.9)
 	elif valid_word and _mark == 0 and _contact_kind == "none":
 		_gel.set_shader_parameter("rim_color", Color("#de9b29"))
 		_gel.set_shader_parameter("rim_strength", 0.85)

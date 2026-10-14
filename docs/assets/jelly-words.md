@@ -85,7 +85,8 @@ the Standard Unity Asset Store EULA documented in
 Both source textures are static; these cues are runtime animation. The portal's
 authored wisps have lifted opacity and a wider falloff, layered above the contact
 shadow and below the gel, so the breathing light remains visible against the pale
-garden. A cream-lit contour connects the glow to the painted body. Two small
+garden. The wider amber halo keeps a bright baseline between pulses; a stronger
+cream-lit contour and surface sweep connect it to the painted body. Two larger
 shoulder glints reuse the integrated Toon FX 1.52 sparkle by Kenneth Foldal Moe
 (Archanor VFX), under the Standard Unity Asset Store EULA recorded in the
 [fragment asset record](jelly-fragments.md); its source image is static, with
@@ -95,8 +96,10 @@ stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
 motion keeps static light, glints and the painted rim without a sweep or enlargement.
 All completion feedback, including the contact highlight, uses the same forward
 spelling: holding `sma` lights `ll` for `small`, while holding `ll` does not light
-`sma`. Every other physical contact still compresses both painted skins and
-adds a soft cream glint, with the existing contact sound on first touch. This
+`sma`. Incompatible targets keep their resting paint, including reverse partners
+that share an idle pair color: holding `t` never recolors or lights `ca`, while
+holding `ca` lights `t` for `cat`. Every other physical contact still compresses
+both painted skins and adds a soft cream glint, with the existing contact sound on first touch. This
 neutral pressure cue does not show a red error rim or a completion glow. Moving
 apart or canceling clears it; reduced motion keeps the static glint. Releasing
 an invalid pair returns the source to its supported position, with a short

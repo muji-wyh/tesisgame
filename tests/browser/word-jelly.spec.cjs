@@ -8,6 +8,13 @@ const vocabulary = require('../../words.json');
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const normalize = text => text.trim().toLowerCase().replace(/\s+/g, ' ');
+const jellyWordsForAge = age => vocabulary.filter(word => word.min_age === age &&
+  ['id', 'text', 'image', 'audio'].every(key => typeof word[key] === 'string' && word[key].trim()) &&
+  normalize(word.text).length >= 2);
+const expectRestingPalette = (tile, resting, message) => {
+  expect(tile.palette_index, message).toBe(resting.palette_index);
+  expect(tile.palette_hue, message).toBeCloseTo(resting.palette_hue, 5);
+};
 
 async function pressRect(page, rect) {
   expect(rect).toHaveLength(4);
@@ -45,7 +52,7 @@ function center(rect, bounds) {
 }
 
 function rootsForWord(state, age, count, markedOnly = false, invalidReverse = false) {
-  const words = new Map(vocabulary.filter(word => word.min_age === age).map(word => [normalize(word.text), word]));
+  const words = new Map(jellyWordsForAge(age).map(word => [normalize(word.text), word]));
   const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
   for (const first of roots) for (const second of roots) {
     if (first.id === second.id) continue;
@@ -910,7 +917,7 @@ test('released roots and merged words fall onto support and keep their contents 
 
 test('word pair colors distinguish exact completion targets and preserve source order', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page);
-  const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
+  const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
   const roots = opening.tiles.filter(tile => tile.mass === 1 && tile.settled && tile.visible);
   const pair = roots.flatMap(source => roots.map(target => ({ source, target }))).find(({ source, target }) =>
     source.id !== target.id && source.palette_index === target.palette_index &&
@@ -941,20 +948,25 @@ test('word pair colors distinguish exact completion targets and preserve source 
       expect(target.palette_hue).toBeCloseTo(source.palette_hue, 5);
     }
     for (const target of selected.tiles.filter(tile => tile.id !== source.id && !words.has(normalize(source.text + tile.text))))
-      expect(target.palette_index, 'Every invalid ordered target differs from the held source').not.toBe(source.palette_index);
+      expectRestingPalette(target, opening.tiles.find(tile => tile.id === target.id),
+        'An invalid ordered target retains its resting color even if it shares the held source hue');
     await capture(page, info, 'word-jelly-compatible-target-colors');
   } finally {
     await page.mouse.up();
   }
+  await expect.poll(async () => (await jelly(page)).drag.source).toBe(-1);
+  const reverseOpening = await jelly(page);
   const reverse = center(pair.target.rect, bounds);
   await page.mouse.move(reverse.x, reverse.y);
   await page.mouse.down();
   try {
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(pair.target.id);
     const selected = await jelly(page);
-    expect(selected.tiles.find(tile => tile.id === pair.source.id).palette_index,
-      'Selecting the suffix does not falsely advertise the reversed word as a completion')
-      .not.toBe(selected.tiles.find(tile => tile.id === pair.target.id).palette_index);
+    expectRestingPalette(selected.tiles.find(tile => tile.id === pair.source.id),
+      reverseOpening.tiles.find(tile => tile.id === pair.source.id),
+      'Selecting the suffix leaves the original prefix in its resting color');
+    expect(selected.tiles.find(tile => tile.id === pair.source.id).completion_hint,
+      'Shared resting colors do not advertise an invalid reversed word as a completion').toBe(false);
   } finally {
     await page.mouse.up();
   }
@@ -966,9 +978,15 @@ test('word pair colors distinguish exact completion targets and preserve source 
   expect(errors).toEqual([]);
 });
 
-for (const reducedMotion of ['no-preference', 'reduce']) {
-  test(`drag completion hints follow exact source order and clear with the gesture (${reducedMotion})`, async ({ page }, info) => {
+for (const { layout, viewport, reducedMotion } of [
+  { layout: 'desktop', viewport: { width: 1366, height: 768 }, reducedMotion: 'no-preference' },
+  { layout: 'desktop', viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' },
+  { layout: 'phone', viewport: { width: 393, height: 852 }, reducedMotion: 'no-preference' },
+  { layout: 'phone', viewport: { width: 393, height: 852 }, reducedMotion: 'reduce' }
+]) {
+  test(`drag completion hints follow exact source order and clear with the gesture (${layout}, ${reducedMotion})`, async ({ page }, info) => {
     test.setTimeout(240000);
+    await page.setViewportSize(viewport);
     await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5 });
     const errors = await startWordJelly(page, { reducedMotion });
     const pair = await availableWord(page, 3, 2, { invalidReverse: true });
@@ -978,11 +996,11 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     const contactSounds = (from, recording) => page.evaluate(({ from, fingerprint }) =>
       window.audioObservation.playbacks.slice(from).filter(sound => sound.fingerprint === fingerprint),
     { from, fingerprint: recording.fingerprint });
-    const evidence = { reducedMotion, prefix: pair.roots[0].text, suffix: pair.roots[1].text,
+    const evidence = { layout, viewport, reducedMotion, prefix: pair.roots[0].text, suffix: pair.roots[1].text,
       audioAvailable, opening };
     const evidencePath = info.outputPath('word-jelly-completion-samples.json');
     const retainEvidence = () => fs.writeFileSync(evidencePath, JSON.stringify(evidence, null, 2));
-    const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => normalize(word.text)));
+    const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
     const hintedIds = state => state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b);
     const expectedIds = (state, source) => state.tiles.filter(tile => tile.id !== source.id && tile.settled &&
       words.has(normalize(source.text + tile.text))).map(tile => tile.id).sort((a, b) => a - b);
@@ -1007,14 +1025,17 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       await capture(page, info, `word-jelly-completion-held-${source.id}`);
       await page.mouse.move(safePoint.x, safePoint.y, { steps: 8 });
       await expect.poll(async () => (await jelly(page)).drag.active).toBe(true);
+      await expect.poll(async () => (await jelly(page)).tiles.filter(tile => tile.id !== source.id).every(tile => tile.settled),
+        { message: 'Lifting a supporting jelly lets the remaining stack settle before measuring its glow' }).toBe(true);
       await expect.poll(async () => {
         const state = await jelly(page);
         return JSON.stringify(hintedIds(state)) === JSON.stringify(expectedIds(state, source));
       }).toBe(true);
+      return jelly(page);
     };
     expectQuiet(opening);
     await capture(page, info, 'word-jelly-completion-idle');
-    await beginDrag(pair.roots[0]);
+    const activeOpening = await beginDrag(pair.roots[0]);
     try {
       const samples = [];
       for (let frame = 0; frame < 8; frame++) {
@@ -1023,7 +1044,10 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
           .toEqual(expectedIds(state, pair.roots[0]));
         for (const tile of state.tiles.filter(tile => tile.id !== pair.roots[0].id)) {
           const original = opening.tiles.find(item => item.id === tile.id);
-          if (original) expect(tile.rect, 'Breathing changes the jelly skin without moving its hit box or text layout').toEqual(original.rect);
+          const layout = activeOpening.tiles.find(item => item.id === tile.id);
+          if (layout) expect(tile.rect, 'Breathing changes the jelly skin without moving its hit box or text layout').toEqual(layout.rect);
+          if (original && !words.has(normalize(pair.roots[0].text + tile.text)))
+            expectRestingPalette(tile, original, 'Dragging a prefix leaves all invalid ordered targets in their resting colors');
           expect(tile.completion_scale).toBeGreaterThanOrEqual(1);
           expect(tile.completion_scale).toBeLessThanOrEqual(1.065);
           if (reducedMotion === 'reduce' || !tile.completion_hint) expect(tile.completion_scale).toBe(1);
@@ -1055,11 +1079,16 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     } finally {
       await page.mouse.up();
     }
+    const reverseOpening = await jelly(page);
+    const restingPrefix = reverseOpening.tiles.find(tile => tile.id === pair.roots[0].id);
     await beginDrag(pair.roots[1]);
     try {
       const reversed = await jelly(page);
       expect(reversed.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint,
         'Dragging a suffix never highlights the original prefix when their reversed spelling is invalid').toBe(false);
+      expectRestingPalette(reversed.tiles.find(tile => tile.id === pair.roots[0].id), restingPrefix,
+        'Dragging a suffix does not recolor its original prefix before contact');
+      evidence.reverseActive = reversed;
       const reverseTarget = center(reversed.tiles.find(tile => tile.id === pair.roots[0].id).rect, bounds);
       reverseTarget.y -= pair.roots[0].rect[3] * bounds.scale * 0.34;
       const beforeContact = await playbackIndex();
@@ -1070,6 +1099,8 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       expect(touching.contact.strength).toBeGreaterThan(0);
       expect(touching.contact).toMatchObject({ source: pair.roots[1].id, target: pair.roots[0].id });
       expect(touching.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint).toBe(false);
+      expectRestingPalette(touching.tiles.find(tile => tile.id === pair.roots[0].id), restingPrefix,
+        'Neutral physical contact does not recolor the prefix of an invalid reversed word');
       evidence.reverseContact = touching;
       await capture(page, info, 'word-jelly-completion-reverse-contact');
       if (audioAvailable) {
