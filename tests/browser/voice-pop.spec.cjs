@@ -93,15 +93,19 @@ function expectResultSaveCue(sounds) {
 
 function expectSilentPipRound(sounds, hits, fragmentCount) {
   const launches = sounds.filter(isLaunch), slices = sounds.filter(isHitSlice);
-  const fragmentTiming = recordingTiming('assets/imported-audio/ui-click/select.wav');
-  const fragmentCues = sounds.filter(sound => Math.abs(sound.duration - fragmentTiming.seconds) <=
-    fragmentTiming.importAllowance + 1 / sound.sampleRate);
+  const fragmentCues = ['appear', 'arrive'].flatMap(cue => {
+    const timing = recordingTiming(`assets/audio/fragments/${cue}.wav`);
+    const matching = sounds.filter(sound => Math.abs(sound.duration - timing.seconds) <=
+      timing.importAllowance + 1 / sound.sampleRate);
+    expect(matching, `Each earned fragment has its own ${cue} recording`).toHaveLength(fragmentCount);
+    return matching;
+  });
   expect(slices, 'Only accepted hits play slice sounds.').toHaveLength(hits);
   slices.forEach(expectHitSlice);
   expect(sounds.filter(isPipCall), 'Successful hits and falling targets never play a Pip recording.').toEqual([]);
   expect(launches.length, 'Fresh targets retain launch cues throughout the complete round.').toBeGreaterThan(hits);
   launches.forEach(expectLaunch);
-  expect(fragmentCues, 'Each earned fragment retains its ordinary collection cue.').toHaveLength(fragmentCount);
+  expect(fragmentCues, 'Each earned fragment sounds on appearance and arrival.').toHaveLength(fragmentCount * 2);
   for (const sound of fragmentCues) {
     expect(sound.fingerprint).toBeTruthy();
     expect(sound.peak).toBeGreaterThan(0.01);
@@ -203,6 +207,7 @@ async function state(page) {
     phase: element.dataset.phase, remaining: Number(element.dataset.remaining),
     combo: Number(element.dataset.combo), bonusTime: Number(element.dataset.bonusTime),
     hits: Number(element.dataset.hits), score: Number(element.dataset.score), chestCount: Number(element.dataset.chestCount),
+    fragmentCount: Number(element.dataset.fragmentCount), chestTier: Number(element.dataset.chestTier),
     bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
     recognitionFeedback: element.dataset.recognitionFeedback || '', recognitionMessage: element.dataset.recognitionMessage || '',
     transcriptFinal: element.dataset.transcriptFinal === 'true', resultsHits: JSON.parse(element.dataset.resultsHits || '{}'),
@@ -249,44 +254,34 @@ function rewardRectsSeparate(a, b) {
     a[1] + a[3] <= b[1] + 1 || b[1] + b[3] <= a[1] + 1;
 }
 
-function expectRewardLadder(current, bounds) {
-  const rewards = current.resultsRewards, thresholds = [100, 200, 300];
-  const earned = thresholds.filter(threshold => current.score >= threshold).length;
-  expect(rewards).toMatchObject({ visible: true, score: current.score, earned });
-  expect(rewards.earned, 'The result displays the round model\'s earned chests').toBe(current.chestCount);
-  expect(rewards.title).toBe(['Your next treasure', '1 chest earned', '2 chests earned', 'All 3 chests earned'][earned]);
-  expect(rewards.rows.map(row => row.threshold)).toEqual(thresholds);
-  expectRewardRect(rewards.rect, null, 'The result reward ladder has finite, nonempty bounds');
+function expectRewardSummary(current, bounds) {
+  const rewards = current.resultsRewards;
+  const tier = current.fragmentCount >= 4 ? 1 + Math.floor((current.fragmentCount - 4) / 5) : 0;
+  const earned = tier > 0 ? 1 : 0;
+  expect(current.chestTier, 'Four fragments unlock one chest, then every five upgrade the same chest').toBe(tier);
+  expect(current.chestCount, 'A round earns one evolving chest independently of its point total').toBe(earned);
+  expect(rewards).toMatchObject({ visible: true, score: current.score, earned,
+    fragment_count: current.fragmentCount, chest_tier: tier,
+    title: tier > 0 ? `Chest Lv. ${tier}` : 'Keep collecting!',
+    detail: tier > 0 ? `1 chest · ${current.fragmentCount} fragments collected` : `${current.fragmentCount} / 4 chest fragments` });
+  expectRewardRect(rewards.rect, null, 'The final reward summary has finite, nonempty bounds');
+  expectRewardRect(rewards.chest_rect, rewards.rect, 'The final chest artwork stays inside its reward summary');
   if (bounds) {
-    expect(rewards.rect[0], 'The reward ladder fits horizontally').toBeGreaterThanOrEqual(-1);
-    expect(rewards.rect[0] + rewards.rect[2], 'The reward ladder fits horizontally').toBeLessThanOrEqual(bounds.width + 1);
+    expect(rewards.rect[0], 'The reward summary fits horizontally').toBeGreaterThanOrEqual(-1);
+    expect(rewards.rect[0] + rewards.rect[2], 'The reward summary fits horizontally').toBeLessThanOrEqual(bounds.width + 1);
   }
-  for (const [index, row] of rewards.rows.entries()) {
-    const value = Math.min(current.score, row.threshold);
-    expect(row).toMatchObject({ value, earned: current.score >= row.threshold,
-      label: `${row.threshold} points`, progress_text: `${value} / ${row.threshold}` });
-    expect(row.progress, 'Each bar uses cumulative round points').toBeCloseTo(Math.min(1, current.score / row.threshold), 5);
-    expect(row.progress).toBeGreaterThanOrEqual(0);
-    expect(row.progress).toBeLessThanOrEqual(1);
-    expectRewardRect(row.rect, rewards.rect, 'Each threshold row stays inside the reward ladder');
-    expectRewardRect(row.bar_rect, row.rect, 'The progress track stays inside its row');
-    expectRewardRect(row.chest_rect, row.rect, 'The chest artwork stays inside its row');
-    expect(rewardRectsSeparate(row.bar_rect, row.chest_rect), 'The progress track cannot overlap its chest').toBe(true);
-    if (index) expect(rewards.rows[index - 1].rect[1] + rewards.rows[index - 1].rect[3],
-      'Threshold rows remain in order without overlap').toBeLessThanOrEqual(row.rect[1] + 1);
-  }
-  // A short landscape screen scrolls the ladder; its rows need not all be in
-  // view at once. Result actions still occupy their own reachable space.
+  // Scrolling the word review may move the summary outside the viewport;
+  // result actions still retain their own nonoverlapping space.
   for (const action of current.controls.filter(control => /^(OpenChests|Replay)$/.test(control.name))) {
     expect(rewardRectsSeparate(rewards.rect, [action.x, action.y, action.width, action.height]),
-      'The reward ladder cannot overlap the result actions').toBe(true);
+      'The reward summary cannot overlap the result actions').toBe(true);
   }
 }
 
 function expectSimpleResults(current, bounds) {
   expect(current.phase).toBe('finished');
   expect(current.resultsHits.total).toBe(current.hits);
-  expectRewardLadder(current, bounds);
+  expectRewardSummary(current, bounds);
   expect(current.resultsScrollbarVisible).toBe(false);
   expect(current.transcript).toBe('');
   expect(current.resultsHits.player, 'Results contain no player identity').toBeUndefined();
@@ -354,7 +349,7 @@ async function scrollResults(page, delta) {
     const bounds = await metrics(page), content = contentBounds(bounds);
     const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
     // PopResults is inset 16 CSS pixels from the playfield. Stay farther inside
-    // when the reward ladder leaves no fully visible Replay or Hear control.
+    // when the reward summary leaves no fully visible Replay or Hear control.
     const interiorTop = bounds.y + content.top * bounds.scale + 32;
     const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 32;
     const firstResult = current.controls.filter(control => /^(Replay|Hear_)/.test(control.name))
@@ -1557,7 +1552,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   await expect(page.locator('#pop-aura')).toHaveAttribute('data-listening', 'false');
   const round = await state(page);
   expect(round.hits).toBe(2);
-  expect(round.score, 'Result bars retain exactly the points earned by the two accepted hits').toBe(after.score);
+  expect(round.score, 'The result summary retains exactly the points earned by the two accepted hits').toBe(after.score);
   expect(round.score).toBeGreaterThan(0);
   expect(round.score).toBeLessThan(100);
   expectSimpleResults(round, await metrics(page));
@@ -1607,7 +1602,7 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect((await state(page)).hits).toBe(0);
   expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false });
   expect((await state(page)).resultsHits.player).toBeUndefined();
-  expect((await state(page)).resultsRewards, 'A new round clears the previous reward ladder').toEqual({});
+  expect((await state(page)).resultsRewards, 'A new round clears the previous reward summary').toEqual({});
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
@@ -1631,8 +1626,8 @@ bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available o
   expect(zero.hits).toBe(0);
   expect(zero.score).toBe(0);
   expectSimpleResults(zero, await metrics(page));
-  expect(zero.resultsRewards.rows.every(row => row.value === 0 && row.progress === 0 && !row.earned),
-    'Zero-hit results keep all three chest bars empty').toBe(true);
+  expect(zero.resultsRewards, 'Zero-hit results retain an empty four-fragment chest goal')
+    .toMatchObject({ earned: 0, chest_tier: 0, fragment_count: 0, detail: '0 / 4 chest fragments' });
   expect(zero.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
   expect(await page.evaluate(() => window.__resultHitFrames.every(frame => frame.text === '0' && frame.total === 0))).toBe(true);
   expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),

@@ -110,6 +110,50 @@ the segments immediately. Exact totals remain available to accessibility tools.
 The halo is an interface progress indicator, not replacement chest artwork;
 no additional image or sound asset is acquired for this presentation.
 
+## Fragment audio
+
+Fragment appearance and arrival use two distinct acquired recordings from
+Kenney's [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds), under
+CC0 1.0. The local All-in-1 3.7.0 source collection supplied `drop_002.ogg` for
+appearance and `glass_001.ogg` for arrival. These are integrated recordings,
+not source previews, and are separate from coin, UI click and chest-opening cues.
+Audio assets contain no animation. The original license, source hashes, output
+hashes and measurements are retained in `assets/audio/fragments/manifest.json`
+and `assets/audio/fragments/LICENSE.txt`.
+
+The 188 ms appearance cue and 276 ms arrival cue retain their full source lengths
+and pitch. Floating-point decoding preserves source peaks above full scale;
+a 1 ms attack, 12 ms tail fade and 0.70 peak ceiling prepare mono 44,100 Hz PCM16
+WAVs. No generated sound or new layers are added. Godot imports them without
+normalization, trimming, looping or compression. Source metadata, waveform,
+timing and headroom were inspected; this does not establish auditory quality.
+
+Jelly Match, Jelly Words and Voice Pop play `appear.wav` when a collected
+fragment starts its visible flight, then `arrive.wav` when it reaches the chest.
+Treasure uses the same pair for each scheduled launch and delivery to its target
+jelly. These cues follow actual presentation events, independently of the
+already committed reward. Ordinary pickups that transfer directly to the HUD
+under reduced motion play only the arrival cue; Treasure retains its existing
+delivery timeline.
+
+Four dedicated channels keep fragment tails separate from coins, merges,
+warnings and chest milestones. Runtime gain is 0.45, with a further 6 dB
+reduction during word pronunciation. Same-kind events less than 60 ms apart
+share one audible cue instead of stacking identical attacks; appearance and
+arrival have independent grouping clocks. Muting, leaving the round or pausing
+the owner stops these channels and clears their grouping clocks. Flight
+boundaries are not replayed when gameplay resumes.
+
+Rebuild the two assets and their separated listening preview:
+
+```powershell
+node tools/import-fragment-audio.cjs 'Q:/uwok/Kenney Game Assets All-in-1 3.7.0/Audio'
+```
+
+`build/fragment-audio-audition.wav` plays the integrated appearance clip, 650 ms
+of silence and the integrated arrival clip, at their asset level. The game mix
+applies its own lower runtime gain. The importer requires FFmpeg and Node.js.
+
 ## Chest art
 
 The tier progression reuses the integrated designs in this order:

@@ -1571,10 +1571,10 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 	elif cue == "powerup_success":
 		audio.stop_jelly_danger()
 		audio.play_pair_feedback(true)
-	elif cue == "powerup_fragment":
-		audio.play_jelly_cue("assemble")
-	elif cue == "chest":
-		audio.play_jelly_cue("fragment")
+	elif cue in ["powerup_fragment_launch", "fragment_appear"]:
+		audio.play_fragment_appearance()
+	elif cue in ["powerup_fragment", "fragment_arrive"]:
+		audio.play_fragment_arrival()
 	else:
 		if cue == "pick" and _mode_id == "word_jelly" and not _word_jelly.game.powerup_active():
 			audio.stop_pair_feedback()
@@ -1930,7 +1930,12 @@ func _pop_reward_cue(cue: String) -> void:
 	if _mode_id != "pop" or collection_page.visible or _page_hidden or _mode_menu_open():
 		return
 	audio.interact(model.theme_id, false)
-	audio.play_jelly_cue("fragment" if cue == "loot" else cue)
+	if cue == "loot":
+		audio.play_fragment_appearance()
+	elif cue == "fragment_arrive":
+		audio.play_fragment_arrival()
+	else:
+		audio.play_jelly_cue(cue)
 
 
 func _show_pop_rewards() -> void:

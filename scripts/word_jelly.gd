@@ -694,9 +694,9 @@ func _pose_powerup() -> void:
 		for arrival: Dictionary in state.get("arrivals", []):
 			var id: int = int(arrival.tile_id)
 			var remaining: float = float(arrival.at) - float(state.elapsed)
-			if bool(arrival.get("arrived", false)) or remaining < 0.0 or remaining > 0.42 or not _tiles.has(id):
+			if bool(arrival.get("arrived", false)) or remaining < 0.0 or remaining > WordModel.POWERUP_FRAGMENT_FLIGHT or not _tiles.has(id):
 				continue
-			var t: float = clampf(1.0 - remaining / 0.42, 0.0, 1.0)
+			var t: float = clampf(1.0 - remaining / WordModel.POWERUP_FRAGMENT_FLIGHT, 0.0, 1.0)
 			var target: Vector2 = _tiles[id].get_rect().get_center()
 			var point: Vector2 = start.lerp(target, smoothstep(0.0, 1.0, t))
 			if not reduced_motion:

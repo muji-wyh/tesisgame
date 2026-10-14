@@ -10,6 +10,7 @@ var checks: int = 0
 var failures: int = 0
 var data = Data.new()
 var words: Array = []
+var cues: Array[String] = []
 
 
 func _initialize() -> void:
@@ -34,6 +35,7 @@ func _run() -> void:
 	root.add_child(view)
 	view.size = Vector2(1000, 720)
 	view.set_process(false)
+	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	_check_fragment_arrival(view)
 	_check_owner_frame_timing(view)
 	_check_staggered_arrivals(view)
@@ -43,6 +45,7 @@ func _run() -> void:
 	_check_flight_pause(view)
 	_check_owner_lifecycle(view)
 	_check_reduced_motion(view)
+	_check_sound_cancellation(view)
 	_check_layout(view)
 	_check_results_and_restart(view)
 	view.free()
@@ -114,6 +117,7 @@ func _reset(view, fragments: int = 0, reduced: bool = false) -> void:
 	view._refresh_hud()
 	view._loot_meter.settle()
 	view._layout()
+	cues.clear()
 
 
 func _merge_marked(view) -> bool:
@@ -172,19 +176,25 @@ func _check_fragment_arrival(view) -> void:
 		return
 	check(view.game.fragment_count == 1 and view._loot_flights.size() == 1 and _progress(view).filled == 0,
 		"A committed fragment keeps flying without filling its destination early")
+	check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 0,
+		"A fragment sounds when its flight appears, without an early destination sound")
 	_advance(view, 0.64)
 	check(_progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
 		and is_zero_approx(float(_progress(view).pulse)) and view._loot_flights.size() == 1,
 		"The treasure ring keeps its fill and pickup pulse still throughout the flight")
+	check(cues.count("fragment_arrive") == 0, "The destination remains silent until the fragment reaches it")
 	_advance(view, 0.02)
 	check(_progress(view).filled == 1 and view._loot_flights.is_empty(),
 		"Reaching the chest advances exactly one segment")
+	check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 1,
+		"Visible contact plays one distinct arrival cue without replaying appearance")
 	_advance(view, 0.4)
 	check(is_equal_approx(float(_progress(view).displayed), 1.0),
 		"The arrived fragment settles into one complete segment")
 	_advance(view, 0.3)
 	check(is_zero_approx(float(_progress(view).pulse)) and view.game.fragment_count == 1,
 		"The pickup accent ends without changing the earned fragment")
+	check(cues.count("fragment_arrive") == 1, "Idle frames cannot replay a completed fragment arrival")
 
 
 func _check_owner_frame_timing(view) -> void:
@@ -203,6 +213,8 @@ func _check_owner_frame_timing(view) -> void:
 		and _progress(view).filled == 0 and is_zero_approx(float(_progress(view).displayed))
 		and is_zero_approx(float(_progress(view).pulse)),
 		"A newly launched fragment cannot inherit time from its creation frame")
+	check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 0,
+		"A coarse creation frame still separates fragment appearance from its future arrival")
 	view._process(0.5)
 	view._process(0.1)
 	check(view._loot_flights.size() == 1 and _progress(view).filled == 0
@@ -212,6 +224,7 @@ func _check_owner_frame_timing(view) -> void:
 	var residual: float = 0.15
 	check(view._loot_flights.is_empty() and _progress(view).filled == 1,
 		"Crossing the arrival boundary credits the fragment once")
+	check(cues.count("fragment_arrive") == 1, "A coarse frame crossing contact emits exactly one arrival cue")
 	check(is_equal_approx(float(_progress(view).displayed), smoothstep(0.0, Meter.FILL_SECONDS, residual))
 		and is_equal_approx(float(_progress(view).pulse), sin(residual / Meter.PULSE_SECONDS * PI)),
 		"Progress fill and pulse receive only the frame time after arrival")
@@ -245,6 +258,8 @@ func _check_staggered_arrivals(view) -> void:
 	view._process(0.02)
 	check(view._loot_flights.size() == 1 and _progress(view).filled == 1,
 		"The first arrival credits only its own fragment")
+	check(cues.count("fragment_appear") == 2 and cues.count("fragment_arrive") == 1,
+		"Staggered flights have independent appearance and destination beats")
 	view._process(0.18)
 	check(view._loot_flights.size() == 1 and _progress(view).filled == 1,
 		"A pending sibling cannot borrow the first fragment's arrival")
@@ -252,6 +267,7 @@ func _check_staggered_arrivals(view) -> void:
 	check(view._loot_flights.is_empty() and _progress(view).filled == 2
 		and float(_progress(view).displayed) < 2.0,
 		"The second arrival starts its own addition without snapping the meter full")
+	check(cues.count("fragment_arrive") == 2, "The later fragment sounds at its own destination contact")
 	_advance(view, 0.6)
 	check(is_equal_approx(float(_progress(view).displayed), 2.0) and is_zero_approx(float(_progress(view).pulse))
 		and view.game.fragment_count == 2,
@@ -281,6 +297,8 @@ func _check_double_fragment_arrival(view) -> void:
 	check(is_equal_approx(float(_progress(view).displayed), 2.0) and is_zero_approx(float(_progress(view).pulse))
 		and view.game.fragment_count == 2,
 		"A double pickup finishes once while preserving the exact earned amount")
+	check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 1,
+		"One visible flight carrying two fragments sounds once at each endpoint")
 
 
 func _check_threshold(view, previous_fragments: int, required: int) -> void:
@@ -333,6 +351,7 @@ func _check_flight_pause(view) -> void:
 		check(view._loot_flights == before and _progress(view).filled == 0
 			and is_zero_approx(float(_progress(view).displayed)) and is_zero_approx(float(_progress(view).pulse)),
 			"The %s gate freezes the flight without leaking progress or pickup effects" % action)
+		check(cues.count("fragment_arrive") == 0, "The %s gate suppresses destination audio while a flight is frozen" % action)
 		if action == "pause":
 			view.pause(false)
 		elif action == "hidden":
@@ -345,6 +364,8 @@ func _check_flight_pause(view) -> void:
 		_advance(view, 0.02)
 		check(view._loot_flights.is_empty() and _progress(view).filled == 1,
 			"The resumed %s flight credits its fragment only when it reaches the chest" % action)
+		check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 1,
+			"Resuming %s keeps exactly one appearance and one genuine arrival cue" % action)
 
 
 func _check_owner_lifecycle(view) -> void:
@@ -390,6 +411,10 @@ func _check_reduced_motion(view) -> void:
 	check(view._loot_flights.is_empty() and _progress(view).filled == 1
 		and is_equal_approx(float(_progress(view).displayed), 1.0) and is_zero_approx(float(_progress(view).pulse)),
 		"Reduced motion presents an earned fragment immediately without flight or pulse")
+	check(cues.count("fragment_appear") == 0 and cues.count("fragment_arrive") == 1,
+		"Reduced motion acknowledges immediate receipt without a fictitious flight sound")
+	_advance(view, 1.0)
+	check(cues.count("fragment_arrive") == 1, "Reduced motion cannot replay its immediate receipt later")
 	_reset(view)
 	if not _merge_marked(view):
 		return
@@ -398,6 +423,37 @@ func _check_reduced_motion(view) -> void:
 	check(view._loot_flights.is_empty() and _progress(view).filled == 1
 		and is_equal_approx(float(_progress(view).displayed), 1.0) and is_zero_approx(float(_progress(view).pulse)),
 		"Enabling reduced motion during flight settles the already earned progress")
+	_advance(view, 1.0)
+	check(cues.count("fragment_appear") == 1 and cues.count("fragment_arrive") == 0,
+		"Changing motion preferences cancels the old flight rather than delivering late audio")
+
+
+func _check_sound_cancellation(view) -> void:
+	for action: String in ["settle", "stop", "restart"]:
+		_reset(view)
+		if not _merge_marked(view):
+			continue
+		_advance(view, 0.3)
+		match action:
+			"settle": view.settle()
+			"stop": view.stop()
+			"restart":
+				view.configure(words, 3, Data.theme("spring"), data.chests, false, 52)
+				view.set_process(false)
+		_advance(view, 1.0)
+		check(cues.count("fragment_arrive") == 0 and view._loot_flights.is_empty(),
+			"The %s boundary cancels pending fragment destination sounds" % action)
+	_reset(view)
+	if not _merge_marked(view):
+		return
+	var stop_on_arrival: Callable = func(cue: String) -> void:
+		if cue == "fragment_arrive":
+			view.stop()
+	view.audio_requested.connect(stop_on_arrival)
+	_advance(view, 0.8)
+	view.audio_requested.disconnect(stop_on_arrival)
+	check(cues.count("fragment_arrive") == 1 and not view._configured and view._loot_flights.is_empty(),
+		"Leaving inside an arrival callback prevents stale flight processing or replay")
 
 
 func _rect(value: Array) -> Rect2:

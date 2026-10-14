@@ -1,0 +1,87 @@
+{
+  "creator": "Kenney",
+  "pack": "Interface Sounds 1.0",
+  "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "assets/audio/fragments/LICENSE.txt",
+  "licenseSha256": "f7966c773bbed0eca6a9c75081c44a178b38eae112724dbb5fdfbd4192d118a9",
+  "acquisition": "Acquired from the user-provided local Kenney Game Assets All-in-1 3.7.0 collection; processed and integrated. Not source previews.",
+  "animations": "Not applicable; audio only.",
+  "review": "Source identity, license, decoded waveform, duration, spectrum and output headroom inspected. No acoustic audition.",
+  "importer": "tools/import-fragment-audio.cjs",
+  "assets": [
+    {
+      "id": "appear",
+      "source": "Interface Sounds/Audio/drop_002.ogg",
+      "sourceSha256": "978c28bfc517f54fc956f7491e33f37802809d938933bf5071f39423089554d3",
+      "destination": "assets/audio/fragments/appear.wav",
+      "sha256": "2803f3aeb01bf0778e838da9848781866696e92662b00fbed10d41066a0d2275",
+      "trigger": "A chest fragment first becomes visible at the start of its flight.",
+      "bytes": 16642,
+      "frames": 8299,
+      "seconds": 0.1881859410430839,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "processing": {
+        "decoder": "FFmpeg float decode",
+        "downmix": "mono",
+        "resample": 44100,
+        "sourcePeak": 1.2520959377288818,
+        "fadeInFrames": 44,
+        "fadeOutFrames": 529,
+        "targetPeak": 0.7,
+        "gain": 0.7080832377640174,
+        "trimming": "none",
+        "pitch": "unchanged",
+        "filtering": "none",
+        "generatedLayers": "none"
+      },
+      "review": {
+        "peak": 0.699981689453125,
+        "peakDbfs": -3.0982664075284743,
+        "rms": 0.09615842291860752,
+        "clippedSamples": 0,
+        "onsetAboveFourPercentPeakSeconds": 0.00011337868480725624,
+        "lastAboveFourPercentPeakSeconds": 0.05453514739229025
+      }
+    },
+    {
+      "id": "arrive",
+      "source": "Interface Sounds/Audio/glass_001.ogg",
+      "sourceSha256": "12a8b47dc2d6351ddf8b8524c29ea487131e4d0152021c9603f3b5fcac9c0491",
+      "destination": "assets/audio/fragments/arrive.wav",
+      "sha256": "f2f23cd2cccca20485e18afd870f69323a045f435f255edbd304fea059097e9f",
+      "trigger": "A chest fragment reaches the receiving chest or its Treasure target jelly.",
+      "bytes": 24346,
+      "frames": 12151,
+      "seconds": 0.2755328798185941,
+      "sampleRate": 44100,
+      "channels": 1,
+      "bitDepth": 16,
+      "processing": {
+        "decoder": "FFmpeg float decode",
+        "downmix": "mono",
+        "resample": 44100,
+        "sourcePeak": 0.888592541217804,
+        "fadeInFrames": 44,
+        "fadeOutFrames": 529,
+        "targetPeak": 0.7,
+        "gain": 0.9245136189220914,
+        "trimming": "none",
+        "pitch": "unchanged",
+        "filtering": "none",
+        "generatedLayers": "none"
+      },
+      "review": {
+        "peak": 0.699981689453125,
+        "peakDbfs": -3.0982664075284743,
+        "rms": 0.0885358797643779,
+        "clippedSamples": 0,
+        "onsetAboveFourPercentPeakSeconds": 0.00006802721088435374,
+        "lastAboveFourPercentPeakSeconds": 0.14596371882086168
+      }
+    }
+  ]
+}

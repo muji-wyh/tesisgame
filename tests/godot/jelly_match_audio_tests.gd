@@ -20,6 +20,16 @@ class DelayedReleaseAudio extends "res://scripts/game_audio.gd":
 		return await super._stream(path, loop)
 
 
+class DelayedFragmentAudio extends "res://scripts/game_audio.gd":
+	signal fragment_loaded
+	var delay_fragment: bool = false
+
+	func _stream(path: String, loop: bool = false) -> AudioStream:
+		if delay_fragment and path in [FRAGMENT_APPEAR_PATH, FRAGMENT_ARRIVE_PATH]:
+			await fragment_loaded
+		return await super._stream(path, loop)
+
+
 var checks := 0
 var failures := 0
 
@@ -39,6 +49,8 @@ func _run() -> void:
 	await _exercise()
 	await _check_pending_warnings()
 	await _check_pending_release()
+	await _check_fragment_channels()
+	await _check_pending_fragments()
 	await create_timer(0.15).timeout
 	print("Jelly Match audio: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -273,3 +285,108 @@ func _check_pending_release() -> void:
 		audio.halt()
 		audio.queue_free()
 		await process_frame
+
+
+func _fragment_silent(audio) -> bool:
+	for player: AudioStreamPlayer in audio._fragment_players:
+		if player.playing or player.stream != null:
+			return false
+	return true
+
+
+func _fragment_playing(audio, path: String) -> bool:
+	for player: AudioStreamPlayer in audio._fragment_players:
+		if player.playing and player.stream != null and player.stream.resource_path == path:
+			return true
+	return false
+
+
+func _check_fragment_channels() -> void:
+	var appearance: AudioStreamWAV = load(Audio.FRAGMENT_APPEAR_PATH)
+	var arrival: AudioStreamWAV = load(Audio.FRAGMENT_ARRIVE_PATH)
+	check(appearance != null and arrival != null and appearance != arrival and appearance.data != arrival.data,
+		"Fragment appearance and destination contact use distinct acquired recordings")
+	var audio := Audio.new()
+	root.add_child(audio)
+	audio.play_fragment_appearance()
+	audio.play_fragment_arrival()
+	check(audio._fragment_players.is_empty(), "Inactive fragment events cannot allocate or queue sound")
+	audio.interact("spring", false)
+	audio.say("res://assets/audio/voice/word-cat.wav")
+	audio.play_coin_arrival()
+	for cue: String in ["danger", "merge", "reward"]:
+		audio.play_jelly_cue(cue)
+	var occupied: Dictionary = audio._jelly_cues.duplicate()
+	var requests: Dictionary = {}
+	for player: AudioStreamPlayer in audio._jelly_players + audio._coin_players + [audio.voice]:
+		if player.playing:
+			requests[player] = audio._playback_requests.get(player, 0)
+	check(requests.size() == 5,
+		"The independent-lane fixture starts one word, one coin, and three foreground jelly sounds")
+	var rng_state: int = audio._pop_slice_rng.state
+	for index in range(24):
+		audio.play_fragment_appearance()
+		audio.play_fragment_arrival()
+	check(audio._fragment_players.size() == 4 and _fragment_playing(audio, Audio.FRAGMENT_APPEAR_PATH)
+		and _fragment_playing(audio, Audio.FRAGMENT_ARRIVE_PATH),
+		"Rapid fragment flights retain both feedback stages inside a fixed four-channel pool")
+	check(audio._jelly_cues == occupied and audio._pop_slice_rng.state == rng_state,
+		"Fragment effects neither replace foreground jelly sounds nor change gameplay randomness")
+	for player: AudioStreamPlayer in requests:
+		check(player.playing and audio._playback_requests.get(player, 0) == requests[player],
+			"Fragment feedback preserves active pronunciation, coins, warnings, merging, and rewards")
+	audio.stop_jelly_sounds()
+	check(_fragment_silent(audio) and audio.voice.playing,
+		"Pausing gameplay cancels fragment tails without interrupting pronunciation")
+	audio.play_fragment_appearance()
+	audio.play_fragment_arrival()
+	audio.set_muted(true)
+	check(_fragment_silent(audio), "Mute immediately cancels both fragment stages")
+	audio.play_fragment_appearance()
+	audio.play_fragment_arrival()
+	audio.set_muted(false)
+	check(_fragment_silent(audio), "Unmuting never replays a suppressed fragment cue")
+	audio.interact("spring", false)
+	audio.available = false
+	audio.play_fragment_appearance()
+	audio.play_fragment_arrival()
+	check(_fragment_silent(audio), "Unavailable audio cannot start either fragment recording")
+	audio.available = true
+	audio.play_fragment_arrival()
+	check(_fragment_playing(audio, Audio.FRAGMENT_ARRIVE_PATH)
+		and not _fragment_playing(audio, Audio.FRAGMENT_APPEAR_PATH),
+		"A fresh destination event plays only its own recording after audio becomes available")
+	audio.halt()
+	audio.play_fragment_appearance()
+	audio.play_fragment_arrival()
+	check(_fragment_silent(audio), "Leaving gameplay cancels fragment sounds and rejects late events")
+	audio.queue_free()
+	await process_frame
+
+
+func _check_pending_fragments() -> void:
+	for cue: String in ["appearance", "arrival"]:
+		for interruption: String in ["pause", "mute", "halt"]:
+			var audio := DelayedFragmentAudio.new()
+			root.add_child(audio)
+			audio.interact("spring", false)
+			audio.delay_fragment = true
+			audio.call("play_fragment_" + cue)
+			check(_fragment_silent(audio), "The %s fixture delays fragment %s before playback" % [interruption, cue])
+			match interruption:
+				"pause": audio.stop_jelly_sounds()
+				"mute":
+					audio.set_muted(true)
+					audio.set_muted(false)
+				"halt": audio.halt()
+			audio.interact("spring", false)
+			audio.delay_fragment = false
+			audio.fragment_loaded.emit()
+			await process_frame
+			check(_fragment_silent(audio), "A delayed fragment %s cannot restart after %s" % [cue, interruption])
+			audio.call("play_fragment_" + cue)
+			var expected: String = Audio.FRAGMENT_APPEAR_PATH if cue == "appearance" else Audio.FRAGMENT_ARRIVE_PATH
+			check(_fragment_playing(audio, expected), "Fresh fragment %s still responds after %s" % [cue, interruption])
+			audio.halt()
+			audio.queue_free()
+			await process_frame

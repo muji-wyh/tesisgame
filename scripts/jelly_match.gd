@@ -917,6 +917,8 @@ func _process(delta: float) -> void:
 	# inside game.step() starts a new flight, not one already aged by the frame.
 	var loot_ready: bool = _reward_pickup_ready()
 	_advance_loot_feedback(delta)
+	if generation != _generation or not _allowed():
+		return
 	if _reward_presentation.is_active():
 		advance_reward_presentation(delta, loot_ready)
 	if generation != _generation or not _allowed():
@@ -963,6 +965,7 @@ func _reward_pickup_ready() -> bool:
 	return tier > 0 and arrived >= 4 + (tier - 1) * 5
 
 func _advance_loot_feedback(delta: float) -> void:
+	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > 0.0:
 		var consumed: float = remaining
@@ -978,6 +981,9 @@ func _advance_loot_feedback(delta: float) -> void:
 			return float(item.elapsed) < LOOT_FLIGHT_SECONDS)
 		if _loot_flights.size() != before:
 			_refresh_hud()
+			_cue("fragment_arrive")
+			if generation != _generation or not _allowed():
+				return
 		remaining -= consumed
 		if consumed <= 0.0 and _loot_flights.size() == before:
 			break
@@ -1106,7 +1112,11 @@ func _cue(cue: String) -> void:
 	if cue in ["danger", "danger_end"]:
 		_refresh_danger()
 	if _allowed():
-		audio_requested.emit(cue)
+		# With reduced motion, the static reward transfers immediately at the HUD.
+		if cue == "chest":
+			audio_requested.emit("fragment_arrive" if reduced_motion else "fragment_appear")
+		else:
+			audio_requested.emit(cue)
 
 func _reward_cue(cue: String) -> void:
 	if cue == "reward":

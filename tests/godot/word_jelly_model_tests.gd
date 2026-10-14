@@ -95,6 +95,8 @@ func _run() -> void:
 	_test_powerup_auto_chain()
 	_test_powerup_manual_guards()
 	_test_powerup_fragment_timeline()
+	_test_powerup_fragment_launch_rhythm()
+	_test_powerup_fragment_launch_reentry()
 	_test_powerup_fragment_repeats()
 	_test_powerup_fragment_changed_reentry()
 	_test_powerup_fragment_repeat_failure()
@@ -757,6 +759,124 @@ func _test_powerup_fragment_timeline() -> void:
 	model.purchase_powerup = Callable()
 
 
+func _test_powerup_fragment_launch_rhythm() -> void:
+	var observations: Array[Array] = []
+	for coarse: bool in [true, false]:
+		var model = _powerup_model("fragments")
+		_accept_powerup_payments(model)
+		var events: Array[Dictionary] = []
+		var observe_cue: Callable = func(cue: String) -> void:
+			if cue in ["powerup_fragment_launch", "powerup_fragment"]:
+				var state: Dictionary = model.powerup_snapshot()
+				events.append({"cue": cue, "at": float(state.elapsed)})
+		model.cue_requested.connect(observe_cue)
+		check(model.activate_powerup("fragments") and events.size() == 1
+			and events[0].cue == "powerup_fragment_launch" and is_zero_approx(float(events[0].at)),
+			"the first fragment appearance cue fires at purchase time without waiting for a frame")
+		var active: Dictionary = model.powerup_snapshot()
+		var total: int = int(active.total)
+		check(bool(active.arrivals[0].launched) and not bool(active.arrivals[0].arrived)
+			and active.arrivals.filter(func(item: Dictionary) -> bool: return bool(item.launched)).size() == 1,
+			"an audible first launch marks only its own visible flight and grants no fragment early")
+		if coarse:
+			model.step(5.0)
+		else:
+			for frame in range(500):
+				model.step(0.01)
+		var launches: Array = events.filter(func(event: Dictionary) -> bool: return event.cue == "powerup_fragment_launch")
+		var arrivals: Array = events.filter(func(event: Dictionary) -> bool: return event.cue == "powerup_fragment")
+		check(not model.powerup_active() and launches.size() == total and arrivals.size() == total,
+			"every visible Treasure fragment has one appearance cue and one destination cue")
+		for index in range(total):
+			check(is_equal_approx(float(launches[index].at), index * Model.POWERUP_FRAGMENT_STAGGER)
+				and is_equal_approx(float(arrivals[index].at) - float(launches[index].at), Model.POWERUP_FRAGMENT_FLIGHT),
+				"each staggered appearance precedes its matching destination by the full flight duration")
+		var previous: float = -1.0
+		for event: Dictionary in events:
+			check(float(event.at) + Model.EPSILON >= previous,
+				"coarse stepping dispatches fragment launch and arrival sounds in chronological order")
+			previous = float(event.at)
+		var completed: Dictionary = model.powerup_snapshot()
+		check(completed.arrivals.all(func(item: Dictionary) -> bool: return bool(item.launched) and bool(item.arrived)),
+			"completed delivery keeps both phases committed so later stepping cannot replay them")
+		var count: int = events.size()
+		model.step(1.0)
+		check(events.size() == count, "finished fragment sounds never replay on later frames")
+		observations.append(events)
+		model.cue_requested.disconnect(observe_cue)
+		model.purchase_powerup = Callable()
+	check(_approximately_equal_state(observations[0], observations[1]),
+		"coarse and fine frames have identical fragment appearance and destination cue timing")
+
+
+func _test_powerup_fragment_launch_reentry() -> void:
+	for launch_number: int in [1, 2]:
+		for action: String in ["pause", "drain", "finish", "configure", "advance"]:
+			var model = _powerup_model("fragments")
+			var payments: Array = _accept_powerup_payments(model)
+			var original: int = _board_fragments(model)
+			var observed: Dictionary = {"launches": 0, "arrivals": 0, "handled": false, "total": 0, "replacement": {}}
+			var observe_cue: Callable = func(cue: String) -> void:
+				if cue == "powerup_fragment":
+					observed.arrivals += 1
+				if cue != "powerup_fragment_launch":
+					return
+				observed.launches += 1
+				if observed.handled or int(observed.launches) != launch_number:
+					return
+				observed.handled = true
+				var state: Dictionary = model.powerup_snapshot()
+				observed.total = int(state.total)
+				check(bool(state.arrivals[launch_number - 1].launched)
+					and not bool(state.arrivals[launch_number - 1].arrived),
+					"the launch flag is committed before a sound callback can reenter the delivery")
+				if action == "pause":
+					model.set_paused(true)
+				elif action == "drain":
+					model.finish_powerup(true)
+				elif action == "finish":
+					model.finish_round()
+				elif action == "configure":
+					check(model.configure([_word("sunflower")], 3, 9),
+						"a launch callback can replace the round after silently fulfilling the paid delivery")
+					observed.replacement = model.snapshot()
+				else:
+					model.step(4.0)
+			model.cue_requested.connect(observe_cue)
+			check(model.activate_powerup("fragments"), "a paid delivery permits a reentrant appearance callback")
+			if launch_number > 1:
+				model.step(Model.POWERUP_FRAGMENT_STAGGER)
+			check(bool(observed.handled) and payments.size() == 1,
+				"both immediate and later appearance callbacks run once against the accepted purchase")
+			if action == "pause":
+				var paused_state: Dictionary = model.snapshot()
+				var paused_cues: Array[int] = [int(observed.launches), int(observed.arrivals)]
+				model.step(5.0)
+				check(model.paused and model.snapshot() == paused_state
+					and [int(observed.launches), int(observed.arrivals)] == paused_cues,
+					"pausing at fragment appearance freezes the board and both sound phases")
+				model.set_paused(false)
+				model.step(5.0)
+			if action == "configure":
+				check(model.snapshot() == observed.replacement and model.phase == "playing"
+					and not model.powerup_active() and int(observed.launches) == launch_number and int(observed.arrivals) == 0,
+					"round replacement cancels every stale launch, arrival, and remaining frame of the old delivery")
+			else:
+				check(not model.powerup_active() and _board_fragments(model) == original + int(observed.total)
+					and model.powerup_snapshot().completed == observed.total,
+					"appearance callback interruption preserves every purchased fragment exactly once")
+				if action in ["pause", "advance"]:
+					check(int(observed.launches) == int(observed.total) and int(observed.arrivals) == int(observed.total),
+						"resumed and reentrant advancement never repeats or skips a fragment's two sound phases")
+				else:
+					check(int(observed.launches) == launch_number and int(observed.arrivals) == 0,
+						"silent settlement drains the accepted delivery without catch-up appearance or arrival sounds")
+				check(model.phase == ("finished" if action == "finish" else "playing"),
+					"appearance callback lifecycle changes preserve the requested round state")
+			model.cue_requested.disconnect(observe_cue)
+			model.purchase_powerup = Callable()
+
+
 func _test_powerup_fragment_repeats() -> void:
 	var model = _powerup_model("fragments")
 	var payments: Array = _accept_powerup_payments(model)
@@ -831,8 +951,9 @@ func _test_powerup_fragment_repeats() -> void:
 	var total: int = totals.reduce(func(sum: int, value: int) -> int: return sum + value, 0)
 	check(not model.powerup_active() and _board_fragments(model) == original + total
 		and events.arrivals.size() == total and cues.count("powerup_fragment") == total
+		and cues.count("powerup_fragment_launch") == total
 		and cues.count("powerup_success") == 3 and payments.size() == 3,
-		"every repeated purchase finishes once with its own feedback and every original arrival effect")
+		"every repeated purchase finishes once with its own feedback and one launch and arrival cue per fragment")
 	check(model.powerup_snapshot().completed == total and model.powerup_snapshot().total == total
 		and model.powerup_price("fragments") == 400 and model.fragment_count == 0 and model.chest_count == 0,
 		"combined delivery totals are conserved without collecting fragments or changing capped pricing")

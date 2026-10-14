@@ -300,6 +300,95 @@ func _test_listening_recovery() -> void:
 	await settle()
 
 
+func _reset_fragment_view(view, reduced: bool = false) -> void:
+	view.show()
+	view.interaction_allowed = Callable()
+	view.configure(WORDS, reduced, 23)
+	view.set_process(false)
+	view.set_listening(true, true, "Listening.")
+
+
+func _test_fragment_endpoint_cues() -> void:
+	var view := PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	var cues: Array[String] = []
+	view.reward_cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	_reset_fragment_view(view)
+	var event: Dictionary = strike(view, true, "fragment-endpoints")
+	check(cues == ["loot"] and view._loot_flights.size() == 1,
+		"A recognized chest marker sounds at visible departure without early destination feedback")
+	check(not view.receive_speech_event(JSON.stringify(event)) and cues == ["loot"],
+		"Duplicate recognition cannot replay the fragment appearance sound")
+	view._process(ChestCelebration.ARRIVAL_SECONDS - 0.01)
+	check(cues.count("fragment_arrive") == 0 and view._loot_flights.size() == 1,
+		"Voice Pop keeps destination audio silent throughout the fragment's actual journey")
+	view._process(0.02)
+	check(cues == ["loot", "fragment_arrive"] and view._loot_flights.is_empty(),
+		"Voice Pop plays a distinct destination cue on the flight's first arriving frame")
+	view._process(1.0)
+	check(cues == ["loot", "fragment_arrive"], "Idle Voice Pop frames cannot replay a completed pickup")
+	for gate: String in ["pause", "hidden", "host_gate"]:
+		_reset_fragment_view(view)
+		cues.clear()
+		strike(view, true, "fragment-gate-" + gate)
+		view._process(0.3)
+		var flights: Array = view._loot_flights.duplicate(true)
+		check(not view.reward_presentation_active(), "The %s fixture has a fragment without a chest milestone" % gate)
+		match gate:
+			"pause": view.pause()
+			"hidden": view.hide()
+			"host_gate": view.interaction_allowed = func() -> bool: return false
+		view._process(1.0)
+		check(view._loot_flights == flights and cues == ["loot"],
+			"The %s gate freezes ordinary fragments and suppresses arrival sound without an active milestone" % gate)
+		view.show()
+		view.interaction_allowed = Callable()
+		view.set_listening(true, true, "Listening.")
+		view.set_process(false)
+		view._process(0.34)
+		check(cues == ["loot"], "Resuming %s preserves the fragment's remaining flight time" % gate)
+		view._process(0.02)
+		check(cues == ["loot", "fragment_arrive"] and view._loot_flights.is_empty(),
+			"The resumed %s fragment sounds once on actual contact" % gate)
+	for boundary: String in ["finish", "stop", "restart", "reduced_motion"]:
+		_reset_fragment_view(view)
+		cues.clear()
+		strike(view, true, "fragment-cancel-" + boundary)
+		view._process(0.3)
+		match boundary:
+			"finish": view.finish_round()
+			"stop": view.stop()
+			"restart": _reset_fragment_view(view)
+			"reduced_motion": view.set_reduced_motion(true)
+		view._process(1.0)
+		check(cues.count("fragment_arrive") == 0 and view._loot_flights.is_empty(),
+			"The %s boundary cancels stale destination audio from an unfinished fragment flight" % boundary)
+	_reset_fragment_view(view, true)
+	cues.clear()
+	strike(view, true, "fragment-static")
+	check(cues == ["fragment_arrive"] and view._loot_flights.is_empty() and view.game.fragment_count == 1,
+		"Reduced motion acknowledges immediate fragment receipt without pretending a flight exists")
+	view._process(1.0)
+	check(cues == ["fragment_arrive"], "Reduced-motion feedback remains one-shot as the clock advances")
+	_reset_fragment_view(view)
+	cues.clear()
+	strike(view, true, "fragment-reentry")
+	var reset_on_arrival: Callable = func(cue: String) -> void:
+		if cue == "fragment_arrive":
+			view.configure(WORDS, false, 24)
+			view.set_process(false)
+	view.reward_cue_requested.connect(reset_on_arrival)
+	view._process(ChestCelebration.ARRIVAL_SECONDS + 0.1)
+	view.reward_cue_requested.disconnect(reset_on_arrival)
+	check(cues == ["loot", "fragment_arrive"] and view.game.phase == "ready"
+		and view.game.fragment_count == 0 and view._loot_flights.is_empty(),
+		"Replacing the round inside arrival feedback cannot process old fragments in the new round")
+	view.stop()
+	view.queue_free()
+	await settle()
+
+
 func _run() -> void:
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
 		await _test_scene(dimensions)
@@ -307,5 +396,6 @@ func _run() -> void:
 	await _test_callback_reentry()
 	await _test_live_queue_and_expiry()
 	await _test_listening_recovery()
+	await _test_fragment_endpoint_cues()
 	print("Voice Pop fragment presentation: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

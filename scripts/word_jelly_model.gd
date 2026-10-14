@@ -394,7 +394,8 @@ func _prepare_powerup_fragments(receipt_id: String) -> void:
 		pending_counts[id] = int(pending_counts[id]) + 1
 		_powerup.arrivals.append({"tile_id": id, "index": _powerup.arrivals.size(),
 			"receipt_id": receipt_id, "total": total,
-			"at": start + POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER, "arrived": false})
+			"at": start + POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER,
+			"launched": false, "arrived": false})
 	_powerup.stage = "arrivals"
 	_powerup.total = int(_powerup.total) + total
 	_powerup.duration = maxf(float(_powerup.duration), start + POWERUP_FRAGMENT_FLIGHT + (total - 1) * POWERUP_FRAGMENT_STAGGER + POWERUP_FRAGMENT_RECOVERY)
@@ -407,6 +408,15 @@ func _advance_powerup() -> void:
 	var receipt_id: String = str(_powerup.receipt_id)
 	if str(_powerup.kind) == "fragments":
 		for arrival: Dictionary in _powerup.arrivals.duplicate():
+			if bool(arrival.arrived):
+				continue
+			if not bool(arrival.launched) and float(_powerup.elapsed) + EPSILON >= float(arrival.at) - POWERUP_FRAGMENT_FLIGHT:
+				# Commit before presentation callbacks may pause, drain, or replace
+				# this delivery. Resuming never replays an already visible launch.
+				arrival.launched = true
+				cue_requested.emit("powerup_fragment_launch")
+				if not _same_powerup(generation, receipt_id) or paused:
+					return
 			if bool(arrival.arrived) or float(_powerup.elapsed) + EPSILON < float(arrival.at):
 				continue
 			arrival.arrived = true
@@ -503,6 +513,8 @@ func _powerup_boundary() -> float:
 		var next: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
 		for arrival: Dictionary in _powerup.arrivals:
 			if not bool(arrival.arrived):
+				if not bool(arrival.launched):
+					next = minf(next, maxf(0.0, float(arrival.at) - POWERUP_FRAGMENT_FLIGHT - float(_powerup.elapsed)))
 				next = minf(next, maxf(0.0, float(arrival.at) - float(_powerup.elapsed)))
 		return next
 	var boundary: float = INF

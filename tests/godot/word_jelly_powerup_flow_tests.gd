@@ -272,19 +272,22 @@ func _check_fragments(app) -> void:
 	check(state.active and state.kind == "fragments" and int(state.total) >= 2 and int(state.total) <= 8
 		and app.coin_wallet.balance == before - 200 and _carried_fragments(game) == 0,
 		"Treasure purchases reserve two to eight fragment arrivals for the exact 200-coin price")
+	check(cues.count("powerup_fragment_launch") == 1 and app.audio._fragment_players[0].playing
+		and app.audio._fragment_players[0].stream == load(app.audio.FRAGMENT_APPEAR_PATH),
+		"The first Treasure fragment plays its appearance recording when its flight starts")
 	view._process(game.POWERUP_FRAGMENT_FLIGHT * 0.5)
 	check(view._powerup_effects.stamps.size() > 0 and _carried_fragments(game) == 0,
 		"Treasure art flies toward the board before any fragment is attached")
 	view._process(game.POWERUP_FRAGMENT_FLIGHT * 0.5 + 0.001)
 	check(arrivals.size() == 1 and _carried_fragments(game) == 1 and cues.count("powerup_fragment") == 1,
-		"The first visible arrival attaches exactly one fragment and triggers its assembly cue")
+		"The first visible arrival attaches exactly one fragment and triggers its arrival cue")
 	var arrived_id: int = int(arrivals[0].tile_id)
 	check(view._tiles[arrived_id].visible_fragment_badges() == 1 and not view._powerup_arrivals.is_empty()
 		and view._powerup_effects.stamps.size() > 0, "The destination shows its new fragment badge with an arrival flash")
-	var assemble_playing: bool = false
-	for player: AudioStreamPlayer in app.audio._jelly_players:
-		assemble_playing = assemble_playing or (player.playing and player.stream == load(app.audio.JELLY_PATHS.assemble))
-	check(assemble_playing, "Fragment arrival uses the application's acquired assembly recording")
+	var arrival_playing: bool = false
+	for player: AudioStreamPlayer in app.audio._fragment_players:
+		arrival_playing = arrival_playing or (player.playing and player.stream == load(app.audio.FRAGMENT_ARRIVE_PATH))
+	check(arrival_playing, "Fragment arrival plays its distinct acquired recording on the fragment channel")
 	_drain(view)
 	check(_carried_fragments(game) == int(state.total) and arrivals.size() == int(state.total)
 		and cues.count("powerup_fragment") == int(state.total) and game.fragment_count == 0
@@ -453,8 +456,10 @@ func _check_preferences(app) -> void:
 	var any_audio: bool = app.audio.pair_feedback.playing
 	for player: AudioStreamPlayer in app.audio._jelly_players:
 		any_audio = any_audio or player.playing
+	for player: AudioStreamPlayer in app.audio._fragment_players:
+		any_audio = any_audio or player.playing
 	check(not any_audio and _carried_fragments(view.game) >= 1,
-		"Muted fragment delivery remains visible and complete without assembly audio")
+		"Muted fragment delivery remains visible and complete without fragment audio")
 	app.set_reduced_motion(false)
 	app.audio.set_muted(false)
 

@@ -23,6 +23,11 @@ const COIN_RELEASE_PATH := "res://assets/audio/coins/release.wav"
 const COIN_CHANNELS := 4
 const COIN_GAIN := 0.60
 const COIN_SPEECH_DB := -6.0
+const FRAGMENT_APPEAR_PATH := "res://assets/audio/fragments/appear.wav"
+const FRAGMENT_ARRIVE_PATH := "res://assets/audio/fragments/arrive.wav"
+const FRAGMENT_CHANNELS := 4
+const FRAGMENT_GAIN := 0.45
+const FRAGMENT_MIN_INTERVAL_MS := 60
 const JELLY_PATHS := {
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
@@ -33,14 +38,13 @@ const JELLY_PATHS := {
 	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
-	"fragment": UI_CLICK_PATH,
 	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
 }
 const JELLY_GAINS := {
 	"finish_ready": 0.40,
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
-	"fragment": 0.30, "assemble": 0.28,
+	"assemble": 0.28,
 }
 const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
 const JELLY_SPEECH_DB: float = -6.0
@@ -121,6 +125,9 @@ var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
 var _coin_players: Array[AudioStreamPlayer] = []
 var _coin_next_player: int = 0
+var _fragment_players: Array[AudioStreamPlayer] = []
+var _fragment_next_player: int = 0
+var _fragment_last_ms: Dictionary = {}
 
 
 func _ready() -> void:
@@ -156,6 +163,8 @@ func _ready() -> void:
 	_stream(UI_CLICK_PATH)
 	_stream(COIN_PATH)
 	_stream(COIN_RELEASE_PATH)
+	_stream(FRAGMENT_APPEAR_PATH)
+	_stream(FRAGMENT_ARRIVE_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
 	voice = _player(0.64)
@@ -275,6 +284,46 @@ func _update_coin_gain() -> void:
 		player.volume_db = linear_to_db(COIN_GAIN) + duck
 
 
+func play_fragment_appearance() -> void:
+	_play_fragment(FRAGMENT_APPEAR_PATH)
+
+
+func play_fragment_arrival() -> void:
+	_play_fragment(FRAGMENT_ARRIVE_PATH)
+
+
+func _play_fragment(path: String) -> void:
+	if muted or not active or not available:
+		return
+	var now: int = Time.get_ticks_msec()
+	if _fragment_last_ms.has(path) and now - int(_fragment_last_ms[path]) < FRAGMENT_MIN_INTERVAL_MS:
+		return
+	_fragment_last_ms[path] = now
+	if _fragment_players.is_empty():
+		for index in range(FRAGMENT_CHANNELS):
+			_fragment_players.append(_player(FRAGMENT_GAIN))
+	# Group simultaneous fragments without stealing merges, warning beats or coins.
+	var player: AudioStreamPlayer = _fragment_players[_fragment_next_player]
+	_fragment_next_player = (_fragment_next_player + 1) % FRAGMENT_CHANNELS
+	_update_fragment_gain()
+	_play(player, path)
+	set_process(true)
+
+
+func stop_fragment_sounds() -> void:
+	for player: AudioStreamPlayer in _fragment_players:
+		_stop(player)
+		player.stream = null
+	_fragment_next_player = 0
+	_fragment_last_ms.clear()
+
+
+func _update_fragment_gain() -> void:
+	var duck: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
+	for player: AudioStreamPlayer in _fragment_players:
+		player.volume_db = linear_to_db(FRAGMENT_GAIN) + duck
+
+
 func play_jelly_cue(cue_name: String) -> void:
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
@@ -323,6 +372,7 @@ func stop_jelly_danger() -> void:
 
 
 func stop_jelly_sounds() -> void:
+	stop_fragment_sounds()
 	for player: AudioStreamPlayer in _jelly_players:
 		_stop(player)
 		player.stream = null
@@ -381,7 +431,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty() or not _coin_players.is_empty())
+	set_process(not _jelly_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
 	_update_music_gain()
 
 
@@ -407,7 +457,11 @@ func _process(_delta: float) -> void:
 	for player: AudioStreamPlayer in _coin_players:
 		coin_playing = coin_playing or player.playing
 	_update_coin_gain()
-	if _round_celebration_id.is_empty() and not jelly_playing and not coin_playing:
+	var fragment_playing: bool = false
+	for player: AudioStreamPlayer in _fragment_players:
+		fragment_playing = fragment_playing or player.playing
+	_update_fragment_gain()
+	if _round_celebration_id.is_empty() and not jelly_playing and not coin_playing and not fragment_playing:
 		set_process(false)
 		return
 	# Actual playback, including a natural word ending, controls the cue mix.
@@ -871,6 +925,7 @@ func _update_music_gain() -> void:
 		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
 	_update_round_celebration_gain()
 	_update_coin_gain()
+	_update_fragment_gain()
 
 
 func set_muted(value: bool) -> void:

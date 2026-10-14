@@ -9,7 +9,8 @@ const WALLET_KEY = 'growWithPip.coinWallet.v1';
 const GROWTH_KEY = 'growWithPip.growth.v1';
 const WRONG = 'assets/imported-audio/pair-feedback/wrong.wav';
 const RIGHT = 'assets/imported-audio/pair-feedback/right.wav';
-const FRAGMENT = 'assets/imported-audio/chest-reference/step-detail.wav';
+const FRAGMENT_APPEAR = 'assets/audio/fragments/appear.wav';
+const FRAGMENT = 'assets/audio/fragments/arrive.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
 const prices = { auto_merge: 600, fragments: 200 };
 const AUTO_MERGE_BEAT = 0.2;
@@ -470,9 +471,24 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   for (const [index, arrival] of arrivals.entries()) expect(arrival.at).toBeCloseTo(0.42 + index * 0.18, 5);
   if (audioAvailable) {
     audioEvidence.fragments = { success: await expectRecording(page, fragmentAudioFrom, RIGHT),
+      appearance: await expectRecording(page, fragmentAudioFrom, FRAGMENT_APPEAR),
       arrival: await expectRecording(page, fragmentAudioFrom, FRAGMENT), sounds: await soundsSince(page, fragmentAudioFrom) };
+    fs.writeFileSync(info.outputPath('word-jelly-powerups-paid-audio.json'), JSON.stringify(audioEvidence, null, 2));
     expect(recordingCount(audioEvidence.fragments.sounds, RIGHT)).toHaveLength(1);
-    expect(recordingCount(audioEvidence.fragments.sounds, FRAGMENT)).toHaveLength(total);
+    const appearances = recordingCount(audioEvidence.fragments.sounds, FRAGMENT_APPEAR);
+    const arrivals = recordingCount(audioEvidence.fragments.sounds, FRAGMENT);
+    expect(appearances).toHaveLength(total);
+    expect(arrivals).toHaveLength(total);
+    expect(audioEvidence.fragments.appearance.fingerprint).not.toBe(audioEvidence.fragments.arrival.fingerprint);
+    for (let index = 0; index < total; index++) {
+      expect(arrivals[index].at - appearances[index].at,
+        'Each arrival recording follows its visible 420 ms flight').toBeGreaterThan(300);
+      expect(arrivals[index].at - appearances[index].at).toBeLessThan(620);
+      // Video capture can quantize the 180 ms model beat to adjacent rendered frames.
+      // The exact schedule is checked above; audible launches must remain distinct.
+      if (index) expect(appearances[index].at - appearances[index - 1].at,
+        'Fragment appearances retain separate audible delivery beats').toBeGreaterThanOrEqual(60);
+    }
   }
   const savedFragments = await storedWallet(page);
   expect(savedFragments.balance).toBe(4800);
@@ -563,11 +579,46 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   }
   await capture(page, info, 'word-jelly-auto-merge-awaits-collection');
   const earnedFragments = completed.reduce((sum, tile) => sum + tile.fragments, 0);
+  const collectAudioFrom = await playbackIndex(page);
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    const timeline = window.fragmentCollectionTimeline = [];
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      timeline.push({ at: performance.now(), flights: state.loot?.flights || 0 });
+    };
+    window.fragmentCollectionObserver = new MutationObserver(record);
+    window.fragmentCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  });
   await pressRect(page, (await jelly(page)).collect_button.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + completed.length);
   const earnedCoins = collectionCoins(await jelly(page), opening, completed);
   await expect.poll(async () => (await wallet(page)).balance).toBe(4200 + earnedCoins);
   expect((await jelly(page)).fragment_count).toBe(opening.fragment_count + earnedFragments);
+  if (audioAvailable && earnedFragments > 0) {
+    await expect.poll(async () => (await jelly(page)).loot.flights, { timeout: 15000 }).toBe(0);
+    await expectRecording(page, collectAudioFrom, FRAGMENT);
+    const sounds = await soundsSince(page, collectAudioFrom);
+    const timeline = await page.evaluate(() => window.fragmentCollectionTimeline);
+    const arrival = recordingCount(sounds, FRAGMENT).at(-1);
+    audioEvidence.collection = { arrival, sounds, timeline };
+    fs.writeFileSync(info.outputPath('word-jelly-powerups-paid-audio.json'), JSON.stringify(audioEvidence, null, 2));
+    if (reducedMotion !== 'reduce') {
+      const appearance = recordingCount(sounds, FRAGMENT_APPEAR).at(-1);
+      expect(appearance, 'Collect plays a distinct fragment appearance recording').toBeTruthy();
+      expect(arrival.at).toBeGreaterThan(appearance.at);
+      // Engine animation time can lag wall time during software WebGL capture.
+      // Check the visible arrival boundary; native tests verify the 650 ms flight.
+      const finalFrame = timeline.findLastIndex((frame, index) => index > 0 && frame.flights === 0 && timeline[index - 1].flights > 0);
+      expect(finalFrame, 'Collected fragments visibly travel before reaching the chest').toBeGreaterThan(0);
+      expect(arrival.at, 'The final arrival cue belongs to the frame completing the visible flight')
+        .toBeGreaterThanOrEqual(timeline[finalFrame - 1].at - 150);
+      expect(arrival.at).toBeLessThanOrEqual(timeline[finalFrame].at + 250);
+      audioEvidence.collection.appearance = appearance;
+    }
+  }
+  await page.evaluate(() => window.fragmentCollectionObserver.disconnect());
   await expect.poll(() => savedGrowth(page)).not.toBe(growth);
   const finalSave = await storedWallet(page);
   expect(finalSave.balance).toBe(4200 + earnedCoins);

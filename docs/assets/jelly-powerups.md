@@ -93,9 +93,13 @@ on the board until the player collects them.
 
 Automatic movement reuses the ordinary pick, contact, and merge cues. Treasure
 flights reuse the existing current chest texture, `portal_glow.png`, and
-`milestone/sparkle.png`. Their arrival cue is the existing Jelly `assemble`
-recording, `assets/imported-audio/chest-reference/step-detail.wav`, at gain 0.28,
-with the first flight arriving after 0.42 seconds and subsequent arrivals
-staggered by 0.18 seconds. The original embedded-game audio provenance remains
-in [chest reference audio](chest-reference-audio.md). These cues belong to the
-owner's actual purchase and arrival events; the button itself plays no sound.
+`milestone/sparkle.png`. Each scheduled fragment launch plays
+`assets/audio/fragments/appear.wav`, and its delivery plays
+`assets/audio/fragments/arrive.wav`, both at gain 0.45. These distinct acquired
+Kenney CC0 recordings, their preparation and their independent four-channel
+mix are documented in [fragment audio](jelly-fragments.md#fragment-audio).
+The first flight arrives after 0.42 seconds and subsequent deliveries are
+staggered by 0.18 seconds. Launches and arrivals each emit once at their actual
+timeline boundaries, including overlapping purchases, and do not replay after
+a pause. The cues belong to the owner's committed purchase and delivery
+events; the button itself plays no sound.

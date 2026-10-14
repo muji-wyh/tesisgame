@@ -563,6 +563,7 @@ func _present_hits(struck: Array) -> void:
 		_last_hit_left = 0.0
 	var time_awards: Array[int] = []
 	var fragment_awards: int = 0
+	var fragment_flights: int = 0
 	var milestones: Array[Dictionary] = []
 	for target in struck:
 		var fragments: int = int(target.get("fragment_awards", 0))
@@ -579,6 +580,7 @@ func _present_hits(struck: Array) -> void:
 		if not visual.is_empty():
 			if fragments > 0 and not reduced_motion:
 				_loot_flights.append({"from": visual.center, "elapsed": 0.0})
+				fragment_flights += 1
 			if _bursts.size() >= Slice.MAX_EFFECTS:
 				_bursts.pop_front()
 			var burst: Dictionary = Slice.create(visual, int(target.get("points", 100)), _card_color(int(target.uid)),
@@ -597,7 +599,7 @@ func _present_hits(struck: Array) -> void:
 		_chest_fx_age = 0.0
 		_chest_fx_serial += 1
 		_chest_fx_amount = fragment_awards
-		reward_cue_requested.emit("loot")
+		reward_cue_requested.emit("loot" if fragment_flights > 0 else "fragment_arrive")
 		if round != game.round_id or _stopped or _finished_sent:
 			return
 	if not struck.is_empty():
@@ -871,9 +873,15 @@ func _process(delta: float) -> void:
 		return
 	if _reward_paused and reward_presentation_active():
 		return
-	for flight: Dictionary in _loot_flights:
-		flight.elapsed += delta
-	_loot_flights = _loot_flights.filter(func(flight: Dictionary) -> bool: return float(flight.elapsed) < ChestCelebration.ARRIVAL_SECONDS)
+	if not _reward_paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+		var flight_count: int = _loot_flights.size()
+		for flight: Dictionary in _loot_flights:
+			flight.elapsed += delta
+		_loot_flights = _loot_flights.filter(func(flight: Dictionary) -> bool: return float(flight.elapsed) < ChestCelebration.ARRIVAL_SECONDS)
+		if _loot_flights.size() < flight_count:
+			reward_cue_requested.emit("fragment_arrive")
+			if round != game.round_id or _stopped or _reward_paused or not is_visible_in_tree():
+				return
 	_sync_game_clock(false)
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
 	var feedback_expired: bool = _advance_hud_feedback(delta, false)
