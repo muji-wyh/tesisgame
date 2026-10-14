@@ -73,6 +73,9 @@ func _ready() -> void:
 	for label in [_heading, _progress, _result_score]:
 		label.autowrap_mode = TextServer.AUTOWRAP_OFF
 		label.clip_text = false
+		# Font shaping settles after a viewport-scale change. Reflow once its
+		# actual metrics arrive so old text heights cannot squeeze the chest.
+		label.minimum_size_changed.connect(_queue_layout)
 	_progress.add_theme_color_override("font_color", Style.MUTED)
 	_scroll = TreasureScroll.new()
 	_scroll.name = "TreasureScroll"
@@ -404,12 +407,15 @@ func _build_cards() -> void:
 			button.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
 		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		panel.add_child(button)
-		# Keep the focus cue on the opening instruction, not around the entire stage.
+		# The chest owns input. Its instruction is plain, non-interactive text.
 		var hint := Panel.new()
 		hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button.add_child(hint)
+		hint.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+		panel.add_child(hint)
 		var caption := Style.label("Hold to open", 16)
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hint.add_child(caption)
 		_cards.append({"panel": panel, "light": light, "art": art, "entry_index": entry_index,
 			"button": button, "hint": hint, "caption": caption,
@@ -785,12 +791,9 @@ func _refresh_captions() -> void:
 		if card.hint.get_meta("appearance", []) == appearance:
 			continue
 		card.hint.set_meta("appearance", appearance)
-		var fill: Color = Style.GOOD if active else Color("#eef1e7") if hovered or focused else Color("#f0eee4")
-		var edge: Color = Style.GOOD if focused else Color.TRANSPARENT
-		if card.opened and not active:
-			fill = Color.TRANSPARENT
-		card.hint.add_theme_stylebox_override("panel", Style.box(fill, edge, ceili(22 / s), maxi(1, roundi(1.5 / s)) if focused else 0))
-		card.caption.add_theme_color_override("font_color", Color.WHITE if active else Style.GOOD if card.opened else Style.INK)
+		# Focus belongs to the reward itself, never a button-shaped instruction.
+		card.light.modulate = Color("#ebcd85", 0.64 if active else 0.52 if focused else 0.38 if hovered else 0.22)
+		card.caption.add_theme_color_override("font_color", Style.GOOD if active or focused or card.opened else Style.MUTED)
 
 
 func _refresh() -> void:
@@ -819,7 +822,10 @@ func _refresh() -> void:
 		_progress.text = JellyRewardProgress.title_for_tier(tier) if tier > 0 else "No chest this round"
 		if _is_jelly_result():
 			var completed: int = maxi(0, int(_result_context.get("cleared_pairs", 0)))
-			_progress.text = "%d word%s completed\n%s" % [completed, "" if completed == 1 else "s", _progress.text]
+			var words: String = "word completed" if completed == 1 else "words completed"
+			_progress.text = words if completed == int(_result_context.get("score", 0)) else "%d %s" % [completed, words]
+			if tier <= 0:
+				_progress.text += "\nNo chest this round"
 	else:
 		_heading.text = JellyRewardProgress.title_for_tier(int(_cards[0].tier)) if state.chest_count == 1 and not _cards.is_empty() and int(_cards[0].tier) > 0 else "Your treasure"
 		_progress.text = "%d / %d opened" % [state.opened_count, state.chest_count]
@@ -917,8 +923,6 @@ func _layout() -> void:
 		card.panel.position = Vector2(left + (index % columns) * (card_w + gap), top + heading_height + floori(float(index) / columns) * (card_h + gap))
 		card.panel.size = Vector2(card_w, card_h)
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
-		card.button.position = Vector2(card_w * 0.08, 8 / s)
-		card.button.size = Vector2(card_w * 0.84, card_h - 12 / s)
 		card.art.position = Vector2.ZERO
 		card.art.size = Vector2(card_w, art_h)
 		card.tier_label.visible = int(card.tier) > 0 and _batch_entries().size() > 1
@@ -930,20 +934,20 @@ func _layout() -> void:
 			card.art.size.y -= 24 / s
 		card.light.size = Vector2.ONE * minf(card_w, art_h * 1.15)
 		card.light.position = Vector2((card_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
-		var hint_width: float = minf(card.button.size.x, 184 / s)
-		card.hint.position = Vector2((card.button.size.x - hint_width) * 0.5, art_h - card.button.position.y + 8 / s)
-		card.hint.size = Vector2(hint_width, 44 / s)
+		var hint_width: float = minf(card_w, 184 / s)
+		card.hint.position = Vector2((card_w - hint_width) * 0.5, art_h + 8 / s)
+		card.hint.size = Vector2(hint_width, 28 / s)
 		card.caption.position = Vector2.ZERO
-		card.caption.size = card.hint.size
 		card.caption.add_theme_font_size_override("font_size", ceili(14 / s))
+		card.caption.size = card.hint.size
 		if wide_single:
 			# A short landscape screen places the instruction beside the chest.
 			card.art.size.x = card_w - 204 / s
-			card.button.position = Vector2(8 / s, 8 / s)
-			card.button.size = card.panel.size - Vector2.ONE * (16 / s)
-			card.hint.position = Vector2(card.button.size.x - hint_width, (card_h - 44 / s) * 0.5 - 8 / s)
+			card.hint.position = Vector2(card_w - hint_width, (card_h - card.hint.size.y) * 0.5)
 			card.light.size = Vector2.ONE * art_h
 			card.light.position = Vector2((card.art.size.x - art_h) * 0.5, art_h * 0.05)
+		card.button.position = card.art.position
+		card.button.size = card.art.size
 	var button_y: float = h - 54 / s
 	_back.size = Vector2((132 if not _result_context.is_empty() else 104) / s, 46 / s)
 	_back.position = Vector2(margin if _save_failed else w - margin - _back.size.x, button_y)
@@ -1023,7 +1027,7 @@ func _layout_jelly_result(s: float, w: float, h: float) -> void:
 	var tight: bool = stage_h * s < 170.0
 	var heading_h: float = (24 if tight else 32) / s
 	var score_h: float = (36 if tight else 62) / s
-	var summary_h: float = (32 if tight else 42) / s
+	var summary_h: float = (20 if tight else 24) / s
 	var label_gap: float = (2 if tight else 4) / s
 	_heading.add_theme_font_size_override("font_size", ceili((18 if tight else 24) / s))
 	_result_score.add_theme_font_size_override("font_size", ceili((30 if tight else 52) / s))
@@ -1050,25 +1054,29 @@ func _layout_jelly_result(s: float, w: float, h: float) -> void:
 	_progress.size = Vector2(info_w, summary_h)
 	if not _cards.is_empty():
 		var card: Dictionary = _cards[0]
-		var hint_h: float = 44 / s
-		var art_h: float = maxf(1.0, chest_h - hint_h - 4 / s)
+		var hint_h: float = 28 / s
+		var tier_h: float = (20 if tight else 24) / s if int(card.tier) > 0 else 0.0
+		var art_h: float = maxf(1.0, chest_h - tier_h - hint_h - 4 / s)
 		card.panel.position = Vector2(info_w + gap if compact else (inner_w - chest_w) * 0.5,
 			top if compact else top + header_h + gap)
 		card.panel.size = Vector2(chest_w, chest_h)
-		card.art.position = Vector2.ZERO
+		card.art.position = Vector2(0, tier_h)
 		card.art.size = Vector2(chest_w, art_h)
-		card.tier_label.hide()
+		card.tier_label.visible = tier_h > 0
+		card.tier_label.position = Vector2.ZERO
+		card.tier_label.size = Vector2(chest_w, tier_h)
+		card.tier_label.add_theme_font_size_override("font_size", ceili(12 / s))
 		card.light.size = Vector2.ONE * minf(chest_w, art_h * 1.12)
-		card.light.position = Vector2((chest_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
+		card.light.position = Vector2((chest_w - card.light.size.x) * 0.5, tier_h + art_h * 0.55 - card.light.size.y * 0.5)
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
-		card.button.position = Vector2.ZERO
-		card.button.size = card.panel.size
+		card.button.position = card.art.position
+		card.button.size = card.art.size
 		var hint_w: float = minf(184 / s, chest_w)
-		card.hint.position = Vector2((chest_w - hint_w) * 0.5, art_h + 4 / s)
+		card.hint.position = Vector2((chest_w - hint_w) * 0.5, tier_h + art_h + 4 / s)
 		card.hint.size = Vector2(hint_w, hint_h)
 		card.caption.position = Vector2.ZERO
-		card.caption.size = card.hint.size
 		card.caption.add_theme_font_size_override("font_size", ceili(13 / s))
+		card.caption.size = card.hint.size
 	_refresh_captions()
 	_update_navigation(1)
 
@@ -1119,14 +1127,14 @@ func _layout_single_result(s: float, w: float, h: float) -> void:
 		card.light.size = Vector2.ONE * minf(art_w, art_h * 1.12)
 		card.light.position = Vector2((art_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
-		card.button.position = Vector2(art_w * 0.06, 0)
-		card.button.size = Vector2(art_w * 0.88, chest_h)
+		card.button.position = card.art.position
+		card.button.size = card.art.size
 		var hint_w: float = minf(184 / s, card.button.size.x)
-		card.hint.position = Vector2((card.button.size.x - hint_w) * 0.5, art_h + 6 / s)
-		card.hint.size = Vector2(hint_w, 44 / s)
+		card.hint.position = Vector2((art_w - hint_w) * 0.5, art_h + 6 / s)
+		card.hint.size = Vector2(hint_w, 28 / s)
 		card.caption.position = Vector2.ZERO
-		card.caption.size = card.hint.size
 		card.caption.add_theme_font_size_override("font_size", ceili(14 / s))
+		card.caption.size = card.hint.size
 	var button_y: float = h - 54 / s
 	_back.size = Vector2(144 / s, 46 / s)
 	_back.position = Vector2(margin if _save_failed else (w - _back.size.x) * 0.5, button_y)
@@ -1186,12 +1194,15 @@ func snapshot() -> Dictionary:
 	for card in _cards:
 		var rect: Rect2 = card.button.get_global_rect()
 		var art_rect: Rect2 = card.art.get_global_rect()
+		var hint_rect: Rect2 = card.hint.get_global_rect()
 		entries.append({"index": card.entry_index, "theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"tier": int(card.tier),
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
 			"disabled": card.button.disabled, "control": str(card.button.name),
 			"caption": card.caption.text,
+			"hint_rect": {"x": hint_rect.position.x, "y": hint_rect.position.y,
+				"width": hint_rect.size.x, "height": hint_rect.size.y},
 			"art_rect": {"x": art_rect.position.x, "y": art_rect.position.y,
 				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})

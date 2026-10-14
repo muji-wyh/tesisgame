@@ -86,6 +86,7 @@ func _run() -> void:
 	await _jelly_accumulation_checks()
 	await _jelly_tier_room_checks()
 	await _result_context_checks()
+	await _scaled_result_resize_checks()
 	await _collect_all_checks()
 	await _collect_failure_checks()
 	print("Pop treasure room: %d checks, %d failures" % [checks, failures])
@@ -198,9 +199,19 @@ func _result_context_checks() -> void:
 	check(room.configure("result-room", 1, "ocean", _manifest, false, 3), "Prepare a live tier-three result chest")
 	room.set_result_context({"score": 420, "chest_tier": 3, "chest_count": 1})
 	check(room._heading.text == "Round complete" and room._result_score.text == "420"
-		and room._progress.text == "0 words completed\nChest Lv. 3" and room._back.text == "Play again"
+		and room._progress.text == "0 words completed" and room._back.text == "Play again"
+		and room._cards[0].tier_label.text == "Chest Lv. 3" and room._cards[0].tier_label.visible
 		and room._home.visible,
-		"Result context presents the score, earned tier and replay action")
+		"Result context gives the earned tier to its chest and keeps score, completed words and replay distinct")
+	for sample: Dictionary in [{"score": 0, "completed": 0, "summary": "words completed"},
+		{"score": 1, "completed": 1, "summary": "word completed"},
+		{"score": 26, "completed": 26, "summary": "words completed"},
+		{"score": 420, "completed": 1, "summary": "1 word completed"},
+		{"score": 420, "completed": 26, "summary": "26 words completed"}]:
+		room.set_result_context({"score": sample.score, "cleared_pairs": sample.completed, "chest_tier": 3, "chest_count": 1})
+		check(room._result_score.text == str(sample.score) and room._progress.text == sample.summary,
+			"Result copy avoids repeating the large total while preserving a different completed-word count: %s" % sample)
+	room.set_result_context({"score": 26, "cleared_pairs": 26, "chest_tier": 3, "chest_count": 1})
 	var actions: Array[String] = []
 	room.replay_requested.connect(func() -> void: actions.append("replay"))
 	room.exit_requested.connect(func() -> void: actions.append("exit"))
@@ -220,6 +231,11 @@ func _result_context_checks() -> void:
 		check(card.panel.get_global_rect().grow(1.0).encloses(card.art.get_global_rect())
 			and card.panel.get_global_rect().grow(1.0).encloses(card.hint.get_global_rect()),
 			"Result chest artwork and hold instruction remain inside their stage at %s" % dimensions)
+		_check_chest_instruction(room, card, "result modal at %s" % dimensions)
+		check(card.tier_label.visible and card.panel.get_global_rect().grow(1.0).encloses(card.tier_label.get_global_rect())
+			and card.tier_label.get_global_rect().end.y <= card.art.get_global_rect().position.y + PIXEL_TOLERANCE
+			and card.tier_label.get_visible_line_count() == 1,
+			"The earned level belongs to a readable row above the chest at %s" % dimensions)
 		check(not room._heading.get_global_rect().intersects(room._result_score.get_global_rect())
 			and not room._result_score.get_global_rect().intersects(room._progress.get_global_rect()),
 			"Result score and explanatory labels remain separate at %s" % dimensions)
@@ -235,6 +251,75 @@ func _result_context_checks() -> void:
 	check(actions == ["replay", "exit"] and room._paused, "Legacy Back still pauses and exits")
 	room.queue_free()
 	await process_frame
+	var storage := Storage.new()
+	room = _make_jelly_room(storage)
+	check(room.configure_empty_result("empty-result-copy", _manifest, false), "Prepare a result with no earned chest")
+	room.set_result_context({"reason": "danger", "score": 1, "cleared_pairs": 1, "chest_tier": 0, "chest_count": 0})
+	check(room._heading.text == "Game over" and room._result_score.text == "1"
+		and room._progress.text == "word completed\nNo chest this round" and room._cards.is_empty(),
+		"An empty danger result keeps its reason and no-chest explanation without repeating the large total")
+	room.set_result_context({"score": 20, "cleared_pairs": 2, "chest_tier": 0, "chest_count": 0})
+	check(room._progress.text == "2 words completed\nNo chest this round" and storage.jelly_writes == 0
+		and storage.coin_writes == 0,
+		"An empty result retains a distinct completed-word count without inventing treasure or coins")
+	room.queue_free()
+	await process_frame
+
+
+func _scaled_result_resize_checks() -> void:
+	var previous_mode: int = root.content_scale_mode
+	var previous_aspect: int = root.content_scale_aspect
+	var previous_scale_size: Vector2i = root.content_scale_size
+	var previous_size: Vector2i = root.size
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_size = Vector2i(480, 480)
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.size = Vector2i(393, 852)
+	for frame in range(3):
+		await process_frame
+	var room = _make_jelly_room(Storage.new())
+	check(room.configure("scaled-result-resize", 1, "ocean", _manifest, false, 3),
+		"Prepare one earned chest for resizing the same live result modal")
+	room.set_result_context({"score": 22, "cleared_pairs": 22, "chest_tier": 3, "chest_count": 1})
+	var modal = load("res://scripts/jelly_game_over.gd").new()
+	root.add_child(modal)
+	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.configure(room, Data.theme("ocean"), true, true, "Round complete")
+	modal.open(false)
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768), Vector2i(568, 320), Vector2i(393, 852)]:
+		root.size = dimensions
+		# Let viewport scaling, font shaping, and their deferred reflow settle.
+		# Do not call layout manually: the live modal must respond to resizing.
+		for frame in range(10):
+			await process_frame
+		var s: float = Style.ui_scale(room)
+		var card: Dictionary = room._cards[0]
+		var context: String = "same scaled result at %s (scale=%.4f, heading=%.2fpx, score=%.2fpx, summary=%.2fpx, chest=%.2fpx)" % [
+			dimensions, s, room._heading.size.y * s, room._result_score.size.y * s, room._progress.size.y * s, card.art.size.y * s]
+		check(room._heading.size.y * s <= 40.0 + PIXEL_TOLERANCE
+			and room._result_score.size.y * s <= 76.0 + PIXEL_TOLERANCE
+			and room._progress.size.y * s <= 30.0 + PIXEL_TOLERANCE,
+			"Result text discards stale font minima instead of taking the chest's space: " + context)
+		if dimensions.y >= 700:
+			check(card.art.size.y * s >= 240.0 - PIXEL_TOLERANCE,
+				"A tall viewport gives the earned chest a substantial readable stage: " + context)
+		for label: Label in [room._heading, room._result_score, room._progress, card.tier_label, card.caption]:
+			check(label.is_visible_in_tree() and label.get_line_count() == 1 and label.get_visible_line_count() == 1
+				and label.get_line_height() <= label.size.y + PIXEL_TOLERANCE,
+				"Result labels remain complete after scaled reflow (%s): %s" % [label.text, context])
+		check(room._scroll.get_global_rect().grow(PIXEL_TOLERANCE).encloses(card.panel.get_global_rect())
+			and room.get_global_rect().grow(PIXEL_TOLERANCE).encloses(room._back.get_global_rect())
+			and not room._scroll.get_global_rect().intersects(room._back.get_global_rect()),
+			"The live result keeps its complete chest stage and replay action in view: " + context)
+		_check_chest_instruction(room, card, context)
+	modal.queue_free()
+	await process_frame
+	root.content_scale_mode = previous_mode
+	root.content_scale_aspect = previous_aspect
+	root.content_scale_size = previous_scale_size
+	root.size = previous_size
+	for frame in range(3):
+		await process_frame
 
 
 func _collect_all_checks() -> void:
@@ -743,6 +828,27 @@ func _check_treasure_labels(room, context: String) -> void:
 				"Treasure labels begin inside the visible scroll area after " + context + detail)
 
 
+func _check_chest_instruction(room, card: Dictionary, context: String) -> void:
+	check(card.hint.get_parent() == card.panel and card.button.get_parent() == card.panel
+		and card.hint.get_theme_stylebox("panel") is StyleBoxEmpty,
+		"The hold caption is a plain sibling of the chest target, without button decoration: " + context)
+	check(card.hint.mouse_filter == Control.MOUSE_FILTER_IGNORE and card.caption.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and card.hint.focus_mode == Control.FOCUS_NONE and card.caption.focus_mode == Control.FOCUS_NONE
+		and not room.navigation_controls().has(card.hint) and not room.navigation_controls().has(card.caption),
+		"The caption cannot intercept touch, pointer or keyboard input: " + context)
+	check(card.button.get_global_rect().grow(PIXEL_TOLERANCE).encloses(card.art.get_global_rect())
+		and not card.button.get_global_rect().intersects(card.hint.get_global_rect()),
+		"Only the artwork owns the chest hit area; its separate caption is outside it: " + context + _card_geometry(room, card))
+	check(card.hint.get_global_rect().grow(PIXEL_TOLERANCE).encloses(card.caption.get_global_rect())
+		and card.caption.get_visible_line_count() == 1 and card.caption.get_line_height() <= card.caption.size.y + PIXEL_TOLERANCE,
+		"The complete opening instruction remains readable in its own row: %s (text=%s, hint=%s, caption=%s, lines=%s/%s, line_height=%s, font=%s)" % [
+			context, card.caption.text, card.hint.get_global_rect(), card.caption.get_global_rect(), card.caption.get_visible_line_count(),
+			card.caption.get_line_count(), card.caption.get_line_height(), card.caption.get_theme_font_size("font_size")])
+	if not card.button.disabled:
+		check(room.navigation_controls().has(card.button) and card.button.focus_mode == Control.FOCUS_ALL,
+			"The real chest remains available in keyboard navigation: " + context)
+
+
 func _room_checks() -> void:
 	var storage := Storage.new()
 	var room = _make_room(storage)
@@ -779,7 +885,8 @@ func _room_checks() -> void:
 				"Every unopened chest visibly explains the hold interaction")
 			check(card.hint.get_global_rect().grow(1.0).encloses(card.caption.get_global_rect())
 				and not card.art.get_global_rect().intersects(card.hint.get_global_rect()),
-				"The hold instruction fits its compact badge below the chest artwork" + _card_geometry(room, card))
+				"The hold instruction fits its plain caption below the chest artwork" + _card_geometry(room, card))
+			_check_chest_instruction(room, card, "reward batch at width %d" % width)
 		if width * Style.ui_scale(room) < 620.0:
 			check(room.snapshot().scroll_max > 0,
 				"A phone can scroll the reward batch without compressing its chest artwork")
@@ -909,17 +1016,45 @@ func _single_chest_layout_checks() -> void:
 		check(room.get_global_rect().grow(1.0).encloses(room._back.get_global_rect())
 			and room._back.size.x * scale <= 113,
 			"The compact Back action remains in reach at %s" % dimensions)
-		check(card.hint.size.y * scale >= 44 - PIXEL_TOLERANCE
-			and card.hint.get_global_rect().grow(1.0).encloses(card.caption.get_global_rect()),
-			"The hold badge remains legible and touch-sized at %s" % dimensions + _card_geometry(room, card))
+		_check_chest_instruction(room, card, "single chest at %s" % dimensions)
+		check(card.button.size.x * scale >= 44 - PIXEL_TOLERANCE and card.button.size.y * scale >= 44 - PIXEL_TOLERANCE,
+			"The chest artwork retains a full touch target beside its noninteractive caption at %s" % dimensions)
+		room._back.grab_focus()
+		room._refresh_captions()
+		var resting_light: float = card.light.modulate.a
 		card.button.grab_focus()
 		await process_frame
 		check(card.button.has_focus() and card.button.get_theme_stylebox("focus") is StyleBoxEmpty,
 			"A focused chest keeps keyboard access without outlining its whole stage at %s" % dimensions)
-		var focus_surface: StyleBoxFlat = card.hint.get_theme_stylebox("panel")
-		check(focus_surface.border_color.a > 0.0 and focus_surface.border_width_top > 0,
-			"Keyboard focus remains visibly indicated on the compact hold badge at %s (focused=%s, disabled=%s, border=%s, color=%s)" % [
-				dimensions, card.button.has_focus(), card.button.disabled, focus_surface.border_width_top, focus_surface.border_color])
+		check(card.light.is_visible_in_tree() and card.light.texture != null and card.light.modulate.a > resting_light
+			and card.hint.get_theme_stylebox("panel") is StyleBoxEmpty,
+			"Keyboard focus brightens the sourced chest light while the caption stays plain at %s" % dimensions)
+		var key := InputEventKey.new()
+		key.keycode = KEY_SPACE
+		key.pressed = true
+		root.push_input(key, true)
+		check(room.snapshot().holding and room.snapshot().active == 0,
+			"The focused chest begins a real keyboard hold at %s" % dimensions)
+		key = InputEventKey.new()
+		key.keycode = KEY_SPACE
+		root.push_input(key, true)
+		check(not room.snapshot().holding and not card.opened,
+			"Releasing the keyboard hold early keeps the chest unopened at %s" % dimensions)
+		var caption_point: Vector2 = card.hint.get_global_rect().get_center()
+		if room._scroll.get_global_rect().has_point(caption_point):
+			var pointer := InputEventMouseButton.new()
+			pointer.button_index = MOUSE_BUTTON_LEFT
+			pointer.position = caption_point
+			pointer.global_position = caption_point
+			pointer.pressed = true
+			root.push_input(pointer, true)
+			check(not room.snapshot().holding and room.snapshot().active == -1,
+				"Pressing the visible instruction cannot start opening its neighboring chest at %s" % dimensions)
+			pointer = InputEventMouseButton.new()
+			pointer.button_index = MOUSE_BUTTON_LEFT
+			pointer.position = caption_point
+			pointer.global_position = caption_point
+			root.push_input(pointer, true)
 		if dimensions.y >= 568:
 			check(viewport.grow(1.0).encloses(card.button.get_global_rect())
 				and room.snapshot().scroll_max == 0,
@@ -1174,6 +1309,7 @@ func _check_settled_layout(room, published: Array[Dictionary], context: String) 
 		check(Rect2(Vector2.ZERO, card.panel.size).grow(PIXEL_TOLERANCE / Style.ui_scale(room)).encloses(card.art.get_rect())
 			and card.panel.get_global_rect().grow(1.0).encloses(card.hint.get_global_rect()),
 			"Chest artwork and its instruction remain inside their own card after " + context + _card_geometry(room, card))
+		_check_chest_instruction(room, card, context)
 		var minimum_art_height: float = 128 if room.size.y * Style.ui_scale(room) < 430 else 220
 		check(card.art.size.x * Style.ui_scale(room) >= 180 - PIXEL_TOLERANCE
 			and card.art.size.y * Style.ui_scale(room) >= minimum_art_height - PIXEL_TOLERANCE,

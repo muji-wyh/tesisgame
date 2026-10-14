@@ -55,6 +55,12 @@ celebrate completion even without a
 chest, omit the chest artwork and confetti, and offer Play again. Presentation
 never saves rewards or opens a chest.
 
+Jelly settlement keeps the completed-word total above the reward and places the
+earned level with its chest. The chest artwork is the hold target; `Hold to open`
+is plain, non-interactive text below it. Keyboard focus brightens the existing
+chest glow instead of outlining the instruction. The compact modal keeps its
+footer reachable and places the result beside the chest on short landscapes.
+
 ## Shared recordings, separate playback
 
 The presentation reuses three already integrated recordings. It does not

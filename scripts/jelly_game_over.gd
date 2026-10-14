@@ -78,8 +78,11 @@ func _layout() -> void:
 	surface.shadow_size = ceili(20 / s)
 	surface.shadow_offset = Vector2(0, 8 / s)
 	panel.add_theme_stylebox_override("panel", surface)
-	panel.size = Vector2(minf(560 / s, maxf(0, size.x - 32 / s)),
-		minf((600 if _has_chest else 330) / s, maxf(0, size.y - 32 / s)))
+	# Keep the reward close to its result and actions, even on a large canvas.
+	# A wide, short viewport still needs room for the two-column arrangement.
+	var landscape: bool = size.x * s >= 600 and size.y * s < 480
+	panel.size = Vector2(minf((560 if landscape else 480) / s, maxf(0, size.x - 32 / s)),
+		minf((540 if _has_chest else 300) / s, maxf(0, size.y - 32 / s)))
 	panel.position = (size - panel.size) * 0.5
 	panel.pivot_offset = panel.size * 0.5
 	if is_instance_valid(_room):
