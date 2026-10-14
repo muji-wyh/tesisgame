@@ -57,6 +57,7 @@ func _init() -> void:
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
 	game.cue_requested.connect(_cue)
+	game.fusion_started.connect(_merge_started)
 	game.fusion_completed.connect(_fusion_completed)
 	game.collected.connect(_collected)
 	game.collection_started.connect(_collection_started)
@@ -972,6 +973,14 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
 	merged.show()
 
+func _merge_started(fusion: Dictionary) -> void:
+	if str(fusion.get("operation", "")) == "merge" and _can_play() \
+		and not bool(fusion.get("automatic", false)) and not game.collection_batch_active() \
+		and game.is_valid_word(fusion.get("result", {})):
+		# The accepted drop already reserves a valid word. Speak with the union
+		# instead of adding the full animation to the pronunciation response time.
+		word_merged.emit(fusion.word)
+
 func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 	if game._has_free_cell():
 		_cue("danger_end")
@@ -980,10 +989,6 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 		if not visual.is_empty():
 			_snapbacks[int(fusion.result.id)] = {"from": visual.merged.position, "elapsed": 0.0}
 	_refresh_hud()
-	if str(fusion.get("operation", "")) == "merge" and _can_play() \
-		and not bool(fusion.get("automatic", false)) and not game.collection_batch_active() \
-		and game.is_valid_word(fusion.get("result", {})):
-		word_merged.emit(fusion.word)
 
 func _landing_contact_at(cell: Dictionary) -> float:
 	if bool(cell.get("arrival", false)):

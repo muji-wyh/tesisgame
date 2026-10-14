@@ -37,8 +37,8 @@ async function start(page, browserName) {
   return errors;
 }
 
-async function pressRect(page, rect) {
-  await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2);
+async function pressRect(page, rect, bounds) {
+  await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2, bounds);
 }
 
 async function mergeNextPair(page) {
@@ -71,12 +71,15 @@ async function mergeNextPair(page) {
 async function observeMerges(page) {
   await page.evaluate(() => {
     window.mergeSpeechObserver?.disconnect();
+    if (window.mergeSpeechReleaseObserver) window.removeEventListener('pointerup', window.mergeSpeechReleaseObserver, true);
     const status = document.getElementById('game-status');
     const initial = JSON.parse(status.dataset.jelly || '{}');
     const seen = new Set(initial.tiles.map(tile => tile.id));
     const evidence = window.mergeSpeechEvidence = {
-      from: window.audioObservation.playbacks.length, completions: [], frames: [], collectionAt: null
+      from: window.audioObservation.playbacks.length, releases: [], completions: [], frames: [], collectionAt: null
     };
+    window.mergeSpeechReleaseObserver = () => evidence.releases.push(performance.now());
+    window.addEventListener('pointerup', window.mergeSpeechReleaseObserver, true);
     const record = () => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       if (state.mode !== 'word_jelly') return;
@@ -116,7 +119,7 @@ function expectNaturalEnd(sound) {
     .toBeGreaterThanOrEqual(sound.duration * 1000 - 60);
 }
 
-test('a manual Jelly Words merge pronounces the completed word once after the fusion', async ({ page, browserName }, info) => {
+test('a manual Jelly Words merge pronounces its word immediately on the accepted drop', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
   const requests = watchAudioRequests(page), errors = await start(page, browserName);
   const opening = await jelly(page);
@@ -152,10 +155,14 @@ test('a manual Jelly Words merge pronounces the completed word once after the fu
   expect(evidence.completions.map(item => item.word.id)).toEqual([word.id]);
   const pending = evidence.frames.filter(frame => frame.fusions.some(fusion => fusion.operation === 'merge'));
   expect(pending.length, 'The browser observes the actual merge animation before completion').toBeGreaterThan(0);
-  expect(spoken[0].at, 'Pronunciation follows the final animation frame, allowing one publication frame')
-    .toBeGreaterThanOrEqual(pending.at(-1).at - 45);
-  expect(Math.abs(spoken[0].at - evidence.completions[0].at), 'The completed-word appearance and voice begin together')
+  expect(evidence.releases).toHaveLength(1);
+  expect(spoken[0].at).toBeGreaterThanOrEqual(evidence.releases[0]);
+  expect(spoken[0].at - evidence.releases[0], 'A valid drop starts playback without the previous 760 ms animation wait')
+    .toBeLessThan(200);
+  expect(Math.abs(spoken[0].at - pending[0].at), 'Pronunciation begins alongside the accepted fusion')
     .toBeLessThan(160);
+  expect(spoken[0].at, 'The merge animation can continue while its word is spoken')
+    .toBeLessThan(evidence.completions[0].at);
   expectNaturalEnd(spoken[0]);
   expect((await jelly(page)).cleared_pairs, 'Pronouncing a merge does not collect it').toBe(opening.cleared_pairs);
   expect(requests, 'Merge speech uses the existing bundled recording without a network request').toEqual([]);
@@ -212,25 +219,44 @@ test('Auto Merge completes its paid animated fusions without pronouncing words',
 
 test('Collect cancels manual merge pronunciation and keeps the whole batch silent', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
-  const errors = await start(page, browserName), opening = await jelly(page);
+  const errors = await start(page, browserName), opening = await jelly(page), bounds = await metrics(page);
   await observeMerges(page);
+  const from = await page.evaluate(() => window.mergeSpeechEvidence.from);
   await mergeNextPair(page);
   await mergeNextPair(page);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.merged_count === opening.merged_count + 2 && state.collect_button.enabled && state.collect_button.count === 2;
   }, { intervals: [25, 50], timeout: 20000 }).toBe(true);
-  const ready = await jelly(page), from = await page.evaluate(() => window.mergeSpeechEvidence.from);
-  const active = pronunciations(await sounds(page), from)
+  await expect.poll(async () => {
+    const earlier = pronunciations(await sounds(page), from);
+    return earlier.length === 2 && earlier.every(sound => sound.endedAt !== undefined);
+  }).toBe(true);
+  // Keep two words ready, then start fresh merge speech. Waiting for this last
+  // fusion to settle would consume most of the now-immediate pronunciation.
+  await mergeNextPair(page);
+  const snapshot = await page.evaluate(() => ({
+    ready: JSON.parse(document.getElementById('game-status').dataset.jelly),
+    playbacks: window.audioObservation.playbacks.slice(window.mergeSpeechEvidence.from),
+    at: performance.now()
+  }));
+  const { ready, at: collectInputAt } = snapshot;
+  const active = pronunciations(snapshot.playbacks)
     .findLast(sound => sound.stoppedAt === undefined && sound.endedAt === undefined);
+  expect(ready.collect_button.enabled).toBe(true);
+  expect(ready.collect_button.count).toBeGreaterThanOrEqual(2);
   expect(active, 'A manual merge pronunciation is still playing when Collect becomes available').toBeTruthy();
-  const collectInputAt = await page.evaluate(() => performance.now());
-  await pressRect(page, ready.collect_button.rect);
+  await pressRect(page, ready.collect_button.rect, bounds);
   await expect.poll(async () => {
     const current = (await sounds(page)).find(sound => sound.at === active.at && sound.scheduledAt === active.scheduledAt);
     return current?.stoppedAt !== undefined;
   }, { message: 'Collect stops the pronunciation that was already playing' }).toBe(true);
-  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + ready.collect_button.count);
+  let batchTotal;
+  await expect.poll(async () => {
+    batchTotal = await page.evaluate(() => window.mergeSpeechEvidence.frames.find(frame => frame.batch.active)?.batch.total || 0);
+    return batchTotal;
+  }).toBeGreaterThanOrEqual(2);
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + batchTotal);
   await page.waitForTimeout(1800);
   const evidence = await retain(page, info, 'collect-cancels-merge-pronunciation');
   expect(evidence.collectionAt).not.toBeNull();

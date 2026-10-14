@@ -86,12 +86,13 @@ func _check_merge_events() -> void:
 		var ids: Array[int] = _reset_view(view, ["ca", "t"], reduced)
 		check(view.game.try_merge(ids[0], ids[1]) == "merged", "A manual prefix-first merge starts")
 		check(not bool(view.game.fusions[0].automatic), "Manual fusion retains its pronunciation origin")
-		check(merged.is_empty(), "Contact does not pronounce an unfinished merge")
+		check(merged.size() == 1 and merged[0].id == "cat" and merged[0].audio == words[0].audio,
+			"Accepting a valid manual merge requests its full production word immediately in either motion preference")
 		_advance(view, view.game.FUSION_SECONDS - 0.001)
-		check(merged.is_empty(), "Pronunciation waits for the complete fusion animation")
+		check(merged.size() == 1, "The liquid fusion continues without delaying or repeating its word")
 		view._process(0.002)
 		check(merged.size() == 1 and merged[0].id == "cat" and merged[0].audio == words[0].audio,
-			"Exactly one completed merge requests its full production word in either motion preference")
+			"Completing the fusion never repeats its accepted-merge pronunciation")
 		_advance(view, view.game.SETTLE_SECONDS * 3.0)
 		check(merged.size() == 1 and view.game.collectable_ids().size() == 1,
 			"Settlement does not replay pronunciation or collect the word")
@@ -103,14 +104,38 @@ func _check_merge_events() -> void:
 	check(view.game.try_merge(ids[1], ids[0]) == "wrong", "A reversed invalid word is rejected")
 	_advance(view, 1.0)
 	check(merged.is_empty() and tapped.is_empty(), "Rejected contact never requests a pronunciation")
+	view.pause(true)
+	check(view.game.try_merge(ids[0], ids[1]) == "ignored" and merged.is_empty(),
+		"A paused board cannot accept a merge or request its pronunciation")
+	view.pause(false)
 	check(view.game.try_merge(ids[0], ids[1]) == "merged", "The valid direction can still merge after rejection")
+	check(merged.size() == 1, "The accepted word is requested before the next animation frame")
 	view._process(view.game.FUSION_SECONDS * 0.5)
 	view.pause(true)
 	view._process(10.0)
-	check(merged.is_empty(), "A paused fusion cannot finish or pronounce its result")
+	check(merged.size() == 1 and view.game.merged_count == 0,
+		"A paused fusion cannot finish or repeat its accepted word")
 	view.pause(false)
 	_advance(view, view.game.FUSION_SECONDS)
-	check(merged.size() == 1, "Resuming a pending fusion pronounces the committed result once")
+	check(merged.size() == 1 and view.game.merged_count == 1,
+		"Resuming completes the pending fusion without requesting its pronunciation again")
+	ids = _reset_view(view, ["ca", "t"])
+	var duplicate_results: Array[String] = []
+	var pause_on_word: Callable = func(_word: Dictionary) -> void:
+		duplicate_results.append(view.game.try_merge(ids[0], ids[1]))
+		view.pause(true)
+	view.word_merged.connect(pause_on_word)
+	check(view.game.try_merge(ids[0], ids[1]) == "merged", "A valid merge can synchronously pause from its word callback")
+	view.word_merged.disconnect(pause_on_word)
+	check(duplicate_results == ["ignored"] and merged.size() == 1 and view.game.paused,
+		"The accepted fusion is reserved before speech callbacks can attempt the same merge again")
+	_advance(view, 1.0)
+	check(merged.size() == 1 and view.game.merged_count == 0,
+		"A synchronous pause prevents animation advancement without duplicating the word event")
+	view.pause(false)
+	_advance(view, 1.0)
+	check(merged.size() == 1 and view.game.merged_count == 1,
+		"The accepted fusion completes exactly once after its synchronous pause resumes")
 	for reduced: bool in [false, true]:
 		_reset_view(view, ["ca", "t", "do", "g", "ca", "t"], reduced)
 		check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with three valid pairs")
@@ -249,9 +274,13 @@ func _check_app_routes() -> void:
 	var ids: Array[int] = _reset_view(view, ["ca", "t", "do", "g"])
 	check(view.game.try_merge(ids[0], ids[1]) == "merged" and view.game.try_merge(ids[2], ids[3]) == "merged",
 		"The application accepts two independent word fusions")
-	_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS * 3.0)
 	check(app.audio.voice.playing and app.audio.voice.stream == load(CAT) and app.audio._voice_queue == [DOG],
-		"Committed application merges route to noninterrupting production word playback")
+		"Accepted manual merges start or queue their production recording before any animation frame")
+	var accepted_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
+	_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS * 3.0)
+	check(app.audio.voice.playing and app.audio.voice.stream == load(CAT) and app.audio._voice_queue == [DOG]
+		and int(app.audio._playback_requests.get(app.audio.voice, 0)) == accepted_request,
+		"Fusion completion preserves current playback and its queue without restarting or duplicating speech")
 	view._collect_all()
 	check(view.game.collection_batch_active() and not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
 		"Collect cancels residual merge narration before its first pickup")
