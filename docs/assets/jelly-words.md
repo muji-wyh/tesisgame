@@ -150,22 +150,31 @@ The current batch finishes before another can begin; pause freezes its clock,
 leaving the round cancels queued pickups, and a failed wallet save stops the
 sequence with the uncollected words intact.
 
-The button reuses the inspected mint gel skin above and the gold coin from
-Kenneth Foldal Moe / Archanor VFX's acquired Toon FX 1.52 package, under the
-Standard Unity Asset Store EULA; conversion and acquisition details remain in
-`assets/coins/manifest.json`. The integrated portal glow, rays and sparkle
-textures retain the licenses and source records in the linked chest-fragment
-record. These are static source images; the growing coin stack, soft overshoot,
-rotating rays and staggered glints are animated in the game. No new asset was
-downloaded. Button strength follows the available word count and retains the
-batch's initial charge until completion. Reduced motion preserves the count,
-static material, stack and light accents without rocking, growth overshoot or
-twinkling. Earned chest celebrations queue until the collection rhythm finishes;
-their existing flight, upgrade and confetti then play through the shared system.
-Focus uses the gel skin's own mint-and-cream contour highlight, replacing the
-dark rectangle around its hit target. It remains distinct from the golden charge
-rim at high counts, stays steady with reduced motion, and clears when disabled.
-Keyboard navigation, activation and touch bounds remain unchanged.
+The Collect button uses a mint collection tray with a soft lower lip, a clear
+caption and a separate cream count badge. Its compact layout puts the caption
+above the artwork and count; the taller sidebar layout keeps the caption below.
+The surface is an interface layout primitive, matching the neighboring item
+panels. The inspected mint, sky and lilac gel skins above form an accumulating
+fan of completed-word jellies. Its front picture reuses the integrated Microsoft
+Fluent Emoji 3D cat (MIT), already shipped in the core interface; exact source,
+creator and acquisition records remain in the
+[Home illustration attribution](../../assets/images/ui/modes/ATTRIBUTION.md).
+The former coin pile is removed: collection primarily clears words and gathers
+their fragments, while bonus coins remain rare.
+
+The integrated portal glow, rays and sparkle textures retain the licenses and
+source records in the linked chest-fragment record. These are static acquired
+images; the unfurling jelly fan, surface overshoot, rotating local rays and
+staggered glints are runtime animation. No new asset was downloaded. Button
+strength follows the available word count and retains the batch's initial
+charge until completion. Each pickup compresses and lifts the illustration on
+the existing collection beat. The label, count placement and touch area remain
+steady. Light stays around the illustration, clear of the compact caption.
+Reduced motion preserves the count, layered artwork and static light accents
+without rocking, growth overshoot or twinkling. A rounded teal focus contour
+follows the tray without a dark rectangular outline and clears when disabled.
+Keyboard navigation, activation, collection cadence, rewards and touch bounds
+remain unchanged. Earned chest celebrations still queue until collection ends.
 
 The existing collection pop marks each pickup. Each collected word now owns an
 independent picture-and-spelling burst: new words coexist with older ones instead

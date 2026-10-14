@@ -1,10 +1,12 @@
 extends Button
-## The hit target stays still while acquired gel and coin artwork build charge.
+## A steady collection tray. Acquired word-jelly artwork builds the charge.
 
 const Style = preload("res://scripts/ui_style.gd")
-const Surface = preload("res://scripts/jelly_surface.gdshader")
 const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
-const COIN = preload("res://assets/coins/gold-coin.png")
+const SKY = preload("res://assets/images/jelly-match/gel-sky.png")
+const LILAC = preload("res://assets/images/jelly-match/gel-lilac.png")
+const WORD_PICTURE = preload("res://assets/images/ui/modes/cat.webp")
+const GEL_REGION := Rect2(11, 34, 298, 252)
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
@@ -27,8 +29,10 @@ var _beat_elapsed: float = BEAT_SECONDS
 var _beat_count: int = 0
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
-var _surface := TextureRect.new()
-var _material := ShaderMaterial.new()
+var _panel := StyleBoxFlat.new()
+var _lip := StyleBoxFlat.new()
+var _badge := StyleBoxFlat.new()
+var _focus := StyleBoxFlat.new()
 
 
 func _init() -> void:
@@ -38,14 +42,6 @@ func _init() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
-	_surface.texture = GEL
-	_surface.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_surface.stretch_mode = TextureRect.STRETCH_SCALE
-	_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_surface.show_behind_parent = true
-	_material.shader = Surface
-	_surface.material = _material
-	add_child(_surface)
 	resized.connect(queue_redraw)
 	focus_entered.connect(queue_redraw)
 	focus_exited.connect(queue_redraw)
@@ -156,7 +152,7 @@ func _sample() -> Dictionary:
 			var t: float = _beat_elapsed / BEAT_SECONDS
 			strike = sin(t * PI) * pow(1.0 - t, 0.55)
 	var stage: int = 0 if _charge < 0.25 else 1 if _charge < 2.5 else 3 if _charge < 5.5 else 6 if _charge < 8.5 else 9 if _charge < 14.5 else 15 if _charge < 20.5 else 21
-	var coins: int = 0 if stage == 0 else 1 if stage == 1 else 3 if stage == 3 else 4 if stage == 6 else 5 if stage == 9 else 7 if stage == 15 else 8
+	var jellies: int = 0 if stage == 0 else 1 if stage == 1 else 3 if stage == 3 else 4 if stage == 6 else 5 if stage == 9 else 7 if stage == 15 else 8
 	var sparks: int = 0 if stage < 3 else 2 if stage < 6 else 4 if stage < 9 else 7 + floori(surplus * 9.0)
 	return {
 		"strength": strength,
@@ -165,9 +161,9 @@ func _sample() -> Dictionary:
 		"growth": growth,
 		"strike": strike,
 		"stage": stage,
-		"coin_count": coins,
+		"jelly_count": jellies,
 		"sparkle_count": sparks,
-		"visual_scale": 0.82 + strength * 0.15 + growth * 0.075 + strike * 0.035 + pulse * strength * 0.014,
+		"visual_scale": 0.88 + strength * 0.10 + growth * 0.055 + strike * 0.018 + pulse * strength * 0.008,
 		"glow": minf(1.0, clampf((_charge - 1.0) / 8.0, 0.0, 1.0) * (0.48 + pulse * 0.20) + strike * 0.15 + surplus * 0.27),
 		"rays": minf(1.0, clampf((_charge - 4.0) / 5.0, 0.0, 1.0) * (0.60 + pulse * 0.22) + surplus * 0.25),
 		"rock": 0.0 if _reduced_motion else sin(_elapsed * (2.6 + surplus * 0.5)) * strength * strength * (0.038 + surplus * 0.007)
@@ -179,134 +175,149 @@ func _draw() -> void:
 		return
 	var pose: Dictionary = _sample()
 	var tall: bool = size.y >= size.x * 0.68
-	var center: Vector2 = size * 0.5
 	var unit: float = 1.0 / _ui_scale
 	var ready: bool = _count > 0 or _active
-	var body_size: Vector2 = size * Vector2(1.03, 1.04) if tall else size * Vector2(1.00, 1.14)
-	var art_scale: float = float(pose.visual_scale)
-	if is_pressed() and not disabled:
-		art_scale *= 0.97
-	var base_color := Color.WHITE if ready else Color(0.91, 0.96, 0.91, 0.90)
+	var available: bool = ready and (not disabled or _active)
+	var press: float = 1.0 if is_pressed() and not disabled else 0.0
+	var strength: float = float(pose.strength)
+	# A consistent mint tray separates this free action from the priced items.
+	# Only its surface flexes; the caption, count and input rectangle stay put.
+	var panel_scale := Vector2(float(pose.visual_scale), float(pose.visual_scale))
+	panel_scale += Vector2(float(pose.growth) * 0.024, -float(pose.growth) * 0.018)
+	panel_scale *= 1.0 - press * 0.025
+	var panel_size: Vector2 = (size - Vector2.ONE * 4.0 * unit) * panel_scale
+	var bounds := Rect2((size - panel_size) * 0.5 + Vector2(0.0, press * unit), panel_size)
+	var radius: int = roundi((20.0 if tall else 16.0) * unit)
+	var fill := Color("#d5f3e7").lerp(Color("#a5e5ce"), strength) if available else Color("#e5eeeb")
 	if is_hovered() and not disabled:
-		base_color = Color(1.05, 1.05, 1.00, 1.0)
-	var icon_center: Vector2 = Vector2(size.x * 0.5, size.y * 0.43) if tall else Vector2(size.x * 0.22, size.y * 0.50)
-	var coin_edge: float = minf(size.x * 0.40, size.y * 0.39) if tall else minf(size.y * 0.57, size.x * 0.245)
-	coin_edge *= 0.85 + float(pose.strength) * 0.13
-	var halo_edge: float = minf(size.x * (0.97 if tall else 0.56), size.y * (0.86 if tall else 0.98))
-	halo_edge = minf(halo_edge, minf(icon_center.x, size.x - icon_center.x) * 2.0 - 2.0 * unit)
-	# Only the authored body flexes. Text and the stable touch target stay level.
-	_surface.size = body_size
-	_surface.position = center - body_size * 0.5
-	_surface.pivot_offset = body_size * 0.5
-	_surface.scale = Vector2.ONE * art_scale
-	_surface.modulate = base_color
-	var warmth: float = clampf((_charge - 1.0) / 8.0, 0.0, 1.0)
-	var focused: bool = has_focus() and not disabled
-	# Focus follows the acquired gel silhouette while the hit target stays fixed.
-	_material.set_shader_parameter("palette_hue", lerpf(0.35, 0.115, warmth))
-	_material.set_shader_parameter("rim_strength", 0.95 if focused else warmth * 0.72)
-	_material.set_shader_parameter("rim_color", Color("#4c987a") if focused else Color("#eab243"))
-	_material.set_shader_parameter("rim_width", 1.4 if focused else 1.15)
-	if float(pose.glow) > 0.001:
-		_draw_art(GLOW, icon_center, Vector2.ONE * halo_edge, Color(1.0, 0.76, 0.22, float(pose.glow)))
-	if float(pose.rays) > 0.001:
-		var turn: float = 0.0 if _reduced_motion else _elapsed * 0.17
+		fill = fill.lightened(0.12)
+	_lip.bg_color = Color("#73b8a0") if available else Color("#b8cdc4")
+	_lip.set_corner_radius_all(radius)
+	_lip.shadow_color = Color("#527f73", 0.16 if available else 0.08)
+	_lip.shadow_size = roundi(3.0 * unit)
+	_lip.shadow_offset = Vector2(0.0, 2.0 * unit)
+	draw_style_box(_lip, bounds)
+	var face := Rect2(bounds.position, bounds.size - Vector2(0.0, (2.5 - press) * unit))
+	_panel.bg_color = fill
+	_panel.border_color = Color("#f3fff6") if available else Color("#f0f5f1")
+	_panel.set_border_width_all(maxi(1, roundi(unit)))
+	_panel.set_corner_radius_all(radius)
+	draw_style_box(_panel, face)
+	if has_focus() and not disabled:
+		_focus.bg_color = Color.TRANSPARENT
+		_focus.border_color = Color("#308775")
+		_focus.set_border_width_all(maxi(2, roundi(2.0 * unit)))
+		_focus.set_corner_radius_all(radius + roundi(2.0 * unit))
+		draw_style_box(_focus, bounds.grow(2.0 * unit))
+	var icon_center := Vector2(size.x * (0.45 if tall else 0.35), size.y * (0.40 if tall else 0.67))
+	var icon_edge: float = minf(size.x * 0.42, size.y * 0.40) if tall else minf(size.x * 0.28, size.y * 0.46)
+	icon_edge *= 0.92 + strength * 0.10
+	var halo_edge: float = icon_edge * (1.55 if tall else 1.50)
+	if available and float(pose.glow) > 0.001:
+		_draw_art(GLOW, icon_center, Vector2.ONE * halo_edge, Color(0.78, 1.0, 0.85, float(pose.glow) * 0.70))
+	if available and float(pose.rays) > 0.001:
+		var turn: float = 0.0 if _reduced_motion else _elapsed * 0.14
 		draw_set_transform(icon_center, turn)
-		_draw_art(RAYS, Vector2.ZERO, Vector2.ONE * halo_edge, Color(1.0, 0.66, 0.08, float(pose.rays)))
-		if float(pose.surplus) > 0.001:
-			draw_set_transform(icon_center, -turn + PI / 6.0)
-			_draw_art(RAYS, Vector2.ZERO, Vector2.ONE * halo_edge * 0.98, Color(1.0, 0.78, 0.17, float(pose.surplus) * 0.65))
+		_draw_art(RAYS, Vector2.ZERO, Vector2.ONE * halo_edge, Color(1.0, 0.96, 0.66, float(pose.rays) * 0.75))
 		draw_set_transform(Vector2.ZERO)
-	_draw_coins(icon_center, coin_edge, pose, ready)
-	_draw_sparkles(icon_center, halo_edge, pose, tall)
-	_draw_caption(tall, ready, unit)
-	_draw_count(tall, ready, unit, float(pose.strike))
+	_draw_jellies(icon_center, icon_edge, pose, tall, available)
+	_draw_sparkles(icon_center, halo_edge, pose, tall, available)
+	_draw_caption(tall, available, unit)
+	_draw_count(tall, available, unit, float(pose.strike))
 
 
 func _draw_art(texture: Texture2D, center: Vector2, extent: Vector2, tint: Color = Color.WHITE) -> void:
 	draw_texture_rect(texture, Rect2(center - extent * 0.5, extent), false, tint)
 
 
-func _draw_coins(center: Vector2, edge: float, pose: Dictionary, ready: bool) -> void:
-	var strength: float = float(pose.strength)
-	var lift: float = -float(pose.strike) * edge * 0.12
-	var positions: Array[Vector2] = [
-		Vector2(-0.42, 0.13), Vector2(0.40, 0.13),
-		Vector2(-0.19, -0.28), Vector2(0.18, -0.36),
-		Vector2(-0.23, -0.53), Vector2(0.22, -0.58), Vector2(0.0, -0.69)
-	]
+func _draw_jellies(center: Vector2, edge: float, pose: Dictionary, tall: bool, available: bool) -> void:
+	var lift: float = (float(pose.growth) * 0.10 + float(pose.strike) * 0.10) * edge
+	var stretch := Vector2(1.0 + float(pose.strike) * 0.07, 1.0 - float(pose.strike) * 0.09)
+	var positions: Array[Vector2] = [Vector2(-0.35, -0.10), Vector2(0.32, -0.18),
+		Vector2(-0.12, -0.33), Vector2(0.15, -0.45), Vector2(-0.32, -0.46),
+		Vector2(0.35, -0.51), Vector2(0.02, -0.63)]
 	var thresholds: Array[float] = [1.5, 2.3, 5.0, 8.0, 10.0, 13.5, 20.0]
-	draw_set_transform(center + Vector2(0.0, lift), float(pose.rock))
-	for index in range(positions.size()):
+	# Rear jellies unfurl from the center as the real available count increases.
+	draw_set_transform(center + Vector2(0.0, -lift), float(pose.rock) * 0.60, stretch)
+	for index in range(positions.size() - 1, -1, -1):
 		var amount: float = smoothstep(thresholds[index], thresholds[index] + 0.8, _charge)
 		if amount <= 0.001:
 			continue
-		var offset: Vector2 = positions[index] * edge * (0.65 + amount * 0.35)
-		var extra_edge: float = edge * (0.77 + amount * 0.15)
-		if index >= 4:
-			# More saved words add a small crown, within the same touch footprint.
-			extra_edge *= 0.73
-			offset.y = maxf(offset.y, -center.y - lift + extra_edge * 0.5 + 3.0 / _ui_scale)
-		_draw_art(COIN, offset, Vector2.ONE * extra_edge, Color(1, 1, 1, amount))
-	var main_tint := Color.WHITE if ready else Color(0.88, 0.91, 0.83, 0.88)
-	_draw_art(COIN, Vector2.ZERO, Vector2.ONE * edge * (1.0 + strength * 0.10), main_tint)
+		var offset: Vector2 = positions[index] * edge * amount
+		var extent := Vector2(edge * 0.74, edge * 0.61) * (0.8 + amount * 0.2)
+		if not tall:
+			# The compact fan opens sideways, leaving the title its own line even
+			# during growth and a collection lift at the highest stored charge.
+			offset.y *= 0.24
+			offset.y = maxf(offset.y, size.y * 0.46 - center.y + lift + extent.y * 0.5 + 1.0 / _ui_scale)
+		var texture: Texture2D = SKY if index % 2 == 0 else LILAC
+		draw_texture_rect_region(texture, Rect2(offset - extent * 0.5, extent), GEL_REGION,
+			Color(1.0, 1.0, 1.0, amount * (1.0 if available else 0.50)))
+	var extent := Vector2(edge, edge * 0.82)
+	var tint := Color.WHITE if available else Color(0.90, 0.95, 0.91, 0.65)
+	draw_texture_rect_region(GEL, Rect2(-extent * 0.5, extent), GEL_REGION, tint)
+	_draw_art(WORD_PICTURE, Vector2(0.0, -edge * 0.025), Vector2.ONE * edge * 0.67, tint)
 	draw_set_transform(Vector2.ZERO)
 
 
-func _draw_sparkles(center: Vector2, edge: float, pose: Dictionary, tall: bool) -> void:
+func _draw_sparkles(center: Vector2, edge: float, pose: Dictionary, tall: bool, available: bool) -> void:
+	if not available:
+		return
 	var amount: int = int(pose.sparkle_count)
+	var unit: float = 1.0 / _ui_scale
 	for index in range(amount):
 		var angle: float = -PI * 0.86 + float(index) * TAU / maxf(float(amount), 4.0)
-		var phase: float = float(index) * 1.91 + _elapsed * (1.7 + float(pose.strength) * 2.0 + float(pose.surplus) * 1.5)
+		var phase: float = float(index) * 1.91 + _elapsed * (1.7 + float(pose.strength) * 1.8 + float(pose.surplus))
 		var twinkle: float = 0.72 if _reduced_motion else pow((sin(phase) + 1.0) * 0.5, 2.0)
-		var radius: float = edge * (0.30 + float(index % 2) * 0.12)
-		var offset: Vector2 = Vector2(cos(angle), sin(angle)) * radius
-		offset.y *= 0.72 if tall else 0.63
-		var point: Vector2 = center + offset
-		var star_edge: float = edge * (0.09 + twinkle * 0.065 + float(pose.strike) * 0.035)
-		point.x = clampf(point.x, star_edge, size.x - star_edge)
-		point.y = clampf(point.y, star_edge, size.y - star_edge)
-		_draw_art(SPARKLE, point, Vector2.ONE * star_edge, Color(1.0, 0.68, 0.08, 0.40 + twinkle * 0.60))
-		_draw_art(SPARKLE, point, Vector2.ONE * star_edge * 0.5, Color(1.0, 1.0, 0.88, 0.55 + twinkle * 0.45))
+		var radius: float = edge * (0.35 + float(index % 2) * 0.10)
+		var point: Vector2 = center + Vector2(cos(angle), sin(angle) * 0.68) * radius
+		var star_edge: float = edge * (0.07 + twinkle * 0.055 + float(pose.strike) * 0.025)
+		# Keep local light below the compact caption and above the tray lip.
+		point.x = clampf(point.x, star_edge, size.x * 0.67)
+		point.y = clampf(point.y, 8.0 * unit if tall else size.y * 0.46, size.y * (0.67 if tall else 0.88))
+		_draw_art(SPARKLE, point, Vector2.ONE * star_edge, Color(1.0, 0.95, 0.69, 0.30 + twinkle * 0.55))
+		_draw_art(SPARKLE, point, Vector2.ONE * star_edge * 0.45, Color(1.0, 1.0, 0.98, 0.55 + twinkle * 0.45))
 
 
-func _draw_caption(tall: bool, ready: bool, unit: float) -> void:
+func _draw_caption(tall: bool, available: bool, unit: float) -> void:
 	var font: Font = Style.HEADING_FONT
 	var caption: String = "Collect"
-	var font_size: int = maxi(10, roundi((15.0 if tall else 13.0) * unit))
-	var area: Rect2 = Rect2(Vector2(size.x * 0.09, size.y * 0.63), Vector2(size.x * 0.82, size.y * 0.27)) if tall else Rect2(Vector2(size.x * 0.375, size.y * 0.22), Vector2(size.x * 0.40, size.y * 0.57))
-	var tint: Color = Style.INK if ready else Style.MUTED
+	var font_size: int = maxi(10, roundi((16.0 if tall else 14.0) * unit))
+	var area := Rect2(Vector2(size.x * 0.08, size.y * (0.68 if tall else 0.065)),
+		Vector2(size.x * 0.84, size.y * (0.25 if tall else 0.34)))
 	var extent: Vector2 = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	if extent.x > area.size.x:
 		font_size = maxi(8, floori(font_size * area.size.x / extent.x))
 		extent = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	var origin := Vector2(area.get_center().x - extent.x * 0.5, area.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5)
-	draw_string_outline(font, origin, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, maxi(1, roundi(unit)), Color(1.0, 1.0, 0.92, 0.66))
-	draw_string(font, origin, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, tint)
+	var origin := Vector2(area.get_center().x - extent.x * 0.5,
+		area.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5)
+	draw_string(font, origin, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
+		Color("#245d4f") if available else Color("#728a80"))
 
 
-func _draw_count(tall: bool, ready: bool, unit: float, strike: float) -> void:
-	var value: int = _remaining if _active else _count
-	var caption: String = str(value)
+func _draw_count(tall: bool, available: bool, unit: float, strike: float) -> void:
+	var caption: String = str(_remaining if _active else _count)
 	var font: Font = Style.HEADING_FONT
-	var font_size: int = maxi(10, roundi(13.0 * unit))
+	var font_size: int = maxi(10, roundi(16.0 * unit))
 	var extent: Vector2 = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	var width: float = maxf(22.0 * unit, extent.x + 10.0 * unit)
-	var height: float = 23.0 * unit
-	var center: Vector2 = Vector2(size.x * 0.76, size.y * 0.26) if tall else Vector2(size.x * 0.845, size.y * 0.50)
+	var width: float = maxf(26.0 * unit, extent.x + 10.0 * unit)
+	var height: float = 26.0 * unit
+	var center := Vector2(size.x * (0.75 if tall else 0.72), size.y * (0.31 if tall else 0.665))
 	var bounds := Rect2(center - Vector2(width, height) * 0.5, Vector2(width, height))
-	bounds.position.x = clampf(bounds.position.x, 2.0 * unit, size.x - bounds.size.x - 2.0 * unit)
-	var fill := Color("#fff6ca") if ready else Color("#f1f6eb")
-	var edge := Color("#ca9141") if ready else Color("#c7d4bd")
+	bounds.position.x = clampf(bounds.position.x, 3.0 * unit, size.x - bounds.size.x - 3.0 * unit)
+	_badge.bg_color = Color("#fffce5") if available else Color("#f4f7f3")
 	if _active:
-		fill = fill.lerp(Color.WHITE, strike * 0.65)
-	var badge := Style.box(fill, edge, ceili(11.0 * unit), maxi(1, roundi(unit)))
-	badge.shadow_color = Color(0.12, 0.25, 0.12, 0.17)
-	badge.shadow_size = ceili(2.0 * unit)
-	badge.shadow_offset = Vector2(0.0, unit)
-	draw_style_box(badge, bounds)
+		_badge.bg_color = _badge.bg_color.lerp(Color.WHITE, strike * 0.65)
+	_badge.border_color = Color("#ffffff", 0.94)
+	_badge.set_border_width_all(maxi(1, roundi(unit)))
+	_badge.set_corner_radius_all(roundi(10.0 * unit))
+	_badge.shadow_color = Color("#468773", 0.12)
+	_badge.shadow_size = roundi(2.0 * unit)
+	_badge.shadow_offset = Vector2(0.0, unit)
+	draw_style_box(_badge, bounds)
 	var baseline: float = bounds.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
-	draw_string(font, Vector2(bounds.get_center().x - extent.x * 0.5, baseline), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Style.INK if ready else Style.MUTED)
+	draw_string(font, Vector2(bounds.get_center().x - extent.x * 0.5, baseline), caption,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("#306a56") if available else Color("#82938b"))
 
 
 func snapshot() -> Dictionary:
@@ -316,6 +327,6 @@ func snapshot() -> Dictionary:
 		"target_charge": _target_charge, "charge": _charge, "stage": int(pose.stage), "surplus": pose.surplus,
 		"visual_scale": pose.visual_scale, "growth": pose.growth,
 		"glow": pose.glow, "rays": pose.rays,
-		"sparkle_count": pose.sparkle_count, "coin_count": pose.coin_count,
+		"sparkle_count": pose.sparkle_count, "jelly_count": pose.jelly_count,
 		"elapsed": _elapsed, "beat_count": _beat_count, "reduced_motion": _reduced_motion
 	}

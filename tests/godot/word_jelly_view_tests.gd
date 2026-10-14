@@ -972,9 +972,9 @@ func _check_collect_button_growth(view) -> void:
 		check(view.collect_button.get_rect().is_equal_approx(high_count_rect),
 			"nine through twenty-four completed words keep the same safe button footprint")
 		if not last.is_empty():
-			check(int(steady.coin_count) > int(last.coin_count) and int(steady.sparkle_count) > int(last.sparkle_count)
+			check(int(steady.jelly_count) > int(last.jelly_count) and int(steady.sparkle_count) > int(last.sparkle_count)
 				and float(steady.glow) > float(last.glow) and float(steady.rays) > float(last.rays),
-				"large batches continue gaining coin artwork, glints and stronger light beyond nine words")
+				"large batches continue gaining word-jelly artwork, glints and stronger light beyond nine words")
 			check(is_equal_approx(float(steady.visual_scale), float(last.visual_scale)),
 				"high-count intensity grows through richer effects without crowding adjacent controls")
 		last = steady
