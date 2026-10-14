@@ -454,7 +454,7 @@ async function verifyArrival(page, info, before, label) {
       expect(tile.text).toBe(root.text);
       expect(tile.fragments).toBe(root.fragments);
       expect(tile.palette_index, `${label}: the body retains its preview partner color`).toBe(source.palette_index);
-      expect(tile.fragment_badges).toBe(root.fragments);
+      expect(tile.fragment_badges).toBe(Math.min(2, root.fragments));
       previousY = centerY;
     }
     const moving = descent.filter(tile => tile.rect[1] + tile.rect[3] / 2 > sourceY + 0.5);
@@ -610,7 +610,7 @@ test('collecting a lower word makes the stack above it visibly fall onto support
     expect(landed.row).toBeGreaterThanOrEqual(original.row + 1);
     expect({ text: landed.text, mass: landed.mass, fragments: landed.fragments })
       .toEqual({ text: original.text, mass: original.mass, fragments: original.fragments });
-    expect(landed.fragment_badges).toBe(original.fragments);
+    expect(landed.fragment_badges).toBe(Math.min(2, original.fragments));
     expect(landed.rect[1]).toBeGreaterThan(original.rect[1]);
     expectSupportedChild(after, landed);
     expectInside(landed.rect, bounds);
@@ -1606,7 +1606,7 @@ test('only forward dictionary words merge while rejected pairs separate without 
   expect(completed.word.min_age).toBe(3);
   expect(completed.picture_visible).toBe(true);
   expect(completed.fragments).toBe(roots[0].fragments + roots[1].fragments);
-  expect(completed.fragment_badges).toBe(completed.fragments);
+  expect(completed.fragment_badges).toBe(Math.min(2, completed.fragments));
   if (audioAvailable) {
     evidence.validMergeSound = await expectRecording(page, audioFrom, 'assets/imported-audio/jelly-interaction/merge-together-v3.wav');
     expect(await negativeSounds(audioFrom), 'A valid forward merge never plays the negative cue').toEqual([]);

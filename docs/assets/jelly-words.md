@@ -29,6 +29,16 @@ the learned word and collects all carried chest fragments, without a coin
 flight or coin sound. The roll is retained across collection retries and uses
 a separate random stream from word supply and powerups. Merging preserves all
 fragment markers, while tapping the complete word collects them.
+Carried fragments use a compact lower-right stack of at most two current-tier
+chest icons. One or two fragments remain directly countable; larger stacks show
+their exact total in a small cream count capsule. The group fits inside the
+jelly with a separate space below the spelling, so repeat Treasure purchases
+cannot create a row of icons across neighboring bodies. A brief, local receive
+pop follows the existing fragment-arrival clock; reduced motion keeps it still.
+This reuses the acquired chest texture and its existing source/license records
+in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md).
+The chest is a static cropped render here, with runtime scale animation; no new
+artwork or audio is acquired. The count capsule is an interface layout primitive.
 Long spellings fit their actual wrapped font lines so a two-part body keeps
 every letter visible beside its picture.
 The model owns the merge and collection clocks, wallet receipt, fragment count,

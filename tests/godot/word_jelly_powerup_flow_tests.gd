@@ -291,8 +291,10 @@ func _check_fragments(app) -> void:
 		and game.chest_count == 0 and game.collected_coins == 0 and app.coin_wallet.balance == before - 200,
 		"All purchased fragments remain on jelly bodies until collection, with one arrival event each and no immediate chest payout")
 	for tile: Dictionary in game.cells:
-		check(view._tiles[int(tile.id)].visible_fragment_badges() == int(tile.fragments),
-			"Every purchased fragment is represented by its destination's badge count")
+		var badge: Dictionary = view._tiles[int(tile.id)].fragment_badge_snapshot()
+		check(view._tiles[int(tile.id)].visible_fragment_badges() == mini(2, int(tile.fragments))
+			and str(badge.count_text) == (str(tile.fragments) if int(tile.fragments) > 2 else ""),
+			"Every purchased fragment is represented by a bounded chest stack and its exact total")
 
 
 func _check_fragment_coarse_frame(app) -> void:

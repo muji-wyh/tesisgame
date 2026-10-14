@@ -660,6 +660,8 @@ func _powerup_stamp(stamps: Array[Dictionary], texture: Texture2D, center: Vecto
 func _pose_powerup() -> void:
 	if _powerup_effects == null:
 		return
+	for tile: WordTile in _tiles.values():
+		tile.set_fragment_arrival(-1.0, reduced_motion)
 	_powerup_effects.visible = _can_play()
 	var state: Dictionary = game.powerup_snapshot()
 	var stamps: Array[Dictionary] = []
@@ -705,6 +707,7 @@ func _pose_powerup() -> void:
 		var id: int = int(arrival.tile_id)
 		if not _tiles.has(id):
 			continue
+		_tiles[id].set_fragment_arrival(float(arrival.elapsed), reduced_motion)
 		var t: float = clampf(float(arrival.elapsed) / 0.48, 0.0, 1.0)
 		var center: Vector2 = _tiles[id].get_rect().get_center()
 		var envelope: float = 1.0 - t
@@ -1195,6 +1198,7 @@ func snapshot() -> Dictionary:
 		item["label_line_height"] = tile._label.get_line_height()
 		item["label_height"] = tile._label.size.y
 		item["fragment_badges"] = tile.visible_fragment_badges()
+		item["fragment_badge"] = tile.fragment_badge_snapshot()
 		item["coins"] = WordModel.coins_for_tile(item)
 		item["coin_drop_chance"] = WordModel.COIN_DROP_CHANCE
 		item["palette_index"] = tile.palette_index

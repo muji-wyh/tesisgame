@@ -69,6 +69,7 @@ func _run() -> void:
 	_check_reposition_completed_word(view)
 	_check_merge_handover_stability(view)
 	_check_collect_and_fragments(view)
+	await _check_fragment_badge_layout(view)
 	_check_ordinary_collection(view)
 	_check_collect_button_growth(view)
 	_check_batch_collection(view)
@@ -799,6 +800,70 @@ func _check_collect_and_fragments(view) -> void:
 	check(payouts[0].amount == 50 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
 		"coin and fragment flight origin matches the tapped merged jelly")
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
+
+
+func _check_fragment_badge_layout(view) -> void:
+	for dimensions: Vector2 in [Vector2(1473, 1175), Vector2(393, 852), Vector2(320, 568), Vector2(844, 390)]:
+		view.size = dimensions
+		_reset(view, true)
+		var ids: Array[int] = _install(view, ["ca"], [1])
+		var unit: float = view._tiles[ids[0]].size.x
+		for shape: Dictionary in [{"name": "root", "size": Vector2.ONE * unit, "mass": 1, "text": "ca"},
+			{"name": "square word", "size": Vector2.ONE * unit, "mass": 2, "text": "cat"},
+			{"name": "wide word", "size": Vector2(2, 1) * unit, "mass": 2, "text": "cat"},
+			{"name": "tall word", "size": Vector2(1, 2) * unit, "mass": 2, "text": "cat"}]:
+			ids = _install(view, [str(shape.text)], [1], [int(shape.mass)])
+			var body = view._tiles[ids[0]]
+			var cell: Dictionary = view.game.cell(ids[0]).duplicate(true)
+			for fragments: int in [1, 2, 6, 8, 20, 0, 1]:
+				cell.fragments = fragments
+				view._configure_tile(body, cell)
+				body.size = shape.size
+				body._layout()
+				await process_frame
+				var badge: Dictionary = body.fragment_badge_snapshot()
+				var context: String = "%s, %s, %d fragments" % [dimensions, shape.name, fragments]
+				check(int(badge.icons) == mini(2, fragments) and body.visible_fragment_badges() == mini(2, fragments),
+					context + ": one or two sourced chest icons replace an unbounded row")
+				check(str(badge.count_text) == (str(fragments) if fragments > 2 else ""),
+					context + ": a larger carried stack displays its full total rather than an overflow remainder")
+				check(bool(badge.visible) == (fragments > 0), context + ": clearing fragments removes all badge artwork")
+				if fragments == 0:
+					continue
+				var rect: Rect2 = _snapshot_rect(badge.rect)
+				check(rect.size.x > 0.0 and rect.size.y > 0.0 and Rect2(Vector2.ZERO, body.size).grow(0.01).encloses(rect),
+					context + ": the complete chest stack and count stay inside the jelly")
+				var overlap: Rect2 = rect.intersection(body._label.get_rect())
+				check(overlap.size.x < 0.01 or overlap.size.y < 0.01,
+					context + ": the compact reward marker never covers the learning label")
+				_assert_complete_label(body, str(shape.text), context)
+				check(body._label.get_theme_font_size("font_size") >= maxi(1, floori(unit * 0.15)),
+					context + ": the caption remains readable rather than shrinking to make room for rewards")
+				if fragments > 2:
+					var count_label: Label = body._fragment_count
+					var count_font: Font = count_label.get_theme_font("font")
+					var count_pixels: int = count_label.get_theme_font_size("font_size")
+					check(count_label.visible and count_label.get_line_count() == 1 and count_label.get_visible_line_count() == 1
+						and count_label.get_line_height() <= count_label.size.y + 0.01
+						and count_font.get_string_size(count_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, count_pixels).x <= count_label.size.x + 0.01,
+						context + ": the entire exact count is visible within its capsule")
+				check(str(body.get("accessibility_name")).contains("%d chest fragments." % fragments),
+					context + ": accessibility retains the exact carried reward amount")
+				body.set_fragment_arrival(0.11, false)
+				var peak: Dictionary = body.fragment_badge_snapshot()
+				check(float(peak.scale) > float(badge.scale)
+					and Rect2(Vector2.ZERO, body.size).grow(0.01).encloses(_snapshot_rect(peak.rect)),
+					context + ": the receipt bounce is visible without crossing the jelly boundary")
+				body.set_fragment_arrival(0.11, true)
+				check(_snapshot_rect(body.fragment_badge_snapshot().rect).is_equal_approx(rect),
+					context + ": reduced motion keeps the full amount with a stationary badge")
+				body.set_fragment_arrival(-1.0, true)
+			body.set_projection(true)
+			var projected: Dictionary = body.fragment_badge_snapshot()
+			check(not bool(projected.visible) and body.visible_fragment_badges() == 0,
+				"placement projection does not duplicate a carried reward marker")
+			body.set_projection(false)
+	view.size = Vector2(1000, 720)
 
 
 func _snapshot_rect(value: Array) -> Rect2:
@@ -1853,7 +1918,7 @@ func _assert_rejected_merge(view, originals: Array, source_id: int, target_id: i
 		check(not tile.is_empty(), context + ": every original tile identity survives")
 		for field: String in ["text", "mass", "parts_count", "fragments", "chest", "word", "kind", "skin"]:
 			check(tile.get(field) == original.get(field), context + ": rejection preserves " + field)
-		check(view._tiles[int(tile.id)].visible_fragment_badges() == int(tile.fragments),
+		check(view._tiles[int(tile.id)].visible_fragment_badges() == mini(2, int(tile.fragments)),
 			context + ": carried fragments stay on their original artwork")
 		check(view._tiles[int(tile.id)].get_rect().is_equal_approx(view._tile_rect(tile)),
 			context + ": final painted bodies agree with their retained model rectangles")
@@ -2280,7 +2345,8 @@ func _check_repeat_merge_and_wrap(view) -> void:
 		"a wrapped automatic merge lands on support with its full painted footprint and no implicit position lock")
 	check(view._tiles[id]._label.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART and view._tiles[id]._label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING,
 		"large jelly uses wrapping without ellipsis")
-	check(view._tiles[id].visible_fragment_badges() == 5 and view._board.encloses(view._tiles[id].get_rect()), "large body and its fragment stack stay in the six-column board")
+	check(view._tiles[id].visible_fragment_badges() == 2 and view._tiles[id].fragment_badge_snapshot().count_text == "5"
+		and view._board.encloses(view._tiles[id].get_rect()), "large body and its compact, exact fragment count stay in the six-column board")
 	var label: Label = view._tiles[id]._label
 	check(Rect2(Vector2.ZERO, view._tiles[id].size).encloses(label.get_rect()), "wrapped label stays within the painted body's layout bounds")
 	var extra: Dictionary = view.game._new_tile("extra", 1, 1)
@@ -2293,7 +2359,8 @@ func _check_repeat_merge_and_wrap(view) -> void:
 	_advance(view, 0.4)
 	check(view.game.cell(id).text == "caterpillar" and view.game.is_valid_word(view.game.cell(id))
 		and view.game.cell(int(extra.id)).text == "extra", "rejected extensions preserve the original valid word and separate root")
-	check(view._tiles[id]._picture.visible and view._tiles[id].visible_fragment_badges() == 5
+	check(view._tiles[id]._picture.visible and view._tiles[id].visible_fragment_badges() == 2
+		and view._tiles[id].fragment_badge_snapshot().count_text == "5"
 		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "rejection retains the word image and each body's own chest markers")
 
 

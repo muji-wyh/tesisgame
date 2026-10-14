@@ -26,6 +26,23 @@ const progress = state => ({ collected_coins: state.collected_coins, cleared_pai
 const forwardPairs = state => state.tiles.flatMap(source => state.tiles.filter(target => source.id !== target.id &&
   words.has((source.text + target.text).trim().toLowerCase())).map(target => [source.id, target.id]));
 
+function expectFragmentBadge(tile) {
+  expect(tile.fragment_badges).toBe(Math.min(2, tile.fragments));
+  const badge = tile.fragment_badge;
+  expect(badge.icons).toBe(Math.min(2, tile.fragments));
+  expect(badge.count_text).toBe(tile.fragments > 2 ? String(tile.fragments) : '');
+  expect(badge.visible).toBe(tile.fragments > 0);
+  if (!tile.fragments) return;
+  const [x, y, width, height] = badge.rect;
+  expect(badge.rect.every(Number.isFinite), 'A carried reward marker has real local geometry').toBe(true);
+  expect(width).toBeGreaterThan(0);
+  expect(height).toBeGreaterThan(0);
+  expect(x, 'The chest stack stays inside its jelly').toBeGreaterThanOrEqual(-0.5);
+  expect(y, 'The chest stack stays inside its jelly').toBeGreaterThanOrEqual(-0.5);
+  expect(x + width, 'The exact count cannot overflow into the neighboring jelly').toBeLessThanOrEqual(tile.rect[2] + 0.5);
+  expect(y + height, 'The chest stack stays inside its jelly').toBeLessThanOrEqual(tile.rect[3] + 0.5);
+}
+
 async function start(page, info, balance) {
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await page.setViewportSize(/iphone|android|mobile/.test(info.project.name)
@@ -136,7 +153,8 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
         generated: state.generated_tiles, merged: state.merged_count, cleared: state.cleared_pairs,
         coins: state.collected_coins, fragments: state.fragment_count, chest_tier: state.chest_tier,
         tiles: state.tiles.map(tile => ({ id: tile.id, text: tile.text, mass: tile.mass, fragments: tile.fragments,
-          fragment_badges: tile.fragment_badges, rect: tile.rect, visible: tile.visible, settled: tile.settled,
+          fragment_badges: tile.fragment_badges, fragment_badge: tile.fragment_badge,
+          rect: tile.rect, visible: tile.visible, settled: tile.settled,
           word: tile.word, picture_visible: tile.picture_visible, coins: tile.coins })),
         fusions: (state.fusions || []).map(fusion => ({ operation: fusion.operation, a_id: fusion.a_id,
           b_id: fusion.b_id, result: fusion.result, elapsed: fusion.elapsed, duration: fusion.duration })) });
@@ -146,6 +164,8 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
       if (powerup.active && powerup.kind === 'fragments' && powerup.elapsed > 0.08 && powerup.elapsed < 0.35 && state.powerup_effect_count > 0)
         capture('fragment-flight');
       if (powerup.kind === 'fragments' && powerup.completed > 0 && state.powerup_effect_count >= 5) capture('fragment-arrival');
+      if (powerup.kind === 'fragments' && state.tiles.some(tile => tile.fragments > 2 && tile.fragment_badge?.scale > 1.04))
+        capture('fragment-stack-arrival');
       const drags = powerup.drags || [];
       if (powerup.active && drags.some(drag => drag.elapsed / drag.duration > 0.2 && drag.elapsed / drag.duration < 0.8))
         capture('auto-midpoint');
@@ -344,6 +364,7 @@ test('rapid Treasure purchases overlap their flights without a cooldown and pres
   }
   expect(final.powerup.completed).toBe(final.powerup.total);
   expect(fragmentTotal(final) - fragmentTotal(opening)).toBe(final.powerup.total);
+  for (const tile of final.tiles) expectFragmentBadge(tile);
   expect(progress(final)).toEqual(progress(opening));
   expect(await savedGrowth(page)).toBe(growth);
   expect(saved.balance).toBe(0);
@@ -361,6 +382,7 @@ test('rapid Treasure purchases overlap their flights without a cooldown and pres
       const tile = frame.tiles.find(item => item.id === original.id);
       const arrived = frame.powerup.arrivals.filter(arrival => arrival.tile_id === original.id && arrival.arrived).length;
       expect(tile.fragments, 'A marker is granted only on its own preserved arrival deadline').toBe(original.fragments + arrived);
+      expectFragmentBadge(tile);
     }
   }
   if (audioAvailable) {
@@ -370,6 +392,36 @@ test('rapid Treasure purchases overlap their flights without a cooldown and pres
     expect(recordingCount(sounds, FRAGMENT)).toHaveLength(final.powerup.total);
     fs.writeFileSync(info.outputPath('word-jelly-treasure-repeat-audio.json'), JSON.stringify(sounds, null, 2));
   }
+  expect(errors).toEqual([]);
+});
+
+test('Treasure fragment stacks stay compact after many purchases', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const { errors, reducedMotion } = await start(page, info, 10000);
+  const opening = await readyPowerup(page, 'fragments');
+  const bounds = await metrics(page), rect = opening.powerup_buttons.fragments.rect;
+  await beginTrace(page, 'treasure-fragment-stacks');
+  for (let purchase = 0; purchase < 20; purchase++)
+    await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2, bounds);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(2300);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.powerup.kind === 'fragments' && !state.powerup.active && state.powerup.stage === 'complete' &&
+      state.powerup_effect_count === 0;
+  }, { timeout: 20000 }).toBe(true);
+  const final = await jelly(page), saved = await storedWallet(page);
+  expect(final.powerup_buttons.fragments.feedback_serial).toBe(opening.powerup_buttons.fragments.feedback_serial + 20);
+  expect(Object.values(saved.receipts).filter(amount => amount < 0)).toHaveLength(20);
+  expect(final.tiles.some(tile => tile.fragments > 2), 'Repeated legitimate purchases produce a compact counted stack').toBe(true);
+  expect(fragmentTotal(final) - fragmentTotal(opening)).toBeGreaterThanOrEqual(40);
+  expect(progress(final), 'Adding fragments never collects them or changes the chest progress').toEqual(progress(opening));
+  for (const tile of final.tiles) expectFragmentBadge(tile);
+  await capture(page, info, 'word-jelly-fragment-stacks-idle');
+  const evidence = await retainTrace(page, info, 'word-jelly-fragment-stacks',
+    reducedMotion === 'reduce' ? ['fragment-arrival'] : ['fragment-stack-arrival']);
+  const stackedFrames = evidence.timeline.filter(frame => frame.tiles.some(tile => tile.fragments > 2));
+  expect(stackedFrames.length, 'The browser observes counted stacks during the delivery sequence').toBeGreaterThan(0);
+  for (const frame of stackedFrames) for (const tile of frame.tiles) expectFragmentBadge(tile);
   expect(errors).toEqual([]);
 });
 
@@ -403,7 +455,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     const tile = afterFragments.tiles.find(item => item.id === original.id);
     const added = arrivals.filter(arrival => arrival.tile_id === original.id).length;
     expect(tile.fragments).toBe(original.fragments + added);
-    expect(tile.fragment_badges).toBe(Math.min(6, tile.fragments));
+    expectFragmentBadge(tile);
   }
   const flightFrames = fragmentEvidence.timeline.filter(frame => frame.powerup.kind === 'fragments');
   expect(flightFrames.some(frame => frame.powerup.elapsed > 0.08 && frame.powerup.elapsed < 0.35 && frame.effects > 0)).toBe(true);
@@ -411,7 +463,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     const tile = frame.tiles.find(item => item.id === original.id);
     const arrived = (frame.powerup.arrivals || []).filter(arrival => arrival.tile_id === original.id && arrival.arrived).length;
     expect(tile.fragments, 'A marker appears only when its own flight arrives').toBe(original.fragments + arrived);
-    expect(tile.fragment_badges).toBe(Math.min(6, tile.fragments));
+    expectFragmentBadge(tile);
     for (const arrival of frame.powerup.arrivals || []) if (arrival.arrived)
       expect(frame.powerup.elapsed + 0.00001).toBeGreaterThanOrEqual(arrival.at);
   }
@@ -501,7 +553,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   for (const tile of completed) {
     expect(tile.picture_visible).toBe(true);
     expect(tile.coins).toBe(tile.mass <= 2 ? 50 : 100);
-    expect(tile.fragment_badges).toBe(Math.min(6, tile.fragments));
+    expectFragmentBadge(tile);
   }
   if (audioAvailable) {
     audioEvidence.auto = { success: await expectRecording(page, autoAudioFrom, RIGHT),

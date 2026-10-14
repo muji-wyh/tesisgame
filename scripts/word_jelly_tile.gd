@@ -5,7 +5,9 @@ var valid_word: bool = false
 var fragments: int = 0
 var _fragment_badges: Array[TextureRect] = []
 var _fragment_texture: Texture2D
-var _fragment_overflow: Label
+var _fragment_holder: Control
+var _fragment_count: Label
+var _fragment_arrival_age: float = -1.0
 var _unit: float = 60.0
 var palette_index: int = -1
 const COMPLETION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
@@ -90,12 +92,21 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	if _fragment_overflow == null:
-		_fragment_overflow = Style.label("", 10)
-		_fragment_overflow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_visual.add_child(_fragment_overflow)
-	while _fragment_badges.size() < mini(fragments, 6):
-		_fragment_badges.append(_texture())
+	if _fragment_holder == null:
+		_fragment_holder = Control.new()
+		_fragment_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_visual.add_child(_fragment_holder)
+		for index in range(2):
+			var badge: TextureRect = _texture()
+			badge.reparent(_fragment_holder, false)
+			_fragment_badges.append(badge)
+		_fragment_count = Style.label("", 10)
+		_fragment_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_fragment_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_fragment_count.add_theme_font_override("font", Style.HEADING_FONT)
+		_fragment_count.add_theme_color_override("font_color", Color("#674a27"))
+		_fragment_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_fragment_holder.add_child(_fragment_count)
 	set("accessibility_name", "%s. %s Drag to a fitting empty space to move it. Shift+Enter selects this jelly to merge with another.%s" % [str(cell.get("text", "")),
 		"Word complete. Press to collect, with a 1% chance of bonus coins, or drag to keep building." if valid_word
 		else "Drag this part before another part to build a word.",
@@ -126,6 +137,7 @@ func _layout() -> void:
 	_badge.hide()
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_unit = minf(size.y, size.x)
+	_layout_fragment_badge()
 	_picture.visible = valid_word and not _projection
 	_label.visible = not _projection
 	var side_by_side: bool = valid_word and size.x > size.y * 1.45
@@ -139,9 +151,18 @@ func _layout() -> void:
 		_picture.size = size * Vector2(0.54, 0.42)
 		_label.position = size * Vector2(0.12, 0.53)
 		_label.size = size * Vector2(0.76, 0.25)
+		if fragments > 0 and size.y < size.x * 1.3:
+			# A small square shares its upper row between the picture and spelling.
+			_picture.position = size * Vector2(0.10, 0.18)
+			_picture.size = size * Vector2(0.30, 0.36)
+			_label.position = size * Vector2(0.43, 0.18)
+			_label.size = size * Vector2(0.47, 0.42)
 	else:
 		_label.position = size * Vector2(0.11, 0.22)
 		_label.size = size * Vector2(0.78, 0.47 if fragments > 0 else 0.53)
+	if fragments > 0 and _fragment_holder != null:
+		var footer_top: float = _fragment_holder.position.y + _fragment_holder.size.y * (1.0 - float(_fragment_holder.get_meta("fit", 1.0))) * 0.5
+		_label.size.y = minf(_label.size.y, maxf(1.0, footer_top - _unit * 0.035 - _label.position.y))
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	var pixels: int = maxi(12, mini(28, roundi(_unit * 0.34)))
@@ -152,22 +173,64 @@ func _layout() -> void:
 		or _label.get_line_count() * _label.get_line_height() > _label.size.y):
 		pixels -= 1
 		_label.add_theme_font_size_override("font_size", pixels)
-	var badge_size: float = minf(_unit * 0.32, 24.0 / maxf(0.5, Style.ui_scale(self)))
-	var badge_gap: float = badge_size * 0.74
-	var count: int = mini(fragments, 6)
-	var start: float = size.x * 0.84 - badge_size - maxf(0, count - 1) * badge_gap
+
+func _layout_fragment_badge() -> void:
+	if _fragment_holder == null:
+		return
+	_fragment_holder.visible = fragments > 0 and not _projection
+	var ui_scale: float = Style.ui_scale(self)
+	var edge: float = minf(_unit * 0.28, 28.0 / ui_scale)
+	var stacked: bool = fragments > 1
+	var offset := Vector2(edge * 0.25, edge * 0.10) if stacked else Vector2.ZERO
+	var extent := Vector2.ONE * edge + offset
 	for index in range(_fragment_badges.size()):
 		var badge: TextureRect = _fragment_badges[index]
 		badge.texture = _fragment_texture
-		badge.visible = not _projection and index < count
-		badge.size = Vector2.ONE * badge_size
-		badge.position = Vector2(maxf(size.x * 0.09, start) + index * badge_gap, size.y * 0.72)
-	if _fragment_overflow != null:
-		_fragment_overflow.visible = not _projection and fragments > 6
-		_fragment_overflow.text = "+%d" % maxi(0, fragments - 6)
-		_fragment_overflow.position = Vector2(size.x * 0.84, size.y * 0.73)
-		_fragment_overflow.size = Vector2(size.x * 0.12, badge_size)
-		_fragment_overflow.add_theme_font_size_override("font_size", maxi(9, int(badge_size * 0.6)))
+		badge.visible = not _projection and index < mini(fragments, 2)
+		badge.size = Vector2.ONE * edge
+		badge.position = offset if index == 1 else Vector2.ZERO
+		badge.modulate = Color(0.93, 0.96, 0.95, 0.85) if stacked and index == 0 else Color.WHITE
+	_fragment_count.visible = fragments > 2 and not _projection
+	_fragment_count.text = str(fragments) if fragments > 2 else ""
+	if fragments > 2:
+		var pixels: int = maxi(8, roundi(minf(_unit * 0.21, 15.0 / ui_scale)))
+		_fragment_count.add_theme_font_size_override("font_size", pixels)
+		var height: float = maxf(edge * 0.76, Style.HEADING_FONT.get_height(pixels))
+		var width: float = maxf(height, Style.HEADING_FONT.get_string_size(_fragment_count.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x + edge * 0.36)
+		extent.y = maxf(extent.y, height)
+		_fragment_count.position = Vector2(extent.x - edge * 0.13, extent.y - height)
+		_fragment_count.size = Vector2(width, height)
+		var paper := Style.box(Color("#fff7e4"), Color("#d9bd82"), ceili(height * 0.5), maxi(1, roundi(1.0 / ui_scale)))
+		paper.set_content_margin_all(0.0)
+		_fragment_count.add_theme_stylebox_override("normal", paper)
+		extent.x = _fragment_count.position.x + width
+	_fragment_holder.size = extent
+	_fragment_holder.pivot_offset = extent * 0.5
+	_fragment_holder.position = Vector2(size.x * 0.91 - extent.x, size.y * 0.96 - extent.y)
+	# Keep even unusually large totals inside the jelly, including its receive pop.
+	var fit: float = minf(1.0, minf(size.x * 0.80 / maxf(1.0, extent.x), size.y * 0.34 / maxf(1.0, extent.y)))
+	_fragment_holder.set_meta("fit", fit)
+	if fit < 1.0:
+		_fragment_holder.position = Vector2(size.x * 0.51, size.y * 0.79) - extent * 0.5
+	set_fragment_arrival(_fragment_arrival_age, _reduced_motion)
+
+func set_fragment_arrival(age: float, reduced: bool = false) -> void:
+	_fragment_arrival_age = age
+	if _fragment_holder == null:
+		return
+	var pop: float = 0.0
+	if age >= 0.0 and age < 0.48 and not reduced:
+		pop = sin(minf(age / 0.11, 1.0) * PI * 0.5) * exp(-maxf(0.0, age - 0.11) * 10.0)
+	_fragment_holder.scale = Vector2.ONE * float(_fragment_holder.get_meta("fit", 1.0)) * (1.0 + pop * 0.12)
+
+func fragment_badge_snapshot() -> Dictionary:
+	if _fragment_holder == null:
+		return {"icons": 0, "count_text": "", "rect": [0.0, 0.0, 0.0, 0.0], "visible": false, "scale": 1.0}
+	var extent: Vector2 = _fragment_holder.size * _fragment_holder.scale
+	var origin: Vector2 = _fragment_holder.position + (_fragment_holder.size - extent) * 0.5
+	return {"icons": visible_fragment_badges(), "count_text": _fragment_count.text if _fragment_count.visible else "",
+		"rect": [origin.x, origin.y, extent.x, extent.y], "visible": _fragment_holder.visible,
+		"scale": _fragment_holder.scale.x}
 
 func visible_fragment_badges() -> int:
-	return mini(fragments, 6) if not _projection else 0
+	return mini(fragments, 2) if not _projection else 0
