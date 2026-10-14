@@ -113,13 +113,13 @@ func _ready() -> void:
 		exit_requested.emit())
 	_home = Button.new()
 	UiClick.bind_button(_home)
-	_home.name = "JellyGameOverHome"
+	_home.name = "GameOverHome"
 	_home.text = "Home"
 	add_child(_home)
 	Style.action_button(_home, Style.GOOD)
 	_home.hide()
 	_home.pressed.connect(func() -> void:
-		if _is_jelly_result() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+		if _is_result_dialog() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
 			home_requested.emit())
 	_retry = Button.new()
 	UiClick.bind_button(_retry)
@@ -182,7 +182,7 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 	var previous_reward_id: String = _result_reward_id
 	_result_context = result.duplicate(true)
 	_result_reward_id = ""
-	if _is_jelly_result() and int(result.get("chest_count", 0)) > 0:
+	if _is_result_dialog() and int(result.get("chest_count", 0)) > 0:
 		_result_reward_id = rewards._reward_id(earned_round_id if not earned_round_id.is_empty() else _configured_id, 0)
 	if result.is_empty():
 		_empty_result_id = ""
@@ -229,12 +229,12 @@ func _is_danger_result() -> bool:
 	return str(_result_context.get("reason", "")) == "danger"
 
 
-func _is_jelly_result() -> bool:
-	return storage_kind == "jelly" and not _result_context.is_empty()
+func _is_result_dialog() -> bool:
+	return not _result_context.is_empty()
 
 
 func _effective_page_size() -> int:
-	return 1 if _is_jelly_result() else maxi(1, page_size)
+	return 1 if _is_result_dialog() else maxi(1, page_size)
 
 
 func collect_all_coins() -> bool:
@@ -831,22 +831,21 @@ func _refresh() -> void:
 	var state: Dictionary = snapshot()
 	var result_mode: bool = not _result_context.is_empty()
 	var danger_result: bool = _is_danger_result()
-	_home.visible = _is_jelly_result()
+	_home.visible = _is_result_dialog()
 	_home.disabled = _paused
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	if result_mode:
-		_heading.text = "Game over" if danger_result else "Round complete" if _is_jelly_result() else "Round results"
+		_heading.text = "Game over" if danger_result else "Round complete"
 		_result_score.text = str(maxi(0, int(_result_context.get("score", 0))))
 		_result_score.accessibility_name = "Score: " + _result_score.text
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
-		_progress.text = JellyRewardProgress.title_for_tier(tier) if tier > 0 else "No chest this round"
-		if _is_jelly_result():
-			var completed: int = maxi(0, int(_result_context.get("cleared_pairs", 0)))
-			var words: String = "word completed" if completed == 1 else "words completed"
-			_progress.text = words if completed == int(_result_context.get("score", 0)) else "%d %s" % [completed, words]
-			if tier <= 0:
-				_progress.text += "\nNo chest this round"
+		var is_pop: bool = _result_context.has("hits")
+		var completed: int = maxi(0, int(_result_context.get("hits" if is_pop else "cleared_pairs", 0)))
+		var words: String = ("word popped" if completed == 1 else "words popped") if is_pop else ("word completed" if completed == 1 else "words completed")
+		_progress.text = "%d %s" % [completed, words] if is_pop or completed != int(_result_context.get("score", 0)) else words
+		if tier <= 0:
+			_progress.text += "\nNo chest this round"
 	else:
 		_heading.text = JellyRewardProgress.title_for_tier(int(_cards[0].tier)) if state.chest_count == 1 and not _cards.is_empty() and int(_cards[0].tier) > 0 else "Your treasure"
 		_progress.text = "%d / %d opened" % [state.opened_count, state.chest_count]
@@ -893,18 +892,15 @@ func _layout() -> void:
 	var h: float = size.y
 	if w <= 0.0 or h <= 0.0:
 		return
-	if _is_jelly_result():
-		_layout_jelly_result(s, w, h)
+	if _is_result_dialog():
+		_layout_result_dialog(s, w, h)
 		return
 	if _back.get_meta("result_appearance", []) != [s, false]:
-		# Restore ordinary result actions after leaving a Jelly modal, including
+		# Restore ordinary result actions after leaving a result modal, including
 		# physical font and button minimums when the viewport scale changes.
 		Style.action_button(_back, Style.GOOD)
 		Style.action_button(_retry, Style.GOOD, true)
 		_back.set_meta("result_appearance", [s, false])
-	if not _result_context.is_empty() and _batch_entries().size() <= 1:
-		_layout_single_result(s, w, h)
-		return
 	var compact: bool = h * s < 430.0
 	var gap: float = 24 / s
 	var margin: float = 12 / s
@@ -993,7 +989,7 @@ func _layout() -> void:
 	_update_navigation(columns)
 
 
-func _layout_jelly_result(s: float, w: float, h: float) -> void:
+func _layout_result_dialog(s: float, w: float, h: float) -> void:
 	var appearance: Array = [s, true]
 	if _back.get_meta("result_appearance", []) != appearance:
 		Style.action_button(_back, Style.GOOD, true)
@@ -1101,71 +1097,6 @@ func _layout_jelly_result(s: float, w: float, h: float) -> void:
 	_refresh_captions()
 	_update_navigation(1)
 
-
-func _layout_single_result(s: float, w: float, h: float) -> void:
-	var margin: float = 16 / s
-	var compact: bool = h * s < 360.0 and w * s >= 480.0
-	var footer: float = (116 if _save_failed else 62) / s
-	_scroll.position = Vector2(margin, 4 / s)
-	_scroll.size = Vector2(maxf(1.0, w - margin * 2), maxf(64 / s, h - footer - 4 / s))
-	var stage_w: float = _scroll.size.x
-	_heading.add_theme_font_size_override("font_size", ceili(20 / s))
-	_result_score.add_theme_font_size_override("font_size", ceili((44 if compact else 52) / s))
-	_progress.add_theme_font_size_override("font_size", ceili(15 / s))
-	var heading_h: float = maxf(30 / s, _heading.get_combined_minimum_size().y)
-	var score_h: float = maxf((58 if compact else 68) / s, _result_score.get_combined_minimum_size().y)
-	var summary_h: float = maxf(26 / s, _progress.get_combined_minimum_size().y)
-	var label_gap: float = 4 / s
-	var header_h: float = heading_h + score_h + summary_h + label_gap * 2
-	var art_w: float = minf(410 / s, stage_w)
-	var art_h: float = clampf(_scroll.size.y - header_h - 60 / s, 180 / s, 328 / s)
-	var info_w: float = stage_w
-	if compact:
-		info_w = minf(210 / s, stage_w * 0.36)
-		art_w = minf(350 / s, stage_w - info_w - 20 / s)
-		art_h = clampf(_scroll.size.y - 54 / s, 128 / s, 230 / s)
-	var chest_h: float = art_h + 54 / s if not _cards.is_empty() else 0.0
-	var content_h: float = maxf(header_h, chest_h) if compact else header_h + chest_h
-	_content.custom_minimum_size = Vector2(0, content_h)
-	_content.size = Vector2(stage_w, maxf(content_h, _scroll.size.y))
-	var top: float = maxf(0.0, (_scroll.size.y - content_h) * 0.5)
-	var info_left: float = (stage_w - info_w - art_w - 20 / s) * 0.5 if compact else 0.0
-	var info_top: float = top + (content_h - header_h) * 0.5 if compact else top
-	_heading.position = Vector2(info_left, info_top)
-	_heading.size = Vector2(info_w, heading_h)
-	_result_score.position = Vector2(info_left, info_top + heading_h + label_gap)
-	_result_score.size = Vector2(info_w, score_h)
-	_progress.position = Vector2(info_left, info_top + heading_h + score_h + label_gap * 2)
-	_progress.size = Vector2(info_w, summary_h)
-	if not _cards.is_empty():
-		var card: Dictionary = _cards[0]
-		card.panel.position = Vector2(info_left + info_w + 20 / s if compact else (stage_w - art_w) * 0.5,
-			top if compact else top + header_h)
-		card.panel.size = Vector2(art_w, chest_h)
-		card.art.position = Vector2.ZERO
-		card.art.size = Vector2(art_w, art_h)
-		card.tier_label.hide()
-		card.light.size = Vector2.ONE * minf(art_w, art_h * 1.12)
-		card.light.position = Vector2((art_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
-		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
-		card.button.position = card.art.position
-		card.button.size = card.art.size
-		var hint_w: float = minf(184 / s, card.button.size.x)
-		card.hint.position = Vector2((art_w - hint_w) * 0.5, art_h + 6 / s)
-		card.hint.size = Vector2(hint_w, 28 / s)
-		card.caption.position = Vector2.ZERO
-		card.caption.add_theme_font_size_override("font_size", ceili(14 / s))
-		card.caption.size = card.hint.size
-	var button_y: float = h - 54 / s
-	_back.size = Vector2(144 / s, 46 / s)
-	_back.position = Vector2(margin if _save_failed else (w - _back.size.x) * 0.5, button_y)
-	_retry.size = Vector2(minf(180 / s, w - margin * 2 - _back.size.x - 8 / s), 46 / s)
-	_retry.position = Vector2(w - margin - _retry.size.x, button_y)
-	_notice.add_theme_font_size_override("font_size", ceili(13 / s))
-	_notice.position = Vector2(margin, button_y - 52 / s)
-	_notice.size = Vector2(w - margin * 2, 48 / s)
-	_refresh_captions()
-	_update_navigation(1)
 
 
 func _ensure_chest_visible(control: Control) -> void:

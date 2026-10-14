@@ -113,22 +113,20 @@ func _test_scene(dimensions: Vector2i) -> void:
 		"Every earned fragment and every milestone has its own sound cue")
 	view._advance_game(view.game.remaining + 1.0)
 	await settle()
-	var result: Dictionary = view.snapshot().results_rewards
-	check(result.earned == 1 and result.chest_tier == 3 and result.fragment_count == 14,
-		"Results show the final upgraded chest and exact fragments")
-	check(view.chests_button.text == "Open chest" and not view.chests_button.disabled, "Only one earned chest is offered")
-	var viewport: Rect2 = view._results.get_global_rect()
-	for button in [view.chests_button, view.replay_button]:
-		check(viewport.grow(1.0).encloses(button.get_global_rect()), "Both actions fit without scrolling at " + str(dimensions))
+	var result: Dictionary = view.game.summary()
+	check(result.chest_count == 1 and result.chest_tier == 3 and result.fragment_count == 14,
+		"Completion retains the final upgraded chest and exact fragments")
+	check(view.snapshot().board_frozen and view._hud.visible and view.controls().is_empty(),
+		"The ended board stays visible while its owner presents settlement")
+	check(view.find_child("PopResults", true, false) == null,
+		"Voice Pop does not construct a standalone result page")
 	view.configure(WORDS, true, 5)
 	view.set_process(false)
 	view.set_listening(true, true, "Listening.")
 	view._advance_game(view.game.remaining + 1.0)
 	await settle()
-	check(view.chests_button.disabled and view.snapshot().results_rewards.earned == 0, "A zero-fragment round cannot open a new chest")
-	view.set_pending_chests(2)
-	check(not view.chests_button.disabled and view.chests_button.text == "Open chests"
-		and view.snapshot().results_rewards.earned == 0, "Older unopened chests remain accessible without inflating this round's result")
+	check(view.game.summary().chest_count == 0 and view.snapshot().board_frozen,
+		"A zero-fragment round finishes without inventing a chest")
 	view.queue_free()
 	await settle()
 
@@ -251,10 +249,10 @@ func _test_live_queue_and_expiry() -> void:
 	check(finished.size() == 1 and finished[0].chest_tier == 2 and finished[0].chest_count == 1,
 		"Natural expiry during confetti settles the final accepted chest exactly once")
 	check(not view.reward_presentation_active()
-		and view._loot_flights.is_empty() and not view._listening and view._results.visible,
-		"Natural expiry clears local milestone motion before presenting the full results")
-	check(view.controls().has(view.chests_button) and view.default_focus() == view.chests_button,
-		"Cancelled milestone animations cannot block results controls")
+		and view._loot_flights.is_empty() and not view._listening and view.snapshot().board_frozen,
+		"Natural expiry clears local milestone motion and freezes the completed board")
+	check(view.controls().is_empty() and view.default_focus() == null,
+		"The frozen board leaves all result focus to its settlement dialog")
 	view.queue_free()
 	await settle()
 

@@ -173,7 +173,9 @@ func _run() -> void:
 	check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(),
 		"The completed Memory round presents the shared celebration before its unopened chest")
 	preload("res://tests/godot/player_flow_fixture.gd").finish_celebration(app)
-	check(not view.visible and app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "The completed Memory board presents its unopened chest")
+	check(view.is_visible_in_tree() and app._settlement_dialog.is_visible_in_tree()
+		and app.chest_button.is_visible_in_tree() and app._single_result.replay_button.disabled,
+		"The completed Memory board stays visible behind its unopened-chest dialog")
 	check(app.medal_progress.counts.is_empty(), "Completing Memory alone does not fabricate a reward claim")
 	var coins_before_chest: int = app.coin_wallet.balance
 	app._open_chest()

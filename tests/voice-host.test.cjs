@@ -356,6 +356,17 @@ test('the accessible panel is hidden and the exact speech API joins the existing
   assert.equal(f.starts, 0);
 });
 
+test('accessible help describes shared settlement and the Pop replay microphone gate', () => {
+  const help = shell.match(/<p id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+  assert.ok(help, 'The canvas has accessible gameplay instructions');
+  assert.match(help, /shared settlement dialog over the finished board/);
+  assert.match(help, /Voice Pop stops listening.*settlement dialog over the frozen board/);
+  assert.match(help, /Home and Play again preserve unopened Pop treasure/);
+  assert.match(help, /Play again returns to the microphone-ready gate; tap Start listening/);
+  assert.match(help, /Back returns to the microphone-ready gate without starting the microphone/);
+  assert.doesNotMatch(help, /New adventure|bottom-right|lists of popped and missed words|Scroll the result|Play again starts another round immediately/);
+});
+
 test('standard and prefixed recognition require a secure context', () => {
   assert.equal(fixture().host.speechAvailable(), true);
   assert.equal(fixture({ api: 'prefixed' }).host.speechAvailable(), true);
@@ -1283,70 +1294,41 @@ test('Pop snapshots sanitize streak bonuses, volley timing and the time bonus po
   assert.deepEqual(cleared.time_bonus_caption, { text: '', x: 0, y: 0, width: 0, height: 0 });
 });
 
-test('Pop snapshots expose full live speech and result state without repeating interim text in the live region', () => {
+test('Pop snapshots expose speech and frozen-board state without repeating interim text', () => {
   const f = fixture();
   let writes = 0, readable = '';
   Object.defineProperty(f.popStatus, 'textContent', {
     get() { return readable; }, set(value) { readable = value; writes++; }
   });
-  const state = { phase: 'running', remaining: 24, transcript: 'I see a ca', transcript_final: false,
-    results_hits: { text: '2', total: 4, active: true, private: 'discard' },
-    results_scroll: 14.5, results_scroll_max: 96, results_scrollbar_visible: false };
+  const state = { phase: 'running', remaining: 24, transcript: 'I see a ca', transcript_final: false };
   f.host.popStatus(JSON.stringify(state));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a ca');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '2', total: 4, active: true, rect: [] });
-  assert.equal(f.popStatus.attributes['data-results-scroll'], '14.5');
-  assert.equal(f.popStatus.attributes['data-results-scroll-max'], '96');
-  assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'false');
-  f.host.popStatus(JSON.stringify({ ...state, transcript: 'I see a cat', transcript_final: true,
-    results_hits: { text: '4', total: 4, active: false }, results_scroll: 38, results_scrollbar_visible: true }));
+  assert.equal(f.popStatus.attributes['data-board-frozen'], 'false');
+  f.host.popStatus(JSON.stringify({ ...state, transcript: 'I see a cat', transcript_final: true }));
   assert.equal(f.popStatus.attributes['data-transcript'], 'I see a cat');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'true');
-  assert.equal(f.popStatus.attributes['data-results-scrollbar-visible'], 'true');
-  assert.equal(writes, 1, 'Transcription, counter animation and scrolling cannot interrupt the game announcement');
+  assert.equal(writes, 1, 'Interim recognition cannot interrupt the game announcement');
   assert.doesNotMatch(readable, /I see/);
+  f.host.popStatus(JSON.stringify({ phase: 'finished', hits: 4, score: 90, board_frozen: true,
+    message: 'Round complete. Your results are ready.' }));
+  assert.equal(f.popStatus.attributes['data-board-frozen'], 'true');
+  assert.match(readable, /Round complete.*Voice Pop\. 4 hits\./);
   f.host.popStatus(JSON.stringify({ phase: 'idle' }));
   assert.equal(f.popStatus.attributes['data-transcript'], '');
   assert.equal(f.popStatus.attributes['data-transcript-final'], 'false');
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, rect: [] });
-  assert.equal(f.popStatus.attributes['data-results-scroll'], '0');
-  assert.equal(f.popStatus.attributes['data-results-scroll-max'], '0');
+  assert.equal(f.popStatus.attributes['data-board-frozen'], 'false');
 });
 
-test('Pop result snapshots sanitize the hit animation and announce only the final hit total', () => {
+test('Pop drops obsolete standalone-page fields and sanitizes frozen-board state', () => {
   const f = fixture();
-  const result = { phase: 'finished', hits: 4, score: 90, best_combo: 3,
-    message: 'Round complete. Tap a word to hear it, or play again.',
-    results_hits: { text: '4', total: 4.9, active: true, private: 'discard' } };
-  f.host.popStatus(JSON.stringify(result));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '4', total: 4, active: true, rect: [] });
-  assert.match(f.popStatus.textContent, /Round complete.*Voice Pop\. 4 hits\./);
-  assert.doesNotMatch(f.popStatus.textContent, /Score|combo|seconds/);
-  assert.equal(Object.keys(f.popStatus.attributes).some(name => name.startsWith('data-report')), false);
-  for (const malformed of [null, [], '4', { text: '<script>', total: 'Infinity', active: 'true' },
-    { text: '1'.repeat(17), total: -5, active: 1 }]) {
-    f.host.popStatus(JSON.stringify({ ...result, results_hits: malformed }));
-    assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']), { text: '', total: 0, active: false, rect: [] });
-  }
-});
-
-test('Pop results discard retired player identity while preserving result layout', () => {
-  const f = fixture();
-  const results_hits = { text: '8', total: 8, active: false, rect: [220, 20, 120, 96],
-    player: { id: 'player-a', name: 'Avery', avatar: 'fox', private: 'discard' } };
-  f.host.popStatus(JSON.stringify({ phase: 'finished', hits: 8, results_hits }));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-hits']),
-    { text: '8', total: 8, active: false, rect: [220, 20, 120, 96] });
-  assert.match(f.popStatus.textContent, /Voice Pop\. 8 hits\./);
-  assert.doesNotMatch(f.popStatus.textContent, /Avery/);
-  f.host.popStatus(JSON.stringify({ phase: 'running', results_hits }));
-  const replay = JSON.parse(f.popStatus.attributes['data-results-hits']);
-  assert.equal(Object.hasOwn(replay, 'player'), false);
-  assert.deepEqual(replay.rect, []);
-  for (const identity of [null, [], 'Avery', { id: 'a', name: 2, avatar: 'fox' }]) {
-    f.host.popStatus(JSON.stringify({ phase: 'finished', results_hits: { ...results_hits, player: identity } }));
-    assert.equal(Object.hasOwn(JSON.parse(f.popStatus.attributes['data-results-hits']), 'player'), false);
+  for (const board_frozen of [null, [], 'true', 1, {}]) {
+    f.host.popStatus(JSON.stringify({ phase: 'finished', hits: 8, board_frozen,
+      results_hits: { text: '8', player: { name: 'Avery' } }, results_scroll: 50,
+      results_rewards: { visible: true, title: 'Retired page' } }));
+    assert.equal(f.popStatus.attributes['data-board-frozen'], 'false');
+    assert.equal(Object.keys(f.popStatus.attributes).some(name => name.startsWith('data-results-')), false);
+    assert.doesNotMatch(f.popStatus.textContent, /Avery|Retired page/);
   }
 });
 
@@ -1853,15 +1835,12 @@ test('Pop publishes fragment identities and one final-tier result independently 
   assert.deepEqual(JSON.parse(f.popStatus.attributes['data-targets']).map(target => target.chest), [true, false]);
   assert.equal(f.popStatus.attributes['data-chest-next-score'], undefined);
   f.host.popStatus(JSON.stringify({ phase: 'finished', chest_count: 1, chest_tier: 2, fragment_count: 9,
-    results_rewards: { visible: true, score: 40, earned: 1, fragment_count: 9, chest_tier: 2,
-      title: 'Chest Lv. 2', detail: '1 chest · 9 fragments collected', rect: [1, 2, 3, 4],
-      chest_rect: [5, 6, 7, 8], private: 'discard', rows: [{ threshold: 100 }] } }));
-  assert.deepEqual(JSON.parse(f.popStatus.attributes['data-results-rewards']), {
-    visible: true, score: 40, earned: 1, fragment_count: 9, chest_tier: 2,
-    title: 'Chest Lv. 2', detail: '1 chest · 9 fragments collected', rect: [1, 2, 3, 4], chest_rect: [5, 6, 7, 8]
-  });
+    board_frozen: true }));
+  assert.equal(f.popStatus.attributes['data-chest-tier'], '2');
+  assert.equal(f.popStatus.attributes['data-fragment-count'], '9');
+  assert.equal(f.popStatus.attributes['data-board-frozen'], 'true');
   f.host.popStatus(JSON.stringify({ phase: 'ready' }));
   assert.equal(f.popStatus.attributes['data-fragment-count'], '0');
   assert.equal(f.popStatus.attributes['data-chest-tier'], '0');
-  assert.equal(f.popStatus.attributes['data-results-rewards'], '{}');
+  assert.equal(f.popStatus.attributes['data-board-frozen'], 'false');
 });

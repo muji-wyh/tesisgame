@@ -79,10 +79,10 @@ func _run() -> void:
 	var earned_medals: Dictionary = app.medal_progress.counts.duplicate(true)
 	var earned_coins: int = app.coin_wallet.balance
 	app._refresh()
-	check(app.model.lesson_words == lesson, "The opened chest retains the current lesson until New adventure")
-	app._new_adventure_button.pressed.emit()
+	check(app.model.lesson_words == lesson, "The opened chest retains the current lesson until Play again")
+	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != lesson,
-		"New adventure leaves the opened chest for a fresh Match board")
+		"Play again leaves the opened chest for a fresh Match board")
 	check(app.model.lesson_words.size() == 5 and app.model.theme_id == world and app.model.hints_remaining == 3,
 		"The fresh lesson preserves the world and renews the normal hint allowance")
 	var current: Dictionary = app.model.cards.filter(func(card: Dictionary) -> bool:

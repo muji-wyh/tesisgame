@@ -128,9 +128,10 @@ func _check_gate(app, context: String) -> void:
 	view.set_listening(true, true, "Listening.")
 	view._advance_game(view.game.remaining + 1.0)
 	await settle()
-	check(view.game.phase == "finished" and view._results.is_visible_in_tree(),
-		context + " reaches the real Voice Pop result surface")
-	_check_bars(app, context + " Voice Pop results")
+	check(view.game.phase == "finished" and view.snapshot().board_frozen
+		and app._settlement_dialog.is_visible_in_tree() and app._pop_rewards.is_visible_in_tree(),
+		context + " reaches Voice Pop settlement over the frozen board")
+	_check_bars(app, context + " Voice Pop settlement")
 
 
 func _check_surfaces(app, dimensions: Vector2i) -> void:

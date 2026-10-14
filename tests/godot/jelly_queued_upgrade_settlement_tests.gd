@@ -188,7 +188,7 @@ func entry_for(saved, reward_id: String) -> Dictionary:
 func check_current_card(app, reward_id: String, label: String) -> bool:
 	var room = app._jelly_rewards
 	var expected_theme: String = RewardProgress.theme_for_tier(FINAL_TIER)
-	check(app._jelly_game_over.is_visible_in_tree() and room.is_visible_in_tree(),
+	check(app._settlement_dialog.is_visible_in_tree() and room.is_visible_in_tree(),
 		label + ": Finish presents the result inside its settlement modal")
 	check(room._cards.size() == 1, label + ": the final result displays one earned chest")
 	if room._cards.size() != 1:
@@ -257,7 +257,7 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 			and app.coin_wallet.balance == coins_before,
 			label + ": failed persistence neither consumes the retained chest nor pays coins")
 		room._back.pressed.emit()
-		check(app._round_id == round_id and app._jelly_game_over.is_visible_in_tree(),
+		check(app._round_id == round_id and app._settlement_dialog.is_visible_in_tree(),
 			label + ": Play again cannot discard an unsaved final reward")
 		storage.reward_writable = true
 		room.retry_save()

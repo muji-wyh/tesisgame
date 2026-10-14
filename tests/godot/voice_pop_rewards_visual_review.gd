@@ -17,7 +17,6 @@ func _capture(label: String, dimensions: Vector2i) -> void:
 	for frame in range(5):
 		await process_frame
 	app._layout()
-	app._pop._results.scroll_vertical = 0
 	for frame in range(5):
 		await process_frame
 		await RenderingServer.frame_post_draw
@@ -71,7 +70,6 @@ func _run() -> void:
 			app._pop.set_listening(true, true, "Listening.")
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	Fixture.finish_celebration(app)
-	app._pop._advance_result_feedback(2.0)
 	for dimensions in [Vector2i(1366, 768), Vector2i(390, 844), Vector2i(320, 568), Vector2i(844, 390)]:
 		await _capture("final-tier", dimensions)
 	app.audio.halt()

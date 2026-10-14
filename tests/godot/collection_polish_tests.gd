@@ -59,41 +59,34 @@ func _run() -> void:
 			app._refresh()
 			await settle()
 			var scale: float = app.Style.ui_scale(app)
-			var button: Button = app._result_retry_button if save_error else app._new_adventure_button
-			var inactive: Button = app._new_adventure_button if save_error else app._result_retry_button
-			check(button.is_visible_in_tree() and not inactive.is_visible_in_tree(),
-				"Results show one normal New adventure action or one conditional save retry")
+			var button: Button = app._single_result.retry_button if save_error else app._single_result.replay_button
+			check(button.is_visible_in_tree() and not button.disabled
+				and app._single_result.replay_button.disabled == save_error
+				and app._single_result.retry_button.is_visible_in_tree() == save_error,
+				"Settlement enables Play again after saving and exposes Retry saving only on failure")
 			check(app._default_focus() == button, "The active result action is the default completed-result focus")
-			var minimum_height: float = 48.0 if save_error else 56.0
-			var expected_width: float = 176.0 if save_error else 240.0
-			check(button.size.y * scale >= minimum_height and button.size.y * scale <= minimum_height + 4,
-				"Retry stays compact and New adventure has a prominent touch target at %s" % dimensions)
-			check(button.size.x * scale >= expected_width and button.size.x * scale <= expected_width + 4.0,
-				"The floating result action preserves its compact width at %s" % dimensions)
+			check(button.size.y * scale >= 44.0 and button.size.x * scale >= 44.0,
+				"Settlement actions retain comfortable touch targets at %s" % dimensions)
 			check(app.get_global_rect().encloses(button.get_global_rect()),
 				"Result actions stay inside the viewport at %s" % dimensions)
-			var minimum_font_size: float = 14.0 if save_error else 20.0
-			check(button.get_theme_font_size("font_size") * scale >= minimum_font_size
-				and button.get_theme_font_size("font_size") * scale < minimum_font_size + 2,
-				"Retry labels stay readable and New adventure uses larger primary-action text")
-			var inset: Vector2 = (app._outcome.get_global_rect().end - button.get_global_rect().end) * scale
-			check(button.get_parent() == app._outcome and inset.x >= 15.0 and inset.x <= 17.0
-				and inset.y >= 15.0 and inset.y <= 17.0,
-				"The result action floats at the bottom-right with a safe inset at %s" % dimensions)
-			check(app._stage.get_global_rect().is_equal_approx(app._outcome.get_global_rect()),
-				"Both normal and retry actions leave the chest stage at full size")
-			check(app._treasure_backdrop.show_theme_name == not save_error,
-				"Save notices replace the world badge so their text cannot overlap on phones")
+			check(button.get_theme_font_size("font_size") * scale >= 14.0,
+				"Settlement labels stay readable at %s" % dimensions)
+			var panel: Rect2 = app._settlement_dialog.panel.get_global_rect()
+			check(app._settlement_dialog.is_ancestor_of(button) and panel.encloses(button.get_global_rect())
+				and app.grid.is_visible_in_tree(),
+				"Saving and retry both remain in a dialog over the completed board at %s" % dimensions)
+			check(app._single_result.caption.is_visible_in_tree(),
+				"The settlement explains its opened or failed-save state inside the dialog")
 			var surface: StyleBoxFlat = button.get_theme_stylebox("normal")
 			check(surface.bg_color.a > 0.9 and surface.border_width_top > 0,
 				"The active result action has a real button surface rather than floating text")
 	app._save_error = false
 	app._pending_fragment = {"medal_id": "spring-1", "after": app.medal_progress.count_for("spring-1") + 1}
 	app._refresh()
-	check(not app._new_adventure_button.visible and not app._result_retry_button.visible
-		and app._valid_focus(app._default_focus()), "Pending reward persistence keeps New adventure hidden with a valid fallback focus")
+	check(app._single_result.replay_button.disabled and not app._single_result.retry_button.visible
+		and app._valid_focus(app._default_focus()), "Pending reward persistence keeps Play again disabled with a valid fallback focus")
 	var pending_lesson: Array = app.model.lesson_words.duplicate(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.phase == "won" and app.model.lesson_words == pending_lesson,
 		"A stale action cannot leave while the opened reward is still awaiting persistence")
 	app._pending_fragment.clear()

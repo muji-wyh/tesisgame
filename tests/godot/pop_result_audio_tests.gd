@@ -15,17 +15,6 @@ func check(value: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
-func _clip(seconds: float = 0.25) -> AudioStreamWAV:
-	var clip := AudioStreamWAV.new()
-	clip.format = AudioStreamWAV.FORMAT_16_BITS
-	clip.mix_rate = 22050
-	var pcm := PackedByteArray()
-	pcm.resize(int(22050 * seconds) * 2)
-	pcm.fill(0)
-	clip.data = pcm
-	return clip
-
-
 func _run() -> void:
 	await _result_lifecycle()
 	print("Pop result audio: %d checks, %d failures" % [checks, failures])
@@ -54,72 +43,46 @@ func _result_lifecycle() -> void:
 		view.receive_transcript(str(view.game.targets[0].word.text))
 	view._advance_game(view.game.remaining)
 	await process_frame
-	check(view.game.phase == "finished" and view.game.hits == 1 and view._results.visible,
-		"The completed round reaches its result with the actual hit count")
+	check(view.game.phase == "finished" and view.game.hits == 1 and view.snapshot().board_frozen,
+		"The completed round retains its actual hit count on a frozen board")
+	check(app._settlement_dialog.is_visible_in_tree() and app._pop_rewards.is_visible_in_tree(),
+		"Voice Pop opens the shared settlement dialog directly")
 	check(not app._pop_speech_active and not view._listening,
-		"Completing the round stops microphone input before review playback")
+		"Completing the round stops microphone input before settlement")
 	check(not app.audio.voice.playing,
-		"Showing the simplified result never starts automatic report narration")
-	check(not app._status_announcement.begins_with("Pip says:"),
-		"Result completion does not announce the removed spoken report")
+		"Showing settlement never starts automatic report narration")
+	check(view.find_child("PopResults", true, false) == null and view.controls().is_empty(),
+		"The removed standalone review page cannot expose late word-playback actions")
 	var summary: Dictionary = view.game.summary()
-	var review_words: Array = []
-	review_words.append_array(summary.hit_words)
-	review_words.append_array(summary.missed_words)
-	check(view._review_buttons.size() == review_words.size() and review_words.size() >= 2,
-		"Both popped and missed words remain available for individual pronunciation")
-	for index in range(review_words.size()):
-		var word: Dictionary = review_words[index]
-		app.audio.cache["res://" + str(word.audio)] = _clip(4.0)
-		app.audio.stop_voice()
-		view._review_buttons[index].pressed.emit()
-		check(app.audio.voice.playing and app.audio.voice.stream == app.audio.cache["res://" + str(word.audio)]
-			and not app.audio.music.playing,
-			"Tapping the result word " + str(word.text) + " plays only its pronunciation")
-		check(view.game.summary() == summary, "Review pronunciation cannot change the completed round's scores or words")
-	var first_review: Button = view._review_buttons[0]
 	for action in ["more", "hidden", "mute", "stop_voice"]:
-		first_review.pressed.emit()
-		check(app.audio.voice.playing, action + " starts with a real review word playing")
 		match action:
 			"more": app._show_collection()
 			"hidden": app.on_page_hidden()
 			"mute": app.audio.set_muted(true)
 			"stop_voice": app.audio.stop_voice()
 		check(not app.audio.voice.playing,
-			action + " stops review audio immediately without reviving report narration")
-		if action == "more":
-			first_review.pressed.emit()
-			check(not app.audio.voice.playing, "A covered result word cannot pronounce behind the menu")
+			action + " leaves the completed round silent")
 		match action:
 			"more": app._hide_collection()
 			"hidden": app.on_page_visible()
 			"mute": app.audio.set_muted(false)
-		check(not app.audio.voice.playing,
-			action + " never resumes speech without a fresh word tap")
-	first_review.pressed.emit()
-	check(app.audio.voice.playing, "Review words work again after menu, background, and mute transitions")
-	view.replay_button.pressed.emit()
+		view.receive_transcript("a stale completed word")
+		check(not app.audio.voice.playing and not view._listening and view.game.summary() == summary,
+			action + " never resumes speech or alters the completed result")
+	app._pop_rewards._back.pressed.emit()
 	preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 	view.set_process(false)
-	check(view.game.phase == "ready" and view.game.hits == 0 and not view._results.visible
+	check(view.game.phase == "ready" and view.game.hits == 0 and not view.snapshot().board_frozen
 		and not app.audio.voice.playing,
-		"Play again clears the result and its pronunciation while waiting for fresh microphone readiness")
-	first_review.pressed.emit()
-	check(not app.audio.voice.playing, "A stale result word cannot play over the next round's listening gate")
+		"Play again clears the frozen board while waiting for fresh microphone readiness")
 	app._on_voice_state([true, true, "Listening."])
 	view._advance_game(view.game.remaining)
 	check(view.game.phase == "finished" and not app.audio.voice.playing,
 		"The next completed round also remains free of automatic narration")
 	for destination in ["match", "memory"]:
-		var review: Dictionary = view.game.summary().missed_words[0]
-		app._pop_hear(review)
-		check(app.audio.voice.playing, destination + " transition starts with an active result pronunciation")
 		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, destination)
 		check(app._mode_id == destination and not app._mode_menu_open() and not app.audio.voice.playing,
-			"Leaving the result for " + destination + " stops the previous word without stale report callbacks")
-		app._pop_hear(review)
-		check(not app.audio.voice.playing, "A late Voice Pop word callback is ignored in " + destination)
+			"Leaving settlement for " + destination + " stops all previous speech")
 		preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "pop")
 		check(app._mode_id == "pop" and not app._mode_menu_open(), "Returning from " + destination + " reaches Voice Pop through Home")
 		preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)

@@ -78,13 +78,13 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
       await shot(page, testInfo, 'match-correct');
       expect((await patch(page, untouched.point)).equals(still), 'A correct answer cannot move the rest of the board.').toBe(true);
     }
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word');
   }
   await acceptCelebration(page);
-  const chest = resultPoint(bounds, 'chest');
-  await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
+  const settled = await metrics(page), chest = resultPoint(settled, 'chest');
+  await page.mouse.move(settled.x + chest.x * settled.scale, settled.y + chest.y * settled.scale);
   await page.mouse.down();
-  try { await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 }); }
+  try { await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 }); }
   finally { await page.mouse.up(); }
   await shot(page, testInfo, 'match-chest-claimed');
   expect(await geometry(page)).toEqual(beforeGeometry);
@@ -127,7 +127,7 @@ test(`Memory keeps remembered positions through automatic corrections and a full
       await shot(page, testInfo, 'memory-correct');
       expect((await patch(page, untouched.point)).equals(still), 'Growing a flower leaves every other remembered position unchanged.').toBe(true);
     }
-    await expect(page.locator('#game-status')).toContainText(index === 4 ? 'You did it!' : 'Find a pair.');
+    await expect(page.locator('#game-status')).toContainText(index === 4 ? /You did it!|Round complete/ : 'Find a pair.');
   }
   await shot(page, testInfo, 'memory-complete');
   expect(await geometry(page)).toEqual(beforeGeometry);
@@ -176,7 +176,7 @@ test('Match accepts the next card on the first tap during nonfinal feedback', as
     if (word !== pairs.at(-1)[0]) await expect(page.locator('#game-status')).toContainText('Find 5 word');
   }
   await click(page, pairs[0][0].point);
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status')).toContainText(/You did it!|Round complete/);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await shot(page, testInfo, 'responsive-match-won');
   expect(await geometry(page), 'The full round reuses its original card coordinates without a layout transition.').toEqual(beforeGeometry);

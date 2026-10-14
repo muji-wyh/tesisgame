@@ -281,7 +281,7 @@ func _scaled_result_resize_checks() -> void:
 	check(room.configure("scaled-result-resize", 1, "ocean", _manifest, false, 3),
 		"Prepare one earned chest for resizing the same live result modal")
 	room.set_result_context({"score": 22, "cleared_pairs": 22, "chest_tier": 3, "chest_count": 1})
-	var modal = load("res://scripts/jelly_game_over.gd").new()
+	var modal = load("res://scripts/settlement_dialog.gd").new()
 	root.add_child(modal)
 	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal.configure(room, Data.theme("ocean"), true, true, "Round complete")

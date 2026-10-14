@@ -132,12 +132,10 @@ func _pop(app) -> void:
 	app._pop.finish_round()
 	Fixture.finish_celebration(app)
 	await settle()
-	check(not app._pop._review_buttons.is_empty(), "Finished Voice Pop creates pronunciation review cards")
-	named(app._pop._review_buttons, "Voice Pop review cards")
-	scan(app, "Voice Pop review and result actions")
-	app._pop.chests_button.pressed.emit()
-	await settle()
-	check(app._pop_rewards_shown and not app._pop_rewards._cards.is_empty(), "Earned Voice Pop treasure opens its saved chest page")
+	check(app._pop_rewards_shown and app._settlement_dialog.is_visible_in_tree()
+		and not app._pop_rewards._cards.is_empty(), "Earned Voice Pop treasure opens directly in the settlement dialog")
+	named(app._pop_rewards.navigation_controls(), "Voice Pop settlement actions")
+	scan(app, "Voice Pop settlement dialog")
 	for card: Dictionary in app._pop_rewards._cards:
 		named([card.button], "Saved chest card")
 	scan(app, "Voice Pop treasure room")
@@ -215,11 +213,11 @@ func _run() -> void:
 	app.medal_progress.error = "The reward could not be saved."
 	app._save_error = true
 	app._refresh()
-	check(app._result_retry_button.visible
-		and str(app._result_retry_button.get("accessibility_description")) == app.medal_progress.error
+	check(app._single_result.retry_button.visible
+		and str(app._single_result.retry_button.get("accessibility_description")) == app.medal_progress.error
 		and str(app._storage_retry_button.get("accessibility_description")) == app.medal_progress.error,
 		"Reward retry controls retain the storage error as an accessible description")
-	check(not app._result_retry_button.text.is_empty(), "Reward recovery keeps its visible action label")
+	check(not app._single_result.retry_button.text.is_empty(), "Reward recovery keeps its visible action label")
 	named([app._storage_retry_button], "Reward recovery")
 	scan(app, "Reward save recovery")
 	app.audio.halt()

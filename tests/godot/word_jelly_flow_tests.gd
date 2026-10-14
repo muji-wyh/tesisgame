@@ -142,7 +142,7 @@ func check_finish_header(app, view) -> void:
 		"A deliberate header Finish pauses the round for confirmation")
 	app._finish_confirmation.finish_button.pressed.emit()
 	await settle()
-	check(view.game.phase == "finished" and app._jelly_game_over.is_visible_in_tree() and not view.snapshot().result.visible and not view.finish_button.is_visible_in_tree(),
+	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible and not view.finish_button.is_visible_in_tree(),
 		"Confirming Finish opens the settlement modal and removes the round action")
 	app._jelly_rewards._back.pressed.emit()
 	await settle()

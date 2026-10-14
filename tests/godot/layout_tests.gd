@@ -181,13 +181,14 @@ func _run() -> void:
 	app._refresh()
 	await settle()
 	check(not app._mode_panel.grid.is_visible_in_tree(), "Results do not repeat gameplay navigation")
-	check(app._outcome.get_global_rect().position.y - app._content_margins.global_position.y <= 100,
-		"The result gets the space below one simple header inside the game area")
+	check(app._settlement_dialog.is_visible_in_tree() and app.grid.is_visible_in_tree()
+		and app._settlement_dialog.panel.get_global_rect().encloses(app._single_result.get_global_rect()),
+		"Settlement stays inside a bounded dialog over the completed game area")
 	var old_lesson: Array = app.model.lesson_words.duplicate(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	await settle()
 	check(app._mode_id == "match" and not app.collection_page.visible and app.model.lesson_words != old_lesson
-		and app.grid.is_visible_in_tree(), "New adventure starts a fresh Match round directly")
+		and app.grid.is_visible_in_tree(), "Play again starts a fresh Match round directly")
 	var action := Button.new()
 	for world in app.model.THEMES:
 		for primary in [false, true]:

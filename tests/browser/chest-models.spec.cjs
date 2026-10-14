@@ -196,7 +196,7 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word');
   }
   await expect.poll(async () => {
     const state = await celebrationState(page);
@@ -235,7 +235,7 @@ test('all five replacement designs fit celebrations and closed stages, and a cla
   const before = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   for (const theme of MODEL_THEMES) {
     await chooseTheme(page, THEME_IDS.indexOf(theme));
-    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
     await captureThemedStage(page, info, theme, 'closed');
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
       'Previewing closed designs does not award a reward').toBe(before);
@@ -246,7 +246,7 @@ test('all five replacement designs fit celebrations and closed stages, and a cla
   await page.mouse.move(bounds.x + point.x * bounds.scale, bounds.y + point.y * bounds.scale);
   await page.mouse.down();
   try {
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 60000 });
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 60000 });
   } finally {
     await page.mouse.up();
   }
@@ -258,7 +258,7 @@ test('all five replacement designs fit celebrations and closed stages, and a cla
   // Each design's own opened model is covered by the restored-batch holds above.
   for (const theme of MODEL_THEMES) {
     await chooseTheme(page, THEME_IDS.indexOf(theme));
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
     await captureThemedStage(page, info, theme, 'opened');
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
       'Changing the opened stage does not duplicate the claimed reward').toBe(claimed);

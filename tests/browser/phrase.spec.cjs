@@ -51,7 +51,7 @@ function expectAnswerPictures(state) {
 function promptFullyVisible(state) {
   if (!state.visible || !state.prompt_text_visible || !state.listen?.visible) return true;
   const layout = state.prompt_layout;
-  return Boolean(layout?.shown && layout.text === state.text && layout.line_count >= 1 && layout.line_count <= 2 &&
+  return Boolean(layout?.shown && layout.text === (state.display_question?.text || state.text) && layout.line_count >= 1 && layout.line_count <= 2 &&
     layout.visible_line_count === layout.line_count);
 }
 
@@ -59,7 +59,7 @@ function expectPromptFullyVisible(state) {
   if (!state.visible || !state.prompt_text_visible || !state.listen?.visible) return;
   expect(state.prompt_layout, 'The full prompt has measured layout information').toBeTruthy();
   expect(state.prompt_layout.shown).toBe(true);
-  expect(state.prompt_layout.text, 'The displayed prompt retains the full target phrase').toBe(state.text);
+  expect(state.prompt_layout.text, 'The displayed prompt retains the full target phrase').toBe(state.display_question?.text || state.text);
   expect(state.prompt_layout.line_count, 'The prompt occupies at least one line').toBeGreaterThanOrEqual(1);
   expect(state.prompt_layout.line_count, 'The compact prompt fits at most two lines').toBeLessThanOrEqual(2);
   expect(state.prompt_layout.visible_line_count, 'Every line, including the final word, is actually visible')
@@ -267,7 +267,7 @@ async function observeRoundCelebration(page) {
           }
         }), 550);
       }
-      if (observation.started && observation.chestAt === null && status.textContent.includes('Hold to open your chest')) {
+      if (observation.started && observation.chestAt === null && status.textContent.includes('Hold the chest to open')) {
         observation.chestAt = performance.now();
       }
       if (observation.started && state.celebration.ready) {
@@ -295,9 +295,12 @@ async function expectRoundCelebration(page, info, name) {
   expect(frame.state).toMatchObject({ phase: 'correct', completed: 3, completion_pending: true,
     celebration: { active: true, ready: false } });
   expect(frame.state.celebration.action).toMatchObject({ text: 'Open chest', visible: false, disabled: true });
+  expect(frame.state.board_frozen, 'The completed phrase remains behind the modal').toBe(true);
   for (const control of [...frame.state.options, ...frame.state.answers, frame.state.listen]) {
-    expect(control.visible, `Completion hides ${control.name}`).toBe(false);
     expect(control.disabled, `Completion disables ${control.name}`).toBe(true);
+  }
+  for (const control of [...frame.state.answers, frame.state.listen]) {
+    expect(control.visible, `Completion preserves ${control.name} on the frozen board`).toBe(true);
   }
   const canvasPng = Buffer.from(frame.raw, 'base64');
   fs.writeFileSync(info.outputPath(`${name}-canvas.png`), canvasPng);
@@ -627,8 +630,9 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   expect((await celebrationState(page)).action).toMatchObject({ text: 'Open chest', visible: true, disabled: false });
   expect(progress(await phraseState(page)), 'Returning from home preserves the ready invitation').toEqual(progress(completion.finished));
   await acceptCelebration(page);
-  await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
-  await expect.poll(async () => (await phraseState(page)).visible).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Hold the chest to open');
+  await expect.poll(async () => (await phraseState(page)).board_frozen).toBe(true);
+  expect((await phraseState(page)).visible, 'The finished phrase remains visible beneath settlement').toBe(true);
   await capture(page, info, 'phrase-earned-chest');
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   const x = bounds.x + chest.x * bounds.scale, y = bounds.y + chest.y * bounds.scale;
@@ -637,7 +641,7 @@ test('Phrase Builder corrects unlimited mistakes, finishes three phrases and ope
   await page.mouse.move(x, y);
   await page.mouse.down();
   try {
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
   } finally { await page.mouse.up(); }
   expect(await pieceCount(page)).toBe(baseline + 1);
   await capture(page, info, 'phrase-opened-chest');

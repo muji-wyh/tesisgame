@@ -904,7 +904,7 @@ func _check_gameplay_pixels(directory: String) -> void:
 			app.chest.set_process(false)
 			for frame in range(4):
 				await process_frame
-			check(app.chest.is_visible_in_tree() and app._stage.size.y > 0,
+			check(app.chest.is_visible_in_tree() and app.chest.size.y > 0,
 				"The %s chest uses the real visible result stage at %s" % [theme_id, dimensions])
 			_begin(app)
 			var first_time: float = float(Feel.HOLD_PULSE_TIMES[0])
@@ -920,7 +920,7 @@ func _check_gameplay_pixels(directory: String) -> void:
 				first_min_case = "%s at %s" % [theme_id, dimensions]
 			first_range = Vector2(minf(first_range.x, first), maxf(first_range.y, first))
 			check(first >= 0.5, "%s at viewport %s/stage %s: first accelerating body beat is visible at %.2f screen pixels" %
-				[theme_id, dimensions, app._stage.size, first])
+				[theme_id, dimensions, app.chest.size, first])
 			for beat in Feel.HOLD_PULSE_TIMES.slice(1):
 				var delta: float = float(beat) + 0.00001 - app._hold_elapsed
 				app._advance_ui(delta)
@@ -940,7 +940,7 @@ func _check_gameplay_pixels(directory: String) -> void:
 				late_min_case = "%s at %s" % [theme_id, dimensions]
 			late_range = Vector2(minf(late_range.x, late), maxf(late_range.y, late))
 			check(late >= 2.0 and late > first, "%s at viewport %s/stage %s: final body rocking grows to %.2f screen pixels" %
-				[theme_id, dimensions, app._stage.size, late])
+				[theme_id, dimensions, app.chest.size, late])
 			var cues: Array = app.chest.hold_effect_snapshot().cues
 			check(cues.filter(func(cue): return cue.cue == "hold_pulse").size() == Feel.HOLD_PULSE_TIMES.size()
 				and cues.filter(func(cue): return cue.cue == "tension_pulse").size() == Feel.PULSE_TIMES.size(),

@@ -90,7 +90,16 @@ func _enter(app, id: String) -> void:
 	check(app._mode_id == id and not app._mode_menu_open(), "The Home card enters " + id)
 
 func _return_home(app) -> void:
-	var home: Button = app._jelly_rewards._home if app._jelly_game_over_open() else app.find_child("Home", true, false) as Button
+	var home: Button = app.find_child("Home", true, false) as Button
+	if app._settlement_dialog_open():
+		if app._round_celebration.is_active():
+			home = app._round_celebration.home_button
+		elif app._is_jelly_mode():
+			home = app._jelly_rewards._home
+		elif app._mode_id == "pop":
+			home = app._pop_rewards._home
+		else:
+			home = app._single_result.home_button
 	check(home != null and home.is_visible_in_tree() and not home.disabled,
 		"Every gameplay screen exposes an available Home button")
 	if home != null and home.is_visible_in_tree() and not home.disabled:
@@ -431,7 +440,7 @@ func _check_results_and_replay(app) -> void:
 		var ended_round: String = app._round_id
 		var covered_home: Button = app.find_child("Home", true, false) as Button
 		await _tap(covered_home.get_global_rect().get_center())
-		check(app._jelly_game_over_open() and not app._mode_menu_open() and app._round_id == ended_round,
+		check(app._settlement_dialog_open() and not app._mode_menu_open() and app._round_id == ended_round,
 			"The covered header Home cannot dismiss the settlement dialog: " + id)
 		await _return_home(app)
 		check(app._mode_id == id, "A result screen returns Home without switching modes: " + id)

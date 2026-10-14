@@ -126,12 +126,14 @@ cannot grant or announce another piece. New-round auto-claims save the earned
 piece silently. Reduced motion skips physical beats and displays the saved result
 directly after its shorter hold.
 
-Ordinary chest results show only the chest until opening and saving complete.
-Then **New adventure** appears as a bottom-right overlay without shifting or
-shrinking the chest. The word review strip and result toy action are removed.
-Hold instructions, completion status and toy unlocks remain available to screen
-readers; pending-save and failed-save messages remain visible. Save recovery
-uses a floating **Retry saving** button. Pip's room is retired; legacy gift
+Ordinary chest results appear in the shared settlement dialog over the completed
+game. Its bounded chest area keeps the hold interaction together with visible
+instructions and completion status. **Home** and **Play again** stay in the
+footer; Play again is disabled until the earned chest opens and saving succeeds,
+then starts a fresh round of the same mode. Saving and save failures disable
+navigation; failures add **Retry save** inside the dialog. Status and actions
+remain available to screen readers. The standalone results page, word review
+strip and result toy action are removed. Pip's room is retired; legacy gift
 accounting remains only for save compatibility.
 Piece counts and medal records still drive persistence and gift requirements,
 but the result has no collectible badge, assembly, tap-to-place interaction or

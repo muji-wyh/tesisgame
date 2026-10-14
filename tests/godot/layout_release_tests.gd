@@ -61,7 +61,7 @@ func _run() -> void:
 			app.model.chest_state = "opened"
 			app._refresh()
 			await settle()
-			check(viewport.encloses(app._result_retry_button.get_global_rect()), "Result saving retry stays visible at %s: %s" % [dimensions, phase])
+			check(viewport.encloses(app._single_result.retry_button.get_global_rect()), "Result saving retry stays visible at %s: %s" % [dimensions, phase])
 		app._save_error = false
 		app.model.phase = "waiting"
 		app._refresh()

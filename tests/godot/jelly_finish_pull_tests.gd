@@ -369,7 +369,7 @@ func check_gameplay(mode: String) -> void:
 	pointer(end, false, true)
 	pointer(end, false, true)
 	await settle()
-	check(view.game.phase == "finished" and app._jelly_game_over.is_visible_in_tree() and not view.snapshot().result.visible and not app._finish_confirmation_open()
+	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible and not app._finish_confirmation_open()
 		and completions.size() == 1, mode + ": deliberate touch release opens exactly one settlement modal directly")
 	check(not button.is_visible_in_tree() and not button.is_pulling(), mode + ": results hide and reset the external header action")
 	app.audio.halt()

@@ -290,19 +290,20 @@ func _run() -> void:
 		_win(app)
 		var before := _total(app)
 		var completed_lesson: Array = app.model.lesson_words.duplicate(true)
-		app._new_adventure_button.pressed.emit()
+		app._single_result.replay_button.pressed.emit()
 		check(_total(app) == before and app.model.phase == "won" and app.model.chest_state == "closed"
-			and not app._new_adventure_button.visible, "The hidden New adventure action cannot skip the unopened %s chest" % mode)
+			and app._single_result.replay_button.disabled, "The disabled Play again action cannot skip the unopened %s chest" % mode)
 		app._open_chest()
 		app.chest.finish_immediately()
-		check(app._new_adventure_button.visible, "Saving the opened %s chest exposes New adventure" % mode)
-		app._new_adventure_button.pressed.emit()
-		check(_total(app) == before + 1, "New adventure after %s preserves the opened chest's saved piece" % mode)
+		check(app._single_result.replay_button.is_visible_in_tree() and not app._single_result.replay_button.disabled,
+			"Saving the opened %s chest enables Play again" % mode)
+		app._single_result.replay_button.pressed.emit()
+		check(_total(app) == before + 1, "Play again after %s preserves the opened chest's saved piece" % mode)
 		check(app.model.phase == "waiting" and app._mode_id == mode and app.model.lesson_words.size() == 5
 			and app.model.lesson_words != completed_lesson and app.model.hints_remaining == 3,
 			"Successful reward preservation starts a fresh five-word %s round with three hints" % mode)
 		var fresh_lesson: Array = app.model.lesson_words.duplicate(true)
-		app._new_adventure_button.pressed.emit()
+		app._single_result.replay_button.pressed.emit()
 		check(app.model.lesson_words == fresh_lesson and _total(app) == before + 1,
 			"A repeated hidden result click neither replaces the fresh lesson nor duplicates its saved piece")
 		var persisted = load("res://scripts/medal_progress.gd").new(directory + "/reload.cfg", directory + "/legacy.cfg", storage)
@@ -314,16 +315,17 @@ func _run() -> void:
 	storage.fail_write = true
 	app._open_chest()
 	app.chest.finish_immediately()
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "memory" and app.model.phase == "won", "A failed opened-chest save keeps the completed Memory game")
 	check(app._save_error and not app._pending_fragment.is_empty() and _total(app) == before, "A failed chest save retains one pending piece without inflating progress")
 	check(not app._message.is_visible_in_tree(), "A saving error does not add duplicate text below the result actions")
-	check(app._result_retry_button.is_visible_in_tree() and app._result_retry_button.text == "Retry saving"
-		and not app._new_adventure_button.is_visible_in_tree() and app._default_focus() == app._result_retry_button,
-		"A failed result exposes only the focused save-retry action")
-	check(str(app._result_retry_button.get("accessibility_description")) == app.medal_progress.error
-		and app._result_retry_button.tooltip_text.is_empty(), "Retry saving keeps the storage error accessible without a hover popup")
-	app._result_retry_button.pressed.emit()
+	check(app._single_result.retry_button.is_visible_in_tree() and app._single_result.retry_button.text == "Retry save"
+		and app._single_result.replay_button.disabled and app._single_result.home_button.disabled
+		and app._default_focus() == app._single_result.retry_button,
+		"A failed settlement focuses Retry save and disables both departure actions")
+	check(str(app._single_result.retry_button.get("accessibility_description")) == app.medal_progress.error
+		and app._single_result.retry_button.tooltip_text.is_empty(), "Retry saving keeps the storage error accessible without a hover popup")
+	app._single_result.retry_button.pressed.emit()
 	app._show_mode_menu()
 	check(not app._mode_menu_open(), "An unsaved completed round blocks returning Home before a mode switch")
 	app.choose_mode("match")
@@ -331,21 +333,21 @@ func _run() -> void:
 	check(app.model.phase == "won" and app._mode_id == "memory" and app.model.lesson_words == lesson and _total(app) == before,
 		"Repeated failed retry, mode changes, and direct resets cannot discard the victory")
 	storage.fail_write = false
-	app._result_retry_button.pressed.emit()
+	app._single_result.retry_button.pressed.emit()
 	check(not app._save_error and _total(app) == before + 1 and app.model.phase == "won"
 		and app._mode_id == "memory" and app.model.lesson_words == lesson,
 		"Retry saves the captured piece exactly once without restarting the completed lesson")
-	app._result_retry_button.pressed.emit()
+	app._single_result.retry_button.pressed.emit()
 	app._retry_reward_save()
 	check(app.model.phase == "won" and app.model.lesson_words == lesson and _total(app) == before + 1,
 		"Stale save retries cannot behave like the removed Repeat lesson feature")
-	check(app._new_adventure_button.is_visible_in_tree() and not app._result_retry_button.is_visible_in_tree()
-		and app._default_focus() == app._new_adventure_button,
-		"Successful saving restores New adventure as the normal result action")
-	app._new_adventure_button.pressed.emit()
+	check(app._single_result.replay_button.is_visible_in_tree() and not app._single_result.retry_button.is_visible_in_tree()
+		and app._default_focus() == app._single_result.replay_button,
+		"Successful saving restores Play again as the normal result action")
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.phase == "waiting" and app._mode_id == "memory" and app._memory.is_visible_in_tree()
 		and app.model.lesson_words != lesson and _total(app) == before + 1,
-		"Only New adventure starts a fresh Memory round after saving, without another piece")
+		"Only Play again starts a fresh Memory round after saving, without another piece")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

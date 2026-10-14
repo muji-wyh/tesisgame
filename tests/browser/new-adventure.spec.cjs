@@ -35,13 +35,13 @@ async function finishMatch(page, knownCards = null) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === attempts - 1 ? 'You did it!' : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === attempts - 1 ? /You did it!|Round complete/ : 'Find 5 word');
   }
   await acceptCelebration(page);
   return [...cards.keys()];
 }
 
-test('New adventure appears at the bottom-right after opening the chest and starts Match directly', async ({ page }, testInfo) => {
+test('the settlement dialog enables Play again after opening the chest and starts Match directly', async ({ page }, testInfo) => {
   const errors = await openGame(page);
   await chooseTheme(page, 5);
   const world = await page.locator('meta[name="theme-color"]').getAttribute('content');
@@ -49,15 +49,19 @@ test('New adventure appears at the bottom-right after opening the chest and star
   const originalWords = [...new Set(originalCards.map(card => card.word))];
   expect((await finishMatch(page, originalCards)).sort()).toEqual([...originalWords].sort());
   await page.screenshot({ path: testInfo.outputPath('result-chest-closed.png'), scale: 'css' });
-  const next = resultPoint(await metrics(page), 'newAdventure');
+  const closedBounds = await metrics(page);
+  expect(closedBounds.growth.settlement.visible).toBe(true);
+  expect(closedBounds.growth.board.visible).toBe(true);
+  expect(closedBounds.growth.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(true);
+  const next = resultPoint(closedBounds, 'newAdventure');
   await tap(page, next.x, next.y);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-  expect(await pieceCount(page), 'The future floating-button area cannot skip an unopened chest.').toBe(pieces);
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+  expect(await pieceCount(page), 'Disabled Play again cannot skip an unopened chest.').toBe(pieces);
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
   try {
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
@@ -65,9 +69,11 @@ test('New adventure appears at the bottom-right after opening the chest and star
   const saved = await record(page);
   await page.mouse.move(0, 0);
   await rendered(page);
-  await page.screenshot({ path: testInfo.outputPath('result-chest-open-floating-adventure.png'), scale: 'css' });
+  expect((await metrics(page)).growth.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(false);
+  await page.screenshot({ path: testInfo.outputPath('result-chest-open-dialog.png'), scale: 'css' });
   await tap(page, next.x, next.y);
   await expect(page.locator('#game-status')).toHaveText(INTRO);
+  expect((await metrics(page)).growth.settlement.visible).toBe(false);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', world);
   await rendered(page);

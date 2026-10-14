@@ -43,9 +43,9 @@ func resize_to(dimensions: Vector2i) -> void:
 	await process_frame
 
 
-func _earn_chests(count: int) -> bool:
+func _earn_chest_tier(tier: int) -> bool:
 	for attempt in range(120):
-		if app._pop.game.chest_count >= count:
+		if app._pop.game.chest_tier >= tier:
 			return true
 		if app._pop.game.phase != "running":
 			break
@@ -54,7 +54,7 @@ func _earn_chests(count: int) -> bool:
 		if not app._pop.game.targets.is_empty():
 			app._pop._listening_tick_usec = Time.get_ticks_usec()
 			app._pop.receive_transcript(str(app._pop.game.targets[0].word.text))
-	printerr("Unable to earn %d chests for visual review" % count)
+	printerr("Unable to earn chest tier %d for visual review" % tier)
 	_failed = true
 	return false
 
@@ -83,7 +83,7 @@ func _run() -> void:
 	app.model.set_theme("autumn")
 	app._pop.set_listening(true, true, "Listening.")
 	app._pop.set_process(false)
-	if not _earn_chests(1):
+	if not _earn_chest_tier(1):
 		await _cleanup()
 		return
 	app._pop._advance_hud_feedback(0.38)
@@ -95,32 +95,29 @@ func _run() -> void:
 	await capture("small-earned-chest")
 	await resize_to(Vector2i(844, 390))
 	await capture("landscape-earned-chest")
-	if not _earn_chests(3):
+	if not _earn_chest_tier(3):
 		await _cleanup()
 		return
 	app._pop._advance_game(app._pop.game.remaining + 1.0)
 	await process_frame
-	app._pop.chests_button.pressed.emit()
 	room = app._pop_rewards
 	_freeze_chests()
-	if not app._pop_rewards_shown or room._cards.size() != 3:
-		printerr("The actual result did not open all three treasure cards")
+	if not app._pop_rewards_shown or room._cards.size() != 1:
+		printerr("The actual result did not open its final upgraded chest")
 		_failed = true
 		await _cleanup()
 		return
 	await resize_to(Vector2i(1366, 768))
-	await capture("desktop-three-chests")
+	await capture("desktop-final-chest")
 	await resize_to(Vector2i(390, 844))
-	await capture("phone-three-chests")
-	room._ensure_chest_visible(room._cards[2].button)
-	await capture("phone-last-chest")
+	await capture("phone-final-chest")
 	room._ensure_chest_visible(room._cards[0].button)
 	await resize_to(Vector2i(320, 568))
-	await capture("small-three-chests")
+	await capture("small-final-chest")
 	await resize_to(Vector2i(844, 390))
-	await capture("landscape-three-chests")
+	await capture("landscape-final-chest")
 	await resize_to(Vector2i(667, 375))
-	await capture("narrow-landscape-three-chests")
+	await capture("narrow-landscape-final-chest")
 	await resize_to(Vector2i(1366, 768))
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(0.6)
@@ -138,28 +135,11 @@ func _run() -> void:
 	await capture("landscape-one-opened")
 	await resize_to(Vector2i(390, 844))
 	await capture("phone-one-opened")
-	room.begin_hold(room._cards[1].button)
-	room.advance_hold(Feel.HOLD_SECONDS)
-	room._cards[1].art._advance_animation(Feel.RELEASE_TIME + 0.045)
-	await capture("phone-release")
-	room._cards[1].art._advance_animation(Feel.OPEN_SECONDS)
-	await capture("phone-two-opened")
 	await resize_to(Vector2i(320, 568))
-	await capture("small-two-opened")
 	room.set_reduced_motion(true)
-	room.begin_hold(room._cards[2].button)
-	room.advance_hold(Feel.HOLD_SECONDS)
-	for card in room._cards:
-		card.art._advance_animation(30.0)
-	await capture("small-all-opened-reduced-motion")
-	await resize_to(Vector2i(390, 844))
-	await capture("phone-three-retained-gifts")
-	room._ensure_chest_visible(room._cards[0].button)
-	await capture("phone-first-retained-gift")
-	room._ensure_chest_visible(room._cards[2].button)
-	await capture("phone-last-retained-gift")
+	await capture("small-opened-reduced-motion")
 	await resize_to(Vector2i(1366, 768))
-	await capture("desktop-three-retained-gifts")
+	await capture("desktop-retained-gift")
 	await _cleanup()
 
 

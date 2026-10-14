@@ -16,7 +16,7 @@ var _title: String = "Game over"
 
 
 func _init() -> void:
-	name = "JellyGameOver"
+	name = "SettlementDialog"
 	z_index = 90
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_shade = ColorRect.new()
@@ -25,21 +25,26 @@ func _init() -> void:
 	add_child(_shade)
 	_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel = Panel.new()
-	panel.name = "GameOverPanel"
+	panel.name = "SettlementPanel"
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.focus_mode = Control.FOCUS_ALL
 	add_child(panel)
 	resized.connect(_layout)
 	hide()
 
 
 func configure(room: Control, palette: Dictionary, motion_reduced: bool, has_chest: bool, title: String = "Game over") -> void:
+	if is_instance_valid(_room) and _room != room:
+		_room.hide()
 	_room = room
 	_palette = palette.duplicate()
 	_reduced_motion = motion_reduced
 	_has_chest = has_chest
 	_title = title
+	panel.set("accessibility_name", title)
 	if _room.get_parent() != panel:
 		_room.reparent(panel, false)
+	_room.show()
 	_layout()
 
 

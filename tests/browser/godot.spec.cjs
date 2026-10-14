@@ -4,7 +4,7 @@ const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
-const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, openRewards, enterGame,
+const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, chooseMode, openRewards, enterGame,
   contentBounds, headerPoint, headerIconRect, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
 
 test.beforeAll(() => {
@@ -500,7 +500,7 @@ async function holdChestUntilOpen(page, point) {
   await page.mouse.down();
   try {
     // Keep holding through slow rendered frames instead of releasing on the runner's clock.
-    await expect(page.locator('#game-status')).toHaveText(/^(Chest opened! Ready for another adventure\?|A gift for Pip! .+ unlocked!)$/, { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText(/^Round complete Treasure collected!$/, { timeout: 15000 });
   } finally {
     await page.mouse.up();
   }
@@ -517,16 +517,16 @@ async function winWithTouch(page, board) {
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
   }
   await acceptCelebration(page);
-  return metrics;
+  return await canvasMetrics(page);
 }
 
 async function holdControllerChest(page) {
   await page.evaluate(() => window.gamepadFixture.button(0, true));
   try {
-    await expect(page.locator('#game-status')).toHaveText(/^(Chest opened! Ready for another adventure\?|A gift for Pip! .+ unlocked!)$/, { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText(/^Round complete Treasure collected!$/, { timeout: 15000 });
   } finally {
     await page.evaluate(() => window.gamepadFixture.button(0, false));
     // Let the engine sample the release before another simulated A press.
@@ -558,12 +558,12 @@ test('new adventures rotate after the chest is opened and growth navigation pres
   const unopened = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
-  await expect(page.locator('#game-status')).toContainText('Lv0');
-  await pressGamepad(page, 1);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  expect((await growthView(page)).visible, 'The settlement blocks the underlying catalog shortcut.').toBe(false);
+  expect((await logicalMetrics(page)).growth.settlement.visible).toBe(true);
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'))).toBe(unopened);
-  await holdChestUntilOpen(page, resultScreenPoint(metrics));
-  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
+  await holdChestUntilOpen(page, resultScreenPoint(await canvasMetrics(page)));
+  await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
   await page.screenshot({ path: testInfo.outputPath('chest-after-opening.png'), scale: 'css' });
   await pressGamepad(page, 0);
   await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
@@ -593,9 +593,11 @@ test('Pip follows the board and chest while growth preserves rewards without ext
   await page.screenshot({ path: testInfo.outputPath('pip-board.png'), scale: 'css' });
   await chooseSeason(page, 0);
   await winWithTouch(page);
-  await greet(headerPoint(await logicalMetrics(page), 'pip'));
+  const coveredPip = headerPoint(await logicalMetrics(page), 'pip');
+  await tap(page, coveredPip.x, coveredPip.y);
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   await page.screenshot({ path: testInfo.outputPath('pip-chest.png'), scale: 'css' });
-  await holdChestUntilOpen(page, resultScreenPoint(bounds));
+  await holdChestUntilOpen(page, resultScreenPoint(await canvasMetrics(page)));
   const earnedProgress = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   await openRewards(page);
   await expect(page.locator('#game-status')).toContainText('Lv0');
@@ -752,7 +754,7 @@ test('three hints per round are shared by touch and Xbox', async ({ page }, test
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === remaining.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(index === remaining.length - 1 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
   }
   await acceptCelebration(page);
   await holdControllerChest(page);
@@ -865,7 +867,7 @@ test('Match keeps the same board after repeated mistakes and finishes only when 
     await buyMatchHint(page, () => pressGamepad(page, 2));
     await page.screenshot({ path: testInfo.outputPath('match-unlimited-retries.png'), scale: 'css' });
     await winWithTouch(page, board);
-    await expect(page.locator('#game-status')).toContainText('You did it!');
+    await expect(page.locator('#game-status')).toContainText(/You did it!|Round complete/);
     await assertFits(page);
     expect(requests).toEqual([]);
     expect(errors).toEqual([]);
@@ -892,14 +894,21 @@ test('fresh adventures save exactly one chest reward per round and preserve prog
     previousWords = words;
     await winWithTouch(page, board);
     await holdControllerChest(page);
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
     await pressGamepad(page, 3);
+    expect((await growthView(page)).visible, 'Settlement blocks the covered growth shortcut.').toBe(false);
+    expect((await logicalMetrics(page)).growth.settlement.visible).toBe(true);
+    await openRewards(page);
     expect((await growthView(page)).visible).toBe(true);
     const progress = await rewardState(page);
     expect(progress.medals).toMatch(new RegExp(`"spring-1"\\s*:\\s*${Math.min(round + 1, 3)}`));
     if (round === 3) expect(progress.medals).toMatch(/"spring-2"\s*:\s*1/);
     await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
     await pressGamepad(page, 1);
+    expect((await logicalMetrics(page)).library.visible).toBe(true);
+    await chooseMode(page, 'match');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
+    expect((await rewardState(page)).medals).toBe(progress.medals);
     if (round < 3) {
       await pressGamepad(page, 0);
       await ready(page);
@@ -943,13 +952,13 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
     }
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
-    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
     expect((await rewardState(page)).medals).toBe(before);
     // Cross the original completion deadline before starting another attempt.
     await page.waitForTimeout(4100);
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
-    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
     expect((await rewardState(page)).medals).toBe(before);
 
     await hold();
@@ -959,7 +968,7 @@ for (const input of ['Space', 'Enter', 'Xbox A']) {
       await release();
     }
     expect((await rewardState(page)).medals, 'Releasing at the flash precedes the final reward save').toBe(before);
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
     const saved = (await rewardState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
@@ -1001,12 +1010,12 @@ test('held touch cancels before the flash and releasing at the flash saves one p
     }
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
-    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
     expect((await rewardState(page)).medals).toBe(before);
     await page.waitForTimeout(4100);
     await expect(progress).toHaveAttribute('hidden', '');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
-    await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+    await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
     expect((await rewardState(page)).medals).toBe(before);
 
     await hold();
@@ -1020,7 +1029,7 @@ test('held touch cancels before the flash and releasing at the flash saves one p
     expect(releases[1], 'The real touch ends at the flash before the reward is saved').toEqual({
       trusted: true, phase: 'release', saved: before
     });
-    await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
     const saved = (await rewardState(page)).medals;
     expect(rewardPieceTotal(saved)).toBe(rewardPieceTotal(before) + 1);
     await expect(progress).toHaveAttribute('hidden', '');
@@ -1042,16 +1051,16 @@ test('Xbox chest opening cancels on disconnect and works again after reconnect',
   const before = (await rewardState(page)).medals, progress = page.locator('#chest-progress');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 0);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   await page.evaluate(() => window.gamepadFixture.button(0, true));
   await expect(progress).toHaveAttribute('data-phase', 'building', { timeout: 5000 });
   await page.evaluate(() => window.gamepadFixture.disconnect());
   await expect(progress).toHaveAttribute('hidden', '');
   await expect(progress).toHaveAttribute('aria-valuenow', '0');
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   expect((await rewardState(page)).medals).toBe(before);
   await page.waitForTimeout(4100);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   expect((await rewardState(page)).medals).toBe(before);
   await page.evaluate(() => window.gamepadFixture.connect());
   await holdControllerChest(page);
@@ -1080,9 +1089,10 @@ test('completes matches and opens a one-shot reward with bundled audio offline',
         await page.touchscreen.tap(point.x, point.y);
       }
       await continueMatch(page);
-      await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
+      await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
     }
-    const chestPoint = resultScreenPoint(metrics);
+    await acceptCelebration(page);
+    const chestPoint = resultScreenPoint(await canvasMetrics(page));
     const beforeChest = await page.evaluate(() => window.audioObservation.playbacks.length);
     await holdChestUntilOpen(page, chestPoint);
     const earned = await page.locator('#game-status').textContent();
@@ -1119,20 +1129,21 @@ test('dragging the reward chest cancels hold-open without losing pointer control
       await page.touchscreen.tap(point.x, point.y);
     }
     await continueMatch(page);
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word–picture pairs.');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word–picture pairs.');
   }
-  const chestPoint = resultScreenPoint(metrics);
+  await acceptCelebration(page);
+  const chestPoint = resultScreenPoint(await canvasMetrics(page));
   await page.mouse.move(chestPoint.x, chestPoint.y);
   await page.mouse.down();
   await page.mouse.move(chestPoint.x + 28, chestPoint.y + 12, { steps: 4 });
   await page.waitForTimeout(1300);
   await page.mouse.up();
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status')).toContainText(/You did it!|Round complete/);
   await holdChestUntilOpen(page, chestPoint);
   expect(errors).toEqual([]);
 });
 
-test('completed Match visibly reveals a bottom-right New adventure after opening the chest on a phone', async ({ page }, testInfo) => {
+test('completed Match keeps its board behind a bounded settlement dialog with a visible Play again action on a phone', async ({ page }, testInfo) => {
     const errors = watchErrors(page);
     await page.setViewportSize({ width: 390, height: 650 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1145,7 +1156,22 @@ test('completed Match visibly reveals a bottom-right New adventure after opening
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const metrics = await canvasMetrics(page);
     const scale = Math.min(metrics.width, metrics.height) / 480;
-    const action = resultPoint(await logicalMetrics(page), 'newAdventure');
+    const logical = await logicalMetrics(page);
+    const action = resultPoint(logical, 'newAdventure');
+    const dialog = logical.growth.settlement;
+    const replay = logical.growth.result.controls.find(control => control.name === 'SettlementReplay');
+    expect(dialog.visible).toBe(true);
+    expect(logical.growth.board.visible).toBe(true);
+    expect(replay.visible && !replay.disabled).toBe(true);
+    const [left, top, width, height] = dialog.panel_rect;
+    expect(left).toBeGreaterThan(0);
+    expect(top).toBeGreaterThan(0);
+    expect(left + width).toBeLessThan(logical.width);
+    expect(top + height).toBeLessThan(logical.height);
+    expect(action.x).toBeGreaterThan(left);
+    expect(action.x).toBeLessThan(left + width);
+    expect(action.y).toBeGreaterThan(top);
+    expect(action.y).toBeLessThan(top + height);
     const next = { x: metrics.x + action.x * scale, y: metrics.y + action.y * scale };
     const screenshot = await page.screenshot({ path: testInfo.outputPath('result-match-complete.png'), scale: 'css' });
     const pixel = await page.evaluate(async ({ encoded, point }) => {
@@ -1159,7 +1185,7 @@ test('completed Match visibly reveals a bottom-right New adventure after opening
       context.drawImage(image, 0, 0);
       return [...context.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data].slice(0, 3);
     }, { encoded: screenshot.toString('base64'), point: { x: next.x, y: next.y - 20 } });
-    expect(pixel, 'The filled New adventure button must render, not just accept invisible input.').toEqual([185, 69, 69]);
+    expect(Math.max(...pixel) - Math.min(...pixel), 'Play again renders a colored button surface.').toBeGreaterThan(30);
     await page.touchscreen.tap(next.x, next.y);
     await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
     expect(errors).toEqual([]);

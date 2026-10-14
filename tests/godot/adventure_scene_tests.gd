@@ -23,7 +23,8 @@ func _run() -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	var properties: Array = app.get_property_list().map(
 		func(property: Dictionary) -> String: return property.name)
-	for property in ["_found_words", "_found_words_scroll", "_result_footer", "_result_actions", "_try_gift_button"]:
+	for property in ["_found_words", "_found_words_scroll", "_result_footer", "_result_actions", "_try_gift_button",
+		"_outcome", "_stage", "_result_text", "_new_adventure_button", "_result_retry_button", "_treasure_backdrop"]:
 		check(not properties.has(property), "The chest result removes the obsolete " + property + " control")
 	check(not app.has_method("_replay_found_word"), "The removed result word strip has no replay handler")
 	var directory := "user://adventure-scene-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
@@ -48,7 +49,7 @@ func _run() -> void:
 	check(not properties.has("_adventure_label"),
 		"The redundant adventure topic label is removed rather than hidden")
 	check(not properties.has("_match_caption"), "Match has no separate Find 3 pairs caption")
-	check(not app._new_adventure_button.is_visible_in_tree(), "The active board has no result action")
+	check(not app._single_result.replay_button.is_visible_in_tree(), "The active board has no result action")
 	app._show_collection()
 	check(app._age_catalog.is_visible_in_tree() and app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 		"The collection shows vocabulary while theme choices stay on Home")
@@ -62,33 +63,34 @@ func _run() -> void:
 	app._controller_mode = true
 	for word in words:
 		_match(app, word)
-	check(app.model.phase == "won" and app._outcome.is_visible_in_tree(),
-		"Winning presents the result")
+	check(app.model.phase == "won" and app._single_result.is_visible_in_tree()
+		and app._settlement_dialog.is_visible_in_tree() and app.grid.is_visible_in_tree(),
+		"Winning presents a settlement dialog over the completed board")
 	check(app._default_focus() == app.chest_button and app.chest_button.has_focus(),
 		"The chest remains the primary controller action after winning")
-	check(not app._new_adventure_button.visible, "A closed chest has no New adventure action")
+	check(app._single_result.replay_button.disabled, "A closed chest has no Play again action")
 	var earned_lesson: Array = app.model.lesson_words.duplicate(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.chest_state == "closed" and app.model.lesson_words == earned_lesson
-		and app.medal_progress.counts.is_empty(), "A hidden action cannot skip the chest or silently claim its reward")
+		and app.medal_progress.counts.is_empty(), "A disabled action cannot skip the chest or silently claim its reward")
 	app._show_collection()
 	check(not app._focus_candidates().has(app.chest_button)
-		and not app._focus_candidates().has(app._new_adventure_button),
+		and not app._focus_candidates().has(app._single_result.replay_button),
 		"The collection modal excludes covered chest actions from controller focus")
 	app._refresh()
 	app._hide_collection()
 	check(app._default_focus() == app.chest_button, "Closing the collection restores the unopened chest action")
 	app._open_chest()
 	check(app.model.chest_state == "opening" and not app._pending_fragment.is_empty()
-		and not app._new_adventure_button.visible, "Opening captures one reward while keeping New adventure hidden")
+		and app._single_result.replay_button.disabled, "Opening captures one reward while keeping Play again disabled")
 	check(app._valid_focus(app._default_focus()), "Opening retains a valid controller destination")
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.chest_state == "opening" and app.model.lesson_words == earned_lesson,
-		"A stale New adventure event cannot skip an opening")
+		"A stale Play again event cannot skip an opening")
 	app.chest.finish_immediately()
-	check(app.medal_progress.count_for("spring-1") == 1 and app._title.text == "Chest opened!"
-		and app._new_adventure_button.is_visible_in_tree(), "A saved opening exposes the next adventure")
-	check(app._default_focus() == app._new_adventure_button and app._new_adventure_button.has_focus(),
+	check(app.medal_progress.count_for("spring-1") == 1 and app._single_result.heading.text == "Round complete"
+		and app._single_result.replay_button.is_visible_in_tree(), "A saved opening exposes the next adventure")
+	check(app._default_focus() == app._single_result.replay_button and app._single_result.replay_button.has_focus(),
 		"The next adventure becomes the completed chest's controller action")
 	for dimensions in [Vector2i(320, 320), Vector2i(320, 321), Vector2i(390, 844), Vector2i(844, 390)]:
 		root.size = dimensions
@@ -98,7 +100,7 @@ func _run() -> void:
 	app.new_round(17)
 	check(app.model.adventure_name == adventure and app.grid.is_visible_in_tree(),
 		"The same seed restores the same adventure and playable board")
-	check(not app._new_adventure_button.is_visible_in_tree() and app.model.hints_remaining == 3,
+	check(not app._single_result.replay_button.is_visible_in_tree() and app.model.hints_remaining == 3,
 		"Reset hides the result action and renews all three hints")
 	app.medal_progress.counts["spring-1"] = 3
 	app.choose_theme("spring")
@@ -119,11 +121,11 @@ func _run() -> void:
 	_match(app, words[0])
 	_retry_mismatches(app)
 	check(app.model.phase == "waiting" and app.model.matched_ids.size() == 2
-		and not app._outcome.is_visible_in_tree(),
+		and not app._single_result.is_visible_in_tree(),
 		"Repeated mismatches preserve the learned pair and active board")
 	for word in words.slice(1):
 		_match(app, word)
-	check(app.model.phase == "won" and not app._new_adventure_button.visible,
+	check(app.model.phase == "won" and app._single_result.replay_button.disabled,
 		"Finishing after repeated mistakes still earns an unopened chest")
 	root.size = Vector2i(320, 320)
 	await process_frame
@@ -133,7 +135,7 @@ func _run() -> void:
 	app.new_round(20)
 	_retry_mismatches(app)
 	check(app.model.phase == "waiting" and app.model.matched_ids.is_empty()
-		and not app._outcome.is_visible_in_tree(),
+		and not app._single_result.is_visible_in_tree(),
 		"Repeated mistakes without matches never replace the board with results")
 	app.new_round(21)
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
@@ -213,21 +215,23 @@ func _retry_mismatches(app) -> void:
 
 func _check_result_bounds(app) -> void:
 	var viewport: Rect2 = root.get_visible_rect().grow(0.5)
-	var stage: Rect2 = app._stage.get_global_rect()
-	var outcome: Rect2 = app._outcome.get_global_rect()
-	check(stage.is_equal_approx(outcome), "The chest fills the result area at %s" % root.size)
-	check(viewport.encloses(stage), "The full chest stage fits the viewport at %s" % root.size)
-	for button in [app._new_adventure_button, app._result_retry_button]:
+	var panel: Rect2 = app._settlement_dialog.panel.get_global_rect()
+	var content: Rect2 = app._single_result.get_global_rect()
+	check(app._settlement_dialog.is_ancestor_of(app._single_result)
+		and panel.encloses(content), "Settlement content lives inside its bounded dialog at %s" % root.size)
+	check(viewport.encloses(panel) and panel.size.x < viewport.size.x and panel.size.y < viewport.size.y,
+		"The settlement leaves the completed game visible around its edges at %s" % root.size)
+	for button in [app._single_result.replay_button, app._single_result.retry_button, app._single_result.home_button]:
 		if not button.is_visible_in_tree():
 			continue
 		var bounds: Rect2 = button.get_global_rect()
 		var scale: float = app.Style.ui_scale(app)
-		check(button.get_parent() == app._outcome and viewport.encloses(bounds)
-			and outcome.encloses(bounds), "The active result action floats inside the result area at %s" % root.size)
+		check(app._single_result.is_ancestor_of(button) and viewport.encloses(bounds)
+			and content.encloses(bounds), "Settlement actions stay inside their dialog at %s" % root.size)
 		check(button.size.x * scale >= 44.0 and button.size.y * scale >= 44.0,
-			"The floating action retains a 44px touch target at %s" % root.size)
-		check(bounds.get_center().x >= outcome.get_center().x and bounds.get_center().y > outcome.get_center().y,
-			"The floating action stays in the bottom-right of the chest at %s" % root.size)
+			"Settlement actions retain a 44px touch target at %s" % root.size)
+		check(bounds.get_center().y > content.get_center().y,
+			"Settlement actions occupy a stable footer below the chest at %s" % root.size)
 
 
 func _check_result_lifecycle_layout(app) -> void:
@@ -252,27 +256,29 @@ func _check_result_lifecycle_layout(app) -> void:
 			Fixture.finish_celebration(app)
 			await process_frame
 			await process_frame
+			if app._settlement_dialog._entrance != null and app._settlement_dialog._entrance.is_valid():
+				app._settlement_dialog._entrance.custom_step(1.0)
 			check(app.model.phase == "won" and app.model.chest_state == "closed"
-				and not app._new_adventure_button.visible, "%s begins its result with only the closed chest" % mode)
+				and app._single_result.replay_button.disabled, "%s begins its result with only the closed chest" % mode)
 			_check_result_bounds(app)
-			var stage: Rect2 = app._stage.get_global_rect()
+			var stage: Rect2 = app._single_result.get_global_rect()
 			app._open_chest()
 			await process_frame
-			check(not app._new_adventure_button.visible and app._stage.get_global_rect().is_equal_approx(stage),
-				"Opening %s keeps the full chest composition and hides the next action at %s" % [mode, dimensions])
+			check(app._single_result.replay_button.disabled and app._single_result.get_global_rect().is_equal_approx(stage),
+				"Opening %s keeps the full chest composition and disables the next action at %s" % [mode, dimensions])
 			app.chest.finish_immediately()
 			await process_frame
 			await process_frame
-			check(app._new_adventure_button.is_visible_in_tree() and not app._result_retry_button.visible
-				and app._stage.get_global_rect().is_equal_approx(stage),
-				"The saved %s opening adds its floating action without moving the chest at %s" % [mode, dimensions])
-			check(not app._title.is_visible_in_tree() and not app._caption.is_visible_in_tree(),
-				"A completed chest has no additional word or gift panel")
+			check(app._single_result.replay_button.is_visible_in_tree() and not app._single_result.retry_button.visible
+				and app._single_result.get_global_rect().is_equal_approx(stage),
+				"The saved %s opening adds its footer action without moving the chest at %s" % [mode, dimensions])
+			check(app._single_result.heading.is_visible_in_tree() and app._single_result.caption.is_visible_in_tree(),
+				"A completed chest retains the dialog heading and collection acknowledgement")
 			_check_result_bounds(app)
-			app._new_adventure_button.grab_focus()
-			check(app._default_focus() == app._new_adventure_button
-				and app._focus_candidates().has(app._new_adventure_button), "The floating action remains reachable by controller")
+			app._single_result.replay_button.grab_focus()
+			check(app._default_focus() == app._single_result.replay_button
+				and app._focus_candidates().has(app._single_result.replay_button), "The footer action remains reachable by controller")
 			app._show_collection()
-			check(not app._focus_candidates().has(app._new_adventure_button), "The room excludes the covered floating action")
+			check(not app._focus_candidates().has(app._single_result.replay_button), "The room excludes the covered footer action")
 			app._hide_collection()
-			check(root.gui_get_focus_owner() == app._new_adventure_button, "Closing the room restores the floating action's focus")
+			check(root.gui_get_focus_owner() == app._single_result.replay_button, "Closing the room restores the floating action's focus")

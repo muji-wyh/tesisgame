@@ -277,7 +277,7 @@ func _test_queued_pairs_and_final_timer(app) -> void:
 	app.feedback_timer.paused = false
 	await create_timer(0.82).timeout
 	check(app.model.phase == "feedback" and app._voice_match_link.is_visible_in_tree()
-		and app.grid.is_visible_in_tree() and not app._outcome.visible,
+		and app.grid.is_visible_in_tree() and not app._single_result.visible,
 		"The last recognized pair stays visible beyond the old 0.7-second feedback interval")
 	check(await _until(func() -> bool: return app.model.phase == "won"), "The last pair's real Timer eventually presents the win")
 	check(Time.get_ticks_msec() - started >= 940 and (app.model.matched_ids.size() / 2) == 5 and app.model.mistakes == 0,

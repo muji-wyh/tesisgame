@@ -40,22 +40,23 @@ paper when this page opens and shows the entire invitation without confetti.
 Reduced motion uses a static
 happy pose with no moving halo or confetti.
 
-`GameUI` owns the round identity, interruptions and input gate. Match, Memory
-and Phrase Builder wait for both the performance and the final pronunciation
-before offering `Open chest`. Phrase accepts completion only at that action.
-Voice Pop saves the score and final upgraded chest first, then restores its
-complete result page after celebration. Its zero-chest rounds go straight to
-results. Jelly Match and Jelly Words immediately show a settlement modal over
-the frozen board, with or without a chest. Finish uses `Round complete`; danger
-expiry uses `Game over`. They have no standalone results page and do not run
-this completion celebration. Earned chests open inside the modal. `Play again`
-saves and collects pending chest coins before starting a new round, while
-`Home` returns to the mode menu and preserves pending treasure. Match and Memory
-celebrate completion even without a
-chest, omit the chest artwork and confetti, and offer Play again. Presentation
-never saves rewards or opens a chest.
+`GameUI` owns the round identity, interruptions and input gate. Every mode uses
+the shared settlement modal over its completed board; standalone result pages
+are removed. Match, Memory and Phrase Builder keep this performance inside the
+modal and wait for both the performance and final pronunciation before offering
+`Open chest`. Phrase accepts completion only at that action. Match and Memory
+also celebrate rounds without treasure, omitting the chest and confetti before
+offering Play again. Presentation never saves rewards or opens a chest.
 
-Jelly settlement keeps the completed-word total above the reward and places the
+Voice Pop and both Jelly modes show results immediately without this completion
+performance. Voice Pop stops recognition and saves its final chest before opening
+the modal. A zero-chest round still shows its honest result. Jelly Finish uses
+`Round complete`; danger expiry uses `Game over`. Earned chests open inside the
+modal. Jelly `Play again` collects pending chest coins before starting a new
+round; Pop `Play again` preserves unopened treasure and returns to its microphone
+gate. `Home` preserves pending Pop and Jelly treasure.
+
+Pop and Jelly settlement keep the completed-word total above the reward and place the
 earned level with its chest. The chest artwork is the hold target; `Hold to open`
 is plain, non-interactive text below it. Keyboard focus brightens the existing
 chest glow instead of outlining the instruction. The compact modal keeps its

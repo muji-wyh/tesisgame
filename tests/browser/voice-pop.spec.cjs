@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, openModeMenu, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint, visibleColorCount } = require('./game-ui.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
+const { chooseMode, openModeMenu, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, recordingTiming } = require('./bundled-audio.cjs');
+const { roomState } = require('./pop-treasure-ui.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
 const catalog = require('../../words.json').filter(word => word.min_age <= 3 && word.image && (word.practice_modes || ['pop']).includes('pop'));
@@ -210,32 +211,13 @@ async function state(page) {
     fragmentCount: Number(element.dataset.fragmentCount), chestTier: Number(element.dataset.chestTier),
     bestCombo: Number(element.dataset.bestCombo), transcript: element.dataset.transcript || '',
     recognitionFeedback: element.dataset.recognitionFeedback || '', recognitionMessage: element.dataset.recognitionMessage || '',
-    transcriptFinal: element.dataset.transcriptFinal === 'true', resultsHits: JSON.parse(element.dataset.resultsHits || '{}'),
-    resultsRewards: JSON.parse(element.dataset.resultsRewards || '{}'),
-    resultsScroll: Number(element.dataset.resultsScroll),
-    resultsScrollMax: Number(element.dataset.resultsScrollMax), resultsScrollbarVisible: element.dataset.resultsScrollbarVisible === 'true',
+    transcriptFinal: element.dataset.transcriptFinal === 'true', boardFrozen: element.dataset.boardFrozen === 'true',
     targets: JSON.parse(element.dataset.targets || '[]'), controls: JSON.parse(element.dataset.controls || '[]'),
     hud: JSON.parse(element.dataset.hud || '{}'),
     message: element.textContent
   }));
 }
 
-async function observeResultHits(page) {
-  await page.evaluate(() => {
-    const element = document.querySelector('#pop-status');
-    window.__resultHitFrames = [];
-    let previous = '';
-    const read = () => {
-      if (element.dataset.phase !== 'finished' || element.dataset.resultsHits === previous) return;
-      previous = element.dataset.resultsHits;
-      window.__resultHitFrames.push({ ...JSON.parse(previous || '{}'), at: performance.now() });
-    };
-    window.__resultHitObserver?.disconnect();
-    window.__resultHitObserver = new MutationObserver(read);
-    window.__resultHitObserver.observe(element, { attributes: true, attributeFilter: ['data-phase', 'data-results-hits'] });
-    read();
-  });
-}
 
 function expectRewardRect(rect, parent, message) {
   expect(rect, message).toHaveLength(4);
@@ -249,54 +231,44 @@ function expectRewardRect(rect, parent, message) {
   expect(rect[1] + rect[3], message).toBeLessThanOrEqual(parent[1] + parent[3] + 1);
 }
 
-function rewardRectsSeparate(a, b) {
-  return a[0] + a[2] <= b[0] + 1 || b[0] + b[2] <= a[0] + 1 ||
-    a[1] + a[3] <= b[1] + 1 || b[1] + b[3] <= a[1] + 1;
-}
 
-function expectRewardSummary(current, bounds) {
-  const rewards = current.resultsRewards;
-  const tier = current.fragmentCount >= 4 ? 1 + Math.floor((current.fragmentCount - 4) / 5) : 0;
-  const earned = tier > 0 ? 1 : 0;
-  expect(current.chestTier, 'Four fragments unlock one chest, then every five upgrade the same chest').toBe(tier);
-  expect(current.chestCount, 'A round earns one evolving chest independently of its point total').toBe(earned);
-  expect(rewards).toMatchObject({ visible: true, score: current.score, earned,
-    fragment_count: current.fragmentCount, chest_tier: tier,
-    title: tier > 0 ? `Chest Lv. ${tier}` : 'Keep collecting!',
-    detail: tier > 0 ? `1 chest · ${current.fragmentCount} fragments collected` : `${current.fragmentCount} / 4 chest fragments` });
-  expectRewardRect(rewards.rect, null, 'The final reward summary has finite, nonempty bounds');
-  expectRewardRect(rewards.chest_rect, rewards.rect, 'The final chest artwork stays inside its reward summary');
-  if (bounds) {
-    expect(rewards.rect[0], 'The reward summary fits horizontally').toBeGreaterThanOrEqual(-1);
-    expect(rewards.rect[0] + rewards.rect[2], 'The reward summary fits horizontally').toBeLessThanOrEqual(bounds.width + 1);
-  }
-  // Scrolling the word review may move the summary outside the viewport;
-  // result actions still retain their own nonoverlapping space.
-  for (const action of current.controls.filter(control => /^(OpenChests|Replay)$/.test(control.name))) {
-    expect(rewardRectsSeparate(rewards.rect, [action.x, action.y, action.width, action.height]),
-      'The reward summary cannot overlap the result actions').toBe(true);
-  }
-}
-
-function expectSimpleResults(current, bounds) {
+async function expectSettlement(page, expected = {}) {
+  await expect.poll(async () => (await roomState(page)).game_over?.visible).toBe(true);
+  const current = await state(page), room = await roomState(page), bounds = await metrics(page);
   expect(current.phase).toBe('finished');
-  expect(current.resultsHits.total).toBe(current.hits);
-  expectRewardSummary(current, bounds);
-  expect(current.resultsScrollbarVisible).toBe(false);
+  expect(current.boardFrozen, 'The completed game remains behind the dialog').toBe(true);
+  expect(current.controls, 'The retired result page has no interactive controls').toEqual([]);
   expect(current.transcript).toBe('');
-  expect(current.resultsHits.player, 'Results contain no player identity').toBeUndefined();
-  expect(current.controls.every(control => /^(?:OpenChests|Replay|Hear_[a-z0-9-]+)$/.test(control.name)),
-    'Voice Pop actions offer earned chests, Play again, and individual word pronunciation').toBe(true);
-  for (const control of current.controls) {
-    expect(control.text, 'Word labels do not include repetition counts').not.toMatch(/×\s*\d/);
-    if (control.name.startsWith('Hear_')) {
-      const word = catalog.find(word => word.id === control.name.slice(5));
-      expect(word, 'Every review card represents a real vocabulary word').toBeTruthy();
-      expect(control.text).toBe(word.text);
-    }
+  expect(room.visible).toBe(true);
+  expect(room.result_context).toMatchObject({ hits: current.hits, score: current.score,
+    chest_count: current.chestCount, chest_tier: current.chestTier, ...expected });
+  expect(room.score_text).toBe(String(current.score));
+  expect(room.progress_text).toContain(`${current.hits} ${current.hits === 1 ? 'word popped' : 'words popped'}`);
+  expectRewardRect(room.game_over.panel_rect, [0, 0, bounds.width, bounds.height], 'Settlement fits the viewport');
+  for (const text of ['Home', 'Play again']) {
+    const action = room.actions.find(action => action.visible && action.text === text);
+    expect(action, `${text} remains reachable in settlement`).toBeTruthy();
+    expectRewardRect(action.rect, room.game_over.panel_rect, `${text} fits the dialog`);
   }
-  expect(current.message).not.toMatch(/Score|Best combo|Pip's report|High five/i);
+  return room;
 }
+
+async function settlementAction(page, text) {
+  const room = await expectSettlement(page);
+  const action = room.actions.find(action => action.visible && !action.disabled && action.text === text);
+  expect(action, `Settlement has an enabled ${text} action`).toBeTruthy();
+  await tap(page, action.rect[0] + action.rect[2] / 2, action.rect[1] + action.rect[3] / 2);
+  await rendered(page);
+}
+
+async function replaySettlement(page) {
+  await settlementAction(page, 'Play again');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'ready');
+  expect((await state(page)).boardFrozen).toBe(false);
+  await action(page, /^RetryListening /);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+}
+
 
 async function visibleAction(page, pattern) {
   let button, previous = '';
@@ -321,188 +293,6 @@ async function action(page, pattern) {
   return button;
 }
 
-function resultsAtEnd(current) {
-  // Godot exposes integer scroll positions but a fractional scrollbar extent.
-  return current.resultsScroll >= current.resultsScrollMax - 1;
-}
-
-async function dispatchResultTouch(page, type, x, y) {
-  await page.evaluate(({ type, x, y }) => {
-    const canvas = document.querySelector('#canvas');
-    const ending = type === 'touchend' || type === 'touchcancel';
-    const touch = typeof document.createTouch === 'function'
-      ? document.createTouch(window, canvas, 1, x + scrollX, y + scrollY, x, y)
-      : new Touch({ identifier: 1, target: canvas, clientX: x, clientY: y,
-        pageX: x + scrollX, pageY: y + scrollY, screenX: x, screenY: y,
-        radiusX: 1, radiusY: 1, rotationAngle: 0, force: ending ? 0 : 1 });
-    // This WebKit build needs TouchList values; modern engines accept arrays.
-    const list = items => typeof document.createTouchList === 'function' ? document.createTouchList(...items) : items;
-    const touches = list(ending ? [] : [touch]);
-    canvas.dispatchEvent(new TouchEvent(type, { bubbles: true, cancelable: true, composed: true,
-      touches, targetTouches: touches, changedTouches: list([touch]) }));
-  }, { type, x, y });
-}
-
-async function scrollResults(page, delta) {
-  const before = await state(page);
-  const swipeBand = async current => {
-    const bounds = await metrics(page), content = contentBounds(bounds);
-    const x = bounds.x + (content.x + content.width / 2) * bounds.scale;
-    // PopResults is inset 16 CSS pixels from the playfield. Stay farther inside
-    // when the reward summary leaves no fully visible Replay or Hear control.
-    const interiorTop = bounds.y + content.top * bounds.scale + 32;
-    const bottom = bounds.y + (bounds.height - content.padding) * bounds.scale - 32;
-    const firstResult = current.controls.filter(control => /^(Replay|Hear_)/.test(control.name))
-      .sort((a, b) => a.y - b.y)[0];
-    const preferredTop = firstResult
-      ? bounds.y + (firstResult.y + Math.min(firstResult.height / 2, 10)) * bounds.scale + 10
-      : interiorTop;
-    // A low visible word must not leave a gesture too short to cross the drag threshold.
-    const top = Math.max(interiorTop, Math.min(preferredTop, bottom - 48));
-    expect(bottom - top, 'A result swipe starts and ends inside the scroller with room to drag').toBeGreaterThan(16);
-    return { x, top, bottom };
-  };
-  if (page.context().browser().browserType().name() === 'chromium') {
-    const { x, top, bottom } = await swipeBand(before);
-    await page.mouse.move(x, (top + bottom) / 2);
-    await page.mouse.wheel(0, delta);
-  } else {
-    // Mobile WebKit has no wheel API; dispatch a complete touch gesture to the canvas.
-    // Its mouse API does not produce the touch input consumed by ScrollContainer.
-    const swipes = Math.abs(delta) >= 10000 ? 8 : 1;
-    for (let swipe = 0; swipe < swipes; swipe++) {
-      const current = await state(page);
-      if (delta < 0 ? current.resultsScroll === 0 : resultsAtEnd(current)) break;
-      const { x, top, bottom } = await swipeBand(current);
-      const distance = Math.min(Math.abs(delta), bottom - top);
-      const start = delta < 0 ? top : bottom;
-      const end = Math.max(top, Math.min(bottom, start - Math.sign(delta) * distance));
-      const dispatch = (type, y) => dispatchResultTouch(page, type, x, y);
-      let firstMoveScroll, lastMoveScroll;
-      await dispatch('touchstart', start);
-      try {
-        await rendered(page);
-        for (let step = 1; step <= 8; step++) {
-          await dispatch('touchmove', start + (end - start) * step / 8);
-          await rendered(page);
-          if (step === 1) firstMoveScroll = (await state(page)).resultsScroll;
-          if (step === 8) lastMoveScroll = (await state(page)).resultsScroll;
-        }
-      } finally {
-        await dispatch('touchend', end);
-      }
-      await rendered(page);
-      // Focusing a partly clipped button can nudge the scroll on touch-down.
-      // The remaining moves must keep scrolling; a focus-only nudge is not a swipe.
-      if (delta > 0 && firstMoveScroll < current.resultsScrollMax - 1) {
-        expect(lastMoveScroll, 'Dragging from a result button continues beyond its initial focus adjustment').toBeGreaterThan(firstMoveScroll);
-      } else if (delta < 0 && firstMoveScroll > 0) {
-        expect(lastMoveScroll, 'A downward swipe keeps moving the result list toward its top').toBeLessThan(firstMoveScroll);
-      }
-    }
-  }
-  await rendered(page);
-  if (delta < 0 && before.resultsScroll > 0) {
-    await expect.poll(async () => (await state(page)).resultsScroll).toBeLessThan(before.resultsScroll);
-  } else if (delta > 0 && !resultsAtEnd(before)) {
-    await expect.poll(async () => (await state(page)).resultsScroll).toBeGreaterThan(before.resultsScroll);
-  }
-}
-
-async function expectDirectResultSwipe(page, pattern) {
-  const bounds = await metrics(page), content = contentBounds(bounds);
-  let swipe;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const current = await state(page);
-    const candidates = current.controls.filter(control => pattern.test(control.name) && !control.disabled &&
-      control.y + control.height <= bounds.height - content.padding &&
-      control.y + control.height / 2 > content.top + 16);
-    // The compact result can have only one short screenful of overflow. After
-    // swiping Play again upward, test a word in the opposite direction when
-    // that gives the finger and scroll offset enough room for a real drag.
-    swipe = candidates.flatMap(button => {
-      const center = button.y + button.height / 2;
-      return [
-        { button, direction: 1, distance: Math.min(96, current.resultsScrollMax - current.resultsScroll - 8,
-          center - content.top - 16) },
-        { button, direction: -1, distance: Math.min(96, current.resultsScroll - 8,
-          bounds.height - content.padding - center - 16) }
-      ];
-    }).sort((a, b) => b.distance - a.distance)[0];
-    if (swipe?.distance > 35) break;
-    await scrollResults(page, 130);
-  }
-  expect(swipe, `A fully visible ${pattern} button is available for the swipe`).toBeTruthy();
-  const { button, direction, distance } = swipe;
-  const before = await state(page);
-  expect(distance, 'The gesture has enough room to cross the drag threshold without hitting an edge').toBeGreaterThan(35);
-  const x = bounds.x + (button.x + button.width / 2) * bounds.scale;
-  const y = bounds.y + (button.y + button.height / 2) * bounds.scale;
-  const samples = [];
-  await dispatchResultTouch(page, 'touchstart', x, y);
-  await rendered(page);
-  await dispatchResultTouch(page, 'touchcancel', x, y);
-  await rendered(page);
-  expect((await state(page)).phase, `Browser cancellation cannot activate ${button.name}`).toBe('finished');
-  expect((await state(page)).phase, 'A canceled tap leaves the completed round intact').toBe('finished');
-  expect((await state(page)).resultsScroll, 'A canceled stationary contact does not move the results').toBe(before.resultsScroll);
-  await dispatchResultTouch(page, 'touchstart', x, y);
-  try {
-    await rendered(page);
-    expect(Math.abs((await state(page)).resultsScroll - before.resultsScroll),
-      'Touch-down on a result button does not jump the list to its focus position').toBeLessThanOrEqual(2);
-    for (let step = 1; step <= 6; step++) {
-      const logicalDistance = direction * distance * step / 6;
-      await dispatchResultTouch(page, 'touchmove', x, y - logicalDistance * bounds.scale);
-      if (step > 1) {
-        await expect.poll(async () => Math.abs((await state(page)).resultsScroll - before.resultsScroll - logicalDistance),
-          { message: `Scroll tracks the pointer one-to-one at scale ${bounds.scale}, step ${step}`, intervals: [40, 80] })
-          .toBeLessThanOrEqual(2);
-      } else await rendered(page);
-      samples.push({ step, pointerDistance: logicalDistance, scrollDistance: (await state(page)).resultsScroll - before.resultsScroll });
-    }
-  } finally {
-    await dispatchResultTouch(page, 'touchend', x, y - direction * distance * bounds.scale);
-  }
-  await page.waitForTimeout(180);
-  const after = await state(page);
-  expect(Math.abs(after.resultsScroll - before.resultsScroll - direction * distance),
-    'Releasing a swipe neither doubles the displacement nor adds a focus jump').toBeLessThanOrEqual(2);
-  expect(after.phase, 'Swiping a result button never starts a new game').toBe('finished');
-  expect((await state(page)).phase, 'Swiping Play again cannot restart the round').toBe('finished');
-  return { button: button.name, canceledTap: true, scale: bounds.scale, direction, samples };
-}
-
-async function captureResultSwipe(page, info, browserName, viewport) {
-  const name = `result-swipe-${viewport.width}x${viewport.height}`;
-  await rendered(page);
-  const png = await page.screenshot({ path: info.outputPath(`${name}.png`), scale: 'css' });
-  const raw = await page.locator('#canvas').evaluate(canvas => new Promise(resolve =>
-    requestAnimationFrame(() => resolve(canvas.toDataURL('image/png').split(',')[1]))));
-  const canvasPng = Buffer.from(raw, 'base64');
-  fs.writeFileSync(info.outputPath(`${name}-canvas.png`), canvasPng);
-  const pageColors = await visibleColorCount(page, png), canvasColors = await visibleColorCount(page, canvasPng);
-  await info.attach(`${name}-rendering`, { body: JSON.stringify({ pageColors, canvasColors }), contentType: 'application/json' });
-  expect(canvasColors, `${name}: the results must remain drawn after resizing and swiping.`).toBeGreaterThan(20);
-  if (pageColors === 1 && process.platform === 'win32' && browserName === 'webkit') {
-    info.annotations.push({ type: 'rendering-limitation',
-      description: `${name}: existing Windows WebKit presentation/capture limitation after resize; the page PNG is blank while the raw canvas renders. Both retained.` });
-  } else {
-    expect(pageColors, `${name}: the page must show the results.`).toBeGreaterThan(20);
-  }
-}
-
-async function resultAction(page, pattern) {
-  await scrollResults(page, -10000);
-  await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
-  for (let attempt = 0; attempt < 8; attempt++) {
-    if ((await state(page)).controls.some(control => !control.disabled && pattern.test(control.name + ' ' + control.text))) {
-      return action(page, pattern);
-    }
-    await scrollResults(page, 180);
-  }
-  throw new Error(`No reachable result action matching ${pattern}`);
-}
 
 async function expectGestureStart(page, browserName) {
   if (browserName === 'chromium') {
@@ -1419,7 +1209,7 @@ bundledAudioTest('three words in one utterance keep all slice tails and backgrou
   await info.attach('triple-slice-audio.json', { body: JSON.stringify({ triple, stopped }), contentType: 'application/json' });
 });
 
-bundledAudioTest('Voice Pop keeps Pip silent through hits, misses and word review while preserving game sounds', async ({ page, browserName }, info) => {
+bundledAudioTest('Voice Pop keeps Pip silent through hits, misses and settlement while preserving game sounds', async ({ page, browserName }, info) => {
   bundledAudioTest.setTimeout(150000);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
@@ -1448,44 +1238,19 @@ bundledAudioTest('Voice Pop keeps Pip silent through hits, misses and word revie
   else expect(runningSounds).toEqual([]);
   expect(await page.evaluate(() => window.__popSpeech.spoken), 'Pip adds no system speech during gameplay.').toEqual([]);
 
-  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ total: 2, active: false });
-  const beforeReview = await page.evaluate(() => window.audioObservation.playbacks.length);
-  // Capture on the browser clock so a short word's audio survives slow runner round-trips.
-  if (audioAvailable) await page.evaluate(() => {
-    window.__pipReviewOutput = [];
-    window.__pipReviewOutputTimer = setInterval(() => window.__pipReviewOutput.push(...audioOutputObservation.read()), 16);
-  });
-  try {
-    const reviewed = await resultAction(page, /^Hear_/);
-    const recording = catalog.find(word => word.id === reviewed.name.slice(5))?.audio;
-    expect(recording, 'The result still offers the real vocabulary pronunciation.').toBeTruthy();
-    if (audioAvailable) {
-      const voice = await expectRecording(page, beforeReview, recording);
-      expect(voice.playbackRate).toBe(1);
-      await expect.poll(() => page.evaluate(voice => Math.max(0, ...window.__pipReviewOutput
-        .filter(sample => sample.time >= voice.scheduledAt + 0.1 && sample.time < voice.scheduledAt + voice.duration)
-        .map(sample => sample.rms)), voice), {
-        message: 'The vocabulary recording renders audible output after the short interface click has ended.'
-      }).toBeGreaterThan(0.00001);
-    }
-  } finally {
-    if (audioAvailable) await page.evaluate(() => clearInterval(window.__pipReviewOutputTimer));
-  }
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished');
-  expect((await state(page)).hits).toBe(round.hits);
+  await expectSettlement(page, { hits: 2 });
+  const settlementSounds = await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished'));
+  expect(settlementSounds.filter(isPipCall), 'The settlement dialog adds no Pip narration.').toEqual([]);
   expect((await state(page)).score).toBe(round.score);
-  const reviewSounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeReview);
-  expect(reviewSounds.filter(isPipCall), 'Word review never adds a Pip vocal reaction.').toEqual([]);
   await info.attach('pip-silent-full-round-audio.json', {
-    body: JSON.stringify({ audioAvailable, hits: round.hits, score: round.score, fragmentCount, runningSounds, reviewSounds,
-      reviewOutput: audioAvailable ? await page.evaluate(() => window.__pipReviewOutput) : [] }),
+    body: JSON.stringify({ audioAvailable, hits: round.hits, score: round.score, fragmentCount, runningSounds, settlementSounds }),
     contentType: 'application/json'
   });
   expect(errors).toEqual([]);
 });
 
-test('a spoken interim word pops once and finishes with animated HITS and simple word results', async ({ page, browserName }, info) => {
-  // Includes a real 50-second round plus earned time, result animation and word replay.
+test('a spoken interim word pops once and settles over its frozen board', async ({ page, browserName }, info) => {
+  // Includes a real 50-second round plus earned time, settlement and explicit microphone replay.
   // Keep each response deadline strict while allowing the complete workflow.
   test.setTimeout(150000);
   await observeAudio(page, { fingerprintBuffers: true, phaseSelector: '#pop-status' });
@@ -1494,7 +1259,6 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   if (browserName === 'chromium') expect(audioAvailable, 'Chromium must exercise real recorded audio').toBe(true);
   await info.attach('native-audio-capability.json', { body: JSON.stringify({ audioAvailable }), contentType: 'application/json' });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
-  await observeResultHits(page);
   const start = Date.now();
   await page.waitForTimeout(1700);
   await page.screenshot({ path: info.outputPath('flying-words.png') });
@@ -1555,178 +1319,90 @@ test('a spoken interim word pops once and finishes with animated HITS and simple
   expect(round.score, 'The result summary retains exactly the points earned by the two accepted hits').toBe(after.score);
   expect(round.score).toBeGreaterThan(0);
   expect(round.score).toBeLessThan(100);
-  expectSimpleResults(round, await metrics(page));
-  expect(round.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
-  await page.screenshot({ path: info.outputPath('results-hit-animation.png') });
-  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ text: '2', total: 2, active: false });
-  const frames = await page.evaluate(() => window.__resultHitFrames);
-  expect(frames[0]).toMatchObject({ text: '0', total: 2, active: true });
-  expect(frames.some(frame => frame.text === '1' && frame.active), 'The total counts through an intermediate value').toBe(true);
-  expect(frames.some(frame => frame.text === '2' && frame.active), 'The final total retains its brief celebration').toBe(true);
-  expect(frames.at(-1)).toMatchObject({ text: '2', total: 2, active: false });
-  expect(frames.at(-1).at - frames[0].at, 'The result count and celebration last about 1.25 seconds').toBeGreaterThanOrEqual(1000);
-  expect(frames.at(-1).at - frames[0].at).toBeLessThan(2500);
+  await expectSettlement(page, { hits: 2 });
+  await page.screenshot({ path: info.outputPath('pop-settlement.png') });
   expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
     audioAvailable);
-  await page.screenshot({ path: info.outputPath('simple-hit-results.png') });
-  await info.attach('result-hit-animation.json', { body: JSON.stringify(frames), contentType: 'application/json' });
-  const reviewed = new Map();
-  for (let attempt = 0; attempt < 10; attempt++) {
-    const current = await state(page);
-    expectSimpleResults(current);
-    for (const control of current.controls.filter(control => control.name.startsWith('Hear_'))) reviewed.set(control.name, control.text);
-    if (resultsAtEnd(current)) break;
-    await scrollResults(page, 200);
-  }
-  expect([...reviewed.values()], 'Both successful words remain in the review list').toEqual(expect.arrayContaining([word, secondWord]));
-  expect(reviewed.size, 'Missed words remain available below the successful words').toBeGreaterThan(2);
-  if ((await state(page)).resultsScrollMax > 0) {
-    expect((await state(page)).resultsScroll).toBeGreaterThan(0);
-    await page.screenshot({ path: info.outputPath('results-scroll-without-bar.png') });
-  }
-  const beforeWord = await page.evaluate(() => window.audioObservation.playbacks.length);
-  const wordControl = await resultAction(page, /^Hear_/);
-  if (audioAvailable) {
-    const recording = catalog.find(item => item.id === wordControl.name.slice(5)).audio;
-    await expectRecording(page, beforeWord, recording);
-  }
-  expectSimpleResults(await state(page));
-  expect((await state(page)).hits).toBe(round.hits);
-  expect((await state(page)).score).toBe(round.score);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(1);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished');
-  await resultAction(page, /^Replay /);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  await replaySettlement(page);
   expect(await page.evaluate(() => window.__popSpeech.starts)).toBe(2);
   await expectGestureStart(page, browserName);
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false });
-  expect((await state(page)).resultsHits.player).toBeUndefined();
-  expect((await state(page)).resultsRewards, 'A new round clears the previous reward summary').toEqual({});
+  expect((await roomState(page)).game_over.visible).toBe(false);
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-bundledAudioTest('zero-hit Voice Pop results keep word pronunciation available offline without narration', async ({ page, browserName }, info) => {
+bundledAudioTest('zero-hit Voice Pop settles offline without narration or a standalone results page', async ({ page, browserName }, info) => {
   bundledAudioTest.setTimeout(120000);
   const audioRequests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true, phaseSelector: '#pop-status' });
   const errors = await open(page);
   const available = await page.evaluate(() => window.audioObservation.available);
-  if (browserName === 'chromium') expect(available, 'Chromium must exercise real bundled word playback').toBe(true);
-  await observeResultHits(page);
-  // Keep recognition online so the real round clock can finish naturally.
-  expect(await page.evaluate(() => navigator.onLine)).toBe(true);
-  expect(audioRequests, 'No separate audio files are fetched during startup').toEqual([]);
+  if (browserName === 'chromium') expect(available, 'Chromium must exercise real audio output').toBe(true);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
-  await expect.poll(async () => (await state(page)).resultsHits).toMatchObject({ text: '0', total: 0, active: false });
   const zero = await state(page);
   expect(zero.hits).toBe(0);
   expect(zero.score).toBe(0);
-  expectSimpleResults(zero, await metrics(page));
-  expect(zero.resultsRewards, 'Zero-hit results retain an empty four-fragment chest goal')
-    .toMatchObject({ earned: 0, chest_tier: 0, fragment_count: 0, detail: '0 / 4 chest fragments' });
-  expect(zero.controls.find(control => control.name === 'Replay')?.text).toBe('Play again');
-  expect(await page.evaluate(() => window.__resultHitFrames.every(frame => frame.text === '0' && frame.total === 0))).toBe(true);
-  expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')),
-    available);
-  await page.screenshot({ path: info.outputPath('zero-hit-results.png') });
+  const room = await expectSettlement(page, { hits: 0, chest_count: 0 });
+  expect(room.chests).toEqual([]);
+  expect(room.progress_text).toContain('No chest this round');
+  expectResultSaveCue(await page.evaluate(() => window.audioObservation.playbacks.filter(sound => sound.phase === 'finished')));
   await page.context().setOffline(true);
   expect(await page.evaluate(() => navigator.onLine)).toBe(false);
-  const beforeReplay = await page.evaluate(() => window.audioObservation.playbacks.length);
-  const wordControl = await resultAction(page, /^Hear_/);
-  const recording = catalog.find(item => item.id === wordControl.name.slice(5)).audio;
-  let replay, output;
-  if (available) {
-    replay = await expectRecording(page, beforeReplay, recording, { active: true });
-    expect(replay.loop).toBe(false);
-    expect(replay.playbackRate).toBe(1);
-    output = await expectOutputEnergy(page);
-  }
-  expectSimpleResults(await state(page));
-  const reviewedResult = (await state(page)).resultsHits;
-  expect(reviewedResult).toMatchObject({ text: '0', total: 0, active: false });
-  expect(audioRequests, 'A review word plays from the game pack while offline').toEqual([]);
-  await page.screenshot({ path: info.outputPath('offline-word-review.png') });
+  await expectSettlement(page, { hits: 0 });
+  await page.screenshot({ path: info.outputPath('zero-hit-settlement-offline.png') });
+  await settlementAction(page, 'Home');
   await chooseMode(page, 'match');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'idle');
-  if (replay) {
-    await expect.poll(() => page.evaluate(at => {
-      const sound = window.audioObservation.playbacks.find(playback => playback.at === at);
-      return sound.stoppedAt !== undefined || sound.endedAt !== undefined;
-    }, replay.at), { message: 'Leaving Voice Pop leaves no live review word source' }).toBe(true);
-  }
   expect(await page.evaluate(() => window.__popSpeech.spoken)).toEqual([]);
-  await info.attach('bundled-word-offline-audio.json', {
-    body: JSON.stringify({ audioAvailable: available, replayOffline: true, recording, replay, output, audioRequests }), contentType: 'application/json'
-  });
-  expect(audioRequests).toEqual([]);
+  expect(audioRequests, 'Settlement uses only bundled assets offline').toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test('Voice Pop result swipes follow the pointer at each display scale without activating buttons', async ({ page, browserName }, info) => {
-  test.setTimeout(150000);
+test('Voice Pop settlement fits desktop and phone layouts and blocks the frozen board', async ({ page, isMobile }, info) => {
+  // Include the real 50-second round and both full-resolution mobile captures.
+  test.setTimeout(180000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await observeAudio(page, { phaseSelector: '#pop-status' });
   const errors = await open(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
-  await page.waitForTimeout(250);
   const starts = await page.evaluate(() => window.__popSpeech.starts);
-  const audioStarts = await page.evaluate(() => window.audioObservation.playbacks.length);
-  const observations = [];
-  const viewports = browserName === 'chromium'
-    ? [{ width: 1366, height: 768 }, { width: 960, height: 600 }]
-    : [{ width: 390, height: 844 }, { width: 844, height: 390 }];
+  const viewports = isMobile
+    ? [{ width: 390, height: 844 }, { width: 844, height: 390 }]
+    : [{ width: 1366, height: 768 }, { width: 960, height: 600 }];
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await rendered(page);
-    await scrollResults(page, -10000);
-    await expect.poll(async () => (await state(page)).resultsScroll).toBe(0);
-    expectSimpleResults(await state(page), await metrics(page));
-    await visibleAction(page, /^Replay /);
-    observations.push(await expectDirectResultSwipe(page, /^Replay$/));
-    observations.push(await expectDirectResultSwipe(page, /^Hear_/));
-    expect(await page.evaluate(() => window.__popSpeech.starts), 'A swipe does not restart the microphone').toBe(starts);
-    expect(await page.evaluate(() => window.audioObservation.playbacks.length),
-      'A swipe on a word button does not pronounce it').toBe(audioStarts);
-    expect((await state(page)).resultsScrollbarVisible).toBe(false);
-    await captureResultSwipe(page, info, browserName, viewport);
+    const room = await expectSettlement(page, { hits: 0 });
+    const before = await state(page);
+    await tap(page, 8, 8);
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Escape');
+    await expectSettlement(page, { hits: 0 });
+    expect((await state(page)).score).toBe(before.score);
+    expect(await page.evaluate(() => window.__popSpeech.starts), 'The covered board cannot restart recognition').toBe(starts);
+    expect(room.scroll_max, 'The compact settlement needs no scrollbar').toBeLessThanOrEqual(1);
+    await page.screenshot({ path: info.outputPath(`pop-settlement-${viewport.width}x${viewport.height}.png`) });
   }
-  await info.attach('result-swipe-displacement.json', { body: JSON.stringify(observations), contentType: 'application/json' });
   expect(errors).toEqual([]);
 });
 
-test('reduced-motion Voice Pop results show the final hit total immediately', async ({ page }, info) => {
+test('reduced-motion Voice Pop settlement shows the final score immediately', async ({ page }, info) => {
+  test.setTimeout(100000);
   await page.setViewportSize({ width: 844, height: 390 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = await open(page);
-  await observeResultHits(page);
-  const word = await popOne(page);
+  await popOne(page);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 55000 });
-  const results = await state(page);
-  expectSimpleResults(results, await metrics(page));
-  expect(results.hits).toBe(1);
-  expect(results.resultsHits).toMatchObject({ text: '1', total: 1, active: false });
-  await page.waitForTimeout(1400);
-  const frames = await page.evaluate(() => window.__resultHitFrames);
-  expect(frames.length).toBeGreaterThan(0);
-  for (const frame of frames) expect(frame).toMatchObject({ text: '1', total: 1, active: false });
-  let reviewedWord;
-  for (let attempt = 0; attempt < 10; attempt++) {
-    const current = await state(page);
-    reviewedWord = current.controls.find(control => control.name === 'Hear_' + word.toLowerCase());
-    if (reviewedWord || resultsAtEnd(current)) break;
-    await scrollResults(page, 180);
-  }
-  expect(reviewedWord?.text, 'Word review remains reachable on the results page in short landscape').toBe(word);
-  await page.screenshot({ path: info.outputPath('reduced-motion-results.png') });
-  await resultAction(page, /^Replay /);
-  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
+  const room = await expectSettlement(page, { hits: 1 });
+  expect(room.game_over.reduced_motion).toBe(true);
+  await page.waitForTimeout(400);
+  expect((await roomState(page)).score_text).toBe(room.score_text);
+  await page.screenshot({ path: info.outputPath('reduced-motion-settlement.png') });
+  await replaySettlement(page);
   expect((await state(page)).hits).toBe(0);
-  expect((await state(page)).resultsHits).toMatchObject({ text: '', total: 0, active: false });
-  expect((await state(page)).resultsHits.player).toBeUndefined();
   expect(errors).toEqual([]);
 });
 

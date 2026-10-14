@@ -101,7 +101,7 @@ func prepare_completion(app) -> void:
 
 func check_no_collectible_presentation(app, message: String) -> void:
 	var medal_script = load("res://scripts/medal_view.gd")
-	var art: Array[Node] = app._stage.find_children("*", "", true, false)
+	var art: Array[Node] = app._single_result.find_children("*", "", true, false)
 	check(not art.any(func(node: Node) -> bool: return node.get_script() == medal_script)
 		and app.find_child("MedalFragment", true, false) == null
 		and app.find_child("RewardFlight", true, false) == null, message)
@@ -917,7 +917,7 @@ func _test_scene() -> void:
 		check(collection_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_SHOW_NEVER
 			and collection_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED,
 			"The catalog scrolls vertically without visible scrollbar chrome")
-	check(app._stage.find_children("*", "ProgressBar", true, false).is_empty(),
+	check(app._single_result.find_children("*", "ProgressBar", true, false).is_empty(),
 		"Chest charging uses shake feedback without a progress bar")
 	if app.has_method("_show_collection"):
 		app.collection_button.grab_focus()
@@ -963,7 +963,8 @@ func _test_scene() -> void:
 	app.on_page_visible()
 	app.set_reduced_motion(false)
 	app._hide_collection()
-	check(app._stage.clip_children == CanvasItem.CLIP_CHILDREN_AND_DRAW, "Chest effects respect the rounded panel mask")
+	check(app._settlement_dialog.mouse_filter == Control.MOUSE_FILTER_STOP,
+		"The settlement overlay intercepts pointer input before it reaches the completed board")
 	check(is_equal_approx(app.feedback_timer.wait_time, 0.7), "Manual and voice feedback advance after 700ms")
 	var dimensions: Array[Vector2i] = [
 		Vector2i(320, 320), Vector2i(375, 667), Vector2i(390, 844),
@@ -1293,9 +1294,9 @@ func _test_scene() -> void:
 	check_no_collectible_presentation(app, "A completed chest has no collectible delivery to delay another adventure")
 	var lesson_before_adventure: Array = app.model.lesson_words.duplicate(true)
 	var saved_before_adventure: Dictionary = app.medal_progress.counts.duplicate()
-	app._new_adventure_button.pressed.emit()
-	check_no_collectible_presentation(app, "New adventure does not carry over collectible artwork")
-	check(app.collection_button.scale == Vector2.ONE, "New adventure preserves the room entry's normal scale")
+	app._single_result.replay_button.pressed.emit()
+	check_no_collectible_presentation(app, "Play again does not carry over collectible artwork")
+	check(app.collection_button.scale == Vector2.ONE, "Play again preserves the room entry's normal scale")
 	check(app._mode_id == "match" and app.model.lesson_words != lesson_before_adventure
 		and app.medal_progress.counts == saved_before_adventure,
 		"The visible result action starts a fresh Match board without duplicating the delivered reward")
@@ -1313,7 +1314,7 @@ func _test_scene() -> void:
 		app.cards[wrong[1]].pressed.emit()
 		app.feedback_timer.timeout.emit()
 	check(app.model.phase == "waiting" and app.model.mistakes == 7 and app.model.cards == retry_cards
-		and app.grid.is_visible_in_tree() and not app._outcome.is_visible_in_tree(),
+		and app.grid.is_visible_in_tree() and not app._single_result.is_visible_in_tree(),
 		"Seven incorrect pairs retain the original active board")
 	check(not has_property(app, "failure_button") and not has_property(app, "failure_image")
 		and not app.has_method("_play_loss_bear"), "Retired Match failure controls and behavior are removed")

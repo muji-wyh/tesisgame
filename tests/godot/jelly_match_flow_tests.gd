@@ -187,14 +187,14 @@ func _run() -> void:
 	earn_fragments(app._jelly, 4)
 	var earned_score: int = game.cleared_pairs
 	game.finish_round()
-	check(not app._round_celebration.is_active() and app._jelly.visible and app._jelly_game_over.is_visible_in_tree(),
+	check(not app._round_celebration.is_active() and app._jelly.visible and app._settlement_dialog.is_visible_in_tree(),
 		"An earned Finish opens settlement over the frozen board without a celebration intermission")
 	check(app._jelly_backdrop.visible, "The settlement modal retains the woodland setting")
 	check(app._jelly_rewards.has_pending() and FileAccess.file_exists(app.jelly_reward_save_path), "Earned treasure is durable before its result action")
 	var receipt: String = app._round_id
 	game.finish_round()
 	check(app._round_id == receipt and app._jelly_rewards.snapshot().chest_count == 1, "Finishing twice preserves one reward batch")
-	check(app._jelly_rewards.is_visible_in_tree() and app._jelly_game_over.is_ancestor_of(app._jelly_rewards),
+	check(app._jelly_rewards.is_visible_in_tree() and app._settlement_dialog.is_ancestor_of(app._jelly_rewards),
 		"The interactive chest belongs to the modal instead of a separate result page")
 	check(app._jelly_rewards.snapshot().result_context.score == earned_score and app._jelly_rewards._heading.text == "Round complete"
 		and app._jelly_rewards._result_score.text == str(earned_score) and app._jelly_rewards.snapshot().result_context.chest_tier == 1,
@@ -220,7 +220,7 @@ func _run() -> void:
 	game.finish_round()
 	check(not app._round_celebration.is_active() and app._jelly.visible, "Zero loot shows a result without a false reward celebration")
 	check(app._round_result.score == 0 and app._jelly_rewards._heading.text == "Round complete"
-		and app._jelly_rewards.snapshot().result_context.fragment_count == 0 and app._jelly_game_over.is_visible_in_tree(),
+		and app._jelly_rewards.snapshot().result_context.fragment_count == 0 and app._settlement_dialog.is_visible_in_tree(),
 		"A new zero-loot round reports its own zero totals without stale score or victory copy")
 	var zero_round_id: String = app._round_id
 	app._jelly_rewards._back.pressed.emit()
@@ -438,8 +438,8 @@ func _upgraded_reward_checks(directory: String) -> void:
 	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.score == cleared
 		and app._round_result.chest_count == 1 and app._round_result.chest_tier == 4,
 		"A natural full-board timeout preserves the single final upgraded chest")
-	check(not celebration.active and app._jelly_game_over.is_visible_in_tree()
-		and app._jelly_game_over.is_ancestor_of(app._jelly_rewards)
+	check(not celebration.active and app._settlement_dialog.is_visible_in_tree()
+		and app._settlement_dialog.is_ancestor_of(app._jelly_rewards)
 		and app._round_result.reason == "danger",
 		"Danger expiry directly opens a Game over settlement with the one final upgraded chest")
 	var saved := RewardState.new(app.jelly_reward_save_path)
@@ -521,7 +521,7 @@ func _reward_conflict_checks(directory: String) -> void:
 			app._jelly.game.finish_round()
 			await settle()
 			check(not app._round_celebration.is_active() and app._round_result.chest_count == 0
-				and room._cards.is_empty() and app._jelly_game_over.is_visible_in_tree() and not room.has_pending(),
+				and room._cards.is_empty() and app._settlement_dialog.is_visible_in_tree() and not room.has_pending(),
 				"A zero-loot follow-up reports its own totals without offering already collected treasure")
 		else:
 			check(app.new_round(93, false, "", next_mode) and app._mode_id == "memory", "Mode exit is safe once the combined reward is durable")

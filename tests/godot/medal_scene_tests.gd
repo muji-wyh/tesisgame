@@ -28,13 +28,13 @@ func win(app) -> void:
 
 func check_no_collectible_presentation(app, phase: String) -> void:
 	var medal_script = load("res://scripts/medal_view.gd")
-	var stage_nodes: Array[Node] = app._stage.find_children("*", "", true, false)
+	var stage_nodes: Array[Node] = app._single_result.find_children("*", "", true, false)
 	check(not stage_nodes.any(func(node: Node) -> bool: return node.get_script() == medal_script)
 		and app.find_child("MedalFragment", true, false) == null
 		and app.find_child("RewardFlight", true, false) == null,
 		phase + " has no collectible art, assembly piece or toolbar flight")
-	check(not (app._title.text + " " + app._caption.text).to_lower().contains("medal")
-		and not (app._title.text + " " + app._caption.text).to_lower().contains("piece")
+	check(not (app._single_result.heading.text + " " + app._single_result.caption.text).to_lower().contains("medal")
+		and not (app._single_result.heading.text + " " + app._single_result.caption.text).to_lower().contains("piece")
 		and not str(app.chest_button.get("accessibility_name")).to_lower().contains("piece"),
 		phase + " does not advertise the retired collectible presentation")
 
@@ -63,7 +63,7 @@ func _run() -> void:
 	app.new_round(6)
 	app.choose_theme("spring")
 	win(app)
-	check(app._caption.text == "Hold to open your chest!", "The unopened chest offers the chest interaction")
+	check(app._single_result.caption.text == "Hold the chest to open", "The unopened chest offers the chest interaction")
 	check_no_collectible_presentation(app, "The unopened chest")
 	app.chest_button.button_down.emit()
 	app._advance_ui(0.1)
@@ -81,8 +81,8 @@ func _run() -> void:
 		"Opening locks the first missing fragment")
 	app.chest.finish_immediately()
 	app.chest_button.button_up.emit()
-	check(app.medal_progress.count_for("spring-1") == 1 and app._title.text == "Chest opened!"
-		and app._caption.text == "Ready for another adventure?",
+	check(app.medal_progress.count_for("spring-1") == 1 and app._single_result.heading.text == "Round complete"
+		and app._single_result.caption.text == "Treasure collected!",
 		"The first saved chest acknowledges success without exposing its internal progress unit")
 	check_no_collectible_presentation(app, "A normal saved opening")
 	var reload = progress_script.new(directory + "/medals.cfg", directory + "/old.cfg")
@@ -91,7 +91,7 @@ func _run() -> void:
 	for frame in range(6):
 		await process_frame
 	check_no_collectible_presentation(app, "Later presentation frames")
-	check(app._new_adventure_button.visible and app.chest_button.disabled,
+	check(app._single_result.replay_button.is_visible_in_tree() and not app._single_result.replay_button.disabled and app.chest_button.disabled,
 		"The saved result moves directly to another adventure without a placement action")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 1, "A repeated opening callback cannot duplicate the piece")
@@ -113,9 +113,9 @@ func _run() -> void:
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.completed_count("spring") == 1, "The third piece completes one medal")
-	check(app.chest.mode == "opened" and app._title.text == "Chest opened!"
-		and not app._title.is_visible_in_tree() and app._new_adventure_button.visible,
-		"Completing saved progress acknowledges the opened chest without adding another result panel")
+	check(app.chest.mode == "opened" and app._single_result.heading.text == "Round complete"
+		and app._single_result.heading.is_visible_in_tree() and not app._single_result.replay_button.disabled,
+		"Completing saved progress acknowledges the opened chest in the same settlement dialog")
 	check_no_collectible_presentation(app, "A toy unlock")
 	app._on_chest_opened()
 	check(app.medal_progress.count_for("spring-1") == 3, "A repeated completion cannot add progress")
@@ -131,7 +131,7 @@ func _run() -> void:
 	check(app.model.reward_id == "spring-2" and app.medal_progress.count_for("spring-2") == 1,
 		"The next win starts the next medal rather than a duplicate")
 	check(not app.chest.hold_effect_snapshot().animated
-		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash) and app._title.text == "Chest opened!",
+		and is_zero_approx(app.chest.hold_effect_snapshot().release_flash) and app._single_result.heading.text == "Round complete",
 		"Reduced motion immediately acknowledges the saved chest")
 	check_no_collectible_presentation(app, "Reduced-motion completion")
 	app.new_round(10)
@@ -147,14 +147,15 @@ func _run() -> void:
 	DirAccess.make_dir_absolute(blocked_path)
 	app.medal_progress = failing_progress
 	app._open_chest()
-	check(app._save_error and app._result_retry_button.text == "Retry saving"
-		and app._result_retry_button.is_visible_in_tree() and not app._new_adventure_button.is_visible_in_tree()
-		and app._title.text == "Save your progress", "A failed save offers only Retry saving without announcing success")
+	check(app._save_error and app._single_result.retry_button.text == "Retry save"
+		and app._single_result.retry_button.is_visible_in_tree() and app._single_result.replay_button.disabled
+		and app._single_result.heading.text == "Round complete" and app._single_result.caption.text.contains("Could not save"),
+		"A failed save enables Retry save while preventing departure and success feedback")
 	check_no_collectible_presentation(app, "A failed save")
 	var pending: Dictionary = app._pending_fragment.duplicate()
 	var lesson_before_retry: Array = app.model.lesson_words.duplicate(true)
 	check(DirAccess.remove_absolute(blocked_path) == OK, "Repair the blocked save destination without replacing its pending receipt")
-	app._result_retry_button.pressed.emit()
+	app._single_result.retry_button.pressed.emit()
 	check(not app._save_error and app.model.phase == "won"
 		and app.model.lesson_words == lesson_before_retry and app.medal_progress.count_for(pending.medal_id) == pending.after,
 		"Retry saving commits the same captured piece without changing the lesson or result")
@@ -170,7 +171,7 @@ func _run() -> void:
 	win(app)
 	var complete: Dictionary = app.medal_progress.counts.duplicate()
 	app._open_chest()
-	check(app._title.text == "Chest opened!" and app._caption.text == "Ready for another adventure?"
+	check(app._single_result.heading.text == "Round complete" and app._single_result.caption.text == "Treasure collected!"
 		and app.medal_progress.counts == complete,
 		"An exhausted theme acknowledges the chest without inventing more progress")
 	check_no_collectible_presentation(app, "An exhausted theme")

@@ -141,8 +141,8 @@ func finish_result(app, tier: int) -> void:
 		"Finishing keeps only the final synthesized chest tier")
 	check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
 		"Earning a result chest alone does not credit or animate coins")
-	check(app._jelly_rewards_shown and app._jelly_game_over.is_visible_in_tree()
-		and app._jelly_game_over.is_ancestor_of(app._jelly_rewards) and not app._round_celebration.is_active(),
+	check(app._jelly_rewards_shown and app._settlement_dialog.is_visible_in_tree()
+		and app._settlement_dialog.is_ancestor_of(app._jelly_rewards) and not app._round_celebration.is_active(),
 		"Every Finish immediately opens settlement inside the modal without an intermission")
 	check(app._jelly_backdrop.is_visible_in_tree() and app._jelly.is_visible_in_tree(),
 		"Interactive settlement keeps the frozen Jelly board behind its shade")

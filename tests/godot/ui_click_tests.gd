@@ -205,24 +205,24 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	await process_frame
 	await process_frame
 	check(app.model.phase == "won" and app.audio.click_count == count, "Completing a real Match board adds no UI clicks")
-	check(not app._new_adventure_button.visible, "An unopened chest has no New adventure action")
+	check(app._single_result.replay_button.disabled, "An unopened chest has no Play again action")
 	PlayerFixture.finish_celebration(app)
 	count = app.audio.click_count
 	app._open_chest()
 	await process_frame
 	await process_frame
-	check(app.model.chest_state == "opened" and app._new_adventure_button.is_visible_in_tree(),
-		"Opening and saving the chest reveals the result New adventure action")
+	check(app.model.chest_state == "opened" and app._single_result.replay_button.is_visible_in_tree(),
+		"Opening and saving the chest reveals the result Play again action")
 	check(app.audio.click_count == count, "Opening the chest keeps its gameplay sounds without a UI click")
 	await create_timer(0.12).timeout
 	var request: int = app.audio._playback_requests.get(app.audio.ui_click, 0)
 	var completions: Array[bool] = []
 	app.audio.ui_click.finished.connect(func() -> void: completions.append(true), CONNECT_ONE_SHOT)
-	_click(app, app._new_adventure_button, "The result New adventure button")
+	_click(app, app._single_result.replay_button, "The result Play again button")
 	check(app.audio._playback_requests.get(app.audio.ui_click, 0) == request + 1,
-		"New adventure does not cancel its click request while rebuilding the board")
+		"Play again does not cancel its click request while rebuilding the board")
 	await create_timer(0.2).timeout
-	check(completions.size() == 1, "New adventure lets its click reach a natural finish")
+	check(completions.size() == 1, "Play again lets its click reach a natural finish")
 	PlayerFixture.enter_mode(app, "pop")
 	app._pop.set_process(false)
 	app._on_voice_state([false, false, "Microphone is unavailable."])

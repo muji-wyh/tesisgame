@@ -38,10 +38,11 @@ confetti over the current screen. Recognition, target motion and the round timer
 continue throughout unlocks and upgrades. Menus, backgrounding and actual
 microphone interruptions freeze the effects with gameplay; reduced motion keeps
 the updated chest without confetti. Leaving or completing the round clears
-pending milestone effects before the existing results flow.
-The result shows the actual score, fragment count and final chest level, with an
-Open chest action only when treasure exists. A round below four fragments does
-not create a chest or show a chest celebration.
+pending milestone effects before settlement. The finished board remains behind
+the shared modal, which shows the actual score, popped-word count and final chest.
+Hold the chest artwork to open it inside the modal. A round below four fragments
+shows its result without creating a chest. Voice Pop no longer has a standalone
+results page, word-review controls or an intervening completion celebration.
 
 The integrated marker and chest artwork comes from the existing licensed chest
 catalog below. Effects and audio reuse [Jelly's fragment asset record](assets/jelly-fragments.md).
@@ -50,8 +51,9 @@ No new source artwork is acquired for this change.
 The batch and opened flags are saved on this device under
 `wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Older
 saves with up to three tierless chests remain readable. Play again starts a fresh
-round while retaining unopened treasure; the result action also exposes pending
-chests from earlier rounds. Returning to the mode resumes saved treasure.
+round while retaining unopened treasure and waiting for a new microphone gesture.
+The modal also exposes pending chests from earlier rounds. Returning to the mode
+resumes saved treasure before the next microphone session.
 Storage failures retain the earned final level and offer Retry save. Round
 receipts prevent duplicate batches. Pop surprises do not modify medal progress.
 

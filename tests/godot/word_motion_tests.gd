@@ -423,10 +423,6 @@ func _check_pop() -> void:
 			WordArt.advance(0.1)
 			check(frozen != null and frozen.region == frame and frozen.atlas == original.atlas,
 				"A sliced target preserves its exact pose without duplicating the decoded atlas")
-			view._add_review("Try these words", [word], Color.CORAL)
-			var row: Button = view._review_buttons.back()
-			var art: TextureRect = row.find_children("*", "TextureRect", true, false)[0]
-			check(art.texture == original, "The result review reuses the same animated vocabulary picture")
 	view._cache_texture(_word("apple"))
 	WordArt.advance(0.1)
 	check(not view.is_word_art_visible("apple") and not WordArt.cache_snapshot().resident_ids.has("apple"),

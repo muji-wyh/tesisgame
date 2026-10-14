@@ -56,7 +56,7 @@ async function medalRecord(page) {
 
 async function waitFeedback(page, correct, final = false) {
   await expect(page.locator('#game-status')).toContainText(correct ? 'A new flower!' : 'Try another pair.');
-  await expect(page.locator('#game-status')).toContainText(final ? 'You did it!' : READY, { timeout: 2500 });
+  await expect(page.locator('#game-status')).toContainText(final ? /You did it!|Round complete/ : READY, { timeout: 2500 });
   await expect(page.locator('#selection-status')).toBeEmpty();
   if (final) await acceptCelebration(page);
 }
@@ -390,14 +390,14 @@ test('Memory accepts the next card and held eye directly from automatic feedback
     await cardTap(page, pair[1]);
     await waitFeedback(page, true, index === remaining.length - 1);
   }
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
   expect(await medalRecord(page)).toBe(saved);
   await screenshot(page, testInfo, 'memory-no-footer-victory');
-  expect(await metrics(page)).toEqual({ x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, scale: bounds.scale });
+  expect(await metrics(page)).toMatchObject({ x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, scale: bounds.scale });
   expect(errors).toEqual([]);
 });
 
-test('five Memory pairs earn one saved piece and New adventure refreshes the lesson', async ({ page }, testInfo) => {
+test('five Memory pairs earn one saved piece and Play again refreshes Memory', async ({ page }, testInfo) => {
   test.setTimeout(120000);
   const errors = await openGame(page);
   await chooseTheme(page, 0);
@@ -415,12 +415,12 @@ test('five Memory pairs earn one saved piece and New adventure refreshes the les
   await screenshot(page, testInfo, 'memory-chest-closed');
   const beforeNext = resultPoint(await metrics(page), 'newAdventure');
   await tap(page, beforeNext.x, beforeNext.y);
-  await expect(page.locator('#game-status')).toHaveText('You did it! Hold to open your chest!');
-  expect(await medalRecord(page), 'A hidden next-adventure action cannot claim or leave the chest.').toBe(before);
+  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+  expect(await medalRecord(page), 'Disabled Play again cannot claim or leave the chest.').toBe(before);
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
-  try { await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 }); }
+  try { await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 }); }
   finally { await page.mouse.up(); }
   await expect(page.locator('#game-status')).not.toContainText(/A new piece!|Medal complete!|Piece \d of 3|Tap to place!/);
   const claimed = await medalRecord(page);
@@ -432,9 +432,9 @@ test('five Memory pairs earn one saved piece and New adventure refreshes the les
   await screenshot(page, testInfo, 'memory-saved-piece');
   const next = resultPoint(await metrics(page), 'newAdventure');
   await tap(page, next.x, next.y);
-  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  await chooseMode(page, 'memory');
   await expect(page.locator('#game-status')).toContainText(READY);
+  expect((await metrics(page)).library.current).toBe('memory');
+  expect((await metrics(page)).growth.settlement.visible).toBe(false);
   const refreshed = await discoverBoard(page);
   expect(refreshed.filter(card => card.kind === 'Word').map(card => card.word).sort()).not.toEqual([...words].sort());
   expect(await medalRecord(page)).toBe(claimed);

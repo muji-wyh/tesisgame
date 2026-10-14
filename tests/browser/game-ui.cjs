@@ -35,8 +35,24 @@ function modeRect(bounds, name) {
 }
 
 async function openModeMenu(page) {
-  if (!(await metrics(page)).library?.visible) {
-    const home = headerPoint(await metrics(page), 'mode');
+  const bounds = await metrics(page);
+  if (!bounds.library?.visible) {
+    let home = headerPoint(bounds, 'mode');
+    if (bounds.growth?.settlement?.visible) {
+      if (bounds.growth.result?.visible) home = resultPoint(bounds, 'home');
+      else {
+        const celebration = await celebrationState(page);
+        let action = celebration.active ? celebration.home : null;
+        if (!action) {
+          const selector = bounds.library?.current === 'pop' ? '#pop-reward-status' : '#jelly-reward-status';
+          action = await page.locator(selector).evaluate(element =>
+            JSON.parse(element.dataset.snapshot || '{}').actions?.find(item => item.text === 'Home'));
+        }
+        expect(action?.visible && !action.disabled, 'The settlement exposes its own available Home action.').toBe(true);
+        const [x, y, width, height] = action.rect;
+        home = { x: x + width / 2, y: y + height / 2 };
+      }
+    }
     await tap(page, home.x, home.y);
   }
   await expect.poll(async () => (await metrics(page)).library?.visible).toBe(true);
@@ -251,6 +267,8 @@ function pipHeaderRect(bounds) {
 
 async function openRewards(page) {
   if (!(await growthView(page)).visible) {
+    const bounds = await metrics(page);
+    if (bounds.growth?.settlement?.visible) await openModeMenu(page);
     if ((await metrics(page)).library?.visible) await activateLibraryControl(page, 'HomeCollection');
     else await activateGrowthControl(page, 'GrowthProgressButton');
   }
@@ -445,7 +463,7 @@ async function acceptCelebration(page) {
   const [x, y, width, height] = action.rect;
   await tap(page, x + width / 2, y + height / 2);
   await expect.poll(async () => (await celebrationState(page)).active).toBe(false);
-  await expect(page.locator('#game-status')).toContainText('Hold to open your chest');
+  await expect(page.locator('#game-status')).toContainText('Hold the chest to open');
 }
 
 async function memoryMetrics(page) {
@@ -500,18 +518,13 @@ async function withMemoryPeek(page, held) {
 }
 
 function resultPoint(bounds, key) {
-  if (!['chest', 'newAdventure', 'retry'].includes(key)) throw new Error(`Unknown result action: ${key}`);
+  const names = { chest: 'OpenSettlementChest', newAdventure: 'SettlementReplay', retry: 'RetrySettlementSave', home: 'SettlementHome' };
+  if (!names[key]) throw new Error(`Unknown result action: ${key}`);
   const result = bounds.growth?.result;
-  const content = result?.visible
-    ? { x: result.rect[0], top: result.rect[1], width: result.rect[2], height: result.rect[3] }
-    : contentBounds({ ...bounds, growth: { ...bounds.growth, board: null } });
-  const scale = uiScale(bounds), height = content.height;
-  if (key === 'chest') return { x: content.x + content.width / 2, y: content.top + height / 2 };
-  const inset = Math.min(16 / scale, content.width / 4, height / 4);
-  const actionWidth = Math.min((key === 'retry' ? 176 : 240) / scale, content.width - inset * 2);
-  const actionHeight = Math.min((key === 'retry' ? 48 : 56) / scale, height - inset * 2);
-  return { x: content.x + content.width - inset - actionWidth / 2,
-    y: content.top + height - inset - actionHeight / 2 };
+  const control = result?.controls?.find(item => item.name === names[key]);
+  if (!control?.rect) throw new Error(`Settlement control has no measured bounds: ${names[key]}`);
+  const [x, y, width, height] = control.rect;
+  return { x: x + width / 2, y: y + height / 2 };
 }
 
 module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, libraryControl, activateLibraryControl, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,

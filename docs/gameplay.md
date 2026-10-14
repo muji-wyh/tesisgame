@@ -107,22 +107,31 @@ questions; after three correct phrases the shared completion celebration begins.
 ## Voice Pop
 
 Start the microphone, then say a live target word to pop it. There is no player
-picker. Speech matching, live captions, the round timer, combo time bonuses and
-the result's word review remain available. The result page preserves the score,
-chest progress, popped and missed words, replay buttons and existing chest action.
+picker. Speech matching, live captions, the round timer and combo time bonuses
+remain available. At the deadline, the board freezes behind the shared settlement
+modal, which shows the score, popped-word count and final earned chest. The
+standalone results page and its word-review controls have been removed.
 
 A successfully spoken live target credits its word once, even when recognition
 delivers repeated interim and final callbacks. An explicit final wrong answer
 bound to a live target resets that word. Silence, expiry, unbound speech and
-recognition errors do not reset mastery. Speech input stops before celebration
-audio starts. See [speech matching](voice-matching.md) for targeting details.
+recognition errors do not reset mastery. Speech input stops before settlement
+opens. See [speech matching](voice-matching.md) for targeting details.
 
 Voice Pop gives each target a 35% chance of a chest marker. A marked hit earns
 one fragment; four unlock a chest and each additional five upgrade it. The
-round saves its final chest tier and celebrates before showing the results.
-A zero-chest round goes directly to results. Earlier saved multi-chest batches
-remain claimable. Progression and durable claims are described in
+round saves its final chest tier before opening settlement, including zero-chest
+rounds. Hold the chest to open it in the modal; Home and Play again preserve any
+unopened treasure. Play again waits for a new microphone gesture. Earlier saved
+multi-chest batches remain claimable. Progression and durable claims are described in
 [Voice Pop treasure](voice-pop-treasure.md).
+
+## Shared settlement
+
+Every game mode settles in a responsive modal over its completed board. Match,
+Memory and Phrase Builder retain their completion celebration inside that modal,
+then offer their existing chest and replay actions. Voice Pop and both Jelly modes
+show their result immediately. No mode opens a standalone settlement page.
 
 ## Shared Jelly controls and settlement
 
@@ -220,22 +229,31 @@ use the approved Ava profile. Extra character speech is not gameplay guidance.
 Source artwork, animation composition and audio provenance are recorded in
 [Pip growth assets](assets/pip-growth.md).
 
-Match, Memory and Phrase Builder finish with Pip's three-second celebration and
-a closed chest reveal. **Open chest** appears only after the performance and
-final pronunciation finish. Clicking it enters the existing hold-to-open page.
-The completed chest shows **New adventure** as a lower-right floating action.
-Repeated input cannot duplicate rewards. Opening a menu or hiding the page
-interrupts safely; an unfinished celebration can replay, while a completed
-invitation does not repeat the full performance.
+Every mode completes in the shared settlement dialog over its finished game;
+there is no separate results page. Match, Memory and Phrase Builder show Pip's
+three-second celebration inside the dialog. If a chest was earned, **Open chest**
+appears only after the performance and final pronunciation finish, then reveals
+the hold-to-open chest in the same dialog.
+
+**Home** and **Play again** occupy the dialog footer. Play again starts a fresh
+round of the same mode. Match, Memory and Phrase Builder require an earned chest
+to open and save before replay; save failures expose **Retry save** and block
+navigation until the reward is safe. Home preserves the completed round, so
+returning to its mode restores the dialog. The finished game remains visible
+with input blocked, and clicking the shade or pressing Escape does not dismiss
+settlement. Repeated input cannot duplicate rewards. Hiding the page interrupts
+safely; an unfinished celebration can replay, while a completed invitation does
+not repeat the full performance.
 
 ## Controls, accessibility and saves
 
 Touch and mouse input share the same controls. Arrow keys and controller
 D-pad/left stick move focus; Enter, Space or controller A activate it. Home
 opens the game library; tapping Pip plays an age-appropriate motion.
-Escape/controller Back closes an
-overlay and returns to the current round. Menu access and exit remain available
-during celebrations, but underlying answer, result and chest actions are gated.
+Escape/controller Back closes ordinary overlays and returns to the current
+round; settlement uses its own Home and Play again actions. Home remains
+available during celebrations, but underlying answer and chest actions are
+gated.
 
 Home contains the word library and sound control. Motion follows the device's
 system setting automatically. Reduced motion keeps static artwork and clear

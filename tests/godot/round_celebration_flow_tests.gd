@@ -511,67 +511,51 @@ func check_pop_result(app, fragments: int) -> void:
 	var saved_result: Dictionary = app._round_result.duplicate(true)
 	check(app._pop.game.phase == "finished" and int(saved_result.chest_count) == chest_count
 		and int(saved_result.chest_tier) == chest_tier and int(saved_result.fragment_count) == fragments,
-		"Pop retains its actual fragments and one final chest tier before celebration")
+		"Pop retains its actual fragments and final chest tier before settlement")
+	check(not app._round_celebration.is_active() and app._settlement_dialog.is_visible_in_tree()
+		and app._pop_rewards_shown and app._pop.is_visible_in_tree() and app._pop.snapshot().board_frozen,
+		"Pop settles directly in a dialog above its frozen board")
+	var room = app._pop_rewards
+	check(room.snapshot().result_context == saved_result and room.snapshot().score_text == str(summary.score),
+		"The shared dialog displays the original Pop score and earned chest")
 	if chest_count == 0:
-		check(not app._round_celebration.snapshot().active and not app._reward_confetti.is_active()
-			and app._pop.is_visible_in_tree(),
-			"A zero-chest Pop result skips celebration and immediately presents the complete result")
+		check(room._cards.is_empty() and room._home.is_visible_in_tree() and room._back.is_visible_in_tree(),
+			"A zero-chest result has usable Home and Play again actions without an empty chest screen")
 		return
-	var view = app._round_celebration
-	check(view.snapshot().active and view.snapshot().automatic and view.snapshot().chest_count == 1
-		and view.snapshot().chest_tier == chest_tier
-		and not app._pop.is_visible_in_tree() and app._pop_rewards.has_pending(),
-		"The Pop performance presents one final tier-%d chest over the saved result" % chest_tier)
-	var identity: String = view.snapshot().round_id
+	check(room.has_pending() and room._cards.size() == 1 and int(room._cards[0].tier) == chest_tier,
+		"The dialog presents the durably saved final-tier chest")
+	var identity: String = app._round_id
 	var earned_paper: Array = app._reward_confetti.snapshot().keys.duplicate()
 	if chest_tier == 1:
 		app.refuse_microphone_stop = true
-		check(not app.new_round(995, false, "", "match") and view.is_active() and view.is_visible_in_tree()
-			and view.current_round_id() == identity and app._mode_id == "pop" and app._pop.game.summary() == summary,
-			"A refused microphone shutdown cancels the mode change without discarding its existing celebration")
+		check(not app.new_round(995, false, "", "match") and app._settlement_dialog.is_visible_in_tree()
+			and app._round_id == identity and app._mode_id == "pop" and app._pop.game.summary() == summary,
+			"A refused microphone shutdown preserves the existing result and settlement dialog")
 		app.refuse_microphone_stop = false
-		var earned_theme: String = app._pop_rewards._draft_themes[0]
+		var earned_theme: String = room._draft_themes[0]
 		var saved_batch: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
-		view.advance(0.7)
 		await cover(app, "growth", true)
 		app.choose_theme("ocean" if earned_theme != "ocean" else "spring")
 		await cover(app, "growth", false)
-		view.set_process(false)
-		check(app.model.theme_id != earned_theme and view.chest.theme_id == earned_theme
-			and app._pop_rewards._draft_themes[0] == earned_theme,
-			"Changing the selected world keeps Pop's preview aligned with its already earned first chest")
+		check(app.model.theme_id != earned_theme and room._cards[0].art.theme_id == earned_theme
+			and room._draft_themes[0] == earned_theme,
+			"Changing the selected world preserves the already earned chest artwork")
 		check(FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_batch,
 			"Changing the presentation world never rewrites the fixed Pop reward batch")
-	app._pop.chests_button.pressed.emit()
-	app._pop.replay_button.pressed.emit()
 	app._pop_finished(summary)
-	check(not app._pop_rewards_shown and view.snapshot().round_id == identity and view.snapshot().elapsed < 0.3,
-		"Covered Pop actions and duplicate completion cannot open rewards or replace the performance")
-	view.advance(1.9)
-	check_fullscreen_confetti(app, "Pop final tier-%d chest" % chest_tier)
+	app._round_celebration.performance_finished.emit(identity)
+	app._round_celebration.open_requested.emit(identity)
+	check(app._pop.is_visible_in_tree() and app._pop_rewards_shown and app._round_result == saved_result
+		and app._pop.game.summary() == summary and not app._round_celebration.is_active(),
+		"Duplicate completion and retired finale callbacks cannot replace the Pop dialog or its result")
 	check(app._reward_confetti.snapshot().keys == earned_paper,
-		"The final Pop presentation cannot replay the chest already announced during gameplay")
-	view.advance(1.2)
-	check(not view.snapshot().active and app._reward_confetti.is_active() and app._pop.is_visible_in_tree() and not app._pop_rewards_shown,
-		"Pop automatically returns to its full result after the shared performance")
-	check_fullscreen_confetti(app, "Pop results paper tail")
-	check(app._pop.game.summary() == summary and app._round_result == saved_result
-		and app._pop._review_buttons.size() == summary.hit_words.size() + summary.missed_words.size(),
-		"Pop preserves score, word review, and its saved round result across the performance")
-	view.performance_finished.emit(identity)
-	view.open_requested.emit(identity)
-	check(app._pop.is_visible_in_tree() and not app._pop_rewards_shown and app._round_result == saved_result,
-		"Late automatic-performance events cannot bypass the original Pop result action")
-	app._pop.chests_button.pressed.emit()
-	check(app._pop_rewards_shown and app._pop_rewards.snapshot().chest_count == 1
-		and app._pop_rewards._cards.size() == 1 and int(app._pop_rewards._cards[0].tier) == chest_tier,
-		"The original Pop result action opens only the saved final-tier chest")
+		"Settlement does not replay the chest burst already announced during gameplay")
 	app.set_reduced_motion(true)
-	check(not app._reward_confetti.is_active(), "Reduced motion immediately clears the remaining Pop paper tail")
-	for entry in app._pop_rewards._cards:
-		app._pop_rewards.begin_hold(entry.button)
-		app._pop_rewards.advance_hold(Feel.HOLD_SECONDS)
-	check(app._pop_rewards.snapshot().opened_count == chest_count and not app._pop_rewards.has_pending(),
-		"The saved Pop batch is opened once before starting the next score fixture")
+	check(not app._reward_confetti.is_active(), "Reduced motion immediately clears any remaining Pop paper tail")
+	for entry in room._cards:
+		room.begin_hold(entry.button)
+		room.advance_hold(Feel.HOLD_SECONDS)
+	check(room.snapshot().opened_count == chest_count and not room.has_pending(),
+		"The saved Pop batch opens once inside settlement")
 	app._hide_pop_rewards()
 	app.set_reduced_motion(false)

@@ -52,7 +52,7 @@ func _run() -> void:
 	app._controller_back()
 	check(app.model.lesson_words == lesson and app.model.selected_id == selected_id, "Back preserves the vocabulary and selected card")
 	check(root.gui_get_focus_owner() == app.collection_button, "Back restores More focus")
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "An invisible result action cannot replace the current lesson")
 	app.choose_theme("space")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
@@ -62,12 +62,12 @@ func _run() -> void:
 	var earned_medals: Dictionary = app.medal_progress.counts.duplicate(true)
 	var earned_coins: int = app.coin_wallet.balance
 	app._refresh()
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app.collection_page.visible,
-		"New adventure starts Match directly")
+		"Play again starts Match directly")
 	check(app.model.lesson_words != lesson and app.model.theme_id == "space", "A new lesson changes the words but preserves the world")
 	lesson = app.model.lesson_words.duplicate(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app.model.lesson_words == lesson, "A repeated result click cannot start another lesson")
 	check((app.model.matched_ids.size() / 2) == 0 and app.model.hints_remaining == 3
 		and app.medal_progress.counts == earned_medals and app.coin_wallet.balance == earned_coins,

@@ -138,8 +138,9 @@ func _fragment_flow_checks(fragments: int) -> void:
 		check(not app._pop_rewards.has_pending() and not FileAccess.file_exists(app.pop_reward_save_path)
 			and not app._round_celebration.is_active() and app._pop.visible,
 			"A partial fragment recipe reaches results without fabricating a chest or celebration")
-		check(app._pop.chests_button.disabled, "Zero-chest results cannot navigate to an empty reward room")
-		app._pop.replay_button.pressed.emit()
+		check(app._settlement_dialog.is_visible_in_tree() and app._pop_rewards._cards.is_empty(),
+			"Zero-chest rounds settle in a compact dialog without an invented chest")
+		app._pop_rewards._back.pressed.emit()
 		check(app._pop.game.phase == "ready" and app._pop.game.fragment_count == 0,
 			"Replay resets a partial recipe and waits for live microphone permission")
 		await _dispose(app)
@@ -149,13 +150,12 @@ func _fragment_flow_checks(fragments: int) -> void:
 	var saved_entries: Array = app._pop_rewards.rewards.entries.duplicate(true)
 	check(saved_entries.size() == 1 and saved_entries[0].tier == tier,
 		"The durable round batch contains its final tier and no intermediate chest")
-	check(app._round_celebration.is_active() and not app._pop.visible,
-		"The shared celebration covers the saved Pop result until its performance ends")
-	Fixture.finish_celebration(app)
-	check(not app._pop_rewards_shown and app._pop.visible, "Statistics remain visible before choosing treasure")
+	check(not app._round_celebration.is_active() and app._pop.visible
+		and app._settlement_dialog.is_visible_in_tree() and app._pop_rewards_shown,
+		"The saved reward appears directly in a dialog over the frozen Pop board")
 	if fragments == 9:
 		var first_id: String = app._pop.game.round_id
-		app._pop.replay_button.pressed.emit()
+		app._pop_rewards._back.pressed.emit()
 		var replayed: bool = app._pop.game.phase == "ready" and app._pop.game.round_id != first_id \
 			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries
 		check(replayed,
@@ -178,16 +178,16 @@ func _fragment_flow_checks(fragments: int) -> void:
 		app._pop_finished(app._round_result.duplicate(true))
 		check(FileAccess.get_file_as_string(app.pop_reward_save_path) == durable,
 			"Repeated completion cannot duplicate the newly saved chest")
-	app._pop.chests_button.pressed.emit()
 	await process_frame
 	await process_frame
 	var room = app._pop_rewards
 	room.set_process(false)
-	check(app._pop_rewards_shown and room.visible and not app._pop.visible, "The result opens the dedicated treasure page")
+	check(app._pop_rewards_shown and room.visible and app._pop.visible
+		and app._settlement_dialog.is_visible_in_tree(), "The result opens treasure inside the shared settlement dialog")
 	check(room.snapshot().chest_count == (2 if fragments == 9 else 1),
 		"The opening page includes only final round rewards and any previously saved treasure")
-	if room._cards.size() != (2 if fragments == 9 else 1):
-		check(false, "The earned treasure room provides every expected chest control")
+	if room._cards.size() != 1:
+		check(false, "The reward dialog presents one earned chest at a time")
 		await _dispose(app)
 		return
 	var first: Button = room._cards[0].button
@@ -211,7 +211,8 @@ func _fragment_flow_checks(fragments: int) -> void:
 	_controller(app, false)
 	check(not room.snapshot().paused, "Returning resumes the reward room without a new microphone session")
 	if fragments == 9:
-		room.begin_hold(room._cards[1].button)
+		room.set_page(0)
+		room.begin_hold(room._cards[0].button)
 		room.advance_hold(0.4)
 		app._show_collection()
 		check(room.snapshot().paused and not room.snapshot().holding and room.snapshot().opened_count == 1,
@@ -219,11 +220,12 @@ func _fragment_flow_checks(fragments: int) -> void:
 		app._hide_collection()
 		check(not room.snapshot().paused, "Closing the growth catalog restores unopened reward controls")
 		app.set_reduced_motion(true)
-		room.begin_hold(room._cards[1].button)
+		room.set_page(0)
+		room.begin_hold(room._cards[0].button)
 		room.advance_hold(Feel.HOLD_SECONDS)
 	check(room.snapshot().opened_count == room.snapshot().chest_count and not room.has_pending(),
 		"Each final chest opens once without generating its earlier upgrade tiers")
-	app._hide_pop_rewards()
+	app._pop_rewards._back.pressed.emit()
 	app._start_pop_listening()
 	check(app._pop.game.phase == "ready" and not app._pop_rewards_shown,
 		"After opening every chest a fresh round waits for microphone permission")
@@ -264,7 +266,7 @@ func _save_failure_checks() -> void:
 		and storage.text == null, "A failed finish save retains a retryable draft of the earned final chest")
 	Fixture.finish_celebration(app)
 	var round_id: String = app._pop.game.round_id
-	app._pop.replay_button.pressed.emit()
+	app._pop_rewards._back.pressed.emit()
 	check(app._pop_rewards_shown and app._pop.game.phase == "finished" and app._pop.game.round_id == round_id,
 		"Play again cannot discard a final chest that still needs to be saved")
 	Fixture.enter_mode(app, "match")
@@ -275,8 +277,7 @@ func _save_failure_checks() -> void:
 	check(not app._pop_rewards.snapshot().save_failed and storage.writes == 1
 		and app._pop_rewards.rewards.entries.size() == 1 and app._pop_rewards.rewards.entries[0].tier == 1,
 		"Retry saves exactly the draft's final tier once")
-	app._hide_pop_rewards()
-	app._pop.replay_button.pressed.emit()
+	app._pop_rewards._back.pressed.emit()
 	check(app._pop.game.phase == "ready" and not app._pop_rewards_shown and storage.writes == 1,
 		"After durable recovery replay proceeds without duplicating or losing the unopened chest")
 	await _dispose(app)
@@ -293,7 +294,7 @@ func _delayed_replay_checks() -> void:
 	var age: int = app.growth.learning_age()
 	var download := VocabularyDownload.new()
 	app.vocabulary_loader.configure(download, func(_path: String, replace: bool) -> bool: return not replace)
-	app._pop.replay_button.pressed.emit()
+	app._pop_rewards._back.pressed.emit()
 	var waiting: bool = download.requests == [age] and app._vocabulary_prompt.visible \
 		and app._pop.game.round_id == previous_round and app._pop_rewards.rewards.entries == saved_entries
 	check(waiting, "Replay waits for required vocabulary without consuming or replacing unopened treasure")
@@ -365,6 +366,8 @@ func _pending_treasure_reload_checks() -> void:
 			await process_frame
 		_check_restored_pending_room(app, saved_entries, saved_text,
 			"switching back to Pop" if reload_index == 0 else "recreating GameUI from the same saved files")
+		if reload_index == 1:
+			_check_claimed_restored_room_exit(app)
 		app.audio.halt()
 		app.queue_free()
 		await process_frame
@@ -384,3 +387,34 @@ func _check_restored_pending_room(app, saved_entries: Array, saved_text: String,
 		"Restoring pending treasure does not enter the microphone flow after " + context)
 	check(FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
 		"Restoring pending treasure neither rerolls nor rewrites its durable batch after " + context)
+
+
+func _check_claimed_restored_room_exit(app) -> void:
+	var room = app._pop_rewards
+	room.set_reduced_motion(true)
+	room.set_process(false)
+	for card in room._cards:
+		if card.opened:
+			continue
+		room.begin_hold(card.button)
+		room.advance_hold(Feel.HOLD_SECONDS)
+	check(not room.has_pending() and room.snapshot().opened_count == 3,
+		"The restored batch can be fully claimed before starting the next microphone session")
+	var ready_round: String = app._pop.game.round_id
+	var wallet: int = app.coin_wallet.balance
+	var saved: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
+	room._back.pressed.emit()
+	check(not app._pop_rewards_shown and not app._settlement_dialog_open() and not app._mode_menu_open()
+		and app._pop.is_visible_in_tree() and app._pop.game.phase == "ready"
+		and app._pop.game.round_id == ready_round and app._pop.retry_button.is_visible_in_tree()
+		and not app._pop.retry_button.disabled,
+		"Back from fully claimed restored treasure exposes the existing ready microphone gate")
+	check(not app._pop_speech_active and not app._pop._listening and not app._pop._enabled,
+		"Leaving restored treasure waits for an explicit microphone gesture")
+	check(app.coin_wallet.balance == wallet and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved,
+		"Returning to the gate cannot credit or rewrite an already opened chest")
+	app._show_mode_menu()
+	app.choose_mode("pop")
+	check(not app._pop_rewards_shown and app._pop.retry_button.is_visible_in_tree()
+		and app._pop.game.round_id == ready_round,
+		"Re-entering the same Pop mode cannot reopen the consumed treasure batch")

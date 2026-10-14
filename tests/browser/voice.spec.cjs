@@ -485,7 +485,7 @@ test('interim speech does not score; final sentences queue distinct real pairs a
   if (audioAvailable) expect(await soundsSince(), 'A duplicate cannot replay any sound.').toHaveLength(1);
   await page.evaluate(words => window.speechFixture.emit(`A ${words[0]}, ${words[0]}, ${words.slice(1).join(', ')}!`),
     pairs.slice(1).map(([word]) => word));
-  await expect(page.locator('#game-status'), 'All four remaining distinct words finish their queued feedback before the round ends.').toContainText('You did it!', { timeout: 15000 });
+  await expect(page.locator('#game-status'), 'All four remaining distinct words finish their queued feedback before the round ends.').toContainText(/You did it!|Round complete/, { timeout: 15000 });
   const hits = (await page.evaluate(() => window.voiceMatchLinks)).filter(event => event.active);
   expect(hits.map(event => event.target.id), 'One final sentence resolves each distinct pair in spoken order.').toEqual(
     pairs.map(([text]) => `${catalog.find(word => word.text === text).id}:word`));

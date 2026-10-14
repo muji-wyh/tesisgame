@@ -152,8 +152,9 @@ func _run() -> void:
 		"The third correct phrase starts a distinct round celebration without claiming a reward early")
 	await _check_round_celebration(app)
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
-		and app.chest_button.is_visible_in_tree() and not view.visible and not app._new_adventure_button.visible,
-		"Choosing Open chest after celebrating enters the existing unopened-chest result screen")
+		and app.chest_button.is_visible_in_tree() and view.is_visible_in_tree() and app._single_result.replay_button.disabled
+		and app._settlement_dialog.is_visible_in_tree(),
+		"Choosing Open chest keeps the finished Phrase board behind its settlement dialog")
 	check(not app.audio.voice.playing, "The chest transition does not play spoken completion instructions")
 	view.finished.emit()
 	view.action_button.pressed.emit()
@@ -357,20 +358,39 @@ func _check_celebration_gate(app, context: String) -> void:
 		context + " still lets the learner replay the phrase after celebrating")
 
 
+func _check_frozen_phrase(view, words: Array[String], phrase: String, context: String) -> void:
+	check(view.snapshot().board_frozen and view.answer_buttons.size() == words.size()
+		and view.snapshot().prompt_text_visible and view.listen_button._caption.text == phrase,
+		context + " retains the completed phrase and its prompt behind the modal")
+	for index in range(view.answer_buttons.size()):
+		var button: Button = view.answer_buttons[index]
+		check(button.is_visible_in_tree() and button.disabled and button.focus_mode == Control.FOCUS_NONE
+			and index < words.size() and button.text == words[index] and button.size.x > 0,
+			context + " retains each final answer tile without accepting input")
+	check(view.navigation_controls().is_empty() and view.default_focus() == null
+		and view._answer_clip.focus_mode == Control.FOCUS_NONE and view.listen_button.disabled
+		and not view.action_button.visible,
+		context + " keeps all interaction and focus inside settlement")
+
+
 func _check_round_celebration(app) -> void:
 	var view = app._phrase
 	var celebration = app._round_celebration
 	celebration.set_process(false)
 	var before: Dictionary = view.game.snapshot()
+	var final_words: Array[String] = []
+	for button: Button in view.answer_buttons:
+		final_words.append(button.text)
 	var pieces_before: int = _pieces(app)
 	var completions: Array[bool] = []
 	var record := func() -> void: completions.append(true)
 	view.finished.connect(record)
 	check(celebration.snapshot().active and not celebration.snapshot().ready and view.completion_pending,
 		"The third phrase hands its completed round to the shared celebration")
-	check(not view.is_visible_in_tree() and not view.action_button.visible
+	check(view.is_visible_in_tree() and app._settlement_dialog.is_visible_in_tree() and not view.action_button.visible
 		and view.navigation_controls().is_empty(),
-		"The pending phrase has no second completion panel or navigable gameplay controls")
+		"The pending phrase stays behind the dialog without duplicate completion controls")
+	_check_frozen_phrase(view, final_words, str(before.text), "During completion celebration")
 	for attempt in range(6):
 		view.action_button.pressed.emit()
 		view.listen_button.pressed.emit()
@@ -402,6 +422,21 @@ func _check_round_celebration(app) -> void:
 	check(view.game.phase == "finished" and app.model.phase == "won" and completions == [true]
 		and not view.completion_pending and not celebration.snapshot().active and _pieces(app) == pieces_before,
 		"Accepting the shared invitation finishes Phrase and enters its unopened chest exactly once")
+	_check_frozen_phrase(view, final_words, str(before.text), "After accepting the chest invitation")
+	check(view.game.current_question().is_empty() and view.game.options.is_empty() and view.game.answer.is_empty(),
+		"The frozen board uses presentation data without restoring a playable model question")
+	var finished_state: Dictionary = view.game.snapshot()
+	for button: Button in view.answer_buttons + view.option_buttons:
+		button.pressed.emit()
+	view.listen_button.pressed.emit()
+	check(view.game.snapshot() == finished_state,
+		"Stale phrase controls cannot change a finished model behind settlement")
+	var original_size: Vector2i = root.size
+	for dimensions in [Vector2i(390, 844), Vector2i(844, 390), original_size]:
+		root.size = dimensions
+		await _settle()
+		app._layout()
+		_check_frozen_phrase(view, final_words, str(before.text), "Resized completed board " + str(dimensions))
 	view.action_button.pressed.emit()
 	view.pip.gameplay_reaction_finished.emit(true)
 	view.pip._process(4.0)
@@ -859,8 +894,8 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	check(app.chest.opening_committed() and _pieces(app) == 0, "Letting go after the lid releases preserves the opening")
 	app.chest._advance_animation(Feel.OPEN_SECONDS)
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and app._chest_reward_announced and not app._save_error
-		and app._new_adventure_button.is_visible_in_tree(),
-		"The finished opening saves one ordinary reward and reveals New adventure")
+		and app._single_result.replay_button.is_visible_in_tree(),
+		"The finished opening saves one ordinary reward and reveals Play again")
 	app._phrase.finished.emit()
 	app.chest.opened.emit()
 	app.chest_button.button_down.emit()
@@ -870,11 +905,12 @@ func _check_chest_and_new_adventure(app, directory: String, progress_script: GDS
 	app.set_process(true)
 	app.chest.set_process(true)
 	app.set_reduced_motion(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	await _settle()
 	check(app._mode_id == "phrase" and app._phrase.is_visible_in_tree() and app._phrase.game.questions.size() == 3
-		and app._phrase.game.phase == "building" and app._phrase.game.completed == 0 and app._phrase.game.mistakes == 0,
-		"Public New adventure starts another fresh three-question Phrase Builder round")
+		and app._phrase.game.phase == "building" and app._phrase.game.completed == 0 and app._phrase.game.mistakes == 0
+		and not app._phrase.snapshot().board_frozen,
+		"Public Play again starts another fresh three-question Phrase Builder round")
 	check(app._phrase.game.questions.all(func(question: Dictionary) -> bool: return int(question.min_age) == app.growth.learning_age()),
 		"The next Phrase Builder round uses exactly the current learning age after browsing a future age")
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().opened_effect.active,

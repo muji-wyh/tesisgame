@@ -53,7 +53,7 @@ test('Match keeps five real pairs in separate groups through rotation and comple
     await tap(page, word.point.x, word.point.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word');
     if (index === 1) {
       await page.setViewportSize(originalViewport);
       await rendered(page);

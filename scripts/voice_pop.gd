@@ -6,10 +6,8 @@ signal hit(word: Dictionary)
 signal launched(uid: int)
 signal missed(count: int)
 signal round_finished(summary: Dictionary)
-signal chests_requested
 signal chest_earned(count: int)
 signal reward_cue_requested(cue: String)
-signal hear_requested(word: Dictionary)
 signal status_changed(snapshot: Dictionary)
 
 const Style = preload("res://scripts/ui_style.gd")
@@ -20,7 +18,6 @@ const SpeechWords = preload("res://scripts/speech_words.gd")
 const PopModel = preload("res://scripts/voice_pop_model.gd")
 const Slice = preload("res://scripts/voice_pop_slice.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
-const ResultRewards = preload("res://scripts/voice_pop_result_rewards.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 const ChestArt = preload("res://scripts/voice_pop_chest_art.gd")
@@ -39,7 +36,6 @@ const CHEST_FX_DURATION: float = 2.2
 const CHEST_COLOR := Color("#ffd570")
 const HIT_COLOR := Color("#9dffe0")
 const BONUS_COLOR := Color("#ffdf73")
-const RESULT_HIT_DURATION: float = 1.25
 const NEON := [CYAN, PINK, VIOLET]
 const CARD_COLORS := [
 	Color("#72dff3"), Color("#ffa1cb"), Color("#ffdc70"),
@@ -48,8 +44,6 @@ const CARD_COLORS := [
 
 var game = PopModel.new()
 var reduced_motion: bool = false
-var replay_button: Button
-var chests_button: Button
 var retry_button: Button
 var time_label: Label
 var hits_label: Label
@@ -140,20 +134,7 @@ var _gate_icon: Label
 var _gate_privacy: Label
 var _gate_actions: HBoxContainer
 var _gate_back: Button
-var _results: ResultScroll
-var _result_body: VBoxContainer
-var _result_hero: Control
-var _result_hits: Label
-var _result_hits_caption: Label
-var _result_hit_fx: Node2D
-var _result_hit_total: int = 0
-var _result_hit_age: float = RESULT_HIT_DURATION
-var _result_idle_time: float = 0.0
-var _result_actions: HBoxContainer
-var _result_rewards: ResultRewards
-var _review_grids: Array[GridContainer] = []
-var _review_buttons: Array[Button] = []
-var _pending_chests: int = 0
+var _frozen_targets: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -198,17 +179,6 @@ func advance_reward_presentation(delta: float) -> void:
 		_displayed_chest_tier = game.chest_tier
 	_update_hud()
 	if not reward_presentation_active():
-		_publish(true)
-
-
-func set_pending_chests(count: int) -> void:
-	_pending_chests = maxi(0, count)
-	if is_instance_valid(chests_button):
-		var total: int = maxi(_pending_chests, game.chest_count)
-		chests_button.text = "Open chests" if total > 1 else "Open chest"
-		chests_button.disabled = total == 0
-		chests_button.set("accessibility_name", "Open your saved treasure." if _pending_chests > 0 else "Collect 4 chest fragments to unlock a chest.")
-		_layout()
 		_publish(true)
 
 
@@ -362,23 +332,10 @@ func _build() -> void:
 	_gate_privacy = _label("Browser speech may process audio remotely. Game stores no voice or transcripts.", 11, SOFT)
 	_gate_privacy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_gate_body.add_child(_gate_privacy)
-	_results = ResultScroll.new()
-	_results.name = "PopResults"
-	_results.interaction_allowed = func() -> bool: return not interaction_allowed.is_valid() or interaction_allowed.call()
-	_results.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_results.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	_results.follow_focus = true
-	add_child(_results)
-	_result_body = VBoxContainer.new()
-	_result_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_results.add_child(_result_body)
-	_results.hide()
-	_results.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _queue_geometry_publish())
 	_gate.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _queue_geometry_publish())
-	for container in [_gate, _gate_body, _results, _result_body]:
+	for container in [_gate, _gate_body]:
 		container.resized.connect(_queue_geometry_publish)
 	_gate.visibility_changed.connect(_queue_geometry_publish)
-	_results.visibility_changed.connect(_queue_geometry_publish)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	_layout()
@@ -409,9 +366,9 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_loot_flights.clear()
 	_last_launch_uid = 0
 	_clear_transcript()
-	_settle_result_feedback()
 	_clear_slices()
 	_draw_targets.clear()
+	_frozen_targets.clear()
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
 	_gate_title.text = "Ready to pop?"
 	_gate_copy.text = _message
@@ -419,7 +376,6 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	retry_button.text = "Start listening"
 	retry_button.disabled = _words.is_empty()
 	_gate.show()
-	_results.hide()
 	_hud.hide()
 	_update_hud()
 	_gate.scroll_vertical = 0
@@ -441,7 +397,7 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		_listening = false
 		_listening_tick_usec = -1
 		if not _stopped:
-			_message = "Round complete. Tap a word to hear it, or play again."
+			_message = "Round complete. Your results are ready."
 		_publish(true)
 		return
 	if listening:
@@ -457,7 +413,6 @@ func set_listening(enabled: bool, listening: bool, message: String) -> void:
 		if not was_running or _listening_tick_usec < 0:
 			_listening_tick_usec = Time.get_ticks_usec()
 		_gate.hide()
-		_results.hide()
 		_hud.show()
 	else:
 		_reward_paused = true
@@ -647,7 +602,6 @@ func pause() -> void:
 	cancel_result_input()
 	_clear_slices()
 	if _finished_sent:
-		_settle_result_feedback()
 		_listening_tick_usec = -1
 		return
 	_sync_game_clock()
@@ -676,7 +630,6 @@ func pause() -> void:
 func stop() -> void:
 	cancel_result_input()
 	_clear_transcript()
-	_settle_result_feedback()
 	_listening = false
 	_listening_tick_usec = -1
 	_enabled = false
@@ -690,6 +643,7 @@ func stop() -> void:
 	_message = ""
 	game.stop()
 	_clear_slices()
+	_frozen_targets.clear()
 	_draw_targets.clear()
 	_target_canvas.queue_redraw()
 	set_process(false)
@@ -703,6 +657,7 @@ func finish_round() -> void:
 	_reward_presentation.clear()
 	_reward_paused = false
 	_loot_flights.clear()
+	_frozen_targets = game.targets.duplicate(true)
 	game.stop()
 	_finish()
 
@@ -717,8 +672,6 @@ func set_reduced_motion(value: bool) -> void:
 		_loot_flights.clear()
 	if value:
 		_clear_slices()
-	if value:
-		_settle_result_feedback()
 	_apply_hud_feedback()
 	_refresh_targets()
 	queue_redraw()
@@ -732,20 +685,10 @@ func controls() -> Array[Control]:
 		if not retry_button.disabled:
 			result.append(retry_button)
 		result.append(_gate_back)
-	elif _results != null and _results.visible:
-		if is_instance_valid(chests_button) and not chests_button.disabled:
-			result.append(chests_button)
-		result.append(replay_button)
-		for button in _review_buttons:
-			result.append(button)
 	return result
 
 
 func default_focus() -> Control:
-	if _results != null and _results.visible:
-		if is_instance_valid(chests_button) and not chests_button.disabled:
-			return chests_button
-		return replay_button
 	if _gate != null and _gate.visible:
 		return _gate_back if retry_button.disabled else retry_button
 	return null
@@ -764,19 +707,14 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 	var candidates: Array[Control] = controls()
 	if _gate != null and _gate.visible and retry_button.disabled:
 		candidates.push_front(retry_button)
-	if is_visible_in_tree() and _results != null and _results.visible and is_instance_valid(chests_button) and chests_button.disabled:
-		candidates.push_front(chests_button)
 	for control in candidates:
 		var rect: Rect2 = control.get_global_rect()
-		var visible_rect: Rect2 = _gate.get_global_rect() if _gate.visible else _results.get_global_rect()
+		var visible_rect: Rect2 = _gate.get_global_rect()
 		# Fractional viewport scaling can put an aligned right edge a few floating
 		# point units outside its parent; keep fully visible controls discoverable.
 		if not visible_rect.grow(0.01).encloses(rect):
 			continue
 		var visible_text: String = str(control.text) if control is Button else ""
-		if visible_text.is_empty() and str(control.name).begins_with("Hear_"):
-			# Only the authored vocabulary text belongs in the review snapshot.
-			visible_text = str(control.get_meta("pop_word_text", ""))
 		actions.append({"name": str(control.name), "text": visible_text,
 			"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y,
 			"disabled": bool(control.disabled) if control is BaseButton else false})
@@ -796,11 +734,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		"chest_fx": _chest_fx_snapshot(),
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
 		"transcript": _transcript, "transcript_final": _transcript_final,
-		"results_hits": _result_hits_snapshot(),
-		"results_rewards": _result_rewards.snapshot() if is_instance_valid(_result_rewards) and not _stopped and game.phase == "finished" and _results.visible else {},
-		"results_scroll": _results.scroll_vertical,
-		"results_scroll_max": maxf(0.0, _results.get_v_scroll_bar().max_value - _results.get_v_scroll_bar().page),
-		"results_scrollbar_visible": _results.get_v_scroll_bar().is_visible_in_tree()}
+		"board_frozen": _finished_sent and not _stopped}
 
 
 func _hud_snapshot() -> Dictionary:
@@ -860,7 +794,7 @@ func _publish_settled_geometry() -> void:
 
 
 func _process(delta: float) -> void:
-	if not is_visible_in_tree():
+	if _finished_sent or not is_visible_in_tree():
 		_listening_tick_usec = -1
 		return
 	if _pending:
@@ -883,9 +817,10 @@ func _process(delta: float) -> void:
 			if round != game.round_id or _stopped or _reward_paused or not is_visible_in_tree():
 				return
 	_sync_game_clock(false)
+	if _finished_sent or round != game.round_id:
+		return
 	_last_hit_left = maxf(0.0, _last_hit_left - delta)
 	var feedback_expired: bool = _advance_hud_feedback(delta, false)
-	_advance_result_feedback(delta)
 	_advance_slices(delta)
 	_refresh_targets()
 	_update_hud()
@@ -912,6 +847,10 @@ func _advance_game(elapsed_seconds: float, present: bool = true) -> void:
 	if not _listening or game.phase != "running":
 		return
 	var previous_misses: int = game.misses
+	# The model retires active targets at the deadline. Preserve their final
+	# visible pose for the settlement backdrop without retaining live gameplay.
+	if elapsed_seconds >= game.remaining:
+		_frozen_targets = game.targets.duplicate(true)
 	game.advance(elapsed_seconds)
 	if game.misses > previous_misses:
 		# One response per batch of expired targets; clearing or pausing a round
@@ -951,13 +890,12 @@ func _emit_launches() -> void:
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
 		_clear_slices()
-		_settle_result_feedback()
 		if game.phase == "running" or reward_presentation_active():
 			pause()
 		_listening_tick_usec = -1
 		set_process(false)
 	else:
-		set_process(true)
+		set_process(not _finished_sent)
 		_layout()
 
 
@@ -1325,32 +1263,6 @@ func _layout() -> void:
 	_gate_actions.add_theme_constant_override("separation", ceili(10.0 / scale))
 	_style_action(retry_button, true)
 	_style_action(_gate_back)
-	var result_width: float = minf(width - 8.0 / scale, 760.0 / scale)
-	_results.position = Vector2((size.x - result_width) * 0.5, edge)
-	_results.size = Vector2(result_width, maxf(0.0, size.y - edge * 2.0))
-	_result_body.add_theme_constant_override("separation", ceili(8.0 / scale))
-	if is_instance_valid(_result_hero):
-		var compact: bool = size.y * scale < 520.0
-		_result_hero.custom_minimum_size.y = (96.0 if compact else 156.0) / scale
-		_layout_result_hits()
-	if is_instance_valid(_result_rewards):
-		_result_rewards.set_compact(size.y * scale < 520.0)
-	if is_instance_valid(_result_actions):
-		# On short landscape screens keep the actions above the scrolling ladder.
-		_result_body.move_child(_result_actions, 1 if size.y * scale < 380.0 else 2)
-		_result_body.move_child(_result_rewards, 2 if size.y * scale < 380.0 else 1)
-		_result_actions.add_theme_constant_override("separation", ceili(8.0 / scale))
-		_style_action(chests_button, not chests_button.disabled)
-		_style_action(replay_button, chests_button.disabled)
-		for button in [chests_button, replay_button]:
-			button.custom_minimum_size.y = 52.0 / scale
-			button.add_theme_font_size_override("font_size", ceili((14.0 if result_width * scale < 360.0 else 18.0) / scale))
-	for grid in _review_grids:
-		grid.columns = 3 if result_width * scale >= 650.0 else 2 if result_width * scale >= 360.0 else 1
-		grid.add_theme_constant_override("h_separation", ceili(8.0 / scale))
-		grid.add_theme_constant_override("v_separation", ceili(8.0 / scale))
-	for button in _review_buttons:
-		button.custom_minimum_size = Vector2(0.0, 66.0 / scale)
 	_apply_hud_feedback()
 	_refresh_targets()
 	queue_redraw()
@@ -1361,7 +1273,7 @@ func _refresh_targets() -> void:
 	_draw_targets.clear()
 	if _target_canvas != null:
 		_target_canvas.queue_redraw()
-	if _arena.size.x <= 0.0 or _arena.size.y <= 0.0 or game.phase not in ["running", "paused"]:
+	if _arena.size.x <= 0.0 or _arena.size.y <= 0.0 or game.phase not in ["running", "paused", "finished"] or _stopped:
 		return
 	var scale: float = Style.ui_scale(self)
 	# Give the cards more flight height without increasing their illustrated size.
@@ -1370,7 +1282,8 @@ func _refresh_targets() -> void:
 	var capsule_height: float = minf(clampf(capsule_width * 0.83, 96.0 / scale, 162.0 / scale), card_space_height - 4.0 / scale)
 	var capsule_size := Vector2(capsule_width, capsule_height)
 	var room: float = maxf(0.0, _arena.size.x - capsule_width - 12.0 / scale)
-	for target in game.targets:
+	var visible_targets: Array = _frozen_targets if game.phase == "finished" else game.targets
+	for target in visible_targets:
 		_cache_texture(target.word)
 		var progress: float = clampf(float(target.age) / maxf(0.1, float(target.lifetime)), 0.0, 1.0)
 		var lane: int = int(target.get("lane", int(target.uid) % 3))
@@ -1701,240 +1614,20 @@ func _finish() -> void:
 	_listening = false
 	_listening_tick_usec = -1
 	_clear_transcript()
-	_message = "Round complete. Tap a word to hear it, or play again."
-	_draw_targets.clear()
+	_message = "Round complete. Your results are ready."
 	_clear_slices()
-	_hud.hide()
+	_hud.show()
 	_gate.hide()
-	_build_results(game.summary())
-	_results.show()
-	_results.scroll_vertical = 0
+	_update_hud()
+	set_process(false)
 	_layout()
 	_publish(true)
 	round_finished.emit(game.summary())
 
 
-func _build_results(summary: Dictionary) -> void:
-	for child in _result_body.get_children():
-		_result_body.remove_child(child)
-		child.queue_free()
-	_review_grids.clear()
-	_review_buttons.clear()
-	_result_hit_total = maxi(0, int(summary.get("hits", 0)))
-	_result_hit_age = RESULT_HIT_DURATION if reduced_motion else 0.0
-	_result_idle_time = 0.0
-	_result_hero = Control.new()
-	_result_hero.name = "ResultHits"
-	_result_hero.mouse_filter = Control.MOUSE_FILTER_PASS
-	_result_hero.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_result_body.add_child(_result_hero)
-	_result_hit_fx = Node2D.new()
-	_result_hit_fx.draw.connect(_draw_result_feedback)
-	_result_hero.add_child(_result_hit_fx)
-	_result_hits = _label("0", 68, CYAN)
-	_result_hits.name = "HitTotal"
-	_result_hits.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_hits.add_theme_color_override("font_shadow_color", Color(CYAN, 0.5))
-	_result_hits.add_theme_constant_override("shadow_outline_size", 6)
-	_result_hero.add_child(_result_hits)
-	_result_hits_caption = _label("HITS", 14, HIT_COLOR)
-	_result_hits_caption.name = "HitsCaption"
-	_result_hits_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_hero.add_child(_result_hits_caption)
-	_result_hero.resized.connect(_layout_result_hits)
-	_result_rewards = ResultRewards.new()
-	_result_body.add_child(_result_rewards)
-	var tier: int = int(summary.get("chest_tier", 0))
-	_result_rewards.configure(int(summary.get("score", 0)), int(summary.get("fragment_count", 0)), tier, _chest_art.texture(tier))
-	_result_actions = HBoxContainer.new()
-	_result_body.add_child(_result_actions)
-	var earned_chests: int = clampi(int(summary.get("chest_count", 0)), 0, 1)
-	var available: int = maxi(_pending_chests, earned_chests)
-	chests_button = _action("Open chests" if available > 1 else "Open chest", available > 0)
-	chests_button.name = "OpenChests"
-	chests_button.disabled = available == 0
-	chests_button.set("accessibility_name", "Collect 4 chest fragments to unlock a chest." if available == 0 else "Open your final upgraded chest.")
-	chests_button.pressed.connect(_open_chests)
-	chests_button.mouse_filter = Control.MOUSE_FILTER_PASS
-	chests_button.focus_entered.connect(func() -> void: _ensure_result_control(chests_button))
-	_result_actions.add_child(chests_button)
-	replay_button = _action("Play again", available == 0)
-	replay_button.name = "Replay"
-	replay_button.pressed.connect(_replay)
-	replay_button.mouse_filter = Control.MOUSE_FILTER_PASS
-	replay_button.focus_entered.connect(func() -> void: _ensure_result_control(replay_button))
-	_result_actions.add_child(replay_button)
-	_add_review("Words you popped", summary.get("hit_words", []), CYAN)
-	_add_review("Try these next time", summary.get("missed_words", []), PINK)
-	# Leave room for the final row and its focus outline at fractional UI scales.
-	var bottom_space := Control.new()
-	bottom_space.custom_minimum_size.y = 8.0 / Style.ui_scale(self)
-	bottom_space.set_meta("pop_min_height", 8.0)
-	bottom_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_result_body.add_child(bottom_space)
-	_layout()
-	_apply_result_feedback()
-
-
-func _result_rect(control: Control) -> Array:
-	var rect: Rect2 = control.get_global_rect()
-	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
-
-
-func _result_hits_snapshot() -> Dictionary:
-	var visible_result: bool = not _stopped and game.phase == "finished" and _results.visible
-	return {"text": _result_hits.text if visible_result and is_instance_valid(_result_hits) else "",
-		"total": _result_hit_total if visible_result else 0,
-		"rect": _result_rect(_result_hits) if visible_result and is_instance_valid(_result_hits) else [],
-		"active": visible_result and not reduced_motion and _result_hit_age < RESULT_HIT_DURATION}
-
-
-func _layout_result_hits() -> void:
-	if not is_instance_valid(_result_hero) or not is_instance_valid(_result_hits):
-		return
-	var scale: float = Style.ui_scale(self)
-	var compact: bool = size.y * scale < 520.0
-	var number_height: float = (62.0 if compact else 96.0) / scale
-	var top: float = (2.0 if compact else 18.0) / scale
-	var score_left: float = 0.0
-	var score_width: float = _result_hero.size.x
-	var number_font: int = 52 if compact else 76
-	var text_width: float = _result_hits.get_theme_font("font").get_string_size(str(_result_hit_total), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(number_font / scale)).x
-	if text_width > score_width:
-		number_font = maxi(18, floori(number_font * score_width / text_width))
-	_place_label(_result_hits, Rect2(score_left, top, score_width, number_height), number_font)
-	_place_label(_result_hits_caption, Rect2(score_left, top + number_height, score_width, 24.0 / scale), 14)
-	_apply_result_feedback()
-
-
-func _settle_result_feedback() -> void:
-	_result_hit_age = RESULT_HIT_DURATION
-	_result_idle_time = 0.0
-	_apply_result_feedback()
-	if is_instance_valid(_results) and _results.visible and game.phase == "finished" and not _stopped:
-		_publish(true)
-
-
-func _advance_result_feedback(delta: float) -> void:
-	if delta <= 0.0 or not is_finite(delta) or _stopped or game.phase != "finished" or not _results.visible:
-		return
-	var before: Dictionary = _result_hits_snapshot()
-	_result_hit_age = minf(RESULT_HIT_DURATION, _result_hit_age + delta)
-	_result_idle_time += minf(delta, 0.1)
-	_apply_result_feedback()
-	if before != _result_hits_snapshot():
-		_publish(true)
-
-
-func _apply_result_feedback() -> void:
-	if not is_instance_valid(_result_hits):
-		return
-	var progress: float = clampf(_result_hit_age / 0.82, 0.0, 1.0)
-	var displayed: int = _result_hit_total if reduced_motion or progress >= 1.0 else floori(_result_hit_total * (1.0 - pow(1.0 - progress, 3.0)))
-	_result_hits.text = str(displayed)
-	var bounce: float = 0.0 if reduced_motion else sin(clampf((_result_hit_age - 0.74) / 0.42, 0.0, 1.0) * PI) * 0.18
-	_result_hits.pivot_offset = _result_hits.size * 0.5
-	_result_hits.scale = Vector2.ONE * (1.0 + bounce)
-	_result_hits.add_theme_color_override("font_color", CYAN.lerp(WHITE, bounce * 3.0))
-	if is_instance_valid(_result_hit_fx):
-		_result_hit_fx.queue_redraw()
-
-
-func _draw_result_feedback() -> void:
-	if not is_instance_valid(_result_hits) or not _results.visible:
-		return
-	var scale: float = Style.ui_scale(self)
-	var center: Vector2 = _result_hits.position + _result_hits.size * 0.5
-	var compact: bool = size.y * scale < 350.0
-	var radius: float = (25.0 if compact else 42.0) / scale
-	var breath: float = 1.0 if reduced_motion else 0.92 + sin(_result_idle_time * 1.7) * 0.08
-	for layer in range(5, 0, -1):
-		_result_hit_fx.draw_circle(center, radius * (0.75 + float(layer) * 0.16), Color(CYAN, 0.025 * breath))
-	var span: float = minf(_result_hero.size.x * 0.30, 150.0 / scale)
-	for direction in [-1.0, 1.0]:
-		var first: Vector2 = center + Vector2(direction * radius * 1.4, 0)
-		var last: Vector2 = center + Vector2(direction * span, 0)
-		_result_hit_fx.draw_line(first, last, Color(CYAN, 0.26 * breath), 2.0 / scale, true)
-	if reduced_motion:
-		return
-	var burst: float = clampf((_result_hit_age - 0.72) / 0.53, 0.0, 1.0)
-	if burst > 0.0 and burst < 1.0:
-		_result_hit_fx.draw_arc(center, radius * (0.9 + burst * 0.65), 0, TAU, 48,
-			Color(HIT_COLOR, (1.0 - burst) * 0.65), 2.0 / scale, true)
-		for index in range(12):
-			var angle: float = float(index) * TAU / 12.0
-			var spread := Vector2(cos(angle) * 1.8, sin(angle) * 0.7)
-			var point: Vector2 = center + spread * radius * (0.85 + burst * 0.65)
-			var reach: float = (2.0 + 3.0 * sin(burst * PI)) / scale
-			var color := Color(HIT_COLOR if index % 2 == 0 else WHITE, 1.0 - burst)
-			_result_hit_fx.draw_line(point - Vector2(reach, 0), point + Vector2(reach, 0), color, 1.5 / scale, true)
-			_result_hit_fx.draw_line(point - Vector2(0, reach), point + Vector2(0, reach), color, 1.5 / scale, true)
-
-
-func _add_review(title: String, words: Array, color: Color) -> void:
-	if words.is_empty():
-		return
-	var scale: float = Style.ui_scale(self)
-	var caption: Label = _label(title, 15, color)
-	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_result_body.add_child(caption)
-	var grid := GridContainer.new()
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_result_body.add_child(grid)
-	_review_grids.append(grid)
-	for word in words:
-		if not word is Dictionary:
-			continue
-		_cache_texture(word)
-		var button := Button.new()
-		button.name = "Hear_" + str(word.get("id", word.get("text", "word")))
-		button.mouse_filter = Control.MOUSE_FILTER_PASS
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(0, 66.0 / scale)
-		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.set("accessibility_name", "Hear " + str(word.get("text", "")))
-		button.set_meta("pop_word_text", str(word.get("text", "")))
-		for state in ["normal", "hover", "pressed"]:
-			button.add_theme_stylebox_override(state, Style.box(Color("#fffdf7") if state == "normal" else Color("#e8f1e5"), color.lightened(0.3), ceili(12.0 / scale), 1))
-		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, color, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))
-		grid.add_child(button)
-		_review_buttons.append(button)
-		var row := HBoxContainer.new()
-		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		row.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		row.offset_left = 10.0 / scale
-		row.offset_right = -10.0 / scale
-		row.add_theme_constant_override("separation", ceili(10.0 / scale))
-		button.add_child(row)
-		var art := TextureRect.new()
-		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		art.custom_minimum_size = Vector2.ONE * 46.0 / scale
-		art.set_meta("pop_edge", 46.0)
-		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		art.texture = _textures.get(str(word.get("id", word.get("text", ""))), null)
-		WordArt.bind(art.texture, art)
-		row.add_child(art)
-		var text: Label = _label(str(word.get("text", "")), 16, Style.INK)
-		text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		row.add_child(text)
-		button.pressed.connect(func() -> void:
-			hear_requested.emit(word))
-		button.focus_entered.connect(func() -> void: _ensure_result_control(button))
-
-
 func cancel_result_input() -> void:
 	if is_instance_valid(_gate):
 		_gate.cancel_drag()
-	if is_instance_valid(_results):
-		_results.cancel_drag()
-
-
-func _ensure_result_control(control: Control) -> void:
-	_ensure_scroll_control(_results, _result_body, control)
 
 
 func _ensure_scroll_control(scroll: ResultScroll, body: Control, control: Control) -> void:
@@ -1953,25 +1646,6 @@ func _ensure_scroll_control(scroll: ResultScroll, body: Control, control: Contro
 		scroll.scroll_vertical = ceili(content_rect.end.y - scroll.size.y)
 
 
-func _replay() -> void:
-	if _stopped or not is_visible_in_tree() or game.phase != "finished" or not _results.visible:
-		return
-	if interaction_allowed.is_valid() and not interaction_allowed.call():
-		return
-	request_listening.emit()
-
-
-func _open_chests() -> void:
-	if _stopped or game.phase != "finished" or maxi(_pending_chests, game.chest_count) <= 0 or not is_visible_in_tree():
-		return
-	if not is_instance_valid(chests_button) or chests_button.disabled:
-		return
-	if interaction_allowed.is_valid() and not interaction_allowed.call():
-		return
-	cancel_result_input()
-	chests_requested.emit()
-
-
 func _exit() -> void:
 	exit_requested.emit()
 
@@ -1985,8 +1659,8 @@ func _cache_texture(word: Dictionary) -> void:
 
 
 func is_word_art_visible(id: String) -> bool:
-	# The custom canvas owns only its current targets. Result rows register
-	# their own clipped TextureRects, so an old cache entry cannot stay active.
+	# The custom canvas owns only its current or frozen targets; cached
+	# vocabulary artwork must not keep animating after the board is replaced.
 	if _stopped or _hud == null or not _hud.is_visible_in_tree():
 		return false
 	return _draw_targets.any(func(target: Dictionary) -> bool:

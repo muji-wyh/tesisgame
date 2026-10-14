@@ -19,7 +19,7 @@ async function resultTap(page, key) {
   await rendered(page);
 }
 
-async function openChest(page, expected = 'Chest opened! Ready for another adventure?') {
+async function openChest(page, expected = 'Round complete Treasure collected!') {
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
@@ -52,9 +52,9 @@ async function winMatch(page) {
     await tap(page, pictured.x, pictured.y);
     await expect(page.locator('#game-status')).toContainText('Great match!');
     await page.keyboard.press('Escape');
-    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? 'You did it!' : 'Find 5 word');
+    await expect(page.locator('#game-status')).toContainText(index === pairs.length - 1 ? /You did it!|Round complete/ : 'Find 5 word');
   }
-  await expect(page.locator('#game-status')).toContainText('You did it!');
+  await expect(page.locator('#game-status')).toContainText(/You did it!|Round complete/);
   await acceptCelebration(page);
 }
 
@@ -137,17 +137,17 @@ test('a failed victory save stays retryable and cannot lose or duplicate its pie
     };
     window.restoreRewardSave = () => { Storage.prototype.setItem = save; };
   });
-  await openChest(page, 'Choose Retry saving.');
-  await expect(page.locator('#game-status')).toContainText('Choose Retry saving.');
+  await openChest(page, 'Could not save your reward. Please try again.');
+  await expect(page.locator('#game-status')).toContainText('Could not save your reward. Please try again.');
   expect(await medalRecord(page)).toBe(before);
   // A separate retry action replaces navigation until the reward is safe.
   await resultTap(page, 'retry');
-  await expect(page.locator('#game-status')).toContainText('Save your progress');
+  await expect(page.locator('#game-status')).toContainText('Could not save your reward. Please try again.');
   expect(await medalRecord(page)).toBe(before);
   await page.screenshot({ path: testInfo.outputPath('victory-save-failed.png'), scale: 'css' });
   await page.evaluate(() => window.restoreRewardSave());
   await page.keyboard.press('Enter');
-  await expect(page.locator('#game-status')).toHaveText('Chest opened! Ready for another adventure?', { timeout: 15000 });
+  await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!', { timeout: 15000 });
   expect(await pieceCount(page)).toBe(1);
   await page.keyboard.press('Enter');
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');

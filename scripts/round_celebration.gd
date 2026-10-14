@@ -3,6 +3,7 @@ extends Control
 
 signal performance_finished(round_id: String)
 signal open_requested(round_id: String)
+signal home_requested
 signal cue_requested(round_id: String, cue: String)
 signal confetti_requested(round_id: String)
 
@@ -19,6 +20,7 @@ const CUE_NAMES := ["step", "step-detail", "reward"]
 var pip: Mascot
 var chest: ChestView
 var action_button: Button
+var home_button: Button
 var _heading: Label
 var _caption: Label
 var _count: Label
@@ -82,6 +84,13 @@ func _init() -> void:
 	action_button.text = "Open chest"
 	action_button.pressed.connect(_request_open)
 	add_child(action_button)
+	home_button = Button.new()
+	home_button.name = "CelebrationHome"
+	home_button.text = "Home"
+	home_button.pressed.connect(func() -> void:
+		if _active and _ready_to_open and not _paused:
+			home_requested.emit())
+	add_child(home_button)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	set_process(false)
@@ -304,6 +313,8 @@ func _visibility_changed() -> void:
 func _refresh_action() -> void:
 	action_button.visible = _active and _ready_to_open and not _automatic
 	action_button.disabled = not _active or not _ready_to_open or _paused or _open_emitted
+	home_button.visible = action_button.visible
+	home_button.disabled = action_button.disabled
 
 
 func _sample() -> void:
@@ -375,8 +386,11 @@ func _layout() -> void:
 	_count.add_theme_color_override("font_color", Style.INK)
 	Style.action_button(action_button, _palette.get("accent", Style.GOOD), true)
 	action_button.custom_minimum_size.y = action_h / scale_factor
-	var action_w: float = minf(230.0, w - 16.0)
-	_place(action_button, Rect2((w - action_w) * 0.5, caption_y + caption_h + gap, action_w, action_h), scale_factor)
+	var action_w: float = (w - 24.0) * 0.5
+	Style.action_button(home_button, _palette.get("accent", Style.GOOD))
+	home_button.custom_minimum_size.y = action_h / scale_factor
+	_place(home_button, Rect2(8, caption_y + caption_h + gap, action_w, action_h), scale_factor)
+	_place(action_button, Rect2(w - 8 - action_w, caption_y + caption_h + gap, action_w, action_h), scale_factor)
 	_sample()
 
 
@@ -400,5 +414,6 @@ func snapshot() -> Dictionary:
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),
 			"disabled": action_button.disabled, "text": action_button.text},
+		"home": {"rect": _rect(home_button.get_global_rect()), "visible": home_button.is_visible_in_tree(), "disabled": home_button.disabled},
 		"pip_rect": _rect(pip.get_global_rect()), "chest_rect": _rect(chest.get_global_rect()),
 		"expression": pip.expression_name(), "chest_mode": chest.mode}

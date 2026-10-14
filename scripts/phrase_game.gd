@@ -50,6 +50,9 @@ var _configured: bool = false
 var _attempt_sequence: int = 0
 var _muted: bool = false
 var _question_id: String = ""
+var _finished_question: Dictionary = {}
+var _finished_options: Array[Dictionary] = []
+var _finished_answer: Array[int] = []
 var _answer_drop: Rect2
 var _bank_drop: Rect2
 var _pointer: int = -2
@@ -150,6 +153,9 @@ func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value
 	_celebrating = false
 	completion_pending = false
 	_question_id = ""
+	_finished_question.clear()
+	_finished_options.clear()
+	_finished_answer.clear()
 	_bank_scroll = 0.0
 	_configured = game.reset(vocabulary, age_band, seed_value)
 	apply_theme(Data.theme(theme_id), theme_id)
@@ -261,7 +267,7 @@ func _visibility_changed() -> void:
 
 
 func _can_interact() -> bool:
-	return _configured and not _paused and is_visible_in_tree() \
+	return _configured and not _paused and not completion_pending and game.phase in ["building", "correct"] and is_visible_in_tree() \
 		and (not interaction_allowed.is_valid() or bool(interaction_allowed.call()))
 
 
@@ -375,6 +381,10 @@ func accept_completion() -> void:
 	# Only the host's shared invitation may accept a completed round.
 	if not completion_pending or _finished_emitted or game.phase != "correct" or game.completed != PhraseGameModel.QUESTION_COUNT:
 		return
+	# Keep presentation data after the model retires its playable question.
+	_finished_question = game.current_question()
+	_finished_options.assign(game.options.duplicate(true))
+	_finished_answer.assign(game.answer)
 	if not game.advance() or game.phase != "finished":
 		return
 	completion_pending = false
@@ -696,7 +706,7 @@ func scroll_bank_to(index: int) -> void:
 
 
 func _draw() -> void:
-	if completion_pending or not _configured:
+	if not _configured:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
@@ -705,7 +715,7 @@ func _draw() -> void:
 		focus.draw(get_canvas_item(), _local_rect(_answer_clip).grow(2 / s))
 	var line_y: float = _answer_drop.end.y - 2 / s
 	draw_line(Vector2(_answer_drop.position.x, line_y), Vector2(_answer_drop.end.x, line_y),
-		accent if _drop_kind == "answer" else Style.GOOD if game.phase == "correct" else Color("#b9cbbf"), 2 / s, true)
+		accent if _drop_kind == "answer" else Style.GOOD if game.phase in ["correct", "finished"] else Color("#b9cbbf"), 2 / s, true)
 	if _answer_max_scroll > 0:
 		var thumb: float = _answer_drop.size.x * _answer_drop.size.x / (_answer_drop.size.x + _answer_max_scroll / s)
 		var left: float = _answer_drop.position.x + (_answer_drop.size.x - thumb) * _answer_scroll / _answer_max_scroll
@@ -728,14 +738,15 @@ func _draw() -> void:
 
 
 func _answer_rects(order: Array[int]) -> Array[Rect2]:
+	var options: Array[Dictionary] = _display_options()
 	var s: float = Style.ui_scale(self)
 	var gap: float = (6 if size.y * s < 360 or _answer_drop.size.x * s < 400 else 10) / s
 	var picture: float = (28 if size.y * s < 360 else 40) / s
 	var result: Array[Rect2] = []
 	var cursor: float = _answer_drop.position.x
 	for index in range(answer_buttons.size()):
-		var text: String = Data.display_word(game.options[order[index]]) if index < order.size() else ""
-		var art_width: float = picture + 8 / s if index < order.size() and not str(game.options[order[index]].image).is_empty() else 0.0
+		var text: String = Data.display_word(options[order[index]]) if index < order.size() else ""
+		var art_width: float = picture + 8 / s if index < order.size() and not str(options[order[index]].image).is_empty() else 0.0
 		var width: float = maxf(64 / s, Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(18 / s)).x + 30 / s) + art_width if index < order.size() else 44 / s
 		result.append(Rect2(cursor, _answer_drop.position.y, width, _answer_clip.size.y))
 		cursor += width + gap
@@ -744,7 +755,7 @@ func _answer_rects(order: Array[int]) -> Array[Rect2]:
 
 func _answer_order() -> Array[int]:
 	# Keep edits transactional while the visible row previews their final order.
-	var order: Array[int] = game.answer.duplicate()
+	var order: Array[int] = _display_answer().duplicate()
 	if _dragging and _drop_kind == "answer":
 		order.erase(_drag_word)
 		order.insert(mini(_drop_index, order.size()), _drag_word)
@@ -761,20 +772,34 @@ func _drop_rect() -> Rect2:
 	return rect
 
 
+func _display_question() -> Dictionary:
+	return _finished_question if game.phase == "finished" else game.current_question()
+
+
+func _display_options() -> Array[Dictionary]:
+	return _finished_options if game.phase == "finished" else game.options
+
+
+func _display_answer() -> Array[int]:
+	return _finished_answer if game.phase == "finished" else game.answer
+
+
 func _refresh() -> void:
-	var question: Dictionary = game.current_question()
+	var question: Dictionary = _display_question()
+	var options: Array[Dictionary] = _display_options()
+	var answer: Array[int] = _display_answer()
 	if str(question.get("id", "")) != _question_id:
 		cancel_input()
 		_question_id = str(question.get("id", ""))
 		_bank_scroll = 0.0
 		_answer_scroll = 0.0
 		_rebuild_buttons()
-	var correct: bool = game.phase == "correct"
+	var correct: bool = game.phase in ["correct", "finished"] and not question.is_empty()
 	var wrong: bool = str(game.feedback) == "wrong"
-	pip.set_attention("thinking" if _can_interact() and game.phase == "building" and not game.answer.is_empty() else "")
+	pip.set_attention("thinking" if _can_interact() and game.phase == "building" and not answer.is_empty() else "")
 	var accent: Color = _palette.get("accent", Style.GOOD)
 	for control in [listen_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
-		control.visible = not completion_pending
+		control.visible = _configured
 	_progress.value = game.completed
 	_progress.set("accessibility_name", "%d of 3 phrases complete" % game.completed)
 	_progress_caption.text = "%d / 3" % mini(game.question_index + 1, 3)
@@ -783,15 +808,15 @@ func _refresh() -> void:
 	_feedback.add_theme_color_override("font_color", Style.GOOD if correct else Style.WRONG if wrong else Style.MUTED)
 	for index in range(option_buttons.size()):
 		var button: Button = option_buttons[index]
-		button.visible = not completion_pending and not game.answer.has(index)
-		button.disabled = _paused or game.phase != "building" or game.answer.has(index)
+		button.visible = not answer.has(index)
+		button.disabled = _paused or game.phase != "building" or answer.has(index)
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
-		var occupied: bool = index < game.answer.size()
-		button.visible = not completion_pending and occupied
-		button.text = Data.display_word(game.options[game.answer[index]]) if occupied else ""
-		button.icon = option_buttons[game.answer[index]].icon if occupied else null
+		var occupied: bool = index < answer.size()
+		button.visible = occupied
+		button.text = Data.display_word(options[answer[index]]) if occupied else ""
+		button.icon = option_buttons[answer[index]].icon if occupied else null
 		WordArt.bind(button.icon, button)
 		button.disabled = _paused or not occupied or game.phase != "building"
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
@@ -800,10 +825,10 @@ func _refresh() -> void:
 	listen_button.disabled = _paused or completion_pending or question.is_empty() or game.phase == "finished"
 	listen_button.configure(question, _muted or correct, accent)
 	listen_button.set_paused(_paused)
-	action_button.visible = not completion_pending
+	action_button.visible = not completion_pending and game.phase != "finished"
 	action_button.text = "Continue" if correct else "Check answer"
 	action_button.disabled = _paused or question.is_empty() or game.phase == "finished" \
-		or (completion_pending or _celebrating or (game.phase == "building" and game.answer.size() != question.get("words", []).size()))
+		or (completion_pending or _celebrating or (game.phase == "building" and answer.size() != question.get("words", []).size()))
 	for button in [listen_button, action_button]:
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 	_layout()
@@ -813,14 +838,15 @@ func _refresh() -> void:
 
 
 func _rebuild_buttons() -> void:
+	var options: Array[Dictionary] = _display_options()
 	for button in option_buttons + answer_buttons:
 		button.get_parent().remove_child(button)
 		button.queue_free()
 	option_buttons.clear()
 	answer_buttons.clear()
-	for index in range(game.options.size()):
-		var button := _button(Data.display_word(game.options[index]), "PhraseOption_%d" % index, _choose.bind(index))
-		button.icon = WordArt.texture(str(game.options[index].image), button)
+	for index in range(options.size()):
+		var button := _button(Data.display_word(options[index]), "PhraseOption_%d" % index, _choose.bind(index))
+		button.icon = WordArt.texture(str(options[index].image), button)
 		button.expand_icon = true
 		button.reparent(_bank_content)
 		button.focus_entered.connect(scroll_bank_to.bind(index))
@@ -828,7 +854,7 @@ func _rebuild_buttons() -> void:
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.set("accessibility_name", button.text + ". Drag or press to add this word.")
 		option_buttons.append(button)
-	for index in range(game.current_question().get("words", []).size()):
+	for index in range(_display_question().get("words", []).size()):
 		var button := _button("", "PhraseAnswer_%d" % index, _remove.bind(index))
 		button.reparent(_answer_content)
 		button.focus_entered.connect(scroll_answer_to.bind(index))
@@ -850,7 +876,7 @@ func _restore_focus() -> void:
 
 
 func default_focus() -> Control:
-	if completion_pending:
+	if completion_pending or game.phase == "finished":
 		return null
 	if not action_button.disabled and (game.phase == "correct" or game.answer.size() == answer_buttons.size()):
 		return action_button
@@ -917,17 +943,18 @@ func _layout_answer(animate: bool = false) -> void:
 		return
 	if is_instance_valid(_reorder_tween):
 		_reorder_tween.kill()
+	var answer: Array[int] = _display_answer()
 	var s: float = Style.ui_scale(self)
 	var order: Array[int] = _answer_order()
 	var rects: Array[Rect2] = _answer_rects(order)
 	var picture_w: float = (28 if size.y * s < 360 else 40) / s
 	for index in range(answer_buttons.size()):
 		var button: Button = answer_buttons[index]
-		var occupied: bool = index < game.answer.size()
-		var slot: int = order.find(game.answer[index]) if occupied else index
+		var occupied: bool = index < answer.size()
+		var slot: int = order.find(answer[index]) if occupied else index
 		var rect: Rect2 = rects[slot]
-		_style_tile(button, occupied, game.phase == "correct", str(game.feedback) == "wrong", s,
-			game.answer[index] if occupied else 0, rect.size.x, picture_w)
+		_style_tile(button, occupied, game.phase in ["correct", "finished"], str(game.feedback) == "wrong", s,
+			answer[index] if occupied else 0, rect.size.x, picture_w)
 		var target: Vector2 = rect.position - _answer_drop.position
 		if animate and not reduced_motion and occupied and button != _source and not button.position.is_equal_approx(target):
 			if not is_instance_valid(_reorder_tween) or not _reorder_tween.is_valid():
@@ -940,7 +967,7 @@ func _layout_answer(animate: bool = false) -> void:
 		_reorder_tween.chain().tween_callback(_publish)
 	var content_w: float = maxf(_answer_drop.size.x, rects[order.size() - 1].end.x - _answer_drop.position.x) if not order.is_empty() else _answer_drop.size.x
 	_answer_max_scroll = maxf(0, content_w - _answer_drop.size.x) * s
-	_answer_clip.focus_mode = Control.FOCUS_ALL if game.phase == "correct" and not _paused and _answer_max_scroll > 0 else Control.FOCUS_NONE
+	_answer_clip.focus_mode = Control.FOCUS_ALL if game.phase == "correct" and _can_interact() and _answer_max_scroll > 0 else Control.FOCUS_NONE
 	_answer_content.size = Vector2(content_w, _answer_clip.size.y)
 	_scroll_answer(_answer_scroll)
 
@@ -1024,17 +1051,20 @@ func _control_snapshot(button: Button) -> Dictionary:
 
 
 func snapshot() -> Dictionary:
+	var options: Array[Dictionary] = _display_options()
 	var result: Dictionary = game.snapshot()
 	result["visible"] = is_visible_in_tree()
 	result["paused"] = _paused
 	result["celebrating"] = _celebrating
 	result["completion_pending"] = completion_pending
+	result["board_frozen"] = completion_pending or (game.phase == "finished" and not _finished_question.is_empty())
+	result["display_question"] = _display_question().duplicate(true)
 	result["options"] = []
 	result["answers"] = []
 	for index in range(option_buttons.size()):
 		var item: Dictionary = _control_snapshot(option_buttons[index])
 		item["index"] = index
-		item["word_id"] = str(game.options[index].id)
+		item["word_id"] = str(options[index].id)
 		result.options.append(item)
 	for index in range(answer_buttons.size()):
 		var item: Dictionary = _control_snapshot(answer_buttons[index])
@@ -1042,7 +1072,7 @@ func snapshot() -> Dictionary:
 		result.answers.append(item)
 	result["listen"] = _control_snapshot(listen_button)
 	result["action"] = _control_snapshot(action_button)
-	result["prompt_text_visible"] = not completion_pending and (_muted or game.phase == "correct")
+	result["prompt_text_visible"] = _configured and (_muted or game.phase in ["correct", "finished"])
 	result["prompt_layout"] = listen_button.transcript_layout()
 	result["progress"] = {"value": game.completed, "total": PhraseGameModel.QUESTION_COUNT, "rect": _rect_snapshot(_progress.get_global_rect()), "visible": _progress.is_visible_in_tree()}
 	result["bank"] = {"rect": _rect_snapshot(_bank_clip.get_global_rect()), "scroll": _bank_scroll, "max_scroll": _bank_max_scroll}

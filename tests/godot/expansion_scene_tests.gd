@@ -88,17 +88,17 @@ func _run() -> void:
 		app._continue_match()
 	check(app.model.phase == "won" and (app.model.matched_ids.size() / 2) == 5, "Five Match pairs enter the shared win screen")
 	PlayerFlow.finish_celebration(app)
-	check(app.chest_button.is_visible_in_tree() and not app._new_adventure_button.visible, "Completing the lesson presents only the unopened chest")
+	check(app.chest_button.is_visible_in_tree() and app._single_result.replay_button.disabled, "Completing the lesson presents only the unopened chest")
 	app._open_chest()
 	app.chest.finish_immediately()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match win earns one ordinary medal piece")
 	app._open_chest()
 	check(app.medal_progress.count_for("ocean-1") == 1, "A Match reward cannot be collected twice")
 	var lesson: Array = app.model.lesson_words.duplicate(true)
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.model.phase == "waiting" and (app.model.matched_ids.size() / 2) == 0
 		and app.model.mistakes == 0 and app.model.hints_remaining == 3 and app.model.lesson_words != lesson,
-		"New adventure starts a fresh Match board with a normal new attempt")
+		"Play again starts a fresh Match board with a normal new attempt")
 	check(app.model.theme_id == "ocean"
 		and app.medal_progress.count_for("ocean-1") == 1,
 		"A fresh adventure preserves the selected world and earned piece")

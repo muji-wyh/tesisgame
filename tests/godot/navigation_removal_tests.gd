@@ -49,25 +49,26 @@ func _run() -> void:
 	check(app._settle_pair_reward(), "The result fixture settles its earned chest before checking navigation")
 	app._refresh()
 	await settle()
-	var actions: Array = app._outcome.find_children("*", "Button", true, false).filter(
+	var actions: Array = app._single_result.find_children("*", "Button", true, false).filter(
 		func(button: Button) -> bool: return button.is_visible_in_tree() and not button.disabled)
-	check(actions == [app._new_adventure_button] and app._default_focus() == app._new_adventure_button,
-		"New adventure is the only normal result action and the default focus")
-	var retry: Button = app.get("_result_retry_button")
+	check(actions.has(app._single_result.replay_button) and actions.has(app._single_result.home_button)
+		and actions.size() == 2 and app._default_focus() == app._single_result.replay_button,
+		"Saved results offer Home and Play again inside the dialog, with Play again as default focus")
+	var retry: Button = app._single_result.retry_button
 	check(retry != null and app.has_method("_retry_reward_save"), "Reward save retry has its own action")
 	if retry != null and app.has_method("_retry_reward_save"):
 		app._progress_ready = false
 		app._save_error = true
 		app._refresh()
 		await settle()
-		check(retry.is_visible_in_tree() and retry.text == "Retry saving" and not app._new_adventure_button.visible,
-			"Only a saving failure exposes Retry saving")
+		check(retry.is_visible_in_tree() and retry.text == "Retry save" and app._single_result.replay_button.disabled,
+			"Only a saving failure exposes Retry save")
 		var words: Array = app.model.lesson_words.duplicate(true)
 		retry.grab_focus()
 		retry.pressed.emit()
 		check(not app._save_error and app.model.phase == "won" and app.model.lesson_words == words,
 			"Retrying storage does not repeat or replace the lesson")
-		check(root.gui_get_focus_owner() == app._new_adventure_button,
+		check(root.gui_get_focus_owner() == app._single_result.replay_button,
 			"A successful retry restores keyboard focus to the remaining result action")
 		retry.pressed.emit()
 		check(app.model.phase == "won" and app.model.lesson_words == words,
@@ -108,9 +109,9 @@ func _run() -> void:
 		and app.model.cards == cards and app.model.hints_remaining == hints,
 		"A Home theme choice keeps the page open and preserves the current game")
 	app.choose_mode("match")
-	app._new_adventure_button.pressed.emit()
+	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and app.model.lesson_words != before_words,
-		"New adventure starts a fresh Match board")
+		"Play again starts a fresh Match board")
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

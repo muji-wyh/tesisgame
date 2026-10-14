@@ -317,11 +317,11 @@ async function installSpeech(page) {
   });
 }
 
-test('Voice Pop saves one final upgraded chest, celebrates, and restores its complete result', async ({ page, browserName }, info) => {
+test('Voice Pop saves one final upgraded chest directly inside its settlement dialog', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
   const requests = watchAudioRequests(page);
   await installSpeech(page);
-  await installPerformanceCapture(page, browserName === 'chromium');
+  await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { reducedMotion: 'no-preference', mode: 'pop' });
   await observeCelebration(page);
   await page.evaluate(() => {
@@ -337,28 +337,21 @@ test('Voice Pop saves one final upgraded chest, celebrates, and restores its com
   await expect(page.locator('#pop-status')).toHaveAttribute('data-fragment-count', '9', { timeout: 65000 });
   await expect(page.locator('#pop-status')).toHaveAttribute('data-chest-count', '1');
   await expect(page.locator('#pop-status')).toHaveAttribute('data-chest-tier', '2');
-  await expect.poll(() => page.evaluate(() => Boolean(window.roundCelebrationObservation?.ended)),
-    { timeout: 70000, message: 'The actual round timer finishes and the three-second automatic celebration ends' }).toBe(true);
-  const observation = await savePerformance(page, info, 'pop');
-  expect(observation.started.value).toMatchObject({ automatic: true, chest_count: 1, chest_tier: 2 });
-  expect(observation.ended.at - observation.started.at).toBeGreaterThanOrEqual(2850);
-  expect(await page.evaluate(() => window.__celebrationSpeech.instances.every(value => !value.running)),
-    'Recognition stops before returning from celebration').toBe(true);
-  await expect.poll(() => page.locator('#pop-status').evaluate(element => {
-    const reward = JSON.parse(element.dataset.resultsRewards || '{}');
-    const controls = JSON.parse(element.dataset.controls || '[]');
-    return Boolean(reward.visible && reward.earned === 1 && reward.chest_tier === 2 && reward.fragment_count === 9 &&
-      controls.some(control => control.name === 'OpenChests' && !control.disabled));
-  })).toBe(true);
-  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.popRewards'))).toBeTruthy();
-  await page.screenshot({ path: info.outputPath('pop-result-after-celebration.png'), scale: 'css' });
-  const action = await page.locator('#pop-status').evaluate(element =>
-    JSON.parse(element.dataset.controls || '[]').find(control => control.name === 'OpenChests'));
-  await tap(page, action.x + action.width / 2, action.y + action.height / 2);
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'finished', { timeout: 70000 });
   await expect.poll(() => page.locator('#pop-reward-status').evaluate(element => {
     const value = JSON.parse(element.dataset.snapshot || '{}');
-    return { visible: value.visible, count: value.chest_count, opened: value.opened_count, tier: value.chests[0]?.tier };
-  }), { timeout: 45000 }).toEqual({ visible: true, count: 1, opened: 0, tier: 2 });
-  expect(requests, 'Voice Pop celebration uses bundled audio without external media requests').toEqual([]);
+    return { visible: value.visible, dialog: value.game_over?.visible, count: value.chest_count,
+      opened: value.opened_count, tier: value.chests[0]?.tier, fragments: value.result_context?.fragment_count };
+  }), { timeout: 45000 }).toEqual({ visible: true, dialog: true, count: 1, opened: 0, tier: 2, fragments: 9 });
+  expect(await page.evaluate(() => window.roundCelebrationObservation?.started),
+    'Settlement does not start a separate full-page finale').toBeFalsy();
+  expect(await page.evaluate(() => window.__celebrationSpeech.instances.every(value => !value.running)),
+    'Recognition stops before the settlement dialog opens').toBe(true);
+  expect(await page.locator('#pop-status').evaluate(element => ({
+    frozen: element.dataset.boardFrozen === 'true', controls: JSON.parse(element.dataset.controls || '[]')
+  }))).toEqual({ frozen: true, controls: [] });
+  expect(await page.evaluate(() => localStorage.getItem('wordBuddies.popRewards'))).toBeTruthy();
+  await page.screenshot({ path: info.outputPath('pop-final-chest-dialog.png'), scale: 'css' });
+  expect(requests, 'Voice Pop settlement uses bundled audio without external media requests').toEqual([]);
   expect(errors).toEqual([]);
 });

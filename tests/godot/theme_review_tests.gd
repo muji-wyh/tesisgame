@@ -134,7 +134,7 @@ func _run() -> void:
 		and app.model.selected_id == selected and app.model.hints_remaining == hints and app.growth.snapshot() == growth,
 		"Resuming Match applies the Home theme without replacing its partial round")
 	await _check_home_only_controls(app)
-	await _check_treasure_themes(app)
+	await _check_settlement_themes(app)
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):
@@ -247,17 +247,15 @@ func _check_loading_theme(directory: String) -> void:
 		await process_frame
 
 
-func _check_treasure_themes(app) -> void:
-	var treasure: Control = app.get("_treasure_backdrop")
-	check(treasure != null, "The treasure result has a dedicated world scene")
-	if treasure == null:
-		return
+func _check_settlement_themes(app) -> void:
+	var dialog: Control = app._settlement_dialog
+	check(dialog != null, "Earned treasure uses the shared settlement dialog")
 	var data = load("res://scripts/game_data.gd")
 	app.choose_theme("spring")
 	check(app.new_round(732, false, "", "match"), "The treasure-world fixture starts a real Match round")
 	# Use a persisted chest reservation; chance outcomes have separate coverage.
 	preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
-	check(not treasure.visible and not treasure.is_visible_in_tree(), "Active play hides the treasure scene")
+	check(not dialog.is_visible_in_tree(), "Active play hides the settlement dialog")
 	app.choose_theme("spring")
 	for card in app.model.cards:
 		if card.kind == "word" and not app.model.card_by_id(card.word.id + ":image").is_empty():
@@ -268,14 +266,15 @@ func _check_treasure_themes(app) -> void:
 	await settle()
 	check(app.model.phase == "won" and app.model.chest_state == "closed",
 		"Five real matches enter the themed treasure result with an unopened chest")
-	check(treasure.mouse_filter == Control.MOUSE_FILTER_IGNORE and treasure.focus_mode == Control.FOCUS_NONE,
-		"The world scenery never captures chest pointer input or keyboard focus")
+	check(app.grid.is_visible_in_tree() and dialog.is_visible_in_tree()
+		and dialog.is_ancestor_of(app.chest_button),
+		"The selected world and completed board remain behind the interactive chest dialog")
 	var chest_theme: String = app.JellyRewardProgress.theme_for_tier(1)
 	var counts_before: Dictionary = app.medal_progress.counts.duplicate(true)
 	for theme_id in data.THEMES:
 		app.choose_theme(theme_id)
 		await settle()
-		_check_treasure_palette(treasure, data.theme(theme_id), "before opening")
+		_check_settlement_palette(app, data.theme(theme_id), "before opening")
 		check(app.model.phase == "won" and app.model.chest_state == "closed" and app.chest.theme_id == chest_theme,
 			"The earned tier-one chest is preserved in the selected " + theme_id + " world")
 		check(app.medal_progress.counts == counts_before and app.model.reward_theme == chest_theme,
@@ -311,7 +310,7 @@ func _check_treasure_themes(app) -> void:
 	for theme_id in data.THEMES:
 		app.choose_theme(theme_id)
 		await settle()
-		_check_treasure_palette(treasure, data.theme(theme_id), "after opening a Spring chest")
+		_check_settlement_palette(app, data.theme(theme_id), "after opening a Spring chest")
 		check(app.model.phase == "won" and app.model.chest_state == "opened" and app.chest.mode == "opened"
 			and app.chest.theme_id == chest_theme and app.model.reward_theme == chest_theme and app.model.reward_id == earned_id,
 			"Changing the scene to " + theme_id + " preserves the already earned chest appearance and Spring reward")
@@ -324,10 +323,11 @@ func _check_treasure_themes(app) -> void:
 	check(reloaded.load_progress() and reloaded.counts == earned_counts and app.medal_progress.counts == earned_counts,
 		"Repeated open callbacks after a world change preserve the same single reward through reload")
 	check(app.new_round(733, false, "", "match"), "A new adventure still leaves the themed treasure result")
-	check(not treasure.visible and not treasure.is_visible_in_tree() and app.medal_progress.counts == earned_counts,
-		"The next lesson hides its old treasure scene without claiming the reward again")
+	check(not dialog.is_visible_in_tree() and app.medal_progress.counts == earned_counts,
+		"The next lesson closes its settlement without claiming the reward again")
 
 
-func _check_treasure_palette(treasure, palette: Dictionary, context: String) -> void:
-	check(treasure.is_visible_in_tree() and treasure.theme_id == palette.id and treasure.palette == palette,
-		"The " + palette.name + " treasure scene follows the selected world " + context)
+func _check_settlement_palette(app, palette: Dictionary, context: String) -> void:
+	check(app._settlement_dialog.is_visible_in_tree() and app._settlement_dialog._palette == palette
+		and app._single_result._palette == palette and app.grid.is_visible_in_tree(),
+		"The " + palette.name + " settlement follows the selected world over its board " + context)
