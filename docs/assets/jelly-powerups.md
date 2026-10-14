@@ -1,11 +1,15 @@
 # Jelly Words powerups
 
-The Auto merge and Treasure purchase controls share the game's quiet rounded
-interface framing. Their artwork stays separate from the stable touch target,
-title, and coin price. Auto merge costs 600, 900, then 1200 coins per round;
+The Auto merge and Treasure purchase controls share a quiet pearl surface.
+A full-width title sits above the sourced item artwork and a separate coin-price
+capsule, so narrow phone controls no longer squeeze the title beside the icon.
+Their artwork stays separate from the stable touch target, title, and coin price.
+Auto merge costs 600, 900, then 1200 coins per round;
 Treasure costs 200, 300, then 400. Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
-The latter uses the same current chest texture as the jelly fragment markers.
+The latter uses the same current chest texture as the jelly fragment markers
+once its cropped image is ready. The acquired Royal fallback stays visible while
+that viewport warms up, without a synchronous GPU readback.
 
 ## Artwork and acquisition
 
@@ -24,14 +28,31 @@ Source and integrated SVG SHA-256:
 `5e1df66b84ec85ce679673d6c8b97d392c450f312cc58b6ec84f1b5194f9fbb1`.
 The rounded interface panels are layout primitives, not replacement prop art.
 
+For the October 2026 interface refinement, Kenney's locally acquired UI Pack 2.0,
+UI Pack - Adventure, UI Adventure Pack, and Fantasy UI Borders previews were
+inspected. The actual neutral `UI Pack/PNG/Grey/Double/button_rectangle_depth_gradient.png`
+and `button_rectangle_depth_flat.png`, and `UI Adventure Pack/PNG/buttonLong_grey.png`
+were also inspected. Their grey bevels, square edges, or chipped fantasy surfaces
+were not integrated because they compete with the existing soft jelly material.
+These remain review candidates in this project; their locally acquired files are
+not integrated, and the existing wand, chest, coin, and gel assets are retained.
+The source packs are by Kenney and carry their local CC0 1.0 licenses;
+these inspected interface images are static and contain no animation.
+
 ## Feedback and lifecycle
 
 Successful purchases give the sourced icon a short upward pop, a restrained
 turn, and local glints over 0.62 seconds. Rejection uses a 0.42-second damped
 sideways recoil and warm amber light. Titles and prices stay level, and the
-touch target never changes. An insufficient balance softens the control and
-warms its price while preserving clickability; only unavailable or busy actions
+touch target never changes. An insufficient balance uses a neutral price capsule
+and warm readable price text while preserving clickability; only unavailable or busy actions
 are disabled. There are no tooltips or explanatory overlays.
+
+The separate Collect control retains its sourced mint gel body and existing
+charge, growth, and sparkle rhythm. Its empty-state body and coin remain visible
+against the landscape, while a ready collection still grows to the original peak
+size. This styling does not change collection eligibility, reward amounts, or
+the stable hit area.
 
 The game owner advances the button clock. Pausing freezes the clock and hides
 the transient pose and light; hidden controls do not advance. Reset clears the

@@ -16,8 +16,8 @@
     "license_source_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7",
     "license_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7",
     "attribution": "Kenney credit is welcomed but not required by the supplied CC0 license",
-    "status": "Eight original PNGs visually inspected, imported unchanged and integrated into both jelly modes; source checks, eight native composition reviews and motion lifecycle checks passed",
-    "animations": "Static PNGs and vector originals; no baked environment animation clips. Runtime tint, opacity and gentle horizontal motion of two clouds are authored by the game."
+    "status": "Eight original PNGs visually inspected and imported unchanged. Hills, trees and foliage remain integrated as low static scenery; the former sky and three cloud images are retained only as historical source material.",
+    "animations": "Static PNGs and vector originals; no baked environment animation clips. Retained garden scenery is static. The former game-authored horizontal motion of two clouds is retired; current panorama and daylight are documented in jelly-sky.md."
   },
   "images": [
     {
@@ -133,11 +133,28 @@
       "processing": "Unmodified original PNG copied byte-for-byte from the supplied local Kenney library"
     }
   ],
+  "runtime": {
+    "active_images": [
+      "hills",
+      "tree",
+      "tree-long",
+      "foliage"
+    ],
+    "retired_images": [
+      "sky",
+      "cloud-bank",
+      "cloud",
+      "cloud-small"
+    ],
+    "presentation": "Hills, trees and foliage remain low and static at the scene perimeter. The former illustrated sky, cloud bank and drifting clouds are no longer drawn.",
+    "current_runtime_record": "docs/assets/jelly-sky.md"
+  },
   "review": {
-    "direction": "Airy layered garden with clouds and low edge foliage framing a quiet playfield",
+    "scope": "Historical illustrated garden before the current sky panorama",
+    "direction": "Earlier airy layered garden with clouds and low edge foliage framing a quiet playfield",
     "source_contact_sheet": "build/jelly-background-asset-scout.png",
     "inspection": "Selected original PNGs inspected individually, including cloud1, treeLong and bushAlt1; source comparison sheet is review material only",
-    "status": "Source artwork and copied image identity verified. Native composition and readability reviewed for both modes at 320 x 568, 393 x 852, 852 x 393 and 1473 x 1175. Native gameplay, lifecycle, reduced-motion and static drawing cache checks passed. Chromium and simulated iPhone WebKit gameplay and layout checks passed; the Chromium Words reload case passed on retry with a 180-second suite limit.",
+    "status": "Historical validation: source artwork and copied image identity verified. Earlier garden composition and readability reviewed for both modes at 320 x 568, 393 x 852, 852 x 393 and 1473 x 1175. Native gameplay, former cloud lifecycle, reduced-motion and static drawing cache checks passed. Chromium and simulated iPhone WebKit gameplay and layout checks passed; the Chromium Words reload case passed on retry with a 180-second suite limit. Current panorama validation is recorded in docs/assets/jelly-sky.md.",
     "native_captures": [
       "build/jelly-backdrop-review/after/jelly-393x852.png",
       "build/jelly-backdrop-review/after/jelly-1473x1175.png",

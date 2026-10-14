@@ -25,6 +25,16 @@ FILES = {
     "tree-long": "PNG/Retina/treeLong.png",
     "foliage": "PNG/Retina/bushAlt1.png",
 }
+ACTIVE_IMAGES = {"hills", "tree", "tree-long", "foliage"}
+
+
+def runtime_record():
+    return {
+        "active_images": [asset_id for asset_id in FILES if asset_id in ACTIVE_IMAGES],
+        "retired_images": [asset_id for asset_id in FILES if asset_id not in ACTIVE_IMAGES],
+        "presentation": "Hills, trees and foliage remain low and static at the scene perimeter. The former illustrated sky, cloud bank and drifting clouds are no longer drawn.",
+        "current_runtime_record": "docs/assets/jelly-sky.md",
+    }
 
 
 def digest(data):
@@ -42,6 +52,8 @@ def inspect_png(data):
 
 def verify():
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if manifest.get("runtime") != runtime_record():
+        raise ValueError("The garden manifest must distinguish current perimeter scenery from retired sky and clouds")
     records = manifest["images"]
     if len(records) != len(FILES) or {record["id"] for record in records} != set(FILES):
         raise ValueError("The garden manifest must contain exactly the eight reviewed images")
@@ -115,15 +127,17 @@ def prepare(source_root):
             "license_source_sha256": digest(license_data),
             "license_sha256": digest(license_data),
             "attribution": "Kenney credit is welcomed but not required by the supplied CC0 license",
-            "status": "Eight original PNGs visually inspected, imported unchanged and integrated into both jelly modes; source checks, eight native composition reviews and motion lifecycle checks passed",
-            "animations": "Static PNGs and vector originals; no baked environment animation clips. Runtime tint, opacity and gentle horizontal motion of two clouds are authored by the game.",
+            "status": "Eight original PNGs visually inspected and imported unchanged. Hills, trees and foliage remain integrated as low static scenery; the former sky and three cloud images are retained only as historical source material.",
+            "animations": "Static PNGs and vector originals; no baked environment animation clips. Retained garden scenery is static. The former game-authored horizontal motion of two clouds is retired; current panorama and daylight are documented in jelly-sky.md.",
         },
         "images": records,
+        "runtime": runtime_record(),
         "review": {
-            "direction": "Airy layered garden with clouds and low edge foliage framing a quiet playfield",
+            "scope": "Historical illustrated garden before the current sky panorama",
+            "direction": "Earlier airy layered garden with clouds and low edge foliage framing a quiet playfield",
             "source_contact_sheet": "build/jelly-background-asset-scout.png",
             "inspection": "Selected original PNGs inspected individually, including cloud1, treeLong and bushAlt1; source comparison sheet is review material only",
-            "status": "Source artwork and copied image identity verified. Native composition and readability reviewed for both modes at 320 x 568, 393 x 852, 852 x 393 and 1473 x 1175. Native gameplay, lifecycle, reduced-motion and static drawing cache checks passed. Chromium and simulated iPhone WebKit gameplay and layout checks passed; the Chromium Words reload case passed on retry with a 180-second suite limit.",
+            "status": "Historical validation: source artwork and copied image identity verified. Earlier garden composition and readability reviewed for both modes at 320 x 568, 393 x 852, 852 x 393 and 1473 x 1175. Native gameplay, former cloud lifecycle, reduced-motion and static drawing cache checks passed. Chromium and simulated iPhone WebKit gameplay and layout checks passed; the Chromium Words reload case passed on retry with a 180-second suite limit. Current panorama validation is recorded in docs/assets/jelly-sky.md.",
             "native_captures": [
                 "build/jelly-backdrop-review/after/jelly-393x852.png",
                 "build/jelly-backdrop-review/after/jelly-1473x1175.png",

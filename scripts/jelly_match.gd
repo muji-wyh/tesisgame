@@ -1246,8 +1246,12 @@ func _style_drop_button() -> void:
 	var s: float = Style.ui_scale(self)
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var pressed: bool = state == "pressed"
-		var surface := Style.box(Color("#e7f4df", 0.94) if pressed else Color("#fffdf5", 0.78),
-			Color("#578f69", 0.72) if pressed else Color("#78a995", 0.30), ceili(12.0 / s), maxi(1, roundi(1.0 / s)))
+		var surface := Style.box(Color("#e3eef1", 0.98) if pressed else Color("#fffefa", 0.92),
+			Color("#8badae", 0.82) if pressed else Color("#b7c9c9", 0.66), ceili(14.0 / s), maxi(1, roundi(1.0 / s)))
+		surface.shadow_color = Color("#4b6679", 0.07 if pressed else 0.10)
+		surface.shadow_size = ceili(5.0 / s)
+		surface.shadow_offset = Vector2(0, (1.0 if pressed else 3.0) / s)
+		surface.border_width_top = maxi(1, roundi(2.0 / s))
 		drop_button.add_theme_stylebox_override(state, surface)
 	var focus := Style.box(Color.TRANSPARENT, Style.GOOD, ceili(12.0 / s), maxi(2, roundi(2.0 / s)))
 	focus.set_expand_margin_all(2.0 / s)
@@ -1407,11 +1411,14 @@ func _refresh_danger() -> void:
 func _draw() -> void:
 	if not _configured:
 		return
-	var well := Style.box(Color("#fbfff9", 0.90), Color("#78a995", 0.64), 18, 2)
-	well.shadow_color = Color("#2a6954", 0.13)
-	well.shadow_size = ceili(10.0 / Style.ui_scale(self))
-	well.shadow_offset = Vector2(0, 5.0 / Style.ui_scale(self))
+	var s: float = Style.ui_scale(self)
+	var well := Style.box(Color("#fafdfb", 0.92), Color("#9db8be", 0.66), ceili(18.0 / s), maxi(1, roundi(1.0 / s)))
+	well.shadow_color = Color("#3b546d", 0.13)
+	well.shadow_size = ceili(12.0 / s)
+	well.shadow_offset = Vector2(0, 5.0 / s)
 	draw_style_box(well, _board.grow(2.0))
+	var inner_lip := Style.box(Color.TRANSPARENT, Color(1, 1, 1, 0.86), ceili(16.0 / s), maxi(1, roundi(1.0 / s)))
+	draw_style_box(inner_lip, _board.grow(-1.0 / s))
 	if _chest_texture != null:
 		for flight: Dictionary in _loot_flights:
 			var p: float = clampf(float(flight.elapsed) / LOOT_FLIGHT_SECONDS, 0.0, 1.0)

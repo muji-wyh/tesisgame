@@ -1,9 +1,10 @@
 # Jelly garden artwork
 
-The integrated **Kenney Background Elements Remastered (1.0)** artwork creates
-an airy layered garden for Jelly Match and Jelly Words. Pale clouds and distant
-hills provide depth; trees and low foliage belong at the outer scene edges so
-the colorful jelly pieces and vocabulary remain the focus.
+The **Kenney Background Elements Remastered (1.0)** hills, trees and foliage
+remain as low, static perimeter scenery for Jelly Match and Jelly Words.
+The former illustrated sky, cloud bank and drifting clouds are retired from
+the shared backdrop. See [Jelly sky](jelly-sky.md) for the current panorama,
+daylight presentation and runtime validation.
 
 ## Source, rights and current status
 
@@ -18,13 +19,13 @@ the colorful jelly pieces and vocabulary remain the focus.
   license copied byte-for-byte into the repository. Source and destination
   hashes are recorded in [the manifest](jelly-garden.json).
 - Animation availability: static PNG artwork and vector originals; no baked
-  environment animation clips. Runtime tint, opacity and gentle horizontal motion
-  of two clouds are game-authored presentation. Original image pixels remain
-  unchanged.
-- Integration: all eight images are used by the shared backdrop for Jelly Match
-  and Jelly Words. The cloud bank's lower edge fades into the sky in wide layouts.
-  GameUI pause and reduced-motion hooks stop the two drifting clouds.
-- Validation status: source artwork and copied file identity verified. Native
+  environment animation clips. The retained garden images do not animate.
+  Runtime tint and opacity preserve their original image pixels; the former
+  game-authored horizontal cloud motion is historical.
+- Current integration: `hills.png`, `tree.png`, `tree-long.png` and `foliage.png`
+  frame the bottom and outer edges of the current panorama. All eight imported
+  originals remain in the repository with their source hashes unchanged.
+- Historical garden validation: source artwork and copied file identity verified. Native
   composition and readability reviewed in both modes at 320 x 568, 393 x 852,
   852 x 393 and 1473 x 1175. Lifecycle and reduced-motion checks passed.
   Chromium and simulated iPhone WebKit gameplay and layout checks passed.
@@ -34,16 +35,16 @@ the colorful jelly pieces and vocabulary remain the focus.
 All source paths below are relative to the supplied pack directory. Imported
 PNGs are in `assets/images/jelly-match/garden/`.
 
-| Imported file | Original source | Intended role |
+| Imported file | Original source | Current or historical role |
 | --- | --- | --- |
-| `sky.png` | `Backgrounds/backgroundEmpty.png` | Complete pale sky, cloud and distant-hill illustration |
-| `hills.png` | `Backgrounds/Elements/hills.png` | Separate transparent distant-hill layer |
-| `cloud-bank.png` | `Backgrounds/Elements/cloudLayer1.png` | Transparent cloud bank with soft lower fade |
-| `cloud.png` | `PNG/Retina/cloud3.png` | Rounded larger cloud |
-| `cloud-small.png` | `PNG/Retina/cloud1.png` | Alternate rounded cloud |
-| `tree.png` | `PNG/Retina/tree.png` | Tapered tree at a scene edge |
-| `tree-long.png` | `PNG/Retina/treeLong.png` | Tall tree for a second perimeter silhouette |
-| `foliage.png` | `PNG/Retina/bushAlt1.png` | Low layered shrub used as edge foliage |
+| `sky.png` | `Backgrounds/backgroundEmpty.png` | Historical illustrated sky; no longer drawn |
+| `hills.png` | `Backgrounds/Elements/hills.png` | Current low, static hill layer |
+| `cloud-bank.png` | `Backgrounds/Elements/cloudLayer1.png` | Historical cloud bank; no longer drawn |
+| `cloud.png` | `PNG/Retina/cloud3.png` | Historical drifting cloud; no longer drawn |
+| `cloud-small.png` | `PNG/Retina/cloud1.png` | Historical alternate drifting cloud; no longer drawn |
+| `tree.png` | `PNG/Retina/tree.png` | Current static tree at the lower scene edge |
+| `tree-long.png` | `PNG/Retina/treeLong.png` | Current static second perimeter tree |
+| `foliage.png` | `PNG/Retina/bushAlt1.png` | Current low, static edge foliage |
 
 `foliage.png` is the source shrub illustration. Its pointed leaf
 tips work as a small cropped foreground cluster, outside the interactive board.
@@ -56,9 +57,13 @@ inspected directly, including both clouds, both trees and the shrub. The
 alternative New Platformer Pack and Platformer Assets Candy materials remain
 source review only and are not imported for this direction.
 
-## Runtime review evidence
+## Historical garden runtime review
 
-Four native after captures were visually reviewed for the garden composition,
+The evidence below records the earlier illustrated garden and its two moving
+clouds. It does not validate the current sky panorama or daylight motion; those
+are recorded in [Jelly sky](jelly-sky.md).
+
+Four native after captures were visually reviewed for that garden composition,
 word contrast, cropped tree and foliage edges, and phone/desktop framing:
 
 - `build/jelly-backdrop-review/after/jelly-393x852.png`
@@ -72,7 +77,7 @@ are in `build/jelly-backdrop-review/after-compact/`. The native Jelly Words flow
 suite passed 95 checks; Jelly Match passed 403 checks after updating its obsolete
 Home preview field assertion.
 
-The shared garden lifecycle suite passed 145 checks covering input pass-through,
+The former shared garden lifecycle suite passed 145 checks covering input pass-through,
 Home, notebook and browser-background pauses, replay, initial reduced motion and
 resuming the same cloud phase. A rendered standalone run passed 28 checks,
 including evidence that cloud transforms leave static scenery drawing cached.
@@ -97,6 +102,8 @@ python tools/import-jelly-garden-assets.py
 python tools/import-jelly-garden-assets.py --check
 ```
 
+The manifest records retained scenery separately from the retired sky and cloud
+assets; regeneration preserves that distinction and the historical review.
 Use `--source <library-root>` when the supplied All-in-1 library is stored in a
 different location. The importer reads only the eight selected PNGs and the
 pack's license. It performs no image conversion, recoloring or resampling.

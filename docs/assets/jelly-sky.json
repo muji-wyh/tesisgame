@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "imported_on": "2026-10-14",
+  "source": {
+    "title": "Skyboxes (1.0)",
+    "creator": "Kenney",
+    "creator_page": "https://kenney.nl/",
+    "collection": "Kenney Game Assets All-in-1 3.7.0",
+    "supplied_source_root": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0",
+    "pack_path": "2D assets/Skyboxes",
+    "acquisition": "User-supplied, already acquired local library; no download or purchase performed",
+    "license": "CC0 1.0",
+    "license_page": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "license_original": "License.txt",
+    "license_file": "assets/images/jelly-match/sky/LICENSE-CC0.txt",
+    "license_source_sha256": "bba7de4552f4a86589fbef2d694c02609643c8d4680e9dbe00407b3474b4a993",
+    "license_sha256": "bba7de4552f4a86589fbef2d694c02609643c8d4680e9dbe00407b3474b4a993",
+    "attribution": "Kenney credit is welcomed but not required by the supplied CC0 license",
+    "status": "Original daytime panorama inspected and converted into the repository; runtime integration and review evidence are documented in jelly-sky.md",
+    "animations": "Static equirectangular PNG panoramas with baked clouds and sun; no source animation clips, sunlight simulation, or day/night engine system"
+  },
+  "images": [
+    {
+      "id": "day",
+      "path": "assets/images/jelly-match/sky/day.png",
+      "source": "Skyboxes/skybox-day.png",
+      "source_sha256": "b7d98fe95157e74b3899a1dd468a1e478005bcd1f668b29b5b42a48cb5358fa2",
+      "source_bytes": 1051605,
+      "source_size": [
+        4096,
+        2048
+      ],
+      "source_mode": "P",
+      "sha256": "e039ada07593d7686975aa504881b0be8a1633a20453cdd940a77481e0c2ecaa",
+      "pixel_sha256": "a35b692e9dd4ceac5758c05d8d14377dbfe74c728b69a012eadb4715754d534d",
+      "bytes": 466993,
+      "size": [
+        2048,
+        1024
+      ],
+      "mode": "RGB",
+      "processing": {
+        "color_conversion": "Pillow Image.convert('RGB'); no palette grading or recoloring",
+        "resize": "Pillow Image.resize((2048, 1024), Image.Resampling.LANCZOS)",
+        "encoding": "PNG RGB with optimize=True",
+        "crop": "None; the entire 2:1 equirectangular panorama is preserved",
+        "other_changes": "No painted additions, alpha extraction, or source-preview content"
+      },
+      "conversion_tool": "Python with Pillow 12.2.0"
+    }
+  ],
+  "review": {
+    "direction": "Soft daytime sky, restrained sunlight and a quiet low garden horizon around the Jelly playfield",
+    "source_contact_sheet": "build/jelly-environment-20261014-source-scout.png",
+    "source_detail_sheet": "build/jelly-environment-20261014-sky-detail.png",
+    "inspection": "All five original sky panoramas, the daytime source crop, existing garden layers, and Nature Kit source preview inspected; only the daytime panorama selected",
+    "status": "Source selection, license, original hashes and converted pixels verified; runtime framing, motion, readability and browser review are documented separately in jelly-sky.md",
+    "alternatives": "Morning, night, alien, space, Nature Kit and particle-light assets remain source review only and are not imported",
+    "preview_note": "Sample (Day).png and Sample (Night).png are watermarked source previews; neither is included in the runtime image"
+  }
+}

@@ -28,6 +28,7 @@ var _chest: Texture2D = CHEST
 var _chest_region := Rect2(39, 309, 798, 595)
 var _icon_rect := Rect2()
 var _coin_rect := Rect2()
+var _price_pill := Rect2()
 var _title := Label.new()
 var _price_label := Label.new()
 var _panel := StyleBoxFlat.new()
@@ -46,6 +47,7 @@ func _init() -> void:
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.autowrap_mode = TextServer.AUTOWRAP_OFF
 		add_child(label)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	resized.connect(_layout)
 	for event: Signal in [focus_entered, focus_exited, mouse_entered, mouse_exited, button_down, button_up]:
 		event.connect(queue_redraw)
@@ -143,32 +145,33 @@ func _update_accessibility() -> void:
 
 func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
-	var edge: float = minf(30.0 * unit, size.y * 0.51)
-	_icon_rect = Rect2(Vector2(7.0 * unit, maxf(3.0 * unit, size.y * 0.31 - edge * 0.5)), Vector2.ONE * edge)
-	var left: float = _icon_rect.end.x + 3.0 * unit
-	_title.position = Vector2(left, 4.0 * unit)
-	var title_size := Vector2(maxf(1.0, size.x - left - 6.0 * unit), maxf(1.0, size.y * 0.55))
+	var edge: float = minf(30.0 * unit, minf(size.y * 0.50, size.x * 0.27))
+	var lower_center: float = size.y - 17.0 * unit
+	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
+	_title.position = Vector2(6.0 * unit, 3.0 * unit)
+	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, 22.0 * unit))
 	var title: String = "Treasure" if _kind == "fragments" else "Auto merge"
 	var font_size: int = maxi(1, roundi(12.0 * unit))
-	if _kind == "auto_merge" and Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x:
-		title = "Auto\nmerge"
-	var longest: String = "Treasure" if _kind == "fragments" else "merge" if title.contains("\n") else title
-	var lines: int = 2 if title.contains("\n") else 1
-	while font_size > 1 and (Style.HEADING_FONT.get_string_size(longest, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
-		or Style.HEADING_FONT.get_height(font_size) * lines + _title.get_theme_constant("line_spacing") * (lines - 1) > title_size.y):
+	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
+		or Style.HEADING_FONT.get_height(font_size) > title_size.y):
 		font_size -= 1
 	_title.text = title
 	_title.add_theme_font_size_override("font_size", font_size)
 	_title.size = title_size
 	_price_label.text = str(_price)
 	var price_font: int = maxi(1, roundi(12.0 * unit))
-	_price_label.add_theme_font_size_override("font_size", price_font)
 	var price_width: float = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x
-	var coin_edge: float = 13.0 * unit
+	var coin_edge: float = 12.0 * unit
+	var available_price: float = maxf(1.0, size.x - _icon_rect.end.x - 10.0 * unit)
+	while price_font > 1 and price_width + coin_edge + 12.0 * unit > available_price:
+		price_font -= 1
+		price_width = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x
+	_price_label.add_theme_font_size_override("font_size", price_font)
 	var group_width: float = coin_edge + 4.0 * unit + price_width
-	var bottom: float = size.y - 6.0 * unit
-	_coin_rect = Rect2(Vector2((size.x - group_width) * 0.5, bottom - coin_edge), Vector2.ONE * coin_edge)
-	_price_label.position = Vector2(_coin_rect.end.x + 4.0 * unit, bottom - 17.0 * unit)
+	var pill_width: float = group_width + 8.0 * unit
+	_price_pill = Rect2(Vector2(size.x - 6.0 * unit - pill_width, lower_center - 11.0 * unit), Vector2(pill_width, 22.0 * unit))
+	_coin_rect = Rect2(Vector2(_price_pill.position.x + 4.0 * unit, lower_center - coin_edge * 0.5), Vector2.ONE * coin_edge)
+	_price_label.position = Vector2(_coin_rect.end.x + 4.0 * unit, lower_center - 9.5 * unit)
 	_price_label.size = Vector2(price_width + 1.0, 19.0 * unit)
 	queue_redraw()
 
@@ -199,42 +202,47 @@ func _draw() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var unit: float = 1.0 / _ui_scale
-	var accent := Color("#8d73b0") if _kind == "auto_merge" else Color("#b59350")
-	var fill := Color("#f4eefb") if _kind == "auto_merge" else Color("#fff3da")
+	var accent := Color("#a699bc") if _kind == "auto_merge" else Color("#b5a075")
+	var fill := Color("#faf9fc") if _kind == "auto_merge" else Color("#fffcf2")
 	var pose: Dictionary = _pose()
 	var ink: Color = Style.INK
 	var celebrating: bool = _feedback_active and _feedback_success and not _paused
 	if disabled and not celebrating:
 		fill = Color("#f0f1eb")
 		accent = Color("#b5bbb0")
-		ink = Color("#7b8478")
+		ink = Color("#64736b")
 	elif not _affordable and not celebrating:
-		fill = fill.lerp(Style.PAPER, 0.55)
-		accent = accent.lerp(Color("#a99b89"), 0.35)
+		accent = accent.lerp(Color("#b9b7af"), 0.28)
 	elif is_hovered():
 		fill = fill.lightened(0.28)
 	_panel.bg_color = fill
-	_panel.border_color = accent.lightened(0.35)
+	_panel.border_color = accent.lightened(0.50)
 	_panel.set_border_width_all(maxi(1, roundi(unit)))
 	_panel.set_corner_radius_all(maxi(1, roundi(13.0 * unit)))
-	_panel.shadow_color = Color(accent.darkened(0.2), 0.12)
-	_panel.shadow_size = roundi(2.0 * unit)
-	_panel.shadow_offset = Vector2(0.0, 2.0 * unit)
+	_panel.shadow_color = Color("#577777", 0.14)
+	_panel.shadow_size = roundi(3.0 * unit)
+	_panel.shadow_offset = Vector2(0.0, (1.0 if is_pressed() else 2.0) * unit)
 	if has_focus() and not disabled:
 		_panel.border_color = accent
 		_panel.set_border_width_all(maxi(1, roundi(2.0 * unit)))
 	draw_style_box(_panel, Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit))
 	_title.add_theme_color_override("font_color", ink)
-	var price_color := Color("#756039") if _affordable else Color("#9c7258")
+	var price_color := Color("#675335") if _affordable else Color("#80644d")
 	if _feedback_active and not _feedback_success and not _paused:
 		price_color = Color("#b46640")
 	_price_label.add_theme_color_override("font_color", ink if disabled and not celebrating else price_color)
+	var price_fill := Color("#fff2c9") if _affordable or celebrating else Color("#eeeee6")
+	var price_edge := Color("#e8d5a7") if _affordable or celebrating else Color("#dde0d6")
+	if disabled and not celebrating:
+		price_fill = Color("#e7ebe3")
+	var price_surface := Style.box(price_fill, price_edge, roundi(11.0 * unit), maxi(1, roundi(unit)))
+	draw_style_box(price_surface, _price_pill)
 	var center: Vector2 = _icon_rect.get_center() + Vector2(pose.offset)
 	var tint := Color("#8e68b5") if _kind == "auto_merge" else Color.WHITE
 	if disabled and not celebrating:
-		tint.a = 0.48
+		tint.a = 0.70
 	elif not _affordable and not celebrating:
-		tint.a = 0.72
+		tint.a = 0.90
 	var light: float = float(pose.light)
 	var light_color := Color("#d7c5ff") if _feedback_success and _kind == "auto_merge" else Color("#ffe49d") if _feedback_success else Color("#ffc49d")
 	if light > 0.0:
@@ -244,10 +252,15 @@ func _draw() -> void:
 	if _kind == "auto_merge":
 		draw_texture_rect(WAND, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
 	else:
-		var extent: Vector2 = _chest_region.size * (_icon_rect.size.x / maxf(1.0, _chest_region.size.x))
-		draw_texture_rect_region(_chest, Rect2(-extent * 0.5, extent), _chest_region, tint)
+		# A newly allocated viewport can be blank until the owner caches its
+		# cropped render. Keep the acquired fallback visible during that warmup.
+		var warming: bool = _chest is ViewportTexture or not _chest_region.has_area()
+		var texture: Texture2D = CHEST if warming else _chest
+		var region := Rect2(39, 309, 798, 595) if warming else _chest_region
+		var extent: Vector2 = region.size * (_icon_rect.size.x / maxf(1.0, region.size.x))
+		draw_texture_rect_region(texture, Rect2(-extent * 0.5, extent), region, tint)
 	draw_set_transform(Vector2.ZERO)
-	draw_texture_rect(COIN, _coin_rect, false, Color(1.0, 1.0, 1.0, 1.0 if celebrating else 0.55 if disabled else 0.8 if not _affordable else 1.0))
+	draw_texture_rect(COIN, _coin_rect, false, Color(1.0, 1.0, 1.0, 0.75 if disabled and not celebrating else 1.0))
 	if light > 0.0:
 		var offsets: Array[Vector2] = [Vector2(-0.42, -0.42), Vector2(0.48, -0.24), Vector2(0.38, 0.38)]
 		for index in range(offsets.size()):

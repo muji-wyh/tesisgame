@@ -167,7 +167,7 @@ func _sample() -> Dictionary:
 		"stage": stage,
 		"coin_count": coins,
 		"sparkle_count": sparks,
-		"visual_scale": 0.74 + strength * 0.23 + growth * 0.075 + strike * 0.035 + pulse * strength * 0.014,
+		"visual_scale": 0.82 + strength * 0.15 + growth * 0.075 + strike * 0.035 + pulse * strength * 0.014,
 		"glow": minf(1.0, clampf((_charge - 1.0) / 8.0, 0.0, 1.0) * (0.48 + pulse * 0.20) + strike * 0.15 + surplus * 0.27),
 		"rays": minf(1.0, clampf((_charge - 4.0) / 5.0, 0.0, 1.0) * (0.60 + pulse * 0.22) + surplus * 0.25),
 		"rock": 0.0 if _reduced_motion else sin(_elapsed * (2.6 + surplus * 0.5)) * strength * strength * (0.038 + surplus * 0.007)
@@ -186,7 +186,7 @@ func _draw() -> void:
 	var art_scale: float = float(pose.visual_scale)
 	if is_pressed() and not disabled:
 		art_scale *= 0.97
-	var base_color := Color.WHITE if ready else Color(0.79, 0.85, 0.80, 0.63)
+	var base_color := Color.WHITE if ready else Color(0.91, 0.96, 0.91, 0.90)
 	if is_hovered() and not disabled:
 		base_color = Color(1.05, 1.05, 1.00, 1.0)
 	var icon_center: Vector2 = Vector2(size.x * 0.5, size.y * 0.43) if tall else Vector2(size.x * 0.22, size.y * 0.50)
@@ -248,7 +248,7 @@ func _draw_coins(center: Vector2, edge: float, pose: Dictionary, ready: bool) ->
 			extra_edge *= 0.73
 			offset.y = maxf(offset.y, -center.y - lift + extra_edge * 0.5 + 3.0 / _ui_scale)
 		_draw_art(COIN, offset, Vector2.ONE * extra_edge, Color(1, 1, 1, amount))
-	var main_tint := Color.WHITE if ready else Color(0.74, 0.76, 0.69, 0.62)
+	var main_tint := Color.WHITE if ready else Color(0.88, 0.91, 0.83, 0.88)
 	_draw_art(COIN, Vector2.ZERO, Vector2.ONE * edge * (1.0 + strength * 0.10), main_tint)
 	draw_set_transform(Vector2.ZERO)
 
@@ -296,8 +296,8 @@ func _draw_count(tall: bool, ready: bool, unit: float, strike: float) -> void:
 	var center: Vector2 = Vector2(size.x * 0.76, size.y * 0.26) if tall else Vector2(size.x * 0.845, size.y * 0.50)
 	var bounds := Rect2(center - Vector2(width, height) * 0.5, Vector2(width, height))
 	bounds.position.x = clampf(bounds.position.x, 2.0 * unit, size.x - bounds.size.x - 2.0 * unit)
-	var fill := Color("#fff6ca") if ready else Color("#e1e7dc")
-	var edge := Color("#ca9141") if ready else Color("#b8c4b5")
+	var fill := Color("#fff6ca") if ready else Color("#f1f6eb")
+	var edge := Color("#ca9141") if ready else Color("#c7d4bd")
 	if _active:
 		fill = fill.lerp(Color.WHITE, strike * 0.65)
 	var badge := Style.box(fill, edge, ceili(11.0 * unit), maxi(1, roundi(unit)))
