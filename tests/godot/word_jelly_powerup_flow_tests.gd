@@ -323,6 +323,67 @@ func _check_fragment_coarse_frame(app) -> void:
 	_drain(view)
 
 
+func _check_fragment_repeated_purchases(app) -> void:
+	await _prepare(app)
+	var view = app._word_jelly
+	var game = view.game
+	check(app.coin_wallet.spend("fixture:treasure-repeat-budget", app.coin_wallet.balance - 500).ok,
+		"Reserve exactly enough real coins for two immediate Treasure purchases")
+	app._coin_flight.sync(app.coin_wallet.balance)
+	view._process(0.0)
+	var receipts: int = app.coin_wallet._receipts.size()
+	var button = view.powerup_buttons.fragments
+	button.pressed.emit()
+	var first: Dictionary = game.powerup_snapshot()
+	check(not button.disabled and not button.snapshot().busy and button.snapshot().price == 300
+		and view.powerup_buttons.auto_merge.disabled and app.coin_wallet.balance == 300,
+		"Treasure immediately shows its next price and remains tappable while Auto merge stays reserved")
+	view._process(0.10)
+	button.pressed.emit()
+	var combined: Dictionary = game.powerup_snapshot()
+	check(not button.disabled and not button.snapshot().affordable and button.snapshot().price == 400
+		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.size() == receipts + 2
+		and combined.receipt_id == first.receipt_id and is_equal_approx(float(combined.elapsed), 0.10),
+		"A second click pays the displayed 300 coins and appends delivery without resetting the first flight")
+	check(int(combined.total) >= int(first.total) + 2 and int(combined.total) <= int(first.total) + 8
+		and _carried_fragments(game) == 0 and view._powerup_effects.stamps.size() > 0,
+		"Both paid batches retain visible flight effects before their markers arrive")
+	view._process(0.05)
+	var before_failure: Dictionary = game.powerup_snapshot()
+	button.pressed.emit()
+	check(game.powerup_snapshot() == before_failure and app.coin_wallet.balance == 0
+		and app.coin_wallet._receipts.size() == receipts + 2 and button.snapshot().price == 400
+		and not button.snapshot().feedback_success and cues.count("powerup_wrong") == 1
+		and cues.count("powerup_success") == 2,
+		"An unfunded rapid third click gives negative feedback without disturbing either accepted purchase")
+	check(app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
+		"An unfunded repeat plays the negative recording even during earlier Treasure flights")
+	view.pause(true)
+	view._process(0.40)
+	check(game.powerup_snapshot() == before_failure and view._powerup_arrivals.is_empty(),
+		"Pausing overlapping Treasure purchases freezes both animation timelines")
+	view.pause(false)
+	view._process(0.50)
+	var delivered: Array = game.powerup_snapshot().arrivals.filter(func(item: Dictionary) -> bool:
+		return float(item.at) <= 0.65 + game.EPSILON)
+	check(arrivals.size() == delivered.size() and view._powerup_arrivals.size() == delivered.size()
+		and _carried_fragments(game) == delivered.size(),
+		"One slow frame preserves every interleaved marker and arrival flash from both purchases")
+	for index in range(mini(arrivals.size(), view._powerup_arrivals.size())):
+		var event: Dictionary = arrivals[index]
+		var flash: Dictionary = view._powerup_arrivals[index]
+		check(int(flash.index) == int(event.index) and absf(float(flash.elapsed) - (0.65 - float(event.at))) < 0.001,
+			"Each overlapping arrival flash keeps its exact deadline instead of using another receipt's array position")
+	_drain(view)
+	check(_carried_fragments(game) == int(combined.total) and arrivals.size() == int(combined.total)
+		and cues.count("powerup_fragment") == int(combined.total)
+		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.size() == receipts + 2,
+		"Both paid batches finish once with their original marker sounds and no extra debit")
+	check(app.coin_wallet.credit("fixture:after-treasure-repeat-budget", 1000).ok,
+		"Restore ordinary fixture funds through a distinct valid chest receipt")
+	app._coin_flight.sync(app.coin_wallet.balance)
+
+
 func _check_lifecycle(app) -> void:
 	await _prepare(app, 2)
 	var view = app._word_jelly
@@ -356,13 +417,15 @@ func _check_lifecycle(app) -> void:
 	game = view.game
 	before = app.coin_wallet.balance
 	view.powerup_buttons.fragments.pressed.emit()
+	view._process(0.1)
+	view.powerup_buttons.fragments.pressed.emit()
 	var total: int = int(game.powerup_snapshot().total)
 	view.finish_button.accessibility_requested.emit()
 	check(app._finish_confirmation_open(), "Finish confirms before ending a purchased fragment flight")
 	app._finish_confirmation.finish_button.pressed.emit()
 	check(game.phase == "finished" and not game.powerup_active() and _carried_fragments(game) == total
-		and game.collected_coins == 0 and game.fragment_count == 0 and app.coin_wallet.balance == before - 200,
-		"Confirmed Finish settles the purchased obligation without automatic collection or a second charge")
+		and game.collected_coins == 0 and game.fragment_count == 0 and app.coin_wallet.balance == before - 500,
+		"Confirmed Finish settles both repeated purchases without automatic collection or another charge")
 
 
 func _check_preferences(app) -> void:
@@ -445,6 +508,7 @@ func _run() -> void:
 	await _check_escalating_prices(app)
 	await _check_fragments(app)
 	await _check_fragment_coarse_frame(app)
+	await _check_fragment_repeated_purchases(app)
 	await _check_lifecycle(app)
 	await _check_preferences(app)
 	await _check_responsive_actions(app)

@@ -106,6 +106,7 @@ var _powerup: Dictionary = {}
 var _powerup_uses: Dictionary = {"auto_merge": 0, "fragments": 0}
 var _powerup_ids: Array[int] = []
 var _powerup_purchasing: bool = false
+var _powerup_activating: bool = false
 var _powerup_committing: bool = false
 var _finishing_powerup: bool = false
 var _finish_after_purchase: bool = false
@@ -213,7 +214,9 @@ func powerup_snapshot() -> Dictionary:
 
 
 func can_activate_powerup(kind: String) -> bool:
-	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or powerup_active() \
+	var repeat_treasure: bool = kind == "fragments" and str(_powerup.get("kind", "")) == "fragments"
+	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
+		or (powerup_active() and not repeat_treasure) \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
 		or not fusions.is_empty() or _settling_remaining() > EPSILON or cells.is_empty():
 		return false
@@ -221,10 +224,22 @@ func can_activate_powerup(kind: String) -> bool:
 
 
 func activate_powerup(kind: String) -> bool:
-	if not can_activate_powerup(kind):
+	if _powerup_activating or not can_activate_powerup(kind):
 		return false
 	var generation: int = _generation
+	# Separate clicks may overlap flights; nested purchase callbacks may not pay again.
+	_powerup_activating = true
+	var purchased: bool = _purchase_powerup(kind)
+	if generation == _generation:
+		changed.emit()
+	_powerup_activating = false
+	return purchased
+
+
+func _purchase_powerup(kind: String) -> bool:
+	var generation: int = _generation
 	var receipt_id: String = _event_id("powerup-" + kind)
+	var previous_timeline: String = str(_powerup.get("receipt_id", ""))
 	var price: int = powerup_price(kind)
 	# Lock the board while persistence runs, including reentrant lifecycle calls.
 	_powerup_purchasing = true
@@ -233,9 +248,14 @@ func activate_powerup(kind: String) -> bool:
 	if generation != _generation:
 		return false
 	if not response is Dictionary or not bool(response.get("ok", false)) or bool(response.get("duplicate", false)):
+		var settle_pending: bool = _settle_after_purchase
 		_settle_after_purchase = false
+		if settle_pending:
+			finish_powerup()
+		if generation != _generation:
+			return false
 		powerup_feedback.emit(kind, false)
-		if generation == _generation and not powerup_active():
+		if generation == _generation and (not powerup_active() or _same_powerup(generation, previous_timeline)):
 			cue_requested.emit("powerup_wrong")
 		if _finish_after_purchase and generation == _generation:
 			_finish_after_purchase = false
@@ -243,15 +263,17 @@ func activate_powerup(kind: String) -> bool:
 		return false
 	# Commit the next price before feedback or lifecycle callbacks can reenter.
 	_powerup_uses[kind] = int(_powerup_uses.get(kind, 0)) + 1
-	_powerup_ids.clear()
-	for tile: Dictionary in cells:
-		_powerup_ids.append(int(tile.id))
-	_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
-		"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
-		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
-		"clock": 0.0, "started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
+	if not bool(_powerup.get("active", false)):
+		_powerup_ids.clear()
+		for tile: Dictionary in cells:
+			_powerup_ids.append(int(tile.id))
+		_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
+			"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
+			"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
+			"clock": 0.0, "started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
+	var timeline_id: String = str(_powerup.receipt_id)
 	if kind == "fragments":
-		_prepare_powerup_fragments()
+		_prepare_powerup_fragments(receipt_id)
 	# The paid obligation exists before any user callback may pause or leave.
 	if _settle_after_purchase or _finish_after_purchase:
 		_settle_after_purchase = false
@@ -261,14 +283,12 @@ func activate_powerup(kind: String) -> bool:
 			finish_round()
 		return true
 	powerup_feedback.emit(kind, true)
-	if not _same_powerup(generation, receipt_id):
+	if not _same_powerup(generation, timeline_id):
 		return true
 	if not paused:
 		cue_requested.emit("powerup_success")
-	if _same_powerup(generation, receipt_id) and not paused:
+	if _same_powerup(generation, timeline_id) and not paused:
 		_advance_powerup()
-	if generation == _generation:
-		changed.emit()
 	return true
 
 
@@ -354,11 +374,15 @@ func _sync_powerup_drag() -> void:
 		_held_tile_id = -1
 
 
-func _prepare_powerup_fragments() -> void:
+func _prepare_powerup_fragments(receipt_id: String) -> void:
 	var total: int = _rng.randi_range(CoinEconomy.TREASURE_FRAGMENT_MIN, CoinEconomy.TREASURE_FRAGMENT_MAX)
+	var start: float = float(_powerup.elapsed)
 	var pending_counts: Dictionary = {}
 	for tile: Dictionary in cells:
 		pending_counts[int(tile.id)] = int(tile.fragments)
+	for arrival: Dictionary in _powerup.arrivals:
+		if not bool(arrival.arrived):
+			pending_counts[int(arrival.tile_id)] = int(pending_counts[int(arrival.tile_id)]) + 1
 	for index in range(total):
 		var candidates: Array[int] = []
 		for id: int in _powerup_ids:
@@ -368,10 +392,12 @@ func _prepare_powerup_fragments() -> void:
 			candidates = _powerup_ids.duplicate()
 		var id: int = candidates[_rng.randi_range(0, candidates.size() - 1)]
 		pending_counts[id] = int(pending_counts[id]) + 1
-		_powerup.arrivals.append({"tile_id": id, "index": index, "at": POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER, "arrived": false})
+		_powerup.arrivals.append({"tile_id": id, "index": _powerup.arrivals.size(),
+			"receipt_id": receipt_id, "total": total,
+			"at": start + POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER, "arrived": false})
 	_powerup.stage = "arrivals"
-	_powerup.total = total
-	_powerup.duration = POWERUP_FRAGMENT_FLIGHT + (total - 1) * POWERUP_FRAGMENT_STAGGER + POWERUP_FRAGMENT_RECOVERY
+	_powerup.total = int(_powerup.total) + total
+	_powerup.duration = maxf(float(_powerup.duration), start + POWERUP_FRAGMENT_FLIGHT + (total - 1) * POWERUP_FRAGMENT_STAGGER + POWERUP_FRAGMENT_RECOVERY)
 
 
 func _advance_powerup() -> void:
@@ -380,7 +406,7 @@ func _advance_powerup() -> void:
 	var generation: int = _generation
 	var receipt_id: String = str(_powerup.receipt_id)
 	if str(_powerup.kind) == "fragments":
-		for arrival: Dictionary in _powerup.arrivals:
+		for arrival: Dictionary in _powerup.arrivals.duplicate():
 			if bool(arrival.arrived) or float(_powerup.elapsed) + EPSILON < float(arrival.at):
 				continue
 			arrival.arrived = true
@@ -390,7 +416,8 @@ func _advance_powerup() -> void:
 			_grant_powerup_fragment(cells[index])
 			_powerup.completed = int(_powerup.completed) + 1
 			powerup_fragment_arrived.emit({"tile_id": int(arrival.tile_id), "index": int(arrival.index),
-				"total": int(_powerup.total), "fragments": int(cells[index].fragments), "receipt_id": receipt_id})
+				"total": int(arrival.total), "fragments": int(cells[index].fragments),
+				"receipt_id": str(arrival.receipt_id), "timeline_id": receipt_id, "at": float(arrival.at)})
 			if not _same_powerup(generation, receipt_id) or paused:
 				return
 			cue_requested.emit("powerup_fragment")
@@ -473,10 +500,11 @@ func _powerup_boundary() -> float:
 	if not bool(_powerup.get("active", false)):
 		return INF
 	if str(_powerup.kind) == "fragments":
+		var next: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
 		for arrival: Dictionary in _powerup.arrivals:
 			if not bool(arrival.arrived):
-				return maxf(0.0, float(arrival.at) - float(_powerup.elapsed))
-		return maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
+				next = minf(next, maxf(0.0, float(arrival.at) - float(_powerup.elapsed)))
+		return next
 	var boundary: float = INF
 	for drag: Dictionary in _powerup.drags:
 		boundary = minf(boundary, maxf(0.0, float(drag.duration) - float(drag.elapsed)))

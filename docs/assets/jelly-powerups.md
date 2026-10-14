@@ -48,6 +48,13 @@ touch target never changes. An insufficient balance uses a neutral price capsule
 and warm readable price text while preserving clickability; only unavailable or busy actions
 are disabled. There are no tooltips or explanatory overlays.
 
+Treasure has no cooldown: it remains available while earlier Treasure fragments
+are flying or their arrival effects are fading. Each click pays its current
+quoted price independently and launches another two to eight fragments. New
+flights overlap existing ones without restarting or skipping them. Insufficient
+funds still trigger rejection feedback and leave all paid deliveries intact.
+Auto merge retains its exclusive board operation.
+
 The separate Collect control retains its sourced mint gel body and existing
 charge, growth, and sparkle rhythm. Its empty-state body and coin remain visible
 against the landscape, while a ready collection still grows to the original peak

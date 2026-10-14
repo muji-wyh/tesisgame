@@ -50,7 +50,9 @@ its matching target over 300 ms. Consecutive flights briefly overlap, leaving
 the completed words on the board for ordinary collection. Treasure costs 200,
 300, then 400 coins per round and delivers a random total of two to eight carried fragments to the current
 board, preferring bodies without fragments. Payment is persisted before either
-ability starts. The two prices advance independently after successful payment;
+ability starts. Treasure can be purchased again during delivery, with each paid
+batch starting its own flights immediately on the shared animation timeline.
+The two prices advance independently after successful payment;
 failed or duplicate payments do not advance them. Supply and danger clocks wait while the ability runs; Home and
 the Finish pull gesture pause it. Neither ability collects words, grants coins, or
 credits learning progress by itself.

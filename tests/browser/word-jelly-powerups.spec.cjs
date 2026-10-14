@@ -305,6 +305,74 @@ test('powerup prices stay visible and unaffordable purchases give feedback witho
   expect(errors).toEqual([]);
 });
 
+test('rapid Treasure purchases overlap their flights without a cooldown and preserve each paid delivery', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const { errors, audioAvailable } = await start(page, info, 900);
+  const opening = await readyPowerup(page, 'fragments'), growth = await savedGrowth(page);
+  const bounds = await metrics(page), rect = opening.powerup_buttons.fragments.rect;
+  const from = await playbackIndex(page);
+  await beginTrace(page, 'treasure-repeat');
+  // Trusted consecutive taps reuse the stable target so no polling wait becomes a cooldown.
+  for (let click = 0; click < 4; click++) await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2, bounds);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(0);
+  await expect.poll(async () => (await jelly(page)).powerup_buttons.fragments.feedback_serial)
+    .toBe(opening.powerup_buttons.fragments.feedback_serial + 4);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.powerup.kind === 'fragments' && !state.powerup.active && state.powerup.stage === 'complete';
+  }).toBe(true);
+  const final = await jelly(page), saved = await storedWallet(page);
+  const evidence = await retainTrace(page, info, 'word-jelly-treasure-repeat', ['fragment-arrival', 'negative-fragments']);
+  const batches = new Map();
+  for (const arrival of final.powerup.arrivals) {
+    if (!batches.has(arrival.receipt_id)) batches.set(arrival.receipt_id, []);
+    batches.get(arrival.receipt_id).push(arrival);
+  }
+  expect(batches.size, 'Every funded click keeps its independent receipt in the same live timeline').toBe(3);
+  expect(final.powerup.receipt_id).toBe([...batches.keys()][0]);
+  const first = [...batches.values()][0], firstEnd = first.at(-1).at + 0.35;
+  for (const [receipt, arrivals] of batches) {
+    expect(arrivals.length).toBeGreaterThanOrEqual(2);
+    expect(arrivals.length).toBeLessThanOrEqual(8);
+    expect(arrivals[0].at - 0.42, 'Each repeat begins before the original animation finishes').toBeLessThan(firstEnd);
+    for (const [index, arrival] of arrivals.entries()) {
+      expect(arrival.receipt_id).toBe(receipt);
+      expect(arrival.total).toBe(arrivals.length);
+      expect(arrival.at).toBeCloseTo(arrivals[0].at + index * 0.18, 5);
+      expect(arrival.arrived).toBe(true);
+    }
+  }
+  expect(final.powerup.completed).toBe(final.powerup.total);
+  expect(fragmentTotal(final) - fragmentTotal(opening)).toBe(final.powerup.total);
+  expect(progress(final)).toEqual(progress(opening));
+  expect(await savedGrowth(page)).toBe(growth);
+  expect(saved.balance).toBe(0);
+  expect(Object.values(saved.receipts).filter(amount => amount < 0)).toEqual([-200, -300, -400]);
+  expect(final.powerup_buttons.fragments.price).toBe(400);
+  expect(final.powerup_buttons.fragments.enabled).toBe(true);
+  const overlap = evidence.timeline.filter(frame => frame.powerup.active && frame.powerup.kind === 'fragments' &&
+    new Set((frame.powerup.arrivals || []).map(arrival => arrival.receipt_id)).size === 3);
+  expect(overlap.length, 'All three payments share continuing animation instead of replacing or draining earlier flights').toBeGreaterThan(0);
+  expect(overlap.some(frame => frame.effects > 0)).toBe(true);
+  expect(overlap.some(frame => frame.buttons.fragments.enabled && !frame.buttons.fragments.busy)).toBe(true);
+  for (const frame of overlap) {
+    expect(frame.buttons.auto_merge.enabled, 'Auto merge keeps its separate operation lock').toBe(false);
+    for (const original of opening.tiles) {
+      const tile = frame.tiles.find(item => item.id === original.id);
+      const arrived = frame.powerup.arrivals.filter(arrival => arrival.tile_id === original.id && arrival.arrived).length;
+      expect(tile.fragments, 'A marker is granted only on its own preserved arrival deadline').toBe(original.fragments + arrived);
+    }
+  }
+  if (audioAvailable) {
+    const sounds = await soundsSince(page, from);
+    expect(recordingCount(sounds, RIGHT)).toHaveLength(3);
+    expect(recordingCount(sounds, WRONG)).toHaveLength(1);
+    expect(recordingCount(sounds, FRAGMENT)).toHaveLength(final.powerup.total);
+    fs.writeFileSync(info.outputPath('word-jelly-treasure-repeat-audio.json'), JSON.stringify(sounds, null, 2));
+  }
+  expect(errors).toEqual([]);
+});
+
 test('paid Treasure arrives on the jellies and Auto merge moves every valid pair before a separate manual collection', async ({ page }, info) => {
   test.setTimeout(240000);
   const { errors, reducedMotion, audioAvailable } = await start(page, info, 5000);

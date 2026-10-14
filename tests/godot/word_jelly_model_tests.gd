@@ -95,6 +95,10 @@ func _run() -> void:
 	_test_powerup_auto_chain()
 	_test_powerup_manual_guards()
 	_test_powerup_fragment_timeline()
+	_test_powerup_fragment_repeats()
+	_test_powerup_fragment_changed_reentry()
+	_test_powerup_fragment_repeat_failure()
+	_test_powerup_fragment_repeat_lifecycle()
 	_test_powerup_fragments_on_nested_word()
 	_test_powerup_pause_and_clocks()
 	_test_powerup_determinism()
@@ -428,8 +432,11 @@ func _test_powerup_price_progression() -> void:
 				and model.powerup_price(kind) == prices[mini(index + 1, prices.size() - 1)]
 				and model.powerup_price(other) == Model.POWERUP_PRICES[other],
 				"payment advances only its own price and caps repeat-use cost")
-			check(not model.activate_powerup(kind) and payments.size() == 1,
-				"a repeated press during an active purchase cannot spend or escalate again")
+			if kind == "auto_merge":
+				check(not model.activate_powerup(kind) and payments.size() == 1,
+					"an active automatic merge cannot spend or escalate again")
+			else:
+				check(model.can_activate_powerup(kind), "Treasure remains purchasable during its delivery animation")
 			model.finish_powerup(true)
 			model.set_paused(true)
 			model.set_paused(false)
@@ -687,9 +694,13 @@ func _test_powerup_manual_guards() -> void:
 			"paid automatic motion cannot detach a manually requested source from its support footprint")
 		model.set_held_tile(1000)
 		check(model._held_tile_id == held_before and not model.can_activate_powerup("auto_merge")
-			and not model.can_activate_powerup("fragments") and not model.activate_powerup("auto_merge")
-			and not model.activate_powerup("fragments") and payments.size() == 1,
-			"paid sequencing prevents held input, overlapping powers, and duplicate wallet calls")
+			and not model.activate_powerup("auto_merge") and payments.size() == 1,
+			"paid sequencing prevents held input and overlapping automatic merge purchases")
+		if kind == "auto_merge":
+			check(not model.can_activate_powerup("fragments") and not model.activate_powerup("fragments")
+				and payments.size() == 1, "Auto merge retains exclusive use of the board")
+		else:
+			check(model.can_activate_powerup("fragments"), "Another Treasure purchase can join the reserved delivery sequence")
 		check(model.snapshot() == before, "blocked manual actions do not mutate a reserved paid sequence")
 		model.finish_powerup(true)
 		model.purchase_powerup = Callable()
@@ -743,6 +754,173 @@ func _test_powerup_fragment_timeline() -> void:
 	check(model.fragment_count == 0 and model.collected_coins == 0 and model.chest_tier == 0
 		and regular_events.collections.is_empty() and regular_events.milestones.is_empty(),
 		"delivered fragments remain on jellies until collection and do not immediately unlock a chest")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_fragment_repeats() -> void:
+	var model = _powerup_model("fragments")
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var cues: Array[String] = []
+	model.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	model.powerup_feedback.connect(func(_kind: String, success: bool) -> void:
+		if success:
+			check(not model.activate_powerup("fragments") and not model.activate_powerup("auto_merge"),
+				"purchase feedback cannot recursively create another debit"))
+	var original: int = _board_fragments(model)
+	var starts: Array[float] = [0.0, 0.10, 0.19]
+	var prices: Array[int] = [200, 300, 400]
+	var totals: Array[int] = []
+	var prior: Dictionary = {}
+	var timeline_id: String = ""
+	for purchase in range(starts.size()):
+		if purchase > 0:
+			model.step(starts[purchase] - starts[purchase - 1])
+			prior = model.powerup_snapshot()
+		check(model.can_activate_powerup("fragments") and model.activate_powerup("fragments"),
+			"Treasure can be purchased again before any earlier fragment arrives")
+		var state: Dictionary = model.powerup_snapshot()
+		if purchase == 0:
+			timeline_id = str(state.receipt_id)
+		check(is_equal_approx(float(state.elapsed), starts[purchase]) and str(state.receipt_id) == timeline_id,
+			"a repeat purchase preserves the original delivery clock and timeline identity")
+		check(payments.size() == purchase + 1 and int(payments[purchase].price) == prices[purchase],
+			"each rapid click pays its current quoted price exactly once")
+		var bought: Array = state.arrivals.filter(func(item: Dictionary) -> bool:
+			return str(item.receipt_id) == str(payments[purchase].id))
+		check(bought.size() >= 2 and bought.size() <= 8, "each independent receipt reserves its own two-to-eight fragments")
+		totals.append(bought.size())
+		for index in range(bought.size()):
+			check(is_equal_approx(float(bought[index].at), starts[purchase] + 0.42 + index * 0.18)
+				and int(bought[index].total) == bought.size(),
+				"each added purchase starts its own full flight and stagger without waiting for earlier tails")
+		if purchase > 0:
+			check(state.arrivals.slice(0, prior.arrivals.size()) == prior.arrivals,
+				"new Treasure purchases preserve all existing destinations, deadlines, and arrival states")
+		check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge"),
+			"automatic merging stays unavailable while any purchased fragments are in flight")
+	var active: Dictionary = model.powerup_snapshot()
+	check(_board_fragments(model) == original and events.arrivals.is_empty(),
+		"three rapid payments never grant fragments before their visible arrival")
+	var reserved_ids: Array[int] = []
+	for arrival: Dictionary in active.arrivals.slice(0, 4):
+		reserved_ids.append(int(arrival.tile_id))
+	check(reserved_ids.size() == 4 and reserved_ids.has(1000) and reserved_ids.has(1001)
+		and reserved_ids.has(1002) and reserved_ids.has(1003),
+		"later purchases include earlier pending markers when preferring unmarked jelly bodies")
+	model.set_paused(true)
+	model.step(4.0)
+	check(model.powerup_snapshot() == active and not model.can_activate_powerup("fragments"),
+		"pause freezes every overlapping delivery and prevents purchases")
+	model.set_paused(false)
+	model.step(0.50)
+	var running: Dictionary = model.powerup_snapshot()
+	var expected: Array = running.arrivals.filter(func(item: Dictionary) -> bool:
+		return float(item.at) <= float(running.elapsed) + Model.EPSILON)
+	check(events.arrivals.size() == expected.size() and _board_fragments(model) == original + expected.size(),
+		"coarse frames cross every interleaved receipt deadline without delaying newly appended flights")
+	var previous_at: float = -1.0
+	for event: Dictionary in events.arrivals:
+		var scheduled: Dictionary = active.arrivals[int(event.index)]
+		check(float(event.at) + Model.EPSILON >= previous_at and is_equal_approx(float(event.at), float(scheduled.at))
+			and str(event.receipt_id) == str(scheduled.receipt_id) and str(event.timeline_id) == timeline_id
+			and int(event.total) == int(scheduled.total),
+			"overlapping arrivals emit in time order with their own receipt and exact presentation deadline")
+		previous_at = float(event.at)
+	model.step(5.0)
+	var total: int = totals.reduce(func(sum: int, value: int) -> int: return sum + value, 0)
+	check(not model.powerup_active() and _board_fragments(model) == original + total
+		and events.arrivals.size() == total and cues.count("powerup_fragment") == total
+		and cues.count("powerup_success") == 3 and payments.size() == 3,
+		"every repeated purchase finishes once with its own feedback and every original arrival effect")
+	check(model.powerup_snapshot().completed == total and model.powerup_snapshot().total == total
+		and model.powerup_price("fragments") == 400 and model.fragment_count == 0 and model.chest_count == 0,
+		"combined delivery totals are conserved without collecting fragments or changing capped pricing")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_fragment_changed_reentry() -> void:
+	var model = _powerup_model("fragments")
+	var payments: Array = _accept_powerup_payments(model)
+	for purchase in range(2):
+		var attempted: Dictionary = {"value": false}
+		model.changed.connect(func() -> void:
+			if attempted.value:
+				return
+			attempted.value = true
+			check(model.can_activate_powerup("fragments"),
+				"the final purchase notification exposes an immediately available Treasure button")
+			check(not model.activate_powerup("fragments"),
+				"a synchronous final change callback cannot recursively create another paid delivery"), CONNECT_ONE_SHOT)
+		check(model.activate_powerup("fragments") and attempted.value and payments.size() == purchase + 1,
+			"each outer click completes one charge even when its final notification tries to purchase again")
+		check(model.can_activate_powerup("fragments"),
+			"the next independent click remains eligible after the guarded notification returns")
+	model.finish_powerup(true)
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_fragment_repeat_failure() -> void:
+	var model = _powerup_model("fragments")
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var cues: Array[String] = []
+	model.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	var original: int = _board_fragments(model)
+	check(model.activate_powerup("fragments"), "one accepted Treasure delivery exists before a repeat fails")
+	model.step(0.12)
+	var active: Dictionary = model.powerup_snapshot()
+	var board: Array = model.cells.duplicate(true)
+	for response: Dictionary in [{"ok": false, "reason": "insufficient"}, {"ok": false, "reason": "storage"}, {"ok": true, "duplicate": true}]:
+		model.purchase_powerup = func(_receipt: String, _kind: String, price: int) -> Dictionary:
+			check(price == 300, "failed repeats retain the next successful-use price")
+			return response.duplicate()
+		check(not model.activate_powerup("fragments") and model.powerup_snapshot() == active
+			and model.cells == board and model.powerup_price("fragments") == 300,
+			"a failed repeat preserves all pending deliveries, existing fragments, and price")
+	check(events.feedback == [["fragments", true], ["fragments", false], ["fragments", false], ["fragments", false]]
+		and cues.count("powerup_wrong") == 3,
+		"insufficient, unsaved, and duplicate repeats give negative feedback while earlier deliveries continue")
+	model.step(5.0)
+	check(not model.powerup_active() and _board_fragments(model) == original + int(active.total)
+		and events.arrivals.size() == int(active.total) and payments.size() == 1,
+		"failed repeats neither lose nor duplicate the already-paid fragments")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_fragment_repeat_lifecycle() -> void:
+	for action: String in ["drain", "finish"]:
+		var model = _powerup_model("fragments")
+		var payments: Array = _accept_powerup_payments(model)
+		var events: Dictionary = _observe_powerups(model)
+		var original: int = _board_fragments(model)
+		model.activate_powerup("fragments")
+		model.step(0.1)
+		model.activate_powerup("fragments")
+		var total: int = int(model.powerup_snapshot().total)
+		model.set_paused(true)
+		if action == "finish":
+			model.finish_round()
+		else:
+			model.finish_powerup(true)
+		check(not model.powerup_active() and _board_fragments(model) == original + total
+			and model.powerup_snapshot().completed == total and payments.size() == 2 and events.arrivals.is_empty(),
+			"silent lifecycle completion drains every accepted repeat without late effects or another charge")
+		check(model.phase == ("finished" if action == "finish" else "playing")
+			and model.fragment_count == 0 and model.collected_coins == 0,
+			"repeat settlement preserves the requested lifecycle and leaves fragments uncollected")
+		model.purchase_powerup = Callable()
+	var model = _powerup_model("fragments")
+	var payments: Array = _accept_powerup_payments(model)
+	model.activate_powerup("fragments")
+	var duration: float = float(model.powerup_snapshot().duration)
+	model.step(duration - 0.01)
+	var previous: Dictionary = model.powerup_snapshot()
+	check(model.can_activate_powerup("fragments") and model.activate_powerup("fragments")
+		and payments.size() == 2 and is_equal_approx(float(model.powerup_snapshot().elapsed), duration - 0.01)
+		and int(model.powerup_snapshot().completed) == int(previous.total),
+		"Treasure stays available through the previous purchase's final impact recovery")
+	model.finish_powerup(true)
 	model.purchase_powerup = Callable()
 
 

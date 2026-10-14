@@ -620,7 +620,7 @@ func _sync_positions() -> void:
 	_pose_powerup()
 
 func _activate_powerup(kind: String) -> void:
-	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or _keyboard_source >= 0 or game.powerup_active():
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or _keyboard_source >= 0:
 		return
 	game.activate_powerup(kind)
 	_refresh_controls()
@@ -638,10 +638,8 @@ func _powerup_fragment_arrived(event: Dictionary) -> void:
 	if _tiles.has(id):
 		_configure_tile(_tiles[id], _cell(id))
 	var age: float = 0.0
-	if _powerup_frame_end >= 0.0 and _powerup_frame_generation == _generation and str(event.receipt_id) == _powerup_frame_receipt:
-		var state: Dictionary = game.powerup_snapshot()
-		var at: float = float(state.arrivals[int(event.index)].at)
-		age = maxf(0.0, _powerup_frame_end - at)
+	if _powerup_frame_end >= 0.0 and _powerup_frame_generation == _generation and str(event.timeline_id) == _powerup_frame_receipt:
+		age = maxf(0.0, _powerup_frame_end - float(event.at))
 	if age < 0.48:
 		_powerup_arrivals.append({"tile_id": id, "elapsed": age, "index": int(event.index)})
 
@@ -1033,8 +1031,9 @@ func _refresh_powerup_buttons() -> void:
 		var price: int = game.powerup_price(kind)
 		button.set_price(price)
 		button.visible = _configured and game.phase == "playing"
-		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and game.can_activate_powerup(kind),
-			balance >= price, game.powerup_active())
+		var available: bool = game.can_activate_powerup(kind)
+		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
+			balance >= price, game.powerup_active() and not available)
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:
