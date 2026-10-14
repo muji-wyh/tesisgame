@@ -154,6 +154,7 @@ function collectRequiredAudio(root) {
   }
   const sources = [
     'assets/audio/sfx/pop-launch.wav',
+    'assets/audio/pair-chest/discovery.wav',
     'assets/audio/coins/collect.wav',
     'assets/audio/coins/release.wav',
     'assets/audio/fragments/appear.wav',

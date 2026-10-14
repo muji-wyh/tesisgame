@@ -48,8 +48,11 @@ func _run() -> void:
 	check(not view.snapshot().active and not view.visible and cues.is_empty(), "No-chest feedback quietly clears without sound or paper")
 	check(view.show_pair_result("round-a", true), "A committed successful pair starts the chest result")
 	view.advance(PairReward.REVEAL_SECONDS - 0.01)
-	check(cues.is_empty() and reveals.is_empty(), "Paper and sound wait for the actual reveal beat")
+	check(cues.is_empty() and reveals.is_empty() and not view.snapshot().discovery_visible,
+		"The visible discovery caption, paper and sound wait for the actual reveal beat")
 	view.advance(0.02)
+	check(view.snapshot().discovery_visible and view.snapshot().message == PairReward.DISCOVERY_MESSAGE,
+		"The chest reveal displays the complete hidden treasure discovery message")
 	check(cues == ["round-a:reward"] and reveals == ["round-a"] and view.snapshot().performance_active,
 		"The reveal emits one round-bound sound and one request for the shared screen overlay")
 	check(not view.show_pair_result("round-a", true) and not view.show_pair_result("round-a", false),
@@ -57,7 +60,7 @@ func _run() -> void:
 	var before_pause: float = view.snapshot().elapsed
 	view.set_paused(true)
 	view.advance(5.0)
-	check(view.snapshot().elapsed == before_pause and reveals == ["round-a"],
+	check(view.snapshot().elapsed == before_pause and reveals == ["round-a"] and not view.snapshot().discovery_visible,
 		"Menu or background pause preserves the current timeline without another reveal")
 	view.set_paused(false)
 	view.advance(0.1)
@@ -69,7 +72,8 @@ func _run() -> void:
 	view.advance(2.0)
 	check(not view.snapshot().performance_active and view.snapshot().active and view.snapshot().earned,
 		"The performance ends while its earned chest remains visible")
-	check(view.snapshot().message == "Chest ready" and view.snapshot().chest_mode == "closed" and reveals.size() == 1,
+	check(view.snapshot().message == PairReward.DISCOVERY_MESSAGE and view.snapshot().chest_mode == "closed"
+		and not view.snapshot().discovery_visible and reveals.size() == 1,
 		"The compact settled status retains a closed chest without opening or repeated paper")
 	check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation), "The closed chest settles exactly to its authored dimensions")
 	for theme_id: String in THEMES:
@@ -91,7 +95,8 @@ func _run() -> void:
 			"All pair reward visuals leave gameplay input with the live board")
 	view.clear()
 	view.advance(10.0)
-	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view.visible,
+	check(not view.snapshot().active and view.snapshot().round_id.is_empty() and not view.visible
+		and not view.snapshot().discovery_visible,
 		"Leaving a round removes every transient and persistent reward visual")
 	view.configure("reentrant", "spring", data.chests, false)
 	view.cue_requested.connect(func(id: String, _cue: String) -> void:
@@ -150,6 +155,17 @@ func check_turn(view, data) -> void:
 			"%s turns the already enlarged acquired chest silhouette at its upper destination" % dimensions)
 		check(view._title.modulate.a < 0.01 and view._surface_layer.modulate.a < 0.01,
 			"The enlarged chest takes visual priority over the compact status pill")
+		view.advance(0.01)
+		var actual_caption: Rect2 = view._discovery.get_rect()
+		var caption: Rect2 = view.get_global_transform_with_canvas() * actual_caption
+		check(view.snapshot().discovery_visible and caption.has_area()
+			and view._discovery.size.is_equal_approx(Rect2(view.snapshot().discovery_rect).size)
+			and Rect2(Vector2.ZERO, Vector2(dimensions)).grow(0.1).encloses(caption),
+			"%s keeps the actual caption bounds inside the viewport without a hidden minimum-height expansion" % dimensions)
+		check(view._discovery.text == PairReward.DISCOVERY_MESSAGE
+			and view._discovery.get_line_count() >= 1 and view._discovery.get_line_count() <= 2
+			and view._discovery.get_visible_line_count() == view._discovery.get_line_count(),
+			"%s displays every line of the complete discovery message within its two-line caption" % dimensions)
 		var model = view._models._pool[1]
 		var safe := Rect2(Vector2.ZERO, Vector2(dimensions))
 		var contained: bool = true

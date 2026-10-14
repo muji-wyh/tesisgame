@@ -35,16 +35,21 @@ the inline effect.
 A new earned chest flies directly to the upper-center showcase, enlarges to a
 visible silhouette up to 176 CSS pixels wide or tall, and makes one full
 vertical-axis turn before returning to settle beside
-"Chest ready". The ordinary Meadow Explorer chest uses the same acquired closed
+"You found a hidden treasure chest!". The ordinary Meadow Explorer chest uses the same acquired closed
 3D model and turn renderer as Jelly Match and Voice Pop. The compact status pill
 fades during the enlargement so the chest remains the focal point. A local flash,
 rotating rays and seven short star glints follow its moving center. The
-1.36-second reveal drives the `reward` cue, light accent and shared viewport
-confetti. GameUI keeps the paper in its own
+1.36-second reveal drives the `reward` cue, a happy group cheer, the complete
+discovery caption under the showcase, light accent and shared viewport
+confetti. The caption wraps to fit narrow screens, ignores input, and settles
+into the reserved HUD row after the flight. GameUI keeps the paper in its own
 CanvasLayer for a 6.4-second burst, including over four seconds of slow descent.
-The chest presentation ends at 2.65 seconds; the paper tail continues
-through the same round's result and opening screens. The closed chest then remains
-as "Chest ready" until the host clears the round. Later pair callbacks cannot
+The flight ends at 2.65 seconds. Its quiet resting tail keeps the final-pair
+completion gate at 3.25 seconds. The host also waits for actual cheer playback
+to finish, so a slow reveal frame cannot truncate the 1.75-second recording
+before the settlement modal appears. The paper tail continues
+through the same round's result and opening views. The closed chest then remains
+beside the complete discovery message until the host clears the round. Later pair callbacks cannot
 restart the earned chest or overwrite it with an unsuccessful drop.
 
 The optional "No chest this pair" acknowledgement lasts 0.8 seconds. It has no
@@ -55,7 +60,14 @@ visible controls ignore pointer input, and confetti remains in the current game.
 
 ## Existing assets and rights
 
-No assets were acquired for this component. The actual closed theme design is
+The discovery uses the acquired CC0 recording "Cheers" by AuraVoice /
+Nocturnal_Vanguard from OpenGameArt. The [audio source record](../../assets/audio/pair-chest/SOURCE.md)
+contains its source, license, acquisition status, hashes and trimming settings.
+A dedicated, speech-ducked player keeps subsequent card clicks from cutting it
+off. Mute, navigation and backgrounding stop the cue; resuming never replays it.
+It replaces only Match and Memory's discovery cue and adds no Pip voice.
+
+The existing closed theme design is
 rendered through `ChestView`, including the original Royal, Energy and Crystal
 illustration and the five integrated 3D replacements. The illustration source
 mapping remains in `assets/chests/SOURCE.txt`; the downloaded models, creators,
@@ -94,7 +106,7 @@ the turn, and both surfaces return to the same position and size.
 - `advance(delta)`, `set_paused(bool)`, `set_reduced_motion(bool)` and `clear()`
   let the owning game control timing and lifecycle without pausing gameplay.
 - `snapshot()` distinguishes `performance_active` from a settled earned status.
-  A final pair may finish its visual before the owner moves to a result page.
+  A final pair finishes its acknowledgement before the owner opens the settlement modal.
 - `confetti_requested(round_id)` emits once at reveal; GameUI owns the viewport
   layer, independent clock and round-scoped deduplication.
 - `cue_requested(round_id, "reward")` is presentation-only; the host retains

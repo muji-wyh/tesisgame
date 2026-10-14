@@ -4,6 +4,7 @@ const Progress = preload("res://scripts/medal_progress.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const PairReward = preload("res://scripts/pair_chest_reward.gd")
+const Audio = preload("res://scripts/game_audio.gd")
 var checks: int = 0
 var failures: int = 0
 var serial: int = 0
@@ -87,11 +88,28 @@ func _run() -> void:
 		await check_failure(mode)
 		await check_dry(mode)
 		await check_reload(mode)
+		await check_discovery_preferences(mode)
 	print("Pair chest flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
+func discovery_playing(app) -> bool:
+	return is_instance_valid(app.audio.pair_chest_discovery) and app.audio.pair_chest_discovery.playing
+
+
+func discovery_cues(app) -> Array[String]:
+	var received: Array[String] = []
+	app._pair_reward.cue_requested.connect(func(id: String, cue: String) -> void:
+		if cue == "reward":
+			received.append(id))
+	return received
+
+
 func check_reward(mode: String, slot: int) -> void:
 	var app = await make_app(mode, slot)
+	var cues: Array[String] = discovery_cues(app)
+	var cheer_seconds: float = 0.0
+	app.audio.set_muted(false)
+	app.audio.interact(app.model.theme_id, false)
 	check(not app.model.chest_earned, mode + " does not own a chest at creation")
 	check(app.coin_wallet.ready and app.coin_wallet.balance == 0, mode + " begins with its isolated empty wallet")
 	for index in range(5):
@@ -101,27 +119,62 @@ func check_reward(mode: String, slot: int) -> void:
 		check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
 			mode + " saves chest ownership without prematurely awarding its coins")
 		if index + 1 == slot:
+			check(not discovery_playing(app) and cues.is_empty()
+				and not app._pair_reward.snapshot().discovery_visible,
+				mode + " waits for the chest reveal beat before cheering or showing its discovery caption")
+			var voice_request: int = app.audio._playback_requests.get(app.audio.voice, 0)
 			app._advance_ui(PairReward.REVEAL_SECONDS + 0.01)
-			check(app._status_announcement.begins_with("Chest found!"), mode + " preserves the earned chest announcement after board refresh")
+			check(discovery_playing(app) and cues == [app._round_id]
+				and app.audio.pair_chest_discovery.stream.resource_path == Audio.PAIR_CHEST_DISCOVERY_PATH,
+				mode + " plays its dedicated cheer exactly when the saved chest is revealed")
+			cheer_seconds = app.audio.pair_chest_discovery.stream.get_length()
+			check(app.audio._playback_requests.get(app.audio.voice, 0) == voice_request,
+				mode + " chest discovery adds no Pip voice or spoken narration")
+			check(app._pair_reward.snapshot().discovery_visible
+				and app._pair_reward.snapshot().message == PairReward.DISCOVERY_MESSAGE
+				and app._status_announcement.begins_with(PairReward.DISCOVERY_MESSAGE),
+				mode + " shows and announces the complete hidden treasure chest message")
 			check(app._reward_confetti.snapshot().visible and app._pair_reward.chest.is_visible_in_tree(), mode + " plays chest and full-screen paper on the live board")
 			check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1),
 				mode + " reveals an ordinary tier-one chest independently of the selected world")
 			check(not app._round_celebration.is_active(), mode + " keeps completion controls out of the pair reward")
-			var elapsed: float = app._pair_reward.snapshot().elapsed
-			var paper_ages: Array = app._reward_confetti.snapshot().ages.duplicate()
-			app._show_mode_menu()
-			app._advance_ui(0.5)
-			check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
-				and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " menu hides and pauses pair effects")
-			app._hide_mode_menu()
-			app._refresh()
-			app.on_page_hidden()
-			app._advance_ui(0.5)
-			check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
-				and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " background pauses without repeating the drop")
-			app.on_page_visible()
-			app._pair_matched(str(app.model.lesson_words[index].id))
-			check(app._pair_words.size() == index + 1, mode + " duplicate callbacks cannot count twice")
+			if slot == 1:
+				var cheer_request: int = app.audio._playback_requests[app.audio.pair_chest_discovery]
+				app._refresh()
+				continue_pair(app)
+				var next_card: Button
+				var next_word: Dictionary = app.model.lesson_words[index + 1]
+				if mode == "match":
+					next_card = app.cards[str(next_word.id) + ":word"]
+				else:
+					for card_index in range(app._memory.memory.cards.size()):
+						if app._memory.memory.cards[card_index].word.id == next_word.id:
+							next_card = app._memory.card_buttons[card_index]
+							break
+				next_card.pressed.emit()
+				check(discovery_playing(app)
+					and app.audio._playback_requests[app.audio.pair_chest_discovery] == cheer_request,
+					mode + " board refresh, continuing feedback and selecting the next card preserve the same cheer")
+				next_card.pressed.emit()
+				var elapsed: float = app._pair_reward.snapshot().elapsed
+				var paper_ages: Array = app._reward_confetti.snapshot().ages.duplicate()
+				app._show_mode_menu()
+				app._advance_ui(0.5)
+				check(not discovery_playing(app) and not app._pair_reward.snapshot().discovery_visible,
+					mode + " returning Home stops the cheer and hides the discovery caption")
+				check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
+					and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " menu hides and pauses pair effects")
+				app._hide_mode_menu()
+				app._refresh()
+				app.on_page_hidden()
+				app._advance_ui(0.5)
+				check(not app._reward_confetti.snapshot().visible and app._reward_confetti.snapshot().ages == paper_ages
+					and is_equal_approx(app._pair_reward.snapshot().elapsed, elapsed), mode + " background pauses without repeating the drop")
+				app.on_page_visible()
+				app._pair_matched(str(app.model.lesson_words[index].id))
+				check(not discovery_playing(app) and cues == [app._round_id],
+					mode + " refresh, navigation, background resume and duplicate callbacks cannot replay the discovery cheer")
+				check(app._pair_words.size() == index + 1, mode + " duplicate callbacks cannot count twice")
 		continue_pair(app)
 		if index == 1 and slot == 1:
 			check(app._pair_words.size() == 2 and app._pair_reward_revealing(), mode + " accepts another pair during chest animation")
@@ -129,9 +182,30 @@ func check_reward(mode: String, slot: int) -> void:
 	app._open_chest()
 	app._start_chest_hold()
 	check(not app._holding_chest and app.model.chest_state == "closed" and pieces(app) == 0, mode + " rejects hidden chest actions during the final pair effect")
-	app._advance_ui(2.5)
+	if slot == 5:
+		check(cheer_seconds > 0.0 and PairReward.REVEAL_SECONDS + cheer_seconds <= PairReward.REWARD_SECONDS,
+			mode + " reserves enough final-pair presentation time for the complete discovery recording")
+		app._advance_ui(PairReward.REVEAL_SECONDS + cheer_seconds - 0.01 - float(app._pair_reward.snapshot().elapsed))
+		check(app._pair_reward_revealing() and not app._round_celebration.is_active()
+			and not app._settlement_dialog_open(),
+			mode + " keeps final settlement closed until the discovery cheer has had time to finish")
+	app._advance_ui(PairReward.REWARD_SECONDS + 0.01 - float(app._pair_reward.snapshot().elapsed))
+	if slot == 5:
+		check(discovery_playing(app) and not app._pair_reward.snapshot().performance_active
+			and app._pair_reward_revealing() and not app._round_celebration.is_active()
+			and not app._settlement_dialog_open(),
+			mode + " a slow visual frame cannot cut off the still-playing final discovery cheer")
+		# Deliver the player's real completion signal without making the test sleep
+		# for the recording's wall-clock duration under the headless audio driver.
+		app.audio.pair_chest_discovery.stop()
+		app.audio.pair_chest_discovery.finished.emit()
+		await process_frame
+		app._advance_ui(0.01)
 	check(app._round_celebration.is_active() and app._round_celebration.snapshot().chest_announced, mode + " retains the normal finale without a second reward burst")
 	Fixture.finish_celebration(app)
+	check(cues == [app._round_id] and not discovery_playing(app)
+		and not app._pair_reward.snapshot().discovery_visible,
+		mode + " final settlement cannot replay the chest discovery or retain its overlay caption")
 	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.size() == 1,
 		mode + " retains one shared paper tail beyond the compact chest and Pip performances")
 	app.set_reduced_motion(true)
@@ -147,10 +221,15 @@ func check_reward(mode: String, slot: int) -> void:
 
 func check_failure(mode: String) -> void:
 	var app = await make_app(mode, 1)
+	var cues: Array[String] = discovery_cues(app)
+	app.audio.set_muted(false)
+	app.audio.interact(app.model.theme_id, false)
 	var storage = app.medal_progress._browser_storage
 	storage.writable = false
 	match_pair(app, 0)
 	check(app._pair_save_failed and not app.model.chest_earned and not app._pair_reward.snapshot().earned, mode + " failed save cannot announce an unsaved chest")
+	app._advance_ui(PairReward.REVEAL_SECONDS + 0.01)
+	check(cues.is_empty() and not discovery_playing(app), mode + " a failed reward save cannot cheer for an uncommitted chest")
 	continue_pair(app)
 	match_pair(app, 1)
 	check(app._pair_words.size() == 2, mode + " remains playable while reward storage is unavailable")
@@ -158,6 +237,12 @@ func check_failure(mode: String) -> void:
 	storage.writable = true
 	app._retry_storage()
 	check(app.model.chest_earned and not app._pair_save_failed and app._pair_reward.snapshot().earned, mode + " retry saves and reveals the same chest")
+	app._advance_ui(PairReward.REVEAL_SECONDS + 0.01)
+	check(cues == [app._round_id] and discovery_playing(app), mode + " successful storage recovery cheers for its newly committed chest once")
+	app._retry_storage()
+	app._refresh()
+	app._advance_ui(0.05)
+	check(cues == [app._round_id], mode + " repeated storage retry and refresh cannot announce the saved chest again")
 	storage.writable = false
 	check(not app.new_round(2, false, "", "phrase") and app._pair_settlement_pending, mode + " preserves failed exit settlement")
 	storage.writable = true
@@ -185,6 +270,8 @@ func check_dry(mode: String) -> void:
 			match_pair(app, index)
 			if round_index < 2:
 				check(app._status_announcement.begins_with("No chest this pair."), mode + " includes the dry pair acknowledgement in the accessible board status")
+				check(not discovery_playing(app) and not app._pair_reward.snapshot().discovery_visible,
+					mode + " ordinary matching feedback has no chest discovery cheer or caption")
 			continue_pair(app)
 		app._advance_ui(3.0)
 		check(app.model.chest_earned == (round_index == 2), mode + " guarantees a chest after two completed dry rounds")
@@ -210,7 +297,43 @@ func check_reload(mode: String) -> void:
 	app._retry_storage()
 	check(not app._pair_save_failed and app._progress_ready, mode + " startup recovery can retry without another reload")
 	check(pieces(app) == 1 and not app.model.chest_earned, mode + " reload settles prior treasure before a fresh round")
+	check(not discovery_playing(app) and not app._pair_reward.snapshot().discovery_visible,
+		mode + " recovering a saved reward never replays its discovery sound or caption")
 	check(app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
 		mode + " reload recovery credits one saved chest without replaying its coin animation")
 	app.queue_free()
 	await settle()
+
+
+func check_discovery_preferences(mode: String) -> void:
+	for muted: bool in [true, false]:
+		var app = await make_app(mode, 1)
+		var cues: Array[String] = discovery_cues(app)
+		app.set_reduced_motion(not muted)
+		app.audio.set_muted(muted)
+		app.audio.interact(app.model.theme_id, false)
+		match_pair(app, 0)
+		app._advance_ui(PairReward.REVEAL_SECONDS + 0.01)
+		check(cues == [app._round_id] and app._pair_reward.snapshot().discovery_visible
+			and app._pair_reward.snapshot().message == PairReward.DISCOVERY_MESSAGE,
+			mode + " keeps its complete visible discovery message with mute or reduced motion enabled")
+		check(discovery_playing(app) == (not muted),
+			mode + " mute suppresses the cheer while reduced motion retains its audio acknowledgement")
+		if muted:
+			app.audio.set_muted(false)
+			app.audio.interact(app.model.theme_id, false)
+			app._refresh()
+			app._advance_ui(0.10)
+			check(not discovery_playing(app) and cues == [app._round_id],
+				mode + " unmuting after discovery does not replay a suppressed cheer")
+		else:
+			check(not app._reward_confetti.is_active(), mode + " reduced motion announces the find without animated paper")
+			app.on_page_hidden()
+			check(not discovery_playing(app) and not app._pair_reward.snapshot().discovery_visible,
+				mode + " backgrounding immediately stops an audible discovery cheer")
+			app.on_page_visible()
+			app._advance_ui(0.10)
+			check(not discovery_playing(app) and cues == [app._round_id],
+				mode + " returning to the page keeps the interrupted cheer silent")
+		app.queue_free()
+		await settle()

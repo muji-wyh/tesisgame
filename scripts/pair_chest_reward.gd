@@ -14,11 +14,14 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const REVEAL_SECONDS: float = Flight.REVEAL_SECONDS
-const REWARD_SECONDS: float = Flight.PERFORMANCE_SECONDS
+const REWARD_SECONDS: float = 3.25
 const MISS_SECONDS: float = 0.80
+const DISCOVERY_MESSAGE: String = "You found a hidden treasure chest!"
 
 var chest: ChestView
 var _title: Label
+var _discovery: Label
+var _discovery_rect := Rect2()
 var _round_id: String = ""
 var _theme_id: String = "spring"
 var _manifest: Dictionary = {}
@@ -77,6 +80,17 @@ func _init() -> void:
 	add_child(_models)
 	_overlay.add_child(_effect)
 	_effect.draw.connect(_draw_chest_effect)
+	_discovery = Style.label(DISCOVERY_MESSAGE, 22)
+	_discovery.name = "ChestDiscoveryMessage"
+	_discovery.add_theme_font_override("font", Style.HEADING_FONT)
+	_discovery.add_theme_color_override("font_color", Style.INK)
+	_discovery.add_theme_color_override("font_outline_color", Color.WHITE)
+	_discovery.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_discovery.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_discovery.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_discovery.max_lines_visible = 2
+	_discovery.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_overlay.add_child(_discovery)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	hide()
@@ -200,6 +214,7 @@ func snapshot() -> Dictionary:
 		"active": _performance_active or _earned, "performance_active": _performance_active,
 		"earned": _earned, "paused": _paused, "reduced_motion": _reduced_motion,
 		"elapsed": _elapsed, "revealed": _revealed, "message": _title.text,
+		"discovery_visible": _discovery.is_visible_in_tree(), "discovery_rect": _discovery_rect,
 		"cue_log": _cue_log.duplicate(),
 		"anchor": _anchor, "toast_rect": _toast_rect, "chest_rect": _chest_rect,
 		"motion": _pose.duplicate(), "live_turn": not _model_sample.is_empty(), "overlay_visible": _overlay.visible,
@@ -226,7 +241,7 @@ func _sample() -> void:
 	var was_visible: bool = chest.is_visible_in_tree()
 	visible = not _round_id.is_empty() and (_performance_active or _earned)
 	chest.visible = _earned
-	_title.text = "Chest found!" if _earned and _performance_active else "Chest ready" if _earned else "No chest this pair" if _performance_active else ""
+	_title.text = DISCOVERY_MESSAGE if _earned else "No chest this pair" if _performance_active else ""
 	_layout()
 	if not was_visible and chest.is_visible_in_tree():
 		_warm_chest()
@@ -254,7 +269,7 @@ func _maintain_chest_render() -> void:
 	var warm: bool = _earned and not _paused and chest.is_visible_in_tree() and Engine.get_process_frames() < _render_until_frame
 	chest.set_idle_paused(not warm)
 	chest.set_process(false)
-	_models.set_active(_earned and _performance_active and not _paused
+	_models.set_active(_earned and _performance_active and _elapsed < Flight.PERFORMANCE_SECONDS and not _paused
 		and not _reduced_motion and is_visible_in_tree())
 
 
@@ -275,7 +290,7 @@ func _layout() -> void:
 	if not available.has_area():
 		return
 	# Keep the resting chest in one place before and after the flight.
-	var desired_width: float = (184.0 if _earned else 170.0) * unit
+	var desired_width: float = (324.0 if _earned else 170.0) * unit
 	var width: float = minf(desired_width, available.size.x)
 	var height: float = minf(46.0 * unit, available.size.y)
 	_toast_rect = Rect2(available.get_center() - Vector2(width, height) * 0.5, Vector2(width, height))
@@ -301,7 +316,12 @@ func _layout() -> void:
 	_title.position = Vector2(text_left, _toast_rect.position.y)
 	_title.size = Vector2(maxf(0.0, _toast_rect.end.x - text_left - 12.0 * unit), height)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if _earned else HORIZONTAL_ALIGNMENT_CENTER
-	_title.add_theme_font_size_override("font_size", maxi(10, roundi((14.0 if _earned else 12.0) * unit)))
+	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var title_font_size: int = maxi(10, roundi((13.0 if _earned else 12.0) * unit))
+	while title_font_size > maxi(9, roundi(10.0 * unit)) and Style.HEADING_FONT.get_multiline_string_size(
+		_title.text, HORIZONTAL_ALIGNMENT_LEFT, _title.size.x, title_font_size).y > height:
+		title_font_size -= 1
+	_title.add_theme_font_size_override("font_size", title_font_size)
 	_title.add_theme_color_override("font_color", Style.INK if _earned else Style.MUTED)
 	_sample_chest_motion(unit)
 	var opacity: float = 1.0
@@ -313,8 +333,33 @@ func _layout() -> void:
 	_surface_layer.modulate.a = _title.modulate.a
 	_surface_layer.queue_redraw()
 	_sync_overlay()
+	_layout_discovery(unit)
 	_glow.queue_redraw()
 	_effect.queue_redraw()
+
+
+func _layout_discovery(unit: float) -> void:
+	_discovery.visible = _earned and _revealed and _performance_active and _elapsed < Flight.PERFORMANCE_SECONDS
+	if not _discovery.visible or not is_inside_tree():
+		return
+	var safe: Rect2 = (get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()).grow(-12.0 * unit)
+	var width: float = minf(260.0 * unit, safe.size.x)
+	var font_size: int = maxi(12, roundi((20.0 if safe.size.x < 430.0 * unit else 22.0) * unit))
+	_discovery.add_theme_font_size_override("font_size", font_size)
+	_discovery.add_theme_constant_override("outline_size", maxi(2, roundi(5.0 * unit)))
+	var height: float = Style.HEADING_FONT.get_height(font_size) * 2.0 + float(_discovery.get_theme_constant("line_spacing"))
+	# Keep the caption at the showcase while the chest returns to its HUD row.
+	# Reduced motion retains this same static, legible acknowledgement.
+	var peak: float = minf(176.0 * unit, minf(safe.size.x * 0.46, safe.size.y * 0.40))
+	var top: float = safe.position.y + maxf(safe.size.y * 0.22, peak * 0.72) + peak * 0.52 + 8.0 * unit
+	_discovery_rect = Rect2(Vector2(safe.get_center().x - width * 0.5,
+		minf(top, safe.end.y - height)), Vector2(width, height))
+	_discovery.position = _discovery_rect.position
+	_discovery.size = _discovery_rect.size
+	_discovery.pivot_offset = _discovery.size * 0.5
+	var age: float = maxf(0.0, _elapsed - REVEAL_SECONDS)
+	_discovery.scale = Vector2.ONE if _reduced_motion else Vector2.ONE * (1.0 - 0.10 * exp(-age * 12.0) * cos(age * 18.0))
+	_discovery.modulate.a = 1.0 if _reduced_motion else (1.0 - smoothstep(Flight.RETURN_START, Flight.PERFORMANCE_SECONDS, _elapsed))
 
 
 func _sample_chest_motion(unit: float) -> void:
@@ -322,7 +367,7 @@ func _sample_chest_motion(unit: float) -> void:
 	var rest: Vector2 = _chest_rect.position + _art_rect.get_center()
 	_pose = {"center": rest, "scale": 1.0, "yaw": 0.0, "roll": 0.0,
 		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0, "phase": "rest"}
-	if not _earned or not _performance_active or _reduced_motion or not _art_rect.has_area():
+	if not _earned or not _performance_active or _elapsed >= Flight.PERFORMANCE_SECONDS or _reduced_motion or not _art_rect.has_area():
 		return
 	var safe: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
 	safe = safe.grow(-2.0 * unit)

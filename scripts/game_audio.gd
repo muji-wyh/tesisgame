@@ -16,6 +16,8 @@ const PAIR_FEEDBACK_PATHS := {
 	false: "res://assets/imported-audio/pair-feedback/wrong.wav",
 }
 const PAIR_FEEDBACK_GAIN := 0.48
+const PAIR_CHEST_DISCOVERY_PATH := "res://assets/audio/pair-chest/discovery.wav"
+const PAIR_CHEST_DISCOVERY_GAIN := 0.75
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
 const UI_CLICK_GAIN := 0.48
 const COIN_PATH := "res://assets/audio/coins/collect.wav"
@@ -78,6 +80,7 @@ var effect: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
 var pair_feedback: AudioStreamPlayer
+var pair_chest_discovery: AudioStreamPlayer
 var ui_click: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var muted: bool = false
@@ -329,6 +332,22 @@ func _update_fragment_gain() -> void:
 		player.volume_db = linear_to_db(FRAGMENT_GAIN) + duck
 
 
+func play_pair_chest_discovery() -> void:
+	if muted or not active or not available:
+		return
+	if pair_chest_discovery == null:
+		pair_chest_discovery = _player(PAIR_CHEST_DISCOVERY_GAIN)
+	_update_jelly_gain()
+	_play(pair_chest_discovery, PAIR_CHEST_DISCOVERY_PATH)
+	set_process(true)
+
+
+func stop_pair_chest_discovery() -> void:
+	if pair_chest_discovery != null:
+		_stop(pair_chest_discovery)
+		pair_chest_discovery.stream = null
+
+
 func play_jelly_cue(cue_name: String) -> void:
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
@@ -362,6 +381,8 @@ func play_jelly_cue(cue_name: String) -> void:
 
 func _update_jelly_gain() -> void:
 	var duck_db: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
+	if pair_chest_discovery != null:
+		pair_chest_discovery.volume_db = linear_to_db(PAIR_CHEST_DISCOVERY_GAIN) + duck_db
 	for player: AudioStreamPlayer in _jelly_players:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
@@ -450,11 +471,12 @@ func _update_round_celebration_gain() -> void:
 func _process(_delta: float) -> void:
 	if muted or not active or not available:
 		stop_round_celebration()
+		stop_pair_chest_discovery()
 		stop_jelly_sounds()
 		stop_coin_sounds()
 		set_process(false)
 		return
-	var jelly_playing: bool = false
+	var jelly_playing: bool = pair_chest_discovery != null and pair_chest_discovery.playing
 	for player: AudioStreamPlayer in _jelly_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
@@ -956,6 +978,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 	# Screen changes silence gameplay, while their short UI acknowledgement finishes.
 	# Muting, backgrounding and shutdown explicitly stop the UI channel too.
 	active = false
+	stop_pair_chest_discovery()
 	if not keep_pair_feedback:
 		stop_pair_feedback()
 	stop_pop_sounds()

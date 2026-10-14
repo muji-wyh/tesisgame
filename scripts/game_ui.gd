@@ -3896,7 +3896,7 @@ func _announce_status(message: String) -> void:
 	if _mode_id in ["match", "memory"] and _pair_reward_revealing() \
 		and _pair_reward_row.is_visible_in_tree() and not _page_hidden \
 		and not collection_page.visible and not _mode_menu_open():
-		var notice: String = "Chest found!" if model.chest_earned else "No chest this pair."
+		var notice: String = PairChestReward.DISCOVERY_MESSAGE if model.chest_earned else "No chest this pair."
 		if not message.begins_with(notice):
 			message = notice + " " + message
 	_status_announcement = message
@@ -4353,7 +4353,11 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 	var pair_was_revealing: bool = _pair_reward_revealing()
 	_sync_pair_presentation()
 	_pair_reward.advance(delta)
-	if pair_was_revealing and not _pair_reward_revealing() and model.phase == "won":
+	# Audio completion can happen between UI frames. Resume the waiting finale
+	# from its round identity as well as the visual timeline's transition edge.
+	var pair_finale_pending: bool = _mode_id in ["match", "memory"] and not _round_id.is_empty() \
+		and _celebration_seen_id != _round_id and model.chest_state == "closed" and not _pair_save_failed and not _settling_chest
+	if (pair_was_revealing or pair_finale_pending) and not _pair_reward_revealing() and model.phase == "won":
 		_refresh()
 	_sync_round_celebration()
 	_sync_settlement_dialog()
@@ -4758,7 +4762,12 @@ func _settle_pair_reward() -> bool:
 
 
 func _pair_reward_revealing() -> bool:
-	return is_instance_valid(_pair_reward) and bool(_pair_reward.snapshot().get("performance_active", false))
+	if not is_instance_valid(_pair_reward):
+		return false
+	# A slow reveal frame must still leave room for the complete cheer before
+	# final-pair settlement. Mute or navigation cancels its player immediately.
+	var cheer_playing: bool = is_instance_valid(audio.pair_chest_discovery) and audio.pair_chest_discovery.playing
+	return bool(_pair_reward.snapshot().get("performance_active", false)) or cheer_playing
 
 
 func _sync_pair_presentation() -> void:
@@ -4768,7 +4777,7 @@ func _sync_pair_presentation() -> void:
 		and not collection_page.visible and not _speech_debug_active
 	var allowed: bool = on_board and not _mode_menu_open() and not _settlement_dialog_open()
 	if not allowed and _pair_reward.visible:
-		audio.stop_jelly_sounds()
+		audio.stop_pair_chest_discovery()
 	_pair_reward.set_paused(not allowed)
 	_pair_reward.visible = allowed
 	# Opening the header menu must not move the board behind its overlay.
@@ -4781,9 +4790,11 @@ func _layout_pair_reward() -> void:
 
 
 func _pair_reward_cue(round_id: String, cue: String) -> void:
-	if round_id != _round_id or _page_hidden or _mode_menu_open() or collection_page.visible or _voice_listening:
+	if round_id != _round_id or _page_hidden or _mode_menu_open() or collection_page.visible or _voice_listening \
+		or _mode_id not in ["match", "memory"] or _settlement_dialog_open():
 		return
-	audio.play_jelly_cue(cue)
+	if cue == "reward":
+		audio.play_pair_chest_discovery()
 
 
 func _phrase_answered(id: String, words: Array[String], correct: bool) -> void:

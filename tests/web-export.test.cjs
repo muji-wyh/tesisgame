@@ -241,6 +241,9 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fs.writeFileSync(path.join(fixture.directory, 'phrases.json'), JSON.stringify(phrases));
   for (const phrase of phrases) fixture.writeImport(phrase.audio);
   fixture.writeImport('assets/audio/sfx/pop-launch.wav');
+  fixture.writeImport('assets/audio/pair-chest/discovery.wav');
+  fixture.writeImport('assets/audio/fragments/appear.wav');
+  fixture.writeImport('assets/audio/fragments/arrive.wav');
   fixture.writeImport('assets/audio/coins/collect.wav');
   fixture.writeImport('assets/audio/coins/release.wav');
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
@@ -254,7 +257,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 370);
+  assert.equal(required.length, 373);
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),

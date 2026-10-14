@@ -177,8 +177,11 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   fs.writeFileSync(path.join(directory, 'phrases.json'), JSON.stringify(phrases));
   const expected = [
     'assets/audio/sfx/pop-launch.wav',
+    'assets/audio/pair-chest/discovery.wav',
     'assets/audio/coins/collect.wav',
     'assets/audio/coins/release.wav',
+    'assets/audio/fragments/appear.wav',
+    'assets/audio/fragments/arrive.wav',
     'assets/audio/jelly-finish/ready.ogg',
     ...['clear', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
