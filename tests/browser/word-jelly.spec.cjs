@@ -1806,16 +1806,6 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
         .toBeGreaterThanOrEqual(previousDepartureScale - 0.0001);
       expect(frame.motion.scale, `${kind} reserves its largest size for arrival`)
         .toBeLessThanOrEqual(upper[0].motion.scale + 0.001);
-      if (kind === 'synthesis') {
-        expect(distance(frame.motion.center, anchorCenter) + currentDistance,
-          'First-chest synthesis retains its straight route to the upper destination').toBeLessThanOrEqual(outboundDistance + 1);
-        for (const axis of [0, 1]) {
-          expect(frame.motion.center[axis], 'Synthesis remains between its anchor and upper destination')
-            .toBeGreaterThanOrEqual(Math.min(anchorCenter[axis], upperCenter[axis]) - 1);
-          expect(frame.motion.center[axis], 'Synthesis does not overshoot either destination axis')
-            .toBeLessThanOrEqual(Math.max(anchorCenter[axis], upperCenter[axis]) + 1);
-        }
-      }
       previousProgress = progress;
       previousUpperDistance = currentDistance;
       previousDepartureScale = frame.motion.scale;
@@ -1828,19 +1818,13 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       expect(Math.abs(frame.motion.center[0] - screenCenter[0]), `${kind} stays horizontally centered upstairs`).toBeLessThan(1);
       expect(frame.motion.center[1], `${kind} celebrates in the upper portion of the screen`).toBeLessThan(bounds[1] + bounds[3] * 0.4);
     }
-    if (kind === 'upgrade') {
-      expect(Math.max(...departure.map(frame => routeDeviation(frame.motion.center))),
-        'The upgrade visibly arcs away from the straight anchor-to-showcase line').toBeGreaterThan(4);
-      expect(Math.max(...departure.map(frame => frame.motion.scale)),
-        'The flying upgrade grows as it approaches the viewer').toBeGreaterThan(1.1);
-      expect(departure.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025 &&
-        Math.abs(frame.motion.yaw) > 0.025 && Math.abs(frame.motion.roll) > 0.025),
-      'The upgrade shows its real pitched and yawed model while banking through the curve').toBe(true);
-    } else {
-      expect(departure.every(frame => Math.abs(frame.motion.yaw) < 0.01 &&
-        Math.abs(frame.motion.pitch) < 0.01),
-      'First-chest synthesis grows without starting its turn during travel').toBe(true);
-    }
+    expect(Math.max(...departure.map(frame => routeDeviation(frame.motion.center))),
+      `${kind} visibly arcs away from the straight anchor-to-showcase line`).toBeGreaterThan(4);
+    expect(Math.max(...departure.map(frame => frame.motion.scale)),
+      `${kind} grows as it approaches the viewer`).toBeGreaterThan(1.1);
+    expect(departure.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025 &&
+      Math.abs(frame.motion.yaw) > 0.025 && Math.abs(frame.motion.roll) > 0.025),
+    `${kind} shows its real pitched and yawed model while banking through the curve`).toBe(true);
     const peakScale = Math.max(...upper.map(frame => frame.motion.scale));
     expect(upper[0].motion.scale, `${kind} reaches full size on arrival`).toBeGreaterThan(1.3);
     expect(peakScale - upper[0].motion.scale, `${kind} has no second enlargement after arriving`).toBeLessThan(0.001);
@@ -1868,12 +1852,10 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       previousDistance = currentDistance;
       previousScale = frame.motion.scale;
     }
-    if (kind === 'upgrade') {
-      expect(Math.max(...returning.map(frame => routeDeviation(frame.motion.center))),
-        'The upgrade also follows a visible curve back to its HUD anchor').toBeGreaterThan(4);
-      expect(returning.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025),
-        'The return keeps the three-dimensional model visible during its recovery').toBe(true);
-    }
+    expect(Math.max(...returning.map(frame => routeDeviation(frame.motion.center))),
+      `${kind} also follows a visible curve back to its HUD anchor`).toBeGreaterThan(4);
+    expect(returning.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025),
+      `${kind} keeps the three-dimensional model visible during its recovery`).toBe(true);
     expect(previousDistance, `${kind} visibly covers most of the return distance before the HUD icon takes over`)
       .toBeLessThan(Math.max(tolerance, distance(upper.at(-1).motion.center, anchorCenter) * 0.35));
     expect(previousScale - 1, `${kind} visibly recovers most of its original size before the HUD icon takes over`)

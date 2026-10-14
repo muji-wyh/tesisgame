@@ -272,6 +272,7 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 		var max_yaw: float = 0.0
 		var max_pitch: float = 0.0
 		var max_roll: float = 0.0
+		var max_depth: float = 0.0
 		var max_model_weight: float = 0.0
 		for step in range(1, 24):
 			var outbound: Dictionary = _pose_at(view, Flight.TOP_SECONDS * float(step) / 24.0)
@@ -280,25 +281,20 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 			var deviation: float = absf(offset.cross(route)) / route.length()
 			check(progress > last_progress and progress < 1.0 and outbound.phase == "depart",
 				"Tier %d at %s advances toward its sole upper destination without an intermediate stop" % [previous + 1, root.size])
-			if previous == 0:
-				check(deviation < 0.1
-					and is_zero_approx(float(outbound.yaw)) and is_zero_approx(float(outbound.roll))
-					and is_zero_approx(float(outbound.pitch)),
-					"First-chest synthesis keeps its straight route and level orientation while growing")
 			max_deviation = maxf(max_deviation, deviation)
 			max_travel_scale = maxf(max_travel_scale, float(outbound.scale))
 			max_yaw = maxf(max_yaw, absf(float(outbound.yaw)))
 			max_pitch = maxf(max_pitch, absf(float(outbound.pitch)))
 			max_roll = maxf(max_roll, absf(float(outbound.roll)))
+			max_depth = maxf(max_depth, float(outbound.depth))
 			max_model_weight = maxf(max_model_weight, float(outbound.model_weight))
 			last_progress = progress
-		if previous > 0:
-			check(max_deviation > 6.0 and max_travel_scale > 1.1 and max_yaw > 0.025
-				and max_pitch > 0.025 and max_roll > 0.025,
-				"An upgrade follows a visible arc with approach scale, yaw, pitch and bank")
-			if previous < 4:
-				check(max_model_weight > 0.9,
-					"The acquired three-dimensional chest is visible during the upgrade flight")
+		check(max_deviation > 6.0 and max_travel_scale > 1.1 and max_yaw > 0.025
+			and max_pitch > 0.025 and max_roll > 0.025 and max_depth > 0.9,
+			"Tier %d follows a visible arc with approach scale, yaw, pitch, bank and depth" % (previous + 1))
+		if previous < 4:
+			check(max_model_weight > 0.9 and not view._model_sample.is_empty(),
+				"The acquired three-dimensional chest is visible during the tier %d flight" % (previous + 1))
 		check(is_zero_approx(float(upper.yaw)) and is_zero_approx(float(upper.pitch))
 			and is_zero_approx(float(upper.roll))
 			and float(upper.scale) > 1.3,
@@ -311,13 +307,12 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 		check(Vector2(returning.center).distance_to(anchor.get_center()) < Vector2(upper.center).distance_to(anchor.get_center())
 			and float(returning.scale) < float(peak.scale),
 			"The return visibly approaches the anchor while recovering the resting size")
-		if previous > 0:
-			var return_offset: Vector2 = Vector2(returning.center) - anchor.get_center()
-			var outbound_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
-			check(absf(return_offset.cross(route)) / route.length() > 6.0
-				and Vector2(returning.center).distance_to(outbound_midway.center) < 0.01
-				and absf(float(returning.scale) - float(outbound_midway.scale)) < 0.0001,
-				"The upgrade retraces the same visible arc with the matching outbound size")
+		var return_offset: Vector2 = Vector2(returning.center) - anchor.get_center()
+		var outbound_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
+		check(absf(return_offset.cross(route)) / route.length() > 6.0
+			and Vector2(returning.center).distance_to(outbound_midway.center) < 0.01
+			and absf(float(returning.scale) - float(outbound_midway.scale)) < 0.0001,
+			"Tier %d retraces the same visible arc with the matching outbound size" % (previous + 1))
 		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
 			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)) and is_zero_approx(float(arrived.pitch))
 			and is_zero_approx(float(arrived.depth)), "The chest lands exactly at its original anchor without residual bank or depth")

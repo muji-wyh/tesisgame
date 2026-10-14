@@ -190,7 +190,7 @@ func _motion(age: float) -> Dictionary:
 	var edge: float = minf(_anchor.size.x, _anchor.size.y)
 	var upgrade: bool = is_active() and int(_events[0].previous_tier) > 0
 	var peak: float = 216.0 if upgrade else 176.0
-	var pose: Dictionary = Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), upgrade)
+	var pose: Dictionary = Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), true)
 	if is_active() and int(_events[0].tier) > 4:
 		# Unmodeled tiers rotate their original artwork in the screen plane.
 		pose.roll = pose.yaw

@@ -25,11 +25,12 @@ establish visible beats; they do not constitute a normal-speed audio review.
 The adaptation preserves the existing 0.65-second pickup flight and progress
 fill. The whole closed chest travels from its HUD anchor to the upper-center
 area, growing throughout its flight, rotates at full size, and retraces the same
-path back to its anchor. Upgrades follow one bowed curve in both directions. A gradual perspective
+path back to its anchor. First-chest synthesis and upgrades follow one bowed
+curve in both directions. A gradual perspective
 enlargement, side turn, forward pitch and gentle bank give travel a sense of depth;
 the acquired 3D model stays visible throughout the journey. The paths respond to
 the HUD position and viewport, without an intermediate stop at screen center.
-First-chest synthesis, Match and Memory retain their existing direct flight.
+Match and Memory retain their existing direct flight.
 Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn, with a
 fixed camera envelope accommodating both the travel pitch and celebration yaw.
 Transitions to Royal and Crystal rotate their original 2D artwork in the screen
