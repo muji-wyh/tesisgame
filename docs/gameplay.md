@@ -191,7 +191,8 @@ target over 300 ms, and leaves completed words for manual collection. Failed pay
 do not advance a price. A fresh round resets prices. See the
 [coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
-A completed merge queues the word's recorded pronunciation once. An accepted
+A completed manual merge queues the word's recorded pronunciation once. Auto
+Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Collect gathers ready words at 120 ms intervals without pronunciation.
 Each reveal has its own randomly varied position and size, fits its picture and

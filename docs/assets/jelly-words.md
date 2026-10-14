@@ -34,9 +34,10 @@ every letter visible beside its picture.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
-Each successful merge pronounces its completed word once after the fusion
-animation, using the existing [Ava Sweet recordings](ava-voice.md). Rapid Auto
-Merge completions queue their words in order so each recording can finish.
+Each successful manual merge pronounces its completed word once after the fusion
+animation, using the existing [Ava Sweet recordings](ava-voice.md). Rapid manual
+completions queue their words in order so each recording can finish. Auto Merge
+keeps the fusion sound effects without pronouncing or queuing its completed words.
 Contact, rejected drops, and moving a completed word do not start pronunciation.
 Collect cancels pending merge speech and retains its sound-effect rhythm;
 direct word taps still pronounce the selected word. Leaving play or muting

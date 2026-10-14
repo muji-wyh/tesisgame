@@ -85,6 +85,7 @@ func _check_merge_events() -> void:
 	for reduced: bool in [false, true]:
 		var ids: Array[int] = _reset_view(view, ["ca", "t"], reduced)
 		check(view.game.try_merge(ids[0], ids[1]) == "merged", "A manual prefix-first merge starts")
+		check(not bool(view.game.fusions[0].automatic), "Manual fusion retains its pronunciation origin")
 		check(merged.is_empty(), "Contact does not pronounce an unfinished merge")
 		_advance(view, view.game.FUSION_SECONDS - 0.001)
 		check(merged.is_empty(), "Pronunciation waits for the complete fusion animation")
@@ -110,19 +111,27 @@ func _check_merge_events() -> void:
 	view.pause(false)
 	_advance(view, view.game.FUSION_SECONDS)
 	check(merged.size() == 1, "Resuming a pending fusion pronounces the committed result once")
-	_reset_view(view, ["ca", "t", "do", "g", "ca", "t"])
-	check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with three valid pairs")
-	for frame in range(500):
-		if not view.game.powerup_active():
-			break
-		view._process(0.01)
-	check(not view.game.powerup_active() and merged.size() == 3 and view.game.merged_count == 3,
-		"Each automatically merged word requests one pronunciation despite overlapping travel")
-	check(tapped.is_empty() and view.game.collected_coins == 0 and view.game.collectable_ids().size() == 3,
-		"Automatic pronunciation does not trigger collection or explicit tap speech")
-	check(view.game.start_collection_batch(), "The player can separately collect the automatic results")
-	_advance(view, 3.0)
-	check(merged.size() == 3 and tapped.is_empty(), "Batch Collect never requests or repeats a word pronunciation")
+	for reduced: bool in [false, true]:
+		_reset_view(view, ["ca", "t", "do", "g", "ca", "t"], reduced)
+		check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with three valid pairs")
+		view._process(view.game.POWERUP_DRAG_SECONDS)
+		check(view.game.fusions.size() == 1 and bool(view.game.fusions[0].automatic),
+			"An automatic fusion retains its origin through the delayed completion")
+		view.pause(true)
+		view._process(1.0)
+		check(merged.is_empty(), "Pausing Auto Merge cannot request pronunciation")
+		view.pause(false)
+		for frame in range(500):
+			if not view.game.powerup_active():
+				break
+			view._process(0.01)
+		check(not view.game.powerup_active() and merged.is_empty() and view.game.merged_count == 3,
+			"Every automatic merge stays unspoken through the final overlapping fusion in either motion preference")
+		check(tapped.is_empty() and view.game.collected_coins == 0 and view.game.collectable_ids().size() == 3,
+			"Silent Auto Merge leaves every completed word available for deliberate collection")
+		check(view.game.start_collection_batch(), "The player can separately collect the automatic results")
+		_advance(view, 3.0)
+		check(merged.is_empty() and tapped.is_empty(), "Batch Collect never requests or repeats an automatic word pronunciation")
 	_reset_view(view, ["ca", "t", "do", "g"])
 	check(view.game.activate_powerup("auto_merge"), "A pending paid operation can be stopped")
 	view._process(0.1)
@@ -224,6 +233,19 @@ func _check_app_routes() -> void:
 	await settle()
 	await _prepare_app(app)
 	var view = app._word_jelly
+	var voice_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
+	view._activate_powerup("auto_merge")
+	_advance(view, 4.0)
+	check(view.game.merged_count == 2 and not view.game.powerup_active() and view.game.cleared_pairs == 0,
+		"The application finishes both automatic fusions without collecting them")
+	check(not app.audio.voice.playing and app.audio._voice_queue.is_empty()
+		and int(app.audio._playback_requests.get(app.audio.voice, 0)) == voice_request,
+		"Auto Merge never starts or queues a word recording in the application")
+	var completed: Dictionary = view.game.cell(view.game.collectable_ids()[0])
+	view._activate(int(completed.id))
+	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(completed.word.audio)),
+		"A deliberate tap on an automatically merged word still pronounces it")
+	app.audio.stop_voice()
 	var ids: Array[int] = _reset_view(view, ["ca", "t", "do", "g"])
 	check(view.game.try_merge(ids[0], ids[1]) == "merged" and view.game.try_merge(ids[2], ids[3]) == "merged",
 		"The application accepts two independent word fusions")

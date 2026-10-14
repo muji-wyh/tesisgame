@@ -8,6 +8,7 @@ const words = vocabulary.filter(word => word.min_age === 3);
 const dictionary = new Map(words.map(word => [word.text.toLowerCase(), word]));
 const timings = new Map(words.map(word => [word.id, recordingTiming(word.audio)]));
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const sounds = page => page.evaluate(() => window.audioObservation.playbacks);
 const matches = (sound, timing) => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate;
 const pronunciations = (playbacks, from = 0) => playbacks.slice(from).filter(sound =>
@@ -38,6 +39,33 @@ async function start(page, browserName) {
 
 async function pressRect(page, rect) {
   await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2);
+}
+
+async function mergeNextPair(page) {
+  const state = await jelly(page), bounds = await metrics(page);
+  const reserved = new Set(state.fusions.flatMap(fusion => [fusion.a_id, fusion.b_id]));
+  const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && !reserved.has(tile.id))
+    .sort((a, b) => a.row - b.row);
+  const source = roots.find(first => roots.some(second => first.id !== second.id && dictionary.has((first.text + second.text).toLowerCase())));
+  expect(source, 'The board still contains a valid forward word pair').toBeTruthy();
+  const target = roots.find(second => source.id !== second.id && dictionary.has((source.text + second.text).toLowerCase()));
+  const point = tile => ({ x: bounds.x + (tile.rect[0] + tile.rect[2] / 2) * bounds.scale,
+    y: bounds.y + (tile.rect[1] + tile.rect[3] / 2) * bounds.scale });
+  const from = point(source), to = point(target);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await jelly(page)).drag.source, { intervals: [25, 50] }).toBe(source.id);
+    await page.mouse.move(to.x, to.y, { steps: 5 });
+    await expect.poll(async () => (await jelly(page)).drag.target, { intervals: [25, 50] }).toBe(target.id);
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => {
+    const next = await jelly(page);
+    return next.fusions.some(fusion => fusion.a_id === source.id && fusion.b_id === target.id) ||
+      next.merged_count > state.merged_count;
+  }, { intervals: [25, 50] }).toBe(true);
 }
 
 async function observeMerges(page) {
@@ -134,88 +162,83 @@ test('a manual Jelly Words merge pronounces the completed word once after the fu
   expect(errors).toEqual([]);
 });
 
-test('Auto Merge speaks every completed word once in order without cutting off earlier words', async ({ page, browserName }, info) => {
+test('Auto Merge completes its paid animated fusions without pronouncing words', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
-  const errors = await start(page, browserName), opening = await jelly(page);
+  const requests = watchAudioRequests(page), errors = await start(page, browserName);
+  const opening = await jelly(page), startingWallet = await wallet(page);
   await observeMerges(page);
   await pressRect(page, opening.powerup_buttons.auto_merge.rect);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete';
   }, { timeout: 20000 }).toBe(true);
-  const after = await jelly(page), from = await page.evaluate(() => window.mergeSpeechEvidence.from);
+  const after = await jelly(page);
   expect(after.powerup.completed).toBeGreaterThan(1);
-  await expect.poll(async () => {
-    const spoken = pronunciations(await sounds(page), from);
-    return spoken.length === after.powerup.completed && spoken.every(sound => sound.endedAt !== undefined);
-  }, { timeout: 30000, message: 'Every automatically merged word finishes its queued recording' }).toBe(true);
-  await page.waitForTimeout(150);
-  const evidence = await retain(page, info, 'auto-merge-pronunciation-queue');
+  await expect.poll(async () => (await wallet(page)).balance)
+    .toBe(startingWallet.balance - opening.powerup_buttons.auto_merge.price);
+  // Wait beyond a complete vocabulary recording so delayed pronunciation is
+  // checked as well as audio emitted during the automatic fusion timeline.
+  await page.waitForTimeout(Math.max(...[...timings.values()].map(timing => timing.seconds)) * 1000 + 200);
+  const evidence = await retain(page, info, 'auto-merge-without-pronunciation');
   const spoken = pronunciations(evidence.playbacks);
   expect(evidence.completions).toHaveLength(after.powerup.completed);
-  expect(spoken, 'There is exactly one pronunciation per completed merge').toHaveLength(after.powerup.completed);
-  for (const [index, sound] of spoken.entries()) {
-    const completion = evidence.completions[index];
-    expect(matches(sound, timings.get(completion.word.id)), `Queued position ${index + 1} speaks ${completion.word.text}`).toBe(true);
-    // The bridge throttles snapshots independently of the audio callback. Use
-    // the actual last pending fusion frame, rather than the later publication
-    // timestamp, to bound the completion event from below.
+  expect(spoken, 'Automatic merges neither speak immediately nor leave queued words').toEqual([]);
+  for (const completion of evidence.completions) {
     const pending = evidence.frames.filter(frame => frame.fusions.some(fusion =>
       fusion.operation === 'merge' && fusion.result.id === completion.id));
     expect(pending.length, 'Each automatic union appears in the published animation').toBeGreaterThan(0);
-    expect(sound.at, 'Queued speech follows the last observed pending fusion frame')
-      .toBeGreaterThanOrEqual(pending.at(-1).at - 10);
-    expectNaturalEnd(sound);
-    if (index) expect(sound.scheduledAt - spoken[index - 1].scheduledAt,
-      'The next word waits for the previous complete recording').toBeGreaterThanOrEqual(spoken[index - 1].duration - 0.04);
   }
-  expect(after.cleared_pairs, 'Auto Merge narration does not trigger Collect').toBe(opening.cleared_pairs);
+  expect(after.merged_count).toBe(opening.merged_count + after.powerup.completed);
+  expect(after.cleared_pairs, 'Auto Merge does not trigger Collect').toBe(opening.cleared_pairs);
   expect(after.collected_coins).toBe(opening.collected_coins);
-  // Most existing word recordings share a padded duration. Compare their PCM
-  // identity with the same visible word deliberately tapped through the normal
-  // collection path, so equal lengths cannot hide repeated or reordered words.
-  const references = [];
-  for (const [index, completion] of evidence.completions.entries()) {
-    let tile = (await jelly(page)).tiles.find(item => item.id === completion.id);
-    if (!tile) continue; // A later valid merge may consume an intermediate word.
-    await expect.poll(async () => {
-      tile = (await jelly(page)).tiles.find(item => item.id === completion.id);
-      return Boolean(tile?.settled);
-    }).toBe(true);
-    const beforeTap = (await sounds(page)).length;
-    await pressRect(page, tile.rect);
-    const direct = await expectRecording(page, beforeTap, completion.word.audio);
-    expect(direct.fingerprint, `The queued ${completion.word.text} uses the same PCM as tapping that word`)
-      .toBe(spoken[index].fingerprint);
-    references.push({ word: completion.word.id, queueIndex: index, direct });
-  }
-  expect(references.length, 'Distinct real words verify the queue content as well as its timing').toBeGreaterThan(1);
-  const referencePath = info.outputPath('auto-merge-pronunciation-identities.json');
-  fs.writeFileSync(referencePath, JSON.stringify(references, null, 2));
-  await info.attach('auto-merge-pronunciation-identities.json', { path: referencePath, contentType: 'application/json' });
+  const mergeTiming = recordingTiming('assets/imported-audio/jelly-interaction/merge-together-v3.wav');
+  expect(evidence.playbacks.some(sound => matches(sound, mergeTiming) && sound.peak > 0.01),
+    'Automatic fusion keeps its existing merge sound effect').toBe(true);
+  let tile;
+  await expect.poll(async () => {
+    tile = (await jelly(page)).tiles.find(item => item.mass > 1 && item.word?.id && item.settled);
+    return Boolean(tile);
+  }).toBe(true);
+  const beforeTap = (await sounds(page)).length;
+  await pressRect(page, tile.rect);
+  await expectRecording(page, beforeTap, tile.word.audio);
+  await expect.poll(async () => pronunciations(await sounds(page), beforeTap).every(sound => sound.endedAt !== undefined)).toBe(true);
+  const tapped = pronunciations(await sounds(page), beforeTap);
+  expect(tapped, 'A deliberate tap still pronounces an automatically merged word exactly once').toHaveLength(1);
+  expectNaturalEnd(tapped[0]);
+  expect(requests, 'Automatic and direct interactions use bundled audio').toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test('Collect cancels pending merge pronunciation and keeps the whole batch silent', async ({ page, browserName }, info) => {
+test('Collect cancels manual merge pronunciation and keeps the whole batch silent', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
   const errors = await start(page, browserName), opening = await jelly(page);
   await observeMerges(page);
-  await pressRect(page, opening.powerup_buttons.auto_merge.rect);
+  await mergeNextPair(page);
+  await mergeNextPair(page);
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete' &&
-      state.collect_button.enabled;
-  }, { timeout: 20000 }).toBe(true);
+    return state.merged_count === opening.merged_count + 2 && state.collect_button.enabled && state.collect_button.count === 2;
+  }, { intervals: [25, 50], timeout: 20000 }).toBe(true);
   const ready = await jelly(page), from = await page.evaluate(() => window.mergeSpeechEvidence.from);
-  const queued = pronunciations(await sounds(page), from);
-  expect(queued.length, 'Rapid Auto Merge leaves pronunciation waiting when Collect becomes available')
-    .toBeLessThan(ready.powerup.completed);
+  const active = pronunciations(await sounds(page), from)
+    .findLast(sound => sound.stoppedAt === undefined && sound.endedAt === undefined);
+  expect(active, 'A manual merge pronunciation is still playing when Collect becomes available').toBeTruthy();
+  const collectInputAt = await page.evaluate(() => performance.now());
   await pressRect(page, ready.collect_button.rect);
+  await expect.poll(async () => {
+    const current = (await sounds(page)).find(sound => sound.at === active.at && sound.scheduledAt === active.scheduledAt);
+    return current?.stoppedAt !== undefined;
+  }, { message: 'Collect stops the pronunciation that was already playing' }).toBe(true);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs + ready.collect_button.count);
   await page.waitForTimeout(1800);
   const evidence = await retain(page, info, 'collect-cancels-merge-pronunciation');
   expect(evidence.collectionAt).not.toBeNull();
-  expect(pronunciations(evidence.playbacks).filter(sound => sound.at >= evidence.collectionAt),
+  const stopped = evidence.playbacks.find(sound => sound.at === active.at && sound.scheduledAt === active.scheduledAt);
+  expect(stopped.stoppedAt, 'The active voice receives its stop after the Collect input').toBeGreaterThanOrEqual(collectInputAt);
+  expect(stopped.stopScheduledAt - stopped.scheduledAt, 'Collect interrupts the word before its natural end')
+    .toBeLessThan(stopped.duration - 0.04);
+  expect(pronunciations(evidence.playbacks).filter(sound => sound.at >= collectInputAt),
     'Neither waiting merge words nor the final collected word speak after Collect starts').toEqual([]);
   expect(errors).toEqual([]);
 });

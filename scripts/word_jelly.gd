@@ -980,7 +980,8 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 			_snapbacks[int(fusion.result.id)] = {"from": visual.merged.position, "elapsed": 0.0}
 	_refresh_hud()
 	if str(fusion.get("operation", "")) == "merge" and _can_play() \
-		and not game.collection_batch_active() and game.is_valid_word(fusion.get("result", {})):
+		and not bool(fusion.get("automatic", false)) and not game.collection_batch_active() \
+		and game.is_valid_word(fusion.get("result", {})):
 		word_merged.emit(fusion.word)
 
 func _landing_contact_at(cell: Dictionary) -> float:

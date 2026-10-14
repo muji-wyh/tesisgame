@@ -511,6 +511,7 @@ func _grant_powerup_fragment(tile: Dictionary) -> void:
 func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
+	var automatic: bool = _powerup_committing
 	# The internal authorization is consumed before emitting any callbacks.
 	_powerup_committing = false
 	var a: Dictionary = cell(a_id)
@@ -534,7 +535,7 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	result.column = position.x
 	result.row = position.y
 	var active: Dictionary = {
-		"operation": "merge", "a_id": a_id, "b_id": b_id,
+		"operation": "merge", "automatic": automatic, "a_id": a_id, "b_id": b_id,
 		"a": a.duplicate(true), "b": b.duplicate(true), "result": result,
 		"word": result.word.duplicate(true), "attempt_id": _event_id("merge"),
 		"elapsed": 0.0, "duration": FUSION_SECONDS, "pop_at": FUSION_SECONDS,

@@ -173,8 +173,8 @@ func _check_auto_merge(app) -> void:
 		and app.coin_wallet.balance == before - 600 and app.growth.snapshot().streaks == growth
 		and not app._coin_flight.snapshot().active,
 		"Automatic merging leaves words for manual collection without rewards, mastery, or coin flights")
-	check(app.audio.voice.playing and app.audio._voice_queue.size() == 1,
-		"Two completed automatic merges pronounce one word and queue the next without interrupting it")
+	check(not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
+		"Completed automatic merges neither pronounce words nor queue delayed narration")
 	check(not view.collect_button.disabled and not view.powerup_buttons.fragments.disabled,
 		"The three-action area returns control after the paid sequence")
 	var saved_receipts: Dictionary = app.coin_wallet._receipts.duplicate()
