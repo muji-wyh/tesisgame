@@ -1433,7 +1433,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   const paused = await jelly(page);
   expect(full.notice).toContain('Board full');
   expect(paused.phase).toBe('playing');
-  expect(paused.danger).toEqual({ active: false, strength: 0 });
+  expect(paused.danger).toMatchObject({ active: false, strength: 0 });
   const arrivals = await page.evaluate(() => window.jellyObservedTimeline.filter((entry, index, entries) =>
     index > 0 && entry.generated > entries[index - 1].generated));
   const intervals = arrivals.slice(1).map((entry, index) => (entry.at - arrivals[index].at) / 1000);
@@ -1469,7 +1469,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(rescueAnimation.every(frame => frame.danger.active), 'The warning stays active until the pair actually clears').toBe(true);
   expect(rescued.cells).toHaveLength(22);
   expect(rescued.full_elapsed, 'A completed rescue cancels the entire previous countdown').toBe(-1);
-  expect(rescued.danger).toEqual({ active: false, strength: 0 });
+  expect(rescued.danger).toMatchObject({ active: false, strength: 0 });
   expect(rescued.chest_count).toBe(0);
   await expect.poll(async () => (await growth(page)).streaks[rescue[0].word.id]).toBe(Math.min(MASTERY_STREAK, streak + 1));
   const rescueFrame = await page.evaluate(() => window.jellyObservedTimeline.length);
@@ -1480,7 +1480,7 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   // Inspect every published countdown frame: repeated remote polls can miss a
   // short pulse while the browser is rendering a large board or a screenshot.
   await page.screenshot({ path: info.outputPath('jelly-refilled-countdown.png'), scale: 'css' });
-  await expect.poll(async () => (await jelly(page)).result.visible,
+  await expect.poll(async () => (await jelly(page)).game_over.visible,
     { timeout: 18000, intervals: [100, 250, 500], message: 'The fresh full-board countdown expires through ordinary gameplay time' }).toBe(true);
   const countdown = await page.evaluate(index => window.jellyObservedTimeline.slice(index)
     .filter(frame => frame.danger?.active), rescueFrame);
@@ -1489,15 +1489,22 @@ test('a naturally full board pauses, can be rescued, and eventually ends without
   expect(countdown.some(frame => frame.danger.strength === 0), 'The warning returns to the quiet board frame between beats').toBe(true);
   const ended = await jelly(page);
   expect(ended.phase).toBe('finished');
-  expect(ended.danger).toEqual({ active: false, strength: 0 });
+  expect(ended.danger).toMatchObject({ active: false, strength: 0 });
   expect(ended.cleared_pairs).toBe(1);
   expect(ended.score).toBe(1);
-  expect(ended.result.title).toBe('Round results');
-  expect(ended.result.caption).toBe('Score: 1 · Fragments: 0 / 4');
+  expect(ended.game_over).toMatchObject({ visible: true, title: 'Game over' });
+  expect(ended.result.visible, 'The frozen board remains behind the settlement dialog').toBe(false);
   expect(ended.chest_count).toBe(0);
   expect(ended.result.open.visible).toBe(false);
-  expect(ended.result.replay.visible).toBe(true);
-  expect((await treasure(page)).pending).not.toBe(true);
+  expect(ended.result.replay.visible).toBe(false);
+  const settlement = await treasure(page);
+  expect(settlement).toMatchObject({ visible: true, heading: 'Game over', score_text: '1',
+    chest_count: 0, visible_chest_count: 0, empty_result: true, replay_action: true });
+  expect(settlement.result_context).toMatchObject({ reason: 'danger', score: 1, cleared_pairs: 1,
+    chest_count: 0, fragment_count: 0 });
+  expect(settlement.actions.find(action => action.text === 'Play again')).toMatchObject({ visible: true, disabled: false });
+  expect(settlement.actions.find(action => action.text === 'Home')).toMatchObject({ visible: true, disabled: false });
+  expect(settlement.pending).not.toBe(true);
   await page.waitForTimeout(400);
   expect((await jelly(page)).round_id).toBe(ended.round_id);
   expect((await growth(page)).streaks[rescue[0].word.id]).toBe(Math.min(MASTERY_STREAK, streak + 1));

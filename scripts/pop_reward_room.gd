@@ -2,6 +2,7 @@ extends Control
 
 signal exit_requested
 signal replay_requested
+signal home_requested
 signal changed(state: Dictionary)
 signal chest_audio_requested(action: String, theme_id: String, progress: float)
 signal chest_cue_requested(theme_id: String, cue: String, step: int)
@@ -49,12 +50,14 @@ var _scroll: TreasureScroll
 var _content: Control
 var _notice: Label
 var _back: Button
+var _home: Button
 var _retry: Button
 var _previous_page: Button
 var _next_page: Button
 var _page_label: Label
 var _page_index: int = 0
 var _result_context: Dictionary = {}
+var _empty_result_id: String = ""
 var _result_score: Label
 var _collecting: bool = false
 var _collect_pending: bool = false
@@ -104,6 +107,16 @@ func _ready() -> void:
 			return
 		pause()
 		exit_requested.emit())
+	_home = Button.new()
+	UiClick.bind_button(_home)
+	_home.name = "JellyGameOverHome"
+	_home.text = "Home"
+	add_child(_home)
+	Style.action_button(_home, Style.GOOD)
+	_home.hide()
+	_home.pressed.connect(func() -> void:
+		if _is_danger_result() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+			home_requested.emit())
 	_retry = Button.new()
 	UiClick.bind_button(_retry)
 	_retry.name = "PopTreasureRetry"
@@ -160,8 +173,42 @@ func has_pending() -> bool:
 
 
 func set_result_context(result: Dictionary) -> void:
+	var previous_page_size: int = _effective_page_size()
+	var had_empty_result: bool = not _empty_result_id.is_empty()
 	_result_context = result.duplicate(true)
+	if result.is_empty():
+		_empty_result_id = ""
+	if is_instance_valid(_scroll) and (previous_page_size != _effective_page_size() or (had_empty_result and _empty_result_id.is_empty())):
+		_page_index = 0
+		_build_cards()
+		return
 	_refresh()
+
+
+func configure_empty_result(id: String, manifest: Dictionary, reduce: bool) -> bool:
+	# An empty round is presentation only. It must neither display an earlier
+	# opened batch as a new reward nor replace any durable unopened treasure.
+	if _unsaved_index >= 0:
+		_refresh()
+		return false
+	pause()
+	_manifest = manifest
+	reduced_motion = reduce
+	_empty_result_id = id
+	_page_index = 0
+	if not rewards.ready and not rewards.load_state():
+		_save_failed = true
+	_build_cards()
+	resume()
+	return not _save_failed
+
+
+func _is_danger_result() -> bool:
+	return str(_result_context.get("reason", "")) == "danger"
+
+
+func _effective_page_size() -> int:
+	return 1 if _is_danger_result() else maxi(1, page_size)
 
 
 func collect_all_coins() -> bool:
@@ -225,6 +272,7 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 	if not _configured_id.is_empty() and _configured_id != id and (_unsaved_index >= 0 or _save_failed):
 		_refresh()
 		return false
+	_empty_result_id = ""
 	if _configured_id == id and not _cards.is_empty():
 		set_reduced_motion(reduce)
 		_refresh()
@@ -261,6 +309,7 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 	if _unsaved_index >= 0 or (_save_failed and not _configured_id.is_empty()):
 		resume()
 		return false
+	_empty_result_id = ""
 	pause()
 	_save_failed = not rewards.load_state()
 	if not _save_failed and rewards.entries.is_empty():
@@ -269,7 +318,7 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 	_page_index = 0
 	for index in range(rewards.entries.size()):
 		if not bool(rewards.entries[index].opened):
-			_page_index = floori(float(index) / maxi(1, page_size))
+			_page_index = floori(float(index) / _effective_page_size())
 			break
 	_build_cards()
 	resume()
@@ -317,8 +366,8 @@ func _build_cards() -> void:
 	_cards.clear()
 	var entries: Array[Dictionary] = _batch_entries()
 	_page_index = clampi(_page_index, 0, _page_count() - 1)
-	var start: int = _page_index * maxi(1, page_size)
-	for entry_index in range(start, mini(entries.size(), start + maxi(1, page_size))):
+	var start: int = _page_index * _effective_page_size()
+	for entry_index in range(start, mini(entries.size(), start + _effective_page_size())):
 		var index: int = _cards.size()
 		var entry: Dictionary = entries[entry_index]
 		var palette: Dictionary = Data.theme(str(entry.theme))
@@ -388,6 +437,8 @@ func _build_cards() -> void:
 
 func _batch_entries() -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
+	if not _empty_result_id.is_empty():
+		return entries
 	if rewards.round_id == _configured_id:
 		entries.assign(rewards.entries)
 	if entries.is_empty():
@@ -400,7 +451,7 @@ func _batch_entries() -> Array[Dictionary]:
 
 
 func _page_count() -> int:
-	return maxi(1, ceili(float(_batch_entries().size()) / maxi(1, page_size)))
+	return maxi(1, ceili(float(_batch_entries().size()) / _effective_page_size()))
 
 
 func set_page(index: int) -> bool:
@@ -432,6 +483,8 @@ func navigation_controls() -> Array[Control]:
 	for button in [_previous_page, _next_page]:
 		if is_instance_valid(button) and button.visible and not button.disabled:
 			controls.append(button)
+	if is_instance_valid(_home) and _home.visible:
+		controls.append(_home)
 	controls.append(_back)
 	return controls
 
@@ -608,6 +661,14 @@ func retry_save() -> void:
 	if _collect_pending:
 		collect_all_coins()
 		return
+	if not _empty_result_id.is_empty():
+		_save_failed = not rewards.load_state()
+		if not _save_failed and not _configured_id.is_empty() and rewards.round_id != _configured_id and not _draft_themes.is_empty():
+			_save_failed = not rewards.create_batch(_configured_id, _draft_themes, _draft_tiers)
+		if not _save_failed:
+			_sync_saved_batch()
+		_build_cards()
+		return
 	if _unsaved_index >= 0:
 		if (storage_kind == "jelly" or max_chests == 0) and rewards.load_state() and rewards.round_id != _configured_id:
 			# Another tab appended loot and changed indexes. Reload rather than
@@ -741,14 +802,20 @@ func _refresh() -> void:
 	_notice.visible = _save_failed
 	var state: Dictionary = snapshot()
 	var result_mode: bool = not _result_context.is_empty()
+	var danger_result: bool = _is_danger_result()
+	_home.visible = danger_result
+	_home.disabled = _paused
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	if result_mode:
-		_heading.text = "Round results"
+		_heading.text = "Game over" if danger_result else "Round results"
 		_result_score.text = str(maxi(0, int(_result_context.get("score", 0))))
 		_result_score.accessibility_name = "Score: " + _result_score.text
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		_progress.text = JellyRewardProgress.title_for_tier(tier) if tier > 0 else "No chest this round"
+		if danger_result:
+			var completed: int = maxi(0, int(_result_context.get("cleared_pairs", 0)))
+			_progress.text = "%d word%s completed\n%s" % [completed, "" if completed == 1 else "s", _progress.text]
 	else:
 		_heading.text = JellyRewardProgress.title_for_tier(int(_cards[0].tier)) if state.chest_count == 1 and not _cards.is_empty() and int(_cards[0].tier) > 0 else "Your treasure"
 		_progress.text = "%d / %d opened" % [state.opened_count, state.chest_count]
@@ -795,6 +862,15 @@ func _layout() -> void:
 	var h: float = size.y
 	if w <= 0.0 or h <= 0.0:
 		return
+	if _is_danger_result():
+		_layout_danger_result(s, w, h)
+		return
+	if _back.get_meta("result_appearance", []) != [s, false]:
+		# Restore ordinary result actions after leaving a danger modal, including
+		# physical font and button minimums when the viewport scale changes.
+		Style.action_button(_back, Style.GOOD)
+		Style.action_button(_retry, Style.GOOD, true)
+		_back.set_meta("result_appearance", [s, false])
 	if not _result_context.is_empty() and _batch_entries().size() <= 1:
 		_layout_single_result(s, w, h)
 		return
@@ -888,13 +964,112 @@ func _layout() -> void:
 	_update_navigation(columns)
 
 
+func _layout_danger_result(s: float, w: float, h: float) -> void:
+	var appearance: Array = [s, true]
+	if _back.get_meta("result_appearance", []) != appearance:
+		Style.action_button(_back, Style.GOOD, true)
+		Style.action_button(_home, Style.GOOD)
+		Style.action_button(_retry, Style.GOOD)
+		Style.action_button(_previous_page, Style.GOOD)
+		Style.action_button(_next_page, Style.GOOD)
+		_back.set_meta("result_appearance", appearance)
+	var margin: float = 4 / s
+	var gap: float = 8 / s
+	var action_h: float = 48 / s
+	var inner_w: float = maxf(1.0, w - margin * 2)
+	var action_y: float = h - action_h - margin
+	var wide_actions: bool = w * s >= 420.0
+	var action_count: int = 3 if _save_failed and wide_actions else 2
+	var action_w: float = (inner_w - gap * (action_count - 1)) / action_count
+	_home.position = Vector2(margin, action_y)
+	_home.size = Vector2(action_w, action_h)
+	_back.position = Vector2(w - margin - action_w, action_y)
+	_back.size = Vector2(action_w, action_h)
+	var footer_top: float = action_y
+	if _save_failed:
+		if wide_actions:
+			_retry.position = Vector2(margin + action_w + gap, action_y)
+			_retry.size = Vector2(action_w, action_h)
+		else:
+			footer_top -= action_h + gap
+			_retry.position = Vector2(margin, footer_top)
+			_retry.size = Vector2(inner_w, action_h)
+		footer_top -= 40 / s
+		_notice.position = Vector2(margin, footer_top)
+		_notice.size = Vector2(inner_w, 36 / s)
+		_notice.add_theme_font_size_override("font_size", ceili(12 / s))
+	if _page_count() > 1:
+		footer_top -= 54 / s
+		var page_w: float = (inner_w - 56 / s - gap * 2) * 0.5
+		_previous_page.position = Vector2(margin, footer_top)
+		_previous_page.size = Vector2(page_w, action_h)
+		_next_page.position = Vector2(w - margin - page_w, footer_top)
+		_next_page.size = Vector2(page_w, action_h)
+		_page_label.position = Vector2(margin + page_w + gap, footer_top)
+		_page_label.size = Vector2(56 / s, action_h)
+		_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_page_label.add_theme_font_size_override("font_size", ceili(13 / s))
+	_scroll.position = Vector2(margin, margin)
+	_scroll.size = Vector2(inner_w, maxf(1.0, footer_top - gap - margin))
+	_scroll.scroll_vertical = 0
+	# Fit the reward stage to the modal. A short screen puts the score beside
+	# the chest; a phone uses a single column with a flexible artwork height.
+	var stage_h: float = _scroll.size.y
+	var compact: bool = w * s >= 420.0 and stage_h * s < 340.0 and not _cards.is_empty()
+	var tight: bool = stage_h * s < 170.0
+	var heading_h: float = (24 if tight else 32) / s
+	var score_h: float = (36 if tight else 62) / s
+	var summary_h: float = (32 if tight else 42) / s
+	var label_gap: float = (2 if tight else 4) / s
+	_heading.add_theme_font_size_override("font_size", ceili((18 if tight else 24) / s))
+	_result_score.add_theme_font_size_override("font_size", ceili((30 if tight else 52) / s))
+	_progress.add_theme_font_size_override("font_size", ceili((11 if tight else 13) / s))
+	heading_h = maxf(heading_h, _heading.get_combined_minimum_size().y)
+	score_h = maxf(score_h, _result_score.get_combined_minimum_size().y)
+	summary_h = maxf(summary_h, _progress.get_combined_minimum_size().y)
+	var header_h: float = heading_h + score_h + summary_h + label_gap * 2
+	var info_w: float = inner_w * 0.42 if compact else inner_w
+	var chest_w: float = inner_w - info_w - gap if compact else minf(410 / s, inner_w)
+	var chest_h: float = minf(stage_h, 370 / s) if compact else maxf(0.0, minf(stage_h - header_h - gap, 370 / s))
+	if _cards.is_empty():
+		chest_h = 0.0
+	var content_h: float = maxf(header_h, chest_h) if compact else header_h + (gap + chest_h if chest_h > 0 else 0.0)
+	var top: float = maxf(0.0, (stage_h - content_h) * 0.5)
+	var info_top: float = top + maxf(0.0, (content_h - header_h) * 0.5) if compact else top
+	_content.custom_minimum_size = Vector2.ZERO
+	_content.size = _scroll.size
+	_heading.position = Vector2(0, info_top)
+	_heading.size = Vector2(info_w, heading_h)
+	_result_score.position = Vector2(0, info_top + heading_h + label_gap)
+	_result_score.size = Vector2(info_w, score_h)
+	_progress.position = Vector2(0, info_top + heading_h + score_h + label_gap * 2)
+	_progress.size = Vector2(info_w, summary_h)
+	if not _cards.is_empty():
+		var card: Dictionary = _cards[0]
+		var hint_h: float = 44 / s
+		var art_h: float = maxf(1.0, chest_h - hint_h - 4 / s)
+		card.panel.position = Vector2(info_w + gap if compact else (inner_w - chest_w) * 0.5,
+			top if compact else top + header_h + gap)
+		card.panel.size = Vector2(chest_w, chest_h)
+		card.art.position = Vector2.ZERO
+		card.art.size = Vector2(chest_w, art_h)
+		card.tier_label.hide()
+		card.light.size = Vector2.ONE * minf(chest_w, art_h * 1.12)
+		card.light.position = Vector2((chest_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
+		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
+		card.button.position = Vector2.ZERO
+		card.button.size = card.panel.size
+		var hint_w: float = minf(184 / s, chest_w)
+		card.hint.position = Vector2((chest_w - hint_w) * 0.5, art_h + 4 / s)
+		card.hint.size = Vector2(hint_w, hint_h)
+		card.caption.position = Vector2.ZERO
+		card.caption.size = card.hint.size
+		card.caption.add_theme_font_size_override("font_size", ceili(13 / s))
+	_refresh_captions()
+	_update_navigation(1)
+
+
 func _layout_single_result(s: float, w: float, h: float) -> void:
-	if not is_equal_approx(float(_back.get_meta("result_scale", -1.0)), s):
-		# Font and button minimums belong to the current viewport scale too.
-		# Retaining phone minimums can push actions out of a resized stage.
-		Style.action_button(_back, Style.GOOD)
-		Style.action_button(_retry, Style.GOOD, true)
-		_back.set_meta("result_scale", s)
 	var margin: float = 16 / s
 	var compact: bool = h * s < 360.0 and w * s >= 480.0
 	var footer: float = (116 if _save_failed else 62) / s
@@ -992,6 +1167,14 @@ func _update_navigation(columns: int) -> void:
 
 func snapshot() -> Dictionary:
 	var entries: Array[Dictionary] = []
+	var actions: Array[Dictionary] = []
+	for button: Button in [_home, _retry, _back]:
+		if not is_instance_valid(button):
+			continue
+		var action_rect: Rect2 = button.get_global_rect()
+		actions.append({"name": str(button.name), "text": button.text,
+			"rect": [action_rect.position.x, action_rect.position.y, action_rect.size.x, action_rect.size.y],
+			"visible": button.visible, "disabled": button.disabled})
 	var opened: int = 0
 	var batch: Array[Dictionary] = _batch_entries()
 	for entry in batch:
@@ -1009,13 +1192,14 @@ func snapshot() -> Dictionary:
 				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
-	return {"round_id": _configured_id, "chest_count": batch.size(), "opened_count": opened,
+	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
 		"result_context": _result_context.duplicate(true), "collect_pending": _collect_pending,
+		"empty_result": not _empty_result_id.is_empty(), "actions": actions,
 		"score_text": _result_score.text if is_instance_valid(_result_score) and not _result_context.is_empty() else "",
 		"replay_action": not _result_context.is_empty(),
 		"heading": _heading.text if is_instance_valid(_heading) else "",
 		"progress_text": _progress.text if is_instance_valid(_progress) else "",
-		"page": _page_index, "page_count": _page_count(), "page_size": maxi(1, page_size), "visible_chest_count": _cards.size(),
+		"page": _page_index, "page_count": _page_count(), "page_size": _effective_page_size(), "visible_chest_count": _cards.size(),
 		"scroll_rect": {"x": viewport_rect.position.x, "y": viewport_rect.position.y,
 			"width": viewport_rect.size.x, "height": viewport_rect.size.y},
 		"scroll_offset": _scroll.scroll_vertical if is_instance_valid(_scroll) else 0,

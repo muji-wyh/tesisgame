@@ -31,6 +31,7 @@ const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const WordJelly = preload("res://scripts/word_jelly.gd")
 const FinishConfirmation = preload("res://scripts/finish_confirmation.gd")
+const JellyGameOver = preload("res://scripts/jelly_game_over.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
@@ -196,6 +197,8 @@ var _finish_confirmation_focus_modes: Dictionary = {}
 var _word_jelly_credits: Dictionary = {}
 var _jelly_rewards: PopRewardRoom
 var _jelly_rewards_shown: bool = false
+var _jelly_game_over: JellyGameOver
+var _jelly_rewards_parent: Control
 var jelly_reward_save_path: String = "user://jelly-rewards-v1.cfg"
 var _jelly_settling: bool = false
 var _jelly_reward_saved: bool = false
@@ -803,6 +806,12 @@ func _build_controls() -> void:
 	_jelly_rewards.changed.connect(_publish_jelly_rewards)
 	_jelly_rewards.hide()
 	column.add_child(_jelly_rewards)
+	_jelly_rewards_parent = column
+	_jelly_game_over = JellyGameOver.new()
+	add_child(_jelly_game_over)
+	_jelly_game_over.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_jelly_rewards.home_requested.connect(func() -> void: _jelly_game_over.home_requested.emit())
+	_jelly_game_over.home_requested.connect(_show_mode_menu)
 	_round_celebration = RoundCelebration.new()
 	_round_celebration.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_round_celebration.performance_finished.connect(_on_round_celebration_finished)
@@ -1323,6 +1332,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_jelly_rewards.pause()
 	_jelly_rewards_shown = false
 	_jelly_rewards.set_result_context({})
+	_restore_jelly_reward_host()
 	_controller_holding_jelly_chest = false
 	_rebuilding = true
 	if not next_mode.is_empty():
@@ -1540,6 +1550,7 @@ func _confirm_jelly_finish() -> void:
 func _sync_jelly() -> void:
 	if not is_instance_valid(_jelly):
 		return
+	_sync_jelly_game_over()
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
 	_word_jelly.pause(not allowed or _mode_id != "word_jelly")
@@ -1551,7 +1562,10 @@ func _sync_jelly() -> void:
 			audio.stop_pair_feedback()
 	if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 		_jelly_rewards.resume()
+	if _jelly_game_over_open() and not _valid_focus(get_viewport().gui_get_focus_owner()):
+		_default_focus().grab_focus()
 	_publish_jelly(_active_jelly().snapshot())
+	_publish_jelly_rewards(_jelly_rewards.snapshot())
 
 
 func _jelly_hear(word: Dictionary, source_mode: String = "") -> void:
@@ -1666,7 +1680,10 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 		_jelly_rewards.pause()
 	if _jelly_settling:
 		return
-	if count > 0:
+	if _jelly_ended_in_danger():
+		_show_jelly_rewards()
+		_announce_status("Game over. " + _jelly_result_summary())
+	elif count > 0:
 		_begin_round_celebration(count)
 	else:
 		_show_jelly_result()
@@ -1675,6 +1692,9 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 
 
 func _show_jelly_result() -> void:
+	if _jelly_ended_in_danger():
+		_show_jelly_rewards()
+		return
 	_active_jelly().result_reveal()
 	if int(_round_result.get("chest_count", 0)) > 0 or _jelly_rewards.has_pending():
 		_show_jelly_rewards()
@@ -1734,17 +1754,29 @@ func _show_jelly_rewards() -> void:
 		return
 	if int(_round_result.get("chest_count", 0)) > 0:
 		_save_jelly_round_reward()
+	elif _jelly_ended_in_danger():
+		_jelly_rewards.configure_empty_result(_round_id, data.chests, reduced_motion)
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
 	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {})
+	if _jelly_ended_in_danger():
+		_jelly_game_over.configure(_jelly_rewards, Data.theme(model.theme_id), reduced_motion,
+			int(_round_result.get("chest_count", 0)) > 0)
+		_stop_controller_actions()
+		_controller_accept_needs_release = _controller_accept_is_pressed()
 	_active_jelly().cancel_input()
 	audio.halt()
 	_jelly_rewards_shown = true
+	if _jelly_ended_in_danger() and not _mode_menu_open():
+		_jelly_game_over.open(true)
 	_refresh()
 	_default_focus().grab_focus()
 
 
 func _hide_jelly_rewards() -> void:
+	if _jelly_ended_in_danger():
+		_show_mode_menu()
+		return
 	_coin_flight.sync(coin_wallet.balance)
 	_jelly_rewards.pause()
 	_controller_holding_jelly_chest = false
@@ -1762,6 +1794,33 @@ func _hide_jelly_rewards() -> void:
 	_default_focus().grab_focus()
 
 
+func _jelly_ended_in_danger() -> bool:
+	return _is_jelly_mode() and str(_round_result.get("reason", "")) == "danger"
+
+
+func _jelly_game_over_open() -> bool:
+	return is_instance_valid(_jelly_game_over) and _jelly_game_over.is_visible_in_tree()
+
+
+func _sync_jelly_game_over() -> void:
+	if not is_instance_valid(_jelly_game_over):
+		return
+	if _jelly_ended_in_danger() and _jelly_rewards_shown and not _mode_menu_open() \
+		and not collection_page.visible and not _page_hidden:
+		_jelly_game_over.open()
+	else:
+		_jelly_game_over.close()
+	if is_instance_valid(_coin_flight):
+		_coin_flight.z_index = 95 if _jelly_game_over_open() else 85
+
+
+func _restore_jelly_reward_host() -> void:
+	_jelly_game_over.close()
+	if _jelly_rewards.get_parent() != _jelly_rewards_parent:
+		_jelly_rewards.reparent(_jelly_rewards_parent, false)
+	_coin_flight.z_index = 85
+
+
 func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	if _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
@@ -1770,14 +1829,19 @@ func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	value["mode"] = _mode_id
 	value["round_id"] = _round_id
 	value["finish_confirmation"] = _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false}
+	value["game_over"] = _jelly_game_over.snapshot() if is_instance_valid(_jelly_game_over) else {"visible": false}
 	_host.jellyStatus(JSON.stringify(value))
 
 
 func _publish_jelly_rewards(state: Dictionary) -> void:
+	# Saving or opening a chest can disable the focused action or rebuild it.
+	if _jelly_game_over_open() and not _jelly_rewards._paused and not _valid_focus(get_viewport().gui_get_focus_owner()):
+		_default_focus().grab_focus()
 	if _host != null:
 		var value: Dictionary = state.duplicate(true)
 		value["visible"] = _is_jelly_mode() and _jelly_rewards_shown and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 		value["mode"] = _mode_id
+		value["game_over"] = _jelly_game_over.snapshot() if is_instance_valid(_jelly_game_over) else {"visible": false}
 		_host.jellyRewardStatus(JSON.stringify(value))
 
 
@@ -2403,8 +2467,9 @@ func _refresh() -> void:
 	_pop.visible = playing and _mode_id == "pop" and not collection_page.visible and not _pop_rewards_shown and not celebrating
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
 	_pop.set_pending_chests(_pop_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size())
-	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
-	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and not _jelly_rewards_shown and not celebrating
+	var keep_ended_board: bool = _jelly_ended_in_danger()
+	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
+	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
 	_jelly_rewards.visible = playing and _is_jelly_mode() and not collection_page.visible and _jelly_rewards_shown
 	var pending_jelly_chests: int = _jelly_rewards.rewards.entries.filter(func(entry: Dictionary) -> bool: return not entry.opened).size()
 	_jelly.set_pending_chests(pending_jelly_chests)
@@ -3510,6 +3575,26 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _jelly_game_over_open():
+		if event is InputEventKey:
+			for action: String in ["ui_left", "ui_right", "ui_up", "ui_down"]:
+				if event.is_action_pressed(action):
+					_move_focus({"ui_left": Vector2.LEFT, "ui_right": Vector2.RIGHT,
+						"ui_up": Vector2.UP, "ui_down": Vector2.DOWN}[action])
+					get_viewport().set_input_as_handled()
+					return
+		if event.is_action_pressed("ui_focus_next") or event.is_action_pressed("ui_focus_prev"):
+			var controls: Array[Control] = _jelly_rewards.navigation_controls()
+			if not controls.is_empty():
+				var index: int = controls.find(get_viewport().gui_get_focus_owner())
+				var direction: int = -1 if event.is_action_pressed("ui_focus_prev") else 1
+				controls[posmod(index + direction, controls.size())].grab_focus()
+			get_viewport().set_input_as_handled()
+			return
+		if (event is InputEventKey and event.is_action_pressed("ui_accept") and event.echo) \
+			or (event is InputEventJoypadButton and event.button_index in [JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_START, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]):
+			get_viewport().set_input_as_handled()
+			return
 	if _finish_confirmation_open():
 		if event.is_action_pressed("ui_cancel"):
 			_cancel_jelly_finish()
@@ -3827,6 +3912,8 @@ func _valid_focus(control: Control) -> bool:
 		return _mode_panel.is_ancestor_of(control)
 	if collection_page.visible and is_instance_valid(control) and control != duck and not collection_page.is_ancestor_of(control):
 		return false
+	if _jelly_game_over_open():
+		return _jelly_game_over.is_ancestor_of(control)
 	if _round_celebration_active() and not collection_page.visible:
 		return _round_celebration.is_ancestor_of(control) or _header.is_ancestor_of(control)
 	return true

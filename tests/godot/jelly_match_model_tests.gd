@@ -1182,6 +1182,7 @@ func _test_full_board_timeout() -> void:
 	check(model.phase == "playing", "A nearly expired countdown does not end early")
 	model.step(0.001)
 	check(model.phase == "finished" and events.finished.size() == 1, "A continuously full board ends exactly once at eight seconds")
+	check(events.finished[0].reason == "danger", "Danger expiry identifies its game-over result")
 	check(events.cues.size() == 8 and events.cues.count("danger") == 8,
 		"Exactly eight warning beats cover elapsed zero through seven, without an expiry cue")
 	check(events.finished[0].chest_count == 0 and events.finished[0].cleared_pairs == 0
@@ -1260,6 +1261,8 @@ func _test_finish_and_reset() -> void:
 	var result: Dictionary = model.finish_round()
 	check(result.fragment_count == 1 and result.chest_count == 0 and result.cleared_pairs == 1 and result.score == 1 and model.snapshot().score == 1 and result.words.size() == 1,
 		"Explicit exit preserves completed rewards and unique successful words")
+	check(result.reason == "finished" and model.finish_round("danger").reason == "finished",
+		"An explicit exit remains distinct from danger and cannot be relabeled after completion")
 	check(model.fusion.is_empty() and events.attempts.size() == 1 and events.finished.size() == 1,
 		"Exit cancels an unfinished fusion without success credit")
 	model.step(10.0)

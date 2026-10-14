@@ -110,6 +110,7 @@ var _powerup_purchasing: bool = false
 var _powerup_committing: bool = false
 var _finishing_powerup: bool = false
 var _finish_after_purchase: bool = false
+var _finish_reason: String = ""
 var _settle_after_purchase: bool = false
 
 
@@ -158,6 +159,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_powerup.clear()
 	_powerup_ids.clear()
 	_finish_after_purchase = false
+	_finish_reason = ""
 	_settle_after_purchase = false
 	error = ""
 	if seed_value < 0:
@@ -867,7 +869,7 @@ func step(delta: float) -> void:
 					break
 			if danger_running and full_elapsed + EPSILON >= next_second:
 				if full_elapsed + EPSILON >= FULL_SECONDS:
-					finish_round()
+					finish_round("danger")
 				else:
 					cue_requested.emit("danger")
 		else:
@@ -1135,13 +1137,15 @@ func snapshot() -> Dictionary:
 	return state
 
 
-func finish_round() -> Dictionary:
+func finish_round(reason: String = "finished") -> Dictionary:
+	if phase == "finished" or _finishing_powerup:
+		return _result.duplicate(true)
+	# Payment and accepted-power settlement can reenter this method. Keep the
+	# original ending cause until that round's final result has been emitted.
+	if _finish_reason.is_empty():
+		_finish_reason = reason
 	if _powerup_purchasing:
 		_finish_after_purchase = true
-		return _result.duplicate(true)
-	if _finishing_powerup:
-		return _result.duplicate(true)
-	if phase == "finished":
 		return _result.duplicate(true)
 	var generation: int = _generation
 	finish_powerup()
@@ -1171,7 +1175,7 @@ func finish_round() -> Dictionary:
 	_held_tile_id = -1
 	for tile: Dictionary in cells:
 		tile.lifted = false
-	_result = {"cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins, "words": []}
+	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))

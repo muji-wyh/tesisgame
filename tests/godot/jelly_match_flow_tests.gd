@@ -450,29 +450,27 @@ func _upgraded_reward_checks(directory: String) -> void:
 	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.score == cleared
 		and app._round_result.chest_count == 1 and app._round_result.chest_tier == 4,
 		"A natural full-board timeout preserves the single final upgraded chest")
-	check(celebration.active and celebration.automatic and celebration.chest_count == 1 and celebration.chest_tier == 4
-		and celebration.score == cleared and celebration.title == "Round results"
-		and celebration.caption == "Score: %d · Chest Lv. 4" % cleared
-		and app._round_celebration._count.text == "" and celebration.theme == RewardProgress.theme_for_tier(4),
-		"The finale reports one Tier 4 chest with its final artwork rather than four separate rewards")
+	check(not celebration.active and app._jelly_game_over.is_visible_in_tree()
+		and app._jelly_game_over.is_ancestor_of(app._jelly_rewards)
+		and app._round_result.reason == "danger",
+		"Danger expiry directly opens a Game over settlement with the one final upgraded chest")
 	var saved := RewardState.new(app.jelly_reward_save_path)
 	saved.storage_kind = "jelly"
 	saved.max_chests = 0
 	saved.allow_repeated_themes = true
 	check(saved.load_state() and saved.round_id == app._round_id and saved.entries.size() == 1
 		and saved.entries[0].tier == 4 and saved.entries[0].theme == RewardProgress.theme_for_tier(4),
-		"Only the final upgraded chest is durable before the celebration completes")
-	Fixture.finish_celebration(app)
+		"Only the final upgraded chest is durable before the Game over settlement is shown")
 	check(not app._round_celebration.is_active() and app._jelly_rewards.is_visible_in_tree()
 		and app._round_result.chest_count == 1 and app._jelly_rewards.snapshot().result_context.score == cleared
-		and app._jelly_rewards._heading.text == "Round results" and app._jelly_rewards._result_score.text == str(cleared),
-		"The completed celebration directly presents the same score and single interactive upgraded reward")
+		and app._jelly_rewards._heading.text == "Game over" and app._jelly_rewards._result_score.text == str(cleared),
+		"The Game over dialog presents the same score and single interactive upgraded reward")
 	var room = app._jelly_rewards
 	room.set_process(false)
 	var first_page: Dictionary = room.snapshot()
 	check(app._jelly_rewards_shown and first_page.chest_count == 1 and first_page.page_count == 1
 		and first_page.page == 0 and first_page.visible_chest_count == 1 and first_page.chests[0].tier == 4
-		and first_page.heading == "Round results" and room._progress.text == "Chest Lv. 4",
+		and first_page.heading == "Game over" and room._progress.text.ends_with("Chest Lv. 4"),
 		"The result itself presents only the final upgraded chest to open")
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)

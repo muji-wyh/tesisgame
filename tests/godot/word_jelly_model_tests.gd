@@ -111,6 +111,7 @@ func _run() -> void:
 	_test_powerup_determinism()
 	_test_powerup_finish_and_lifecycle()
 	_test_powerup_payment_reentry()
+	_test_finish_reasons()
 	_test_powerup_presentation_reentry()
 	print("Word Jelly model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -1041,6 +1042,32 @@ func _test_powerup_payment_reentry() -> void:
 			model.purchase_powerup = Callable()
 
 
+func _test_finish_reasons() -> void:
+	for kind: String in ["auto_merge", "fragments"]:
+		for accepted: bool in [false, true]:
+			var model = _powerup_model(kind)
+			var finished: Array[Dictionary] = []
+			model.finished.connect(func(result: Dictionary) -> void: finished.append(result))
+			model.purchase_powerup = func(_receipt: String, _kind: String, _price: int) -> Dictionary:
+				model.finish_round("danger")
+				model.finish_round()
+				return {"ok": accepted, "duplicate": false}
+			check(model.activate_powerup(kind) == accepted, "Deferred ending preserves the original payment result")
+			check(model.phase == "finished" and not model.powerup_active() and finished.size() == 1
+				and finished[0].reason == "danger" and model.finish_round().reason == "danger",
+				"Accepted and rejected payments retain the first ending reason through deferred completion")
+			model.purchase_powerup = Callable()
+	var model = _powerup_model("auto_merge")
+	_accept_powerup_payments(model)
+	check(model.activate_powerup("auto_merge"), "An accepted power exists before reentrant result settlement")
+	model.changed.connect(func() -> void: model.finish_round(), CONNECT_ONE_SHOT)
+	check(model.finish_round("danger").reason == "danger" and model.merged_count == 3,
+		"Reentrant completion while draining an accepted power keeps the original ending reason")
+	model.purchase_powerup = Callable()
+	check(model.configure([_word("cat")], 3, 9) and model.finish_round().reason == "finished",
+		"A new round clears its predecessor's danger ending reason")
+
+
 func _test_powerup_presentation_reentry() -> void:
 	for action: String in ["pause", "drain", "finish"]:
 		var model = _powerup_model("auto_merge")
@@ -1190,6 +1217,8 @@ func _test_merging_and_collection() -> void:
 	check(events.cues.count("pop") == 1, "collection has exactly one disappearance cue")
 	var result_summary: Dictionary = model.finish_round()
 	check(result_summary.coins == 50 and result_summary.words.size() == 1, "round summary includes collected words and coins")
+	check(result_summary.reason == "finished" and model.finish_round("danger").reason == "finished",
+		"An explicit exit remains distinct from danger and cannot be relabeled after completion")
 
 
 func _test_rare_coin_drop_boundary() -> void:
@@ -3425,6 +3454,7 @@ func _test_full_board() -> void:
 	model.set_paused(false)
 	model.step(Model.FULL_SECONDS)
 	check(model.phase == "finished", "unrelieved full board ends the round")
+	check(model.finish_round().reason == "danger", "Danger expiry identifies its game-over result")
 
 
 func _test_independent_operations() -> void:

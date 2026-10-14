@@ -168,7 +168,7 @@ func step(delta: float) -> void:
 					break
 			if danger_running and full_elapsed + EPSILON >= next_second:
 				if full_elapsed + EPSILON >= FULL_SECONDS:
-					finish_round()
+					finish_round("danger")
 				else:
 					cue_requested.emit("danger")
 		elif spawn_elapsed + EPSILON >= spawn_interval:
@@ -286,14 +286,14 @@ func snapshot() -> Dictionary:
 	return state
 
 
-func finish_round() -> Dictionary:
+func finish_round(reason: String = "finished") -> Dictionary:
 	if phase == "finished":
 		return _result.duplicate(true)
 	# An interrupted fusion has not cleared its tiles yet, so it earns no attempt
 	# or fragment. Previously completed clears are already reflected in the result.
 	phase = "finished"
 	fusions.clear()
-	_result = {"cleared_pairs": cleared_pairs, "score": score(), "words": []}
+	_result = {"reason": reason, "cleared_pairs": cleared_pairs, "score": score(), "words": []}
 	_result.merge(reward_progress(fragment_count))
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
