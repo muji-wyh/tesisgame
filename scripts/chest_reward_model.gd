@@ -27,7 +27,7 @@ func prepare(tier: int) -> void:
 	if not source is Dictionary or not source.has("model"):
 		return
 	var style: Dictionary = source.duplicate(true)
-	# A full yaw needs a wider volume than the original lid-opening envelope.
+	# Flight pitch and full yaw need a wider volume than the lid-opening envelope.
 	# Override only this private instance; the normal opening camera is intact.
 	var box: Dictionary = style.get("closed_bounds_3d", {})
 	var minimum: Array = box.get("min", [])
@@ -37,9 +37,13 @@ func prepare(tier: int) -> void:
 	var half_x: float = maxf(absf(float(minimum[0])), absf(float(maximum[0])))
 	var half_z: float = maxf(absf(float(minimum[2])), absf(float(maximum[2])))
 	var radius: float = Vector2(half_x, half_z).length()
+	var half_y: float = maxf(absf(float(minimum[1])), absf(float(maximum[1])))
+	var pitch_y: float = half_z * sin(0.24)
+	var pitch_z: float = half_y * sin(0.24)
+	radius += pitch_z
 	style["motion_bounds_3d"] = {
-		"min": [-radius, float(minimum[1]), -radius],
-		"max": [radius, float(maximum[1]), radius]
+		"min": [-radius, float(minimum[1]) - pitch_y, -radius],
+		"max": [radius, float(maximum[1]) + pitch_y, radius]
 	}
 	style["camera_margin"] = 1.12
 	style["max_resolution"] = 512
@@ -57,14 +61,14 @@ func prepare(tier: int) -> void:
 	view.set_render_active(_active)
 
 
-func sample(tier: int, yaw: float) -> Dictionary:
-	if not is_finite(yaw):
+func sample(tier: int, yaw: float, pitch: float = 0.0) -> Dictionary:
+	if not is_finite(yaw) or not is_finite(pitch):
 		return {}
 	prepare(tier)
 	if not _pool.has(tier):
 		return {}
 	var view: ModelView = _pool[tier]
-	view.set_closed_turn(yaw)
+	view.set_closed_turn(yaw, pitch)
 	return {"texture": view.get_texture(), "bounds": view.closed_bounds(),
 		"turn_bounds": view.closed_turn_bounds()}
 

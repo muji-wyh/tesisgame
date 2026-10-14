@@ -23,10 +23,15 @@ second and the relevant sequences at five frames per second. These samples
 establish visible beats; they do not constitute a normal-speed audio review.
 
 The adaptation preserves the existing 0.65-second pickup flight and progress
-fill. The whole closed chest then travels directly from its HUD anchor to the
-upper-center area, enlarges and rotates, and flies back
-to the same anchor. Match and Memory share the same flight choreography.
-Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn.
+fill. The whole closed chest travels from its HUD anchor to the upper-center
+area, enlarges and rotates, and flies back to the same anchor. Upgrades follow
+a bowed outward path and a separate, shallower return arc. A gradual perspective
+enlargement, side turn, forward pitch and gentle bank give travel a sense of depth;
+the acquired 3D model stays visible throughout the journey. The paths respond to
+the HUD position and viewport, without an intermediate stop at screen center.
+First-chest synthesis, Match and Memory retain their existing direct flight.
+Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn, with a
+fixed camera envelope accommodating both the travel pitch and celebration yaw.
 Transitions to Royal and Crystal rotate their original 2D artwork in the screen
 plane without inventing rear geometry. No new artwork or sound is acquired.
 Intermediate chests never run final opening or saving callbacks; the gameplay
@@ -34,7 +39,7 @@ model alone owns fragment credit and tier changes.
 
 After pickup, the 2.65-second performance reaches the upper destination at
 0.84 seconds in one smooth flight, without a waypoint at the viewport center.
-Enlargement follows arrival; the
+Upgrades approach at up to 1.32 times their HUD size; the main enlargement follows arrival. The
 full turn runs from 0.90 to 1.82 seconds. Material change, local flash, reward
 sound and confetti share the 1.36-second midpoint. This places the Jelly Words
 milestone peak after its 1.95-second word-picture reading beat. The return runs

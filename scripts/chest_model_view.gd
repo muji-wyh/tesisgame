@@ -296,12 +296,12 @@ func set_pose(open_amount: float, pressure: float, pulse: float, idle_time: floa
 	_request_render()
 
 
-func set_closed_turn(yaw: float) -> void:
-	if not is_instance_valid(_model) or not is_finite(yaw):
+func set_closed_turn(yaw: float, pitch: float = 0.0) -> void:
+	if not is_instance_valid(_model) or not is_finite(yaw) or not is_finite(pitch):
 		return
 	# Reward turns use the acquired closed geometry, independently of the
 	# opening mechanism. The caller supplies the entire deterministic clock.
-	var key: Array = ["closed-turn", yaw]
+	var key: Array = ["closed-turn", yaw, pitch]
 	if key == _pose_key:
 		return
 	_pose_key = key
@@ -312,7 +312,7 @@ func set_closed_turn(yaw: float) -> void:
 	_light_strength = 0.0
 	_reduced_motion = false
 	_pose_mechanism(0.0, 0.0, 0.0, 0.0, true)
-	_rig.rotation = Vector3(0.0, yaw, 0.0)
+	_rig.rotation = Vector3(pitch, yaw, 0.0)
 	_interior_light.position = _rig.transform * _cavity
 	set_interior_light(0.0, Color.WHITE)
 	_dirty = true

@@ -133,7 +133,8 @@ func _sync() -> void:
 		var age: float = _elapsed - ARRIVAL_SECONDS
 		var tier: int = int(event.tier) if _revealed or int(event.previous_tier) == 0 else int(event.previous_tier)
 		if tier > 0 and int(event.tier) <= 4:
-			_model_sample = _models.sample(tier, _motion(age).yaw)
+			var pose: Dictionary = _motion(age)
+			_model_sample = _models.sample(tier, pose.yaw, pose.pitch)
 	_sync_flight_layer()
 
 
@@ -173,8 +174,9 @@ func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
 
 func _motion(age: float) -> Dictionary:
 	var edge: float = minf(_anchor.size.x, _anchor.size.y)
-	var peak: float = 216.0 if is_active() and int(_events[0].previous_tier) > 0 else 176.0
-	var pose: Dictionary = Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self))
+	var upgrade: bool = is_active() and int(_events[0].previous_tier) > 0
+	var peak: float = 216.0 if upgrade else 176.0
+	var pose: Dictionary = Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), upgrade)
 	if is_active() and int(_events[0].tier) > 4:
 		# Unmodeled tiers rotate their original artwork in the screen plane.
 		pose.roll = pose.yaw
@@ -273,7 +275,8 @@ func snapshot() -> Dictionary:
 	if is_active() and _started and _anchor.has_area():
 		motion = _placement(_motion(_elapsed - ARRIVAL_SECONDS), minf(_anchor.size.x, _anchor.size.y), _anchor.get_center())
 		if reduced_motion:
-			motion.merge({"center": _anchor.get_center(), "scale": 1.0, "yaw": 0.0, "roll": 0.0, "phase": "still"}, true)
+			motion.merge({"center": _anchor.get_center(), "scale": 1.0, "yaw": 0.0, "roll": 0.0,
+				"pitch": 0.0, "depth": 0.0, "model_weight": 0.0, "phase": "still"}, true)
 		motion.center = [motion.center.x, motion.center.y]
 	var bounds: Rect2 = _flight_bounds()
 	return {"active": is_active(), "visible": visible, "elapsed": _elapsed,

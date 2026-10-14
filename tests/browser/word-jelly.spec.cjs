@@ -1704,11 +1704,14 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
         const motion = presentation.motion, kind = presentation.kind;
         if (motion.phase === 'depart') {
           captureFlight(`${kind}-departure`);
-          if (presentation.elapsed >= 0.65 + 0.84 / 2) captureFlight(`${kind}-direct-transit`);
+          if (presentation.elapsed >= 0.65 + 0.84 / 2) captureFlight(`${kind}-transit`);
         }
         if (motion.phase === 'celebrate' && !presentation.revealed) captureFlight(`${kind}-upper-arrival`);
         if (presentation.revealed && motion.phase === 'celebrate') captureFlight(`${kind}-enlarged-turn`);
-        if (motion.phase === 'return') captureFlight(`${kind}-return`);
+        if (motion.phase === 'return') {
+          captureFlight(`${kind}-return`);
+          if (presentation.elapsed >= 0.65 + (1.98 + 2.65) / 2) captureFlight(`${kind}-return-transit`);
+        }
       }
       if (presentation.visible && presentation.revealed && !window.wordJellyMilestoneFrames[presentation.kind])
         window.wordJellyMilestoneFrames[presentation.kind] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
@@ -1778,37 +1781,60 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
     // endpoints can fall between samples. Check the observed journey here;
     // native route tests cover exact start/end poses and timing boundaries.
     const phases = visible.map(frame => frame.motion.phase).filter((phase, index, all) => index === 0 || phase !== all[index - 1]);
-    expect(phases, `${kind} flies directly upstairs, celebrates, and returns in order`).toEqual(['depart', 'celebrate', 'return']);
+    expect(phases, `${kind} flies upstairs, celebrates, and returns without an intermediate stop`).toEqual(['depart', 'celebrate', 'return']);
     const upper = visible.filter(frame => frame.motion.phase === 'celebrate');
     expect(upper.length, `${kind} has an upper-screen presentation beat`).toBeGreaterThan(2);
     const upperCenter = upper[0].motion.center;
     const departure = visible.filter(frame => frame.motion.phase === 'depart');
     expect(departure.length, `${kind} has several observed poses on its outbound journey`).toBeGreaterThan(1);
     const outboundDistance = distance(anchorCenter, upperCenter);
+    const route = [upperCenter[0] - anchorCenter[0], upperCenter[1] - anchorCenter[1]];
+    const routeProgress = point => ((point[0] - anchorCenter[0]) * route[0] +
+      (point[1] - anchorCenter[1]) * route[1]) / outboundDistance ** 2;
+    const routeDeviation = point => Math.abs((point[0] - anchorCenter[0]) * route[1] -
+      (point[1] - anchorCenter[1]) * route[0]) / outboundDistance;
     let previousUpperDistance = Infinity;
+    let previousProgress = -Infinity;
     for (const frame of departure) {
       const currentDistance = distance(frame.motion.center, upperCenter);
-      expect(distance(frame.motion.center, anchorCenter) + currentDistance,
-        `${kind} departs on the direct route from its HUD chest to the upper destination`).toBeLessThanOrEqual(outboundDistance + 1);
-      for (const axis of [0, 1]) {
-        expect(frame.motion.center[axis], `${kind} never detours past either destination axis toward screen center`)
-          .toBeGreaterThanOrEqual(Math.min(anchorCenter[axis], upperCenter[axis]) - 1);
-        expect(frame.motion.center[axis], `${kind} remains between its anchor and upper destination`)
-          .toBeLessThanOrEqual(Math.max(anchorCenter[axis], upperCenter[axis]) + 1);
+      const progress = routeProgress(frame.motion.center);
+      expect(progress, `${kind} keeps making forward progress toward its sole upper destination`)
+        .toBeGreaterThanOrEqual(previousProgress - 0.001);
+      expect(progress, `${kind} has not overshot its upper destination`).toBeLessThanOrEqual(1.001);
+      if (kind === 'synthesis') {
+        expect(distance(frame.motion.center, anchorCenter) + currentDistance,
+          'First-chest synthesis retains its straight route to the upper destination').toBeLessThanOrEqual(outboundDistance + 1);
+        for (const axis of [0, 1]) {
+          expect(frame.motion.center[axis], 'Synthesis remains between its anchor and upper destination')
+            .toBeGreaterThanOrEqual(Math.min(anchorCenter[axis], upperCenter[axis]) - 1);
+          expect(frame.motion.center[axis], 'Synthesis does not overshoot either destination axis')
+            .toBeLessThanOrEqual(Math.max(anchorCenter[axis], upperCenter[axis]) + 1);
+        }
       }
-      expect(currentDistance, `${kind} moves continuously closer to its upper destination`).toBeLessThanOrEqual(previousUpperDistance + 0.1);
+      previousProgress = progress;
       previousUpperDistance = currentDistance;
     }
     expect(previousUpperDistance, `${kind} makes visible progress toward its upper destination`)
       .toBeLessThan(distance(departure[0].motion.center, upperCenter) - 1);
-    expect(previousUpperDistance, `${kind} completes most of its direct flight before the upper celebration`)
+    expect(previousUpperDistance, `${kind} completes most of its flight before the upper celebration`)
       .toBeLessThan(Math.max(tolerance, outboundDistance * 0.15));
     for (const frame of upper) {
       expect(Math.abs(frame.motion.center[0] - screenCenter[0]), `${kind} stays horizontally centered upstairs`).toBeLessThan(1);
       expect(frame.motion.center[1], `${kind} celebrates in the upper portion of the screen`).toBeLessThan(bounds[1] + bounds[3] * 0.4);
     }
-    expect(departure.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01),
-      `${kind} travels to its upper destination before enlarging and turning`).toBe(true);
+    if (kind === 'upgrade') {
+      expect(Math.max(...departure.map(frame => routeDeviation(frame.motion.center))),
+        'The upgrade visibly arcs away from the straight anchor-to-showcase line').toBeGreaterThan(4);
+      expect(Math.max(...departure.map(frame => frame.motion.scale)),
+        'The flying upgrade grows as it approaches the viewer').toBeGreaterThan(1.1);
+      expect(departure.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025 &&
+        Math.abs(frame.motion.yaw) > 0.025 && Math.abs(frame.motion.roll) > 0.025),
+      'The upgrade shows its real pitched and yawed model while banking through the curve').toBe(true);
+    } else {
+      expect(departure.every(frame => frame.motion.scale <= 1.05 && Math.abs(frame.motion.yaw) < 0.01 &&
+        Math.abs(frame.motion.pitch) < 0.01),
+      'First-chest synthesis retains its resting size and orientation during travel').toBe(true);
+    }
     expect(Math.max(...upper.map(frame => frame.motion.scale)), `${kind} clearly enlarges at its destination`).toBeGreaterThan(1.3);
     expect(upper.some(frame => frame.motion.yaw > 0.1 && frame.motion.yaw < 6.1), `${kind} visibly turns while enlarged upstairs`).toBe(true);
     expect(Math.max(...visible.map(frame => frame.motion.yaw)), `${kind} completes its full closed-chest turn by the return journey`).toBeGreaterThan(6.2);
@@ -1823,6 +1849,12 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       previousDistance = currentDistance;
       previousScale = frame.motion.scale;
     }
+    if (kind === 'upgrade') {
+      expect(Math.max(...returning.map(frame => routeDeviation(frame.motion.center))),
+        'The upgrade also follows a visible curve back to its HUD anchor').toBeGreaterThan(4);
+      expect(returning.some(frame => frame.motion.model_weight > 0.9 && Math.abs(frame.motion.pitch) > 0.025),
+        'The return keeps the three-dimensional model visible during its recovery').toBe(true);
+    }
     expect(previousDistance, `${kind} visibly covers most of the return distance before the HUD icon takes over`)
       .toBeLessThan(Math.max(tolerance, distance(upper.at(-1).motion.center, anchorCenter) * 0.35));
     const peakScale = Math.max(...upper.map(frame => frame.motion.scale));
@@ -1830,8 +1862,8 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       .toBeLessThan((peakScale - 1) * 0.35);
     const firstReveal = visible.find(frame => frame.revealed);
     expect(firstReveal.wordRevealVisible, 'The chest peak follows the completed word-picture reading beat').toBe(false);
-    expect(['departure', 'direct-transit', 'upper-arrival', 'enlarged-turn', 'return']
-      .every(phase => Boolean(keyframes[`${kind}-${phase}`])), `${kind} records all five real rendered flight keyframes`).toBe(true);
+    expect(['departure', 'transit', 'upper-arrival', 'enlarged-turn', 'return', 'return-transit']
+      .every(phase => Boolean(keyframes[`${kind}-${phase}`])), `${kind} records all six real rendered flight keyframes`).toBe(true);
   }
   expect(errors).toEqual([]);
 });
