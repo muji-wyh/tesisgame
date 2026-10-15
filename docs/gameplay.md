@@ -41,12 +41,16 @@ follow this welcome; theme and sound choices remain secondary.
 Each Home game card shows a miniature example of its actual mechanic: linking
 a picture and word, turning Memory cards, speaking to pop a flying word card,
 ordering phrase pieces, merging a Jelly Match pair, or building and collecting
-a Jelly Words word. These decorative examples use fixed interface artwork and
+a Jelly Words word. The Jelly Words card continues from `ca` + `t` into `cat`
+to a chest fragment flying into a Royal chest, its lid opening, and a fan of
+gold coins. This shows the treasure reward alongside word construction.
+These decorative examples use fixed interface artwork and
 do not select curriculum words, load another age's vocabulary, or earn rewards.
 All six cards automatically loop silent demonstrations with staggered timing,
 readable result holds and soft resets. Pointer and keyboard focus still belong
 to the whole card. Hidden Home and background tabs pause the examples; returning
-resumes them. The system reduced-motion setting keeps every example static.
+resumes them. The system reduced-motion setting keeps every example static,
+including a completed word and open chest on the Jelly Words card.
 The reused artwork and source rights are recorded in the
 [mode illustration attribution](../assets/images/ui/modes/ATTRIBUTION.md).
 

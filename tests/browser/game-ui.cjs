@@ -67,7 +67,8 @@ async function libraryControl(page, name) {
     if (!item || item.visible === false) return null;
     const [left, top, width, height] = item.rect;
     const [x, y, w, h] = state.viewport_rect || [0, 0, bounds.width, bounds.height];
-    const tolerance = 1 / bounds.scale;
+    // Godot's float coordinates can exceed the one-CSS-pixel edge by roundoff.
+    const tolerance = (1 + 1e-3) / bounds.scale;
     return left >= x - tolerance && top >= y - tolerance && left + width <= x + w + tolerance && top + height <= y + h + tolerance ? item : null;
   };
   let item = target(await metrics(page));

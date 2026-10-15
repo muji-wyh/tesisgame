@@ -9,6 +9,14 @@ const MIC = preload("res://assets/images/ui/modes/microphone.webp")
 const MINT = preload("res://assets/images/jelly-match/gel-mint.png")
 const LILAC = preload("res://assets/images/jelly-match/gel-lilac.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
+const CHEST = preload("res://assets/chests/royal/closed.png")
+const CHEST_BODY = preload("res://assets/chests/rigs/royal/body.png")
+const CHEST_INTERIOR = preload("res://assets/chests/rigs/royal/interior.png")
+const CHEST_LID = preload("res://assets/chests/rigs/royal/lid_outer.png")
+const CHEST_INNER_LID = preload("res://assets/chests/rigs/royal/lid_inner.png")
+const CHEST_LATCH = preload("res://assets/chests/rigs/royal/latch.png")
+const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const DESIGN_SIZE := Vector2(220, 112)
 const DURATION := 5.8
 const PHASE_OFFSETS := {"match": 0.0, "memory": 0.85, "pop": 1.7, "phrase": 2.55, "jelly": 3.4, "word_jelly": 4.25}
@@ -267,7 +275,7 @@ func _gel(rect: Rect2, skin: Texture2D, word: String = "", picture: Texture2D = 
 
 func _draw_jelly_match(moving: bool) -> void:
 	if moving:
-		_draw_merge_demo(false)
+		_draw_merge_demo()
 	else:
 		_gel(Rect2(13, 20, 91, 83), MINT, "", CAT)
 		_gel(Rect2(116, 20, 91, 83), MINT, "cat")
@@ -275,18 +283,82 @@ func _draw_jelly_match(moving: bool) -> void:
 
 
 func _draw_jelly_words(moving: bool) -> void:
+	var approach: float = smoothstep(0.5, 1.15, _elapsed) if moving else 1.0
+	var fusion: float = smoothstep(1.05, 1.5, _elapsed) if moving else 1.0
+	var collect: float = smoothstep(2.55, 2.9, _elapsed) if moving else 0.0
+	var opening: float = smoothstep(3.25, 3.85, _elapsed) if moving else 1.0
+	var center := Vector2(56, 66)
+	if fusion < 1.0:
+		var gap: float = lerpf(26, 14, approach) * (1.0 - fusion)
+		var dimensions := Vector2(60 + approach * 5, 68 - approach * 4)
+		_gel(Rect2(center - Vector2(gap, 0) - dimensions * 0.5, dimensions), LILAC, "ca", null, 1.0 - fusion)
+		_gel(Rect2(center + Vector2(gap, 0) - dimensions * 0.5, dimensions), LILAC, "t", null, 1.0 - fusion)
+	if fusion > 0.0:
+		var recoil: float = _recoil(1.5) if moving else 0.0
+		var press: float = _hop(2.35, 0.35, 0.12) if moving else 0.0
+		var dimensions := Vector2(96, 90) * Vector2(1.0 + recoil * 0.12 + press, 1.0 - recoil * 0.10 - press)
+		_gel(Rect2(center - dimensions * 0.5 - Vector2(0, collect * 10), dimensions), LILAC, "", null, fusion * (1.0 - collect))
+		var content_alpha: float = smoothstep(0.35, 0.85, fusion)
+		var picture_side: float = lerpf(36, 44, collect)
+		var picture_center: Vector2 = center - Vector2(0, 11 + collect * 8)
+		_art(CAT, Rect2(picture_center - Vector2.ONE * picture_side * 0.5, Vector2.ONE * picture_side), content_alpha)
+		_text("cat", center + Vector2(0, 18), roundi(lerpf(23, 25, collect)), Color(Style.INK, content_alpha))
 	if moving:
-		_draw_merge_demo(true)
-		return
-	_gel(Rect2(0, 33, 65, 66), LILAC, "ca")
-	_gel(Rect2(54, 33, 55, 66), LILAC, "t")
-	_arrow(Vector2(110, 64), Vector2(133, 64), PURPLE)
-	_gel(Rect2(130.5, 9.5, 87, 99), LILAC, "cat", CAT)
-	_art(COIN, Rect2(185, 0, 27, 27))
+		_tap(Vector2(80, 85), 2.35, PURPLE)
+	# The same acquired Royal layers and hinge as the full-size chest, without
+	# creating a reward system or a 3D viewport for a decorative Home card.
+	var anticipation: float = _hop(3.0, 0.25, 1.5) if moving else 0.0
+	var chest_center := Vector2(164, 103 - anticipation)
+	var chest_scale: float = lerpf(0.108, 0.121, opening)
+	var mouth := Vector2(164, 60)
+	if opening > 0.0:
+		var glow_size := Vector2(114, 102)
+		draw_texture_rect(GLOW, Rect2(Vector2(162, 56) - glow_size * 0.5, glow_size), false, Color(1.0, 0.78, 0.34, opening * 0.55))
+	_draw_preview_chest(chest_center, chest_scale, opening)
+	if moving and _elapsed < 3.15:
+		var flight: float = smoothstep(2.6, 3.12, _elapsed)
+		var origin := Vector2(84, 42)
+		var point: Vector2 = origin.lerp(mouth, flight) - Vector2(0, sin(flight * PI) * 29)
+		var alpha: float = (1.0 - smoothstep(0.88, 1.0, flight)) * smoothstep(1.4, 1.6, _elapsed)
+		var fragment_size := Vector2(21, 16) * (1.0 + sin(flight * PI) * 0.20)
+		draw_texture_rect_region(CHEST, Rect2(point - fragment_size * 0.5, fragment_size), Rect2(39, 309, 798, 596), Color(1, 1, 1, alpha))
+		if flight > 0.0:
+			_art(SPARKLE, Rect2(point - Vector2(16, 5), Vector2(11, 11)), alpha * 0.8)
+	if opening > 0.55:
+		for index in range(3):
+			var flight: float = smoothstep(3.65 + index * 0.12, 4.35 + index * 0.12, _elapsed) if moving else 1.0
+			var destination := Vector2(130 + index * 34, 26 - (14 if index == 1 else 0))
+			var point: Vector2 = mouth.lerp(destination, flight) - Vector2(0, sin(flight * PI) * 17)
+			var coin_size: float = (20 if index != 1 else 24) * smoothstep(0.0, 0.25, flight)
+			_art(COIN, Rect2(point - Vector2.ONE * coin_size * 0.5, Vector2.ONE * coin_size))
+		for index in range(3):
+			var pulse: float = 0.75 + 0.25 * sin(_elapsed * 5 + index * 2) if moving else 1.0
+			var point: Vector2 = [Vector2(111, 48), Vector2(210, 56), Vector2(185, 9)][index]
+			var side: float = (12 if index == 1 else 9) * pulse
+			draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * side * 0.5, Vector2.ONE * side), false, Color(1.0, 0.78, 0.25, opening * pulse))
 
 
-func _draw_merge_demo(word_pieces: bool) -> void:
-	var skin: Texture2D = LILAC if word_pieces else MINT
+func _draw_preview_chest(base: Vector2, factor: float, opening: float) -> void:
+	# Crop positions are the original 1024px Royal canvas coordinates in rigs.json.
+	var origin: Vector2 = base - Vector2(438, 905) * factor
+	var lid_height: float = cos(opening * PI)
+	if lid_height < 0.0:
+		_preview_chest_layer(CHEST_INNER_LID, Vector2(122, 157), origin, factor, -lid_height)
+	if opening > 0.0:
+		_preview_chest_layer(CHEST_INTERIOR, Vector2(100, 439), origin, factor)
+	_preview_chest_layer(CHEST_BODY, Vector2(39, 514), origin, factor)
+	if lid_height > 0.0:
+		_preview_chest_layer(CHEST_LID, Vector2(46, 309), origin, factor, lid_height)
+	_preview_chest_layer(CHEST_LATCH, Vector2(207, 495 + opening * 18), origin, factor)
+
+
+func _preview_chest_layer(texture: Texture2D, crop: Vector2, origin: Vector2, factor: float, hinge_scale: float = 1.0) -> void:
+	var point := Vector2(crop.x, 475 + (crop.y - 475) * hinge_scale)
+	var dimensions: Vector2 = texture.get_size() * Vector2(1.0, hinge_scale) * factor
+	_art(texture, Rect2(origin + point * factor, dimensions))
+
+
+func _draw_merge_demo() -> void:
 	var approach: float = smoothstep(0.75, 1.7, _elapsed)
 	var fusion: float = smoothstep(1.65, 2.3, _elapsed)
 	var clear: float = smoothstep(3.65, 4.15, _elapsed)
@@ -296,20 +368,18 @@ func _draw_merge_demo(word_pieces: bool) -> void:
 		var stretch := Vector2(1.0 + approach * 0.12, 1.0 - approach * 0.08)
 		var dimensions: Vector2 = Vector2(91, 83) * stretch
 		var labels: float = 1.0 - smoothstep(0.0, 0.45, fusion)
-		_gel(Rect2(center - Vector2(separation, 0) - dimensions * 0.5, dimensions), skin,
-			"ca" if word_pieces else "", null if word_pieces else CAT, 1.0 - fusion, labels)
-		_gel(Rect2(center + Vector2(separation, 0) - dimensions * 0.5, dimensions), skin,
-			"t" if word_pieces else "cat", null, 1.0 - fusion, labels)
+		_gel(Rect2(center - Vector2(separation, 0) - dimensions * 0.5, dimensions), MINT, "", CAT, 1.0 - fusion, labels)
+		_gel(Rect2(center + Vector2(separation, 0) - dimensions * 0.5, dimensions), MINT, "cat", null, 1.0 - fusion, labels)
 		if approach < 0.4:
-			_arrow(Vector2(96, 61), Vector2(123, 61), PURPLE if word_pieces else Style.GOOD)
+			_arrow(Vector2(96, 61), Vector2(123, 61))
 	if fusion > 0.0 and clear < 1.0:
 		var recoil: float = _recoil(2.3)
 		var press: float = _hop(3.4, 0.25, 0.10)
 		var dimensions: Vector2 = Vector2(128, 96) * Vector2(1.0 + recoil * 0.14 + press - clear * 0.5, 1.0 - recoil * 0.10 - press + clear * 0.3)
 		var collect_center: Vector2 = center + Vector2(0, -clear * 18)
-		_gel(Rect2(collect_center - dimensions * 0.5, dimensions), skin, "cat", CAT,
+		_gel(Rect2(collect_center - dimensions * 0.5, dimensions), MINT, "cat", CAT,
 			fusion * (1.0 - clear), smoothstep(0.45, 0.85, fusion))
-	_tap(center + Vector2(33, 23), 3.4, PURPLE if word_pieces else Style.GOOD)
+	_tap(center + Vector2(33, 23), 3.4, Style.GOOD)
 	if _elapsed >= 3.75:
 		var flight: float = smoothstep(3.75, 4.45, _elapsed)
 		var coin_center: Vector2 = center.lerp(Vector2(161, 32), flight) - Vector2(0, sin(flight * PI) * 24)
