@@ -150,6 +150,13 @@ including across page backgrounding. Committing Finish immediately opens the
 settlement modal over the frozen board. Automatic full-board expiry opens the
 same modal after its warning completes.
 
+Finish deforms the same acquired coral skin: its broad crown stays attached to
+the header, the clear middle stretches, and the rounded lower lobe carries the
+two-line instruction. The painted foot receives only a bounded expansion instead
+of the full drag extension. The gold rim samples the deformed alpha in screen
+pixels, retaining the source's transparent padding around the curved underside.
+The gesture distances, cancellation, spring recovery and audio remain unchanged.
+
 The control has the accessible name `Drop the next jellies` without a hover popup, while
 the visible layout retains its four previews without a `Next` label or progress
 bar. Keyboard and controller users can focus the whole area and activate it.

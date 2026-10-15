@@ -422,13 +422,20 @@ func _update_visual() -> void:
 	_gel.set_shader_parameter("pull", _visual_pull)
 	_gel.set_shader_parameter("max_pull", _max_pull)
 	_gel.set_shader_parameter("sideways", _sideways)
+	_gel.set_shader_parameter("pixel_unit", unit)
 	_gel.set_shader_parameter("armed", 1.0 if _armed else 0.0)
 	_gel.set_shader_parameter("focus_light", 1.0 if has_focus() and not _pulling else 0.0)
 	_gel.set_shader_parameter("shimmer", 0.45 if _reduced_motion else fmod(_clock * 1.3, 1.8) - 0.3)
 	_gel.set_shader_parameter("light_color", Color("#fff0b8"))
 	_surface.modulate = Color(1.0, 1.0, 1.0, 0.48 if disabled else 1.0)
-	var text_center := Vector2(size.x * 0.5 + _sideways * 0.74, size.y * 0.5 + _visual_pull * 0.82)
 	var instructing: bool = _pulling or _tap_hint or _returning
+	# Follow the same lower-lobe mapping as the skin, including its soft recoil.
+	var caption_t: float = lerpf(0.5, 0.73, smoothstep(0.0, 16.0 * unit, _visual_pull)) if instructing else 0.5
+	var body_stretch: float = size.y * 0.65 * (1.0 - exp(-maxf(0.0, _visual_pull) / (size.y * 0.8)))
+	var text_y: float = size.y * caption_t + _visual_pull - body_stretch + body_stretch * (caption_t - 0.42) / 0.58
+	if _visual_pull < 0.0:
+		text_y = (size.y + _visual_pull) * caption_t
+	var text_center := Vector2(size.x * 0.5 + _sideways, text_y)
 	_label.text = "Drag to\nfinish" if instructing else text
 	_label.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 * unit)))
 	var label_width: float = Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, maxi(1, roundi(12.0 * unit))).x + 2.0 * unit
