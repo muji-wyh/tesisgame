@@ -1,6 +1,11 @@
 shader_type canvas_item;
 render_mode unshaded;
 
+#include "res://scripts/jelly_optics.gdshaderinc"
+
+uniform sampler2D shape_sdf : filter_linear, repeat_disable;
+uniform vec2 surface_size = vec2(100.0);
+
 uniform float bend = 0.0;
 uniform float beat = 0.0;
 uniform float preview_pressure = 0.0;
@@ -51,6 +56,7 @@ void fragment() {
 	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
 	vec4 gel = texture(TEXTURE, clamp(sample_uv, vec2(0.0), vec2(1.0)));
 	gel.rgb = palette(gel.rgb);
+	gel.rgb = jelly_source_light(gel.rgb, shape_sdf, sample_uv, surface_size);
 	// A soft sweep lights the acquired paint without moving the learning label.
 	float sweep = 1.0 - smoothstep(0.02, 0.18, abs(sample_uv.x * 0.7 + sample_uv.y * 0.3 - completion_glint));
 	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.89), completion_strength * (0.12 + sweep * 0.42));

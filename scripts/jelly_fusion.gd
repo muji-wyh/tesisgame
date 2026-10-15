@@ -2,6 +2,8 @@ extends Control
 ## One continuous, textured gel surface follows the committed model clock.
 
 const Surface = preload("res://scripts/jelly_union.gdshader")
+const BeadSurface = preload("res://scripts/jelly_surface.gdshader")
+const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 var stage: String = "contact"
 var _paint: ColorRect
@@ -22,7 +24,12 @@ func _init() -> void:
 	_paint.material = _gel
 	add_child(_paint)
 	for index in range(5):
-		_beads.append(_image())
+		var bead := _image()
+		var skin := ShaderMaterial.new()
+		skin.shader = BeadSurface
+		skin.set_shader_parameter("shape_sdf", SHAPE_SDF)
+		bead.material = skin
+		_beads.append(bead)
 	hide()
 
 func _image() -> TextureRect:
@@ -73,6 +80,7 @@ func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, exten
 		var travel: float = (1.0 - pow(1.0 - release, 2.0)) * unit * (0.66 + 0.09 * (index % 2))
 		var bead_size: float = unit * (0.16 + 0.025 * (index % 3)) * (1.0 - smoothstep(0.48, 1.0, release))
 		bead.size = Vector2(bead_size * (1.0 - release * 0.18), bead_size * (1.32 - release * 0.32))
+		(bead.material as ShaderMaterial).set_shader_parameter("surface_size", bead.size)
 		bead.pivot_offset = bead.size * 0.5
 		bead.rotation = angle + PI * 0.5
 		bead.position = center + direction * travel + Vector2(0.0, unit * release * release * 0.24) - bead.size * 0.5

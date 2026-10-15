@@ -35,9 +35,9 @@
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral-material.png",
-      "sha256": "39396f31d38bbe8dbdf199f2c09d7263a9614edaec180521d0e36b3eb02094c0",
+      "sha256": "6c3052971919778371efde57adcc5aeaca7c5d8d7d0d78a9797ad43b26a34612",
       "source": "assets/images/jelly-match/gel-coral.png",
-      "source_sha256": "faf99e7056b6283c5bb415f367e071ffce6f41e016a1a93a7818c6fdd37d46a9",
+      "source_sha256": "3993aff5493c81e55112c7ca7def0220e93e9edec0e3fa243f77b36dc5c58bd5",
       "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
       "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -50,9 +50,9 @@
     },
     {
       "path": "assets/images/jelly-match/gel-mint-material.png",
-      "sha256": "8c47fc12d15bb48a663e00cf49413e3854c75f7b286aa9d9ec742469d16fdb9d",
+      "sha256": "48abeeb23c5ce1e69018c4aeedc83639bfe7f3b857b130e4f538870f73589e01",
       "source": "assets/images/jelly-match/gel-mint.png",
-      "source_sha256": "f14382fff28b91ee53b547d62b85d5aa0d1df0dfd8a71be8bcbf40b30dd78827",
+      "source_sha256": "986e4bdcd72bd3dc228f26261c3c04d6dc8d5d1624184c6e799501f1652cfadd",
       "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
       "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -65,9 +65,9 @@
     },
     {
       "path": "assets/images/jelly-match/gel-sky-material.png",
-      "sha256": "888b8146c618de33a1e9e735d25840fe9d7cd8cb8354b7402df5d1987ed8e286",
+      "sha256": "5e8debcf6af5318c3b8f60a81da64439b77941a4277a35caf9ad0b06b22d9a15",
       "source": "assets/images/jelly-match/gel-sky.png",
-      "source_sha256": "e6540fc21927449c74f8791e9ce6167695632ffb0cabe27888c6ffc2221beb17",
+      "source_sha256": "d19d38f797f4e42bbe86da20173a044f5dd7573009bc7049619ad0c57b735aa0",
       "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
       "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -80,9 +80,9 @@
     },
     {
       "path": "assets/images/jelly-match/gel-lilac-material.png",
-      "sha256": "b92216eaca17981a63ca6361f7d61826bfc82c85d21a4f252f32e5d311ef3f78",
+      "sha256": "0373e7cc37361fed8db95d5381c214cafc401439b133cb0e1e50325c15fd4040",
       "source": "assets/images/jelly-match/gel-lilac.png",
-      "source_sha256": "d2c8211a58ad86190a9485061db18883b0fedda72014fae7a316d875beca1b2d",
+      "source_sha256": "c02a93588b356ec314a5e7abfdc9823f18be038ea9b962a500ac66fcd484e314",
       "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
       "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [

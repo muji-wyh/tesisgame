@@ -1,6 +1,8 @@
 shader_type canvas_item;
 render_mode unshaded;
 
+#include "res://scripts/jelly_optics.gdshaderinc"
+
 // RGB is the acquired painted surface with edge bleed. Alpha stores the
 // signed distance to that artwork's silhouette, not a replacement shape.
 uniform sampler2D material_a : source_color, filter_linear, repeat_disable;
@@ -66,17 +68,12 @@ void fragment() {
 		union_distance(point + vec2(epsilon, 0.0)).x - union_distance(point - vec2(epsilon, 0.0)).x,
 		union_distance(point + vec2(0.0, epsilon)).x - union_distance(point - vec2(0.0, epsilon)).x
 	) / (epsilon * 2.0);
-	float edge = 1.0 - smoothstep(0.0, unit * 0.15, -field.x);
-	float shade = max(0.0, dot(normal, normalize(vec2(0.45, 0.85))));
-	float light = max(0.0, dot(normal, normalize(vec2(-0.55, -0.85))));
-	// The thick lower edge transmits less light; a narrow wet meniscus catches
-	// the same upper-left light as the production artwork.
-	paint *= 1.0 - shade * edge * 0.26;
-	paint += vec3(0.82, 0.97, 1.0) * pow(light, 3.0) * edge * 0.32;
+	paint = jelly_light(paint, -field.x / max(unit, 1.0), normal);
+	float edge = 1.0 - smoothstep(0.0, unit * 0.105, -field.x);
 	vec2 local = (point - mix(body_a.xy, body_b.xy, 0.5)) / body_b.zw;
 	float sheen = exp(-pow((local.x + 0.23 - flow * 0.12) / 0.07, 2.0)
 		- pow((local.y + 0.18) / 0.18, 2.0));
-	paint = mix(paint, vec3(1.0, 0.995, 0.94), sheen * (0.22 + charge * 0.25));
+	paint = mix(paint, vec3(1.0, 0.995, 0.94), sheen * charge * 0.25);
 	paint += vec3(0.06, 0.10, 0.07) * charge * (1.0 - edge);
 	COLOR = vec4(paint, alpha * opacity);
 }

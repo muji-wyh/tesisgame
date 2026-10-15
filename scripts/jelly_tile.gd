@@ -6,6 +6,7 @@ const WordArt = preload("res://scripts/word_art.gd")
 const Surface = preload("res://scripts/jelly_surface.gdshader")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const CONTACT_SHADOW = preload("res://assets/images/jelly-match/contact-shadow.png")
+const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
 
 static var _contact_outlines: Dictionary = {}
 
@@ -53,6 +54,7 @@ func _init() -> void:
 	_surface = _texture()
 	_gel = ShaderMaterial.new()
 	_gel.shader = Surface
+	_gel.set_shader_parameter("shape_sdf", SHAPE_SDF)
 	_surface.material = _gel
 	_picture = _texture()
 	_label = Style.label("", 20)
@@ -209,9 +211,9 @@ func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bo
 	# The source-painted shadow stays on the support while the body descends.
 	var distance: float = clampf(lift / maxf(1.0, size.y * 2.0), 0.0, 1.0)
 	_shadow.visible = visible_shadow
-	_shadow.size = size * Vector2(lerpf(0.68, 0.94, distance) + compression * 0.07, lerpf(0.095, 0.19, distance))
+	_shadow.size = size * Vector2(lerpf(0.64, 0.94, distance) + compression * 0.07, lerpf(0.082, 0.19, distance))
 	_shadow.position = Vector2((size.x - _shadow.size.x) * 0.5, size.y * Motion.FOOT_Y + lift - _shadow.size.y * 0.6)
-	_shadow.modulate.a = lerpf(0.6, 0.12, distance)
+	_shadow.modulate.a = lerpf(1.0, 0.16, distance)
 
 func _layout() -> void:
 	if _visual == null:
@@ -219,6 +221,7 @@ func _layout() -> void:
 	_visual.size = size
 	_content_offset = Vector2.ZERO
 	_surface.size = size
+	_gel.set_shader_parameter("surface_size", size)
 	# Stay within the artwork's transparent margin, including tiny landscape tiles.
 	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
 	_picture.visible = not _projection and (kind == "picture" or combined)

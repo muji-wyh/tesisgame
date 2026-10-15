@@ -12,7 +12,7 @@ import subprocess
 import wave
 import zipfile
 
-from PIL import Image, __version__ as pillow_version
+from PIL import Image, ImageFilter, __version__ as pillow_version
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -24,10 +24,14 @@ ARCHIVES = {
 }
 BOING_SHA256 = "9c6af38ca79332ad3fa66ad1229179d2a91655c1157d3620e21ef676f54d9fdd"
 PALETTES = {"coral": 0.0, "mint": 0.34, "sky": 0.50, "lilac": 0.72}
-WHITE_CENTER = 0.40
-WHITE_CONTOUR = 0.24
+WHITE_CENTER = 0.34
+WHITE_CONTOUR = 0.16
 SATURATION_SCALE = 0.88
 MINT_SATURATION_SCALE = 0.78
+LOWER_PAINT_RADIUS = 8.0
+LOWER_PAINT_STRENGTH = 0.75
+LOWER_PAINT_X_RAMP = (0.06, 0.16, 0.80, 0.90)
+LOWER_PAINT_Y_RAMP = (0.45, 0.56, 0.84, 0.92)
 SOUNDS = {
     "danger": ("question_001.ogg", -12.0),
 }
@@ -75,6 +79,27 @@ def smoothstep(low, high, value):
     return amount * amount * (3.0 - 2.0 * amount)
 
 
+def soften_lower_paint(canvas, art_size, art_origin):
+    # Blur premultiplied color so transparent RGB cannot bleed into the paint.
+    # Only a localized interior blend uses it; source alpha is copied unchanged.
+    blurred = canvas.convert("RGBa").filter(ImageFilter.GaussianBlur(LOWER_PAINT_RADIUS)).convert("RGBA")
+    pixels = []
+    for index, (paint, softened) in enumerate(zip(canvas.get_flattened_data(), blurred.get_flattened_data())):
+        if paint[3] == 0:
+            pixels.append(paint)
+            continue
+        x = ((index % canvas.width) - art_origin[0]) / (art_size[0] - 1)
+        y = ((index // canvas.width) - art_origin[1]) / (art_size[1] - 1)
+        weight = smoothstep(*LOWER_PAINT_X_RAMP[:2], x) * (1.0 - smoothstep(*LOWER_PAINT_X_RAMP[2:], x))
+        weight *= smoothstep(*LOWER_PAINT_Y_RAMP[:2], y) * (1.0 - smoothstep(*LOWER_PAINT_Y_RAMP[2:], y))
+        weight *= LOWER_PAINT_STRENGTH
+        pixels.append(tuple(round(paint[channel] * (1.0 - weight) + softened[channel] * weight)
+                            for channel in range(3)) + (paint[3],))
+    result = Image.new("RGBA", canvas.size)
+    result.putdata(pixels)
+    return result
+
+
 def prepare_images(source):
     original = Image.open(source).convert("RGBA")
     if original.size != (297, 251):
@@ -101,6 +126,7 @@ def prepare_images(source):
         recolored.putdata(pixels)
         canvas = Image.new("RGBA", (320, 320))
         canvas.paste(recolored, (11, 34))
+        canvas = soften_lower_paint(canvas, original.size, (11, 34))
         destination = output / f"gel-{color}.png"
         canvas.save(destination, optimize=True)
         records.append({"path": relative(destination), "kind": "gel_surface", "sha256": sha256(destination),
@@ -111,7 +137,17 @@ def prepare_images(source):
                                       "horizontal_transition": [0.08, 0.28],
                                       "foot_transition": [0.80, 0.99],
                                       "interpolation": "smoothstep",
-                                      "coordinates": "Normalized source artwork before transparent padding"}})
+                                      "coordinates": "Normalized source artwork before transparent padding"},
+                        "lower_paint_softening": {
+                            "operation": "Premultiplied-alpha Pillow GaussianBlur blended into recolored RGB",
+                            "gaussian_radius_source_pixels": LOWER_PAINT_RADIUS,
+                            "maximum_blend": LOWER_PAINT_STRENGTH,
+                            "horizontal_ramp": list(LOWER_PAINT_X_RAMP),
+                            "vertical_ramp": list(LOWER_PAINT_Y_RAMP),
+                            "interpolation": "Product of rising and falling smoothstep masks",
+                            "coordinates": "Normalized source artwork before transparent padding",
+                            "alpha": "Every original source alpha value retained unchanged",
+                            "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"}})
     shadow_source = source.parents[2] / "Shadow.png"
     shadow = Image.open(shadow_source)
     if shadow.mode != "RGBA" or shadow.size != (334, 150):
@@ -314,7 +350,7 @@ def main():
         **({"material_audio_sources": existing["material_audio_sources"]} if "material_audio_sources" in existing
            else {} if options.images_only else {"material_audio_sources": MATERIAL_AUDIO_SOURCES}),
         "image_processing": {"tool": "Pillow", "version": pillow_version,
-                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 40 percent center to 24 percent contour white mix. Original silhouette, painted detail and alpha preserved. Separate contact shadow copied unchanged."},
+                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Original silhouette and every source alpha value preserved. Separate contact shadow copied unchanged."},
         "images": prepare_images(source_dir / "jelly/png/separate/Jellies/Blank/Jelly (3).png"),
         "audio": existing["audio"] if options.images_only else prepare_sounds(source_dir / "kenney-interface-sounds"),
         "reuse": {"chest_reward": "assets/imported-audio/chest-reference/reward.wav",

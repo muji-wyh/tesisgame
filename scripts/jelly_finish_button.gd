@@ -10,6 +10,7 @@ signal accessibility_requested
 const Style = preload("res://scripts/ui_style.gd")
 const Surface = preload("res://scripts/jelly_finish_surface.gdshader")
 const GEL = preload("res://assets/images/jelly-match/gel-coral.png")
+const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
 const FLAG = preload("res://assets/images/ui/finish-flag.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
@@ -75,6 +76,7 @@ func _init() -> void:
 	_glow.texture = GLOW
 	_surface.texture = GEL
 	_gel.shader = Surface
+	_gel.set_shader_parameter("shape_sdf", SHAPE_SDF)
 	_surface.material = _gel
 	_flag.texture = FLAG
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE

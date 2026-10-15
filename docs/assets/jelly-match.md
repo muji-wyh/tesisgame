@@ -53,11 +53,13 @@ The four production textures are:
 
 Each is a 320 × 320 RGBA image. The original 297 × 251 illustration occupies
 `x=11, y=34, width=297, height=251`; surrounding pixels are transparent. The source
-aspect ratio and every alpha edge, highlight and shaded contour are retained.
+aspect ratio, silhouette and every alpha value are retained. The acquired upper
+highlights remain crisp while the lower painted shade receives a localized softening.
 The adaptation changes hue while retaining 88% of the source HSV saturation
-(78% for mint to restrain its bright green contour). It mixes 40% white into the
-central reading area and 24% into the outer contour and lower foot. This retains
-the source's material contrast without making the word area dark. It does not
+(78% for mint to restrain its bright green contour). It mixes 34% white into the
+central reading area and 16% into the outer contour and lower foot. The lighter
+center keeps words readable while the shoulders and foot retain more fruit color.
+The adaptation does not
 redraw the source silhouette or add a face. The source's other bodies have
 protruding ears or bubble clusters; those are intentionally not included in the
 gameplay set.
@@ -65,9 +67,29 @@ gameplay set.
 Processing uses normalized coordinates within the unpadded source. The horizontal
 center weight is `smoothstep(0.08, 0.28, x) * smoothstep(0.08, 0.28, 1 - x)`;
 the foot weight is `1 - smoothstep(0.80, 0.99, y)`. The product interpolates the
-white mix from 0.24 to 0.40. Each smoothstep uses the cubic `t * t * (3 - 2 * t)`
-after clamping `t` to 0–1. Hue offsets are unchanged and every source alpha value
-is retained. The manifest records these constants for each color.
+white mix from 0.16 to 0.34. Each smoothstep uses the cubic `t * t * (3 - 2 * t)`
+after clamping `t` to 0–1. Hue offsets are unchanged.
+
+After recoloring, Pillow blurs a premultiplied-alpha copy with an eight-source-pixel
+Gaussian radius, then blends only its RGB into the lower interior paint. The
+maximum blend is 0.75, weighted horizontally by
+`smoothstep(0.06, 0.16, x) * (1 - smoothstep(0.80, 0.90, x))` and vertically by
+`smoothstep(0.45, 0.56, y) * (1 - smoothstep(0.84, 0.92, y))`. This softens the
+hard lower shade boundary without blurring the upper glints or the rightmost
+small reflection. The brighter reading area and original painted lighting remain
+recognizable. Premultiplication prevents transparent RGB from bleeding into the
+blend; output alpha always comes from the unblurred source. The manifest records
+the color and softening recipe for each variant.
+
+The ordinary skin, continuous fusion, release beads and Finish control share
+`scripts/jelly_optics.gdshaderinc`. It reads inward distance and the contour normal
+from the acquired silhouette: a dense colored edge, a softly lit lower shoulder
+and a restrained upper-left wet highlight give the paint depth. Only RGB changes;
+the display alpha, exact-word hue assignments, interaction rims and upright learning
+content retain their existing roles. Normal direction accounts for body aspect
+ratio and is independent of absolute tile size. The source shadow remains
+unmodified; its planted footprint is slightly tighter and uses full source alpha
+(at most 26/255), fading and widening with the existing support-lift motion.
 
 Content should stay near the center, approximately `x=80..240, y=110..235` in
 texture coordinates. Keep label layout and hit bounds stable while deforming the

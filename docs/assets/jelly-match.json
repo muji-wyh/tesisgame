@@ -47,13 +47,13 @@
   "image_processing": {
     "tool": "Pillow",
     "version": "12.2.0",
-    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 40 percent center to 24 percent contour white mix. Original silhouette, painted detail and alpha preserved. Separate contact shadow copied unchanged."
+    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Original silhouette and every source alpha value preserved. Separate contact shadow copied unchanged."
   },
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral.png",
       "kind": "gel_surface",
-      "sha256": "faf99e7056b6283c5bb415f367e071ffce6f41e016a1a93a7818c6fdd37d46a9",
+      "sha256": "3993aff5493c81e55112c7ca7def0220e93e9edec0e3fa243f77b36dc5c58bd5",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -69,8 +69,8 @@
       "hue_shift_turns": 0.0,
       "saturation_scale": 0.88,
       "white_mix": {
-        "center": 0.4,
-        "contour": 0.24,
+        "center": 0.34,
+        "contour": 0.16,
         "horizontal_transition": [
           0.08,
           0.28
@@ -81,12 +81,33 @@
         ],
         "interpolation": "smoothstep",
         "coordinates": "Normalized source artwork before transparent padding"
+      },
+      "lower_paint_softening": {
+        "operation": "Premultiplied-alpha Pillow GaussianBlur blended into recolored RGB",
+        "gaussian_radius_source_pixels": 8.0,
+        "maximum_blend": 0.75,
+        "horizontal_ramp": [
+          0.06,
+          0.16,
+          0.8,
+          0.9
+        ],
+        "vertical_ramp": [
+          0.45,
+          0.56,
+          0.84,
+          0.92
+        ],
+        "interpolation": "Product of rising and falling smoothstep masks",
+        "coordinates": "Normalized source artwork before transparent padding",
+        "alpha": "Every original source alpha value retained unchanged",
+        "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-mint.png",
       "kind": "gel_surface",
-      "sha256": "f14382fff28b91ee53b547d62b85d5aa0d1df0dfd8a71be8bcbf40b30dd78827",
+      "sha256": "986e4bdcd72bd3dc228f26261c3c04d6dc8d5d1624184c6e799501f1652cfadd",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -102,8 +123,8 @@
       "hue_shift_turns": 0.34,
       "saturation_scale": 0.78,
       "white_mix": {
-        "center": 0.4,
-        "contour": 0.24,
+        "center": 0.34,
+        "contour": 0.16,
         "horizontal_transition": [
           0.08,
           0.28
@@ -114,12 +135,33 @@
         ],
         "interpolation": "smoothstep",
         "coordinates": "Normalized source artwork before transparent padding"
+      },
+      "lower_paint_softening": {
+        "operation": "Premultiplied-alpha Pillow GaussianBlur blended into recolored RGB",
+        "gaussian_radius_source_pixels": 8.0,
+        "maximum_blend": 0.75,
+        "horizontal_ramp": [
+          0.06,
+          0.16,
+          0.8,
+          0.9
+        ],
+        "vertical_ramp": [
+          0.45,
+          0.56,
+          0.84,
+          0.92
+        ],
+        "interpolation": "Product of rising and falling smoothstep masks",
+        "coordinates": "Normalized source artwork before transparent padding",
+        "alpha": "Every original source alpha value retained unchanged",
+        "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-sky.png",
       "kind": "gel_surface",
-      "sha256": "e6540fc21927449c74f8791e9ce6167695632ffb0cabe27888c6ffc2221beb17",
+      "sha256": "d19d38f797f4e42bbe86da20173a044f5dd7573009bc7049619ad0c57b735aa0",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -135,8 +177,8 @@
       "hue_shift_turns": 0.5,
       "saturation_scale": 0.88,
       "white_mix": {
-        "center": 0.4,
-        "contour": 0.24,
+        "center": 0.34,
+        "contour": 0.16,
         "horizontal_transition": [
           0.08,
           0.28
@@ -147,12 +189,33 @@
         ],
         "interpolation": "smoothstep",
         "coordinates": "Normalized source artwork before transparent padding"
+      },
+      "lower_paint_softening": {
+        "operation": "Premultiplied-alpha Pillow GaussianBlur blended into recolored RGB",
+        "gaussian_radius_source_pixels": 8.0,
+        "maximum_blend": 0.75,
+        "horizontal_ramp": [
+          0.06,
+          0.16,
+          0.8,
+          0.9
+        ],
+        "vertical_ramp": [
+          0.45,
+          0.56,
+          0.84,
+          0.92
+        ],
+        "interpolation": "Product of rising and falling smoothstep masks",
+        "coordinates": "Normalized source artwork before transparent padding",
+        "alpha": "Every original source alpha value retained unchanged",
+        "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-lilac.png",
       "kind": "gel_surface",
-      "sha256": "d2c8211a58ad86190a9485061db18883b0fedda72014fae7a316d875beca1b2d",
+      "sha256": "c02a93588b356ec314a5e7abfdc9823f18be038ea9b962a500ac66fcd484e314",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -168,8 +231,8 @@
       "hue_shift_turns": 0.72,
       "saturation_scale": 0.88,
       "white_mix": {
-        "center": 0.4,
-        "contour": 0.24,
+        "center": 0.34,
+        "contour": 0.16,
         "horizontal_transition": [
           0.08,
           0.28
@@ -180,6 +243,27 @@
         ],
         "interpolation": "smoothstep",
         "coordinates": "Normalized source artwork before transparent padding"
+      },
+      "lower_paint_softening": {
+        "operation": "Premultiplied-alpha Pillow GaussianBlur blended into recolored RGB",
+        "gaussian_radius_source_pixels": 8.0,
+        "maximum_blend": 0.75,
+        "horizontal_ramp": [
+          0.06,
+          0.16,
+          0.8,
+          0.9
+        ],
+        "vertical_ramp": [
+          0.45,
+          0.56,
+          0.84,
+          0.92
+        ],
+        "interpolation": "Product of rising and falling smoothstep masks",
+        "coordinates": "Normalized source artwork before transparent padding",
+        "alpha": "Every original source alpha value retained unchanged",
+        "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       }
     },
     {

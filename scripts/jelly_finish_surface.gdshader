@@ -1,6 +1,10 @@
 shader_type canvas_item;
 render_mode unshaded;
 
+#include "res://scripts/jelly_optics.gdshaderinc"
+
+uniform sampler2D shape_sdf : filter_linear, repeat_disable;
+
 uniform vec2 canvas_size = vec2(108.0, 184.0);
 uniform vec2 body_size = vec2(84.0, 44.0);
 uniform vec2 body_origin = vec2(12.0, 10.0);
@@ -61,6 +65,8 @@ void fragment() {
 	vec2 source_uv = skin_uv(point);
 	float inside = step(0.0, source_uv.x) * step(source_uv.x, 1.0) * step(0.0, source_uv.y) * step(source_uv.y, 1.0);
 	vec4 paint = texture(TEXTURE, clamp(source_uv, vec2(0.0), vec2(1.0))) * inside;
+	paint.rgb = jelly_source_light(paint.rgb, shape_sdf, source_uv,
+		vec2(body_size.x / 0.945, max(1.0, body_size.y + pull) / 0.784));
 	float lighting = max(armed, focus_light * 0.35);
 	float sweep = 1.0 - smoothstep(0.03, 0.19, abs(source_uv.x * 0.72 + source_uv.y * 0.28 - shimmer));
 	paint.rgb = mix(paint.rgb, light_color.rgb, lighting * (0.17 + sweep * 0.32));
