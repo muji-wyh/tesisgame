@@ -150,17 +150,28 @@ The current batch finishes before another can begin; pause freezes its clock,
 leaving the round cancels queued pickups, and a failed wallet save stops the
 sequence with the uncollected words intact.
 
-The Collect button uses a mint collection tray with a soft lower lip, a clear
-caption and a separate cream count badge. Its compact layout puts the caption
-above the artwork and count; the taller sidebar layout keeps the caption below.
-The surface is an interface layout primitive, matching the neighboring item
-panels. The inspected mint, sky and lilac gel skins above form an accumulating
-fan of completed-word jellies. Its front picture reuses the integrated Microsoft
+The Collect button uses a horizontal mint capsule with a soft lower lip. A larger
+completed-word jelly illustration sits on the left; the Collect title and an
+inline word count sit together on the right. The count reads "1 word" or
+"N words" while ready and "N left" during collection, without a separate badge.
+The empty state retains its illustration and readable "0 words" count.
+The surface is an interface layout primitive. The inspected mint, sky and lilac
+gel skins above form an accumulating fan of completed-word jellies. Its front
+picture reuses the integrated Microsoft
 Fluent Emoji 3D cat (MIT), already shipped in the core interface; exact source,
 creator and acquisition records remain in the
 [Home illustration attribution](../../assets/images/ui/modes/ATTRIBUTION.md).
-The former coin pile is removed: collection primarily clears words and gathers
-their fragments, while bonus coins remain rare.
+Collection primarily clears words and gathers their fragments, while bonus
+coins remain rare; the button uses the word illustration rather than coin art.
+
+When a side layout gives the board more space, Collect shares one 144-pixel-wide
+action rail to the right of the well, below Auto merge and Treasure. The well
+and rail are centered together, with a 12-pixel gap between them. On short
+screens the rail can extend beside the supply row while staying below the
+header. Other layouts use a compact footer centered under the well, with
+Collect between the two purchase controls. All three controls remain 56 display
+pixels high, and the layout preserves twelve-pixel bottom padding. There is no
+isolated control on the left of the board.
 
 The integrated portal glow, rays and sparkle textures retain the licenses and
 source records in the linked chest-fragment record. These are static acquired
@@ -169,12 +180,13 @@ staggered glints are runtime animation. No new asset was downloaded. Button
 strength follows the available word count and retains the batch's initial
 charge until completion. Each pickup compresses and lifts the illustration on
 the existing collection beat. The label, count placement and touch area remain
-steady. Light stays around the illustration, clear of the compact caption.
+steady. Light stays around the illustration, clear of the title and count.
 Reduced motion preserves the count, layered artwork and static light accents
 without rocking, growth overshoot or twinkling. A rounded teal focus contour
-follows the tray without a dark rectangular outline and clears when disabled.
-Keyboard navigation, activation, collection cadence, rewards and touch bounds
-remain unchanged. Earned chest celebrations still queue until collection ends.
+follows the capsule without a dark rectangular outline and clears when disabled.
+Keyboard navigation, activation, collection cadence and rewards remain unchanged;
+each layout keeps stable touch bounds as the available count changes. Earned
+chest celebrations still queue until collection ends.
 
 The existing collection pop marks each pickup. Each collected word now owns an
 independent picture-and-spelling burst: new words coexist with older ones instead

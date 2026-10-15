@@ -1070,8 +1070,8 @@ func _layout() -> void:
 	var bottom_padding: float = 12.0 / s
 	var padding: float = 4.0 / s
 	var feed_gap: float = 4.0 / s
-	var hud_width: float = 100.0 / s
-	var hud_gap: float = 8.0 / s
+	var hud_width: float = 144.0 / s
+	var hud_gap: float = 12.0 / s
 	var local_finish: bool = finish_button.get_parent() == self
 	var local_chest: bool = not has_header_chest()
 	var top_hud_height: float = 52.0 / s if local_finish or local_chest else 0.0
@@ -1081,10 +1081,10 @@ func _layout() -> void:
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - top_hud_height)
 	var footer_height: float = 56.0 / s + edge
 	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
-	var side_pitch: float = _fit_layout_pitch(available - Vector2((hud_width + hud_gap) * 2.0, 0.0), s)
-	# Use side controls only when they buy a larger board. A tall portrait
-	# must not grow gutters just because its former cell-size cap left room.
-	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s
+	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
+	# Center the well and its single action rail as one group. On short screens
+	# the rail may extend beside the supply row, but never into the header.
+	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	_pitch = side_pitch if side_hud else bottom_pitch
@@ -1093,7 +1093,8 @@ func _layout() -> void:
 	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
 	var group_top: float = maxf(top_hud_height, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var rail_extent: float = hud_width + hud_gap if side_hud else 0.0
+	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -1106,8 +1107,10 @@ func _layout() -> void:
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
-	var footer_width: float = maxf(_board.size.x, minf(size.x - edge * 2.0, 356.0 / s))
-	var hud_x: float = _board.position.x - hud_width - hud_gap if side_hud else (size.x - footer_width) * 0.5
+	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
+	var item_width: float = clampf((footer_width - 132.0 / s) * 0.5, 88.0 / s, 112.0 / s)
+	var collect_width: float = footer_width - item_width * 2.0 - 16.0 / s
+	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s
@@ -1133,13 +1136,13 @@ func _layout() -> void:
 		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
 	if collect_button != null:
 		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width, minf(96.0 / s, _board.size.y * 0.44)) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 56.0 / s)
+		collect_button.size = Vector2(hud_width if side_hud else collect_width, 56.0 / s)
 		collect_button.position = Vector2(hud_x, _board.end.y - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - collect_button.size.x) * 0.5, _board.end.y + edge)
 	for index in range(powerup_buttons.size()):
 		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
 		button.set_ui_scale(s)
-		button.size = Vector2(hud_width, 56.0 / s) if side_hud else Vector2((footer_width - 16.0 / s) / 3.0, 56.0 / s)
-		button.position = Vector2(_board.end.x + hud_gap, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
+		button.size = Vector2(hud_width if side_hud else item_width, 56.0 / s)
+		button.position = Vector2(hud_x, _board.end.y - (3 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
 			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge)
 	if _powerup_effects != null:
 		_powerup_effects.size = size

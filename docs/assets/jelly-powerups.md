@@ -11,6 +11,14 @@ The latter uses the same current chest texture as the jelly fragment markers
 once its cropped image is ready. The acquired Royal fallback stays visible while
 that viewport warms up, without a synchronous GPU readback.
 
+The purchase controls and Collect share one action group. When a side layout
+allows a larger board, Auto merge and Treasure stack above Collect in a single
+144-pixel-wide rail to the right, separated from the well by 12 display pixels.
+The well and rail are centered as one group; on short screens the rail may
+extend beside the supply row without entering the header. Otherwise the controls
+form a compact footer under the well, with Collect in the middle. Each action
+is 56 display pixels high, and the group retains twelve-pixel bottom padding.
+
 ## Artwork and acquisition
 
 | Runtime material | Original source, creator, and rights | Acquisition and animation |
@@ -55,11 +63,16 @@ flights overlap existing ones without restarting or skipping them. Insufficient
 funds still trigger rejection feedback and leave all paid deliveries intact.
 Auto merge retains its exclusive board operation.
 
-The separate Collect control retains its sourced mint gel body and existing
-charge, growth, and sparkle rhythm. Its empty-state body and coin remain visible
-against the landscape, while a ready collection still grows to the original peak
-size. This styling does not change collection eligibility, reward amounts, or
-the stable hit area.
+Collect uses a horizontal mint capsule with a larger sourced word-jelly
+illustration on the left and the title and inline word count together on the
+right. There is no separate count badge or coin illustration. The mint, sky and
+lilac gel skins and Microsoft Fluent Emoji cat are existing integrated artwork;
+their unchanged source, creator, license and acquisition records are linked in
+[Jelly Words](jelly-words.md). The empty state keeps this illustration and the
+"0 words" count visible. Accumulated words retain the existing charge, growth,
+local light and sparkle rhythm, while each pickup gives the illustration a
+small compress-and-lift beat. This styling does not change collection
+eligibility or reward amounts, and count changes never move the hit area.
 
 The game owner advances the button clock. Pausing freezes the clock and hides
 the transient pose and light; hidden controls do not advance. Reset clears the

@@ -100,6 +100,31 @@ func check_finish_header(app, view) -> void:
 		for name: String in header_neighbors:
 			check(not chest.intersects(header_neighbors[name]),
 				"The header chest stays clear of " + name + context)
+		var board: Rect2 = view._global_rect(view._board)
+		# Inspect actual controls after their minimum sizes resolve, including
+		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
+		var actions: Dictionary = {"Auto merge": view.powerup_buttons.auto_merge.get_global_rect(),
+			"Collect": collect, "Treasure": view.powerup_buttons.fragments.get_global_rect()}
+		var action_names: Array = actions.keys()
+		for action_index in range(action_names.size()):
+			var action: Rect2 = actions[action_names[action_index]]
+			check(playfield.grow(0.1).encloses(action) and not action.intersects(board),
+				str(action_names[action_index]) + " fits the hosted playfield without covering the board" + context)
+			for other_index in range(action_index + 1, action_names.size()):
+				var other: Rect2 = actions[action_names[other_index]]
+				var horizontal_gap: float = maxf(other.position.x - action.end.x, action.position.x - other.end.x)
+				var vertical_gap: float = maxf(other.position.y - action.end.y, action.position.y - other.end.y)
+				check(not action.intersects(other) and maxf(horizontal_gap, vertical_gap) >= 8.0 / s - 0.1,
+					str(action_names[action_index]) + " and " + str(action_names[other_index])
+					+ " retain eight display pixels between their actual touch targets" + context)
+			if view._compact_hud:
+				check(action.position.x >= board.end.x + 8.0 / s - 0.1
+					and absf(action.position.x - collect.position.x) < 0.1,
+					str(action_names[action_index]) + " shares one action rail to the right of the board" + context)
+			else:
+				check(action.position.y >= board.end.y - 0.1
+					and absf(action.position.y - collect.position.y) < 0.1,
+					str(action_names[action_index]) + " shares the footer beneath the board" + context)
 		_check_playfield_layout(view, s, context)
 		if not view._compact_hud:
 			check(chest.end.y <= playfield.position.y + 0.1,
@@ -177,7 +202,12 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 	check(is_equal_approx(board.size.x / board.size.y, 6.0 / 8.0)
 		and is_equal_approx(tray.position.x, board.position.x) and is_equal_approx(tray.size.x, board.size.x),
 		"Six square-cell columns keep an aligned supply tray without stretching the board" + context)
-	var horizontal_slack: float = view.size.x - board.size.x
+	# The occupied width includes the single side rail when it enlarges the well.
+	var occupied: Rect2 = board
+	if view._compact_hud:
+		for rectangle: Rect2 in regions.values():
+			occupied = occupied.merge(rectangle)
+	var horizontal_slack: float = view.size.x - occupied.size.x
 	var top_slack: float = tray.position.y - view.global_position.y
 	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
 		"The board uses the available width or height instead of leaving spare room in both directions" + context)
