@@ -1243,9 +1243,13 @@ func _preferred_size(mass: int) -> Vector2i:
 
 func _fill_upcoming() -> void:
 	while upcoming.size() < UPCOMING_COUNT:
-		if _supply.is_empty():
-			_build_supply()
-		upcoming.append(_supply.pop_front())
+		upcoming.append(_next_supply_tile())
+
+
+func _next_supply_tile() -> Dictionary:
+	if _supply.is_empty():
+		_build_supply()
+	return _supply.pop_front()
 
 
 func _build_supply() -> void:
@@ -1312,7 +1316,7 @@ func _spawn_drop() -> void:
 			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)), departure + ARRIVAL_SLOT_CLEARANCE)
 	for index in range(DROP_COUNT):
 		if not _spawn_tile(true, index):
-			break
+			continue
 		var tile: Dictionary = cells.back()
 		var column: int = int(tile.column)
 		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
@@ -1330,13 +1334,17 @@ func _spawn_drop() -> void:
 
 
 func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
-	if upcoming.is_empty():
+	if upcoming.is_empty() or (arrival and (arrival_index < 0 or arrival_index >= upcoming.size())):
 		return false
 	var occupied: Dictionary = _occupied()
 	var position: Vector2i = _arrival_position(occupied, arrival_index) if arrival else _free_position(occupied, 1, 1)
 	if position.x < 0:
 		return false
-	var tile: Dictionary = upcoming.pop_front()
+	# A visible preview owns its column until it can enter. Refill only that
+	# slot so blocked roots never slide sideways or get replaced by a neighbor.
+	var tile: Dictionary = upcoming[arrival_index] if arrival else upcoming.pop_front()
+	if arrival:
+		upcoming[arrival_index] = _next_supply_tile()
 	tile.column = position.x
 	tile.row = position.y
 	tile.age = 0.0 if arrival else SETTLE_SECONDS
@@ -1624,14 +1632,14 @@ func _has_free_cell() -> bool:
 func _arrival_position(occupied: Dictionary, preferred_column: int = -1) -> Vector2i:
 	var position := Vector2i(-1, -1)
 	for column in range(COLUMNS):
+		if preferred_column >= 0 and column != preferred_column:
+			continue
 		var row: int = 0
 		while row < ROWS and not occupied.has(row * COLUMNS + column):
 			row += 1
 		var landing_row: int = row - 1
-		# The mixed preview is already the committed left-to-right packet.
-		# Keep each root in its visible lane whenever that lane admits a body.
-		if column == preferred_column and landing_row >= 0:
-			return Vector2i(column, landing_row)
+		# A supplied root can enter only through its advertised column. Without
+		# a specified column, this also checks whether any entrance is available.
 		if landing_row > position.y:
 			position = Vector2i(column, landing_row)
 	return position

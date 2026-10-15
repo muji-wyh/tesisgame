@@ -147,8 +147,12 @@ audio above; it adds no downloaded assets.
 
 The committed six-root preview is mixed before it is shown. Each slot releases
 straight into its corresponding board column, including above uneven stacks.
-Only a sealed entry redirects that root to a reachable lane; queued roots keep
-their IDs and preview order, and shared lanes preserve their safe arrival spacing.
+A sealed entry keeps its root in the same preview slot until that column opens.
+Each dispatch releases at most one root per open column and refills only those
+departing slots; blocked roots keep their IDs, letters, and carried fragments.
+Repeated dispatches preserve safe arrival spacing within each column. A timed
+partial release also cancels a held tray press, preventing pointer-up from
+releasing the replacements a second time.
 The cloud environment and recessed rim are documented in [Jelly Words well](jelly-well.md).
 
 The Collect button snapshots all completed word jellies currently on the board.

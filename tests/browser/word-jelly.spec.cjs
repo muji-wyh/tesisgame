@@ -534,6 +534,132 @@ test('manual and automatic preview packets naturally fall into the well', async 
   expect(errors).toEqual([]);
 });
 
+test('blocked preview lanes retain their roots while open columns release and refill', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const errors = await startWordJelly(page), opening = await jelly(page);
+  const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1);
+  const found = rootsForWord({ tiles: floor }, 3, 2);
+  expect(found, 'The ordinary starter packet provides a floor word to collect').toBeTruthy();
+  const completed = await merge(page, found.roots[0].id, found.roots[1].id);
+  const beforeCollection = await jelly(page);
+  await pressRect(page, completed.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.cleared_pairs === beforeCollection.cleared_pairs + 1 && !state.fusions.length &&
+      state.tiles.every(tile => tile.settled) && state.preview.slots.every(slot => slot.visible);
+  }, { message: 'Collecting the real word leaves its surviving roots settled at uneven heights' }).toBe(true);
+
+  const blockedColumns = state => Array.from({ length: state.columns }, (_, column) => column)
+    .filter(column => state.tiles.some(tile => tile.row === 0 && tile.column <= column && column < tile.column + tile.width));
+  let before = await jelly(page);
+  const heights = Array.from({ length: before.columns }, (_, column) =>
+    Math.min(before.rows, ...before.tiles.filter(tile => tile.column <= column && column < tile.column + tile.width).map(tile => tile.row)));
+  expect(new Set(heights).size, 'A genuine collection creates different column heights').toBeGreaterThan(1);
+  const filling = [];
+  // Each manual release resets the supply clock. Reach the first mixed entrance
+  // without waiting for an automatic packet or a fully blocked danger countdown.
+  for (let packet = 0; packet < before.rows && blockedColumns(before).length === 0; packet++) {
+    expect(before.preview.enabled).toBe(true);
+    const previous = before;
+    await pressRect(page, previous.preview.rect);
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return state.generated_tiles === previous.generated_tiles + previous.columns &&
+        state.tiles.every(tile => tile.settled) && state.preview.slots.every(slot => slot.visible);
+    }, { message: 'One ordinary manual packet settles before inspecting the next entrance' }).toBe(true);
+    before = await jelly(page);
+    filling.push({ generated: before.generated_tiles, blocked: blockedColumns(before), elapsed: before.spawn_elapsed });
+  }
+  const blocked = blockedColumns(before);
+  const open = Array.from({ length: before.columns }, (_, column) => column).filter(column => !blocked.includes(column));
+  expect(blocked.length, 'Some full columns obstruct their own top entrances').toBeGreaterThan(0);
+  expect(open.length, 'The collected word leaves at least one other entrance open').toBeGreaterThan(0);
+  expect(before.full_elapsed, 'Mixed entrances do not start the full-board countdown').toBeLessThan(0);
+  expect(before.preview.enabled, 'Open columns still allow a manual release').toBe(true);
+  await capture(page, info, 'word-jelly-mixed-entrances-before-release');
+
+  await page.evaluate(({ before, open }) => {
+    const status = document.getElementById('game-status');
+    const wanted = new Set(before.upcoming.map(root => root.id));
+    const departing = new Set(open.map(column => before.upcoming[column].id));
+    window.wordJellyLaneEvidence = { timeline: [], frame: null };
+    let capturing = false;
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const tiles = state.tiles?.filter(tile => wanted.has(tile.id)) || [];
+      window.wordJellyLaneEvidence.timeline.push({ generated: state.generated_tiles, tiles,
+        upcoming: state.upcoming, preview: state.preview?.slots, at: performance.now() });
+      const moved = tiles.some(tile => {
+        const source = before.preview.slots.find(slot => slot.id === tile.id);
+        return departing.has(tile.id) && !tile.settled &&
+          tile.rect[1] + tile.rect[3] / 2 > source.rect[1] + source.rect[3] / 2 + 0.5;
+      });
+      if (!capturing && moved) {
+        capturing = true;
+        document.getElementById('canvas').toBlob(blob => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onload = () => { window.wordJellyLaneEvidence.frame = reader.result.split(',')[1]; };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
+    };
+    window.wordJellyLaneObserver = new MutationObserver(record);
+    window.wordJellyLaneObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    record();
+  }, { before, open });
+  await pressRect(page, before.preview.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.generated_tiles > before.generated_tiles && state.tiles.every(tile => tile.settled) &&
+      state.preview.slots.every(slot => slot.visible);
+  }, { message: 'The partial packet lands and only its departing slots finish refilling' }).toBe(true);
+  const after = await jelly(page);
+  await page.evaluate(() => window.wordJellyLaneObserver.disconnect());
+  // Freeze immediately: the partial release may have filled the final gaps.
+  await openModeMenu(page);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyLaneEvidence.frame)),
+    { message: 'The real partial release retains a rendered canvas frame' }).toBe(true);
+  const evidence = await page.evaluate(() => window.wordJellyLaneEvidence);
+  fs.writeFileSync(info.outputPath('word-jelly-partial-release.png'), Buffer.from(evidence.frame, 'base64'));
+  fs.writeFileSync(info.outputPath('word-jelly-partial-release-timeline.json'),
+    JSON.stringify({ filling, blocked, open, before, after, timeline: evidence.timeline }, null, 2));
+
+  const identity = root => ({ id: root.id, text: root.text, fragments: root.fragments });
+  const expectedIds = open.map(column => before.upcoming[column].id).sort((a, b) => a - b);
+  const arrivals = after.tiles.filter(tile => !before.tiles.some(original => original.id === tile.id));
+  expect(after.generated_tiles, 'Only the open entrances generate a new body').toBe(before.generated_tiles + open.length);
+  expect(arrivals.map(tile => tile.id).sort((a, b) => a - b), 'No blocked preview falls into another column').toEqual(expectedIds);
+  expect(evidence.timeline.some(frame => frame.tiles.length === open.length),
+    'The published timeline includes every root in the partial packet').toBe(true);
+  for (const column of open) {
+    const root = before.upcoming[column], landed = arrivals.find(tile => tile.id === root.id);
+    expect(identity(landed), 'A released root retains its advertised contents').toEqual(identity(root));
+    expect(landed.column, 'Each released preview lands in its own column').toBe(column);
+    expect(after.preview.slots[column].id, 'Only a released slot advertises a replacement').not.toBe(root.id);
+    expect(after.preview.slots[column].id).toBe(after.upcoming[column].id);
+  }
+  for (const frame of evidence.timeline.filter(frame => frame.generated > before.generated_tiles)) {
+    expect(frame.generated, 'The partial release cannot create an extra fallback root').toBe(before.generated_tiles + open.length);
+    for (const column of blocked) {
+      expect(identity(frame.upcoming[column]), 'Blocked preview text and fragments remain in the same slot')
+        .toEqual(identity(before.upcoming[column]));
+      expect(frame.preview[column]).toMatchObject({ id: before.upcoming[column].id, visible: true });
+    }
+    for (const tile of frame.tiles) {
+      const column = before.upcoming.findIndex(root => root.id === tile.id);
+      expect(open, 'Every observed departure belongs to an open entrance').toContain(column);
+      expect(tile.column).toBe(column);
+      expect(tile.rect[0] + tile.rect[2] / 2, 'The visible fall stays centered in its advertised lane')
+        .toBeCloseTo(before.preview.slots[column].rect[0] + before.preview.slots[column].rect[2] / 2, 2);
+    }
+  }
+  expect(after.merged_count).toBe(before.merged_count);
+  expect(after.cleared_pairs).toBe(before.cleared_pairs);
+  expect(errors).toEqual([]);
+});
+
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
   test.setTimeout(180000);
   const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);

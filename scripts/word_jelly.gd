@@ -41,6 +41,7 @@ var _palette := Palette.new()
 var _palette_indices: Dictionary = {}
 var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
+var _preview_generated: int = -1
 var _word_reveal: WordReveal
 var collect_button: CollectButton
 var _placement_tile: WordTile
@@ -227,6 +228,7 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
+		_preview_generated = game.generated_tiles
 		return super._press(pointer, global_point)
 	var id: int = _tile_at(point)
 	if id < 0:
@@ -266,6 +268,9 @@ func _move(global_point: Vector2) -> void:
 
 func _release(global_point: Vector2) -> void:
 	if _preview_first_id >= 0:
+		# A partial timed dispatch can leave the first slot unchanged while the
+		# pressed packet has already departed through its other open columns.
+		_preview_canceled = _preview_canceled or _preview_generated != game.generated_tiles
 		super._release(global_point)
 		return
 	var source: int = _source
@@ -486,6 +491,9 @@ func _refresh_palette() -> void:
 func _sync_tiles() -> void:
 	if not _configured:
 		return
+	if _preview_first_id >= 0 and _preview_generated != game.generated_tiles:
+		_preview_canceled = true
+		_set_preview_pressed(false)
 	# The old preview still owns the departing IDs until this sync completes.
 	# Keep the slot rather than screen pixels so a paused resize stays coherent.
 	for cell: Dictionary in game.cells:

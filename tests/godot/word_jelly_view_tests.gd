@@ -106,6 +106,8 @@ func _run() -> void:
 	_check_keyboard(view)
 	_check_keyboard_rejection(view)
 	_check_arrival_packet(view)
+	_check_partial_preview_columns(view)
+	_check_partial_preview_press_race(view)
 	_check_preview_pull_handoff(view)
 	_check_staggered_preview_refill(view)
 	_check_immediate_preview_packets(view)
@@ -2590,6 +2592,98 @@ func _check_arrival_packet(view) -> void:
 				check(view.game.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and view.game.merged_count == 0 and payouts.is_empty(),
 					"arrival, pause and resize preserve the supply and reward ledgers")
 	view.size = Vector2(1000, 720)
+
+
+func _partial_preview_fixture(view, reduced: bool) -> Array:
+	_reset(view, reduced)
+	view.game.cells.clear()
+	for column: int in [0, 4]:
+		var roof: Dictionary = view.game._new_tile("play" if column == 0 else "foot", 2, 1)
+		roof.column = column
+		roof.row = 0
+		view.game.cells.append(roof)
+	view.game.upcoming.clear()
+	for text: String in ["fat", "hap", "sle", "her", "py", "ep"]:
+		view.game.upcoming.append(view.game._new_tile(text, 1, 1 if text in ["fat", "sle"] else 0))
+	view._sync_tiles()
+	view._layout()
+	view._sync_preview()
+	return view.game.upcoming.duplicate(true)
+
+
+func _check_partial_preview_columns(view) -> void:
+	for reduced: bool in [false, true]:
+		for automatic: bool in [false, true]:
+			for dimensions: Vector2 in [Vector2(1366, 768), Vector2(393, 852)]:
+				view.size = dimensions
+				var packet: Array = _partial_preview_fixture(view, reduced)
+				var origins: Array[Rect2] = []
+				for preview in view._preview_tiles:
+					origins.append(preview.get_rect())
+				var generated: int = view.game.generated_tiles
+				if automatic:
+					view.game.spawn_elapsed = view.game.spawn_interval - 0.001
+					_advance(view, 0.001)
+				else:
+					var point: Vector2 = view.get_global_transform() * view._preview_rect.get_center()
+					check(view._press(2, point), "a partially open tray accepts an ordinary pointer press")
+					view._release(point)
+				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 4,
+					"only sle and her leave a tray whose outer entrances are blocked by play and foot")
+				for slot: int in [2, 3]:
+					var id: int = int(packet[slot].id)
+					var cell: Dictionary = view.game.cell(id)
+					check(not cell.is_empty() and cell.column == slot and cell.arrival_index == slot
+						and view._arrival_origins[id].slot == slot and view._tiles[id]._label.text == packet[slot].text,
+						"each middle root owns its original tray slot and the column directly below it")
+					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[slot]
+					check(view._tiles[id].get_rect().is_equal_approx(expected), "a partial release preserves the original painted origin")
+				for sample in range(25):
+					for slot: int in [0, 1, 4, 5]:
+						var preview = view._preview_tiles[slot]
+						check(view.game.upcoming[slot] == packet[slot] and preview.visible
+							and preview.tile_id == int(packet[slot].id) and preview._label.text == packet[slot].text
+							and preview.get_rect().is_equal_approx(origins[slot]) and is_equal_approx(preview.modulate.a, 1.0)
+							and not view._tiles.has(int(packet[slot].id)),
+							"blocked previews remain visible, unchanged, and in their own slots throughout the middle descent")
+					for slot: int in [2, 3]:
+						var body = view._tiles[int(packet[slot].id)]
+						check(is_equal_approx(body.get_rect().get_center().x, origins[slot].get_center().x),
+							"a middle arrival never slides sideways toward another preview or entrance")
+					_advance(view, 0.1)
+				for slot: int in [2, 3]:
+					check(view._preview_tiles[slot].visible and view._preview_tiles[slot].tile_id != int(packet[slot].id)
+						and view._preview_tiles[slot].tile_id == int(view.game.upcoming[slot].id),
+						"only the two departed slots refill after their own bodies clear the tray")
+				check(payouts.is_empty() and attempts.is_empty() and view.game.fragment_count == 0,
+					"partial supply preserves reward and learning ledgers")
+	view.size = Vector2(1000, 720)
+
+
+func _check_partial_preview_press_race(view) -> void:
+	for reduced: bool in [false, true]:
+		var packet: Array = _partial_preview_fixture(view, reduced)
+		var point: Vector2 = view.get_global_transform() * view._preview_rect.get_center()
+		check(view._press(2, point), "the partial-dispatch race starts with a real held preview")
+		view.game.spawn_elapsed = view.game.spawn_interval - 0.001
+		_advance(view, 0.001)
+		var generated: int = view.game.generated_tiles
+		var next: Array = view.game.upcoming.duplicate(true)
+		check(view.game.upcoming[0] == packet[0] and view._preview_canceled,
+			"automatic partial supply invalidates the held packet even when its first slot stays blocked")
+		view._move(point)
+		view._release(point)
+		check(view.game.generated_tiles == generated and view.game.upcoming == next and cues.count("pick") == 0,
+			"releasing a stale partial packet cannot consume replacements or play another pick cue")
+		check(view._press(2, point), "a new gesture can immediately use the refilled middle slots")
+		view._release(point)
+		check(view.game.generated_tiles == generated + 2 and cues.count("pick") == 1,
+			"a fresh partial preview gesture releases exactly two more roots once")
+		check(view._press(2, point), "partial supply still supports a cancelable tray gesture")
+		generated = view.game.generated_tiles
+		view.cancel_input()
+		view._release(point)
+		check(view.game.generated_tiles == generated, "canceling a partial tray gesture does not dispatch supply")
 
 
 func _preview_skin_pose(tile) -> Dictionary:

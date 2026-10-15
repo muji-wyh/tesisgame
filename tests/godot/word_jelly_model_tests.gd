@@ -86,6 +86,7 @@ func _run() -> void:
 	_test_arrival_full_board_determinism()
 	_test_arrival_reachable_lanes()
 	_test_arrival_preview_columns()
+	_test_arrival_blocked_preview_slots()
 	_test_arrival_reserved_lanes()
 	_test_arrival_same_lane_spacing()
 	_test_arrival_mixed_lane_readiness()
@@ -3909,18 +3910,94 @@ func _test_arrival_preview_columns() -> void:
 	for row in range(Model.ROWS):
 		blocked.cells.append(_placed_tile(2000 + row, "x", 0, row))
 	var advertised: Array = blocked.upcoming.duplicate(true)
-	check(blocked.drop_now(), "A blocked preview column can use reachable space without losing its packet")
+	check(blocked.drop_now(), "Open preview columns can release while the first column remains blocked")
 	for slot in range(advertised.size()):
 		var tile: Dictionary = blocked.cell(int(advertised[slot].id))
+		if slot == 0:
+			check(tile.is_empty() and blocked.upcoming[slot] == advertised[slot],
+				"A blocked preview retains its original slot and complete identity")
+			continue
 		check(not tile.is_empty() and tile.arrival_index == slot and tile.text == advertised[slot].text,
-			"Blocked-column fallback keeps every advertised identity and its visible launch slot")
-		check(tile.column == (1 if slot == 0 else slot),
-			"Only a genuinely sealed preferred lane redirects a root; other roots keep their own columns")
-	check(blocked.cell(int(advertised[0].id)).row == Model.ROWS - 1
-		and blocked.cell(int(advertised[1].id)).row == Model.ROWS - 2,
-		"The redirected root and its lane's own root reserve distinct floor-up positions")
+			"Skipping a blocked first column preserves every later root's visible launch slot")
+		check(tile.column == slot and tile.row == Model.ROWS - 1,
+			"Every admitted root falls only into its own column without a redirected neighbor")
 	_assert_arrival_lane_clearance(blocked, "blocked preview lane")
-	_assert_board(blocked, "blocked preview fallback")
+	_assert_board(blocked, "fixed blocked preview slot")
+
+
+func _blocked_preview_model():
+	var model = _model([_word("father"), _word("happy"), _word("sleep"), _word("play"), _word("foot")])
+	model.cells.assign([_placed_tile(1000, "play", 0, 0, 2, 1, _word("play")),
+		_placed_tile(1001, "foot", 4, 0, 2, 1, _word("foot"))])
+	for column in [0, 1, 4, 5]:
+		for row in range(1, Model.ROWS):
+			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
+	model.upcoming.clear()
+	var parts: Array[String] = ["fat", "hap", "sle", "her", "py", "ep"]
+	for slot in range(parts.size()):
+		model.upcoming.append(model._new_tile(parts[slot], 1, 1 if slot % 2 == 0 else 0))
+	return model
+
+
+func _assert_advertised_root(tile: Dictionary, advertised: Dictionary, column: int, row: int, label: String) -> void:
+	check(not tile.is_empty(), label + ": the expected advertised root arrives")
+	if tile.is_empty():
+		return
+	check(tile.column == column and tile.row == row and tile.arrival_index == column,
+		label + ": the root retains its own preview column and launch slot")
+	for key in ["id", "text", "mass", "parts_count", "fragments", "chest", "word", "kind"]:
+		check(tile.get(key) == advertised.get(key), label + ": arrival preserves advertised " + key)
+
+
+func _test_arrival_blocked_preview_slots() -> void:
+	for dispatch: String in ["manual", "automatic"]:
+		var model = _blocked_preview_model()
+		var original: Array = model.upcoming.duplicate(true)
+		var generated: int = model.generated_tiles
+		var existing_count: int = model.cells.size()
+		for batch in range(3):
+			var advertised: Array = model.upcoming.duplicate(true)
+			if dispatch == "manual":
+				check(model.drop_now(), "manual release accepts the two open middle columns")
+			else:
+				model.spawn_elapsed = model.spawn_interval - 0.01
+				model.step(0.01)
+			check(model.generated_tiles == generated + (batch + 1) * 2 and model.cells.size() == existing_count + (batch + 1) * 2,
+				"%s release adds exactly the two admitted roots while four preview columns are blocked" % dispatch)
+			check(is_zero_approx(model.spawn_elapsed), "%s partial release resets the supply timer once" % dispatch)
+			for slot in range(Model.UPCOMING_COUNT):
+				var tile: Dictionary = model.cell(int(advertised[slot].id))
+				if slot in [2, 3]:
+					_assert_advertised_root(tile, advertised[slot], slot, Model.ROWS - 1 - batch,
+						"%s middle-column batch %d slot %d" % [dispatch, batch, slot])
+					check(model.upcoming[slot].id != advertised[slot].id,
+						"only a departing preview slot receives a fresh root")
+				else:
+					check(tile.is_empty() and model.upcoming[slot] == original[slot],
+						"fat, hap, py, and ep stay byte-for-byte in their blocked preview slots")
+			_assert_board(model, "%s screenshot lanes batch %d" % [dispatch, batch])
+		var waiting: Array = model.upcoming.duplicate(true)
+		check(model.collect(1000), "collecting play can reopen its two sealed preview columns")
+		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
+		check(model.upcoming == waiting, "opening a lane does not consume or slide any waiting preview")
+		check(model.drop_now(), "newly opened left columns release alongside the still-open middle columns")
+		for slot in range(Model.UPCOMING_COUNT):
+			if slot < 4:
+				_assert_advertised_root(model.cell(int(waiting[slot].id)), waiting[slot], slot, 0 if slot < 2 else Model.ROWS - 4,
+					"reopened left columns slot %d" % slot)
+			else:
+				check(model.upcoming[slot] == original[slot] and model.cell(int(original[slot].id)).is_empty(),
+					"the right blocked previews remain untouched when only the left roof clears")
+		waiting = model.upcoming.duplicate(true)
+		check(model.collect(1001), "collecting foot reopens the remaining two preview columns")
+		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
+		check(model.drop_now(), "the original right previews can enter once their own roof clears")
+		for slot in [4, 5]:
+			_assert_advertised_root(model.cell(int(original[slot].id)), original[slot], slot, 0,
+				"reopened right columns slot %d" % slot)
+		for slot in [0, 1]:
+			check(model.upcoming[slot] == waiting[slot], "newly full left columns retain their replacement previews")
+		_assert_board(model, "%s reopened screenshot lanes" % dispatch)
 
 
 func _test_arrival_reserved_lanes() -> void:
@@ -3932,24 +4009,23 @@ func _test_arrival_reserved_lanes() -> void:
 	var reserved: Dictionary = model.fusions[0].result.duplicate(true)
 	check(reserved.column == 1 and reserved.row == 3 and reserved.width == 2,
 		"future word reserves its neighboring entry lane before the visual merge finishes")
-	var incoming: Array[int] = _arrival_ids(model)
 	var preview: Array = model.upcoming.duplicate(true)
 	var generated_before: int = model.generated_tiles
-	check(model.drop_now(), "remaining entry space accepts arrivals during a merge")
-	for index in range(incoming.size()):
-		var tile: Dictionary = model.cell(incoming[index])
-		if index < 3:
-			check(not tile.is_empty() and tile.column == 1 and tile.row == 2 - index,
-				"roots stack above the reserved result instead of crossing its future footprint")
-			check(int(tile.arrival_index) == index and is_equal_approx(Model.arrival_delay(tile), float(index) * 0.4),
-				"partial same-lane batches preserve preview identity and safe FIFO launch spacing")
-		else:
-			check(tile.is_empty(), "a partial batch stops when every entry lane is sealed")
-			check(model.upcoming[index - 3] == preview[index],
-				"every unreleased preview keeps its complete original identity and order after a partial batch")
-	check(not model.can_drop_now() and model.upcoming[0].id == incoming[3],
-		"unreleased roots stay committed at the front of the preview after a partial batch")
-	check(model.generated_tiles == generated_before + 3, "partial batches consume exactly the admitted FIFO prefix")
+	for batch in range(3):
+		var advertised: Dictionary = model.upcoming[1].duplicate(true)
+		check(model.drop_now(), "the remaining entry lane accepts one root during each partial dispatch")
+		var tile: Dictionary = model.cell(int(advertised.id))
+		_assert_advertised_root(tile, advertised, 1, 2 - batch, "arrival above reserved result")
+		check(is_equal_approx(Model.arrival_delay(tile), 0.3 + float(batch) * 0.4),
+			"repeated partial dispatch preserves the slot stagger and same-column clearance")
+		check(model.generated_tiles == generated_before + batch + 1,
+			"each dispatch consumes exactly one root from the only open preview column")
+		for slot in [0, 2, 3, 4, 5]:
+			check(model.cell(int(preview[slot].id)).is_empty() and model.upcoming[slot] == preview[slot],
+				"reserved and occupied top lanes retain every waiting preview in its own slot")
+	check(not model.can_drop_now(), "the third same-column arrival seals the remaining reachable entry")
+	var full: Dictionary = model.snapshot()
+	check(not model.drop_now() and model.snapshot() == full, "a sealed reservation cannot consume any replacement preview")
 	_assert_reservations(model, "arrival respects a future word roof")
 	_assert_board(model, "partial arrival into a reserved lane")
 
@@ -3959,18 +4035,24 @@ func _test_arrival_same_lane_spacing() -> void:
 	model.cells.clear()
 	for column in range(Model.COLUMNS - 1):
 		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
-	var incoming: Array[int] = _arrival_ids(model)
-	check(model.drop_now(), "one deep open entry lane can admit a complete batch")
+	var waiting: Array = model.upcoming.duplicate(true)
+	var incoming: Array[int] = []
 	var clearance: float = 0.4
-	for index in range(incoming.size()):
-		var tile: Dictionary = model.cell(incoming[index])
+	for index in range(6):
+		var advertised: Dictionary = model.upcoming[5].duplicate(true)
+		incoming.append(int(advertised.id))
+		check(model.drop_now(), "one open lane accepts its own preview on each immediate partial dispatch")
+		var tile: Dictionary = model.cell(int(advertised.id))
 		check(tile.column == Model.COLUMNS - 1 and tile.row == Model.ROWS - 1 - index,
 			"the only reachable lane stacks new roots from the floor upward")
-		check(is_equal_approx(Model.arrival_delay(tile), float(index) * clearance),
-			"repeated use of one lane reserves at least 400 milliseconds of headroom in FIFO landing order")
+		check(tile.arrival_index == 5 and is_equal_approx(Model.arrival_delay(tile), 0.75 + float(index) * clearance),
+			"repeated use of slot five retains its stagger and 400 milliseconds of headroom")
 		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
 			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
 			"contact and input readiness use the stored lane delay")
+		for slot in range(5):
+			check(model.upcoming[slot] == waiting[slot] and model.cell(int(waiting[slot].id)).is_empty(),
+				"repeated use of the last slot never consumes a blocked earlier preview")
 	_assert_arrival_lane_clearance(model, "same-lane batch")
 	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
 	var last_id: int = int(by_readiness.back().id)
@@ -4012,21 +4094,29 @@ func _test_arrival_mixed_lane_readiness() -> void:
 		for row in range(first_occupied_row, Model.ROWS):
 			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
 	var incoming: Array[int] = _arrival_ids(model)
-	check(model.drop_now(), "uneven lanes admit the advertised six roots into a three-two-one staircase")
+	check(model.drop_now(), "uneven lanes admit only their three open preview slots")
+	for slot in range(incoming.size()):
+		var tile: Dictionary = model.cell(incoming[slot])
+		if slot < 3:
+			check(not tile.is_empty() and int(tile.column) == slot and int(tile.arrival_index) == slot,
+				"the first staircase dispatch retains the three admitted preview columns")
+		else:
+			check(tile.is_empty() and model.upcoming[slot].id == incoming[slot],
+				"sealed staircase columns retain their original preview roots")
+	check(model.drop_now(), "the second staircase dispatch fills only its two remaining open columns")
+	var final_id: int = int(model.upcoming[0].id)
+	check(model.drop_now(), "the third staircase dispatch fills only its final open column")
 	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
 	var last_id: int = int(by_readiness.back().id)
 	var last_ready: float = Model.settle_duration(model.cell(last_id))
-	var final_slot_ready: float = Model.settle_duration(model.cell(incoming.back()))
-	check(last_id == incoming[4] and final_slot_ready < last_ready,
-		"same-lane clearance can make an earlier preview slot recover after the final advertised slot")
-	for index in range(incoming.size()):
-		var tile: Dictionary = model.cell(incoming[index])
-		check(int(tile.arrival_index) == index, "uneven lane placement retains the original preview slot identity")
-	check(is_equal_approx(Model.arrival_delay(model.cell(incoming[4])), 0.8),
-		"the fifth preview root waits behind its earlier same-lane sibling")
+	var final_slot_ready: float = Model.settle_duration(model.cell(incoming[2]))
+	check(last_id == final_id and final_slot_ready < last_ready,
+		"repeated use of slot zero can recover after the first dispatch's last admitted preview")
+	check(is_equal_approx(Model.arrival_delay(model.cell(final_id)), 0.8),
+		"the third slot-zero root waits behind both earlier same-column arrivals")
 	_assert_arrival_lane_clearance(model, "uneven-lane batch")
 	model.step(final_slot_ready)
-	check(model.is_settled(model.cell(incoming.back())) and not model.is_settled(model.cell(last_id))
+	check(model.is_settled(model.cell(incoming[2])) and not model.is_settled(model.cell(last_id))
 		and model.full_elapsed < 0.0, "the last advertised root cannot start danger before the physically latest arrival recovers")
 	model.step(last_ready - final_slot_ready - 0.001)
 	check(not model.is_settled(model.cell(last_id)) and model.full_elapsed < 0.0,
