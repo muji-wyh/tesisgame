@@ -1522,6 +1522,8 @@ func _check_danger_curve() -> void:
 	for scale_factor: float in [0.65, 1.0, 1.6]:
 		var bounds := Rect2(90.0, 100.0, 260.0, 440.0)
 		frame.layout_frame(bounds, scale_factor, 18.0)
+		check(is_equal_approx(float(frame.material.get_shader_parameter("corner_radius")), ceilf(18.0 / scale_factor) * scale_factor),
+			"The danger light follows the same rounded corner as the well at every UI scale")
 		var required := bounds.grow(peak_extent / scale_factor)
 		check(Rect2(frame.position, frame.size).encloses(required),
 			"The danger canvas contains the full final glow at every UI scale")

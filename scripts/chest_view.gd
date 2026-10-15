@@ -104,6 +104,8 @@ func _ready() -> void:
 	_rainbow_material.shader = RAINBOW_LIGHT
 	_rainbow_light.material = _rainbow_material
 	_charge.add_child(_rainbow_light)
+	# Keep the cavity light and drifting sparkle layers without a rainbow arc.
+	_rainbow_light.hide()
 	_charge.hide()
 	_charge.draw.connect(_draw_charge)
 	add_child(_art)
@@ -782,6 +784,7 @@ func hold_effect_snapshot() -> Dictionary:
 		"pulse_motion": _pulse_motion(),
 		"crown_clock": _crown_clock(), "crown_flow_phase": _crown_flow_phase(),
 		"crown_streaks": [], "crown_milestones": [], "crown_crest": _crown_crest(),
+		"rainbow_visible": _rainbow_light.is_visible_in_tree(),
 		"rainbow_strength": _rainbow_strength(), "rainbow_progress": _rainbow_progress(), "rainbow_motes": _rainbow_motes(),
 		"crown_effect_bounds": {"x": crown_bounds.position.x, "y": crown_bounds.position.y,
 			"width": crown_bounds.size.x, "height": crown_bounds.size.y},

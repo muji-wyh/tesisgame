@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { openGame, metrics, tap, rendered, celebrationState, visibleColorCount } = require('./game-ui.cjs');
+const { openGame, metrics, tap, rendered, chooseMode, celebrationState, visibleColorCount } = require('./game-ui.cjs');
 
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const room = page => page.locator('#jelly-reward-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
@@ -137,12 +137,18 @@ for (const mode of ['jelly', 'word_jelly']) {
       });
       await tap(page, 3, 3);
       expect((await jelly(page)).game_over.visible, 'Tapping the shade cannot dismiss the result or resume a full board').toBe(true);
-      const replay = actions.find(action => action.text === 'Play again');
-      await press(page, replay.rect);
+      const home = viewport.width < 600;
+      const departure = actions.find(action => action.text === (home ? 'Home' : 'Play again'));
+      await press(page, departure.rect);
+      if (home) {
+        await expect.poll(async () => (await metrics(page)).library.visible).toBe(true);
+        expect((await metrics(page)).library.current).toBe('');
+        await chooseMode(page, mode);
+      }
       await expect.poll(async () => {
         const state = await jelly(page);
         return state.round_id !== ended.round_id && state.phase === 'playing' && !state.game_over.visible;
-      }, { message: 'Play again starts a playable fresh round directly from the dialog' }).toBe(true);
+      }, { message: 'Leaving the ended round starts a playable fresh board on replay or Home reentry' }).toBe(true);
       expect((await wallet(page)).balance).toBe(startingCoins);
       expect(errors).toEqual([]);
     });
@@ -271,6 +277,12 @@ test('earned Jelly Match treasure opens inside the responsive Game over dialog',
   const home = (await room(page)).actions.find(action => action.text === 'Home');
   await press(page, home.rect);
   await expect.poll(async () => (await metrics(page)).library.visible).toBe(true);
+  expect((await wallet(page)).balance).toBe(before + 50);
+  await chooseMode(page, 'jelly');
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.round_id !== ended.round_id && state.phase === 'playing' && !state.game_over.visible;
+  }, { message: 'Home reentry cannot resume an opened Game over board' }).toBe(true);
   expect((await wallet(page)).balance).toBe(before + 50);
   expect(errors).toEqual([]);
 });

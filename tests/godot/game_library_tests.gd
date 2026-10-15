@@ -204,6 +204,26 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var library := Library.new()
 	root.add_child(library)
+	library.fit(Vector2(1280, 800), 1.0)
+	var focused_tile: Button = library.buttons[0]
+	focused_tile.grab_focus()
+	check(focused_tile.focus_mode == Control.FOCUS_ALL and focused_tile.get_theme_stylebox("focus") is StyleBoxEmpty,
+		"Programmatic Home focus preserves navigation without a persistent dark pointer outline")
+	var keyboard := InputEventKey.new()
+	keyboard.keycode = KEY_TAB
+	keyboard.pressed = true
+	root.push_input(keyboard, true)
+	check(focused_tile.get_theme_stylebox("focus") is StyleBoxFlat
+		and focused_tile.get_theme_stylebox("focus").border_width_top >= 3,
+		"Keyboard navigation restores the visible high-contrast focus outline")
+	var pointer := InputEventScreenTouch.new()
+	pointer.position = Vector2(1, 1)
+	pointer.pressed = true
+	root.push_input(pointer, true)
+	check(focused_tile.get_theme_stylebox("focus") is StyleBoxEmpty,
+		"Touch navigation hides only the focus decoration without disabling focus")
+	pointer.pressed = false
+	root.push_input(pointer, true)
 	library.mode_requested.connect(func(id: String) -> void:
 		chosen = id
 		mode_requests += 1)

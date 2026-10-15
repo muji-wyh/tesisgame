@@ -425,13 +425,13 @@ func _check_results_and_replay(app) -> void:
 	app.chest.finish_immediately()
 	await settle()
 	check(app.model.chest_state == "opened" and not app._save_error, "The completed Memory chest is saved")
-	await _return_home(app)
-	await _enter(app, "memory")
 	var previous_round: String = app._round_id
 	app._new_adventure()
 	await settle()
 	check(app._mode_id == "memory" and app._round_id != previous_round and app.model.phase == "waiting",
 		"Memory Play again starts another Memory round without a hidden mode switch")
+	await _return_home(app)
+	await _enter(app, "memory")
 	for id: String in ["jelly", "word_jelly"]:
 		await _enter(app, id)
 		app._active_jelly().game.finish_round()

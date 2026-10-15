@@ -44,9 +44,14 @@ async function openModeMenu(page) {
         const celebration = await celebrationState(page);
         let action = celebration.active ? celebration.home : null;
         if (!action) {
-          const selector = bounds.library?.current === 'pop' ? '#pop-reward-status' : '#jelly-reward-status';
-          action = await page.locator(selector).evaluate(element =>
-            JSON.parse(element.dataset.snapshot || '{}').actions?.find(item => item.text === 'Home'));
+          action = await page.evaluate(() => {
+            for (const selector of ['#pop-reward-status', '#jelly-reward-status']) {
+              const element = document.querySelector(selector);
+              const state = JSON.parse(element?.dataset.snapshot || '{}');
+              if (state.visible) return state.actions?.find(item => item.text === 'Home');
+            }
+            return null;
+          });
         }
         expect(action?.visible && !action.disabled, 'The settlement exposes its own available Home action.').toBe(true);
         const [x, y, width, height] = action.rect;

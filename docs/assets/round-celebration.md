@@ -47,7 +47,7 @@ modal and wait for both the performance and final pronunciation before enabling
 the real chest in place. There is no Open chest button or extra confirmation.
 `RoundRewardLayout` gives the preview and settlement the same Pip and chest
 rectangles, keeping both subjects still across the handoff. The existing hold
-gesture drives the rainbow, opening, cancellation, audio and durable reward save;
+gesture drives the cavity glow, opening, cancellation, audio and durable reward save;
 finishing the celebration never opens or awards treasure automatically. Phrase
 accepts completion at this automatic handoff. Match and Memory
 also celebrate rounds without treasure, omitting the chest and confetti before
@@ -64,8 +64,10 @@ performance. Voice Pop stops recognition and saves its final chest before openin
 the modal. A zero-chest round still shows its honest result. Jelly Finish uses
 `Round complete`; danger expiry uses `Game over`. Earned chests open inside the
 modal. Jelly `Play again` collects pending chest coins before starting a new
-round; Pop `Play again` preserves unopened treasure and returns to its microphone
-gate. `Home` preserves pending Pop and Jelly treasure.
+round. Pop `Play again` also settles its unopened treasure and returns to its
+microphone gate. `Home` settles pending treasure before leaving any completed
+round, and selecting that game again starts a fresh board. Live games still pause
+and offer `Continue` on Home.
 
 Pop and Jelly settlement keep the completed-word total above the reward and place the
 earned level with its chest. The chest artwork is the hold target; `Hold to open`

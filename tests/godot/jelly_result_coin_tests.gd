@@ -226,7 +226,7 @@ func check_interactive_result(tier: int) -> void:
 	await dispose(app)
 
 
-func check_replay_during_opening(stage: String) -> void:
+func check_replay_during_opening(stage: String, home: bool = false) -> void:
 	var app = await make_app()
 	finish_result(app, 1)
 	var room = app._jelly_rewards
@@ -248,7 +248,19 @@ func check_replay_during_opening(stage: String) -> void:
 			check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == 0,
 				"Replay starts while saved result coins are still flying toward the HUD")
 	check(not room._back.disabled, "Play again remains available during chest interaction")
-	room._back.pressed.emit()
+	if home:
+		room._home.pressed.emit()
+		check(app._mode_menu_open() and not app._settlement_dialog_open() and not room.has_pending()
+			and app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
+			"Home settles the chest exactly once before leaving its " + stage + " state")
+		check(app._mode_panel.snapshot().current.is_empty(), "Home never labels an ended game as Continue")
+		room._home.pressed.emit()
+		room._back.pressed.emit()
+		check(app._round_id == old_round and app.get_meta("result_test_storage").coin_writes == 1,
+			"Repeated hidden result actions cannot replace the Home screen or pay again")
+		app.choose_mode("jelly")
+	else:
+		room._back.pressed.emit()
 	check_new_board(app, old_round, 50)
 	check(app.get_meta("result_test_storage").coin_writes == 1, "Every replay opening stage yields exactly one durable payout")
 	await dispose(app)
@@ -287,7 +299,7 @@ func check_reduced_result() -> void:
 	await dispose(app)
 
 
-func check_replay_save_retry(fail_coins: bool) -> void:
+func check_replay_save_retry(fail_coins: bool, home: bool = false) -> void:
 	var app = await make_app()
 	finish_result(app, 1)
 	var room = app._jelly_rewards
@@ -295,10 +307,13 @@ func check_replay_save_retry(fail_coins: bool) -> void:
 	var old_round: String = app._round_id
 	storage.coin_writable = not fail_coins
 	storage.reward_writable = fail_coins
-	room._back.pressed.emit()
+	if home:
+		room._home.pressed.emit()
+	else:
+		room._back.pressed.emit()
 	check(app._round_id == old_round and app._jelly.game.phase == "finished" and app._jelly_rewards_shown
-		and room._save_failed and room.has_pending(),
-		"Replay stays on the result when wallet or chest consumption cannot be saved")
+		and not app._mode_menu_open() and room._save_failed and room.has_pending(),
+		"Departure stays on the result when wallet or chest consumption cannot be saved")
 	check(app.coin_wallet.balance == (0 if fail_coins else 50) and not room.rewards.entries[0].opened,
 		"Failed replay preserves the pending chest and only the durable portion of its payout")
 	check(room._retry.is_visible_in_tree() and not room._retry.disabled,
@@ -307,7 +322,11 @@ func check_replay_save_retry(fail_coins: bool) -> void:
 	storage.reward_writable = true
 	room._retry.pressed.emit()
 	if app._round_id == old_round:
-		room._back.pressed.emit()
+		if home:
+			room._home.pressed.emit()
+			app.choose_mode("jelly")
+		else:
+			room._back.pressed.emit()
 	check_new_board(app, old_round, 50)
 	check(storage.coin_writes == 1, "Retry after either store failure settles one receipt without a reload or duplicate payout")
 	await dispose(app)
@@ -353,21 +372,19 @@ func check_menu_and_background() -> void:
 	room._cards[0].button.button_down.emit()
 	room.advance_hold(0.3)
 	app._show_mode_menu()
-	check(room._paused and not room._holding and app.coin_wallet.balance == 0,
-		"Opening the menu cancels an uncommitted result hold without paying coins")
+	check(room._paused and not room._holding and app.coin_wallet.balance == 50,
+		"Opening Home cancels an uncommitted hold and saves the earned chest")
 	room.replay_requested.emit()
 	check(app._round_id == old_round, "A replay callback cannot replace the result while the menu owns input")
 	app._hide_mode_menu()
 	app._controller_back()
 	check(app._mode_menu_open() and app._round_id == old_round and app._jelly.game.phase == "finished"
-		and app.coin_wallet.balance == 0 and app.get_meta("result_test_storage").coin_writes == 0,
-		"Controller Back opens the menu from the result without triggering Play again or collecting coins")
+		and app.coin_wallet.balance == 50 and app.get_meta("result_test_storage").coin_writes == 1,
+		"Controller Back repeats Home without duplicating the settled chest")
 	app._hide_mode_menu()
 	check_result_context(app, score, 1)
-	start_open(room)
-	room._cards[0].art._advance_animation(Feel.RELEASE_TIME + 0.01)
-	check(app.coin_wallet.balance == 50 and room._opening,
-		"The background fixture starts after the result opening has durably released its coins")
+	check(app.coin_wallet.balance == 50 and room.rewards.entries[0].opened,
+		"The background fixture starts after Home has durably settled its chest")
 	app.on_page_hidden()
 	room.replay_requested.emit()
 	check(app._round_id == old_round and not app._coin_flight.snapshot().active,
@@ -396,10 +413,12 @@ func _run() -> void:
 		await check_interactive_result(tier)
 	for stage in ["unopened", "holding", "opening", "released", "flying"]:
 		await check_replay_during_opening(stage)
+		await check_replay_during_opening(stage, true)
 	await check_zero_replay()
 	await check_reduced_result()
 	for fail_coins in [true, false]:
 		await check_replay_save_retry(fail_coins)
+		await check_replay_save_retry(fail_coins, true)
 	await check_retained_inventory()
 	await check_menu_and_background()
 	print("Jelly result coins: %d checks, %d failures" % [checks, failures])

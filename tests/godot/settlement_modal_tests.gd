@@ -335,14 +335,22 @@ func _check_navigation(app, mode: String) -> void:
 	check(app._mode_menu_open() and not app._settlement_dialog_open(), mode + ": Home closes the modal into the mode library")
 	app.choose_mode(mode)
 	await _settle()
-	check(app._settlement_dialog_open() and app._round_id == identity,
-		mode + ": returning from Home restores the same completed round")
+	check(not app._settlement_dialog_open() and app._round_id != identity and not app._current_round_ended(),
+		mode + ": returning from Home starts a fresh playable round")
 	var coins: int = app.coin_wallet.balance
+	# Complete a second round to exercise replay directly, with its chest still closed.
+	await _complete_mode(app, mode, mode in ["match", "memory", "phrase", "pop"])
+	identity = app._round_id
+	var expected_coins: int = coins + (50 if mode in ["match", "memory", "phrase", "pop"] else 0)
 	replay.pressed.emit()
 	await _settle()
 	check(not app._settlement_dialog_open() and app._round_id != identity and _board(app, mode).is_visible_in_tree(),
 		mode + ": Play again starts a fresh playable board directly from the modal")
-	check(app.coin_wallet.balance == coins, mode + ": replay does not duplicate a completed reward")
+	check(app.coin_wallet.balance == expected_coins, mode + ": replay automatically claims its unopened chest once")
+	var fresh_id: String = app._round_id
+	replay.pressed.emit()
+	check(app._round_id == fresh_id and app.coin_wallet.balance == expected_coins,
+		mode + ": repeated replay cannot restart the new round or duplicate its reward")
 
 
 func _rect(values: Array) -> Rect2:

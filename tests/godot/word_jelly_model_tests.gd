@@ -80,8 +80,12 @@ func _run() -> void:
 	_test_arrival_timing()
 	_test_arrival_readiness_and_pause()
 	_test_arrival_automatic_timing()
+	_test_pacing_progression()
+	_test_pacing_cycle_commit()
+	_test_pacing_boundary_determinism()
 	_test_arrival_full_board_determinism()
 	_test_arrival_reachable_lanes()
+	_test_arrival_preview_columns()
 	_test_arrival_reserved_lanes()
 	_test_arrival_same_lane_spacing()
 	_test_arrival_mixed_lane_readiness()
@@ -3693,8 +3697,130 @@ func _test_arrival_automatic_timing() -> void:
 	var latest_ready: float = _latest_arrival_ready(automatic)
 	automatic.step(latest_ready)
 	check(automatic.can_drop_now() and is_equal_approx(automatic.spawn_elapsed, latest_ready), "descent does not pause or restart the next automatic supply timer")
-	check(is_equal_approx(automatic.spawn_interval, 20.0) and is_equal_approx(Model.MIN_SPAWN_INTERVAL, 16.0),
-		"arrival polish retains the established relaxed supply pacing")
+	check(is_equal_approx(automatic.spawn_interval, 20.0) and is_equal_approx(Model.MIN_SPAWN_INTERVAL, 10.0),
+		"a fresh round keeps the twenty-second opening while successful play can earn the ten-second floor")
+
+
+func _pacing_ready_word(model) -> int:
+	var completed: int = model.cleared_pairs
+	var interval: float = model.spawn_interval
+	_board(model, ["ca", "t"])
+	var word: Dictionary = _merge(model, 1000, 1001)
+	model.step(Model.SETTLE_SECONDS)
+	check(model.cleared_pairs == completed and is_equal_approx(model.spawn_interval, interval),
+		"building a valid word does not count as a collection or change the advertised supply interval")
+	return int(word.get("id", -1))
+
+
+func _test_pacing_progression() -> void:
+	var model := Model.new()
+	model.configure([_word("cat")], 3, 42)
+	var events: Dictionary = _observe(model)
+	check(model.cleared_pairs == 0 and is_equal_approx(model.spawn_interval, 20.0),
+		"zero completed collections retain the beginner supply interval")
+	for count in range(1, 25):
+		var id: int = _pacing_ready_word(model)
+		var interval: float = model.spawn_interval
+		check(model.collect(id), "pacing progression uses an accepted completed-word collection")
+		model.step(Model.COLLECT_SECONDS)
+		check(model.cleared_pairs == count and events.collections.size() == count
+			and is_equal_approx(model.spawn_interval, interval),
+			"each real collection commits success once while retaining the current packet's advertised interval")
+		var generated: int = model.generated_tiles
+		if count % 8 != 0:
+			check(model.drop_now(), "manual Next applies earned pacing immediately without adding a cooldown")
+		else:
+			model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
+			check(model.generated_tiles == generated, "the current packet keeps its full advertised deadline after collection")
+			model.step(0.001)
+		var expected_interval: float = maxf(10.0, 20.0 - floorf(float(count) / 4.0) * 2.0)
+		check(model.generated_tiles == generated + Model.DROP_COUNT and is_zero_approx(model.spawn_elapsed)
+			and is_equal_approx(model.spawn_interval, expected_interval),
+			"%d successfully collected words start the next six-root cycle at %.1f seconds" % [count, expected_interval])
+	check(model.configure([_word("cat")], 3, 42) and model.cleared_pairs == 0
+		and is_zero_approx(model.spawn_elapsed) and is_equal_approx(model.spawn_interval, 20.0),
+		"a replacement round restores the beginner supply interval and discards earned acceleration")
+
+
+func _pacing_prime_stage(model) -> void:
+	for count in range(1, Model.CLEARS_PER_DIFFICULTY_STAGE):
+		var id: int = _pacing_ready_word(model)
+		check(model.collect(id), "A pacing stage is earned with ordinary word collection")
+		model.step(Model.COLLECT_SECONDS)
+		check(model.cleared_pairs == count and is_equal_approx(model.spawn_interval, 20.0),
+			"Fewer than four collections retain the opening stage")
+
+
+func _test_pacing_cycle_commit() -> void:
+	for dispatch: String in ["automatic", "manual", "blocked"]:
+		var model := Model.new()
+		model.configure([_word("cat")], 3, 42)
+		_pacing_prime_stage(model)
+		var id: int = _pacing_ready_word(model)
+		model.step(Model.INITIAL_SPAWN_INTERVAL - model.spawn_elapsed - Model.COLLECT_SECONDS - 0.1)
+		check(model.collect(id), "a late-cycle completed word can start its ordinary collection")
+		model.step(Model.COLLECT_SECONDS)
+		var generated: int = model.generated_tiles
+		var upcoming: Array = model.upcoming.duplicate(true)
+		check(model.cleared_pairs == 4 and generated == Model.INITIAL_SETTLED_TILES
+			and is_equal_approx(model.spawn_interval, 20.0) and is_equal_approx(model.spawn_elapsed, 19.9),
+			"a successful collection near release cannot advance anticipation or dispatch a surprise batch")
+		if dispatch == "blocked":
+			_fill_rows(model, 0, Model.ROWS - 1)
+			check(not model.drop_now(), "a sealed well still rejects manual supply")
+			model._spawn_drop()
+			check(model.generated_tiles == generated and model.upcoming == upcoming
+				and is_equal_approx(model.spawn_interval, 20.0),
+				"a packet that cannot place any root cannot latch pending difficulty")
+			continue
+		if dispatch == "manual":
+			check(model.drop_now(int(upcoming[0].id)), "manual Next can immediately release the advertised roots")
+		else:
+			model.step(0.099)
+			check(model.generated_tiles == generated, "the loaded preview retains its original remaining time")
+			model.step(0.001)
+		check(model.generated_tiles == generated + Model.DROP_COUNT and is_zero_approx(model.spawn_elapsed)
+			and is_equal_approx(model.spawn_interval, 18.0),
+			"a successful %s dispatch starts a full faster cycle after four collected words" % dispatch)
+		for tile: Dictionary in upcoming:
+			check(not model.cell(int(tile.id)).is_empty(), "difficulty changes preserve the advertised root identities")
+	var failed = _model([_word("cat")])
+	failed.spawn_interval = Model.INITIAL_SPAWN_INTERVAL
+	_batch_board(failed, 1)
+	failed.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": false}
+	check(failed.collect(1000), "the failed-save fixture starts a real lucky collection")
+	failed.step(Model.COLLECT_SECONDS)
+	check(failed.cleared_pairs == 0 and failed.drop_now() and is_equal_approx(failed.spawn_interval, 20.0),
+		"a failed collection save never earns faster supply on the next dispatch")
+	failed.credit_collection = Callable()
+
+
+func _test_pacing_boundary_determinism() -> void:
+	for lead: float in [0.0, 0.1]:
+		var whole := Model.new()
+		var sliced := Model.new()
+		for model in [whole, sliced]:
+			model.configure([_word("cat")], 3, 42)
+			_pacing_prime_stage(model)
+			var id: int = _pacing_ready_word(model)
+			model.step(Model.INITIAL_SPAWN_INTERVAL - model.spawn_elapsed - Model.COLLECT_SECONDS - lead)
+			check(model.collect(id), "boundary pacing uses a real completed-word collection")
+		var duration: float = Model.COLLECT_SECONDS + lead + 0.25
+		whole.step(duration)
+		var remaining: float = duration
+		while remaining > Model.EPSILON:
+			var delta: float = minf(0.01, remaining)
+			sliced.step(delta)
+			remaining -= delta
+		var snapshots: Array = [whole.snapshot(), sliced.snapshot()]
+		for state: Dictionary in snapshots:
+			state.spawn_elapsed = snappedf(float(state.spawn_elapsed), 0.000001)
+			for cell: Dictionary in state.cells:
+				cell.age = snappedf(float(cell.age), 0.000001)
+		check(snapshots[0] == snapshots[1] and whole.cleared_pairs == 4
+			and whole.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT
+			and is_equal_approx(whole.spawn_interval, 18.0) and is_equal_approx(whole.spawn_elapsed, 0.25),
+			"coarse and fine frames latch the same next interval when collection finishes before or exactly on dispatch")
 
 
 func _test_arrival_full_board_determinism() -> void:
@@ -3756,6 +3882,45 @@ func _test_arrival_reachable_lanes() -> void:
 	check(model.full_elapsed < 0.0 and model.can_drop_now(), "collecting the roof resets danger and reopens reachable entry lanes")
 	check(model.drop_now(int(preview[0].id)), "the unchanged preview can enter after the roof is cleared")
 	_assert_board(model, "reopened entry after collection")
+
+
+func _test_arrival_preview_columns() -> void:
+	for dispatch: String in ["manual", "automatic"]:
+		var model = _model([_word("cat")])
+		model.cells.clear()
+		var roofs: Array[int] = [4, 7, 3, 6, 2, 5]
+		for column in range(Model.COLUMNS):
+			for row in range(roofs[column], Model.ROWS):
+				model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
+		for batch_index in range(2):
+			var advertised: Array = model.upcoming.duplicate(true)
+			if dispatch == "manual":
+				check(model.drop_now(int(advertised[0].id)), "Consecutive manual packets can enter before the earlier packet settles")
+			else:
+				model.step(model.spawn_interval - model.spawn_elapsed)
+			for slot in range(advertised.size()):
+				var tile: Dictionary = model.cell(int(advertised[slot].id))
+				check(not tile.is_empty() and tile.text == advertised[slot].text and tile.column == slot
+					and tile.row == roofs[slot] - batch_index - 1 and tile.arrival_index == slot,
+					"%s supply drops the committed preview straight into its own open column even above uneven stacks" % dispatch)
+			_assert_board(model, "%s preview lanes, batch %d" % [dispatch, batch_index])
+	var blocked = _model([_word("cat")])
+	blocked.cells.clear()
+	for row in range(Model.ROWS):
+		blocked.cells.append(_placed_tile(2000 + row, "x", 0, row))
+	var advertised: Array = blocked.upcoming.duplicate(true)
+	check(blocked.drop_now(), "A blocked preview column can use reachable space without losing its packet")
+	for slot in range(advertised.size()):
+		var tile: Dictionary = blocked.cell(int(advertised[slot].id))
+		check(not tile.is_empty() and tile.arrival_index == slot and tile.text == advertised[slot].text,
+			"Blocked-column fallback keeps every advertised identity and its visible launch slot")
+		check(tile.column == (1 if slot == 0 else slot),
+			"Only a genuinely sealed preferred lane redirects a root; other roots keep their own columns")
+	check(blocked.cell(int(advertised[0].id)).row == Model.ROWS - 1
+		and blocked.cell(int(advertised[1].id)).row == Model.ROWS - 2,
+		"The redirected root and its lane's own root reserve distinct floor-up positions")
+	_assert_arrival_lane_clearance(blocked, "blocked preview lane")
+	_assert_board(blocked, "blocked preview fallback")
 
 
 func _test_arrival_reserved_lanes() -> void:
@@ -3857,7 +4022,7 @@ func _test_arrival_mixed_lane_readiness() -> void:
 	for index in range(incoming.size()):
 		var tile: Dictionary = model.cell(incoming[index])
 		check(int(tile.arrival_index) == index, "uneven lane placement retains the original preview slot identity")
-	check(is_equal_approx(Model.arrival_delay(model.cell(incoming[4])), 1.0),
+	check(is_equal_approx(Model.arrival_delay(model.cell(incoming[4])), 0.8),
 		"the fifth preview root waits behind its earlier same-lane sibling")
 	_assert_arrival_lane_clearance(model, "uneven-lane batch")
 	model.step(final_slot_ready)

@@ -60,6 +60,7 @@ for (const mode of ['jelly', 'word_jelly']) {
           await page.mouse.move(to.x, to.y, { steps: 4 });
         }
         await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
+        expect((await jelly(page)).finish.pull.label_text).toBe('Drag to\nfinish');
         expect((await jelly(page)).phase, 'An armed pull waits for release').toBe('playing');
       } finally {
         if (session) {
@@ -116,10 +117,7 @@ for (const mode of ['jelly', 'word_jelly']) {
         await expect.poll(async () => (await metrics(page)).library.visible).toBe(true);
         expect((await room(page)).visible).toBe(false);
         await chooseMode(page, mode);
-        await expect.poll(async () => (await room(page)).visible).toBe(true);
-        expect((await jelly(page)).round_id, 'Returning from Home preserves the settled round').toBe(ended.round_id);
-        const replay = (await room(page)).actions.find(item => item.text === 'Play again');
-        await click(center(replay.rect, await metrics(page)));
+        expect((await room(page)).visible, 'Returning from Home starts a fresh game without its old settlement').toBe(false);
       }
       await expect.poll(async () => {
         const state = await jelly(page);

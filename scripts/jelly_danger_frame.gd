@@ -26,7 +26,8 @@ func layout_frame(bounds: Rect2, ui_scale: float, radius: float) -> void:
 	size = expanded.size
 	material.set_shader_parameter("region_size", size * ui_scale)
 	material.set_shader_parameter("frame_half", bounds.size * ui_scale * 0.5)
-	material.set_shader_parameter("corner_radius", radius * ui_scale)
+	# Match the well's rounded StyleBox after its pixel-to-canvas conversion.
+	material.set_shader_parameter("corner_radius", ceilf(radius / ui_scale) * ui_scale)
 
 static func primary_pulse(elapsed: float, reduced: bool) -> float:
 	return 1.0 if reduced else 1.0 - smoothstep(0.18, 0.55, fposmod(elapsed, 1.0))

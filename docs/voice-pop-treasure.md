@@ -50,11 +50,12 @@ No new source artwork is acquired for this change.
 
 The batch and opened flags are saved on this device under
 `wordBuddies.popRewards` (native fallback `user://pop-rewards-v1.cfg`). Older
-saves with up to three tierless chests remain readable. Play again starts a fresh
-round while retaining unopened treasure and waiting for a new microphone gesture.
-The modal also exposes pending chests from earlier rounds. Returning to the mode
-resumes saved treasure before the next microphone session.
-Storage failures retain the earned final level and offer Retry save. Round
+saves with up to three tierless chests remain readable. Home and Play again save
+and collect all unopened Pop treasure, including pending chests from earlier
+rounds. Play again starts a fresh round at the microphone gate; selecting the
+finished mode from Home also starts fresh. An unfinished round still offers
+Continue. A new microphone gesture is required before listening starts.
+Storage failures retain the earned final level, block leaving, and offer Retry save. Round
 receipts prevent duplicate batches. Pop surprises do not modify medal progress.
 
 Match and Memory independently roll a 50% chance of one chest per completed

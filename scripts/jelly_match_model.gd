@@ -23,8 +23,9 @@ const SUPPLY_BATCH_PAIRS: int = 3
 const SETTLE_SECONDS: float = Motion.MAX_SETTLE_SECONDS
 # Leave time to listen, find the picture, and drag before the next drop arrives.
 const INITIAL_SPAWN_INTERVAL: float = 10.0
-const MIN_SPAWN_INTERVAL: float = 6.0
-const SPEEDUP_PER_PAIR: float = 0.05
+const MIN_SPAWN_INTERVAL: float = 5.0
+const CLEARS_PER_DIFFICULTY_STAGE: int = 4
+const SPEEDUP_PER_STAGE: float = 1.0
 const FUSION_SECONDS: float = 1.05
 const POP_SECONDS: float = 0.7
 const FULL_SECONDS: float = 8.0
@@ -311,6 +312,7 @@ func _eligible(word: Dictionary, level: int) -> bool:
 
 
 func _spawn_drop() -> void:
+	var previous_generated: int = generated_tiles
 	var used_columns: Array[int] = []
 	var column_counts: Dictionary = {}
 	# Accept another batch immediately, placing each new arrival above any
@@ -327,6 +329,11 @@ func _spawn_drop() -> void:
 		column_counts[column] = ordinal + 1
 		if not used_columns.has(column):
 			used_columns.append(column)
+	if generated_tiles > previous_generated:
+		# Speed up the next packet only after this one departs. A successful
+		# match never shortens the current Next anticipation or skips its beat.
+		var stage: int = floori(float(cleared_pairs) / CLEARS_PER_DIFFICULTY_STAGE)
+		spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - stage * SPEEDUP_PER_STAGE)
 
 
 func _spawn_tile(arrival: bool = true, column: int = -1, entry_offset: int = 0) -> void:
@@ -483,7 +490,6 @@ func _complete_fusion(attempt_id: String) -> void:
 		"fragment_count": fragment_count,
 		"previous_chest_tier": previous_tier, "chest_tier": chest_tier
 	})
-	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - cleared_pairs * SPEEDUP_PER_PAIR)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	var generation: int = _generation
 	var word_ids: Array[String] = [str(completed.word.id)]

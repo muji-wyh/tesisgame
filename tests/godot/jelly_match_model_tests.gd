@@ -48,6 +48,8 @@ func _run() -> void:
 	_test_full_board_timeout()
 	_test_danger_rescue_and_pause()
 	_test_finish_and_reset()
+	_test_pacing_cycle_commit()
+	_test_pacing_boundary_determinism()
 	_test_long_round()
 	_test_catalog_levels()
 	_test_signal_reentry()
@@ -727,7 +729,7 @@ func _test_fusion_timeline() -> void:
 		"Fragment credit and its pickup cue happen once after a marked pair clears")
 	check(model.try_merge(pair[0], pair[1]) == "ignored" and events.attempts.size() == 1,
 		"Removed tile IDs cannot replay learning or rewards")
-	check(is_equal_approx(model.spawn_interval, 9.95), "The first clear gently reduces the ten-second interval by 0.05 seconds")
+	check(is_equal_approx(model.spawn_interval, 10.0), "The first clear preserves the advertised interval until the next packet dispatches")
 	_assert_board(model, "Completed fusion")
 
 
@@ -1310,6 +1312,86 @@ func _test_finish_and_reset() -> void:
 	check(events.finished.size() == 2, "Each configured round produces one independent finish")
 
 
+func _pacing_prime_stage(model) -> void:
+	for count in range(1, Model.CLEARS_PER_DIFFICULTY_STAGE):
+		model.step(Model.SETTLE_SECONDS)
+		var pair: Array[int] = _pair(model)
+		check(not pair.is_empty() and model.try_merge(pair[0], pair[1]) == "correct",
+			"A pacing stage is earned with ordinary matching")
+		model.step(Model.FUSION_SECONDS)
+		check(model.cleared_pairs == count and is_equal_approx(model.spawn_interval, 10.0),
+			"Fewer than four completed pairs retain the opening stage")
+
+
+func _test_pacing_cycle_commit() -> void:
+	for dispatch: String in ["automatic", "manual", "blocked"]:
+		var model = Model.new()
+		model.configure(_vocabulary(), 3, 62)
+		_pacing_prime_stage(model)
+		model.step(Model.INITIAL_SPAWN_INTERVAL - model.spawn_elapsed - Model.FUSION_SECONDS - 0.1)
+		var pair: Array[int] = _pair(model)
+		check(model.try_merge(pair[0], pair[1]) == "correct", "A late-cycle pair can begin an ordinary fusion")
+		model.step(Model.FUSION_SECONDS)
+		var generated: int = model.generated_tiles
+		var upcoming: Array = model.upcoming.duplicate(true)
+		check(model.cleared_pairs == 4 and generated == INITIAL_COUNT
+			and is_equal_approx(model.spawn_interval, 10.0) and is_equal_approx(model.spawn_elapsed, 9.9),
+			"Completing a pair near release cannot shorten the advertised cycle or trigger an early batch")
+		if dispatch == "blocked":
+			while model.cells.size() < Model.CAPACITY:
+				model._spawn_tile(false)
+			generated = model.generated_tiles
+			upcoming = model.upcoming.duplicate(true)
+			check(not model.drop_now(), "A full board still rejects manual supply")
+			model._spawn_drop()
+			check(model.generated_tiles == generated and model.upcoming == upcoming
+				and is_equal_approx(model.spawn_interval, 10.0),
+				"A packet that cannot place any tile cannot latch pending difficulty")
+			continue
+		if dispatch == "manual":
+			check(model.drop_now(int(upcoming[0].id)), "Manual Next releases the pending batch immediately")
+		else:
+			model.step(0.099)
+			check(model.generated_tiles == generated, "The advertised batch waits until its original deadline")
+			model.step(0.001)
+		check(model.generated_tiles == generated + Model.DROP_COUNT and is_zero_approx(model.spawn_elapsed)
+			and is_equal_approx(model.spawn_interval, 9.0),
+			"A successful %s dispatch starts a full faster cycle after four completed pairs" % dispatch)
+		for tile: Dictionary in upcoming:
+			check(not model.tile_by_id(int(tile.id)).is_empty(), "Difficulty changes preserve the advertised tile identities")
+		check(model.configure(_vocabulary(), 3, 62) and model.cleared_pairs == 0
+			and is_zero_approx(model.spawn_elapsed) and is_equal_approx(model.spawn_interval, 10.0),
+			"A replacement round restores the beginner interval without pending acceleration")
+
+
+func _test_pacing_boundary_determinism() -> void:
+	for lead: float in [0.0, 0.1]:
+		var whole = Model.new()
+		var sliced = Model.new()
+		for model in [whole, sliced]:
+			model.configure(_vocabulary(), 3, 62)
+			_pacing_prime_stage(model)
+			model.step(Model.INITIAL_SPAWN_INTERVAL - model.spawn_elapsed - Model.FUSION_SECONDS - lead)
+			var pair: Array[int] = _pair(model)
+			check(model.try_merge(pair[0], pair[1]) == "correct", "Boundary pacing uses a real accepted fusion")
+		var duration: float = Model.FUSION_SECONDS + lead + 0.25
+		whole.step(duration)
+		var remaining: float = duration
+		while remaining > Model.EPSILON:
+			var delta: float = minf(0.01, remaining)
+			sliced.step(delta)
+			remaining -= delta
+		var snapshots: Array = [whole.snapshot(), sliced.snapshot()]
+		for state: Dictionary in snapshots:
+			state.spawn_elapsed = snappedf(float(state.spawn_elapsed), 0.000001)
+			for cell: Dictionary in state.cells:
+				cell.age = snappedf(float(cell.age), 0.000001)
+		check(snapshots[0] == snapshots[1] and whole.cleared_pairs == 4
+			and whole.generated_tiles == INITIAL_COUNT + Model.DROP_COUNT
+			and is_equal_approx(whole.spawn_interval, 9.0) and is_equal_approx(whole.spawn_elapsed, 0.25),
+			"Coarse and fine frames latch the same faster next cycle when success is before or exactly on dispatch")
+
+
 func _test_long_round() -> void:
 	var model = Model.new()
 	var events: Dictionary = _observe(model)
@@ -1324,23 +1406,30 @@ func _test_long_round() -> void:
 			break
 		check(model.try_merge(pair[0], pair[1]) == "correct", "Long-round matching remains responsive")
 		model.step(Model.FUSION_SECONDS)
-		check(model.spawn_interval >= 6.0 and model.spawn_interval <= 10.0,
+		check(model.spawn_interval >= 5.0 and model.spawn_interval <= 10.0,
 			"Spawn acceleration always remains within its specified limits")
-		if model.cleared_pairs in [20, 50, 80]:
-			var expected_interval: float = 9.0 if model.cleared_pairs == 20 else 7.5 if model.cleared_pairs == 50 else 6.0
-			check(is_equal_approx(model.spawn_interval, expected_interval),
-				"%d completed pairs leave %.1f seconds between four-tile drops" % [model.cleared_pairs, expected_interval])
+		if model.cleared_pairs < 4:
+			check(model.drop_now() and is_equal_approx(model.spawn_interval, 10.0),
+				"Dispatch after one, two, or three completed pairs cannot enter the next difficulty stage")
+		elif model.cleared_pairs in [4, 8, 12, 16, 20, 24]:
+			var expected_intervals: Dictionary = {4: 9.0, 8: 8.0, 12: 7.0, 16: 6.0, 20: 5.0, 24: 5.0}
+			var expected_interval: float = float(expected_intervals[model.cleared_pairs])
 			var generated: int = model.generated_tiles
 			var expected_drop: int = mini(Model.DROP_COUNT, Model.CAPACITY - model.cells.size())
-			model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
-			check(model.generated_tiles == generated, "An accelerated drop still waits for its complete interval")
-			model.step(0.001)
+			if model.cleared_pairs % 8 == 4:
+				check(model.drop_now(), "Manual supply commits earned acceleration without a cooldown")
+			else:
+				model.step(model.spawn_interval - model.spawn_elapsed - 0.001)
+				check(model.generated_tiles == generated, "An accelerated drop still waits for its complete advertised interval")
+				model.step(0.001)
 			check(model.generated_tiles == generated + expected_drop,
 				"An accelerated boundary dispatches one batch, limited only by available space")
-		elif model.cleared_pairs == 79:
-			check(model.spawn_interval > 6.0, "The fastest pace is not reached before eighty completed pairs")
+			check(is_equal_approx(model.spawn_interval, expected_interval) and is_zero_approx(model.spawn_elapsed),
+				"%d real completed pairs start the next four-tile cycle at %.1f seconds" % [model.cleared_pairs, expected_interval])
+		elif model.cleared_pairs == 19:
+			check(model.spawn_interval > 5.0, "The five-second floor is not available before twenty completed pairs")
 		_assert_board(model, "Long-round clear %d" % index)
-	check(model.cleared_pairs == 100 and model.spawn_interval == 6.0, "Long play holds the minimum six-second interval")
+	check(model.cleared_pairs == 100 and model.spawn_interval == 5.0, "Long play holds the minimum five-second interval")
 	check(model.chest_count == 1 and model.chest_tier > 3, "A long round keeps upgrading one chest without an unrelated tier cap")
 	var awarded: int = 0
 	for count in events.fragments:

@@ -205,8 +205,9 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	await process_frame
 	await process_frame
 	check(app.model.phase == "won" and app.audio.click_count == count, "Completing a real Match board adds no UI clicks")
-	check(app._single_result.replay_button.disabled, "An unopened chest has no Play again action")
 	PlayerFixture.finish_celebration(app)
+	check(not app._single_result.replay_button.disabled and app._single_result.replay_button.is_visible_in_tree(),
+		"An unopened chest offers Play again with automatic reward settlement")
 	count = app.audio.click_count
 	app._open_chest()
 	await process_frame

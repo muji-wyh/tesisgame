@@ -108,9 +108,12 @@ Supply dispatches four tiles together. Twelve settled tiles fill the bottom
 three rows of the initial matching layout. The first automatic batch waits for
 the full ten-second interval; the upcoming area can still release it immediately
 on request.
-Each cleared pair shortens the interval by 0.05 seconds, down to a six-second
-minimum after 80 pairs. This leaves nine seconds at 20 pairs and 7.5 seconds at
-50 pairs. New rounds and replays receive the same opening interval. Four committed upcoming
+Every four completed pairs reduce the next cycle's interval by one second, down to
+a five-second minimum after twenty pairs. The stages at 0, 4, 8, 12, 16, and 20
+pairs use 10, 9, 8, 7, 6, and 5 seconds. A successfully dispatched packet fixes the interval for the following
+cycle; completing pairs never shortens the current Next countdown. Idle time,
+failed matches, and unfinished fusions do not advance this progression. New
+rounds and replays receive the same ten-second opening interval. Four committed upcoming
 tiles appear outside the well: a compact two-by-two group on wide screens and
 a horizontal strip above it on phones. There is no visible heading or countdown
 bar. Their picture/word kind, artwork and chest markers come from the actual
@@ -125,7 +128,8 @@ tile has settled and the well has room, including during a fusion. It uses the s
 four-tile dispatch, column selection, gravity and landing projections as a timed
 drop; a nearly full board still accepts only its remaining capacity. The supply
 clock resets after an accepted manual drop, so the next timed batch receives a
-full interval. Dropping a batch does not score a point, award treasure or record
+full interval based on the pairs completed at dispatch. A rejected drop leaves
+the running cycle intact. Dropping a batch does not score a point, award treasure or record
 a learning attempt.
 
 Fusion reserves only its own two tiles. Other pairs, pronunciation, automatic
@@ -276,8 +280,9 @@ The modal displays the score, completed word count, and final chest tier or
 `No chest this round`. Four fragments unlock one chest; every five more upgrade
 it. Hold the earned chest to open it inside the modal. `Play again` saves and
 collects pending chest coins before starting a new round; save failures retain
-the modal for retry. `Home` returns to the mode menu and preserves pending
-treasure. See
+the modal for retry. `Home` also saves and collects pending chest coins before
+returning to the mode menu. Selecting that finished mode starts a fresh round.
+See
 [chest fragments](jelly-fragments.md) for the reward and animation details.
 
 | Event | Runtime path | Original source | Duration | Peak |

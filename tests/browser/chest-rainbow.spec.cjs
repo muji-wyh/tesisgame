@@ -72,46 +72,8 @@ async function observeRainbow(page, reducedMotion) {
   }, reducedMotion === 'reduce');
 }
 
-async function rainbowPixelEvidence(page, evidence) {
-  return page.evaluate(async source => {
-    const images = await Promise.all([source.baseline, ...source.frames.map(frame => frame.png)].map(async encoded => {
-      const image = new Image();
-      image.src = `data:image/png;base64,${encoded}`;
-      await image.decode();
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width; canvas.height = image.height;
-      const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0);
-      return context.getImageData(0, 0, image.width, image.height);
-    }));
-    const { art } = source, scale = source.canvasWidth / source.logicalWidth;
-    // Sample the air above the solid lid, in three separated parts of the bow.
-    // The baseline rejects static illustration colors and page decorations.
-    const regions = { left: [0.12, 0.12, 0.37, 0.20], crown: [0.44, 0.10, 0.12, 0.20], right: [0.51, 0.12, 0.37, 0.20] };
-    return images.slice(1).map((image, index) => {
-      const result = { timeline_progress: source.frames[index].timeline_progress };
-      for (const [name, region] of Object.entries(regions)) {
-        const x0 = Math.round((art.x + art.width * region[0]) * scale);
-        const y0 = Math.round((art.y + art.height * region[1]) * scale);
-        const x1 = Math.round((art.x + art.width * (region[0] + region[2])) * scale);
-        const y1 = Math.round((art.y + art.height * (region[1] + region[3])) * scale);
-        let pixels = 0, changed = 0, delta = 0;
-        for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
-          const offset = (y * image.width + x) * 4;
-          const difference = [0, 1, 2].reduce((sum, channel) => sum + Math.abs(image.data[offset + channel] - images[0].data[offset + channel]), 0);
-          pixels++;
-          delta += difference;
-          if (difference > 8) changed++;
-        }
-        result[name] = { pixels, changed, fraction: changed / pixels, meanDelta: delta / pixels };
-      }
-      return result;
-    });
-  }, evidence);
-}
-
 for (const reducedMotion of ['no-preference', 'reduce']) {
-  test(`the chest rainbow reveals from left to right with earned progress (${reducedMotion})`, async ({ page }, testInfo) => {
+  test(`chest opening keeps its timing and rewards without a rainbow arc (${reducedMotion})`, async ({ page }, testInfo) => {
     test.setTimeout(180000);
     const errors = await openEarnedChest(page, reducedMotion);
     await page.mouse.down();
@@ -154,20 +116,10 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       fs.writeFileSync(filename, png);
       await testInfo.attach(name, { path: filename, contentType: 'image/png' });
     }
-    const pixels = await rainbowPixelEvidence(page, evidence);
-    const progressPath = testInfo.outputPath('rainbow-progress-evidence.json');
-    fs.writeFileSync(progressPath, JSON.stringify({ ...evidence, baseline: undefined,
-      frames: evidence.frames.map(({ png, ...frame }) => frame), pixels }, null, 2));
-    await testInfo.attach('rainbow-progress-evidence', { path: progressPath, contentType: 'application/json' });
-    const [early, middle, late] = pixels;
-    expect(early.left.changed, 'The first visible spectrum appears on the left').toBeGreaterThan(10);
-    expect(early.left.meanDelta, 'A reversed wipe cannot light the right side before the left')
-      .toBeGreaterThan(early.right.meanDelta * 1.7 + 0.08);
-    expect(middle.crown.meanDelta, 'The growing bow reaches its crown after the left side')
-      .toBeGreaterThan(early.crown.meanDelta + 0.2);
-    expect(late.right.meanDelta, 'The right side becomes visible near completion')
-      .toBeGreaterThan(early.right.meanDelta + 0.2);
-    expect(late.right.changed).toBeGreaterThan(early.right.changed + 10);
+    expect(evidence.history.length, 'The real chest publishes its input and opening states').toBeGreaterThan(3);
+    expect(evidence.history.every(frame => frame.rainbow_visible === false),
+      'The rainbow layer stays hidden during hold, opening, release, and the opened rest state').toBe(true);
+    expect((await roomState(page)).chests[0].rainbow_visible).toBe(false);
     const press = evidence.cues.find(cue => cue.cue === 'press');
     expect(press).toBeTruthy();
     const steps = evidence.cues.filter(cue => cue.cue === 'charge_step');

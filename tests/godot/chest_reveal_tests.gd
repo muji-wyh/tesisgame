@@ -955,6 +955,9 @@ func _check_rainbow_progress(data) -> void:
 		for fraction in [0.12, 0.33, 0.7, 1.0]:
 			chest.set_hold_progress(fraction)
 			var state: Dictionary = chest.hold_effect_snapshot()
+			check(not state.rainbow_visible and chest._charge.is_visible_in_tree()
+				and not state.rainbow_motes.is_empty(),
+				"%s keeps cavity glow and drifting sparkles without displaying a rainbow arc" % theme)
 			var expected: float = fraction * Feel.HOLD_SECONDS / (Feel.HOLD_SECONDS + Feel.RELEASE_TIME)
 			check(state.rainbow_progress > previous and is_equal_approx(state.rainbow_progress, expected)
 				and is_equal_approx(float(chest._rainbow_material.get_shader_parameter("reveal_progress")), expected),

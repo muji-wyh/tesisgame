@@ -272,11 +272,11 @@ func check_manual_mode(app, mode: String) -> void:
 	if mode == "phrase":
 		check(app._phrase.game.phase == "finished" and not app._phrase.completion_pending,
 			"Phrase completes at the automatic modal handoff without an extra confirmation")
-	await cover(app, "menu", true)
-	await cover(app, "menu", false)
+	await cover(app, "background", true)
+	await cover(app, "background", false)
 	check(not view.is_active() and app.chest_button.is_visible_in_tree() and app._round_id == identity
 		and app.model.chest_earned and pieces(app) == before,
-		mode + " restores the same directly openable reward after a Home visit")
+		mode + " restores the same directly openable reward after backgrounding")
 	view.advance(5.0)
 	app._reward_confetti.advance(app._reward_confetti.DURATION)
 	view.action_button.pressed.emit()
@@ -350,7 +350,7 @@ func check_no_chest_mode(app, mode: String) -> void:
 	app._accept_round_chest(identity)
 	check(pieces(app) == before and not app._holding_chest and app.model.chest_state == "closed",
 		mode + " rejects direct and hidden chest actions when no reward was earned")
-	for kind in ["menu", "background"]:
+	for kind in ["growth", "background"]:
 		await cover(app, kind, true)
 		await cover(app, kind, false)
 		view.set_process(false)
@@ -459,10 +459,15 @@ func check_interruption_and_replacement(app) -> void:
 		view.action_button.pressed.emit()
 		await cover(app, kind, false)
 		view.set_process(false)
-		check(not view.is_active() and app._round_id == identity and app._phrase.game.phase == "finished"
-			and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed"
-			and app._reward_confetti.snapshot().keys == paper.keys,
-			kind + " restores the same direct chest without replaying or opening it")
+		if kind == "menu":
+			check(not view.is_active() and app._round_id != identity and app._phrase.game.phase != "finished"
+				and not app._settlement_dialog_open(),
+				"Home settles the ended Phrase result and reentry starts a fresh round")
+		else:
+			check(not view.is_active() and app._round_id == identity and app._phrase.game.phase == "finished"
+				and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed"
+				and app._reward_confetti.snapshot().keys == paper.keys,
+				kind + " restores the same direct chest without replaying or opening it")
 	var old_id: String = app._round_id
 	var before: int = pieces(app)
 	check(app.new_round(991, false, "", "phrase"), "A replacement game settles the earned Phrase chest")

@@ -86,11 +86,20 @@ Actual collections may combine pieces from different source groups, and partial
 rounds can finish below a chest threshold, so these are planning units.
 
 For reference only, automatic Jelly Words supply provides three new words every
-20 seconds, eventually every 16 seconds. Perfect completion of that supply is
-49.5-61.875 expected coins per minute under the new policy. This excludes the
-initial board and is not a player earning-rate promise: players can tap the
-preview to release supply early, or take longer to solve it. No reward-per-minute
-cap or artificial waiting gate is introduced.
+20 seconds initially, down to every 10 seconds after twenty successful word
+collections. Every four collections reduce the next cycle's interval by two seconds;
+the interval is fixed at successful batch dispatch and never shortens the
+countdown already running. Merging alone, Auto Merge, and idle time do not
+advance this progression.
+
+At 5.5 expected coins per ordinary source word, perfect completion gives a
+theoretical automatic-supply bound of 49.5-99 expected coins per minute:
+`3 * (60 / interval_seconds) * 5.5`. This is a supply calculation, not a measured
+player earning rate. It excludes the initial board and assumes every supplied
+word is successfully collected; players can tap the preview to release supply
+early or take longer to solve it. Rewards, odds, prices, and source-count saving
+targets remain unchanged. No reward-per-minute cap or artificial waiting gate
+is introduced.
 
 ## Session budget scenarios
 

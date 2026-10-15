@@ -57,8 +57,9 @@ The reused artwork and source rights are recorded in the
 Home offers eight illustrated theme choices below the game cards, arranged in
 one row on wide screens and two rows on phones. The selected theme is highlighted
 and saved automatically. Theme switching is available only on Home, including
-controller shoulder shortcuts. Select the current game to continue the same round
-with the new theme; saved treasure batches retain their original theme.
+controller shoulder shortcuts. Select an unfinished game to continue the same
+round with the new theme; selecting a finished game starts a fresh round. Saved
+treasure batches retain their original theme.
 
 See [growth rules and persistence](growth-system.md) and the
 [curriculum research](vocabulary/growth-curriculum.md) for the complete mapping.
@@ -131,9 +132,10 @@ opens. See [speech matching](voice-matching.md) for targeting details.
 Voice Pop gives each target a 35% chance of a chest marker. A marked hit earns
 one fragment; four unlock a chest and each additional five upgrade it. The
 round saves its final chest tier before opening settlement, including zero-chest
-rounds. Hold the chest to open it in the modal; Home and Play again preserve any
-unopened treasure. Play again waits for a new microphone gesture. Earlier saved
-multi-chest batches remain claimable. Progression and durable claims are described in
+rounds. Hold the chest to open it in the modal; Home and Play again automatically
+save and collect any unopened treasure before leaving. Play again waits for a new
+microphone gesture. Earlier saved multi-chest batches use the same durable claims.
+Progression and durable claims are described in
 [Voice Pop treasure](voice-pop-treasure.md).
 
 ## Shared settlement
@@ -152,14 +154,23 @@ panoramic sky has slow drift and daylight changes; Home, the notebook, page
 hiding and Finish confirmation pause play and scenery. Reduced motion keeps the
 sky still. See [Jelly sky](assets/jelly-sky.md) for the artwork and rendering.
 
+Jelly Match starts with ten seconds between automatic batches. Every four completed
+pairs reduce the next cycle's interval by one second, reaching a five-second
+minimum after twenty pairs. Jelly Words uses the collection-based progression
+described below. In both modes, each successfully dispatched batch fixes the
+interval for the following cycle, including a requested early batch. Completing
+matches or words never shortens the countdown already running in Next. Idle
+time does not raise difficulty; a new round restores the opening interval.
+
 Pull Finish downward until it glows and sounds, then release to finish. An early
 release springs back without ending play; tapping demonstrates the pull. Keyboard
 and controller activation use a Keep playing / Finish confirmation instead.
 Finishing or letting the full-board danger countdown expire opens settlement in
 a modal over the frozen board. The modal shows the score, completed words and
 earned chest, including an empty result. There is no standalone Jelly result
-page. Play again collects pending treasure and starts a new round; Home retains
-unopened treasure. Failed saves remain available for retry.
+page. Home and Play again save and collect pending treasure before leaving.
+Play again starts a fresh round, as does selecting the finished mode from Home.
+A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
@@ -183,12 +194,18 @@ as `ca` with either `t` or `n`. Reverse-only partners keep their resting paint
 and receive no highlight: dragging `t` does not cue `ca`, because `tca` is not
 a word. All jellies still react to physical contact, including invalid pairs.
 
-Automatic batches start 20 seconds apart. Each collected word shortens the
-interval by 0.04 seconds, down to a 16-second minimum. Tapping the preview can
-still release the next batch early. The preview sits above the well: each jelly
-leaves its visible slot, accelerates down its lane and compresses briefly on
-contact before becoming playable. A small stagger separates the releases;
-successive arrivals in one lane keep enough spacing to avoid overlap. Arrivals
+Automatic batches start 20 seconds apart. Every four successfully collected words
+reduce the next cycle's interval by two seconds, reaching a ten-second minimum
+after twenty collections. Tap and Collect pickups both count; idle time,
+merging alone, Auto Merge, and unsuccessful collections do not. A successful
+batch dispatch fixes the next cycle's interval, so the current Next countdown
+never shrinks when a word is collected. Tapping the preview can still release
+the next batch early. The preview sits above the well: each jelly
+leaves its visible slot, accelerates straight down its corresponding column and
+compresses briefly on contact before becoming playable. A small stagger separates the releases;
+only a sealed column redirects a root into reachable space. The preview is already
+mixed and keeps its committed order when released. Successive arrivals in one
+lane keep enough spacing to avoid overlap. Arrivals
 stop at the first support reachable from above, never inside an enclosed hole.
 Sealing every entrance starts the existing full-well countdown. Reduced motion
 places incoming bodies directly on their supports with the same readiness clock.
@@ -245,11 +262,12 @@ three-second celebration inside the dialog. If a chest was earned, **Open chest*
 appears only after the performance and final pronunciation finish, then reveals
 the hold-to-open chest in the same dialog.
 
-**Home** and **Play again** occupy the dialog footer. Play again starts a fresh
-round of the same mode. Match, Memory and Phrase Builder require an earned chest
-to open and save before replay; save failures expose **Retry save** and block
-navigation until the reward is safe. Home preserves the completed round, so
-returning to its mode restores the dialog. The finished game remains visible
+**Home** and **Play again** occupy the dialog footer. Both actions automatically
+save and collect any remaining earned chest rewards, including an unfinished
+opening. Save failures expose **Retry save** and block navigation until the reward
+is safe. Play again starts a fresh round of the same mode. Home returns to the game
+menu; selecting the finished mode starts a new round. An unfinished round still
+resumes when selected from Home. The finished game remains visible
 with input blocked, and clicking the shade or pressing Escape does not dismiss
 settlement. Repeated input cannot duplicate rewards. Hiding the page interrupts
 safely; an unfinished celebration can replay, while a completed invitation does

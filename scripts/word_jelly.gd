@@ -15,6 +15,8 @@ const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const WELL_CLOUDS = preload("res://assets/images/jelly-match/well/clouds.png")
+const WELL_SURFACE = preload("res://scripts/word_jelly_well.gdshader")
 
 var credit_collection: Callable:
 	set(value):
@@ -49,10 +51,22 @@ var _reveal_frame_end: float = -1.0
 var _reveal_frame_batch: int = -1
 var _reveal_frame_generation: int = -1
 var _error_notice_reserved: bool = false
+var _well_art := TextureRect.new()
 
 func _init() -> void:
 	super()
 	name = "WordJelly"
+	_well_art.name = "CloudPatternWell"
+	_well_art.texture = WELL_CLOUDS
+	_well_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_well_art.stretch_mode = TextureRect.STRETCH_SCALE
+	_well_art.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	_well_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var well_material := ShaderMaterial.new()
+	well_material.shader = WELL_SURFACE
+	_well_art.material = well_material
+	add_child(_well_art)
+	move_child(_well_art, 0)
 	game = WordModel.new()
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
@@ -1113,6 +1127,11 @@ func _layout() -> void:
 		_reflow.clear()
 		_snapbacks.clear()
 	_board = next_board
+	var well_bounds: Rect2 = _board.grow(-2.0 / s)
+	_well_art.position = well_bounds.position
+	_well_art.size = well_bounds.size
+	_well_art.material.set_shader_parameter("region_size", well_bounds.size * s)
+	_well_art.material.set_shader_parameter("corner_radius", ceilf(16.0 / s) * s)
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size

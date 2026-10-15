@@ -152,9 +152,9 @@ func _run() -> void:
 		"The third correct phrase starts a distinct round celebration without claiming a reward early")
 	await _check_round_celebration(app)
 	check(view.game.phase == "finished" and app.model.phase == "won" and app.model.chest_state == "closed"
-		and app.chest_button.is_visible_in_tree() and view.is_visible_in_tree() and app._single_result.replay_button.disabled
+		and app.chest_button.is_visible_in_tree() and view.is_visible_in_tree() and not app._single_result.replay_button.disabled
 		and app._settlement_dialog.is_visible_in_tree(),
-		"Automatic completion keeps the finished Phrase board behind its directly openable chest dialog")
+		"Automatic completion keeps the finished Phrase board behind its chest dialog with automatic-settlement replay available")
 	check(not app.audio.voice.playing, "The chest transition does not play spoken completion instructions")
 	view.finished.emit()
 	view.action_button.pressed.emit()
@@ -228,18 +228,14 @@ func _check_answer_confetti(app) -> void:
 			check(not celebration.is_active() and app.chest_button.is_visible_in_tree()
 				and not app.chest_button.disabled and app.model.chest_state == "closed",
 				"The Phrase chest becomes directly openable without a confetti celebration")
-		for interruption in ["home", "catalog", "background"]:
-			if interruption == "home":
-				app._mode_heading_button.pressed.emit()
-			elif interruption == "catalog":
+		for interruption in ["catalog", "background"]:
+			if interruption == "catalog":
 				app.collection_button.pressed.emit()
 			else:
 				app.on_page_hidden()
 			paper.advance(0.25)
 			_check_no_finale_confetti(paper, "The " + stage + " Phrase invitation stays clear behind " + interruption)
-			if interruption == "home":
-				PlayerFixture.enter_mode(app, "phrase")
-			elif interruption == "catalog":
+			if interruption == "catalog":
 				app._collection_back.pressed.emit()
 			else:
 				app.on_page_visible()
@@ -254,6 +250,16 @@ func _check_answer_confetti(app) -> void:
 		"The confetti-free Phrase result exposes its earned chest directly inside settlement")
 	paper.advance(0.25)
 	_check_no_finale_confetti(paper, "The direct chest handoff cannot resume the cleared answer confetti")
+	var completed_round: String = app._round_id
+	var pieces_before_home: int = _pieces(app)
+	app._mode_heading_button.pressed.emit()
+	check(app._mode_menu_open() and app.model.chest_state == "opened" and _pieces(app) == pieces_before_home + 1,
+		"Home saves the completed Phrase reward before leaving its invitation")
+	_check_no_finale_confetti(paper, "Home cannot restore cleared final-answer confetti")
+	PlayerFixture.enter_mode(app, "phrase")
+	check(app._round_id != completed_round and view.game.phase == "building" and view.game.completed == 0
+		and _pieces(app) == pieces_before_home + 1,
+		"Choosing the completed Phrase mode from Home starts fresh without repeating its reward")
 	check(app.new_round(174, false, "", "phrase"), "The next Phrase round resets its local answer sequence")
 	await _settle()
 	check(paper.snapshot().keys.is_empty() and not paper.is_active(),

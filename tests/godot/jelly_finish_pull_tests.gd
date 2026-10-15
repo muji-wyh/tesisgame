@@ -169,9 +169,11 @@ func check_component() -> void:
 		var context: String = "touch" if touch else "mouse"
 		pointer(start, true, touch)
 		check(button.is_pulling(), context + ": the header target owns a real pointer press")
+		check(button.snapshot().label_text == "Drag to\nfinish", context + ": pressing shows the two-line drag instruction")
 		pointer(start, false, touch)
 		check(commits.is_empty() and requests.is_empty(), context + ": a tap neither finishes nor opens keyboard confirmation")
 		check_tap_response(button, context, cues, commits, requests)
+		check(button.snapshot().label_text == "Finish", context + ": the resting label returns after tap feedback")
 		pointer(start, true, touch)
 		motion(start - Vector2(0, threshold * 0.2), touch)
 		check(not button.snapshot().armed and float(button.snapshot().progress) <= 0.01,
@@ -182,6 +184,7 @@ func check_component() -> void:
 		motion(start + Vector2(0, threshold * 0.4), touch)
 		button.advance(0.08)
 		var short_pull: Dictionary = button.snapshot()
+		check(short_pull.label_text == "Drag to\nfinish", context + ": dragging retains the wrapped instruction")
 		check(short_pull.pulling and not short_pull.armed and float(short_pull.visual_pull) > 0.0,
 			context + ": a partial drag deforms the jelly while remaining reversible")
 		motion(start + Vector2(0, threshold * 0.8), touch)

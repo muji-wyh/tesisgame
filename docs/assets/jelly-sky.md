@@ -133,6 +133,12 @@ no page, game-script or shader errors. The consolidated evidence is
 `build/jelly-sky-browser-validation.json`. Fixed-size coverage does not erase
 the dynamic-resize limitation above.
 
+The [October 15 resize investigation](../qa/2026-10-15-webkit-resize.md) reproduces
+the same blank composed page in a standalone WebGL canvas without Godot or game
+code. Raw canvas output remains rendered and Chromium passes the identical
+sequence. The Windows Playwright WebKit limitation is still unresolved; the
+reproducible diagnostic reports it as a failure.
+
 ## Reproduction
 
 With Python and Pillow available:

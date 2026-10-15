@@ -309,8 +309,9 @@ func check_earned_result(mode: String, reason: String) -> void:
 	var finished_round: String = app._round_id
 	app.choose_mode(mode)
 	await settle()
-	check(app._round_id == finished_round and app._settlement_dialog.is_visible_in_tree(),
-		mode + ": choosing the same mode from Home restores its settlement modal")
+	check(app._round_id != finished_round and not app._settlement_dialog.is_visible_in_tree()
+		and app._active_jelly().game.phase == "playing",
+		mode + ": choosing the same mode from Home starts a fresh playable round")
 	await dispose(app)
 
 

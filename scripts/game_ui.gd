@@ -916,7 +916,7 @@ func _toggle_library_sound() -> void:
 
 
 func _save_presentation() -> void:
-	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted, reduced_motion)
+	_mode_panel.configure(_mode_id if _can_continue_round() else "", audio.muted, reduced_motion)
 	if _host != null:
 		_host.presentationSettings(reduced_motion, audio.muted)
 	var saved: bool = _presentation.save_preferences()
@@ -947,8 +947,9 @@ func _play_ui_click(source: Control = null) -> void:
 
 func _show_mode_menu() -> void:
 	if _mode_menu_open() or _finish_confirmation_open() or _page_hidden or collection_page.visible \
-		or model.chest_state == "opening" \
 		or (_save_error and not _pending_fragment.is_empty()):
+		return
+	if not _settle_completed_round_rewards():
 		return
 	_mode_menu_resume_voice = _voice_mode
 	if _mode_menu_resume_voice and _host != null and not bool(_host.suspendSpeechForMenu()):
@@ -1001,7 +1002,53 @@ func _show_mode_menu() -> void:
 	_update_duck()
 	_default_focus().grab_focus()
 	_restore_mode_music()
-	_announce_status("Home. Choose a game to play." + (" Select %s to continue your round." % MODES[_mode_id] if _has_entered_game else ""))
+	_announce_status("Home. Choose a game to play." + (" Select %s to continue your round." % MODES[_mode_id] if _can_continue_round() else ""))
+
+
+func _current_round_ended() -> bool:
+	if _is_jelly_mode():
+		return is_instance_valid(_active_jelly()) and _active_jelly().game.phase == "finished"
+	if _mode_id == "pop":
+		return is_instance_valid(_pop) and _pop.game.phase == "finished"
+	return _mode_id in ["match", "memory", "phrase"] and model.phase == "won"
+
+
+func _can_continue_round() -> bool:
+	return _has_entered_game and not _current_round_ended()
+
+
+func _settle_completed_round_rewards() -> bool:
+	if not _current_round_ended():
+		return true
+	# Home and replay share the same durable receipts as opening by hand.
+	# Settle an in-flight opening before leaving, including an incomplete hold.
+	if _is_jelly_mode():
+		_controller_holding_jelly_chest = false
+		if not _save_jelly_round_reward() or not _jelly_rewards.collect_all_coins():
+			_show_jelly_rewards()
+			_announce_status("Your coins are waiting to be saved. Choose Retry save.")
+			return false
+	elif _mode_id == "pop":
+		_controller_holding_pop_chest = false
+		if not _save_pop_round_reward() or not _pop_rewards.collect_all_coins():
+			_show_pop_rewards()
+			_announce_status("Your coins are waiting to be saved. Choose Retry save.")
+			return false
+	else:
+		_stop_round_celebration()
+		_settling_chest = true
+		audio.stop_chest_performance()
+		if model.chest_earned and model.chest_state == "closed":
+			_open_chest()
+		if model.chest_state == "opening":
+			chest.finish_immediately()
+		_settling_chest = false
+		if _save_error or (model.chest_earned and model.chest_state != "opened"):
+			_refresh()
+			_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
+			return false
+	_coin_flight.sync(coin_wallet.balance)
+	return true
 
 
 func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> void:
@@ -1357,7 +1404,7 @@ func choose_mode(id: String) -> void:
 	if not _mode_menu_open() or _page_hidden or not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_has_entered_game = true
-	if id == _mode_id:
+	if id == _mode_id and not _current_round_ended():
 		_hide_mode_menu(false, true)
 		_refresh()
 		_default_focus().grab_focus()
@@ -1366,7 +1413,7 @@ func choose_mode(id: String) -> void:
 		return
 	# A failed reward settlement must expose the current game's save retry.
 	_hide_mode_menu(false, false)
-	if new_round(-1, true, "", id):
+	if new_round(-1, id != _mode_id, "", id):
 		_default_focus().grab_focus()
 		if id == "pop":
 			_start_pop_listening()
@@ -1659,9 +1706,7 @@ func _replay_jelly() -> void:
 			or collection_page.visible or _mode_menu_open():
 		return
 	_controller_holding_jelly_chest = false
-	if not _save_jelly_round_reward() or not _jelly_rewards.collect_all_coins():
-		_show_jelly_rewards()
-		_announce_status("Your coins are waiting to be saved. Choose Retry save, then Play again.")
+	if not _settle_completed_round_rewards():
 		return
 	_coin_flight.sync(coin_wallet.balance)
 	if new_round(-1, false, "", _mode_id, "", false):
@@ -1949,9 +1994,7 @@ func _replay_pop() -> void:
 		or _speech_debug_active or collection_page.visible or _mode_menu_open():
 		return
 	_controller_holding_pop_chest = false
-	if not _save_pop_round_reward() or _pop_rewards._save_failed or _pop_rewards._unsaved_index >= 0:
-		_show_pop_rewards()
-		_announce_status("Your coins are waiting to be saved. Choose Retry save, then Play again.")
+	if not _settle_completed_round_rewards():
 		return
 	_coin_flight.sync(coin_wallet.balance)
 	if new_round(-1, false, "", "pop", "", false):
@@ -2380,7 +2423,7 @@ func _refresh() -> void:
 	_mode_panel.configure_theme(model.theme_id,
 		model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()), _journey_save_failed)
 	var mode_changed: bool = theme_changed or _styled_mode_id != _mode_id
-	var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _has_entered_game else null
+	var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _can_continue_round() else null
 	for button: Button in _mode_buttons:
 		button.set_pressed_no_signal(button == current_mode_button)
 		button.disabled = model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty())
@@ -2466,9 +2509,9 @@ func _refresh() -> void:
 		result_message = "Your chest is open. You can let go!" if chest.opening_committed() else "Keep holding to open. Release to cancel."
 	_single_result.configure(palette, earned_chest, saving_reward, _save_error, model.chest_state == "opened", result_message)
 	_single_result.retry_button.set("accessibility_description", medal_progress.error if _save_error else "")
-	var actions_blocked: bool = saving_reward or _save_error or (earned_chest and model.chest_state != "opened")
+	var actions_blocked: bool = saving_reward or _save_error
 	_single_result.replay_button.disabled = actions_blocked
-	_single_result.home_button.disabled = model.chest_state == "opening" or saving_reward or _save_error
+	_single_result.home_button.disabled = actions_blocked
 	chest_button.disabled = not earned_chest or model.chest_state == "opened" or chest.opening_committed() or _save_error
 	_set_accessibility_name(chest_button, "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest")
 	if won:
@@ -2813,7 +2856,7 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.text = str(MODES[_mode_id])
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_layout_game_heading()
-	_mode_panel.configure(_mode_id if _has_entered_game else "", audio.muted if audio != null else false, reduced_motion)
+	_mode_panel.configure(_mode_id if _can_continue_round() else "", audio.muted if audio != null else false, reduced_motion)
 	_mode_panel.configure_growth(growth.snapshot())
 	_mode_panel.coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	_mode_panel.set_home_coins(coin_wallet.balance)
@@ -3839,7 +3882,7 @@ func _default_focus() -> Control:
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
 		return _vocabulary_retry if _vocabulary_retry.visible else _vocabulary_back
 	if _mode_menu_open():
-		var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _has_entered_game else null
+		var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _can_continue_round() else null
 		return current_mode_button if current_mode_button != null else _mode_buttons[0]
 	if collection_page.visible:
 		return _collection_back
@@ -4452,7 +4495,10 @@ func _chest_input(event: InputEvent) -> void:
 
 
 func _new_adventure() -> void:
-	if collection_page.visible or model.phase != "won" or (model.chest_earned and model.chest_state != "opened") or _save_error:
+	if collection_page.visible or _mode_menu_open() or _page_hidden or _rebuilding \
+		or _mode_id not in ["match", "memory", "phrase"] or model.phase != "won" or _save_error:
+		return
+	if not _settle_completed_round_rewards():
 		return
 	if not _pending_fragment.is_empty() and medal_progress.count_for(_pending_fragment.medal_id) < int(_pending_fragment.after):
 		return

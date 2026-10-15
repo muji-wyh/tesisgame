@@ -44,21 +44,13 @@ inside `begin_hold()`, without waiting for a tween or a network result.
 Cancellation clears real progress immediately and returns the pose over 120 ms.
 A new hold interrupts that return and starts from zero.
 
-The rainbow is a translucent light arc behind the chest. Overlapping spectral
-bands have feathered edges and fading ends. The bow reveals from its left foot,
-over the crown, to its right foot as actual hold and opening progress advances.
-The soft leading edge continues through the chest's brief held pose and reaches
-the right end exactly at lid release, then the complete arc fades with the
-release light. The arc fits around the closed chest's stable resting silhouette
-so taller lids leave the early progress visible. Reduced motion retains the same
-readable earned progress without drift. Its brightness keeps the existing
-restrained buildup. The recessed track,
-white bevel, moving cursor and three fixed stars
-are removed. Seven small glints drift upward from the chest and disappear with
-the light. There is no visible phase or percentage label; semantic progress
-remains available to screen readers.
+The rainbow arc is removed from holding and opening. Cavity glow, seven drifting
+glints, lid motion, seam light and the release flash retain their existing timing.
+The remaining atmosphere fades with the release light, and reduced motion keeps
+its quiet static presentation. There is no visible phase or percentage label;
+semantic progress remains available to screen readers.
 
-The shader reuses the integrated `portal_glow.png` from Bobardo's **Modern 2D
+The cavity glow reuses the integrated `portal_glow.png` from Bobardo's **Modern 2D
 Animated Chests Pack_FREE Demo 1.0.2**, under the Standard Unity Asset Store EULA
 recorded in [treasure assets](../voice-pop-treasure.md), with source mapping in
 `assets/chests/SOURCE.txt`. Glints reuse `sparkle.png` from Kenneth Foldal Moe /
@@ -129,9 +121,10 @@ directly after its shorter hold.
 Ordinary chest results appear in the shared settlement dialog over the completed
 game. Its bounded chest area keeps the hold interaction together with visible
 instructions and completion status. **Home** and **Play again** stay in the
-footer; Play again is disabled until the earned chest opens and saving succeeds,
-then starts a fresh round of the same mode. Saving and save failures disable
-navigation; failures add **Retry save** inside the dialog. Status and actions
+footer; both save and collect any unopened earned chest before leaving. Play
+again starts a fresh round of the same mode, as does selecting the finished mode
+from Home. Saving and save failures disable navigation; failures add **Retry
+save** inside the dialog. Status and actions
 remain available to screen readers. The standalone results page, word review
 strip and result toy action are removed. Pip's room is retired; legacy gift
 accounting remains only for save compatibility.

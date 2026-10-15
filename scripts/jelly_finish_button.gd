@@ -428,7 +428,8 @@ func _update_visual() -> void:
 	_gel.set_shader_parameter("light_color", Color("#fff0b8"))
 	_surface.modulate = Color(1.0, 1.0, 1.0, 0.48 if disabled else 1.0)
 	var text_center := Vector2(size.x * 0.5 + _sideways * 0.74, size.y * 0.5 + _visual_pull * 0.82)
-	_label.text = text
+	var instructing: bool = _pulling or _tap_hint or _returning
+	_label.text = "Drag to\nfinish" if instructing else text
 	_label.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 * unit)))
 	var label_width: float = Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, maxi(1, roundi(12.0 * unit))).x + 2.0 * unit
 	var flag_edge: float = 15.0 * unit
@@ -438,6 +439,12 @@ func _update_visual() -> void:
 	_flag.modulate = Color("#744847") if not _armed else Color("#76532b")
 	_label.position = text_center + Vector2(-group_width * 0.5 + flag_edge + 4.0 * unit, -11.0 * unit)
 	_label.size = Vector2(label_width, 22.0 * unit)
+	_flag.visible = not instructing
+	if instructing:
+		_label.add_theme_font_size_override("font_size", maxi(1, roundi(11.0 * unit)))
+		_label.add_theme_constant_override("line_spacing", -2)
+		_label.position = text_center - Vector2(size.x - 12.0 * unit, 34.0 * unit) * 0.5
+		_label.size = Vector2(size.x - 12.0 * unit, 34.0 * unit)
 	_label.modulate.a = 0.6 if disabled else 1.0
 	_flag.modulate.a = 0.6 if disabled else 1.0
 	_glow.visible = _armed
@@ -464,5 +471,5 @@ func snapshot() -> Dictionary:
 		"pull_distance": _pull_distance, "visual_pull": _visual_pull,
 		"threshold": _threshold, "max_pull": _max_pull, "ui_scale": _ui_scale,
 		"idle_cue": _idle_cue >= 0.0, "hint_allowed": _hint_allowed,
-		"glow": _armed, "label_rect": _label.get_rect(), "surface_rect": _surface.get_rect()
+		"glow": _armed, "label_rect": _label.get_rect(), "label_text": _label.text, "surface_rect": _surface.get_rect()
 	}

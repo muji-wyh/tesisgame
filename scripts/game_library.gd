@@ -59,6 +59,7 @@ var _tiles: Array[Dictionary] = []
 var _current := ""
 var _factor := 1.0
 var _muted := false
+var _keyboard_focus_visible := false
 var _available := Vector2(1280, 800)
 
 
@@ -343,6 +344,21 @@ func _preview_focus_changed(tile: Dictionary) -> void:
 	tile.preview.set_highlighted(tile.button.is_hovered() or tile.button.has_focus())
 
 
+func _input(event: InputEvent) -> void:
+	var keyboard_focus: bool = _keyboard_focus_visible
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		keyboard_focus = false
+	elif (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
+		keyboard_focus = true
+	elif event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
+		keyboard_focus = true
+	if keyboard_focus == _keyboard_focus_visible:
+		return
+	_keyboard_focus_visible = keyboard_focus
+	for tile: Dictionary in _tiles:
+		_style_tile(tile)
+
+
 func _portrait(texture: Texture2D) -> AtlasTexture:
 	var portrait := AtlasTexture.new()
 	portrait.atlas = texture
@@ -473,9 +489,14 @@ func _style_tile(tile: Dictionary) -> void:
 		surface.shadow_size = ceili((1.0 if pressed else 3.0) / _factor)
 		surface.shadow_offset = Vector2(0, (1.0 if pressed else 2.0) / _factor)
 		tile.button.add_theme_stylebox_override(state, surface)
-	var focus := Style.box(Color.TRANSPARENT, Style.INK, radius, ceili(3.0 / _factor))
-	focus.set_expand_margin_all(-2.0 / _factor)
-	tile.button.add_theme_stylebox_override("focus", focus)
+	# Programmatic focus restores navigation after Home. Show its outline only
+	# after keyboard/controller input, rather than leaving a dark pointer border.
+	if _keyboard_focus_visible:
+		var focus := Style.box(Color.TRANSPARENT, Style.INK, radius, ceili(3.0 / _factor))
+		focus.set_expand_margin_all(-2.0 / _factor)
+		tile.button.add_theme_stylebox_override("focus", focus)
+	else:
+		tile.button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 
 func _layout_hero() -> void:
@@ -576,6 +597,7 @@ func snapshot() -> Dictionary:
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
 	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls, "previews": previews,
+		"keyboard_focus_visible": _keyboard_focus_visible,
 		"hero": {"title": heading.text, "goal": _journey_heading.text, "count": _journey_count.text, "ready": _growth.get("ready", false),
 			"completed": _growth.get("completed", false), "mastered": _growth.get("mastered", 0), "total": _growth.get("total", 0),
 			"progress": _journey_bar.value / 100.0, "next_age": _next_age, "rect": _rect_values(_hero.get_global_rect()),

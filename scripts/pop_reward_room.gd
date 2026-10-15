@@ -1151,6 +1151,7 @@ func snapshot() -> Dictionary:
 			"theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"tier": int(card.tier),
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
+			"rainbow_visible": card.art._rainbow_light.is_visible_in_tree(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),
 			"disabled": card.button.disabled, "control": str(card.button.name),
 			"caption": card.caption.text,

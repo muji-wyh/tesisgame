@@ -37,7 +37,9 @@ const BATCH_BEAT_SECONDS: float = 0.12
 const BATCH_POP_SECONDS: float = 0.06
 const COIN_DROP_CHANCE: float = CoinEconomy.JELLY_BONUS_CHANCE
 const INITIAL_SPAWN_INTERVAL: float = 20.0
-const MIN_SPAWN_INTERVAL: float = 16.0
+const MIN_SPAWN_INTERVAL: float = 10.0
+const CLEARS_PER_DIFFICULTY_STAGE: int = 4
+const SPEEDUP_PER_STAGE: float = 2.0
 const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
@@ -1296,6 +1298,7 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 
 
 func _spawn_drop() -> void:
+	var previous_generated: int = generated_tiles
 	var column_delays: Dictionary = {}
 	var slot_delays: Dictionary = {}
 	# Concurrent batches reserve their destinations immediately. Preserve the
@@ -1319,13 +1322,18 @@ func _spawn_drop() -> void:
 			# floor-up order even when other lanes use an alternating release.
 			tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]) + sqrt(2.0 / Motion.ARRIVAL_GRAVITY))
 		column_delays[column] = float(tile.arrival_delay)
+	if generated_tiles > previous_generated:
+		# Completed collections set the next packet's pace. Keep the current
+		# Next timer intact so a late Collect cannot unexpectedly release it.
+		var stage: int = floori(float(cleared_pairs) / CLEARS_PER_DIFFICULTY_STAGE)
+		spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - stage * SPEEDUP_PER_STAGE)
 
 
 func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	if upcoming.is_empty():
 		return false
 	var occupied: Dictionary = _occupied()
-	var position: Vector2i = _arrival_position(occupied) if arrival else _free_position(occupied, 1, 1)
+	var position: Vector2i = _arrival_position(occupied, arrival_index) if arrival else _free_position(occupied, 1, 1)
 	if position.x < 0:
 		return false
 	var tile: Dictionary = upcoming.pop_front()
@@ -1451,7 +1459,6 @@ func _complete_collection(completed: Dictionary) -> void:
 		if _collection_batch_cursor >= _collection_batch_ids.size():
 			_collection_batch_active = false
 			_collection_batch_next_in = 0.0
-	spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - float(cleared_pairs) * 0.04)
 	full_elapsed = -1.0
 	var generation: int = _generation
 	# Commit all rewards before callbacks. A callback may end or replace a round.
@@ -1614,13 +1621,17 @@ func _has_free_cell() -> bool:
 	return _arrival_position(_occupied()).x >= 0
 
 
-func _arrival_position(occupied: Dictionary) -> Vector2i:
+func _arrival_position(occupied: Dictionary, preferred_column: int = -1) -> Vector2i:
 	var position := Vector2i(-1, -1)
 	for column in range(COLUMNS):
 		var row: int = 0
 		while row < ROWS and not occupied.has(row * COLUMNS + column):
 			row += 1
 		var landing_row: int = row - 1
+		# The mixed preview is already the committed left-to-right packet.
+		# Keep each root in its visible lane whenever that lane admits a body.
+		if column == preferred_column and landing_row >= 0:
+			return Vector2i(column, landing_row)
 		if landing_row > position.y:
 			position = Vector2i(column, landing_row)
 	return position

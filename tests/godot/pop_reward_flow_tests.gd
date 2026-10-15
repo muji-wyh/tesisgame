@@ -156,10 +156,12 @@ func _fragment_flow_checks(fragments: int) -> void:
 	if fragments == 9:
 		var first_id: String = app._pop.game.round_id
 		app._pop_rewards._back.pressed.emit()
+		saved_entries[0].opened = true
 		var replayed: bool = app._pop.game.phase == "ready" and app._pop.game.round_id != first_id \
-			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries
+			and not app._pop_rewards_shown and app._pop_rewards.rewards.entries == saved_entries \
+			and app.coin_wallet.balance == 100
 		check(replayed,
-			"Play again starts a fresh round while preserving the previous unopened final chest")
+			"Play again starts a fresh round after saving the previous final chest's coins")
 		if not replayed:
 			await _dispose(app)
 			return
@@ -169,10 +171,9 @@ func _fragment_flow_checks(fragments: int) -> void:
 		await _earn_fragments(app, 4)
 		await _finish_pop(app)
 		check(app._round_result.chest_count == 1 and app._round_result.chest_tier == 1
-			and app._pop_rewards.rewards.entries.size() == 2
-			and app._pop_rewards.rewards.entries[0].tier == 2
-			and app._pop_rewards.rewards.entries[1].tier == 1,
-			"A second completed round adds one final chest without replacing the prior upgraded treasure")
+			and app._pop_rewards.rewards.entries.size() == 1
+			and app._pop_rewards.rewards.entries[0].tier == 1 and app.coin_wallet.balance == 100,
+			"A second completed round adds its final chest while retaining the prior chest's saved coins")
 		Fixture.finish_celebration(app)
 		var durable: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
 		app._pop_finished(app._round_result.duplicate(true))
@@ -184,8 +185,8 @@ func _fragment_flow_checks(fragments: int) -> void:
 	room.set_process(false)
 	check(app._pop_rewards_shown and room.visible and app._pop.visible
 		and app._settlement_dialog.is_visible_in_tree(), "The result opens treasure inside the shared settlement dialog")
-	check(room.snapshot().chest_count == (2 if fragments == 9 else 1),
-		"The opening page includes only final round rewards and any previously saved treasure")
+	check(room.snapshot().chest_count == 1,
+		"The opening page includes the current final chest without resurrecting a claimed prior reward")
 	if room._cards.size() != 1:
 		check(false, "The reward dialog presents one earned chest at a time")
 		await _dispose(app)
@@ -278,8 +279,9 @@ func _save_failure_checks() -> void:
 		and app._pop_rewards.rewards.entries.size() == 1 and app._pop_rewards.rewards.entries[0].tier == 1,
 		"Retry saves exactly the draft's final tier once")
 	app._pop_rewards._back.pressed.emit()
-	check(app._pop.game.phase == "ready" and not app._pop_rewards_shown and storage.writes == 1,
-		"After durable recovery replay proceeds without duplicating or losing the unopened chest")
+	check(app._pop.game.phase == "ready" and not app._pop_rewards_shown and storage.writes == 2
+		and not app._pop_rewards.has_pending() and app.coin_wallet.balance == 50,
+		"After durable recovery replay saves its chest consumption and credits exactly one reward")
 	await _dispose(app)
 
 
@@ -289,15 +291,17 @@ func _delayed_replay_checks() -> void:
 	await _finish_pop(app)
 	Fixture.finish_celebration(app)
 	var saved_entries: Array = app._pop_rewards.rewards.entries.duplicate(true)
-	var saved_text: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
 	var previous_round: String = app._pop.game.round_id
 	var age: int = app.growth.learning_age()
 	var download := VocabularyDownload.new()
 	app.vocabulary_loader.configure(download, func(_path: String, replace: bool) -> bool: return not replace)
 	app._pop_rewards._back.pressed.emit()
+	saved_entries[0].opened = true
+	var saved_text: String = FileAccess.get_file_as_string(app.pop_reward_save_path)
 	var waiting: bool = download.requests == [age] and app._vocabulary_prompt.visible \
-		and app._pop.game.round_id == previous_round and app._pop_rewards.rewards.entries == saved_entries
-	check(waiting, "Replay waits for required vocabulary without consuming or replacing unopened treasure")
+		and app._pop.game.round_id == previous_round and app._pop_rewards.rewards.entries == saved_entries \
+		and app.coin_wallet.balance == 50
+	check(waiting, "Replay settles earned treasure before waiting for required vocabulary")
 	if not waiting:
 		app._cancel_vocabulary_round()
 		await _dispose(app)
@@ -318,13 +322,13 @@ func _delayed_replay_checks() -> void:
 		"Completing a replay download does not start a microphone session without a new gesture")
 	check(app._pop_rewards.rewards.entries == saved_entries
 		and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
-		"Delayed replay preserves the exact unopened reward IDs, levels and durable save")
+		"Delayed replay preserves the exact opened reward receipt and durable save")
 	Fixture.enter_mode(app, "match")
 	Fixture.enter_mode(app, "pop")
-	check(app._pop_rewards_shown and app._pop_rewards.is_visible_in_tree()
-		and not app._pop.is_visible_in_tree() and app._pop_rewards.rewards.entries == saved_entries
+	check(not app._pop_rewards_shown and app._pop.is_visible_in_tree()
+		and app._pop_rewards.rewards.entries == saved_entries and app.coin_wallet.balance == 50
 		and FileAccess.get_file_as_string(app.pop_reward_save_path) == saved_text,
-		"Returning through Home still restores the same unopened treasure after a delayed replay")
+		"Returning through Home keeps settled treasure claimed after a delayed replay")
 	await _dispose(app)
 
 

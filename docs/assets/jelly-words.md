@@ -133,9 +133,23 @@ after landing. Shared entry lanes retain extra clearance so a later root cannot
 overtake an earlier one. Each preview slot refills after its own departing body
 has cleared it. Reduced motion keeps the same readiness clocks while placing
 bodies directly at their reserved destinations. The six-column board, initial
-three rows, 20-to-16-second supply cadence, merge, and collection rules
-remain unchanged. This polish reuses the integrated gel artwork and landing
+three rows, merge, and collection rules remain unchanged. Automatic supply starts
+with a twenty-second interval. Every four successful completed-word collections reduce
+the next cycle's interval by two seconds, down to ten seconds after twenty
+collections. Tap and Collect pickups count equally; idle time, merge-only play,
+Auto Merge, and failed collections do not increase difficulty. Each successful
+packet dispatch, automatic or manual, fixes the interval for the following
+cycle. Collections never shorten the current Next countdown, and rejected
+dispatches leave it intact. New rounds restore the twenty-second opening
+interval; the existing danger grace period remains independent. This polish
+reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
+
+The committed six-root preview is mixed before it is shown. Each slot releases
+straight into its corresponding board column, including above uneven stacks.
+Only a sealed entry redirects that root to a reachable lane; queued roots keep
+their IDs and preview order, and shared lanes preserve their safe arrival spacing.
+The cloud environment and recessed rim are documented in [Jelly Words well](jelly-well.md).
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
