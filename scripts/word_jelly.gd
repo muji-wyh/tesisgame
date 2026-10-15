@@ -481,7 +481,8 @@ func _sync_tiles() -> void:
 				if preview.tile_id == int(cell.id):
 					_arrival_origins[int(cell.id)] = {"slot": index,
 						"pressure": float(preview._gel.get_shader_parameter("preview_pressure")),
-						"sway": float(preview._gel.get_shader_parameter("preview_sway"))}
+						"sway": float(preview._gel.get_shader_parameter("preview_sway")),
+						"pull": float(preview._gel.get_shader_parameter("preview_pull"))}
 					break
 	_refresh_palette()
 	var live: Dictionary = {}
@@ -586,7 +587,14 @@ func _sync_positions() -> void:
 				compression = float(pose.compression)
 				var source_pose: Dictionary = _arrival_origins.get(id, {})
 				var release: float = 1.0 - smoothstep(0.0, 0.12, age)
-				tile.set_preview_pressure(float(source_pose.get("pressure", 0.0)) * release, float(source_pose.get("sway", 0.0)) * release)
+				var source_pull: float = float(source_pose.get("pull", 0.0))
+				tile.set_preview_pressure(float(source_pose.get("pressure", 0.0)) * release, float(source_pose.get("sway", 0.0)) * release,
+					source_pull * release)
+				# Start the fall at the loaded belly, not the undeformed rectangle.
+				# Releasing tension must never pull the visible foot back uphill.
+				var loaded_foot: float = source.size.y * Motion.FOOT_Y * source_pull
+				var remaining_pull: float = tile.size.y * Motion.FOOT_Y * source_pull * release * stretch.y
+				tile.position.y += loaded_foot * (1.0 - fall * fall) - remaining_pull
 				shadow_visible = align >= 1.0
 				tile.z_index = 3
 			elif _snapbacks.has(id) and not reduced_motion:
@@ -721,6 +729,7 @@ func _pose_powerup() -> void:
 	_powerup_effects.present(stamps)
 
 func _sync_preview() -> void:
+	drop_button.queue_redraw()
 	var refills: Array[float] = []
 	refills.resize(_preview_tiles.size())
 	refills.fill(1.0)
@@ -748,7 +757,7 @@ func _sync_preview() -> void:
 		preview.position = _preview_origins[index]
 		preview.modulate.a = clampf(refill, 0.0, 1.0)
 		preview.deform(0.0, 0.0)
-		preview.set_preview_pressure(float(pose.pressure), float(pose.sway))
+		preview.set_preview_pressure(float(pose.pressure), float(pose.sway), float(pose.pull))
 
 func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())

@@ -2,6 +2,7 @@ extends SceneTree
 
 const Jelly = preload("res://scripts/word_jelly.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
+const Motion = preload("res://scripts/jelly_motion.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const COIN_REWARD_SEED: int = 208
@@ -105,6 +106,7 @@ func _run() -> void:
 	_check_keyboard(view)
 	_check_keyboard_rejection(view)
 	_check_arrival_packet(view)
+	_check_preview_pull_handoff(view)
 	_check_staggered_preview_refill(view)
 	_check_immediate_preview_packets(view)
 	_check_arrival_land_timing(view)
@@ -2587,6 +2589,103 @@ func _check_arrival_packet(view) -> void:
 						"every supplied jelly finishes planted exactly on its reserved board cell")
 				check(view.game.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and view.game.merged_count == 0 and payouts.is_empty(),
 					"arrival, pause and resize preserve the supply and reward ledgers")
+	view.size = Vector2(1000, 720)
+
+
+func _preview_skin_pose(tile) -> Dictionary:
+	return {"pressure": float(tile._gel.get_shader_parameter("preview_pressure")),
+		"sway": float(tile._gel.get_shader_parameter("preview_sway")),
+		"pull": float(tile._gel.get_shader_parameter("preview_pull"))}
+
+
+func _check_skin_pose(actual: Dictionary, expected: Dictionary, reason: String) -> void:
+	for field: String in ["pressure", "sway", "pull"]:
+		check(actual.has(field) and is_equal_approx(float(actual.get(field, INF)), float(expected[field])),
+			"%s preserves the visible %s" % [reason, field])
+
+
+func _painted_preview_foot(tile) -> float:
+	var pull: float = float(tile._gel.get_shader_parameter("preview_pull"))
+	return tile.position.y + tile.size.y * Motion.FOOT_Y * (1.0 + pull * tile._surface.scale.y)
+
+
+func _advance_preview_foot_samples(view, id: int, seconds: float, frame_rate: int) -> void:
+	var previous: float = _painted_preview_foot(view._tiles[id])
+	var remaining: float = seconds
+	while remaining > 0.000001:
+		var delta: float = minf(1.0 / float(frame_rate), remaining)
+		view._process(delta)
+		remaining -= delta
+		var current: float = _painted_preview_foot(view._tiles[id])
+		check(current >= previous - 0.001,
+			"the painted belly keeps falling at %d Hz without an upward release pop: %.4f -> %.4f" % [frame_rate, previous, current])
+		previous = current
+
+
+func _check_preview_pull_handoff(view) -> void:
+	for frame_rate: int in [30, 60]:
+		_check_preview_pull_handoff_at_rate(view, frame_rate)
+
+
+func _check_preview_pull_handoff_at_rate(view, frame_rate: int) -> void:
+	var neutral := {"pressure": 0.0, "sway": 0.0, "pull": 0.0}
+	for reduced: bool in [false, true]:
+		for automatic: bool in [false, true]:
+			for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 844)]:
+				view.size = dimensions
+				_reset(view, reduced)
+				view.game.spawn_interval = Model.INITIAL_SPAWN_INTERVAL
+				view.game.spawn_elapsed = view.game.spawn_interval - 0.001 if automatic else view.game.spawn_interval * 0.93
+				view._sync_preview()
+				var packet: Array = view.game.upcoming.duplicate(true)
+				var poses: Dictionary = {}
+				var feet: Dictionary = {}
+				for preview in view._preview_tiles:
+					poses[preview.tile_id] = _preview_skin_pose(preview)
+					feet[preview.tile_id] = _painted_preview_foot(preview)
+					check(is_zero_approx(float(poses[preview.tile_id].pull)) if reduced else float(poses[preview.tile_id].pull) > 0.20,
+						"the handoff starts from a loaded preview skin, or a neutral reduced-motion skin")
+				if automatic:
+					_advance(view, 0.001)
+				else:
+					view._drop_next(int(packet[0].id))
+				check(is_zero_approx(view.game.spawn_elapsed), "release resets the supply clock before the visual handoff")
+				var final_ready: float = 0.0
+				for index in range(packet.size()):
+					var id: int = int(packet[index].id)
+					var origin: Dictionary = view._arrival_origins.get(id, {})
+					check(int(origin.get("slot", -1)) == index, "the loaded skin retains its responsive preview slot")
+					_check_skin_pose(origin, poses[id], "The captured departure")
+					_check_skin_pose(_preview_skin_pose(view._tiles[id]), poses[id], "The first painted arrival frame")
+					if not reduced:
+						check(is_equal_approx(_painted_preview_foot(view._tiles[id]), float(feet[id])),
+							"the first arrival frame starts at the visible loaded foot without a handoff jump")
+					final_ready = maxf(final_ready, Model.settle_duration(view.game.cell(id)))
+				for preview in view._preview_tiles:
+					_check_skin_pose(_preview_skin_pose(preview), neutral, "The replacement preview")
+				var first_id: int = int(packet[0].id)
+				var last_id: int = int(packet[-1].id)
+				_advance_preview_foot_samples(view, first_id, 0.06, frame_rate)
+				var departing: Dictionary = _preview_skin_pose(view._tiles[first_id])
+				if reduced:
+					_check_skin_pose(departing, neutral, "The reduced-motion arrival")
+				else:
+					check(float(departing.pull) > 0.0 and float(departing.pull) < float(poses[first_id].pull),
+						"a departing skin smoothly releases its accumulated downward tension")
+					_check_skin_pose(_preview_skin_pose(view._tiles[last_id]), poses[last_id], "The waiting staggered arrival")
+				view.pause(true)
+				_advance(view, 0.25)
+				view.size = Vector2(390, 700) if dimensions.x > dimensions.y else Vector2(1000, 720)
+				view._layout()
+				_check_skin_pose(_preview_skin_pose(view._tiles[first_id]), departing, "A paused and resized departure")
+				view.pause(false)
+				_advance_preview_foot_samples(view, first_id, 0.061, frame_rate)
+				_check_skin_pose(_preview_skin_pose(view._tiles[first_id]), neutral, "The fully released arrival skin")
+				_advance(view, final_ready + 0.001 - float(view.game.cell(first_id).age))
+				for item: Dictionary in packet:
+					_check_skin_pose(_preview_skin_pose(view._tiles[int(item.id)]), neutral, "The settled board skin")
+				check(view.game.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT and payouts.is_empty() and heard.is_empty(),
+					"preview tension and release cannot create extra bodies, rewards or speech")
 	view.size = Vector2(1000, 720)
 
 

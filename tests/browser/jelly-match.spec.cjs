@@ -955,7 +955,7 @@ test.describe('manual jelly supply', () => {
   }
 });
 
-test('preview pressure builds through fusion and pauses only with the menu', async ({ page }, info) => {
+test('preview downward pull builds through fusion and pauses only with the menu', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const poses = state => state.preview.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion }));
@@ -982,18 +982,22 @@ test('preview pressure builds through fusion and pauses only with the menu', asy
     const after = late.preview.slots[index].motion;
     expect(between.intensity, 'Every preview builds pressure as its dispatch approaches').toBeGreaterThan(before.intensity);
     expect(after.intensity, 'Pressure keeps building through the final part of the supply cycle').toBeGreaterThan(between.intensity);
+    expect(between.pull, 'Each queued skin sags farther downward as the supply clock advances').toBeGreaterThan(before.pull);
+    expect(after.pull, 'The late preview holds more downward tension than the middle of the cycle').toBeGreaterThan(between.pull);
     expect(between.beat, 'The pulse phase follows the actual supply clock').toBeGreaterThan(before.beat);
     expect(after.beat).toBeGreaterThan(between.beat);
     for (const state of [early, middle, late]) {
       const slot = state.preview.slots[index];
       expect(slot.rect, 'The queued tile keeps a fixed origin and hit rectangle').toEqual(early.preview.slots[index].rect);
-      expect(Object.keys(slot.motion).sort()).toEqual(['beat', 'intensity', 'pressure', 'sway']);
+      expect(Object.keys(slot.motion).sort()).toEqual(['beat', 'intensity', 'pressure', 'pull', 'sway']);
       expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.075);
       expect(slot.motion.pressure).toBeLessThanOrEqual(0.23);
+      expect(slot.motion.pull).toBeGreaterThanOrEqual(0);
+      expect(slot.motion.pull).toBeLessThanOrEqual(0.35);
       expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.075);
     }
-    expect({ pressure: after.pressure, sway: after.sway }, 'The gel skin changes strain without moving its contents')
-      .not.toEqual({ pressure: before.pressure, sway: before.sway });
+    expect({ pressure: after.pressure, sway: after.sway, pull: after.pull }, 'The gel skin changes strain without moving its contents')
+      .not.toEqual({ pressure: before.pressure, sway: before.sway, pull: before.pull });
   }
   expect(new Set(late.preview.slots.map(slot => JSON.stringify([slot.motion.pressure, slot.motion.sway]))).size,
     'The four skins have staggered pressure impulses').toBeGreaterThan(1);

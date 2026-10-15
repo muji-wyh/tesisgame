@@ -30,13 +30,13 @@ static func ready_at(cell: Dictionary) -> float:
 
 static func preview(elapsed: float, interval: float, index: int, reduced: bool = false) -> Dictionary:
 	if reduced:
-		return {"pressure": 0.0, "sway": 0.0, "beat": 0.0, "intensity": 0.0}
+		return {"pressure": 0.0, "sway": 0.0, "pull": 0.0, "beat": 0.0, "intensity": 0.0}
 	var duration: float = maxf(0.1, interval)
 	var progress: float = clampf(elapsed / duration, 0.0, 1.0)
 	var time: float = progress * duration
-	# Alternating squishes let the crown swing behind the planted belly. The
-	# supply clock brings these elastic beats closer together before the drop.
-	var acceleration: float = 2.15 / duration
+	# The real supply clock loads the hanging belly, while alternating strain
+	# beats accelerate from a quiet wobble to a hurried attempt to hold on.
+	var acceleration: float = 3.05 / duration
 	var phase: float = 0.65 * time + 0.5 * acceleration * time * time
 	var stagger: float = 0.18 + float(index) * 0.095
 	var latest: int = floori(phase - stagger)
@@ -54,14 +54,17 @@ static func preview(elapsed: float, interval: float, index: int, reduced: bool =
 			pressure += strength * exp(-7.8 * release) * (cos(19.0 * release) + 7.8 / 19.0 * sin(19.0 * release))
 			var lag: float = maxf(0.0, release - 0.025)
 			var direction: float = -1.0 if (pulse + index) % 2 == 0 else 1.0
-			sway += direction * strength * 0.75 * exp(-6.0 * lag) * sin(16.0 * lag)
-	# Finish with a readable crouch rather than cutting a random wiggle short.
-	# Each queued body leans its own way; Words carries this pose into departure.
-	var gather_start: float = duration - minf(0.5 + float(index) * 0.012, duration * 0.35)
+			sway += direction * strength * 0.70 * exp(-6.0 * lag) * sin(16.0 * lag)
+	# Release the crown squeeze into a long, loaded belly before departure.
+	# Each body leans its own way; Words carries this actual pose into the fall.
+	var gather_start: float = duration - minf(0.8 + float(index) * 0.025, duration * 0.35)
 	var gather: float = smoothstep(gather_start, duration - minf(0.07, duration * 0.05), time)
-	pressure = lerpf(pressure, 0.18 + float(index % 3) * 0.012, gather)
+	pressure = lerpf(pressure, 0.045 + float(index % 3) * 0.008, gather)
 	sway = lerpf(sway, -0.025 if index % 2 == 0 else 0.025, gather)
-	return {"pressure": pressure, "sway": sway, "beat": phase * TAU,
+	# A growing baseline makes urgency readable between the transient tugs.
+	var pull: float = 0.30 * pow(progress, 1.6)
+	pull += maxf(0.0, pressure) * 0.30 * smoothstep(0.25, 0.9, progress)
+	return {"pressure": pressure, "sway": sway, "pull": pull, "beat": phase * TAU,
 		"intensity": lerpf(0.12, 1.0, pow(progress, 1.8))}
 
 

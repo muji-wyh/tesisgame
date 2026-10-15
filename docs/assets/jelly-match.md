@@ -161,17 +161,27 @@ batch then uses the existing soft landing feedback at contact. Manual supply
 introduces no new artwork or audio assets, and preserves the current mute,
 pronunciation priority and interruption behavior.
 
-Upcoming bodies stay planted while the acquired skin briefly compresses, spreads
-at its lower lobe and settles through a damped rebound. Pressure impulses follow
-the actual supply clock, rising from 0.65 to 2.8 Hz; strain builds toward 6% near
-release. Each squeeze takes 70 ms, followed by one small overshoot and a dying
-tail. A delayed crown sway and slight slot offsets keep the four bodies from
-moving in rigid unison. The painted foot stays fixed above the source contact
-shadow; labels, pictures, chest markers and input rectangles remain stationary.
-Menu pause freezes the pose; fusion leaves anticipation running. New supply starts at rest; a full board
-and reduced motion display neutral previews. No new visual or audio asset is
-introduced for anticipation; the existing CC0 gel skins and contact shadow are
-reused.
+Upcoming bodies progressively sag toward the well as the real supply clock
+advances. The acquired skin lengthens downward, with a narrower shoulder and a
+heavier lower lobe, reaching roughly 31-32% extension just before release.
+Alternating pressure impulses accelerate from 0.65 to 3.7 Hz. Each squeeze takes
+85 ms, followed by a damped rebound and delayed crown sway; slot offsets keep the
+bodies from moving in rigid unison. During the final loaded pose, compression
+eases while the downward stretch remains. The contact shadow follows the painted
+foot, but labels, pictures, chest markers and input rectangles stay stationary.
+Jelly Words transfers the exact visible skin pose into each staggered departure
+and releases its tension over the first 120 ms of descent. Its trajectory starts
+at the stretched foot, compensating for the recovering skin so the belly never
+pops upward at release. New supply starts at rest; menu pause freezes the pose, while fusion leaves anticipation running.
+A full board and reduced motion display neutral previews.
+
+A warm glow beneath each hanging foot grows with the same downward strain. It
+reuses the static, already integrated `assets/chests/particles/portal_glow.png`
+from Bobardo's Modern 2D Animated Chests Pack_FREE Demo 1.0.2, under the existing
+[Unity Asset Store EULA record](../voice-pop-treasure.md); the original source
+mapping remains in `assets/chests/SOURCE.txt`. Its placement and intensity are
+authored at runtime, with no separate timer or baked animation. The CC0 gel skins
+and contact shadow above are also reused; no new visual or audio asset is acquired.
 
 Each landing projection reuses the same acquired gel silhouette at its actual
 destination, without word, picture or chest content. It remains stationary while

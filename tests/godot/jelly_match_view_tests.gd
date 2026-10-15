@@ -508,16 +508,19 @@ func _check_preview_controller(view) -> void:
 
 func _preview_window(interval: float, start: float, finish: float) -> Dictionary:
 	var energy: float = 0.0
+	var pull: float = 0.0
 	var samples: int = 0
 	for index in range(WordModel.UPCOMING_COUNT):
 		for sample_index in range(81):
 			var progress: float = lerpf(start, finish, float(sample_index) / 80.0)
 			var pose: Dictionary = Motion.preview(progress * interval, interval, index)
-			energy += float(pose.pressure) * float(pose.pressure) + float(pose.sway) * float(pose.sway)
+			energy += float(pose.pressure) * float(pose.pressure) + float(pose.sway) * float(pose.sway) + float(pose.pull) * float(pose.pull)
+			pull += float(pose.pull)
 			samples += 1
 	var first: Dictionary = Motion.preview(start * interval, interval, 0)
 	var last: Dictionary = Motion.preview(finish * interval, interval, 0)
-	return {"amplitude": sqrt(energy / samples), "speed": (float(last.beat) - float(first.beat)) / ((finish - start) * interval)}
+	return {"amplitude": sqrt(energy / samples), "pull": pull / samples,
+		"speed": (float(last.beat) - float(first.beat)) / ((finish - start) * interval)}
 
 
 func _check_preview_pose(view, reason: String) -> void:
@@ -529,15 +532,16 @@ func _check_preview_pose(view, reason: String) -> void:
 		check(tile.position.is_equal_approx(view._preview_origins[index]) and tile._surface.scale == Vector2.ONE
 			and is_zero_approx(float(tile._gel.get_shader_parameter("bend")))
 			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_pressure")), float(pose.pressure))
-			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_sway")), float(pose.sway)),
+			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_sway")), float(pose.sway))
+			and is_equal_approx(float(tile._gel.get_shader_parameter("preview_pull")), float(pose.pull)),
 			"%s applies preview %d's model-clock strain to its skin without moving or scaling its root" % [reason, index + 1])
 		check(tile._visual.scale == Vector2.ONE and tile._picture.scale == Vector2.ONE and tile._label.scale == Vector2.ONE
 			and is_zero_approx(tile._visual.rotation) and is_zero_approx(tile._picture.rotation) and is_zero_approx(tile._label.rotation),
 			"%s keeps preview %d learning content free of pressure deformation" % [reason, index + 1])
 		check(tile._shadow.visible and tile._shadow.modulate.a > 0.0
 			and is_equal_approx(tile._shadow.position.x + tile._shadow.size.x * 0.5, tile.size.x * 0.5)
-			and is_equal_approx(tile._shadow.position.y + tile._shadow.size.y * 0.6, tile.size.y * Motion.FOOT_Y),
-			"%s keeps preview %d's contact shadow anchored to its painted foot" % [reason, index + 1])
+			and is_equal_approx(tile._shadow.position.y + tile._shadow.size.y * 0.6, tile.size.y * Motion.FOOT_Y * (1.0 + float(pose.pull))),
+			"%s keeps preview %d's contact shadow attached to its downward-stretched painted foot" % [reason, index + 1])
 		var shadow_layer: int = tile.z_index + tile._shadow.z_index
 		check(tile.z_as_relative and tile._shadow.z_as_relative and tile._visual.z_as_relative
 			and tile.get_parent() == view.drop_button.get_parent()
@@ -566,7 +570,10 @@ func _check_preview_motion(view) -> void:
 		var late: Dictionary = _preview_window(interval, 0.84, 0.99)
 		check(float(early.amplitude) > 0.0 and float(middle.amplitude) > float(early.amplitude)
 			and float(late.amplitude) > float(middle.amplitude),
-			"The %.2f-second supply cycle builds material pressure from early through middle to late release" % interval)
+			"The %.2f-second supply cycle builds material strain from early through middle to late release" % interval)
+		check(float(middle.pull) > float(early.pull) + 0.025
+			and float(late.pull) > float(middle.pull) + 0.08,
+			"The %.2f-second supply cycle visibly sags farther downward as release approaches" % interval)
 		check(float(middle.speed) > float(early.speed) and float(late.speed) > float(middle.speed),
 			"The %.2f-second supply cycle brings pressure pulses closer together as dispatch approaches" % interval)
 		var previous_intensity: float = 0.0
@@ -576,12 +583,13 @@ func _check_preview_motion(view) -> void:
 			var pose: Dictionary = Motion.preview(elapsed, interval, 0)
 			check(float(pose.intensity) >= previous_intensity and float(pose.intensity) <= 1.0
 				and float(pose.pressure) >= -0.075 and float(pose.pressure) <= 0.23 and absf(float(pose.sway)) <= 0.075
+				and float(pose.pull) >= 0.0 and float(pose.pull) <= 0.35
 				and not pose.has("offset") and not pose.has("stretch") and not pose.has("bend"),
 				"Preview urgency stays within the expressive skin envelope without affine motion at %d percent" % step)
 			previous_intensity = float(pose.intensity)
 			var still: Dictionary = Motion.preview(elapsed, interval, step % WordModel.UPCOMING_COUNT, true)
 			check(is_zero_approx(float(still.pressure)) and is_zero_approx(float(still.sway))
-				and is_zero_approx(float(still.beat)) and is_zero_approx(float(still.intensity)),
+				and is_zero_approx(float(still.pull)) and is_zero_approx(float(still.beat)) and is_zero_approx(float(still.intensity)),
 				"Reduced motion has a neutral preview pose throughout the supply beat")
 			for index in range(1, WordModel.UPCOMING_COUNT):
 				var other: Dictionary = Motion.preview(elapsed, interval, index)
@@ -589,27 +597,35 @@ func _check_preview_motion(view) -> void:
 		check(different_slots, "The supply retains staggered pressure impulses instead of moving as a rigid group")
 		for index in range(WordModel.UPCOMING_COUNT):
 			var reset: Dictionary = Motion.preview(0.0, interval, index)
-			check(is_zero_approx(float(reset.pressure)) and is_zero_approx(float(reset.sway)),
+			check(is_zero_approx(float(reset.pressure)) and is_zero_approx(float(reset.sway)) and is_zero_approx(float(reset.pull)),
 				"A newly queued skin starts exactly at rest rather than inheriting the previous beat")
 			var previous: Dictionary = reset
-			var maximum_rate: Vector2 = Vector2.ZERO
+			var maximum_rate: Vector3 = Vector3.ZERO
 			var minimum_pressure: float = 0.0
 			var maximum_pressure: float = 0.0
 			var maximum_sway: float = 0.0
+			var minimum_pull: float = 0.0
+			var maximum_pull: float = 0.0
 			for sample_index in range(1, 2001):
 				var current: Dictionary = Motion.preview(interval * float(sample_index) / 2000.0, interval, index)
-				var rate := Vector2(absf(float(current.pressure) - float(previous.pressure)), absf(float(current.sway) - float(previous.sway))) / (interval / 2000.0)
+				var rate := Vector3(absf(float(current.pressure) - float(previous.pressure)),
+					absf(float(current.sway) - float(previous.sway)), absf(float(current.pull) - float(previous.pull))) / (interval / 2000.0)
 				maximum_rate = maximum_rate.max(rate)
 				minimum_pressure = minf(minimum_pressure, float(current.pressure))
 				maximum_pressure = maxf(maximum_pressure, float(current.pressure))
 				maximum_sway = maxf(maximum_sway, absf(float(current.sway)))
+				minimum_pull = minf(minimum_pull, float(current.pull))
+				maximum_pull = maxf(maximum_pull, float(current.pull))
 				previous = current
-			check(minimum_pressure >= -0.075 and maximum_pressure <= 0.23 and maximum_sway <= 0.075,
+			check(minimum_pressure >= -0.075 and maximum_pressure <= 0.23 and maximum_sway <= 0.075
+				and minimum_pull >= 0.0 and maximum_pull <= 0.35,
 				"Preview %d stays inside the authored skin's safe envelope throughout the %.2f-second cycle" % [index + 1, interval])
 			check(maximum_pressure > 0.11 and maximum_sway > 0.018,
 				"Preview %d builds to a visibly exaggerated compression and sideways wobble in the %.2f-second cycle" % [index + 1, interval])
-			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 2.5,
-				"Preview %d compresses and elastically recovers through continuous bounded pressure without a phase-boundary snap" % (index + 1))
+			check(maximum_pull >= 0.25 and float(previous.pull) >= 0.25,
+				"Preview %d holds a clearly loaded downward pose until the %.2f-second cycle releases it" % [index + 1, interval])
+			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 2.5 and maximum_rate.z < 2.5,
+				"Preview %d compresses, sags and elastically recovers through continuous bounded strain without a phase-boundary snap" % (index + 1))
 	_reset(view, false, false)
 	var first: Array = view.snapshot().preview.slots.duplicate(true)
 	var content: Array = _preview_content_transforms(view)
@@ -639,7 +655,8 @@ func _check_preview_motion(view) -> void:
 	_advance(view, view.game.FUSION_SECONDS - 0.4 + 0.00001)
 	_check_preview_pose(view, "The batch dispatched during disappearance")
 	var dispatched: Array = view.snapshot().preview.slots
-	check(int(dispatched[0].id) != int(first[0].id) and float(dispatched[0].motion.intensity) < 0.121,
+	check(int(dispatched[0].id) != int(first[0].id) and float(dispatched[0].motion.intensity) < 0.121
+		and float(dispatched[0].motion.pull) < 0.001,
 		"Dispatch resets the replacement preview to gentle motion instead of inheriting urgency")
 	_reset(view, false, false)
 	var reset_slots: Array = view.snapshot().preview.slots

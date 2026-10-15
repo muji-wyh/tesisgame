@@ -5,6 +5,7 @@ uniform float bend = 0.0;
 uniform float beat = 0.0;
 uniform float preview_pressure = 0.0;
 uniform float preview_sway = 0.0;
+uniform float preview_pull = 0.0;
 uniform vec4 rim_color : source_color = vec4(0.21, 0.49, 0.44, 1.0);
 uniform float rim_strength = 0.0;
 uniform float rim_width = 1.0;
@@ -27,6 +28,9 @@ vec3 palette(vec3 paint) {
 }
 
 void vertex() {
+	// Extend the skin mesh, not its UV bounds, so the hanging belly cannot clip.
+	// The learning face and input rectangle are separate, stationary controls.
+	VERTEX.y *= 1.0 + preview_pull;
 	gel_modulate = COLOR;
 }
 
@@ -34,12 +38,12 @@ void fragment() {
 	vec2 sample_uv = UV;
 	sample_uv.x += sin(UV.y * 3.14159265) * sin(beat + UV.y * 3.14159265) * bend;
 	sample_uv.y += sin(UV.x * 3.14159265) * cos(beat + UV.x * 3.14159265) * bend * 0.55;
-	// Anticipation deforms the acquired skin above its painted contact point.
-	// The lower lobe spreads under pressure; the crown follows a little later.
+	// The crown resists while gravity stretches the acquired lower lobe.
+	// A pinched shoulder preserves volume as the skin extends downwards.
 	float height = clamp((0.890625 - UV.y) / 0.784375, 0.0, 1.0);
-	// Leave a transparent margin even at the final exaggerated crouch.
+	// Keep lateral pressure inside the acquired texture's transparent margin.
 	float bulge = sin(height * 3.14159265) * preview_pressure * 0.28;
-	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge);
+	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge - preview_pull * smoothstep(0.15, 0.9, height) * 0.42);
 	sample_uv.x -= preview_sway * height * height;
 	sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);
 	vec2 local = UV - vec2(0.5);
