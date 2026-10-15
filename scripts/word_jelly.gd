@@ -1101,7 +1101,7 @@ func _layout() -> void:
 	var bottom_padding: float = 12.0 / s
 	var padding: float = 4.0 / s
 	var feed_gap: float = 4.0 / s
-	var hud_width: float = 144.0 / s
+	var hud_width: float = clampf((size.x - edge * 2.0) * 0.25, 88.0 / s, 144.0 / s)
 	var hud_gap: float = 12.0 / s
 	var local_finish: bool = finish_button.get_parent() == self
 	var local_chest: bool = not has_header_chest()
@@ -1109,23 +1109,27 @@ func _layout() -> void:
 	var notice_y: float = top_hud_height
 	if not game.error.is_empty():
 		top_hud_height += 42.0 / s
-	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - top_hud_height)
+	var content_top: float = top_hud_height + 12.0 / s
+	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var footer_height: float = 56.0 / s + edge
-	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
+	var collect_row_height: float = 64.0 / s
+	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height + collect_row_height), s)
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
 	# the rail may extend beside the supply row, but never into the header.
 	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
+	var top_action_height: float = 0.0 if side_hud else collect_row_height
 	_pitch = side_pitch if side_hud else bottom_pitch
 	_gap = maxf(3.0 / s, _pitch * 0.09)
 	var preview_size: float = _pitch - _gap
 	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
-	var group_top: float = maxf(top_hud_height, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
+	var group_top: float = maxf(content_top, size.y - bottom_padding - footer_height - top_action_height - _pitch * WordModel.ROWS - feed_height)
+	var preview_top: float = group_top + top_action_height
 	var rail_extent: float = hud_width + hud_gap if side_hud else 0.0
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, preview_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -1158,7 +1162,7 @@ func _layout() -> void:
 	_loot_detail.size = Vector2(maxf(0.0, size.x - 152.0 / s), 16.0 / s)
 	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_loot_detail.add_theme_font_size_override("font_size", ceili(10.0 / s))
-	_preview_rect = Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height))
+	_preview_rect = Rect2(Vector2(_board.position.x, preview_top), Vector2(_board.size.x, preview_height))
 	drop_button.position = _preview_rect.position
 	drop_button.size = _preview_rect.size
 	_style_drop_button()
@@ -1173,12 +1177,12 @@ func _layout() -> void:
 	if collect_button != null:
 		collect_button.set_ui_scale(s)
 		collect_button.size = Vector2(hud_width if side_hud else collect_width, 56.0 / s)
-		collect_button.position = Vector2(hud_x, _board.end.y - collect_button.size.y) if side_hud else Vector2(hud_x + (footer_width - collect_button.size.x) * 0.5, _board.end.y + edge)
+		collect_button.position = Vector2(hud_x if side_hud else _board.get_center().x - collect_button.size.x * 0.5, group_top)
 	for index in range(powerup_buttons.size()):
 		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
 		button.set_ui_scale(s)
 		button.size = Vector2(hud_width if side_hud else item_width, 56.0 / s)
-		button.position = Vector2(hud_x, _board.end.y - (3 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
+		button.position = Vector2(hud_x, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
 			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge)
 	if _powerup_effects != null:
 		_powerup_effects.size = size
@@ -1192,7 +1196,7 @@ func _layout() -> void:
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[chest_meter_rect().grow(10.0 / s)])
+			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s)])
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()

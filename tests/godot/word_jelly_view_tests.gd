@@ -253,6 +253,17 @@ func _check_supply_layout(view) -> void:
 			check(overlap.size.x < 0.01 or overlap.size.y < 0.01,
 				"%s and %s do not overlap%s" % [names[index], names[other], context])
 	var s: float = Style.ui_scale(view)
+	var collect: Rect2 = view.collect_button.get_rect()
+	if view._compact_hud:
+		check(is_equal_approx(collect.position.y, tray.position.y),
+			"side Collect aligns with the top of the supply tray" + context)
+		for button: Control in view.powerup_buttons.values():
+			check(collect.end.y + 8.0 / s <= button.position.y + 0.01,
+				"side Collect stays above both paid powerups with a clear gap" + context)
+	else:
+		check(absf(collect.get_center().x - board.get_center().x) < 0.01
+			and collect.end.y + 8.0 / s <= tray.position.y + 0.01,
+			"Collect is centered above the supply tray with an eight-pixel gap" + context)
 	check(tray.size.y * s >= 44.0 - 0.01 and view.finish_button.size.y * s >= 44.0 - 0.01,
 		"manual drop and Finish retain forty-four-pixel target heights" + context)
 	check(view.collect_button.size.y * s >= 44.0 - 0.01 and view.collect_button.size.x * s >= 44.0 - 0.01,

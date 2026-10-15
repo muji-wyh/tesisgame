@@ -101,6 +101,7 @@ func check_finish_header(app, view) -> void:
 			check(not chest.intersects(header_neighbors[name]),
 				"The header chest stays clear of " + name + context)
 		var board: Rect2 = view._global_rect(view._board)
+		var tray: Rect2 = view.drop_button.get_global_rect()
 		# Inspect actual controls after their minimum sizes resolve, including
 		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
 		var actions: Dictionary = {"Auto merge": view.powerup_buttons.auto_merge.get_global_rect(),
@@ -121,16 +122,24 @@ func check_finish_header(app, view) -> void:
 				check(action.position.x >= board.end.x + 8.0 / s - 0.1
 					and absf(action.position.x - collect.position.x) < 0.1,
 					str(action_names[action_index]) + " shares one action rail to the right of the board" + context)
+				if action_names[action_index] == "Collect":
+					check(absf(action.position.y - tray.position.y) < 0.1,
+						"Collect starts at the top of the action rail beside the supply tray" + context)
 			else:
-				check(action.position.y >= board.end.y - 0.1
-					and absf(action.position.y - collect.position.y) < 0.1,
-					str(action_names[action_index]) + " shares the footer beneath the board" + context)
+				if action_names[action_index] == "Collect":
+					check(action.end.y + 8.0 / s <= tray.position.y + 0.1,
+						"Collect sits above the phone supply tray with an eight-pixel gap" + context)
+				else:
+					check(action.position.y >= board.end.y - 0.1
+						and absf(action.position.y - actions["Auto merge"].position.y) < 0.1,
+						str(action_names[action_index]) + " stays in the paid-tool footer beneath the board" + context)
 		_check_playfield_layout(view, s, context)
 		if not view._compact_hud:
 			check(chest.end.y <= playfield.position.y + 0.1,
 				"Portrait treasure stays above the playfield and supply tray" + context)
-			check(absf(collect.get_center().x - view._global_rect(view._board).get_center().x) < 0.1,
-				"Hosted Collect remains centered beneath the phone board" + context)
+			check(absf(collect.get_center().x - board.get_center().x) < 0.1
+				and collect.end.y + 8.0 / s <= tray.position.y + 0.1,
+				"Hosted Collect remains centered above the phone supply tray" + context)
 			view._word_reveal.set_reduced_motion(false)
 			view._word_reveal._rng.seed = 4821
 			for index in range(3):
@@ -142,14 +151,18 @@ func check_finish_header(app, view) -> void:
 				for entry: Dictionary in view._word_reveal.snapshot().entries:
 					var rect: Array = entry.rect
 					var card := Rect2(float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3]))
-					check(not card.intersects(chest) and playfield.grow(0.1).encloses(card),
-						"Every collected-word card stays clear of the chest throughout its elastic motion" + context)
+					check(not card.intersects(chest) and not card.intersects(collect)
+						and playfield.grow(0.1).encloses(card),
+						"Every collected-word card stays clear of the chest and top Collect action throughout its elastic motion" + context)
 				view._word_reveal.advance(0.025)
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
 		if dimensions == Vector2i(624, 1119):
 			check(view._board.size.x * s >= 540.0,
 				"The reported portrait size gains substantial board width beyond its former 468-pixel cap")
+		if dimensions == Vector2i(320, 480):
+			check(view._board.size.x * s >= 180.0,
+				"The small phone keeps at least thirty display pixels per board column beside the responsive action rail")
 	root.size = original_size
 	await settle()
 	var source: Vector2 = view._tiles[int(view.game.cells[0].id)].get_global_rect().get_center()
@@ -208,7 +221,7 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 		for rectangle: Rect2 in regions.values():
 			occupied = occupied.merge(rectangle)
 	var horizontal_slack: float = view.size.x - occupied.size.x
-	var top_slack: float = tray.position.y - view.global_position.y
+	var top_slack: float = minf(tray.position.y, view.collect_button.get_global_rect().position.y) - view.global_position.y
 	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
 		"The board uses the available width or height instead of leaving spare room in both directions" + context)
 

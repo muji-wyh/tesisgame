@@ -182,14 +182,16 @@ creator and acquisition records remain in the
 Collection primarily clears words and gathers their fragments, while bonus
 coins remain rare; the button uses the word illustration rather than coin art.
 
-When a side layout gives the board more space, Collect shares one 144-pixel-wide
-action rail to the right of the well, below Auto merge and Treasure. The well
-and rail are centered together, with a 12-pixel gap between them. On short
-screens the rail can extend beside the supply row while staying below the
-header. Other layouts use a compact footer centered under the well, with
-Collect between the two purchase controls. All three controls remain 56 display
-pixels high, and the layout preserves twelve-pixel bottom padding. There is no
-isolated control on the left of the board.
+When a side layout gives the board more space, Collect sits at the top of a
+responsive action rail to the right of the well, aligned with the supply
+row. Auto merge and Treasure stay at the bottom of that rail. The well and
+rail are centered together, with a 12-pixel gap between them. Other layouts
+center Collect above the supply row with an eight-pixel gap and retain the two
+purchase controls below the well. All three controls remain 56 display pixels
+high. The rail ranges from 88 to 144 display pixels wide so small screens
+retain room for readable word jellies. The layout preserves space below the
+header and twelve-pixel bottom padding. Collection reveals avoid the chest
+and Collect artwork.
 
 The integrated portal glow, rays and sparkle textures retain the licenses and
 source records in the linked chest-fragment record. These are static acquired
