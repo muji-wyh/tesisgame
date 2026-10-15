@@ -43,6 +43,13 @@ async function startWordJelly(page, { age = 3, reducedMotion = 'no-preference', 
     return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
       state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Word Jelly board opens with three rows of settled roots' }).toBe(true);
+  const opening = await jelly(page);
+  expect(opening.tiles.every(tile => tile.focused === false),
+    'Pointer entry does not give any starter jelly an unsolicited keyboard focus ring').toBe(true);
+  expect(opening.drag.source, 'Pointer entry starts without a held jelly').toBe(-1);
+  expect(opening.drag.selected, 'Pointer entry starts without a keyboard-selected jelly').toBe(-1);
+  expect(opening.tiles.every(tile => tile.completion_hint === false),
+    'Pointer entry does not advertise a selected completion target').toBe(true);
   return errors;
 }
 
@@ -285,6 +292,7 @@ function expectWordRevealContent(entry, bounds, area) {
 function expectSupplyLayout(state, bounds) {
   const board = state.board_rect, tray = state.preview.rect, area = state.playfield_rect;
   const collect = state.collect_button.rect, paidTools = Object.values(state.powerup_buttons).map(button => button.rect);
+  const autoMerge = state.powerup_buttons.auto_merge.rect, divider = state.action_divider.rect;
   const scale = Math.max(2 / 3, bounds.scale), tolerance = 0.25 / bounds.scale;
   const inside = (rect, parent, label) => {
     expect(rect.every(Number.isFinite), `${label} has finite bounds`).toBe(true);
@@ -307,7 +315,7 @@ function expectSupplyLayout(state, bounds) {
     expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + 0.5) * board[2] / 6)),
       `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
   }
-  const regions = [['well', board], ['supply tray', tray], ['Collect words', collect],
+  const regions = [['well', board], ['supply tray', tray], ['Collect words', collect], ['Action divider', divider],
     ...Object.entries(state.powerup_buttons).map(([kind, button]) => [kind, button.rect])];
   inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
   for (const [index, [label, rect]] of regions.entries()) {
@@ -318,19 +326,23 @@ function expectSupplyLayout(state, bounds) {
       expect(width <= tolerance || height <= tolerance, `${label} and ${otherLabel} do not overlap`).toBe(true);
     }
   }
+  expect(Math.abs(collect[0] - autoMerge[0]), 'Collect aligns directly above Auto merge').toBeLessThan(tolerance);
+  expect(Math.abs(autoMerge[1] - collect[1] - collect[3] - 20 / scale),
+    'A twenty-pixel separator gap keeps Collect adjacent to the paid tools').toBeLessThan(tolerance);
+  expect(state.action_divider.visible, 'The free Collect action has a visible divider from paid tools').toBe(true);
+  expect(divider[1], 'The divider stays below Collect').toBeGreaterThanOrEqual(collect[1] + collect[3] - tolerance);
+  for (const rect of paidTools) {
+    expect(divider[1] + divider[3], 'The divider stays above every paid tool').toBeLessThanOrEqual(rect[1] + tolerance);
+    expect(divider[0], 'The divider spans each paid tool center').toBeLessThanOrEqual(rect[0] + rect[2] / 2 + tolerance);
+    expect(divider[0] + divider[2], 'The divider spans each paid tool center').toBeGreaterThanOrEqual(rect[0] + rect[2] / 2 - tolerance);
+  }
   if (collect[0] >= board[0] + board[2] - tolerance) {
-    expect(collect[1], 'The right-rail Collect target begins beside the upper supply area')
-      .toBeLessThanOrEqual(tray[1] + tray[3] + tolerance);
     for (const rect of paidTools) {
       expect(Math.abs(rect[0] - collect[0]), 'Paid tools share the Collect rail').toBeLessThan(tolerance);
-      expect(collect[1] + collect[3], 'Collect remains above the paid tools in the right rail')
-        .toBeLessThanOrEqual(rect[1] + tolerance);
     }
   } else {
-    expect(Math.abs(collect[0] + collect[2] / 2 - (board[0] + board[2] / 2)),
-      'Collect is centered above the well on narrow layouts').toBeLessThan(tolerance);
-    expect(collect[1] + collect[3], 'Collect has its own row above the supply tray')
-      .toBeLessThanOrEqual(tray[1] + tolerance);
+    expect(collect[1], 'Collect remains with the tools below the well on narrow layouts')
+      .toBeGreaterThanOrEqual(board[1] + board[3] - tolerance);
     for (const rect of paidTools) {
       expect(rect[1], 'Paid tools remain below the well on narrow layouts')
         .toBeGreaterThanOrEqual(board[1] + board[3] - tolerance);
@@ -1482,7 +1494,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
     });
     const layout = { board: initial.board_rect, preview: initial.preview.rect, collect: initial.collect_button.rect,
       paidTools: Object.fromEntries(Object.entries(initial.powerup_buttons).map(([kind, button]) => [kind, button.rect])),
-      finish: initial.finish.rect };
+      divider: initial.action_divider, finish: initial.finish.rect };
     fs.writeFileSync(info.outputPath('word-jelly-batch-timeline.json'), JSON.stringify({ layout, stages, timeline }, null, 2));
   }
   const final = await jelly(page);
@@ -1492,7 +1504,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   let previousStarted = 0, previousCompleted = 0;
   const entryStates = new Map();
   for (const frame of timeline) {
-    expect(frame.button.rect, 'The upper Collect target stays fixed throughout real batch playback').toEqual(initial.collect_button.rect);
+    expect(frame.button.rect, 'The Collect target stays fixed throughout real batch playback').toEqual(initial.collect_button.rect);
     expect(frame.total).toBe(3);
     expect(frame.ids.slice().sort((a, b) => a - b)).toEqual(collectedIds.slice().sort((a, b) => a - b));
     expect(frame.skipped, 'Every captured word remains eligible throughout playback').toBe(0);

@@ -27,6 +27,157 @@ func settle() -> void:
 		await process_frame
 
 
+func pointer_event(point: Vector2, pressed: bool, touch: bool = false) -> void:
+	if touch:
+		var event := InputEventScreenTouch.new()
+		event.index = 0
+		event.position = point
+		event.pressed = pressed
+		Input.parse_input_event(event)
+	else:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		event.position = point
+		event.global_position = point
+		event.pressed = pressed
+		root.push_input(event)
+	await process_frame
+
+
+func key_event(code: Key, shift: bool = false) -> void:
+	for pressed: bool in [true, false]:
+		var event := InputEventKey.new()
+		event.keycode = code
+		event.physical_keycode = code
+		event.shift_pressed = shift
+		event.pressed = pressed
+		root.push_input(event)
+		await process_frame
+
+
+func check_tab_reachability(view, context: String) -> void:
+	view.set_process(false)
+	view.cancel_input()
+	check(view.game.drop_now(), "The keyboard fixture evolves the board with new supply in " + context)
+	view.game.step(1.0)
+	view._process(0.0)
+	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), true)
+	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), false)
+	var remaining: Array[int] = []
+	for id: int in view._tiles:
+		if not view._tiles[id].disabled:
+			remaining.append(id)
+	var total: int = remaining.size()
+	for index in range(128):
+		await key_event(KEY_TAB)
+		var focused: Control = root.gui_get_focus_owner()
+		for id: int in remaining.duplicate():
+			if view._tiles[id] == focused:
+				remaining.erase(id)
+		if remaining.is_empty():
+			break
+	check(total > 0 and remaining.is_empty(),
+		"Repeated Tab reaches every settled jelly after new supply in %s; unreachable IDs: %s" % [context, remaining])
+	view.set_process(true)
+
+
+func check_input_focus(app) -> void:
+	var original_size: Vector2i = root.size
+	root.size = Vector2i(1366, 768)
+	app._show_mode_menu()
+	await settle()
+	app._mode_panel.ensure_mode_visible("word_jelly")
+	await settle()
+	var mode_button: Button = app._mode_panel.button_for_mode("word_jelly")
+	await pointer_event(mode_button.get_global_rect().get_center(), true)
+	await pointer_event(mode_button.get_global_rect().get_center(), false)
+	await settle()
+	var view = app._word_jelly
+	view.set_process(false)
+	check(app._mode_id == "word_jelly" and not app._mode_menu_open() and view.has_focus(),
+		"A real mouse click starts Jelly Words with focus on the neutral board")
+	check(view._tiles.values().all(func(tile) -> bool: return not tile.has_focus() and tile._mark == 0 \
+		and not tile.selected and not tile.highlighted and not tile.completion_hint)
+		and view._source == -1 and view._keyboard_source == -1,
+		"Pointer entry does not paint an unsolicited selection, focus rim, or completion hint")
+	var first: Control = view.navigation_controls()[0]
+	await key_event(KEY_TAB)
+	check(first.has_focus() and first._mark == 1 and not first.selected,
+		"The first Tab from the neutral board focuses the first playable jelly without selecting it")
+	await key_event(KEY_ENTER, true)
+	check(view._keyboard_source == first.tile_id and first.selected and first._mark == 2,
+		"Shift+Enter still intentionally selects the keyboard-focused jelly")
+	await key_event(KEY_ESCAPE)
+	check(view._keyboard_source == -1 and not first.selected,
+		"Escape cancels the intentional keyboard selection")
+	var next: Control = view.navigation_controls()[1]
+	await pointer_event(next.get_global_rect().get_center(), true)
+	check(not first.has_focus() and first._mark < 1 and view._source == next.tile_id,
+		"A pointer gesture clears the old keyboard rim while selecting its own jelly")
+	await pointer_event(next.get_global_rect().get_center(), false)
+	app._show_mode_menu()
+	await settle()
+	app._mode_panel.ensure_mode_visible("word_jelly")
+	await settle()
+	var round_id: String = app._round_id
+	await pointer_event(mode_button.get_global_rect().get_center(), true, true)
+	await pointer_event(mode_button.get_global_rect().get_center(), false, true)
+	await settle()
+	check(not app._mode_menu_open() and app._round_id == round_id and view.has_focus()
+		and view._tiles.values().all(func(tile) -> bool: return not tile.has_focus() and tile._mark == 0),
+		"Touch Continue preserves the round without restoring an unsolicited jelly rim")
+	view.set_process(true)
+	app._pending_vocabulary_round = [405, false, "", "word_jelly", "", true]
+	app._resume_vocabulary_round()
+	await settle()
+	view.set_process(false)
+	check(view.has_focus() and view._tiles.values().all(func(tile) -> bool: return not tile.has_focus() and tile._mark == 0),
+		"A delayed vocabulary handoff preserves neutral focus after pointer or touch entry")
+	await key_event(KEY_RIGHT)
+	check(view.default_focus().has_focus(),
+		"The first direction key from a touch-started board reaches the first playable jelly (focus=%s, default=%s)"
+		% [root.gui_get_focus_owner(), view.default_focus()])
+	app._show_mode_menu()
+	await settle()
+	mode_button.grab_focus()
+	await key_event(KEY_ENTER)
+	await settle()
+	check(not app._mode_menu_open() and view.default_focus().has_focus(),
+		"Keyboard activation of Continue retains intentional focus on a playable jelly")
+	app._show_mode_menu()
+	app.choose_mode("match")
+	app._show_mode_menu()
+	await settle()
+	mode_button.grab_focus()
+	await key_event(KEY_ENTER)
+	await settle()
+	view.set_process(false)
+	check(app._mode_id == "word_jelly" and not app._mode_menu_open() and view.default_focus().has_focus(),
+		"Keyboard activation of a new Jelly Words round retains intentional tile focus")
+	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), true)
+	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), false)
+	check(view.has_focus(), "Pointer takeover restores the neutral Jelly focus anchor")
+	var idle_stick := InputEventJoypadMotion.new()
+	idle_stick.axis = JOY_AXIS_LEFT_X
+	for amount: float in [0.0, 0.20, -0.20]:
+		idle_stick.axis_value = amount
+		root.push_input(idle_stick)
+	check(view.has_focus(), "Idle controller samples cannot add a focus rim to a pointer-started board")
+	app._enter_controller_mode()
+	check(view.default_focus().has_focus(),
+		"Controller activation promotes the neutral board to a playable jelly")
+	app._controller_mode = false
+	await check_tab_reachability(view, "Jelly Words")
+	Fixture.enter_mode(app, "jelly")
+	await settle()
+	await check_tab_reachability(app._jelly, "Jelly Match")
+	view.cancel_input()
+	view.set_process(true)
+	root.size = original_size
+	await settle()
+
+
 func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 	var game = view.game
 	# Existing persistence fixtures deliberately exercise the rare winning branch.
@@ -101,11 +252,26 @@ func check_finish_header(app, view) -> void:
 			check(not chest.intersects(header_neighbors[name]),
 				"The header chest stays clear of " + name + context)
 		var board: Rect2 = view._global_rect(view._board)
-		var tray: Rect2 = view.drop_button.get_global_rect()
 		# Inspect actual controls after their minimum sizes resolve, including
 		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
 		var actions: Dictionary = {"Auto merge": view.powerup_buttons.auto_merge.get_global_rect(),
 			"Collect": collect, "Treasure": view.powerup_buttons.fragments.get_global_rect()}
+		var auto_merge: Rect2 = actions["Auto merge"]
+		check(absf(collect.position.x - auto_merge.position.x) < 0.1
+			and absf(auto_merge.position.y - collect.end.y - 20.0 / s) < 0.1,
+			"Collect sits directly above Auto merge with a separate twenty-pixel divider band" + context)
+		var divider_state: Dictionary = view.snapshot().get("action_divider", {})
+		var divider_rect: Array = divider_state.get("rect", [])
+		check(bool(divider_state.get("visible", false)) and divider_rect.size() == 4,
+			"The free Collect action has a visible separator from the paid tools" + context)
+		if divider_rect.size() == 4:
+			var divider := Rect2(float(divider_rect[0]), float(divider_rect[1]), float(divider_rect[2]), float(divider_rect[3]))
+			var divider_right: float = auto_merge.end.x if view._compact_hud else actions["Treasure"].end.x
+			check(divider.size.x > 0.0 and divider.size.y > 0.0 and playfield.grow(0.1).encloses(divider)
+				and divider.position.y >= collect.end.y and divider.end.y <= auto_merge.position.y,
+				"The divider remains inside the empty band between free and paid actions" + context)
+			check(absf(divider.position.x - auto_merge.position.x) < 0.1 and absf(divider.end.x - divider_right) < 0.1,
+				"The divider spans the action rail or the complete paid-tool footer" + context)
 		var action_names: Array = actions.keys()
 		for action_index in range(action_names.size()):
 			var action: Rect2 = actions[action_names[action_index]]
@@ -122,24 +288,18 @@ func check_finish_header(app, view) -> void:
 				check(action.position.x >= board.end.x + 8.0 / s - 0.1
 					and absf(action.position.x - collect.position.x) < 0.1,
 					str(action_names[action_index]) + " shares one action rail to the right of the board" + context)
-				if action_names[action_index] == "Collect":
-					check(absf(action.position.y - tray.position.y) < 0.1,
-						"Collect starts at the top of the action rail beside the supply tray" + context)
 			else:
-				if action_names[action_index] == "Collect":
-					check(action.end.y + 8.0 / s <= tray.position.y + 0.1,
-						"Collect sits above the phone supply tray with an eight-pixel gap" + context)
-				else:
-					check(action.position.y >= board.end.y - 0.1
-						and absf(action.position.y - actions["Auto merge"].position.y) < 0.1,
+				check(action.position.y >= board.end.y - 0.1,
+					str(action_names[action_index]) + " stays in the action footer beneath the board" + context)
+				if action_names[action_index] != "Collect":
+					check(absf(action.position.y - auto_merge.position.y) < 0.1,
 						str(action_names[action_index]) + " stays in the paid-tool footer beneath the board" + context)
 		_check_playfield_layout(view, s, context)
 		if not view._compact_hud:
 			check(chest.end.y <= playfield.position.y + 0.1,
 				"Portrait treasure stays above the playfield and supply tray" + context)
-			check(absf(collect.get_center().x - board.get_center().x) < 0.1
-				and collect.end.y + 8.0 / s <= tray.position.y + 0.1,
-				"Hosted Collect remains centered above the phone supply tray" + context)
+			check(absf(collect.position.x - auto_merge.position.x) < 0.1 and collect.position.y >= board.end.y,
+				"Hosted Collect remains above the left paid tool in the phone footer" + context)
 			view._word_reveal.set_reduced_motion(false)
 			view._word_reveal._rng.seed = 4821
 			for index in range(3):
@@ -153,7 +313,7 @@ func check_finish_header(app, view) -> void:
 					var card := Rect2(float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3]))
 					check(not card.intersects(chest) and not card.intersects(collect)
 						and playfield.grow(0.1).encloses(card),
-						"Every collected-word card stays clear of the chest and top Collect action throughout its elastic motion" + context)
+						"Every collected-word card stays clear of the chest and Collect action throughout its elastic motion" + context)
 				view._word_reveal.advance(0.025)
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
@@ -221,7 +381,7 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 		for rectangle: Rect2 in regions.values():
 			occupied = occupied.merge(rectangle)
 	var horizontal_slack: float = view.size.x - occupied.size.x
-	var top_slack: float = minf(tray.position.y, view.collect_button.get_global_rect().position.y) - view.global_position.y
+	var top_slack: float = tray.position.y - view.global_position.y
 	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
 		"The board uses the available width or height instead of leaving spare room in both directions" + context)
 
@@ -386,6 +546,7 @@ func _run() -> void:
 	Fixture.enter_mode(app, "match")
 	app.audio.set_muted(true)
 	app.set_reduced_motion(true)
+	await check_input_focus(app)
 	check(app.new_round(405, false, "", "word_jelly"), "The new mode starts through the application route")
 	await settle()
 	var view = app._word_jelly

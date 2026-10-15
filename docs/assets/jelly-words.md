@@ -182,16 +182,20 @@ creator and acquisition records remain in the
 Collection primarily clears words and gathers their fragments, while bonus
 coins remain rare; the button uses the word illustration rather than coin art.
 
-When a side layout gives the board more space, Collect sits at the top of a
-responsive action rail to the right of the well, aligned with the supply
-row. Auto merge and Treasure stay at the bottom of that rail. The well and
-rail are centered together, with a 12-pixel gap between them. Other layouts
-center Collect above the supply row with an eight-pixel gap and retain the two
-purchase controls below the well. All three controls remain 56 display pixels
-high. The rail ranges from 88 to 144 display pixels wide so small screens
-retain room for readable word jellies. The layout preserves space below the
-header and twelve-pixel bottom padding. Collection reveals avoid the chest
-and Collect artwork.
+Collect sits directly above Auto merge with the same width and horizontal
+alignment. A visible rule centered in a twenty-pixel gap separates free
+collection from the two coin-priced tools. This rule is a decorative interface
+primitive and does not receive input. Side layouts keep this action group at
+the bottom of the right rail, with Treasure eight pixels below Auto merge.
+Other layouts place Collect above the left purchase control below the well;
+the divider spans both purchase controls in their shared bottom row.
+
+The well and side rail are centered together, with a twelve-pixel gap between
+them. The rail ranges from 88 to 144 display pixels wide so small screens
+retain room for readable word jellies. Controls are 56 display pixels high;
+Collect can shrink to 44 pixels on very short screens to preserve the gap.
+The layout preserves space below the header and twelve-pixel bottom padding.
+Collection reveals avoid the chest and Collect artwork.
 
 The integrated portal glow, rays and sparkle textures retain the licenses and
 source records in the linked chest-fragment record. These are static acquired

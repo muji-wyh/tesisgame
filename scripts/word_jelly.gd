@@ -44,6 +44,7 @@ var _arrival_origins: Dictionary = {}
 var _preview_generated: int = -1
 var _word_reveal: WordReveal
 var collect_button: CollectButton
+var _action_divider := ColorRect.new()
 var _placement_tile: WordTile
 var _placement: Dictionary = {}
 var _completion_source: int = -1
@@ -109,6 +110,12 @@ func _init() -> void:
 		button.z_index = 5
 		add_child(button)
 		powerup_buttons[kind] = button
+	_action_divider.name = "PaidToolsDivider"
+	_action_divider.color = Color(0.27, 0.43, 0.42, 0.52)
+	_action_divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_action_divider.z_index = 5
+	_action_divider.hide()
+	add_child(_action_divider)
 	_powerup_effects = PowerupEffects.new()
 	add_child(_powerup_effects)
 	_placement_tile = WordTile.new()
@@ -1080,6 +1087,7 @@ func _refresh_collect_button() -> void:
 	var batch: Dictionary = game.collection_batch_snapshot()
 	var count: int = game.collectable_ids().size() if _configured else 0
 	collect_button.visible = _configured and game.phase == "playing"
+	_action_divider.visible = collect_button.visible
 	collect_button.disabled = not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
@@ -1111,25 +1119,27 @@ func _layout() -> void:
 		top_hud_height += 42.0 / s
 	var content_top: float = top_hud_height + 12.0 / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
-	var footer_height: float = 56.0 / s + edge
-	var collect_row_height: float = 64.0 / s
-	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height + collect_row_height), s)
+	var action_height: float = 56.0 / s
+	var collect_height: float = action_height
+	var divider_gap: float = 20.0 / s
+	var footer_height: float = action_height * 2.0 + divider_gap + edge
+	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
 	# the rail may extend beside the supply row, but never into the header.
 	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
-	var top_action_height: float = 0.0 if side_hud else collect_row_height
+	if side_hud:
+		collect_height = clampf(available.y - action_height * 2.0 - divider_gap - 8.0 / s, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
 	_gap = maxf(3.0 / s, _pitch * 0.09)
 	var preview_size: float = _pitch - _gap
 	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
-	var group_top: float = maxf(content_top, size.y - bottom_padding - footer_height - top_action_height - _pitch * WordModel.ROWS - feed_height)
-	var preview_top: float = group_top + top_action_height
+	var group_top: float = maxf(content_top, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
 	var rail_extent: float = hud_width + hud_gap if side_hud else 0.0
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, preview_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -1149,7 +1159,6 @@ func _layout() -> void:
 	_falling_layer.size = _board.size
 	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
 	var item_width: float = clampf((footer_width - 132.0 / s) * 0.5, 88.0 / s, 112.0 / s)
-	var collect_width: float = footer_width - item_width * 2.0 - 16.0 / s
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
@@ -1162,7 +1171,7 @@ func _layout() -> void:
 	_loot_detail.size = Vector2(maxf(0.0, size.x - 152.0 / s), 16.0 / s)
 	_loot_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_loot_detail.add_theme_font_size_override("font_size", ceili(10.0 / s))
-	_preview_rect = Rect2(Vector2(_board.position.x, preview_top), Vector2(_board.size.x, preview_height))
+	_preview_rect = Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height))
 	drop_button.position = _preview_rect.position
 	drop_button.size = _preview_rect.size
 	_style_drop_button()
@@ -1174,16 +1183,18 @@ func _layout() -> void:
 	if local_finish:
 		finish_button.size = Vector2(84.0, 44.0) / s
 		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
-	if collect_button != null:
-		collect_button.set_ui_scale(s)
-		collect_button.size = Vector2(hud_width if side_hud else collect_width, 56.0 / s)
-		collect_button.position = Vector2(hud_x if side_hud else _board.get_center().x - collect_button.size.x * 0.5, group_top)
 	for index in range(powerup_buttons.size()):
 		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
 		button.set_ui_scale(s)
-		button.size = Vector2(hud_width if side_hud else item_width, 56.0 / s)
+		button.size = Vector2(hud_width if side_hud else item_width, action_height)
 		button.position = Vector2(hud_x, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
-			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge)
+			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge + action_height + divider_gap)
+	var auto_merge: Rect2 = powerup_buttons.auto_merge.get_rect()
+	collect_button.set_ui_scale(s)
+	collect_button.size = Vector2(auto_merge.size.x, collect_height)
+	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
+	_action_divider.size = Vector2(hud_width if side_hud else footer_width, 2.0 / s)
+	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
 		_powerup_effects.size = size
 	_notice.position = Vector2(edge, notice_y)
@@ -1219,6 +1230,7 @@ func snapshot() -> Dictionary:
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
+	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}
 	state["powerup"] = game.powerup_snapshot()
 	state["powerup_buttons"] = {}
 	for kind: String in powerup_buttons:

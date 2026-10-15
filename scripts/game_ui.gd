@@ -255,6 +255,7 @@ var _drag_anchor_position: Vector2 = Vector2.ZERO
 var _drag_anchor_offset: Vector2 = Vector2.ZERO
 var _controller_mode: bool = false
 var _pointer_focus_active: bool = false
+var _navigation_focus_active: bool = false
 var _proactive_touches: Dictionary = {}
 var _collection_multi_touch: bool = false
 var _controller_stick: Vector2 = Vector2.ZERO
@@ -3528,6 +3529,24 @@ func _observe_activity(event: InputEvent) -> void:
 		_pointer_focus_active = event.pressed and not event.canceled
 	elif event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		_pointer_focus_active = false
+	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed) \
+		or (event is InputEventScreenTouch and event.pressed):
+		_navigation_focus_active = false
+		if _is_jelly_mode() and is_instance_valid(_active_jelly()):
+			var view = _active_jelly()
+			if view._tiles.values().has(get_viewport().gui_get_focus_owner()):
+				view.grab_focus()
+	elif event is InputEventKey and event.pressed and not event.echo:
+		var entering_navigation: bool = not _navigation_focus_active
+		_navigation_focus_active = true
+		# A pointer-started board keeps a neutral focus anchor until navigation
+		# begins. Promote it once; later Tab cycles must reach older jellies too.
+		if entering_navigation and _is_jelly_mode() and is_instance_valid(_active_jelly()) and _active_jelly().has_focus():
+			for action: String in ["ui_focus_next", "ui_focus_prev", "ui_left", "ui_right", "ui_up", "ui_down"]:
+				if event.is_action_pressed(action):
+					_default_focus().grab_focus()
+					get_viewport().set_input_as_handled()
+					break
 
 
 func _input(event: InputEvent) -> void:
@@ -3621,7 +3640,8 @@ func _input(event: InputEvent) -> void:
 			_update_controller_navigation()
 			get_viewport().set_input_as_handled()
 	elif event is InputEventJoypadMotion and event.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y]:
-		_enter_controller_mode()
+		if absf(event.axis_value) >= 0.55:
+			_enter_controller_mode()
 		if event.axis == JOY_AXIS_LEFT_X:
 			_controller_stick.x = event.axis_value
 		else:
@@ -3636,8 +3656,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _enter_controller_mode() -> void:
+	var entering_navigation: bool = not _navigation_focus_active
 	_controller_mode = true
-	if not _valid_focus(get_viewport().gui_get_focus_owner()):
+	_navigation_focus_active = true
+	if not _valid_focus(get_viewport().gui_get_focus_owner()) \
+		or (entering_navigation and _is_jelly_mode() and _active_jelly().has_focus()):
 		_default_focus().grab_focus()
 
 
@@ -3900,6 +3923,10 @@ func _default_focus() -> Control:
 				if _valid_focus(control):
 					return control
 			return _settlement_dialog.panel
+		# Automatic handoffs after a pointer gesture must not look like a
+		# selected jelly. Keep every tile available to keyboard navigation.
+		if not _navigation_focus_active and _active_jelly()._can_play():
+			return _active_jelly()
 		var jelly_focus: Control = _active_jelly().default_focus()
 		return jelly_focus if _valid_focus(jelly_focus) else collection_button
 	if model.phase == "won":

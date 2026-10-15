@@ -254,16 +254,16 @@ func _check_supply_layout(view) -> void:
 				"%s and %s do not overlap%s" % [names[index], names[other], context])
 	var s: float = Style.ui_scale(view)
 	var collect: Rect2 = view.collect_button.get_rect()
-	if view._compact_hud:
-		check(is_equal_approx(collect.position.y, tray.position.y),
-			"side Collect aligns with the top of the supply tray" + context)
-		for button: Control in view.powerup_buttons.values():
-			check(collect.end.y + 8.0 / s <= button.position.y + 0.01,
-				"side Collect stays above both paid powerups with a clear gap" + context)
-	else:
-		check(absf(collect.get_center().x - board.get_center().x) < 0.01
-			and collect.end.y + 8.0 / s <= tray.position.y + 0.01,
-			"Collect is centered above the supply tray with an eight-pixel gap" + context)
+	var auto_merge: Rect2 = view.powerup_buttons.auto_merge.get_rect()
+	var divider: Rect2 = view._action_divider.get_rect()
+	check(is_equal_approx(collect.position.x, auto_merge.position.x) and is_equal_approx(collect.size.x, auto_merge.size.x)
+		and absf(auto_merge.position.y - collect.end.y - 20.0 / s) < 0.01,
+		"Collect sits directly above Auto merge with a twenty-pixel separator band" + context)
+	check(view._action_divider.visible and bounds.encloses(divider) and divider.size.y * s >= 1.0
+		and divider.position.y > collect.end.y and divider.end.y < auto_merge.position.y,
+		"a visible divider separates free collection from the paid tools" + context)
+	check(view._action_divider.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"the divider is decorative and never intercepts game input" + context)
 	check(tray.size.y * s >= 44.0 - 0.01 and view.finish_button.size.y * s >= 44.0 - 0.01,
 		"manual drop and Finish retain forty-four-pixel target heights" + context)
 	check(view.collect_button.size.y * s >= 44.0 - 0.01 and view.collect_button.size.x * s >= 44.0 - 0.01,
